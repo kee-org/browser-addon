@@ -38,7 +38,9 @@
         "default_title": "KeeFox",
         "default_popup": "popup/popup.html"
     },
-    "options_page": "settings/settings.html",
+    "options_ui": {
+        "page": "settings/settings.html"
+    },
     "permissions": [
         "tabs",
         "contextMenus",
