@@ -1,0 +1,49 @@
+{
+    "manifest_version": 2,
+    "name": "KeeFox",
+    "default_locale": "en_US",
+    "version": "1.99",
+    "version_name": "1.99 alpha 1",
+    "author": "Chris Tomlinson",
+    "description": "Webextensions experiment",
+    "background": {
+        "scripts": [
+            "common/dollar-polyfill.js",
+            "common/browser-polyfill.js",
+            "background/biginteger.js",
+            "background/app.js"
+        ],
+        "persistent": true
+    },
+    "content_scripts": [
+  {
+    "matches": ["*://*/*"],
+    "js": [
+            "common/dollar-polyfill.js",
+            "common/browser-polyfill.js",
+            "page/page.js"
+        ]
+    }
+    ],
+    "icons": {
+        "32": "common/images/32.png",
+        "48": "common/images/48.png",
+        "64": "common/images/64.png",
+        "96": "common/images/96.png"
+    },
+    "browser_action": {
+        "default_icon": {
+            "48": "common/images/48.png"
+        },
+        "default_title": "KeeFox",
+        "default_popup": "popup/popup.html"
+    },
+    "options_page": "settings/settings.html",
+    "permissions": [
+        "tabs",
+        "contextMenus",
+        "storage",
+        "clipboardWrite",
+        "clipboardRead"
+    ]
+}

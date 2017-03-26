@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="popup.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="main" class="hidden">
+            <div id="connectionStatus"></div>
+            <div id="notifications"></div>
+            <div id="helpLink"><a href="http://keefox.org/help">Help</a></div>
+            <div id="debug"></div>
+        </div>
+        <div id="loading">Loading...</div>
+        <!--
+            One day this could polyfill so that we can drop the chrome namespace and use webextensions instead but it doesn't work yet.
+            <script src="../common/browser-polyfill.js"></script>
+        -->
+
+        <script src="../common/dollar-polyfill.js"></script>
+        <script src="popup.js"></script>
+
+    </body>
+</html>

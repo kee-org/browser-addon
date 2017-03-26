@@ -1,0 +1,12 @@
+*.user
+*.userprefs
+*.suo
+/node_modules
+*.bak
+*.orig
+/temp
+/local
+.vs
+/background/app.js
+/popup/popup.js
+/page/page.js

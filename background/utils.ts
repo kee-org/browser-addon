@@ -1,0 +1,271 @@
+/// <reference path="../common/Logger.ts" />
+
+// constructor
+class Utils {
+    constructor ()
+    {
+        this._KFLog = KeeFoxLog;
+    }
+
+    _KFLog: KeeFoxLogger;
+
+    // Checks whether the user's sensitive data is being logged for debugging purposes
+    oneOffSensitiveLogCheckHandler = function ()
+    {
+        if (config.logSensitiveData)
+        {
+            const button: Button = {
+                label: $STR("KeeFox-FAMS-NotifyBar-A-LearnMore-Button.label"),
+                action: "loadUrlHelpSensitiveLogging"
+            };
+            keefox_org.notifyUser(new KeeFoxNotification(
+                "keefox-sensitivelog", [button], utils.newGUID(), $STR("notifyBarLogSensitiveData.label"), "High"));
+        }
+    };
+
+    /*******************************************
+    / General utility functions
+    /*******************************************/
+
+    openAndReuseOneTabPerURL = function (url) {
+        if (this._KFLog.logSensitiveData)
+            this._KFLog.debug("trying to find an already open tab with this url:" + url);
+        else
+            this._KFLog.debug("trying to find an already open tab with the requested url");
+        browser.tabs.query({ url }).then(tabs => {
+            tabs.length > 0
+                ? browser.tabs.update(tabs[0].id, { active: true })
+                : browser.tabs.create({ url });
+        });
+    };
+
+    versionAsInt = function (versionArray)
+    {
+        let value = 0;
+        for ( let i = 0; i < versionArray.length; i++) {
+            value = (value * 256) + versionArray[i];
+        }
+
+        return value;
+    };
+
+    versionAsArray = function (versionInt)
+    {
+        const byteArray = [0, 0, 0];
+
+        for (let i = byteArray.length -1; i >= 0; i--) {
+            const byte = versionInt & 0xff;
+            byteArray[i] = byte;
+            versionInt = (versionInt - byte) / 256;
+        }
+
+        return byteArray;
+    };
+
+    versionAsString = function (versionInt)
+    {
+        let value = "";
+        const versionArray = this.versionAsArray(versionInt);
+        for ( let i = 0; i < versionArray.length; i++) {
+            if (i > 0)
+                value += ".";
+            value += versionArray[i].toString();
+        }
+
+        return value;
+    };
+
+    // return the two-digit hexadecimal code for a byte
+    toHexString = function (charCode)
+    {
+        return ("0" + charCode.toString(16)).slice(-2);
+    };
+
+    BigIntFromRandom = function (byteCount)
+    {
+        const bytes = new Uint8Array(byteCount);
+        window.crypto.getRandomValues(bytes);
+        const hex = Array.from(bytes).map(this.toHexString).join("");
+        return BigInteger.parse(hex, 16);
+    };
+
+    // input can be either UTF8 formatted string or a byte array
+    hash = function<T extends string | Uint8Array> (data: T, outFormat: string = "hex", algorithm: string = "SHA-256")
+    {
+        let inBuffer: any;
+
+        //TODO: typeguards
+        if (typeof(data) == "string" )
+            inBuffer = new TextEncoder("utf-8").encode(data);
+        else
+            inBuffer = data;
+
+        return crypto.subtle.digest({name: algorithm}, inBuffer).then(outBuffer => {
+            if (outFormat == "base64") {
+                return utils.byteArrayToBase64(outBuffer);
+            } else {
+                return Array.from((new Uint8Array(outBuffer))).map(this.toHexString).join("");
+            }
+        });
+    };
+
+    intToByteArray = function (int) {
+        const byteArray = [0, 0, 0, 0];
+
+        for ( let index = byteArray.length -1; index >= 0; index-- ) {
+            const byte = int & 0xff;
+            byteArray [ index ] = byte;
+            int = (int - byte) / 256 ;
+        }
+
+        return byteArray;
+    };
+
+    intArrayToByteArray = function (intArray) {
+        const byteArray = new Array(intArray.length*4);
+
+        for ( let index = 0; index < intArray.length; index ++ ) {
+            let int = intArray[index];
+            for ( let j = 3; j >= 0; j-- ) {
+                const byte = int & 0xff;
+                byteArray [ (index * 4) + j ] = byte;
+                int = (int - byte) / 256 ;
+            }
+        }
+
+        return byteArray;
+    };
+
+    stringToByteArray = function (str)
+    {
+        const e = new TextEncoder("utf-8");
+        return e.encode(str);
+    };
+
+    // A variation of base64toByteArray which allows us to calculate a HMAC far
+    // more efficiently than with seperate memory buffers
+    base64toByteArrayForHMAC = function (input, extraLength, view = null) {
+        const binary = atob(input);
+        const len = binary.length;
+        let offset = 0;
+        if (!view)
+        {
+            const buffer = new ArrayBuffer(len + extraLength);
+            view = new Uint8Array(buffer);
+            offset = 20;
+        }
+        for (let i = 0; i < len; i++)
+        {
+            view[(i+offset)] = binary.charCodeAt(i);
+        }
+        return view;
+    };
+
+    base64toByteArray = function (input) {
+        const binary = atob(input);
+        const len = binary.length;
+        const buffer = new ArrayBuffer(len);
+        const view = new Uint8Array(buffer);
+        for (let i = 0; i < len; i++)
+        {
+            view[i] = binary.charCodeAt(i);
+        }
+        return view;
+    };
+
+    byteArrayToBase64 = function (arrayBuffer): string {
+        let base64 = "";
+        const encodings = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        const bytes = new Uint8Array(arrayBuffer);
+        const byteLength = bytes.byteLength;
+        const byteRemainder = byteLength % 3;
+        const mainLength = byteLength - byteRemainder;
+        let a;
+        let b;
+        let c;
+        let d;
+        let chunk;
+
+        // Main loop deals with bytes in chunks of 3
+        for (let i = 0; i < mainLength; i = i + 3)
+        {
+            // Combine into a single integer
+            chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
+
+            // Use bitmasks to extract 6-bit segments from the triplet
+            a = (chunk & 16515072) >> 18; // 16515072 = (2^6 - 1) << 18
+            b = (chunk & 258048) >> 12; // 258048 = (2^6 - 1) << 12
+            c = (chunk & 4032) >>  6; // 4032 = (2^6 - 1) << 6
+            d = chunk & 63; // 63 = 2^6 - 1
+
+            // Convert the raw binary segments to the appropriate ASCII encoding
+            base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
+        }
+
+        // Deal with the remaining bytes and padding
+        if (byteRemainder == 1)
+        {
+            chunk = bytes[mainLength];
+
+            a = (chunk & 252) >> 2; // 252 = (2^6 - 1) << 2
+
+            // Set the 4 least significant bits to zero
+            b = (chunk & 3) << 4; // 3 = 2^2 - 1
+
+            base64 += encodings[a] + encodings[b] + "==";
+        } else if (byteRemainder == 2)
+        {
+            chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1];
+
+            a = (chunk & 64512) >> 10; // 64512 = (2^6 - 1) << 10
+            b = (chunk & 1008) >> 4; // 1008  = (2^6 - 1) << 4
+
+            // Set the 2 least significant bits to zero
+            c = (chunk & 15) << 2; // 15 = 2^4 - 1
+
+            base64 += encodings[a] + encodings[b] + encodings[c] + "=";
+        }
+
+        return base64;
+    };
+
+    hexStringToByteArray = function (hexString, byteArray = null) {
+        if (hexString.length % 2 !== 0) {
+            throw Error("Must have an even number of hex digits to convert to bytes");
+        }
+        const numBytes = hexString.length / 2;
+        if (!byteArray)
+            byteArray = new Uint8Array(numBytes);
+        for (let i=0; i<numBytes; i++) {
+            byteArray[i] = parseInt(hexString.substr(i*2, 2), 16);
+        }
+        return byteArray;
+    };
+
+    newGUID = function ()
+    {
+        const lut = []; for (let i=0; i<256; i++) { lut[i] = (i<16 ? "0": "")+(i).toString(16); }
+
+        const dvals = new Uint32Array(4);
+        window.crypto.getRandomValues(dvals);
+        const d0 = dvals[0];
+        const d1 = dvals[1];
+        const d2 = dvals[2];
+        const d3 = dvals[3];
+        return lut[d0&0xff]+lut[d0>>8&0xff]+lut[d0>>16&0xff]+lut[d0>>24&0xff]+"-"+
+        lut[d1&0xff]+lut[d1>>8&0xff]+"-"+lut[d1>>16&0x0f|0x40]+lut[d1>>24&0xff]+"-"+
+        lut[d2&0x3f|0x80]+lut[d2>>8&0xff]+"-"+lut[d2>>16&0xff]+lut[d2>>24&0xff]+    lut[d3&0xff]+lut[d3>>8&0xff]+lut[d3>>16&0xff]+lut[d3>>24&0xff];
+    };
+
+    //TODO:c:replace or delete
+    // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Interact_with_the_clipboard says this won't work from a background page.
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1272869
+    // However, using a content page is not always feasible unless we can fire up an internal extension content page in a hidden tab.
+    // May not be able to write to clipboard unless Mozilla fix this issue.
+    copyStringToClipboard = function (value)
+    {
+        //document.execCommand("copy");
+    };
+};
+
+let utils = new Utils();

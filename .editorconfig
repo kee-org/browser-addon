@@ -1,0 +1,27 @@
+# top-most EditorConfig file
+root = true
+
+[*]
+end_of_line = cflf
+insert_final_newline = true
+
+# Matches multiple files with brace expansion notation
+# Set default charset
+[*.{js,ts,json,html,css,sass,less}]
+charset = utf-8
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+# Tab indentation (no size specified)
+[Makefile]
+indent_style = tab
+
+# # Indentation override for all JS under lib directory
+# [lib/**.js]
+# indent_style = space
+# indent_size = 2
+
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2
