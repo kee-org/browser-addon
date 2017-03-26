@@ -15,16 +15,14 @@
         ],
         "persistent": true
     },
-    "content_scripts": [
-  {
-    "matches": ["*://*/*"],
-    "js": [
-            "common/dollar-polyfill.js",
-            "common/browser-polyfill.js",
-            "page/page.js"
+    "content_scripts": [{
+        "matches": ["*://*/*"],
+        "js": [
+                "common/dollar-polyfill.js",
+                "common/browser-polyfill.js",
+                "page/page.js"
         ]
-    }
-    ],
+    }],
     "icons": {
         "32": "common/images/32.png",
         "48": "common/images/48.png",
