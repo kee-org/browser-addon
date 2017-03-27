@@ -1,4 +1,4 @@
-WebExtensions (Mozilla Firefox) / Google Chrome (Chromium) browsers add-on for linking browser to the KeePassRPC KeePass plugin.
+WebExtensions (Mozilla Firefox) / Google Chrome (Chromium) browsers add-on for linking browsers to the KeePassRPC KeePass plugin.
 
 Build requirements:
 
