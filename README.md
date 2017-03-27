@@ -1,10 +1,10 @@
-WebExtensions / Chrome browser add-on for linking a browser to the KeePassRPC KeePass plugin.
+WebExtensions (Mozilla Firefox) / Google Chrome (Chromium) add-on for linking browsers to the KeePassRPC KeePass plugin.
 
 Build requirements:
 
-# node
-# npm
-# the usual hundreds of node modules installed by the above
+* node
+* npm or yarn
+* the usual hundreds of node modules installed by the above
 
 It's all set up for Visual Studio Code but it shouldn't be too hard to work out how to build it using other IDEs.
 
