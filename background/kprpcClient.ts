@@ -4,6 +4,7 @@ communication using the KeePassRPC protocol >= version 1.3.
 */
 
 /// <reference path="session.ts" />
+/// <reference path="../common/FeatureFlags.ts" />
 /// <reference path="../common/Logger.ts" />
 
 declare var keefox_win: any; //TODO:c: implement? - messaging probably required in some form or another
@@ -28,7 +29,7 @@ class kprpcClient {
         this.requestId = 1;
         this.callbacks = {};
         this.callbacksData = {};
-        this.clientVersion = [1, 6, 4];
+        this.clientVersion = [2, 0, 0];
         this.authPromptAborted = false;
         this.srpClientInternals = null;
         this.secretKey = null;
@@ -167,15 +168,11 @@ class kprpcClient {
                     if (data.error.messageParams && data.error.messageParams.length >= 1)
                         extra[0] = data.error.messageParams[0];
 
-                    if (data.error.code == "VERSION_CLIENT_TOO_HIGH") {
-                        log.error($STRF("KeeFox-conn-client-v-high", extra));
-                        keefox_org.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
-                        //keefox_org._launchInstaller(null,null,true);
-                    } else if (data.error.code == "VERSION_CLIENT_TOO_LOW") {
+                    if (data.error.code == "VERSION_CLIENT_TOO_LOW") {
+                        // This means that the server requires us to support a feature that we don't have
                         log.error($STRF("KeeFox-conn-client-v-low", extra));
                         keefox_org.appState.latestConnectionError = "VERSION_CLIENT_TOO_LOW";
-                        //TODO:c: capabilities instead
-                        //keefox_org._launchInstaller(null,null,true,utils.versionAsString(extra),utils.versionAsString(utils.versionAsInt(this.clientVersion)));
+                        this.showConnectionMessage($STR("KeeFox-conn-setup-client-features-missing"));
                     } else if (data.error.code == "UNRECOGNISED_PROTOCOL") {
                         log.error($STR("KeeFox-conn-unknown-protocol") + " "
                             + $STRF("KeeFox-further-info-may-follow", extra));
@@ -267,6 +264,22 @@ class kprpcClient {
             this.resetConnection();
             return;
         }
+
+  	    // Versions of KeePassRPC <= 1.6.x will reject connections (send an "error" property) from
+  	    // KeeFox clients that are too new (like this one). For >= 1.7 it will only do so if it also
+  	    // decides that this client does not support features essential for it to function.
+  	    // Therefore if we've reached this far, we can check the server's list of features that get
+  	    // sent back on the server's first handshake response and reject if the server is missing features we need.
+        if (data.features && !FeatureFlags.required.every(function (feature) { return data.features.indexOf(feature) !== -1; }))
+        {
+            log.error($STRF("KeeFox-conn-client-v-high", []));
+            keefox_org.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
+            this.showConnectionMessage($STR("KeeFox-conn-setup-server-features-missing"));
+            this.resetConnection();
+            return;
+        }
+
+        FeatureFlags.received = data.features;
 
         // We use key authentication when we have a pre-agreed secret key
         if (data.key !== undefined && data.key !== null) {
@@ -564,6 +577,7 @@ class kprpcClient {
                     srp: setupSRP,
                     key: setupKey,
                     version: utils.versionAsInt(this.clientVersion),
+                    features: FeatureFlags.offered,
 
                     // these parameters allows KPRPC to identify which type of client is making
                     // this request. We can't trust it but it can help the user to understand what's going on.
