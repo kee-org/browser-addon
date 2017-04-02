@@ -126,8 +126,6 @@ class jsonrpcClient {
                         netRuntimeVersion = "Mono " + resultWrapper.result.monoVersion;
                     else
                         netRuntimeVersion = ".NET " + resultWrapper.result.nETversion;
-
-                        //TODO:c: Do version capabilities checks here? probably not.
                 }
 
             }

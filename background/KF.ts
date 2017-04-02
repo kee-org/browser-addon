@@ -1,6 +1,5 @@
 /// <reference path="../common/config.ts" />
 /// <reference path="search.ts" />
-/// <reference path="KFExtension.ts" />
 /// <reference path="../common/Logger.ts" />
 /// <reference path="commands.ts" />
 /// <reference path="utils.ts" />
@@ -13,8 +12,6 @@ class KeeFox {
     appState: AppState;
     utils: Utils;
     search: Search;
-    _keeFoxExtension;
-    _keeFoxStorage;
     foregroundTabId: number;
 
     regularKPRPCListenerQueueHandlerTimer: number;
@@ -57,10 +54,6 @@ class KeeFox {
 
         this._KFLog = KeeFoxLog;
         this.utils = utils;
-
-        this._keeFoxExtension = KFExtension;
-
-        this._keeFoxStorage = this._keeFoxExtension.storage;
 
         this.search = new Search(this, {
             version: 1,

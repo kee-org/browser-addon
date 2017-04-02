@@ -1,4 +1,3 @@
-/// <reference path="KFExtension.ts" />
 /// <reference path="../common/Logger.ts" />
 
 "use strict";
@@ -38,6 +37,7 @@ class KFCommands {
             "label": "loggedOut.label",
             "tooltip": "loggedOut.tip",
             "accesskey": ""
+            // global.
         },
         {
             "name": "showMenuMatchedLogins",
@@ -50,6 +50,7 @@ class KFCommands {
             "label": "KeeFox-matched-logins.label",
             "tooltip": "", // No tooltip for a menu
             "accesskey": ""
+            // global. can make it show a "select login" dialog attached to the form (or top left if psuedo form)
         },
         {
             "name": "fillMatchedLogin",
@@ -62,6 +63,7 @@ class KFCommands {
             "label": "", // will be replaced with content from the best matched login
             "tooltip": "", // will be replaced with content from the best matched login
             "accesskey": ""
+            // global.
         },
         {
             "name": "showMenuKeeFox",
@@ -74,6 +76,7 @@ class KFCommands {
             "label": "KeeFox_Menu-Button.label",
             "tooltip": "KeeFox_Menu-Button.tip",
             "accesskey": ""
+            // global - main browseraction association
         },
         {
             "name": "showMenuChangeDatabase",
@@ -86,6 +89,7 @@ class KFCommands {
             "label": "KeeFox_Menu-Button.changeDB.label",
             "tooltip": "KeeFox_Menu-Button.changeDB.tip",
             "accesskey": ""
+            // no. Only makes sense in world where main panel can be given focus programatically.
         },
         {
             "name": "detectForms",
@@ -98,6 +102,7 @@ class KFCommands {
             "label": "KeeFox_Menu-Button.fillCurrentDocument.label",
             "tooltip": "KeeFox_Menu-Button.fillCurrentDocument.tip",
             "accesskey": ""
+            // page.
         },
         {
             "name": "generatePassword",
@@ -110,6 +115,7 @@ class KFCommands {
             "label": "KeeFox_Menu-Button.copyNewPasswordToClipboard.label",
             "tooltip": "KeeFox_Menu-Button.copyNewPasswordToClipboard.tip",
             "accesskey": ""
+            // page. Option to insert into text or password field if one is focussed when generator panel is displayed.
         },
         {
             "name": "showMenuLogins",
@@ -122,6 +128,7 @@ class KFCommands {
             "label": "KeeFox_Logins-Button.label",
             "tooltip": "KeeFox_Logins-Button.tip",
             "accesskey": ""
+            // no. user should use main browseraction global instead.
         }
 //        {
 //            "name": "autoTypeHere",
@@ -146,85 +153,33 @@ class KFCommands {
     conditions = {
         loginToKeePass: function ()
         {
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            return (keeFoxStorage.get("KeePassRPCActive", false)
-                    && keeFoxStorage.get("KeePassRPCInstalled", false)
-                    && !keeFoxStorage.get("KeePassDatabaseOpen", false));
+            return keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex == -1;
         },
         fillMatchedLogin: function ()
         {
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            if (!(keeFoxStorage.get("KeePassDatabaseOpen", false)
-                || keeFoxStorage.get("KeePassRPCActive", false)))
+            if (!keefox_org.appState.connected || keefox_org.appState.ActiveKeePassDatabaseIndex == -1)
                 return false;
-            let container;
-
-            container = document.getElementById("KeeFox-PanelSubSection-MatchedLoginsList");
-            if (!container)
-                return false;
-            const matches = container.getElementsByTagName("li");
-            if (!matches)
-                return false;
-            const firstMatch = matches[0];
-            if (!firstMatch)
-                return false;
-            if (!firstMatch.getAttribute("data-uuid"))
-                return false;
-
+            //TODO:c: establish if 1 login was found
             return true;
         },
         showMenuMatchedLogins: function (target)
         {
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            if (!(keeFoxStorage.get("KeePassDatabaseOpen", false)
-                || keeFoxStorage.get("KeePassRPCActive", false)))
+            if (!keefox_org.appState.connected || keefox_org.appState.ActiveKeePassDatabaseIndex == -1)
                 return false;
-
-            //TODO:1.6: Needs more work to support alternative matched logins configuration that puts all logins into the overflow div
-            const container = document.getElementById("KeeFox-PanelSubSection-MatchedLoginsList");
-            if (!container)
-                return false;
-            const matches = container.getElementsByTagName("li");
-            if (!matches)
-                return false;
-            if (matches.length <= 1)
-                return false;
-
+            //TODO:c: establish if > 1 logins were found
             return true;
         },
         generatePassword: function ()
         {
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            return (keeFoxStorage.get("KeePassDatabaseOpen", false)
-                || keeFoxStorage.get("KeePassRPCActive", false));
-        },
-        showMenuChangeDatabase: function ()
-        {
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            return (keeFoxStorage.get("KeePassDatabaseOpen", false)
-                || keeFoxStorage.get("KeePassRPCActive", false));
+            return keefox_org.appState.connected;
         },
         detectForms: function ()
         {
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            return (keeFoxStorage.get("KeePassDatabaseOpen", false)
-                && keeFoxStorage.get("KeePassRPCActive", false));
+            return keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0;
         },
         showMenuGeneratePassword: function ()
         {
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            return (keeFoxStorage.get("KeePassDatabaseOpen", false)
-                || keeFoxStorage.get("KeePassRPCActive", false));
-        },
-        showMenuLogins: function ()
-        {
-
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            if (keeFoxStorage.get("KeePassDatabaseOpen", false)
-                && keeFoxStorage.get("KeePassRPCActive", false))
-                return true;
-            else
-                return false;
+            return keefox_org.appState.connected;
         }
     };
 
@@ -238,14 +193,6 @@ class KFCommands {
         loginToKeePass: function ()
         {
             keefox_org.loginToKeePass();
-        },
-        showMenuChangeDatabase: function (target)
-        {
-
-
-            keefox_win.panel.displayPanel();
-            keefox_win.panel.hideSubSections();
-            keefox_win.panel.showSubSectionChangeDatabase();
         },
         detectForms: function ()
         {
@@ -266,55 +213,14 @@ class KFCommands {
             keefox_win.panel.hideSubSections();
             keefox_win.panel.showSubSectionGeneratePassword();
         },
-        showMenuLogins: function ()// could target in future (e.g. if we want to include all logins in a submenu of the context menu?))
-        {
-
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            if (keeFoxStorage.get("KeePassDatabaseOpen", false)
-                && keeFoxStorage.get("KeePassRPCActive", false))
-            {
-                keefox_win.panel.displayPanel();
-                keefox_win.panel.hideSubSections();
-                keefox_win.panel.showSubSectionAllLogins();
-            }
-        },
         fillMatchedLogin: function ()
         {
-
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-            if (!(keeFoxStorage.get("KeePassDatabaseOpen", false)
-                || keeFoxStorage.get("KeePassRPCActive", false)))
-                return;
-
-            //TODO:1.6: Make this work when matched logins are displayed in the KeeFox-PanelSubSection-MatchedLoginsList-Overflow instead
-            const container = document.getElementById("KeeFox-PanelSubSection-MatchedLoginsList");
-            if (!container)
-                return;
-            const matches = container.getElementsByTagName("li");
-            if (!matches)
-                return;
-            const firstMatch = matches[0];
-            if (!firstMatch)
-                return;
-            if (!firstMatch.getAttribute("data-uuid"))
-                return;
-
-            firstMatch.dispatchEvent(new Event("keefoxCommand"));
+            //TODO:c: implement
             return;
         },
         showMenuMatchedLogins: function (target)
         {
-
-            const keeFoxStorage = keefox_org._keeFoxStorage;
-
-            if (!(keeFoxStorage.get("KeePassDatabaseOpen", false)
-                || keeFoxStorage.get("KeePassRPCActive", false)))
-                return;
-
-            //TODO:1.6: Make this work when matched logins are displayed in the KeeFox-PanelSubSection-MatchedLoginsList-Overflow instead
-            keefox_win.panelInvokedByMatchedLoginsShortcut = true;
-            keefox_win.panel.displayPanel();
-            keefox_win.panel.hideSubSections();
+            //TODO:c: implement
         },
         autoTypeHere: function ()
         {
@@ -324,7 +230,6 @@ class KFCommands {
 
     init = function ()
     {
-        this.keeFoxStorage = KFExtension.storage;
         this.setDefaultCommands();
         this.load();
         this.resolveConfiguration();
