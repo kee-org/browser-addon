@@ -252,7 +252,6 @@ class FormFilling {
 
         // Allow user to override automatic behaviour if multiple logins match this URL
         this.matchResult.wantToAutoFillFormWithMultipleMatches = this.config.autoFillFormsWithMultipleMatches;
-        this.matchResult.wantToAutoSubmitFormWithMultipleMatches = this.config.autoSubmitFormsWithMultipleMatches;
 
         // overwrite existing username by default unless a preference or tab variable tells us otherwise
         this.matchResult.overWriteFieldsAutomatically = this.config.overWriteFieldsAutomatically;
