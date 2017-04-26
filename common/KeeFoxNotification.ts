@@ -7,7 +7,8 @@ class KeeFoxNotification {
             public buttons: Button[],
             public id: string, //Guid
             public message: string,
-            public priority: "High" | "Medium" | "Low"
+            public priority: "High" | "Medium" | "Low",
+            public allowMultiple: boolean
         ) {}
 
     render () {

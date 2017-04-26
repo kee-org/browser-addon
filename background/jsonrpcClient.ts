@@ -158,13 +158,13 @@ class jsonrpcClient {
                     passwordGenerated = true;
                     keefox_org.utils.copyStringToClipboard(resultWrapper.result);
                     keefox_org.notifyUser(new KeeFoxNotification(
-                        "keefox-generate-password", [], utils.newGUID(), $STR("generatePassword.copied"), "Medium"));
+                        "keefox-generate-password", [], utils.newGUID(), $STR("generatePassword.copied"), "Medium", false));
                 }
             }
             if (!passwordGenerated)
             {
                 keefox_org.notifyUser(new KeeFoxNotification(
-                        "keefox-generate-password", [], utils.newGUID(), $STR("generatePassword.launch"), "Medium"));
+                        "keefox-generate-password", [], utils.newGUID(), $STR("generatePassword.launch"), "Medium", false));
             }
         }, ++this.kprpcClient.requestId);
     }

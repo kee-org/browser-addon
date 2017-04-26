@@ -445,7 +445,7 @@ class kprpcClient {
     onConnectStartup (type, thisFunction, timeout) {
 
         // if any errors were shown, they are now resolved
-        keefox_org.removeUserNotifications((notification: KeeFoxNotification) => notification.name == "keefox-connection-message");
+        keefox_org.removeUserNotifications((notification: KeeFoxNotification) => notification.name != "keefox-connection-message");
         keefox_org.appState.latestConnectionError = "";
 
         //TODO:c:tutorial, etc.
@@ -871,7 +871,7 @@ class kprpcClient {
 
     showConnectionMessage (msg: string) {
         keefox_org.notifyUser(new KeeFoxNotification(
-            "keefox-connection-message", [], utils.newGUID(), msg, "Medium"));
+            "keefox-connection-message", [], utils.newGUID(), msg, "Medium", false));
     };
 
 }

@@ -128,7 +128,10 @@ class KeeFox {
 
 
     notifyUser (notification: KeeFoxNotification) {
-        keefox_org.appState.notifications[notification.id] = notification;
+        if (!notification.allowMultiple) {
+            keefox_org.removeUserNotifications((n: KeeFoxNotification) => n.name != notification.name);
+        }
+        keefox_org.appState.notifications.push(notification);
         keefox_org.ports.browserPopup.postMessage({appState: keefox_org.appState});
     }
 

@@ -19,7 +19,7 @@ class Utils {
                 action: "loadUrlHelpSensitiveLogging"
             };
             keefox_org.notifyUser(new KeeFoxNotification(
-                "keefox-sensitivelog", [button], utils.newGUID(), $STR("notifyBarLogSensitiveData.label"), "High"));
+                "keefox-sensitivelog", [button], utils.newGUID(), $STR("notifyBarLogSensitiveData.label"), "High", false));
         }
     };
 
