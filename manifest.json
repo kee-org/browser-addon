@@ -45,5 +45,11 @@
         "storage",
         "clipboardWrite",
         "clipboardRead"
-    ]
+    ],
+    "applications": {
+        "gecko": {
+            "id": "keefox@chris.tomlinson",
+            "strict_min_version": "51.0"
+        }
+    }
 }
