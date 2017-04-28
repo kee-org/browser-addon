@@ -39,6 +39,7 @@ defaultConfig.searchAllOpenDBs = true;
 defaultConfig.siteConfig = defaultSiteConfig;
 defaultConfig.tutorialProgress = "";
 defaultConfig.version = 1;
+defaultConfig.triggerChangeInputEventAfterFill = false;
 
 class ConfigManager {
     public current: Config;

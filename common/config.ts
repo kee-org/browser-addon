@@ -31,4 +31,5 @@ class Config {
     siteConfig: { url: string, config: {}}[];
     tutorialProgress: string;
     version: number;
+    triggerChangeInputEventAfterFill: boolean;
 }
