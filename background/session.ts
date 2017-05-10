@@ -33,9 +33,11 @@ class Session {
     private webSocketTimer;
     private onOpen;
     private onMessage;
+    private _KFLog: KeeFoxLogger;
 
 constructor (onOpen, onMessage)
 {
+    this._KFLog = KeeFoxLog;
     this.onOpen = onOpen;
     this.onMessage = onMessage;
     this.reconnectionAttemptFrequency = 2000;
@@ -92,14 +94,14 @@ startup () {
     //TODO:c:review above - should be doable now
     reconnectSoon ()
     {
-        log.debug("Creating a reconnection timer.");
+        this._KFLog.debug("Creating a reconnection timer.");
          // Create a timer
          this.reconnectTimer = window.setInterval(this.timerCallback.bind(this), this.reconnectionAttemptFrequency);
     };
 
     reconnectVerySoon ()
     {
-        log.debug("Creating a fast reconnection timer.");
+        this._KFLog.debug("Creating a fast reconnection timer.");
 
         this.fastRetries = 40; // 10 seconds of more frequent connection attempts
 
@@ -108,12 +110,12 @@ startup () {
     };
 
     tryToconnectToWebsocket () {
-        log.debug("Attempting to connect to RPC server webSocket.");
+        this._KFLog.debug("Attempting to connect to RPC server webSocket.");
         const connectResult = this.connect();
         if (connectResult == "alive")
-            log.debug("Connection already established.");
+            this._KFLog.debug("Connection already established.");
         if (connectResult == "locked")
-            log.debug("Connection attempt already underway.");
+            this._KFLog.debug("Connection attempt already underway.");
     };
 
     httpConnectionAttemptCallback () {
@@ -139,7 +141,7 @@ startup () {
         if (this.connectionProhibitedUntil.getTime() > (new Date()).getTime())
             return "locked";
 
-        log.debug("Trying to open a webSocket connection");
+        this._KFLog.debug("Trying to open a webSocket connection");
 
         this.connectLock = true;
         try
@@ -153,7 +155,7 @@ startup () {
         }
 
         this.webSocket.onopen = function (event) {
-            log.info("Websocket connection opened");
+            _this._KFLog.info("Websocket connection opened");
 
             _this.connectLock = false;
 
@@ -161,29 +163,29 @@ startup () {
             _this.onOpen();
         };
         this.webSocket.onmessage = function (event) {
-            log.debug("received message from web socket");
+            _this._KFLog.debug("received message from web socket");
 
             const obj = JSON.parse(event.data);
 
             // if we failed to parse an object from the JSON
             if (!obj)
             {
-                log.error("received bad message from web socket. Can't parse from JSON.");
+                _this._KFLog.error("received bad message from web socket. Can't parse from JSON.");
                 return;
             }
             _this.onMessage(obj);
         };
         this.webSocket.onerror = function (event) {
-            log.debug("Websocket connection error");
+            _this._KFLog.debug("Websocket connection error");
 
             _this.connectLock = false;
 
             // webSocket spec says that we can't know why there was an error
-            log.debug("Websocket connection error end");
+            _this._KFLog.debug("Websocket connection error end");
         };
         this.webSocket.onclose = function (event) {
             keefox_org._pauseKeeFox();
-            log.debug("Websocket connection closed");
+            _this._KFLog.debug("Websocket connection closed");
         };
 
     };
@@ -226,28 +228,31 @@ startup () {
         // 99.9% of users will be in).
         if ((new Date()).getTime() > rpc.speculativeWebSocketAttemptProhibitedUntil.getTime())
         {
-            log.debug("Speculatively trying to open a webSocket connection");
+            this._KFLog.debug("Speculatively trying to open a webSocket connection");
             rpc.speculativeWebSocketAttemptProhibitedUntil = new Date();
             rpc.speculativeWebSocketAttemptProhibitedUntil.setTime(
                 rpc.speculativeWebSocketAttemptProhibitedUntil.getTime() + 73000);
             rpc.httpConnectionAttemptCallback();
         } else
         {
+            // closure for http event callbacks
+            const _this = this;
+
             const xhr = new XMLHttpRequest();
 
             xhr.open("GET", rpc.httpChannelURI, true);
             xhr.timeout = 750;
             xhr.onerror = function () {
                 // an error indicates that KeePass is running (or that it is at least worth attempting a precious websocket connection)
-                log.debug("HTTP connection did not timeout. We will now attempt a web socket connection.");
+                _this._KFLog.debug("HTTP connection did not timeout. We will now attempt a web socket connection.");
                 rpc.httpConnectionAttemptCallback();
             };
             xhr.ontimeout = function () {
                 // a timeout indicates that KeePass is not running
-                log.debug("HTTP connection timed out. Will not attempt web socket connection.");
+                _this._KFLog.debug("HTTP connection timed out. Will not attempt web socket connection.");
             };
             xhr.onabort = function (x) {
-                log.warn("HTTP connection aborted. Will not attempt web socket connection.");
+                _this._KFLog.warn("HTTP connection aborted. Will not attempt web socket connection.");
             };
 
             // Try to connect
