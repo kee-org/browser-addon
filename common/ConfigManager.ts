@@ -4,7 +4,7 @@
 */
 
 /// <reference path="DefaultSiteConfig.ts" />
-/// <reference path="../common/config.ts" />
+/// <reference path="config.ts" />
 
 let defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
@@ -90,12 +90,11 @@ class ConfigManager {
         }
     }
 
-    public load () {
+    public load (onLoaded) {
         browser.storage.local.get().then(config => {
             const pageCount = config["keefoxConfigPageCount"];
 
-            if (!pageCount)
-                return;
+            if (pageCount) {
 
             let configString = "";
             for (let i=0; i < pageCount; i++)
@@ -106,11 +105,10 @@ class ConfigManager {
             }
             if (configString)
                 this.current = JSON.parse(configString);
+            }
+            onLoaded();
         });
     }
 }
 
-// initialise the configuration
 let configManager = new ConfigManager();
-let config = configManager.current;
-configManager.load();

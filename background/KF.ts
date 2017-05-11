@@ -1,4 +1,5 @@
 /// <reference path="../common/config.ts" />
+/// <reference path="../common/ConfigManager.ts" />
 /// <reference path="search.ts" />
 /// <reference path="../common/Logger.ts" />
 /// <reference path="commands.ts" />
@@ -34,9 +35,6 @@ class KeeFox {
 
     constructor ()
     {
-        // Make sure user knows we're not ready yet
-        browser.browserAction.setBadgeText({ text: "OFF" });
-        browser.browserAction.setBadgeBackgroundColor({ color: "red" });
 
         this.appState = {
             latestConnectionError: "",
@@ -45,7 +43,7 @@ class KeeFox {
             KeePassDatabases: [],
             notifications: [],
             connected: false,
-            config: config
+            config: configManager.current
         };
 
         this.foregroundTabId = -1;
@@ -55,7 +53,7 @@ class KeeFox {
 
         this.search = new Search(this, {
             version: 1,
-            searchAllDatabases: config.searchAllOpenDBs
+            searchAllDatabases: configManager.current.searchAllOpenDBs
         });
 
         //TODO:c: tutorial guides, etc.
@@ -100,6 +98,12 @@ class KeeFox {
         };
 
         browser.runtime.onConnect.addListener(this.ports.onConnected);
+
+        // Setup any ports that we were notified of before the addon finished initialising
+        //TODO:c: Check to see if there is any chance these will fail (tab closed during init?) and handle as appropriate
+        portsQueue.forEach(port => this.ports.onConnected(port));
+        portsQueue = null;
+        browser.runtime.onConnect.removeListener(onConnectedBeforeInitialised);
 
         browser.tabs.onActivated.addListener(event => {
                 keefox_org.foregroundTabId = event.tabId;
@@ -229,7 +233,7 @@ class KeeFox {
             browser.browserAction.setBadgeBackgroundColor({ color: "orange" });
         }
 
-        if (config.rememberMRUDB)
+        if (configManager.current.rememberMRUDB)
         {
             const MRUFN = this.getDatabaseFileName();
             if (MRUFN != null && MRUFN != undefined && !(MRUFN instanceof Error))
@@ -252,9 +256,9 @@ class KeeFox {
     // to be prompted to choose a DB to open
     loginToKeePass ()
     {
-        let databaseFileName = config.keePassDBToOpen;
+        let databaseFileName = configManager.current.keePassDBToOpen;
         if (databaseFileName == "")
-            databaseFileName = config.keePassMRUDB;
+            databaseFileName = configManager.current.keePassMRUDB;
 
         this.changeDatabase(databaseFileName, true);
     }
@@ -661,10 +665,22 @@ class KeeFox {
 
 };
 
-let keefox_org = new KeeFox();
+let keefox_org: KeeFox;
+
+// Make sure user knows we're not ready yet
+browser.browserAction.setBadgeText({ text: "OFF" });
+browser.browserAction.setBadgeBackgroundColor({ color: "red" });
+//TODO:c: Disable the browser button entirely until the config, logging and main module have been initialised?
+
+// Assumes config and logging have been initialised before this is called.
+function startup () {
+
+keefox_org = new KeeFox();
 
 // attach our utils so it can be called from outside this module
 keefox_org.utils = utils;
+
+}
 
 
 // callbacks for messaging / ports
@@ -708,6 +724,20 @@ function pageDisconnect () {
     if (keefox_org.ports.tabs[this.sender.tab.id].length == 0)
         delete keefox_org.ports.tabs[this.sender.tab.id];
 }
+
+let portsQueue = [];
+
+function onConnectedBeforeInitialised (port: browser.runtime.Port) {
+    portsQueue.push(port);
+}
+
+// Before we've initialised this main module, we might receive connection
+// attempts from content pages, etc. so we store them for later processing.
+browser.runtime.onConnect.addListener(onConnectedBeforeInitialised);
+
+// Load our config and start the addon once done
+configManager.load(startup);
+
 
 //TODO:c: below might be useful code from v1
 //     setLoginActions: function (resultWrapper)

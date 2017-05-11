@@ -38,7 +38,7 @@ let myPort = chrome.runtime.connect({ name: "browserPopup" });
 myPort.postMessage({ greeting: "hello from content script" });
 
 myPort.onMessage.addListener(function (m: any) {
-  KeeFoxLog = new KeeFoxLogger(m.appState.config);
+  KeeFoxLog.configureFromPreferences(m.appState.config);
   KeeFoxLog.debug("In browser popup script, received message from background script: ");
   KeeFoxLog.debug(m.appState.connected);
   updateAppState(m.appState);

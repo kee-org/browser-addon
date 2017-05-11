@@ -20,8 +20,7 @@ interface LogMessage {
 class KeeFoxLogger {
     constructor (config: {logLevel: number, logSensitiveData: boolean})
     {
-        this.config = config;
-        this.configureFromPreferences();
+        this.configureFromPreferences(config);
 
         this.info("Logging system initialised at " + Date());
         if (this.logSensitiveData)
@@ -34,7 +33,6 @@ class KeeFoxLogger {
     levelDebug: boolean;
     methodConsole: boolean;
     logSensitiveData: boolean;
-    config: {logLevel: number, logSensitiveData: boolean};
 
     private getMessage (data)
     {
@@ -118,9 +116,9 @@ class KeeFoxLogger {
     };
 
     //TODO:c:security call this also (in all pages + background) when settings are changed
-    configureFromPreferences ()
+    configureFromPreferences (config: {logLevel: number, logSensitiveData: boolean})
     {
-        const prefLevel = this.config.logLevel;
+        const prefLevel = config.logLevel;
         this.levelDebug = false;
         this.levelInfo = false;
         this.levelWarn = false;
@@ -134,11 +132,11 @@ class KeeFoxLogger {
             case 1: this.levelError = true;
         }
 
-        this.logSensitiveData = this.config.logSensitiveData;
+        this.logSensitiveData = config.logSensitiveData;
     };
 
 };
 
-// Logging before we have been able to get the current configuration from the background process has to follow some fixed default configuration
+// Logging before we have been able to get the current configuration asynchronously has to follow some fixed default configuration
 //TODO:c: before release, reduce default to Warn
 let KeeFoxLog = new KeeFoxLogger({logLevel: 4, logSensitiveData: false});

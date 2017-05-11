@@ -65,7 +65,7 @@ function startup (currentAppState: AppState, isForegroundTab: boolean, myTabId: 
     tabId = myTabId;
     frameId = myFrameId;
 
-    KeeFoxLog = new KeeFoxLogger(currentAppState.config);
+    KeeFoxLog.configureFromPreferences(currentAppState.config);
     formUtils = new FormUtils(KeeFoxLog);
     formFilling = new FormFilling(formUtils, KeeFoxLog, currentAppState.config, matchResultReceiver, matchFinder);
 

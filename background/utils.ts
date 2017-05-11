@@ -1,18 +1,16 @@
 /// <reference path="../common/Logger.ts" />
+/// <reference path="../common/ConfigManager.ts" />
 
 // constructor
 class Utils {
     constructor ()
     {
-        this._KFLog = KeeFoxLog;
     }
-
-    _KFLog: KeeFoxLogger;
 
     // Checks whether the user's sensitive data is being logged for debugging purposes
     oneOffSensitiveLogCheckHandler = function ()
     {
-        if (config.logSensitiveData)
+        if (configManager.current.logSensitiveData)
         {
             const button: Button = {
                 label: $STR("KeeFox-FAMS-NotifyBar-A-LearnMore-Button.label"),

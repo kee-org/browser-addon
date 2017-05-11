@@ -6,6 +6,7 @@ communication using the KeePassRPC protocol >= version 1.3.
 /// <reference path="session.ts" />
 /// <reference path="../common/FeatureFlags.ts" />
 /// <reference path="../common/Logger.ts" />
+/// <reference path="../common/ConfigManager.ts" />
 
 declare var keefox_win: any; //TODO:c: implement? - messaging probably required in some form or another
 
@@ -610,7 +611,7 @@ class kprpcClient {
 
         // if we expect client to be able to retrieve a password from a stored location, we'll re-use the most recent username if we can find it. Otherwise we'll start from scratch
         if (securityLevel <= 2) {
-            username = config.KPRPCUsername;
+            username = configManager.current.KPRPCUsername;
         }
 
         if (username.length <= 0) {
@@ -623,11 +624,11 @@ class kprpcClient {
     getSecurityLevel () {
         // read these from about:config. Attacker could change about:config to a lower security level but in doing so, a new SRP auth will be triggered during which the server has opportunity
         // to reject the client becuase its security level is too low.
-        return config.connSLClient;
+        return configManager.current.connSLClient;
     };
 
     getSecurityLevelServerMinimum () {
-        return config.connSLServerMin;
+        return configManager.current.connSLServerMin;
     };
 
     getStoredKey (username?, securityLevel = 0) {
@@ -640,7 +641,7 @@ class kprpcClient {
             return null;
         if (securityLevel == 2 || securityLevel == 1) {
             // There is no longer any way to adjust the security of the stored key so we must treat all as if they are securityLevel 1
-            return config.KPRPCStoredKeys[username];
+            return configManager.current.KPRPCStoredKeys[username];
         }
     };
 
@@ -652,8 +653,8 @@ class kprpcClient {
             // There is no longer any way to adjust the security of the stored key so we must treat all as if they are securityLevel 1
             // store the key
             //TODO:c: Need a neater way to set a new item on an array as part of setting a config value
-            config.KPRPCStoredKeys[username] = key;
-            configManager.setASAP({ KPRPCStoredKeys: config.KPRPCStoredKeys });
+            configManager.current.KPRPCStoredKeys[username] = key;
+            configManager.setASAP({ KPRPCStoredKeys: configManager.current.KPRPCStoredKeys });
         }
     };
 
@@ -662,8 +663,8 @@ class kprpcClient {
             // There is no longer any way to adjust the security of the stored key so we must treat all as if they are securityLevel 1
             // set the key in about:config
             //TODO:c: Need a neater way to set a new item on an array as part of setting a config value
-            config.KPRPCStoredKeys[username] = "";
-            configManager.setASAP({ KPRPCStoredKeys: config.KPRPCStoredKeys });
+            configManager.current.KPRPCStoredKeys[username] = "";
+            configManager.setASAP({ KPRPCStoredKeys: configManager.current.KPRPCStoredKeys });
         }
     };
 

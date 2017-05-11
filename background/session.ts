@@ -4,6 +4,7 @@ client and an KeePassRPC server.
 */
 
 /// <reference path="../common/Logger.ts" />
+/// <reference path="../common/ConfigManager.ts" />
 
 class Session {
     private reconnectionAttemptFrequency: number;
@@ -68,7 +69,7 @@ constructor (onOpen, onMessage)
 
 startup () {
 
-        this.webSocketPort = config.KeePassRPCWebSocketPort;
+        this.webSocketPort = configManager.current.KeePassRPCWebSocketPort;
 
         // Don't allow user to select an invalid port
         if (this.webSocketPort <= 0 || this.webSocketPort > 65535

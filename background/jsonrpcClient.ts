@@ -3,6 +3,7 @@ jsonrpcClient provides a JSON-RPC client and method proxies for
 communication between KeeFox and a KeePassRPC server.
 */
 
+/// <reference path="../common/ConfigManager.ts" />
 /// <reference path="kprpcClient.ts" />
 /// <reference path="../common/Logger.ts" />
 
@@ -89,7 +90,7 @@ class jsonrpcClient {
 
         if (dbFileName == undefined || dbFileName == null || dbFileName == "")
         {
-            if (!config.searchAllOpenDBs)
+            if (!configManager.current.searchAllOpenDBs)
                 dbFileName = keefox_org.appState.KeePassDatabases[keefox_org.appState.ActiveKeePassDatabaseIndex].fileName;
             else
                 dbFileName = "";
