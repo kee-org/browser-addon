@@ -1,5 +1,629 @@
 {
-    "placeholder": {
-        "message": "TODO"
-    }
+  "KB_shortcut_simple_1_desc": {
+    "message": "Show main menu"
+  },
+  "KB_shortcut_simple_2_desc": {
+    "message": "Login to KeePass / Select matched login / Show matched logins list"
+  },
+  "KB_shortcut_simple_3_desc": {
+    "message": "Show logins list"
+  },
+  "Options_title": {
+    "message": "KeeFox Options"
+  },
+  "add_site": {
+    "message": "Add site"
+  },
+  "black_list": {
+    "message": "Black List"
+  },
+  "browse_label": {
+    "message": "Browse"
+  },
+  "conn_client_v_high": {
+    "message": "You must downgrade to version $1 or upgrade KeePassRPC to match your version of KeeFox. Going to initiate the upgrade wizard now."
+  },
+  "conn_client_v_low": {
+    "message": "You must upgrade to version $1 or downgrade KeePassRPC to match your version of KeeFox. Going to initiate the downgrade wizard now."
+  },
+  "conn_display_description": {
+    "message": "A Firefox addon that securely enables automatic login to most websites."
+  },
+  "conn_firewall_problem": {
+    "message": "KeeFox can not connect to KeePass. A firewall is probably blocking communication on TCP port 12546."
+  },
+  "conn_invalid_message": {
+    "message": "KeeFox sent an invalid command to your password database."
+  },
+  "conn_setup_aborted": {
+    "message": "Authorisation cancelled or denied. The next attempt to connect will be delayed for $1 minutes."
+  },
+  "conn_setup_client_sl_low": {
+    "message": "KeeFox asked for a security level that was too low to be accepted by the password server. You must restart the authentication process using security level $1."
+  },
+  "conn_setup_enter_password_title": {
+    "message": "KeeFox Authorisation"
+  },
+  "conn_setup_enter_password": {
+    "message": "Please enter the password displayed by the KeePass \"Authorise a new connection\" window. You do not need to remember this password. If you get it wrong you will be able to try again shortly."
+  },
+  "conn_setup_expired": {
+    "message": "You have been using the same secret key for too long."
+  },
+  "conn_setup_failed": {
+    "message": "KeeFox was not allowed to connect, probably because you entered the connection password incorrectly."
+  },
+  "conn_setup_invalid_param": {
+    "message": "KeeFox supplied an invalid parameter. Further info may follow: $1"
+  },
+  "conn_setup_missing_param": {
+    "message": "KeeFox failed to supply a required parameter. Further info may follow: $1"
+  },
+  "conn_setup_restart": {
+    "message": "KeeFox must restart the authorisation process."
+  },
+  "conn_setup_retype_password": {
+    "message": "Please type in a new password when prompted."
+  },
+  "conn_setup_server_sl_low": {
+    "message": "KeeFox has rejected the connection to the password server because their security level is too low. You must restart the authentication process using security level $1."
+  },
+  "conn_setup_client_features_missing": {
+    "message": "KeeFox must be upgraded to connect to your KeePass Password Safe. Ensure you are running the latest version of the browser add-on / extension."
+  },
+  "conn_setup_server_features_missing": {
+    "message": "The KeePassRPC KeePass Password Safe plugin must be upgraded to allow KeeFox to connect to it. Ensure you are running the latest version of the KeePass plugin. You can start the process from the KeePass Help menu - click on \"Check for Updates\"."
+  },
+  "conn_sl_client_desc": {
+    "message": "This allows you to control how securely KeeFox will store the secret communication key inside Firefox. It is possible to configure different security settings for KeeFox and KeePass but this is rarely useful."
+  },
+  "conn_sl_client": {
+    "message": "KeeFox security level"
+  },
+  "conn_sl_high_warning_desc": {
+    "message": "A high security setting will require you to enter a randomly generated password every time you start Firefox or KeePass."
+  },
+  "conn_sl_high": {
+    "message": "High"
+  },
+  "conn_sl_low_warning_desc": {
+    "message": "A low security setting could increase the chance of your passwords being stolen. Please make sure you read the information in the manual (see link above)"
+  },
+  "conn_sl_low": {
+    "message": "Low"
+  },
+  "conn_sl_medium": {
+    "message": "Medium"
+  },
+  "conn_sl_server_min_desc": {
+    "message": "This allows you to prevent KeeFox from connecting to KeePass if its security level is set too low. See the options within KeePass to set the actual security level used by KeePass."
+  },
+  "conn_sl_server_min": {
+    "message": "Minimum acceptable KeePass security level"
+  },
+  "conn_sl_desc": {
+    "message": "Change the settings below to control how secure the communication link between Firefox and KeePass is. You probably don't need to ever adjust these settings but if you do, please make sure you have read the relevant manual pages first."
+  },
+  "conn_sl_link": {
+    "message": "Learn more about these settings and the communication between Firefox and KeePass in the manual"
+  },
+  "conn_unknown_error": {
+    "message": "An unexpected error occured when trying to connect to your password database."
+  },
+  "conn_unknown_protocol": {
+    "message": "KeeFox supplied an invalid protocol."
+  },
+  "form_id": {
+    "message": "Form ID"
+  },
+  "form_name": {
+    "message": "Form name"
+  },
+  "further_info_may_follow": {
+    "message": "Further info may follow: $1"
+  },
+  "matched_logins_label": {
+    "message": "Matched login entries"
+  },
+  "placeholder_for_best_match": {
+    "message": "Placeholder for best matching login entry"
+  },
+  "pref_Advanced_heading": {
+    "message": "Advanced"
+  },
+  "pref_AuthorisedConnections_heading": {
+    "message": "Authorised Connections"
+  },
+  "pref_Commands_heading": {
+    "message": "Commands"
+  },
+  "pref_Commands_intro": {
+    "message": "Choose the keyboard shortcuts for the main KeeFox commands."
+  },
+  "pref_ConnectionSecurity_heading": {
+    "message": "Connection Security"
+  },
+  "pref_DoNothing_desc": {
+    "message": "Do nothing"
+  },
+  "pref_FillAndSubmitForm_desc": {
+    "message": "Fill in and submit the form"
+  },
+  "pref_FillAndSubmitPrompt_desc": {
+    "message": "Fill in and submit the login prompt"
+  },
+  "pref_FillForm_desc": {
+    "message": "Fill in the form"
+  },
+  "pref_FillingEntries_heading": {
+    "message": "Filling entries"
+  },
+  "pref_FillNote_desc": {
+    "message": "You can override the \"KeeFox chooses\" behaviours above for individual entries in the KeePass \"edit entry\" dialog."
+  },
+  "pref_FillPrompt_desc": {
+    "message": "Fill in the login prompt"
+  },
+  "pref_FindingEntries_heading": {
+    "message": "Finding entries"
+  },
+  "pref_KeePass_heading": {
+    "message": "KeePass"
+  },
+  "pref_Logging_heading": {
+    "message": "Logging"
+  },
+  "pref_SavingEntries_heading": {
+    "message": "Saving entries"
+  },
+  "pref_alwaysDisplayUsernameWhenTitleIsShown_label": {
+    "message": "Display username in Logins list and search results"
+  },
+  "pref_autoFillFormsWithMultipleMatches_label": {
+    "message": "Forms with multiple matches should be automatically filled and submitted"
+  },
+  "pref_keePassDBToOpen_label": {
+    "message": "When opening or logging in to KeePass, use this database file"
+  },
+  "pref_keePassLocation_label": {
+    "message": "Use this location"
+  },
+  "pref_keePassRPCPort_label": {
+    "message": "Communicate with KeePass using this TCP/IP port"
+  },
+  "pref_keePassRPCPortWarning_label": {
+    "message": "NB: change the setting in KeePass.config or else KeeFox will not always be able to communicate with KeePass"
+  },
+  "pref_listAllOpenDBs_label": {
+    "message": "List logins from all open KeePass databases"
+  },
+  "pref_logLevel_desc": {
+    "message": "Choose how verbose you want the log to be. Each higher log level produces more output."
+  },
+  "pref_logLevelDebugging_label": {
+    "message": "Debugging"
+  },
+  "pref_logLevelInformation_label": {
+    "message": "Information"
+  },
+  "pref_logLevelWarnings_label": {
+    "message": "Warnings"
+  },
+  "pref_logLevelErrors_label": {
+    "message": "Errors"
+  },
+  "pref_logMethod_desc": {
+    "message": "Select where you would like KeeFox to record a log of its activity."
+  },
+  "pref_logMethodConsole": {
+    "message": "Javascript console"
+  },
+  "pref_notifyBarRequestPasswordSave_label": {
+    "message": "Offer to save passwords"
+  },
+  "pref_notifyWhenEntryUpdated_label": {
+    "message": "Display the \"Password successfully updated\" notification"
+  },
+  "pref_notifyWhenLateDiscovery_label": {
+    "message": "Display a notification when KeeFox finds logins matching a form added after the web page has finished loading"
+  },
+  "pref_rememberMRUDB_label": {
+    "message": "Remember the most recently used KeePass database"
+  },
+  "pref_rememberMRUGroup_label": {
+    "message": "Remember the group you most recently saved to"
+  },
+  "pref_saveFavicons_label": {
+    "message": "Save website logo/icon (favicon)"
+  },
+  "pref_searchAllOpenDBs_label": {
+    "message": "Search all open KeePass databases"
+  },
+  "pref_site_options_find_desc": {
+    "message": "KeeFox tries to find log-in details for all forms that contain a password field. Adjust this and more in "
+  },
+  "pref_site_options_find_link": {
+    "message": "site-specific settings"
+  },
+  "pref_site_options_savepass_desc": {
+    "message": "Disable \"save password\" notifications in "
+  },
+  "pref_when_keefox_chooses_prompt_desc": {
+    "message": "When KeeFox chooses a matching login for an HTTPAuth, NTLM or proxy prompt, KeeFox should"
+  },
+  "pref_when_keefox_chooses_standard_form_desc": {
+    "message": "When KeeFox chooses a matching login for a standard form, KeeFox should"
+  },
+  "pref_when_user_chooses_desc": {
+    "message": "When you choose a matched login, KeeFox should"
+  },
+  "pref_triggerChangeInputEventAfterFill_label": {
+    "message": "Trigger Change/Input Event after auto-fill"
+  },
+  "remove_site": {
+    "message": "Remove Site"
+  },
+  "save_site_settings": {
+    "message": "Save site settings"
+  },
+  "site_options_default_intro_desc": {
+    "message": "Settings for all sites. Add individual site addresses to override."
+  },
+  "site_options_intro_desc": {
+    "message": "Settings for all sites whose address starts with"
+  },
+  "site_options_invisible_tip_desc": {
+    "message": "NB: The names and IDs may not be the same as visible labels on the page (they are set in the source code of the page)"
+  },
+  "site_options_list_explain_desc": {
+    "message": "If a form matches against one of the white lists below KeeFox will always try to fill it. If a form matches one of the black lists below KeeFox will never try to fill it. If it matches both lists KeeFox will not try to fill it."
+  },
+  "site_options_siteEnabledExplanation_desc": {
+    "message": "Select the checkboxes on the left to enable a setting"
+  },
+  "site_options_title": {
+    "message": "KeeFox Site options"
+  },
+  "site_options_valid_form_intro_desc": {
+    "message": "KeeFox will try to fill matching KeePass entries for all forms that have a password field (box). You can adjust this behaviour below."
+  },
+  "text_field_id": {
+    "message": "Text field ID"
+  },
+  "text_field_name": {
+    "message": "Text field name"
+  },
+  "type_new_shortcut_key_placeholder": {
+    "message": "Type a new shortcut key"
+  },
+  "white_list": {
+    "message": "White List"
+  },
+  "Back_label": {
+    "message": "Back"
+  },
+  "Back_tip": {
+    "message": "Go back to the previous KeeFox menu"
+  },
+  "Dialog_OK_Button_key": {
+    "message": "O"
+  },
+  "Dialog_OK_Button_label": {
+    "message": "OK"
+  },
+  "Help_Centre_Button_label": {
+    "message": "Help Centre"
+  },
+  "Help_Centre_Button_tip": {
+    "message": "Visit the online help centre."
+  },
+  "Install_Cancel_Button_label": {
+    "message": "Cancel"
+  },
+  "Install_Finally_description": {
+    "message": "Finally, if you have any trouble getting KeeFox to work correctly, please take a look at the help resources found at"
+  },
+  "Install_IC1KRPCdownloaded_description": {
+    "message": "Nearly finished..."
+  },
+  "Install_monoManual_description": {
+    "message": "KeeFox can run on Mac and Linux systems, but requires manual installation by following these steps:"
+  },
+  "Install_monoManual2_description": {
+    "message": "Customisation instructions:"
+  },
+  "Install_monoManualStep1_description": {
+    "message": "1) Download and install Mono from the website below. Linux users can usually install the latest version of Mono from your distribution's package repository but please ensure you install the complete Mono package (some distributions seperate Mono into multiple sub-packages)."
+  },
+  "Install_monoManualStep2_description": {
+    "message": "2) Download KeePass Password Safe 2.19 (or higher) Portable (ZIP Package) from the website below or try your distribution's package manager (make sure you get a new enough version though!)"
+  },
+  "Install_monoManualStep3_description": {
+    "message": "3) Unzip KeePass to ~/KeePass (this default can be customised) where ~ represents your home directory"
+  },
+  "Install_monoManualStep4_description": {
+    "message": "4) Copy the KeePassRPC.plgx file to a subdirectory called plugins in the directory that contains your KeePass installation (e.g. ~/KeePass/plugins) "
+  },
+  "Install_monoManualStep5_description": {
+    "message": "5) Restart Firefox"
+  },
+  "Install_monoManualStep6_description": {
+    "message": "The KeePassRPC.plgx file you need to manually copy is at:"
+  },
+  "Install_monoManualUpgrade_description": {
+    "message": "To upgrade KeeFox:"
+  },
+  "Install_monoManualUpgradeStep1_description": {
+    "message": "1) Copy the KeePassRPC.plgx file to the plugins subdirectory inside the directory that contains your KeePass installation (e.g. ~/KeePass/plugins where ~ represents your home directory)"
+  },
+  "Install_monoManualUpgradeStep2_description": {
+    "message": "2) Restart Firefox"
+  },
+  "Install_setupNET35ExeInstallExpandeeManualStep1_description": {
+    "message": "1) Download and install .NET from Microsoft"
+  },
+  "Install_setupNET35ExeInstallExpandeeManualStep2_description": {
+    "message": "2) Download and install KeePass Password Safe 2 setup or ZIP from http://keepass.info"
+  },
+  "Logins_Button_label": {
+    "message": "Logins"
+  },
+  "Logins_Button_tip": {
+    "message": "Explore all your logins and quickly log in to your websites."
+  },
+  "Logins_Context_Edit_Group_label": {
+    "message": "Edit group"
+  },
+  "Logins_Context_Edit_Login_label": {
+    "message": "Edit login"
+  },
+  "Matched_Logins_Button_label": {
+    "message": "Matched Logins"
+  },
+  "Matched_Logins_Button_tip": {
+    "message": "See the logins that matched the current page"
+  },
+  "Menu_Button_changeDB_label": {
+    "message": "Change database"
+  },
+  "Menu_Button_changeDB_tip": {
+    "message": "Choose a different KeePass password database."
+  },
+  "Menu_Button_copyNewPasswordToClipboard_label": {
+    "message": "Generate new password"
+  },
+  "Menu_Button_copyNewPasswordToClipboard_tip": {
+    "message": "Gets a new password from KeePass using the most recently used password generator profile and puts it into your clipboard."
+  },
+  "Menu_Button_fillCurrentDocument_label": {
+    "message": "Find matching logins"
+  },
+  "Menu_Button_fillCurrentDocument_tip": {
+    "message": "Force KeeFox to re-detect login forms on this page and search for login entries that match those forms. This is necessary on a small minority of web sites."
+  },
+  "Menu_Button_options_label": {
+    "message": "Options"
+  },
+  "Menu_Button_options_tip": {
+    "message": "View and change your preferred KeeFox options."
+  },
+  "Search_label": {
+    "message": "Search..."
+  },
+  "Search_tip": {
+    "message": "Start typing to display your matching login entries"
+  },
+  "Tools_Menu_options_label": {
+    "message": "KeeFox options"
+  },
+  "PasswordProfilesExplanation_label": {
+    "message": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles."
+  },
+  "change": {
+    "message": "Change"
+  },
+  "change_field_explanation": {
+    "message": "KeeFox will also update the website icon (favicon) and any HTTP Auth Realm information. More complex modifications will require you to manually edit the entry."
+  },
+  "change_field_status": {
+    "message": "The selected entry will have all username, password and other form fields replaced with the values you have just entered."
+  },
+  "change_url_status": {
+    "message": "The entry's web page address (URL) will be updated with the latest URL."
+  },
+  "change_url_option_1": {
+    "message": "Replace the entry's URL (but still fill forms if you visit the old URL)"
+  },
+  "change_url_option_2": {
+    "message": "Replace the entry's URL (delete the old URL completely)"
+  },
+  "change_url_option_3": {
+    "message": "Keep the old entry's URL (but still fill forms if you visit the new URL)"
+  },
+  "change_url_option_4": {
+    "message": "Keep the old entry's URL (don't add the new URL to the entry)"
+  },
+  "changeDBButtonEmpty_label": {
+    "message": "No database"
+  },
+  "changeDBButtonEmpty_tip": {
+    "message": "There are no databases in your KeePass Recent databases list. Use KeePass to open your preferred database."
+  },
+  "changeDBButtonListItem_tip": {
+    "message": "Switch to the $1 database"
+  },
+  "copy_other_label": {
+    "message": "Copy other field"
+  },
+  "copy_password_label": {
+    "message": "Copy password"
+  },
+  "copy_username_label": {
+    "message": "Copy username"
+  },
+  "create": {
+    "message": "Create"
+  },
+  "create_new_entry": {
+    "message": "Create new entry"
+  },
+  "current_website": {
+    "message": "Current website"
+  },
+  "all_websites": {
+    "message": "All websites"
+  },
+  "database_label": {
+    "message": "Database"
+  },
+  "disable_password_manager": {
+    "message": "The KeeFox add-on may not work correctly if you allow Firefox to manage your passwords. Should KeeFox disable the built-in Firefox password manager?"
+  },
+  "dismiss_notification": {
+    "message": "Dismiss this notification without taking any action"
+  },
+  "generatePassword_copied": {
+    "message": "A new password has been copied to your clipboard."
+  },
+  "generatePassword_launch": {
+    "message": "Please launch KeePass first."
+  },
+  "group_label": {
+    "message": "Group"
+  },
+  "httpAuth_default": {
+    "message": "You are logged out of your password database (it may be locked)"
+  },
+  "httpAuth_loadingPasswords": {
+    "message": "Loading passwords"
+  },
+  "httpAuth_noMatches": {
+    "message": "No matching entries found"
+  },
+  "install_somethingsWrong": {
+    "message": "Something went wrong"
+  },
+  "installKeeFox_label": {
+    "message": "Install KeeFox"
+  },
+  "keefox_enabled": {
+    "message": "KeeFox enabled"
+  },
+  "keepass_history_pointer": {
+    "message": "KeePass has an \"undo\" feature which you can access from the KeePass \"edit entry\" dialog window. Click on the \"History\" tab and then use the \"Restore\" button to revert to an older version."
+  },
+  "launchKeePass_label": {
+    "message": "Launch KeePass"
+  },
+  "launchKeePass_tip": {
+    "message": "You need to open and log into KeePass to use KeeFox. Click here to do that."
+  },
+  "loading": {
+    "message": "Loading"
+  },
+  "loggedIn_label": {
+    "message": "Logged in"
+  },
+  "loggedIn_tip": {
+    "message": "You are logged in to your '$1' password database"
+  },
+  "loggedInMultiple_tip": {
+    "message": "You are logged in to $1 password databases. '$2' is active."
+  },
+  "loggedOut_label": {
+    "message": "Logged out"
+  },
+  "loggedOut_tip": {
+    "message": "You are logged out of your password database (it may be locked)"
+  },
+  "loginToKeePass_label": {
+    "message": "Login to KeePass"
+  },
+  "loginsButtonEmpty_label": {
+    "message": "Empty"
+  },
+  "loginsButtonEmpty_tip": {
+    "message": "This folder has no logins inside it"
+  },
+  "loginsButtonGroup_tip": {
+    "message": "Explore the logins inside this folder."
+  },
+  "loginsButtonLogin_tip": {
+    "message": "Login to $1 with this username: $2. Right click for more options."
+  },
+  "matchedLogin_label": {
+    "message": "$1 - $2"
+  },
+  "matchedLogin_tip": {
+    "message": "$1 in the $2 group ($3)"
+  },
+  "matched_logins_found": {
+    "message": "Matched logins found"
+  },
+  "more_options": {
+    "message": "More options"
+  },
+  "multi_page_update_warning": {
+    "message": "Multi-page login forms may also require manual editing."
+  },
+  "noUsername_partial_tip": {
+    "message": "no username"
+  },
+  "notifyBarLaunchKeePass_label": {
+    "message": "You are not logged in to your password database."
+  },
+  "notifyBarLaunchKeePassButton_tip": {
+    "message": "Launch KeePass to enable KeeFox"
+  },
+  "notifyBarLogSensitiveData_label": {
+    "message": "WARNING: KeeFox is logging your passwords! If you have not intentionally enabled this setting you should disable it immediately"
+  },
+  "notifyBarLoginToKeePassButton_tip": {
+    "message": "Login to your KeePass database to enable KeeFox"
+  },
+  "notifyBarNeverForSiteButton_key": {
+    "message": "e"
+  },
+  "notifyBarNeverForSiteButton_label": {
+    "message": "Never for This Site"
+  },
+  "notifyBarRememberButton_key": {
+    "message": "S"
+  },
+  "notifyBarRememberButton_label": {
+    "message": "Save"
+  },
+  "password_management": {
+    "message": "Password management"
+  },
+  "password_successfully_updated": {
+    "message": "Password successfully updated."
+  },
+  "saveMultiPagePasswordText": {
+    "message": "Do you want KeeFox to save this multi-page password?"
+  },
+  "savePasswordLogin_tip": {
+    "message": "Username: $1. Website address (URL): $2"
+  },
+  "savePasswordText": {
+    "message": "Do you want KeeFox to save this password?"
+  },
+  "search_again": {
+    "message": "Search again"
+  },
+  "selectDefaultKDBXLocation": {
+    "message": "Choose a default password database"
+  },
+  "update": {
+    "message": "Update"
+  },
+  "update_existing_entry": {
+    "message": "Update existing entry"
+  },
+  "view_them_in_the_main_keefox_panel": {
+    "message": "View them in the main KeeFox panel"
+  },
+  "whichEntry_label": {
+    "message": "Choose an entry..."
+  }
 }

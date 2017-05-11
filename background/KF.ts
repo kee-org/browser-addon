@@ -16,9 +16,7 @@ class KeeFox {
 
     regularKPRPCListenerQueueHandlerTimer: number;
 
-    // our logging object (held locally becuase this is a seperate module)
-    //TODO:c: not needed anymore
-    _KFLog;
+    _KFLog: KeeFoxLogger;
 
     // Our link to the JSON-RPC objects required for communication with KeePass
     KeePassRPC: jsonrpcClient;

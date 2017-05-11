@@ -78,8 +78,6 @@ gulp.task('watch', ['build'], function() {
 gulp.task('collect', function() {
     gulp.src('page/page.js')
 		.pipe(gulp.dest('build/page'));
-    gulp.src('page/page.js')
-		.pipe(gulp.dest('build/page'));
     gulp.src('popup/popup.js')
 		.pipe(gulp.dest('build/popup'));
     gulp.src('popup/popup.css')
@@ -87,6 +85,10 @@ gulp.task('collect', function() {
     gulp.src('popup/popup.html')
 		.pipe(gulp.dest('build/popup'));
     gulp.src('settings/settings.html')
+		.pipe(gulp.dest('build/settings'));
+    gulp.src('settings/*.css')
+		.pipe(gulp.dest('build/settings'));
+    gulp.src('settings/*.js')
 		.pipe(gulp.dest('build/settings'));
 	gulp.src('common/*.js')
 		.pipe(gulp.dest('build/common'));
@@ -96,6 +98,8 @@ gulp.task('collect', function() {
 		.pipe(gulp.dest('build/background'));
 	gulp.src('_locales/**')
 		.pipe(gulp.dest('build/_locales'));
+	gulp.src('_locales/en-US/**')
+		.pipe(gulp.dest('build/_locales/en_US')); //TODO:c: remove this hack when Firefox fixes locale location bug
 	return gulp.src('manifest.json')
         .pipe(gulp.dest('build'));
 });
