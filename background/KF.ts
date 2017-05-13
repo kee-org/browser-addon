@@ -3,6 +3,7 @@
 /// <reference path="../common/Logger.ts" />
 /// <reference path="commands.ts" />
 /// <reference path="utils.ts" />
+/// <reference path="jsonrpcClient.ts" />
 /// <reference path="../common/AppState.ts" />
 /// <reference path="../common/AddonMessage.ts" />
 /// <reference path="../common/KeeFoxNotification.ts" />
@@ -601,17 +602,17 @@ class KeeFox {
     RegularKPRPCListenerQueueHandler ()
     {
         // If there is nothing in the queue at the moment or we are already processing a callback, we give up for now
-        if (keefox_org.processingCallback || keefox_org.pendingCallback == "")
+        if (this.processingCallback || this.pendingCallback == "")
             return;
 
         keefox_org._KFLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
-        keefox_org.processingCallback = true;
-        if (keefox_org.pendingCallback=="_pauseKeeFox")
-            keefox_org._pauseKeeFox();
-        else if (keefox_org.pendingCallback=="_refreshKPDB")
-            keefox_org._refreshKPDB();
-        keefox_org.pendingCallback = "";
-        keefox_org.processingCallback = false;
+        this.processingCallback = true;
+        if (this.pendingCallback=="_pauseKeeFox")
+            this._pauseKeeFox();
+        else if (this.pendingCallback=="_refreshKPDB")
+            this._refreshKPDB();
+        this.pendingCallback = "";
+        this.processingCallback = false;
         keefox_org._KFLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
     }
 
