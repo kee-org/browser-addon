@@ -65,15 +65,15 @@ constructor (onOpen, onMessage)
 }
 
 startup () {
-
+        const defaultWebSocketPort = 12546;
         this.webSocketPort = config.KeePassRPCWebSocketPort;
 
         // Don't allow user to select an invalid port
         if (this.webSocketPort <= 0 || this.webSocketPort > 65535
             || this.webSocketPort == 19455)
         {
-            configManager.setASAP( {KeePassRPCWebSocketPort: 12546 });
-            this.webSocketPort = 12546;
+            configManager.setASAP( {KeePassRPCWebSocketPort: defaultWebSocketPort });
+            this.webSocketPort = defaultWebSocketPort;
         }
         this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
         this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
