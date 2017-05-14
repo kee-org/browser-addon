@@ -10,5 +10,6 @@
 /background/app.js
 /popup/popup.js
 /page/page.js
+/settings/settings.js
 /dist
 /build

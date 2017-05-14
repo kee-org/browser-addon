@@ -8,18 +8,51 @@
 <body class="container-fluid">
     <div id="i18n_root" style="display:none">
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title" data-i18n="pref_FindingEntries_heading"></h3>
+        <form>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-i18n="pref_FindingEntries_heading"></h3>
+                </div>
+                <div class="panel-body">
+                        <label><input type="checkbox" id="pref_searchAllOpenDBs_label" /><span data-i18n="pref_searchAllOpenDBs_label"></span></label>
+                </div>
             </div>
-            <div class="panel-body">
-                Panel content
-            </div>
-        </div>
 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-i18n="pref_FillingEntries_heading"></h3>
+                </div>
+                <div class="panel-body">
+                    Panel content
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-i18n="pref_SavingEntries_heading"></h3>
+                </div>
+                <div class="panel-body">
+                    Panel content
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-i18n="pref_site_options_heading"></h3>
+                </div>
+                <div class="panel-body">
+                    <div data-i18n="pref_site_options_desc"></div>
+                </div>
+            </div>
+
+            <button type="submit">Save</button> <!-- TODO: Probably want to autocommit changes instead -->
+        </form>
     </div>
 
     <script src="../common/i18n.js"></script>
+    <script src="../common/dollar-polyfill.js"></script>
+    <script src="../common/browser-polyfill.js"></script>
+    <script src="settings.js"></script>
 </body>
 
 </html>

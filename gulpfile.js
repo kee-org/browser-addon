@@ -5,9 +5,9 @@ var sourcemaps = require('gulp-sourcemaps');
 var zip = require('gulp-zip');
 
 gulp.task("default", [ "build" ]);
-gulp.task("build", ["ts:background", "ts:popup", "ts:page" ]);
+gulp.task("build", ["ts:background", "ts:popup", "ts:page", "ts:settings" ]);
 
-gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:page" ]);
+gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:page", "lint:settings" ]);
 
 gulp.task("lint:background", function() {
     return gulp.src(["background/**/*.ts"])
@@ -27,6 +27,14 @@ gulp.task("lint:page", function() {
 
 gulp.task("lint:popup", function() {
     return gulp.src(["popup/**/*.ts"])
+        .pipe(tslint({
+            formatter: "verbose"
+        }))
+        .pipe(tslint.report())
+});
+
+gulp.task("lint:settings", function() {
+    return gulp.src(["settings/**/*.ts"])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -67,6 +75,18 @@ gulp.task("ts:page", ["lint:page"], function() {
         .js
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("page"));
+});
+
+var tsProjectSettings = ts.createProject("settings/tsconfig.json", {
+    outFile: "settings.js"
+});
+gulp.task("ts:settings", ["lint:settings"], function() {
+    return tsProjectSettings.src()
+        .pipe(sourcemaps.init())
+        .pipe(tsProjectSettings())
+        .js
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest("settings"));
 });
 
 gulp.task('watch', ['build'], function() {

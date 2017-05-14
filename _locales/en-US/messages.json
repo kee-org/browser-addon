@@ -156,7 +156,8 @@
     "message": "Fill in the form"
   },
   "pref_FillingEntries_heading": {
-    "message": "Filling entries"
+    "message": "Filling entries",
+    "description": "Heading for section of options panel which contains settings relating to how KeeFox behaves when filling entries into forms"
   },
   "pref_FillNote_desc": {
     "message": "You can override the \"KeeFox chooses\" behaviours above for individual entries in the KeePass \"edit entry\" dialog."
@@ -165,7 +166,8 @@
     "message": "Fill in the login prompt"
   },
   "pref_FindingEntries_heading": {
-    "message": "Finding entries"
+    "message": "Finding entries",
+    "description": "Heading for section of options panel which contains settings relating to how KeeFox behaves when finding entries for a website"
   },
   "pref_KeePass_heading": {
     "message": "KeePass"
@@ -174,7 +176,8 @@
     "message": "Logging"
   },
   "pref_SavingEntries_heading": {
-    "message": "Saving entries"
+    "message": "Saving entries",
+    "description": "Heading for section of options panel which contains settings relating to how KeeFox behaves when saving new entries"
   },
   "pref_alwaysDisplayUsernameWhenTitleIsShown_label": {
     "message": "Display username in Logins list and search results"
@@ -237,16 +240,16 @@
     "message": "Save website logo/icon (favicon)"
   },
   "pref_searchAllOpenDBs_label": {
-    "message": "Search all open KeePass databases"
+    "message": "Search all open KeePass databases",
+    "description": "Search all open KeePass databases"
   },
-  "pref_site_options_find_desc": {
-    "message": "KeeFox tries to find log-in details for all forms that contain a password field. Adjust this and more in "
+  "pref_site_options_desc": {
+    "message": "KeeFox tries to find log-in details for all forms that contain a password field. Adjust this, \"save password\" notifications and more for each website here.",
+    "description": "Gives examples to the user for what the Site-specific section of the options panel is for."
   },
-  "pref_site_options_find_link": {
-    "message": "site-specific settings"
-  },
-  "pref_site_options_savepass_desc": {
-    "message": "Disable \"save password\" notifications in "
+  "pref_site_options_heading": {
+    "message": "Site-specific settings",
+    "description": "Heading for section of options panel which contains settings relating to customisations to how KeeFox behaves for specific websites."
   },
   "pref_when_keefox_chooses_prompt_desc": {
     "message": "When KeeFox chooses a matching login for an HTTPAuth, NTLM or proxy prompt, KeeFox should"
