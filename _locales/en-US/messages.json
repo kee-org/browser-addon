@@ -8,9 +8,6 @@
   "KB_shortcut_simple_3_desc": {
     "message": "Show logins list"
   },
-  "Options_title": {
-    "message": "KeeFox Options"
-  },
   "add_site": {
     "message": "Add site"
   },
@@ -18,7 +15,8 @@
     "message": "Black List"
   },
   "browse_label": {
-    "message": "Browse"
+    "message": "Browse",
+    "description": "Select a local file location"
   },
   "conn_client_v_high": {
     "message": "You must downgrade to version $1 or upgrade KeePassRPC to match your version of KeeFox. Going to initiate the upgrade wizard now."
@@ -129,10 +127,8 @@
     "message": "Placeholder for best matching login entry"
   },
   "pref_Advanced_heading": {
-    "message": "Advanced"
-  },
-  "pref_AuthorisedConnections_heading": {
-    "message": "Authorised Connections"
+    "message": "Advanced",
+    "description": "Advanced"
   },
   "pref_Commands_heading": {
     "message": "Commands"
@@ -144,23 +140,27 @@
     "message": "Connection Security"
   },
   "pref_DoNothing_desc": {
-    "message": "Do nothing"
+    "message": "Do nothing",
+    "description": "Label for configuring KeeFox to take no action. Specific context may vary but will relate to auto filling and/or submitting"
   },
   "pref_FillAndSubmitForm_desc": {
-    "message": "Fill in and submit the form"
+    "message": "Fill in and submit the form",
+    "description": "Fill in and submit the form"
   },
   "pref_FillAndSubmitPrompt_desc": {
     "message": "Fill in and submit the login prompt"
   },
   "pref_FillForm_desc": {
-    "message": "Fill in the form"
+    "message": "Fill in the form",
+    "description": "Fill in the form"
   },
   "pref_FillingEntries_heading": {
     "message": "Filling entries",
     "description": "Heading for section of options panel which contains settings relating to how KeeFox behaves when filling entries into forms"
   },
   "pref_FillNote_desc": {
-    "message": "You can override the \"KeeFox chooses\" behaviours above for individual entries in the KeePass \"edit entry\" dialog."
+    "message": "You can override the \"KeeFox chooses\" behaviours above for individual entries in the KeePass \"edit entry\" dialog.",
+    "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
   },
   "pref_FillPrompt_desc": {
     "message": "Fill in the login prompt"
@@ -169,75 +169,84 @@
     "message": "Finding entries",
     "description": "Heading for section of options panel which contains settings relating to how KeeFox behaves when finding entries for a website"
   },
-  "pref_KeePass_heading": {
-    "message": "KeePass"
-  },
   "pref_Logging_heading": {
-    "message": "Logging"
+    "message": "Logging",
+    "description": "The output of text information that reports on the inner-workings of KeeFox."
   },
   "pref_SavingEntries_heading": {
     "message": "Saving entries",
     "description": "Heading for section of options panel which contains settings relating to how KeeFox behaves when saving new entries"
   },
-  "pref_alwaysDisplayUsernameWhenTitleIsShown_label": {
-    "message": "Display username in Logins list and search results"
-  },
   "pref_autoFillFormsWithMultipleMatches_label": {
-    "message": "Forms with multiple matches should be automatically filled and submitted"
+    "message": "Forms with multiple matches should be automatically filled and submitted",
+    "description": "Forms with multiple matches should be automatically filled and submitted"
   },
   "pref_keePassDBToOpen_label": {
-    "message": "When opening or logging in to KeePass, use this database file"
-  },
-  "pref_keePassLocation_label": {
-    "message": "Use this location"
+    "message": "When opening or logging in to KeePass, use this database file",
+    "description": "When opening or logging in to KeePass, use this database file"
   },
   "pref_keePassRPCPort_label": {
-    "message": "Communicate with KeePass using this TCP/IP port"
+    "message": "Communicate with KeePass using this TCP/IP port",
+    "description": "Communicate with KeePass using this TCP/IP port"
   },
   "pref_keePassRPCPortWarning_label": {
-    "message": "NB: change the setting in KeePass.config or else KeeFox will not always be able to communicate with KeePass"
+    "message": "NB: change the setting in KeePass.config or else KeeFox will not always be able to communicate with KeePass",
+    "description": "Displayed to the user near the setting for changing the KeePassRPC port"
   },
   "pref_listAllOpenDBs_label": {
-    "message": "List logins from all open KeePass databases"
+    "message": "List logins from all open KeePass databases",
+    "description": "List logins from all open KeePass databases"
   },
   "pref_logLevel_desc": {
-    "message": "Choose how verbose you want the log to be. Each higher log level produces more output."
+    "message": "Choose how verbose you want the log to be. Each higher log level produces more output.",
+    "description": "Choose how verbose you want the log to be. Each higher log level produces more output."
   },
   "pref_logLevelDebugging_label": {
-    "message": "Debugging"
+    "message": "Debugging",
+    "description": "Logging level for the most verbose information about KeeFox's operation"
   },
   "pref_logLevelInformation_label": {
-    "message": "Information"
+    "message": "Information",
+    "description": "Logging level for important information about KeeFox's operation"
   },
   "pref_logLevelWarnings_label": {
-    "message": "Warnings"
+    "message": "Warnings",
+    "description": "Logging level for potential problems"
   },
   "pref_logLevelErrors_label": {
-    "message": "Errors"
+    "message": "Errors",
+    "description": "Logging level for problems"
   },
   "pref_logMethod_desc": {
-    "message": "Select where you would like KeeFox to record a log of its activity."
+    "message": "Select where you would like KeeFox to record a log of its activity.",
+    "description": "Select where you would like KeeFox to record a log of its activity."
   },
   "pref_logMethodConsole": {
-    "message": "Javascript console"
+    "message": "Javascript console",
+    "description": "Javascript console"
   },
   "pref_notifyBarRequestPasswordSave_label": {
     "message": "Offer to save passwords"
   },
   "pref_notifyWhenEntryUpdated_label": {
-    "message": "Display the \"Password successfully updated\" notification"
+    "message": "Display the \"Password successfully updated\" notification",
+    "description": "Option to enable or diable the information displayed when a password has been updated"
   },
   "pref_notifyWhenLateDiscovery_label": {
-    "message": "Display a notification when KeeFox finds logins matching a form added after the web page has finished loading"
+    "message": "Display a notification when KeeFox finds logins matching a form added after the web page has finished loading",
+    "description": "Display a notification when KeeFox finds logins matching a form added after the web page has finished loading"
   },
   "pref_rememberMRUDB_label": {
-    "message": "Remember the most recently used KeePass database"
+    "message": "Remember the most recently used KeePass database",
+    "description": "Remember the most recently used KeePass database"
   },
   "pref_rememberMRUGroup_label": {
-    "message": "Remember the group you most recently saved to"
+    "message": "Remember the group you most recently saved to",
+    "description": "Whether KeeFox will remember the name of the KeePass group most recently chosen by the user"
   },
   "pref_saveFavicons_label": {
-    "message": "Save website logo/icon (favicon)"
+    "message": "Save website logo/icon (favicon)",
+    "description": "Whether or not KeeFox will save the website's icon when a new entry is saved"
   },
   "pref_searchAllOpenDBs_label": {
     "message": "Search all open KeePass databases",
@@ -255,13 +264,16 @@
     "message": "When KeeFox chooses a matching login for an HTTPAuth, NTLM or proxy prompt, KeeFox should"
   },
   "pref_when_keefox_chooses_standard_form_desc": {
-    "message": "When KeeFox chooses a matching login for a standard form, KeeFox should"
+    "message": "When KeeFox chooses a matching login for a standard form, KeeFox should",
+    "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
   },
   "pref_when_user_chooses_desc": {
-    "message": "When you choose a matched login, KeeFox should"
+    "message": "When you choose a matched login, KeeFox should",
+    "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
   },
   "pref_triggerChangeInputEventAfterFill_label": {
-    "message": "Trigger Change/Input Event after auto-fill"
+    "message": "Trigger Change/Input Event after auto-fill",
+    "description": "Trigger Change/Input Event after auto-fill"
   },
   "remove_site": {
     "message": "Remove Site"

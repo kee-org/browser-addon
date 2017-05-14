@@ -7,4 +7,3 @@ function $STR (str) {
     el.innerHTML = $STR(el.getAttribute('data-i18n'));
   });
 
-document.getElementById("i18n_root").style.display = "block";
