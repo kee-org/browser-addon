@@ -2,7 +2,6 @@
 
 class SiteConfigManager
 {
-    private _KFLog = KeeFoxLog;
     private configCache = {};
 
     public valueAllowed (val, whitelist, blacklist, def)
@@ -13,14 +12,14 @@ class SiteConfigManager
         for (const b in blacklist)
             if (blacklist[b].toLowerCase() == val.toLowerCase())
             {
-                this._KFLog.debug("Value found in blacklist");
+                KeeFoxLog.debug("Value found in blacklist");
                 // a blacklist match always overrides the existing default behaviour
                 return false;
             }
         for (const w in whitelist)
             if (whitelist[w].toLowerCase() == val.toLowerCase())
             {
-                this._KFLog.debug("Value found in whitelist");
+                KeeFoxLog.debug("Value found in whitelist");
                 // a whitelist match only overrides an unspecified default behaviour
                 if (def == null)
                     return true;
@@ -74,11 +73,11 @@ class SiteConfigManager
                     workingConf = this.applyMoreSpecificConfig(workingConf, siteConfig[i].config);
                 }
             }
-            this._KFLog.debug("Adding configuration to cache");
+            KeeFoxLog.debug("Adding configuration to cache");
             this.configCache[url] = workingConf;
         } else
         {
-            this._KFLog.debug("Returning configuration from cache");
+            KeeFoxLog.debug("Returning configuration from cache");
             workingConf = this.configCache[url];
         }
         return workingConf;
@@ -90,7 +89,7 @@ class SiteConfigManager
             if ((curl as any).startsWith(url))
             {
                 delete this.configCache[curl];
-                this._KFLog.debug("Remove config cache entry '"+curl+"' for URL '"+url+"'");
+                KeeFoxLog.debug("Remove config cache entry '"+curl+"' for URL '"+url+"'");
             }
         }
     };
@@ -127,7 +126,7 @@ class SiteConfigManager
 
     private setConfigForURL (siteConfig, url, newConfig)
     {
-        this._KFLog.debug("setConfigForURL");
+        KeeFoxLog.debug("setConfigForURL");
 
         // Clear the current config cache.
         //TODO:2: would be more efficient to only remove affected URLs

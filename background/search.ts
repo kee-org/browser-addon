@@ -6,11 +6,9 @@
 class Search {
 
     _keefox_org;
-    _KFLog;
 
     constructor (keefox_org, config) {
         this._keefox_org = keefox_org;
-        this._KFLog = KeeFoxLog;
         this.resolveConfig(config);
         this.validateConfig();
     }

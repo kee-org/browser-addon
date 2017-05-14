@@ -17,8 +17,6 @@ class KeeFox {
 
     regularKPRPCListenerQueueHandlerTimer: number;
 
-    _KFLog: KeeFoxLogger;
-
     // Our link to the JSON-RPC objects required for communication with KeePass
     KeePassRPC: jsonrpcClient;
 
@@ -48,7 +46,6 @@ class KeeFox {
 
         this.foregroundTabId = -1;
 
-        this._KFLog = KeeFoxLog;
         this.utils = utils;
 
         this.search = new Search(this, {
@@ -144,7 +141,7 @@ class KeeFox {
 
     getDBbyFilename (fileName)
     {
-        this._KFLog.debug("Getting database for filename: " + fileName);
+        KeeFoxLog.debug("Getting database for filename: " + fileName);
         if (fileName == undefined || fileName == null || fileName.length == 0)
             return this.appState.KeePassDatabases[this.appState.ActiveKeePassDatabaseIndex];
 
@@ -158,32 +155,32 @@ class KeeFox {
     shutdown ()
     {
         // These log messages never appear. Does this function even get executed?
-        this._KFLog.debug("KeeFox module shutting down...");
+        KeeFoxLog.debug("KeeFox module shutting down...");
         // if (this.KeePassRPC != undefined && this.KeePassRPC != null)
         //     this.KeePassRPC..session.shutdown();
         // if (this.regularKPRPCListenerQueueHandlerTimer != undefined && this.regularKPRPCListenerQueueHandlerTimer != null)
         //     clearInterval(this.regularKPRPCListenerQueueHandlerTimer);
         // this.KeePassRPC = null;
 
-        this._KFLog.debug("KeeFox module shut down.");
-        this._KFLog = null;
+        KeeFoxLog.debug("KeeFox module shut down.");
+        KeeFoxLog = null;
     }
 
     _keeFoxBrowserStartup ()
     {
-        this._KFLog.info("KeeFox initialising");
+        KeeFoxLog.info("KeeFox initialising");
 
         //this._keeFoxVariableInit();
         this.KeePassRPC = new jsonrpcClient();
         this.KeePassRPC.startup();
 
-        this._KFLog.info("KeeFox initialised OK although the connection to KeePass may not be established just yet...");
+        KeeFoxLog.info("KeeFox initialised OK although the connection to KeePass may not be established just yet...");
     }
 
     // Temporarilly disable KeeFox. Used (for e.g.) when KeePass is shut down.
     _pauseKeeFox ()
     {
-        this._KFLog.debug("Pausing KeeFox.");
+        KeeFoxLog.debug("Pausing KeeFox.");
         this.appState.KeePassDatabases = null;
         this.appState.ActiveKeePassDatabaseIndex = -1;
         this.appState.connected = false;
@@ -199,13 +196,13 @@ class KeeFox {
             }, this);
         }, this);
 
-        this._KFLog.info("KeeFox paused.");
+        KeeFoxLog.info("KeeFox paused.");
     }
 
     _refreshKPDB ()
     {
         this.getAllDatabases();
-        this._KFLog.debug("Refresh of KeeFox's view of the KeePass database initiated.");
+        KeeFoxLog.debug("Refresh of KeeFox's view of the KeePass database initiated.");
     }
 
     updateKeePassDatabases (newDatabases)
@@ -223,7 +220,7 @@ class KeeFox {
         this.appState.KeePassDatabases = newDatabases;
         this.appState.ActiveKeePassDatabaseIndex = newDatabaseActiveIndex;
 
-        this._KFLog.info("Number of databases open: " + newDatabases.length);
+        KeeFoxLog.info("Number of databases open: " + newDatabases.length);
 
         if (newDatabases.length > 0) {
             browser.browserAction.setBadgeText({ text: "" });
@@ -299,7 +296,7 @@ class KeeFox {
             return this.KeePassRPC.getMRUdatabases();
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -311,7 +308,7 @@ class KeeFox {
             this.KeePassRPC.changeDB(fileName, closeCurrent);
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -323,7 +320,7 @@ class KeeFox {
             this.KeePassRPC.changeLocation(locationId);
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -335,7 +332,7 @@ class KeeFox {
             return this.KeePassRPC.addLogin(login, parentUUID, dbFileName);
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -347,7 +344,7 @@ class KeeFox {
             return this.KeePassRPC.updateLogin(login, oldLoginUUID, urlMergeMode, dbFileName);
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -359,7 +356,7 @@ class KeeFox {
             return this.KeePassRPC.getAllDatabases();
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -371,7 +368,7 @@ class KeeFox {
             return this.KeePassRPC.getApplicationMetadata();
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -383,7 +380,7 @@ class KeeFox {
             return this.KeePassRPC.findLogins(fullURL, formSubmitURL, httpRealm, uniqueID, dbFileName, freeText, username, callback, callbackData);
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -395,7 +392,7 @@ class KeeFox {
             this.KeePassRPC.launchLoginEditor(uuid, dbFileName);
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -407,7 +404,7 @@ class KeeFox {
             this.KeePassRPC.launchGroupEditor(uuid, dbFileName);
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -419,7 +416,7 @@ class KeeFox {
             return this.KeePassRPC.getPasswordProfiles();
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -431,7 +428,7 @@ class KeeFox {
             return this.KeePassRPC.generatePassword(profileName, url);
         } catch (e)
         {
-            this._KFLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -452,7 +449,7 @@ class KeeFox {
             switch(topic)
             {
                 case "nsPref:changed":
-                    window.keefox_org._KFLog.debug("Observed an event: " + subject + "," + topic + "," + data);
+                    window.KeeFoxLog.debug("Observed an event: " + subject + "," + topic + "," + data);
                     var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
                                        .getService(Ci.nsIWindowMediator);
                     var window = wm.getMostRecentWindow("navigator:browser") ||
@@ -497,7 +494,7 @@ class KeeFox {
             {
                 case "logSensitiveData":
                     // Allow the change to go ahead but warn the user (in case they did not understand the change that was made)
-                    window.keefox_org._KFLog.configureFromPreferences();
+                    window.KeeFoxLog.configureFromPreferences();
                     utils.oneOffSensitiveLogCheckHandler();
                     break;
                 case "searchAllOpenDBs":
@@ -528,35 +525,35 @@ class KeeFox {
     {
         const sigTime = Date();
 
-        keefox_org._KFLog.debug("Signal received by KPRPCListener (" + sig + ") @" + sigTime);
+        KeeFoxLog.debug("Signal received by KPRPCListener (" + sig + ") @" + sigTime);
 
         let executeNow = false;
         let pause = false;
         let refresh = false;
 
         switch (sig) {
-            case "0": keefox_org._KFLog.info("KeePassRPC is requesting authentication [deprecated]."); break;
-            case "3": keefox_org._KFLog.info("KeePass' currently active DB is about to be opened."); break;
-            case "4": keefox_org._KFLog.info("KeePass' currently active DB has just been opened.");
+            case "0": KeeFoxLog.info("KeePassRPC is requesting authentication [deprecated]."); break;
+            case "3": KeeFoxLog.info("KeePass' currently active DB is about to be opened."); break;
+            case "4": KeeFoxLog.info("KeePass' currently active DB has just been opened.");
                 refresh = true;
                 break;
-            case "5": keefox_org._KFLog.info("KeePass' currently active DB is about to be closed."); break;
-            case "6": keefox_org._KFLog.info("KeePass' currently active DB has just been closed.");
+            case "5": KeeFoxLog.info("KeePass' currently active DB is about to be closed."); break;
+            case "6": KeeFoxLog.info("KeePass' currently active DB has just been closed.");
                 refresh = true;
                 break;
-            case "7": keefox_org._KFLog.info("KeePass' currently active DB is about to be saved."); break;
-            case "8": keefox_org._KFLog.info("KeePass' currently active DB has just been saved.");
+            case "7": KeeFoxLog.info("KeePass' currently active DB is about to be saved."); break;
+            case "8": KeeFoxLog.info("KeePass' currently active DB has just been saved.");
                 refresh = true;
                 break;
-            case "9": keefox_org._KFLog.info("KeePass' currently active DB is about to be deleted."); break;
-            case "10": keefox_org._KFLog.info("KeePass' currently active DB has just been deleted."); break;
-            case "11": keefox_org._KFLog.info("KeePass' active DB has been changed/selected.");
+            case "9": KeeFoxLog.info("KeePass' currently active DB is about to be deleted."); break;
+            case "10": KeeFoxLog.info("KeePass' currently active DB has just been deleted."); break;
+            case "11": KeeFoxLog.info("KeePass' active DB has been changed/selected.");
                 refresh = true;
                 break;
-            case "12": keefox_org._KFLog.info("KeePass is shutting down.");
+            case "12": KeeFoxLog.info("KeePass is shutting down.");
                 pause = true;
                 break;
-            default: keefox_org._KFLog.error("Invalid signal received by KPRPCListener (" + sig + ")"); break;
+            default: KeeFoxLog.error("Invalid signal received by KPRPCListener (" + sig + ")"); break;
         }
 
         if (!pause && !refresh)
@@ -567,7 +564,7 @@ class KeeFox {
         // If there is nothing in the queue at the moment we can process this callback straight away
         if (!keefox_org.processingCallback && keefox_org.pendingCallback == "")
         {
-            keefox_org._KFLog.debug("Signal executing now. @" + sigTime);
+            KeeFoxLog.debug("Signal executing now. @" + sigTime);
             keefox_org.processingCallback = true;
             executeNow = true;
         }
@@ -584,7 +581,7 @@ class KeeFox {
             if (executeNow) { keefox_org.appState.lastKeePassRPCRefresh = now; keefox_org._refreshKPDB(); } else keefox_org.pendingCallback = "_refreshKPDB";
         }
 
-        keefox_org._KFLog.info("Signal handled or queued. @" + sigTime);
+        KeeFoxLog.info("Signal handled or queued. @" + sigTime);
         if (executeNow)
         {
             //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
@@ -593,10 +590,10 @@ class KeeFox {
             else if (keefox_org.pendingCallback=="_refreshKPDB")
                 keefox_org._refreshKPDB();
             else
-                keefox_org._KFLog.info("A pending signal was found and handled.");
+                KeeFoxLog.info("A pending signal was found and handled.");
             keefox_org.pendingCallback = "";
             keefox_org.processingCallback = false;
-            keefox_org._KFLog.info("Signal handled. @" + sigTime);
+            KeeFoxLog.info("Signal handled. @" + sigTime);
         }
     }
 
@@ -606,7 +603,7 @@ class KeeFox {
         if (keefox_org.processingCallback || keefox_org.pendingCallback == "")
             return;
 
-        keefox_org._KFLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
+        KeeFoxLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
         keefox_org.processingCallback = true;
         if (keefox_org.pendingCallback=="_pauseKeeFox")
             keefox_org._pauseKeeFox();
@@ -614,7 +611,7 @@ class KeeFox {
             keefox_org._refreshKPDB();
         keefox_org.pendingCallback = "";
         keefox_org.processingCallback = false;
-        keefox_org._KFLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
+        KeeFoxLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
     }
 
     //TODO:c: tabs.currentTab().then(tab => tab.favIconUrl) will get the URI for a favicon but then need to make a network request to download
@@ -643,13 +640,13 @@ class KeeFox {
         {
             // something failed so we can't get the favicon. We don't really mind too much...
             faviconLoader.onComplete(null,0,null,null);
-            if (this._KFLog.logSensitiveData)
+            if (KeeFoxLog.logSensitiveData)
             {
-                this._KFLog.info("favicon load failed for " + url + " : " + ex);
+                KeeFoxLog.info("favicon load failed for " + url + " : " + ex);
                 throw "We couldn't find a favicon for this URL: " + url + " BECAUSE: " + ex;
             } else
             {
-                this._KFLog.info("favicon load failed: " + ex);
+                KeeFoxLog.info("favicon load failed: " + ex);
                 throw "We couldn't find a favicon BECAUSE: " + ex;
             }
         }
