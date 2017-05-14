@@ -9,6 +9,9 @@
     "out/**/*": true,
     "background/app.js": true,
     "page/page.js": true,
-    "popup/popup.js": true
+    "popup/popup.js": true,
+    "settings/settings.js": true,
+    "build/**/*": true,
+    "dist/**/*": true
   }
 }
