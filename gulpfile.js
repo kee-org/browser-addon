@@ -114,6 +114,8 @@ gulp.task('collect', function() {
 		.pipe(gulp.dest('build/common'));
 	gulp.src('common/images/**')
 		.pipe(gulp.dest('build/common/images'));
+	gulp.src('common/fonts/**')
+		.pipe(gulp.dest('build/common/fonts'));
 	gulp.src('background/*.js')
 		.pipe(gulp.dest('build/background'));
 	gulp.src('_locales/**')
