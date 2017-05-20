@@ -1,7 +1,6 @@
 /// <reference path="../common/Logger.ts" />
 /// <reference path="../common/AppState.ts" />
 /// <reference path="../common/AddonMessage.ts" />
-/// <reference path="../common/SiteConfigManager.ts" />
 
 declare const chrome: typeof browser;
 

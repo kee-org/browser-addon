@@ -29,158 +29,194 @@
 
 <body class="container-fluid">
     <div id="i18n_root" style="display:none">
+        <div id="siteModeChooser">
+            <form>
+                Showing options for: <label class="radio-inline">
+                    <input type="radio" name="siteOptionsMode" id="siteOptionsModeAll" value="all" checked> All websites
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="siteOptionsMode" id="siteOptionsModeSpecific" value="specific"> A specific website
+                </label>
+        </div>
+        <div id="siteChooser" style="display:none">
+            <form class="form-horizontal">
+                <label for="siteChooserSearch"><span>Website:</span></label>
+                <div class="dropdown">
+                    <span class="input-group">
 
-        <form>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title" data-i18n="pref_FindingEntries_heading"></h3>
+                        <input type="text" class="form-control" name="siteChooserSearch" id="siteChooserSearch" autocomplete="off" />
+                        <span class="input-group-btn" style="display:none;" id="siteSearchClearButton">
+                            <button class="btn btn-default" type="button" aria-label="clear search"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
+                        </span>
+                    </span>
+                    <ul class="dropdown-menu" id="siteChooserSearchResults" style="display:none;">
+                        <li class="dropdown-menu-item"><a href="#">Test1</a></li>
+                        <li class="dropdown-menu-item"><a href="#">Test2</a></li>
+                    </ul>
                 </div>
-                <div class="panel-body">
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="pref_searchAllOpenDBs_label" /><span data-i18n="pref_searchAllOpenDBs_label"></span></label>
+                <button class="btn btn-default" type="button" id="siteAddButton" style="display: none;">Add</button>
+                <button class="btn btn-default" type="button" id="siteEditButton" style="display: none;">Edit</button>
+            </form>
+        </div>
+        <div id="settings" class="col-md-12">
+            <form>
+                <div class="panel panel-default" id="panelFindingEntries">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-i18n="pref_FindingEntries_heading"></h3>
                     </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="pref_listAllOpenDBs_label" /><span data-i18n="pref_listAllOpenDBs_label"></span></label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="pref_notifyWhenLateDiscovery_label" /><span data-i18n="pref_notifyWhenLateDiscovery_label"></span></label>
+                    <div class="panel-body">
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="pref_searchAllOpenDBs_label" /><span data-i18n="pref_searchAllOpenDBs_label"></span></label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="pref_listAllOpenDBs_label" /><span data-i18n="pref_listAllOpenDBs_label"></span></label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="pref_notifyWhenLateDiscovery_label" /><span data-i18n="pref_notifyWhenLateDiscovery_label"></span></label>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title" data-i18n="pref_FillingEntries_heading"></h3>
-                </div>
+                <div class="panel panel-default" id="panelFillingEntries">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-i18n="pref_FillingEntries_heading"></h3>
+                    </div>
 
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-xs-7"><span data-i18n="pref_when_keefox_chooses_standard_form_desc"></span></div>
-                            <div class="col-xs-5">
-                                <select class="form-control" id="pref_when_keefox_chooses_standard_form_desc">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-7"><span data-i18n="pref_when_keefox_chooses_standard_form_desc"></span></div>
+                                <div class="col-xs-5">
+                                    <select class="form-control" id="pref_when_keefox_chooses_standard_form_desc">
                                     <option value="DoNothing" data-i18n="pref_DoNothing_desc"></option>
                                     <option value="Fill" data-i18n="pref_FillForm_desc"></option>
                                     <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
                                 </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-xs-7"><span data-i18n="pref_when_user_chooses_desc"></span></div>
-                            <div class="col-xs-5">
-                                <select class="form-control" id="pref_when_user_chooses_desc">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-7"><span data-i18n="pref_when_user_chooses_desc"></span></div>
+                                <div class="col-xs-5">
+                                    <select class="form-control" id="pref_when_user_chooses_desc">
                                     <option value="Fill" data-i18n="pref_FillForm_desc"></option>
                                     <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
                                 </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div><span data-i18n="pref_FillNote_desc"></span></div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="pref_autoFillFormsWithMultipleMatches_label" /><span data-i18n="pref_autoFillFormsWithMultipleMatches_label"></span></label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="pref_triggerChangeInputEventAfterFill_label" /><span data-i18n="pref_triggerChangeInputEventAfterFill_label"></span></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title" data-i18n="pref_SavingEntries_heading"></h3>
-                </div>
-                <div class="panel-body">
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="pref_saveFavicons_label" /><span data-i18n="pref_saveFavicons_label"></span></label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="pref_rememberMRUGroup_label" /><span data-i18n="pref_rememberMRUGroup_label"></span></label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="pref_notifyWhenEntryUpdated_label" /><span data-i18n="pref_notifyWhenEntryUpdated_label"></span></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title" data-i18n="pref_Logging_heading"></h3>
-                </div>
-                <div class="panel-body">
-                    <fieldset class="logging-border">
-                        <legend class="logging-border" data-i18n="pref_logMethod_desc"></legend>
-                        <div class="control-group">
-                            <div class="checkbox">
-                                <label><input type="checkbox" id="pref_logMethodConsole" /><span data-i18n="pref_logMethodConsole"></span></label>
-                            </div>
+                        <div><span data-i18n="pref_FillNote_desc"></span></div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="pref_autoFillFormsWithMultipleMatches_label" /><span data-i18n="pref_autoFillFormsWithMultipleMatches_label"></span></label>
                         </div>
-                    </fieldset>
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-xs-7"><span data-i18n="pref_logLevel_desc"></span></div>
-                            <div class="col-xs-5">
-                                <select class="form-control" id="pref_logLevel_desc">
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="pref_triggerChangeInputEventAfterFill_label" /><span data-i18n="pref_triggerChangeInputEventAfterFill_label"></span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default" id="panelSavingEntries">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-i18n="pref_SavingEntries_heading"></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="checkbox siteSpecificField">
+                            <label><input type="checkbox" id="pref_notifyBarRequestPasswordSave_label" /><span data-i18n="pref_notifyBarRequestPasswordSave_label"></span></label>
+                        </div>
+                        <div class="checkbox nonSiteSpecificField">
+                            <label><input type="checkbox" id="pref_saveFavicons_label" /><span data-i18n="pref_saveFavicons_label"></span></label>
+                        </div>
+                        <div class="checkbox nonSiteSpecificField">
+                            <label><input type="checkbox" id="pref_rememberMRUGroup_label" /><span data-i18n="pref_rememberMRUGroup_label"></span></label>
+                        </div>
+                        <div class="checkbox nonSiteSpecificField">
+                            <label><input type="checkbox" id="pref_notifyWhenEntryUpdated_label" /><span data-i18n="pref_notifyWhenEntryUpdated_label"></span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default" id="panelLogging">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-i18n="pref_Logging_heading"></h3>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset class="logging-border">
+                            <legend class="logging-border" data-i18n="pref_logMethod_desc"></legend>
+                            <div class="control-group">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" id="pref_logMethodConsole" /><span data-i18n="pref_logMethodConsole"></span></label>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-7"><span data-i18n="pref_logLevel_desc"></span></div>
+                                <div class="col-xs-5">
+                                    <select class="form-control" id="pref_logLevel_desc">
                                     <option value="Debugging" data-i18n="pref_logLevelDebugging_label"></option>
                                     <option value="Information" data-i18n="pref_logLevelInformation_label"></option>
                                     <option value="Warnings" data-i18n="pref_logLevelWarnings_label"></option>
                                     <option value="Errors" data-i18n="pref_logLevelErrors_label"></option>
                                 </select>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title" data-i18n="pref_Advanced_heading"></h3>
-                </div>
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-xs-9"><span data-i18n="pref_keePassRPCPort_label"></span></div>
-                            <div class="col-xs-3">
-                                <input class="form-control" id="pref_keePassRPCPort_label" type="number" min="1" max="65535" step="1">
-                            </div>
+                <div class="panel panel-default" id="panelFindingForms">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-i18n="pref_Finding_forms_heading"></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div data-i18n="site_options_valid_form_intro_desc"></div>
+                        <div data-i18n="site_options_list_explain_desc"></div>
+                        <div data-i18n="site_options_invisible_tip_desc"></div>
+                        <div class="input-group col-md-6">
+                            <span class="input-group-addon siteSpecificToggle">
+                                <input type="checkbox" aria-label="...">
+                            </span>
+                            <input class="form-control" id="disabledInput" type="text" disabled />
                         </div>
                     </div>
-                    <div><span data-i18n="pref_keePassRPCPortWarning_label"></span></div>
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-xs-5"><span data-i18n="pref_keePassDBToOpen_label"></span></div>
-                            <div class="col-xs-7">
-                                <input class="form-control" id="pref_keePassDBToOpen_label" type="text">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="pref_rememberMRUDB_label" /><span data-i18n="pref_rememberMRUDB_label"></span></label>
-                    </div>
                 </div>
-            </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title" data-i18n="pref_site_options_heading"></h3>
-                </div>
-                <div class="panel-body">
-                    <div data-i18n="pref_site_options_desc"></div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <input type="checkbox" aria-label="...">
-                        </span>
-                        <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled>
+                <div class="panel panel-default" id="panelAdvanced">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-i18n="pref_Advanced_heading"></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-9"><span data-i18n="pref_keePassRPCPort_label"></span></div>
+                                <div class="col-xs-3">
+                                    <input class="form-control" id="pref_keePassRPCPort_label" type="number" min="1" max="65535" step="1">
+                                </div>
+                            </div>
+                        </div>
+                        <div><span data-i18n="pref_keePassRPCPortWarning_label"></span></div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-5"><span data-i18n="pref_keePassDBToOpen_label"></span></div>
+                                <div class="col-xs-7">
+                                    <input class="form-control" id="pref_keePassDBToOpen_label" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="pref_rememberMRUDB_label" /><span data-i18n="pref_rememberMRUDB_label"></span></label>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+
+            </form>
+        </div>
     </div>
 
-    <script src="../common/i18n.js"></script>
-    <script src="../common/dollar-polyfill.js"></script>
     <script src="../common/browser-polyfill.js"></script>
+    <script src="../common/dollar-polyfill.js"></script>
+    <script src="../common/i18n.js"></script>
     <script src="settings.js"></script>
 </body>
 

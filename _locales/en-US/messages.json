@@ -253,12 +253,10 @@
     "description": "Search all open KeePass databases"
   },
   "pref_site_options_desc": {
-    "message": "KeeFox tries to find log-in details for all forms that contain a password field. Adjust this, \"save password\" notifications and more for each website here.",
-    "description": "Gives examples to the user for what the Site-specific section of the options panel is for."
+    "message": "KeeFox tries to find log-in details for all forms that contain a password field. Adjust this, \"save password\" notifications and more for each website here."
   },
   "pref_site_options_heading": {
-    "message": "Site-specific settings",
-    "description": "Heading for section of options panel which contains settings relating to customisations to how KeeFox behaves for specific websites."
+    "message": "Site-specific settings"
   },
   "pref_when_keefox_chooses_prompt_desc": {
     "message": "When KeeFox chooses a matching login for an HTTPAuth, NTLM or proxy prompt, KeeFox should"
@@ -288,19 +286,23 @@
     "message": "Settings for all sites whose address starts with"
   },
   "site_options_invisible_tip_desc": {
-    "message": "NB: The names and IDs may not be the same as visible labels on the page (they are set in the source code of the page)"
+    "message": "NB: The names and IDs may not be the same as visible labels on the page (they are set in the source code of the page)",
+    "description": "Explains that the configuration settings might not be what the casual user expects"
   },
   "site_options_list_explain_desc": {
-    "message": "If a form matches against one of the white lists below KeeFox will always try to fill it. If a form matches one of the black lists below KeeFox will never try to fill it. If it matches both lists KeeFox will not try to fill it."
+    "message": "If a form matches against one of the white lists below KeeFox will always try to fill it. If a form matches one of the black lists below KeeFox will never try to fill it. If it matches both lists KeeFox will not try to fill it.",
+    "description": "Explains how KeeFox chooses which forms to fill in"
   },
   "site_options_siteEnabledExplanation_desc": {
     "message": "Select the checkboxes on the left to enable a setting"
   },
-  "site_options_title": {
-    "message": "KeeFox Site options"
+  "pref_Finding_forms_heading": {
+    "message": "Finding forms",
+    "description": "Settings heading for how KeeFox finds forms it is (or isn't) interested in filling in with entries from KeePass"
   },
   "site_options_valid_form_intro_desc": {
-    "message": "KeeFox will try to fill matching KeePass entries for all forms that have a password field (box). You can adjust this behaviour below."
+    "message": "KeeFox will try to fill matching KeePass entries for all forms that have a password field (box). You can adjust this behaviour below.",
+    "description": "Explains how KeeFox chooses which forms to fill in"
   },
   "text_field_id": {
     "message": "Text field ID"

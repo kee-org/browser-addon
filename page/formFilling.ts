@@ -1,6 +1,7 @@
 /// <reference path="../common/Logger.ts" />
 /// <reference path="../common/kfDataModel.ts" />
 /// <reference path="../common/config.ts" />
+/// <reference path="../common/ConfigManager.ts" />
 
 class FormFilling {
 
@@ -280,27 +281,21 @@ class FormFilling {
 
         this.matchResult.doc = doc;
 
-        const conf = siteConfigManager.getConfigForURL(this.config.siteConfig, doc.URL);
+        const conf = configManager.siteConfigFor(doc.URL);
 
         // Forcing a scan for orphaned fields on all pages. May need to change
         // this if real world performance is too slow.
-        conf.scanForOrphanedFields = true;
-
-        if (conf.scanForOrphanedFields)
-        {
-            const pseudoForm = this.scanForOrphanedFields(doc);
-            if (pseudoForm) {
-                forms = Array.prototype.slice.call(forms);
-                forms.push(pseudoForm);
-            }
+        const pseudoForm = this.scanForOrphanedFields(doc);
+        if (pseudoForm) {
+            forms = Array.prototype.slice.call(forms);
+            forms.push(pseudoForm);
         }
 
         this.matchResult.forms = forms;
 
         if (!forms || forms.length == 0)
         {
-            this.Logger.info("No forms found on this page." + (conf.scanForOrphanedFields
-                ? "" : " If you think there should be a form detected, try enabling 'Scan for orphaned fields' in site-specific settings."));
+            this.Logger.info("No forms found on this page.");
             return;
         }
 
@@ -341,22 +336,7 @@ class FormFilling {
             // we check whether any whitelist or blacklist entries must override that behaviour
             let interestingForm = null;
 
-            interestingForm = siteConfigManager.valueAllowed(form.id, conf.interestingForms.id_w, conf.interestingForms.id_b, interestingForm);
-            interestingForm = siteConfigManager.valueAllowed(form.name, conf.interestingForms.name_w, conf.interestingForms.name_b, interestingForm);
-
-            if (interestingForm === false)
-            {
-                this.Logger.debug("Lost interest in this form after inspecting form name and ID");
-                continue;
-            }
-
-            for (const f in otherFields)
-            {
-                interestingForm = siteConfigManager.valueAllowed(otherFields[f].id, conf.interestingForms.f_id_w, conf.interestingForms.f_id_b, interestingForm);
-                interestingForm = siteConfigManager.valueAllowed(otherFields[f].name, conf.interestingForms.f_name_w, conf.interestingForms.f_name_b, interestingForm);
-            }
-
-            //TODO:1.6: #444 interestingForm = keefox_org.this.config.cssSelectorAllowed(document,conf.interestingForms.f_css_w,conf.interestingForms.f_css_b,interestingForm);
+            interestingForm = configManager.isFormInteresting(form);
 
             if (interestingForm === false)
             {
