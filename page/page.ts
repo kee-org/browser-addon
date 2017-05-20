@@ -68,10 +68,7 @@ function startup (currentAppState: AppState, isForegroundTab: boolean, myTabId: 
     formUtils = new FormUtils(KeeFoxLog);
     formFilling = new FormFilling(formUtils, KeeFoxLog, currentAppState.config, matchResultReceiver, matchFinder);
 
-    // Don't search for logins if this is a background tab
-    if (isForegroundTab) {
-        formFilling.findMatchesInThisFrame();
-    }
+    updateAppState(currentAppState, isForegroundTab);
 }
 
 KeeFoxLog.debug("content page started");
@@ -80,12 +77,14 @@ let myPort = chrome.runtime.connect({ name: "page" });
 myPort.postMessage({ greeting: "hello from content page script" });
 
 myPort.onMessage.addListener(function (m: AddonMessage) {
-    if (!appState) {
-        startup(m.appState, m.isForegroundTab, m.tabId, m.frameId);
-    }
     KeeFoxLog.debug("In browser popup script, received message from background script: ");
     KeeFoxLog.debug(m.appState.connected.toString());
-    updateAppState(m.appState, m.isForegroundTab);
+
+    if (!appState) {
+        startup(m.appState, m.isForegroundTab, m.tabId, m.frameId);
+    } else {
+        updateAppState(m.appState, m.isForegroundTab);
+    }
 
     if (m.findMatchesResult) {
         formFilling.findLoginsResultHandler(m.findMatchesResult);
