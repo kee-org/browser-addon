@@ -8,9 +8,6 @@
   "KB_shortcut_simple_3_desc": {
     "message": "Show logins list"
   },
-  "add_site": {
-    "message": "Add site"
-  },
   "black_list": {
     "message": "Black List"
   },
@@ -226,7 +223,8 @@
     "description": "Javascript console"
   },
   "pref_notifyBarRequestPasswordSave_label": {
-    "message": "Offer to save passwords"
+    "message": "Offer to save passwords",
+    "description": "Offer to save passwords"
   },
   "pref_notifyWhenEntryUpdated_label": {
     "message": "Display the \"Password successfully updated\" notification",
@@ -252,12 +250,6 @@
     "message": "Search all open KeePass databases",
     "description": "Search all open KeePass databases"
   },
-  "pref_site_options_desc": {
-    "message": "KeeFox tries to find log-in details for all forms that contain a password field. Adjust this, \"save password\" notifications and more for each website here."
-  },
-  "pref_site_options_heading": {
-    "message": "Site-specific settings"
-  },
   "pref_when_keefox_chooses_prompt_desc": {
     "message": "When KeeFox chooses a matching login for an HTTPAuth, NTLM or proxy prompt, KeeFox should"
   },
@@ -272,18 +264,6 @@
   "pref_triggerChangeInputEventAfterFill_label": {
     "message": "Trigger Change/Input Event after auto-fill",
     "description": "Trigger Change/Input Event after auto-fill"
-  },
-  "remove_site": {
-    "message": "Remove Site"
-  },
-  "save_site_settings": {
-    "message": "Save site settings"
-  },
-  "site_options_default_intro_desc": {
-    "message": "Settings for all sites. Add individual site addresses to override."
-  },
-  "site_options_intro_desc": {
-    "message": "Settings for all sites whose address starts with"
   },
   "site_options_invisible_tip_desc": {
     "message": "NB: The names and IDs may not be the same as visible labels on the page (they are set in the source code of the page)",
