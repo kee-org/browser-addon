@@ -11,6 +11,9 @@
         "scripts": [
             "common/dollar-polyfill.js",
             "common/browser-polyfill.js",
+            "common/punycode.js",
+            "common/pslData.js",
+            "common/publicsuffixlist.js",
             "background/biginteger.js",
             "background/app.js"
         ],
@@ -22,6 +25,9 @@
         "js": [
                 "common/dollar-polyfill.js",
                 "common/browser-polyfill.js",
+                "common/punycode.js",
+                "common/pslData.js",
+                "common/publicsuffixlist.js",
                 "page/page.js"
         ]
     }],
