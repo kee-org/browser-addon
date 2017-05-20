@@ -65,7 +65,7 @@ class Config {
     keePassMRUDB: string;
     KeePassRPCWebSocketPort: number;
     KPRPCUsername: string;
-    KPRPCStoredKeys: string[];
+    KPRPCStoredKeys: {[key: string]: string};
     lastConnectedToKeePass: string;
     listAllOpenDBs: boolean;
     logLevel: number;
