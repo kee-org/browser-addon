@@ -244,7 +244,7 @@ class ConfigManager {
 
     public isFormInteresting (form: HTMLFormElement) {
 
-        return true;
+        return null;
 
         //TODO:c: re-implement
         // let interestingForm: boolean = null;

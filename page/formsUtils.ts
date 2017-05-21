@@ -76,12 +76,12 @@ private isAKnownUsernameString (fieldNameIn) {
 * all arrays are standard javascript arrays
 * usernameField may be null.
 */
-public getFormFields (form, isSubmission, currentPage?): any[]
+public getFormFields (form, isSubmission, currentPage?)
 {
     const DOMusernameField = null;
-    const pwFields = [];
-    const otherFields = [];
-    const allFields = [];
+    const pwFields: keeFoxLoginField[] = [];
+    const otherFields: keeFoxLoginField[] = [];
+    const allFields: { index: number; element: keeFoxLoginField; type: string; }[] = [];
     let firstPasswordIndex = -1;
     let firstPossibleUsernameIndex = -1;
     let usernameIndex = -1;
@@ -98,7 +98,7 @@ public getFormFields (form, isSubmission, currentPage?): any[]
             && (form.elements[i].type == undefined || form.elements[i].type == null)))
             continue; // maybe it's something un-interesting
 
-        const DOMtype = form.elements[i].type.toLowerCase();
+        const DOMtype: string = form.elements[i].type.toLowerCase();
 
         this.Logger.debug("domtype: "+ DOMtype );
 
@@ -175,7 +175,7 @@ public getFormFields (form, isSubmission, currentPage?): any[]
     this.Logger.debug("actualUsernameIndex: " + actualUsernameIndex);
     this.Logger.debug("otherFields.length:" + otherFields.length);
 
-    return [actualUsernameIndex, pwFields, otherFields];
+    return { actualUsernameIndex, pwFields, otherFields };
 };
 
 // private getSaveOnSubmitForSite (siteURL)

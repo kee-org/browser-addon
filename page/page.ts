@@ -40,8 +40,16 @@ function shouldSearchForMatches (oldState: AppState, newState: AppState) {
 function updateAppState (newState: AppState, isForegroundTab: boolean) {
     const oldState = appState;
     appState = newState;
-    if (isForegroundTab && shouldSearchForMatches(oldState, appState))
+    const shouldSearch = shouldSearchForMatches(oldState, appState);
+    const shouldRemoveMatches = shouldSearch || (oldState && oldState.connected &&
+        (!appState.connected || (oldState.KeePassDatabases.length > 0 && appState.KeePassDatabases.length == 0))
+        );
+
+    if (shouldRemoveMatches)
+        formFilling.removeKeeFoxIconFromAllFields();
+    if (isForegroundTab && shouldSearch) {
         formFilling.findMatchesInThisFrame();
+    }
 }
 
 function renderMatchedLogins (logins: any[]) {

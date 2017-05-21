@@ -473,7 +473,7 @@ class keeFoxLoginField {
     DOMSelectElement: HTMLSelectElement;
 
     // "type" attribute on the HTML form element
-    type: string;
+    type: "password" | "text" | "radio" | "select-one" | "checkbox";
 
     formFieldPage: number;
 

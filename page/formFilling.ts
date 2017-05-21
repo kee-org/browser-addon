@@ -3,16 +3,49 @@
 /// <reference path="../common/config.ts" />
 /// <reference path="../common/ConfigManager.ts" />
 
+class MatchResult {
+    logins: any[];
+    usernameIndexArray: number[];
+    passwordFieldsArray: keeFoxLoginField[][];
+    otherFieldsArray: keeFoxLoginField[][];
+    currentPage: number;
+    allMatchingLogins: any[];
+    formRelevanceScores: number[];
+    UUID: string;
+    wantToAutoFillForm: boolean;
+    mustAutoFillForm: boolean;
+    cannotAutoFillForm: boolean;
+    wantToAutoSubmitForm: boolean;
+    mustAutoSubmitForm: boolean;
+    cannotAutoSubmitForm: boolean;
+    wantToAutoFillFormWithMultipleMatches: boolean;
+    overWriteFieldsAutomatically: boolean;
+    dbFileName: string;
+    doc: Document;
+    forms: HTMLFormElement[];
+    formReadyForSubmit: boolean;
+    autofillOnSuccess: boolean;
+    autosubmitOnSuccess: boolean;
+    notifyUserOnSuccess: boolean;
+    formOrigin: string;
+    wrappers: any[];
+    requestCount: number;
+    responseCount: number;
+    requestIds: any[];
+}
+
 class FormFilling {
 
     private Logger: KeeFoxLogger;
     private config: Config;
     private findLoginOp: any = {};
-    private matchResult: any = {};
+    private matchResult: MatchResult = new MatchResult();
     private latestFindMatchesResult: any;
 
     private matchFinder: {(uri: string): void};
     private formUtils: FormUtils;
+
+    private keeFoxFieldIcon: KeeFoxFieldIcon;
 
     constructor (formUtils: FormUtils,
         logger: KeeFoxLogger,
@@ -25,6 +58,7 @@ class FormFilling {
         this.config = config;
         this.matchResultReceiver = matchResultReceiver;
         this.matchFinder = matchFinder;
+        this.keeFoxFieldIcon = new KeeFoxFieldIcon();
     }
 
     public matchResultReceiver;
@@ -210,7 +244,7 @@ class FormFilling {
         }
 
         return this.fillMatchedFields (fields, dataFields, formFields);
-    };
+    }
 
     /* Expects this data object:
     {
@@ -220,7 +254,7 @@ class FormFilling {
         ... others
     }
     */
-    findMatchesInThisFrame (behaviour: FindMatchesBehaviour = {})
+    public findMatchesInThisFrame (behaviour: FindMatchesBehaviour = {})
     {
         const doc = window.document;
 
@@ -329,12 +363,12 @@ class FormFilling {
             this.matchResult.formRelevanceScores[i] = 0;
 
             this.Logger.debug("about to get form fields");
-            const [usernameIndex, passwordFields, otherFields] =
+            const { actualUsernameIndex: usernameIndex, pwFields: passwordFields, otherFields } =
                 this.formUtils.getFormFields(form, false);
 
             // We want to fill in this form if we find a password field but first
             // we check whether any whitelist or blacklist entries must override that behaviour
-            let interestingForm = null;
+            let interestingForm: boolean = null;
 
             interestingForm = configManager.isFormInteresting(form);
 
@@ -374,9 +408,9 @@ class FormFilling {
             }
 
         }  // end of form for loop
-    };
+    }
 
-    scanForOrphanedFields (doc)
+    private scanForOrphanedFields (doc)
     {
         const t = (new Date()).getTime();
         const orphanedFields = [];
@@ -407,9 +441,9 @@ class FormFilling {
         this.Logger.debug("scanForOrphanedFields took: " + (tn-t));
 
         return pseudoForm;
-    };
+    }
 
-    findLoginsResultHandler (resultWrapper)
+    public findLoginsResultHandler (result)
     {
         let foundLogins = null;
         const convertedResult = [];
@@ -417,9 +451,9 @@ class FormFilling {
 
         try
         {
-            if ("result" in resultWrapper && resultWrapper.result !== false && resultWrapper.result != null)
+            if (result)
             {
-                foundLogins = resultWrapper.result;
+                foundLogins = result;
 
                 for (const i in foundLogins)
                 {
@@ -453,9 +487,9 @@ class FormFilling {
         this.latestFindMatchesResult = this.matchResult;
 
         this.fillAndSubmit(true);
-    };
+    }
 
-    getRelevanceOfLoginMatchesAgainstAllForms (convertedResult, findLoginOp, matchResult)
+    getRelevanceOfLoginMatchesAgainstAllForms (convertedResult, findLoginOp, matchResult: MatchResult)
     {
         const crString = JSON.stringify(convertedResult);
         let firstMatchProcessed = false;
@@ -568,10 +602,9 @@ class FormFilling {
             && typeof(formIndex) != "undefined"
             && typeof(loginIndex) != "undefined";
 
-        let matchResult;
+        const matchResult = this.matchResult;
         let mostRelevantFormIndex;
 
-        matchResult = this.latestFindMatchesResult;
         // Give up if we have no results for this frame (i.e. there were no forms to fill)
         if (!matchResult)
             return;
@@ -586,6 +619,9 @@ class FormFilling {
         const passwordFields = matchResult.passwordFieldsArray[mostRelevantFormIndex];
         const usernameIndex = matchResult.usernameIndexArray[mostRelevantFormIndex];
         const otherFields = matchResult.otherFieldsArray[mostRelevantFormIndex];
+
+        // Give the user a way to choose a login interactively
+        this.keeFoxFieldIcon.addKeeFoxIconToFields(passwordFields, otherFields, matchResult.logins[mostRelevantFormIndex].length);
 
         // this records the login that we eventually choose as the one to fill the chosen form with
         let matchingLogin = null;
@@ -1087,6 +1123,10 @@ class FormFilling {
 
         this.Logger.info("Relevance for " + login.uniqueID + " is: " + score);
         return {score: score, lowFieldMatchRatio: lowFieldMatchRatio};
-    };
+    }
+
+    public removeKeeFoxIconFromAllFields () {
+        this.keeFoxFieldIcon.removeKeeFoxIconFromAllFields();
+    }
 
 };
