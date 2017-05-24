@@ -304,7 +304,7 @@ class kprpcClient {
         if (data.srp !== undefined && data.srp !== null) {
             if (this.checkServerSecurityLevel(data.srp.securityLevel)) {
                 switch (data.srp.stage) {
-                    case "identifyToClient": this.identifyToClient(data); break;
+                    case "identifyToClient": this.getSideChannelPassword(data); break;
                     case "proofToClient": this.proofToClient(data); break;
                     default: return;
                 }
@@ -388,14 +388,39 @@ class kprpcClient {
         });
     };
 
-    identifyToClient (data) {
+    getSideChannelPassword (data) {
 
         // get the user to type in the one-time password
-        //TODO:c:make it a nicer UI (e.g. non-blocking)
+
+        //TODO:c: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/windows/update
+        //TODO:c: above could let us frequently bring attention and focus to the SRP window so user knows KeeFox is broken without their intervention
+        // Could use onFocusChanged to refocus if can find a non-annoying way to do so
+
+        const s = data.srp.s;
+        const B = data.srp.B;
+        const _this = this;
+
+        function handleMessage (request, sender, sendResponse) {
+            _this.identifyToClient(request.password, s, B);
+            browser.runtime.onMessage.removeListener(handleMessage);
+        }
+
+        browser.runtime.onMessage.addListener(handleMessage);
+
         this.authPromptAborted = false;
-        const password = window.prompt($STR("KeeFox-conn-setup-enter-password"));
+
+        const createData = {
+            type: "detached_panel", // "popup" is another option. Not clear what the difference is.
+            url: "/dialogs/SRP.html",
+            width: 450,
+            height: 200
+        };
+        const creating = (browser as any).windows.create(createData);
+    }
+
+    identifyToClient (password, s, B) {
         this.srpClientInternals.p = password;
-        this.srpClientInternals.receive_salts(data.srp.s, data.srp.B).then(() => {
+        this.srpClientInternals.receive_salts(s, B).then(() => {
 
             const data2server =
                 {

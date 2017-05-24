@@ -98,6 +98,8 @@ gulp.task('watch', ['build'], function() {
 gulp.task('collect', function() {
     gulp.src('page/page.js')
 		.pipe(gulp.dest('build/page'));
+    gulp.src('page/*.css')
+		.pipe(gulp.dest('build/page'));
     gulp.src('popup/popup.js')
 		.pipe(gulp.dest('build/popup'));
     gulp.src('popup/popup.css')
@@ -116,6 +118,8 @@ gulp.task('collect', function() {
 		.pipe(gulp.dest('build/common/images'));
 	gulp.src('common/fonts/**')
 		.pipe(gulp.dest('build/common/fonts'));
+	gulp.src('dialogs/**')
+		.pipe(gulp.dest('build/dialogs'));
 	gulp.src('background/*.js')
 		.pipe(gulp.dest('build/background'));
 	gulp.src('_locales/**')
