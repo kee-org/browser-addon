@@ -46,6 +46,9 @@
         "clipboardWrite",
         "clipboardRead"
     ],
+    "web_accessible_resources" : [
+		"panels/*"
+    ],
     "applications": {
         "gecko": {
             "id": "keefox@chris.tomlinson",

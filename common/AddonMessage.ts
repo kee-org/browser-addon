@@ -9,4 +9,7 @@ interface AddonMessage {
     removeNotification?: number;
     findMatches?: { uri: string };
     findMatchesResult?: any;
+    logins?: keeFoxLoginInfo[];
+    action?: string;
+    selectedLoginIndex?: number;
 }

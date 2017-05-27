@@ -10,6 +10,7 @@
 /background/app.js
 /popup/popup.js
 /page/page.js
+/panels/panels.js
 /settings/settings.js
 /dist
 /build

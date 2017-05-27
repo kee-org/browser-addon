@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "target": "ES6",
+        "types": [
+            "../typedefs/filesystem",
+            "../typedefs/filewriter",
+            "../typedefs/browser",
+            "../typedefs/biginteger",
+            "../typedefs/dollar-polyfill"
+        ]
+    },
+    "include": [
+        "**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}

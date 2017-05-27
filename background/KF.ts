@@ -8,6 +8,8 @@
 /// <reference path="../common/AddonMessage.ts" />
 /// <reference path="../common/KeeFoxNotification.ts" />
 
+declare const chrome: typeof browser;
+
 class KeeFox {
 
     appState: AppState;
@@ -27,8 +29,10 @@ class KeeFox {
     urlToOpenOnStartup: string;
     ports: {
         tabs: browser.runtime.Port[][];
+        iframes: browser.runtime.Port[][];
         browserPopup: Partial<browser.runtime.Port>;
         onConnected: any;
+        mapInjectedIframes: number[][];
     };
 
     constructor ()
@@ -41,7 +45,8 @@ class KeeFox {
             KeePassDatabases: [],
             notifications: [],
             connected: false,
-            config: configManager.current
+            config: configManager.current,
+            logins: []
         };
 
         this.foregroundTabId = -1;
@@ -69,9 +74,16 @@ class KeeFox {
 
         this.ports = {
             tabs: [],
+            iframes: [],
             browserPopup: {postMessage: msg => {} },
             onConnected: function (p: browser.runtime.Port) {
-                switch (p.name) {
+                let name = p.name;
+                let parentFrameId: number;
+                if (name.startsWith("iframe")) {
+                    parentFrameId = parseInt(name.substr(7));
+                    name = "iframe";
+                }
+                switch (name) {
                     case "browserPopup": {
                         p.onMessage.addListener(browserPopupMessageHandler);
                         p.onDisconnect.addListener(browserPopupDisconnect);
@@ -89,9 +101,23 @@ class KeeFox {
                         keefox_org.ports.tabs[p.sender.tab.id][p.sender.frameId] = p;
                         break;
                     }
+                    case "iframe": {
+                        p.onMessage.addListener(iframeMessageHandler.bind(p));
+                        p.onDisconnect.addListener(iframeDisconnect.bind(p));
+                        p.postMessage({ appState: keefox_org.appState, frameId: p.sender.frameId, tabId: p.sender.tab.id, isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId } as AddonMessage);
+                        const iframe = keefox_org.ports.iframes[p.sender.tab.id];
+                        if (!iframe)
+                            keefox_org.ports.iframes[p.sender.tab.id] = [];
+                        keefox_org.ports.iframes[p.sender.tab.id][p.sender.frameId] = p;
+                        if (!keefox_org.ports.mapInjectedIframes[p.sender.tab.id])
+                            keefox_org.ports.mapInjectedIframes[p.sender.tab.id] = [];
+                        keefox_org.ports.mapInjectedIframes[p.sender.tab.id][p.sender.frameId] = parentFrameId;
+                        break;
+                    }
                 }
 
-            }
+            },
+            mapInjectedIframes: []
         };
 
         browser.runtime.onConnect.addListener(this.ports.onConnected);
@@ -714,12 +740,32 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         delete keefox_org.appState.notifications[msg.removeNotification];
         keefox_org.ports.browserPopup.postMessage({ appState: keefox_org.appState, isForegroundTab: this.sender.tab.id === keefox_org.foregroundTabId } as AddonMessage);
     }
+    if (msg.logins) {
+        keefox_org.appState.logins = msg.logins;
+    }
+};
+
+function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
+    console.log("In background script, received message from iframe script: " + msg);
+
+    if (msg.action == "manualFill" && msg.selectedLoginIndex != null) {
+        const tabId = this.sender.tab.id;
+        const frameId = this.sender.frameId;
+        const parentFrameId = keefox_org.ports.mapInjectedIframes[tabId][frameId];
+        keefox_org.ports.tabs[tabId][parentFrameId].postMessage(msg);
+    }
 };
 
 function pageDisconnect () {
     delete keefox_org.ports.tabs[this.sender.tab.id][this.sender.frameId];
     if (keefox_org.ports.tabs[this.sender.tab.id].length == 0)
         delete keefox_org.ports.tabs[this.sender.tab.id];
+}
+
+function iframeDisconnect () {
+    delete keefox_org.ports.iframes[this.sender.tab.id][this.sender.frameId];
+    if (keefox_org.ports.iframes[this.sender.tab.id].length == 0)
+        delete keefox_org.ports.iframes[this.sender.tab.id];
 }
 
 let portsQueue = [];

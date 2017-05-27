@@ -1,4 +1,5 @@
 /// <reference path="../common/config.ts" />
+/// <reference path="../common/kfDataModel.ts" />
 /// <reference path="../common/KeeFoxNotification.ts" />
 
 interface AppState {
@@ -9,4 +10,5 @@ interface AppState {
     notifications: KeeFoxNotification[];
     connected: boolean;
     config: Config;
+    logins: keeFoxLoginInfo[];
 }

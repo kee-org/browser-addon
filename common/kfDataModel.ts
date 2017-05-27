@@ -34,7 +34,7 @@ class keeFoxLoginInfo {
 
     // The "action" parameter of the form (for multi-page
     // logins, this is always the first page)
-    formActionURL;
+    //formActionURL;
 
     // The realm of a HTTP athentication request
     httpRealm: string;
@@ -78,6 +78,11 @@ class keeFoxLoginInfo {
     neverAutoFill: boolean;
     neverAutoSubmit: boolean;
     database;
+
+    lowFieldMatchRatio: any;
+    formIndex: number;
+    loginIndex: number;
+    frameKey: any;
 
     constructor () {
         this.alwaysAutoFill = false;
@@ -147,12 +152,12 @@ class keeFoxLoginInfo {
     // currently used only for recording potentially half-finished new entries after
     // user has submitted a form, hence not all info. needs to be persisted
     toSource () {
-        const formActionURLParam = (this.formActionURL == null) ? "null" : ("'" + this.formActionURL + "'");
+        //const formActionURLParam = (this.formActionURL == null) ? "null" : ("'" + this.formActionURL + "'");
         const httpRealmParam = (this.httpRealm == null) ? "null" : ("'" + this.httpRealm + "'");
         const uniqueIDParam = (this.uniqueID == null) ? "null" : ("'" + this.uniqueID + "'");
         const titleParam = (this.title == null) ? "null" : ("'" + this.title + "'");
 
-        return "( deserialisedOutputURLs , " + formActionURLParam + ", " + httpRealmParam + " , " + this.usernameIndex
+        return "( deserialisedOutputURLs , " + httpRealmParam + " , " + this.usernameIndex
             + " , deserialisedOutputPasswords , " + uniqueIDParam + " , " + titleParam + " , deserialisedOutputOtherFields , " + this.maximumPage + " )";
     };
 

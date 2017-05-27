@@ -1,10 +1,12 @@
 class KeeFoxFieldIcon {
 
     private fieldsWithIcons: keeFoxLoginField[] = [];
+    private logins: keeFoxLoginInfo[];
 
     public removeKeeFoxIconFromAllFields () {
         for (const field of this.fieldsWithIcons) {
             const element: HTMLElement = field.DOMInputElement;
+            element.removeEventListener("click", this.showMatchedLoginsPanel);
             element.removeEventListener("mousemove", this.hoverOverInput);
             element.style.backgroundImage = "";
             element.style.backgroundRepeat = "";
@@ -13,9 +15,12 @@ class KeeFoxFieldIcon {
             element.style.backgroundPosition = "";
         }
         this.fieldsWithIcons = [];
+        this.logins = null;
     }
 
-    public addKeeFoxIconToFields (passwordFields: keeFoxLoginField[], otherFields: keeFoxLoginField[], matchTotal: number) {
+    public addKeeFoxIconToFields (passwordFields: keeFoxLoginField[], otherFields: keeFoxLoginField[], logins: keeFoxLoginInfo[]) {
+
+        this.logins = logins;
 
         //TODO:c: tell user how many matches there were
         //const image = matchTotal > 1 ? this.getLabelledIcon(matchTotal.toString()) : this.KEEFOX_ICON_16;
@@ -27,6 +32,7 @@ class KeeFoxFieldIcon {
             this.fieldsWithIcons.push(field);
 
             const element: HTMLElement = field.DOMInputElement;
+            element.addEventListener("click", this.showMatchedLoginsPanel.bind(this));
             element.addEventListener("mousemove", this.hoverOverInput);
 
             element.style.backgroundImage = "url('" + image + "')";
@@ -34,6 +40,12 @@ class KeeFoxFieldIcon {
             element.style.backgroundAttachment = "scroll";
             element.style.backgroundSize = "16px 18px";
             element.style.backgroundPosition = "98% 50%";
+        }
+    }
+
+    private showMatchedLoginsPanel (e) {
+        if ((e.clientX - e.target.offsetLeft) > (parseInt(document.defaultView.getComputedStyle(e.target).width) - 16)) {
+            formFilling.createMatchedLoginsPanelNearNode(e.target, this.logins);
         }
     }
 

@@ -5,9 +5,9 @@ var sourcemaps = require('gulp-sourcemaps');
 var zip = require('gulp-zip');
 
 gulp.task("default", [ "build" ]);
-gulp.task("build", ["ts:background", "ts:popup", "ts:page", "ts:settings" ]);
+gulp.task("build", ["ts:background", "ts:popup", "ts:panels", "ts:page", "ts:settings" ]);
 
-gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:page", "lint:settings" ]);
+gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:settings" ]);
 
 gulp.task("lint:background", function() {
     return gulp.src(["background/**/*.ts"])
@@ -27,6 +27,14 @@ gulp.task("lint:page", function() {
 
 gulp.task("lint:popup", function() {
     return gulp.src(["popup/**/*.ts"])
+        .pipe(tslint({
+            formatter: "verbose"
+        }))
+        .pipe(tslint.report())
+});
+
+gulp.task("lint:panels", function() {
+    return gulp.src(["panels/**/*.ts"])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -65,6 +73,18 @@ gulp.task("ts:popup", ["lint:popup"], function() {
         .pipe(gulp.dest("popup"));
 });
 
+var tsProjectPanels = ts.createProject("panels/tsconfig.json", {
+    outFile: "panels.js"
+});
+gulp.task("ts:panels", ["lint:panels"], function() {
+    return tsProjectPanels.src()
+        .pipe(sourcemaps.init())
+        .pipe(tsProjectPanels())
+        .js
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest("panels"));
+});
+
 var tsProjectPage = ts.createProject("page/tsconfig.json", {
     outFile: "page.js"
 });
@@ -91,6 +111,7 @@ gulp.task("ts:settings", ["lint:settings"], function() {
 
 gulp.task('watch', ['build'], function() {
     gulp.watch(['common/**/*.ts', 'popup/**/*.ts'], ['ts:popup']);
+    gulp.watch(['common/**/*.ts', 'panels/**/*.ts'], ['ts:panels']);
     gulp.watch(['common/**/*.ts', 'page/**/*.ts'], ['ts:page']);
     gulp.watch(['common/**/*.ts', 'background/**/*.ts'], ['ts:background']);
 });
@@ -106,6 +127,12 @@ gulp.task('collect', function() {
 		.pipe(gulp.dest('build/popup'));
     gulp.src('popup/popup.html')
 		.pipe(gulp.dest('build/popup'));
+    gulp.src('panels/panels.js')
+		.pipe(gulp.dest('build/panels'));
+    gulp.src('panels/panels.css')
+		.pipe(gulp.dest('build/panels'));
+    gulp.src('panels/panels.html')
+		.pipe(gulp.dest('build/panels'));
     gulp.src('settings/settings.html')
 		.pipe(gulp.dest('build/settings'));
     gulp.src('settings/*.css')

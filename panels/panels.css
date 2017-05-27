@@ -1,0 +1,88 @@
+body {
+    background-color: white;
+    padding: 0px;
+    margin: 0px;
+}
+
+#MatchedLoginsListContainer {
+
+    border-style: outset;
+    border-width: 2px;
+    border-color:grey;
+    padding: 4px;
+    margin: 0px;
+}
+
+#KeeFox-MatchedLoginsList {
+
+    border: red solid 0px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    height:288px;
+}
+
+/* Default login list item and group style */
+#KeeFox-MatchedLoginsList li
+{
+    min-height:26px;
+    padding:0px 5px 0px 22px;
+    margin:0px;
+    background-repeat:no-repeat;
+    background-position:2px 4px;
+    cursor:default;
+    line-height:26px;
+    position:relative;
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+}
+
+#KeeFox-MatchedLoginsList li:active
+{
+    background-color: #E3E3E3;
+    border: 1px solid #C6C6C7;
+    border-radius: 3px;
+}
+
+#KeeFox-MatchedLoginsList li:hover
+{
+    background-color: #EAEAEA;
+    border: 1px solid #D6D6D6;
+    border-radius: 3px;
+}
+
+/* Shade the item that has keyboard focus */
+#KeeFox-MatchedLoginsList li:focus
+{
+    background-color: #DDDDDD;
+}
+
+/* Basic login list styles */
+#KeeFox-MatchedLoginsList ul {
+    margin:0 0 0 0px;
+    padding:0px 0px 0px 4px;
+    list-style:none;
+}
+
+#KeeFox-optionsMenuTrigger
+{
+    width:18px;
+    min-width:18px;
+    height:18px;
+    min-height:18px;
+    background-color: #F4F4F4;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    position:absolute;
+    right: 10px;
+    bottom:calc(50% - 11px);
+    background-image: url("../common/images/menu.png");
+    padding:1px;
+    background-repeat:no-repeat;
+    background-position:1px 1px;
+    cursor: pointer;
+}
+
+#KeeFox-optionsMenuTrigger:hover
+{
+    background-color: #fff;
+}

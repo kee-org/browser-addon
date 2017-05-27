@@ -2,9 +2,10 @@
 /// <reference path="../common/kfDataModel.ts" />
 /// <reference path="../common/config.ts" />
 /// <reference path="../common/ConfigManager.ts" />
+/// <reference path="keeFoxFieldIcon.ts" />
 
 class MatchResult {
-    logins: any[];
+    logins: keeFoxLoginInfo[][];
     usernameIndexArray: number[];
     passwordFieldsArray: keeFoxLoginField[][];
     otherFieldsArray: keeFoxLoginField[][];
@@ -32,6 +33,7 @@ class MatchResult {
     requestCount: number;
     responseCount: number;
     requestIds: any[];
+    mostRelevantFormIndex?: number;
 }
 
 class FormFilling {
@@ -62,6 +64,42 @@ class FormFilling {
     }
 
     public matchResultReceiver;
+
+    public createMatchedLoginsPanelNearNode (target, logins) {
+
+        this.closeMatchedLoginsPanel();
+
+        //TODO:c: calcualte correct position and update it when page reflows
+        const container = document.createElement("div");
+        container.id="KeeFoxAddonPanelMatchedLogins";
+        const top = 1000;
+        const left = 400;
+        container.style.setProperty( "width", "400px", "important" );
+        container.style.setProperty( "height", "300px", "important" );
+        container.style.setProperty( "top", top + "px", "important" );
+        container.style.setProperty( "left", left + "px", "important" );
+        container.style.setProperty( "display", "block", "important" );
+        container.style.setProperty( "position", "absolute", "important" );
+        container.style.setProperty( "zIndex", "2147483647", "important" );
+
+        const iframe = document.createElement("iframe");
+        iframe.style.setProperty( "width", "100%", "important" );
+        iframe.style.setProperty( "height", "100%", "important" );
+        iframe.style.setProperty( "border", "none", "important" );
+        iframe.style.setProperty( "visibility", "visible", "important" );
+        iframe.style.setProperty( "position", "relative", "important" );
+        iframe.setAttribute("scrolling", "no");
+
+        iframe.src = chrome.extension.getURL("panels/panels.html") + "?parentFrameId=" + frameId + "&panel=matchedLogins";
+        container.appendChild(iframe);
+
+        document.getElementsByTagName("body")[0].appendChild(container);
+    }
+
+    public closeMatchedLoginsPanel () {
+        const panel = document.getElementById("KeeFoxAddonPanelMatchedLogins");
+        if (panel) panel.parentNode.removeChild(panel);
+    }
 
     private calculateFieldMatchScore (formField, dataField, currentPage, overWriteFieldsAutomatically)
     {
@@ -272,8 +310,12 @@ class FormFilling {
 
         const useCachedResults = true;
 
+        //TODO:c: create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
+        // matchResult = new MatchResult();
         this.matchResult.UUID = "";
         this.matchResult.logins = [];
+        this.matchResult.mostRelevantFormIndex = null;
+
 
         // auto fill the form by default unless a preference or tab variable tells us otherwise
         this.matchResult.wantToAutoFillForm = this.config.autoFillForms;
@@ -596,32 +638,38 @@ class FormFilling {
         this.Logger.debug("fillAndSubmit started. automated: " + automated
             + ", formIndex: " + formIndex + ", loginIndex: " + loginIndex);
 
-        // We do some things differently if we're being manually asked to fill and
-        // submit a specific matched login
-        const isMatchedLoginRequest = !automated
-            && typeof(formIndex) != "undefined"
-            && typeof(loginIndex) != "undefined";
-
         const matchResult = this.matchResult;
-        let mostRelevantFormIndex;
 
         // Give up if we have no results for this frame (i.e. there were no forms to fill)
         if (!matchResult)
             return;
-        mostRelevantFormIndex = this.getMostRelevantForm().bestFormIndex;
+
+        // We do some things differently if we're being manually asked to fill and
+        // submit a specific matched login
+        const isMatchedLoginRequest = !automated
+            && ((matchResult.mostRelevantFormIndex !== null && matchResult.mostRelevantFormIndex >= 0) || typeof(formIndex) != "undefined")
+            && typeof(loginIndex) != "undefined";
+
+        if (!isMatchedLoginRequest) {
+            matchResult.mostRelevantFormIndex = this.getMostRelevantForm().bestFormIndex;
+        }
 
         // Supplied formID overrides any that we just automatically calculated above
-        if (formIndex >= 0)
-            mostRelevantFormIndex = formIndex;
+        if (formIndex !== null && formIndex >= 0)
+            matchResult.mostRelevantFormIndex = formIndex;
 
         // from now on we concentrate on just the most relevant form and the fields we found earlier
-        const form = matchResult.forms[mostRelevantFormIndex];
-        const passwordFields = matchResult.passwordFieldsArray[mostRelevantFormIndex];
-        const usernameIndex = matchResult.usernameIndexArray[mostRelevantFormIndex];
-        const otherFields = matchResult.otherFieldsArray[mostRelevantFormIndex];
+        const form = matchResult.forms[matchResult.mostRelevantFormIndex];
+        const passwordFields = matchResult.passwordFieldsArray[matchResult.mostRelevantFormIndex];
+        const usernameIndex = matchResult.usernameIndexArray[matchResult.mostRelevantFormIndex];
+        const otherFields = matchResult.otherFieldsArray[matchResult.mostRelevantFormIndex];
 
-        // Give the user a way to choose a login interactively
-        this.keeFoxFieldIcon.addKeeFoxIconToFields(passwordFields, otherFields, matchResult.logins[mostRelevantFormIndex].length);
+        if (!isMatchedLoginRequest) {
+            myPort.postMessage({ logins: matchResult.logins[matchResult.mostRelevantFormIndex] });
+
+            // Give the user a way to choose a login interactively
+            this.keeFoxFieldIcon.addKeeFoxIconToFields(passwordFields, otherFields, matchResult.logins[matchResult.mostRelevantFormIndex]);
+        }
 
         // this records the login that we eventually choose as the one to fill the chosen form with
         let matchingLogin = null;
@@ -648,39 +696,39 @@ class FormFilling {
             // so it can be set correctly later
             if (loginIndex >= 0)
             {
-                matchingLogin = matchResult.logins[mostRelevantFormIndex][loginIndex];
+                matchingLogin = matchResult.logins[matchResult.mostRelevantFormIndex][loginIndex];
                 matchResult.UUID = null;
                 matchResult.dbFileName = null;
             }
 
             let checkMatchingLoginRelevanceThreshold = false;
-            if (matchingLogin == null && matchResult.logins[mostRelevantFormIndex].length == 1) {
-                matchingLogin = matchResult.logins[mostRelevantFormIndex][0];
+            if (matchingLogin == null && matchResult.logins[matchResult.mostRelevantFormIndex].length == 1) {
+                matchingLogin = matchResult.logins[matchResult.mostRelevantFormIndex][0];
                 checkMatchingLoginRelevanceThreshold = true;
             } else if (matchResult.UUID != undefined && matchResult.UUID != null && matchResult.UUID != "") {
                 // Skip the relevance tests if we have been told to use a specific UUID
                 this.Logger.debug("We've been told to use a login with this UUID: " + matchResult.UUID);
-                for (let count = 0; count < matchResult.logins[mostRelevantFormIndex].length; count++)
-                    if (matchResult.logins[mostRelevantFormIndex][count].uniqueID == matchResult.UUID)
+                for (let count = 0; count < matchResult.logins[matchResult.mostRelevantFormIndex].length; count++)
+                    if (matchResult.logins[matchResult.mostRelevantFormIndex][count].uniqueID == matchResult.UUID)
                     {
-                        matchingLogin = matchResult.logins[mostRelevantFormIndex][count];
+                        matchingLogin = matchResult.logins[matchResult.mostRelevantFormIndex][count];
                         break;
                     }
                 if (matchingLogin == null)
                     this.Logger.warn("Could not find the required KeePass entry. Maybe the website redirected you to a different domain or hostname?");
 
-            } else if (matchingLogin == null && (!matchResult.logins[mostRelevantFormIndex] || !matchResult.logins[mostRelevantFormIndex].length)) {
+            } else if (matchingLogin == null && (!matchResult.logins[matchResult.mostRelevantFormIndex] || !matchResult.logins[matchResult.mostRelevantFormIndex].length)) {
                 this.Logger.debug("No logins for form.");
             } else if (matchingLogin == null) {
                 this.Logger.debug("Multiple logins for form, so estimating most relevant.");
                 let mostRelevantLoginIndex = 0;
 
-                for (let count = 0; count < matchResult.logins[mostRelevantFormIndex].length; count++)
-                    if (matchResult.logins[mostRelevantFormIndex][count].relevanceScore > matchResult.logins[mostRelevantFormIndex][mostRelevantLoginIndex].relevanceScore)
+                for (let count = 0; count < matchResult.logins[matchResult.mostRelevantFormIndex].length; count++)
+                    if (matchResult.logins[matchResult.mostRelevantFormIndex][count].relevanceScore > matchResult.logins[matchResult.mostRelevantFormIndex][mostRelevantLoginIndex].relevanceScore)
                         mostRelevantLoginIndex = count;
 
                 this.Logger.debug("We think login " + mostRelevantLoginIndex + " is most relevant.");
-                matchingLogin = matchResult.logins[mostRelevantFormIndex][mostRelevantLoginIndex];
+                matchingLogin = matchResult.logins[matchResult.mostRelevantFormIndex][mostRelevantLoginIndex];
 
                 // If user has specified, prevent automatic fill due to multiple matches
                 if (automated && !matchResult.wantToAutoFillFormWithMultipleMatches)

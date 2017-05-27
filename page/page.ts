@@ -4,7 +4,7 @@
 
 declare const chrome: typeof browser;
 
-let appState;
+let appState: AppState;
 let keefoxPopupLoadTime = Date.now();
 let formUtils: FormUtils;
 let formFilling: FormFilling;
@@ -85,18 +85,22 @@ let myPort = chrome.runtime.connect({ name: "page" });
 myPort.postMessage({ greeting: "hello from content page script" });
 
 myPort.onMessage.addListener(function (m: AddonMessage) {
-    KeeFoxLog.debug("In browser popup script, received message from background script: ");
-    KeeFoxLog.debug(m.appState.connected.toString());
+    KeeFoxLog.debug("In browser content page script, received message from background script");
 
     if (!appState) {
         startup(m.appState, m.isForegroundTab, m.tabId, m.frameId);
-    } else {
+    } else if (m.appState) {
         updateAppState(m.appState, m.isForegroundTab);
     }
 
     if (m.findMatchesResult) {
         formFilling.findLoginsResultHandler(m.findMatchesResult);
         renderMatchedLogins(m.findMatchesResult);
+    }
+
+    if (m.action == "manualFill" && m.selectedLoginIndex != null) {
+        formFilling.closeMatchedLoginsPanel();
+        formFilling.fillAndSubmit(false, null, m.selectedLoginIndex);
     }
 });
 
