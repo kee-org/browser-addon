@@ -3,9 +3,11 @@
 function updateAppState (newState: AppState) {
     const oldState = appState;
     appState = newState;
-    const shouldRemoveMatches = (oldState && oldState.connected &&
-        (!appState.connected || (oldState.KeePassDatabases.length > 0 && appState.KeePassDatabases.length == 0))
-        );
+}
+
+function updateTabState (newState: TabState) {
+    const oldState = tabState;
+    tabState = newState;
 }
 
 KeeFoxLog.debug("iframe page started");
@@ -30,9 +32,10 @@ switch (params["panel"])
             KeeFoxLog.debug("In iframe script, received message from background script: ");
 
             if (m.appState) this.updateAppState(m.appState);
+            if (m.tabState) this.updateTabState(m.tabState);
 
             //TODO:c: sometimes don't do this?
-            matchedLoginsPanel.createNearNode(document.getElementById("arrowContainer"), appState.logins);
+            matchedLoginsPanel.createNearNode(document.getElementById("arrowContainer"), tabState.logins);
         });
     break;
 }

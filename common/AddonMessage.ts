@@ -1,7 +1,9 @@
 /// <reference path="../common/AppState.ts" />
+/// <reference path="../common/TabState.ts" />
 
 interface AddonMessage {
     appState?: AppState;
+    tabState?: TabState;
     isForegroundTab?: boolean;
     tabId?: number;
     frameId?: number;

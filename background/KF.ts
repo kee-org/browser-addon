@@ -5,6 +5,7 @@
 /// <reference path="commands.ts" />
 /// <reference path="utils.ts" />
 /// <reference path="../common/AppState.ts" />
+/// <reference path="../common/TabState.ts" />
 /// <reference path="../common/AddonMessage.ts" />
 /// <reference path="../common/KeeFoxNotification.ts" />
 
@@ -13,6 +14,7 @@ declare const chrome: typeof browser;
 class KeeFox {
 
     appState: AppState;
+    tabStates: TabState[];
     utils: Utils;
     search: Search;
     foregroundTabId: number;
@@ -32,7 +34,6 @@ class KeeFox {
         iframes: browser.runtime.Port[][];
         browserPopup: Partial<browser.runtime.Port>;
         onConnected: any;
-        mapInjectedIframes: number[][];
     };
 
     constructor ()
@@ -45,9 +46,10 @@ class KeeFox {
             KeePassDatabases: [],
             notifications: [],
             connected: false,
-            config: configManager.current,
-            logins: []
+            config: configManager.current
         };
+
+        this.tabStates = [];
 
         this.foregroundTabId = -1;
 
@@ -92,7 +94,12 @@ class KeeFox {
                     case "page": {
                         p.onMessage.addListener(pageMessageHandler.bind(p));
                         p.onDisconnect.addListener(pageDisconnect.bind(p));
-                        p.postMessage({ appState: keefox_org.appState, frameId: p.sender.frameId, tabId: p.sender.tab.id, isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId } as AddonMessage);
+                        p.postMessage({
+                            appState: keefox_org.appState,
+                            frameId: p.sender.frameId,
+                            tabId: p.sender.tab.id,
+                            isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
+                        } as AddonMessage);
                         const tab = keefox_org.ports.tabs[p.sender.tab.id];
                         if (!tab)
                             keefox_org.ports.tabs[p.sender.tab.id] = [];
@@ -102,20 +109,28 @@ class KeeFox {
                     case "iframe": {
                         p.onMessage.addListener(iframeMessageHandler.bind(p));
                         p.onDisconnect.addListener(iframeDisconnect.bind(p));
-                        p.postMessage({ appState: keefox_org.appState, frameId: p.sender.frameId, tabId: p.sender.tab.id, isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId } as AddonMessage);
+                        p.postMessage({
+                            appState: keefox_org.appState,
+                            tabState: keefox_org.tabStates[p.sender.tab.id],
+                            frameId: p.sender.frameId,
+                            tabId: p.sender.tab.id,
+                            isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
+                        } as AddonMessage);
                         const iframe = keefox_org.ports.iframes[p.sender.tab.id];
                         if (!iframe)
                             keefox_org.ports.iframes[p.sender.tab.id] = [];
                         keefox_org.ports.iframes[p.sender.tab.id][p.sender.frameId] = p;
-                        if (!keefox_org.ports.mapInjectedIframes[p.sender.tab.id])
-                            keefox_org.ports.mapInjectedIframes[p.sender.tab.id] = [];
-                        keefox_org.ports.mapInjectedIframes[p.sender.tab.id][p.sender.frameId] = parentFrameId;
+
+                        if (!keefox_org.tabStates[p.sender.tab.id])
+                            keefox_org.tabStates[p.sender.tab.id] = new TabState();
+                        if (!keefox_org.tabStates[p.sender.tab.id].mapInjectedIframes)
+                            keefox_org.tabStates[p.sender.tab.id].mapInjectedIframes = [];
+                        keefox_org.tabStates[p.sender.tab.id].mapInjectedIframes[p.sender.frameId] = parentFrameId;
                         break;
                     }
                 }
 
-            },
-            mapInjectedIframes: []
+            }
         };
 
         browser.runtime.onConnect.addListener(this.ports.onConnected);
@@ -139,16 +154,13 @@ class KeeFox {
                     });
                 }
 
-                commandManager.setupContextMenuItems(keefox_org.appState.connected, keefox_org.appState.KeePassDatabases.length, null);
+                commandManager.setupContextMenuItems();
             }
         );
         // browser.tabs.onUpdated.addListener((id, event) =>
         //     event.url
         // );
 
-        // browser.browserAction.onClicked.addListener(function() {
-        //     this.ports.browserPopup.postMessage({appState: {connected:true}});
-        // });
     }
 
 
@@ -222,7 +234,7 @@ class KeeFox {
             }, this);
         }, this);
 
-        commandManager.setupContextMenuItems(this.appState.connected, this.appState.KeePassDatabases.length, null);
+        commandManager.setupContextMenuItems();
 
         KeeFoxLog.info("KeeFox paused.");
     }
@@ -275,7 +287,7 @@ class KeeFox {
             }, this);
         }, this);
 
-        commandManager.setupContextMenuItems(this.appState.connected, this.appState.KeePassDatabases.length, null);
+        commandManager.setupContextMenuItems();
     }
 
     // if the MRU database is known, open that but otherwise send empty string which will cause user
@@ -744,7 +756,10 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         keefox_org.ports.browserPopup.postMessage({ appState: keefox_org.appState, isForegroundTab: this.sender.tab.id === keefox_org.foregroundTabId } as AddonMessage);
     }
     if (msg.logins) {
-        keefox_org.appState.logins = msg.logins;
+        if (!keefox_org.tabStates[this.sender.tab.id]) {
+            keefox_org.tabStates[this.sender.tab.id] = new TabState();
+        }
+        keefox_org.tabStates[this.sender.tab.id].logins = msg.logins;
     }
 };
 
@@ -754,7 +769,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.action == "manualFill" && msg.selectedLoginIndex != null) {
         const tabId = this.sender.tab.id;
         const frameId = this.sender.frameId;
-        const parentFrameId = keefox_org.ports.mapInjectedIframes[tabId][frameId];
+        const parentFrameId = keefox_org.tabStates[tabId].mapInjectedIframes[frameId];
         keefox_org.ports.tabs[tabId][parentFrameId].postMessage(msg);
     }
 };

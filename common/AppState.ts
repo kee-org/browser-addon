@@ -1,6 +1,5 @@
-/// <reference path="../common/config.ts" />
-/// <reference path="../common/kfDataModel.ts" />
-/// <reference path="../common/KeeFoxNotification.ts" />
+/// <reference path="config.ts" />
+/// <reference path="KeeFoxNotification.ts" />
 
 interface AppState {
     latestConnectionError: string;
@@ -10,5 +9,4 @@ interface AppState {
     notifications: KeeFoxNotification[];
     connected: boolean;
     config: Config;
-    logins: keeFoxLoginInfo[];
 }

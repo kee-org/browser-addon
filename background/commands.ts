@@ -151,48 +151,49 @@ class KFCommands {
         });
     };
 
-    public setupContextMenuItems (connected: boolean, dbCount: number, logins) {
-        if (keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0) {
-            try {
-                browser.contextMenus.create({
-                    id: "detect-forms",
-                    title: $STR("Menu_Button_fillCurrentDocument_label"),
-                    contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
-                });
-            } catch (e) {
-                // try again with Chrome-supported contexts
-                browser.contextMenus.create({
-                    id: "detect-forms",
-                    title: $STR("Menu_Button_fillCurrentDocument_label"),
-                    contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
-                });
+    public setupContextMenuItems () {
+        chrome.contextMenus.removeAll(() => {
+            if (keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0) {
+                try {
+                    browser.contextMenus.create({
+                        id: "detect-forms",
+                        title: $STR("Menu_Button_fillCurrentDocument_label"),
+                        contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
+                    });
+                } catch (e) {
+                    // try again with Chrome-supported contexts
+                    browser.contextMenus.create({
+                        id: "detect-forms",
+                        title: $STR("Menu_Button_fillCurrentDocument_label"),
+                        contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
+                    });
+                }
             }
-        }
 
-        if (keefox_org.appState.connected) {
-            try {
-                browser.contextMenus.create({
-                    id: "generate-password",
-                    title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
-                    contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
-            });
-            } catch (e) {
-                // try again with Chrome-supported contexts
-                browser.contextMenus.create({
-                    id: "generate-password",
-                    title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
-                    contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
+            if (keefox_org.appState.connected) {
+                try {
+                    browser.contextMenus.create({
+                        id: "generate-password",
+                        title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
+                        contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
                 });
+                } catch (e) {
+                    // try again with Chrome-supported contexts
+                    browser.contextMenus.create({
+                        id: "generate-password",
+                        title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
+                        contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
+                    });
+                }
             }
-        }
 
-        // if (keefox_org.appState.ActiveKeePassDatabaseIndex < 0) {
+            // if (keefox_org.appState.ActiveKeePassDatabaseIndex < 0) {
 
-        // }
+            // }
+        });
     }
 }
 
-//TODO:c: need to do this later I expect
 // initialise the command system
 let commandManager = new KFCommands();
 commandManager.init();
