@@ -138,5 +138,4 @@ class KeeFoxLogger {
 };
 
 // Logging before we have been able to get the current configuration asynchronously has to follow some fixed default configuration
-//TODO:c: before release, reduce default to Warn
-let KeeFoxLog = new KeeFoxLogger({logLevel: 4, logSensitiveData: false});
+let KeeFoxLog = new KeeFoxLogger({logLevel: 2, logSensitiveData: false});

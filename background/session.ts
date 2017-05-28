@@ -73,7 +73,9 @@ startup () {
         if (this.webSocketPort <= 0 || this.webSocketPort > 65535
             || this.webSocketPort == 19455)
         {
-            configManager.setASAP( {KeePassRPCWebSocketPort: defaultWebSocketPort });
+            configManager.current.KeePassRPCWebSocketPort = defaultWebSocketPort;
+            configManager.save();
+
             this.webSocketPort = defaultWebSocketPort;
         }
         this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;

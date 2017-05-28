@@ -260,7 +260,8 @@ class KeeFox {
         {
             const MRUFN = this.getDatabaseFileName();
             if (MRUFN != null && MRUFN != undefined && !(MRUFN instanceof Error))
-                configManager.setASAP({ keePassMRUDB: MRUFN });
+                configManager.current.keePassMRUDB = MRUFN;
+                configManager.save();
         }
 
         keefox_org.ports.browserPopup.postMessage( { appState: this.appState });

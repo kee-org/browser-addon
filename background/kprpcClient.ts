@@ -410,7 +410,7 @@ class kprpcClient {
         this.authPromptAborted = false;
 
         const createData = {
-            type: "detached_panel", // "popup" is another option. Not clear what the difference is.
+            type: "popup",
             url: "/dialogs/SRP.html",
             width: 450,
             height: 200
@@ -639,7 +639,8 @@ class kprpcClient {
 
         if (username.length <= 0) {
             username = keefox_org.utils.newGUID();
-            configManager.setASAP({ KPRPCUsername: username });
+            configManager.current.KPRPCUsername = username;
+            configManager.save();
         }
         return username;
     };
@@ -675,9 +676,8 @@ class kprpcClient {
         if (securityLevel == 2 || securityLevel == 1) {
             // There is no longer any way to adjust the security of the stored key so we must treat all as if they are securityLevel 1
             // store the key
-            //TODO:c: Need a neater way to set a new item on an array as part of setting a config value
             configManager.current.KPRPCStoredKeys[username] = key;
-            configManager.setASAP({ KPRPCStoredKeys: configManager.current.KPRPCStoredKeys });
+            configManager.save();
         }
     };
 
@@ -685,9 +685,8 @@ class kprpcClient {
         if (!securityLevel || securityLevel == 2 || securityLevel == 1) {
             // There is no longer any way to adjust the security of the stored key so we must treat all as if they are securityLevel 1
             // set the key in about:config
-            //TODO:c: Need a neater way to set a new item on an array as part of setting a config value
             configManager.current.KPRPCStoredKeys[username] = "";
-            configManager.setASAP({ KPRPCStoredKeys: configManager.current.KPRPCStoredKeys });
+            configManager.save();
         }
     };
 
