@@ -9,15 +9,23 @@ class MatchedLoginsPanelStub {
         this.target = target;
     }
 
-    public createMatchedLoginsPanelNearNode () {
+    public createMatchedLoginsPanel () {
         this.container = document.createElement("div");
         this.container.id = "KeeFoxAddonPanelMatchedLogins";
 
         this.container.style.setProperty( "display", "block", "important" );
         this.container.style.setProperty( "position", "absolute", "important" );
         this.container.style.setProperty( "zIndex", "2147483647", "important" );
-        this.targetRelativeRect = this.target.getBoundingClientRect();
-        this.positionPanel();
+
+        if (this.target) {
+            this.targetRelativeRect = this.target.getBoundingClientRect();
+            this.positionPanel();
+        } else {
+            this.container.style.setProperty( "width", "400px", "important" );
+            this.container.style.setProperty( "height", "300px", "important" );
+            this.container.style.setProperty( "top", ((window.innerHeight-300)/2 + window.scrollY)  + "px", "important" );
+            this.container.style.setProperty( "left", ((window.innerWidth-400)/2 + window.scrollX) + "px", "important" );
+        }
 
         const iframe = document.createElement("iframe");
         iframe.style.setProperty( "width", "100%", "important" );

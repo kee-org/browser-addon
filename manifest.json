@@ -49,6 +49,31 @@
     "web_accessible_resources" : [
 		"panels/*"
     ],
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+1"
+            }
+        },
+        "primary-action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+2"
+            },
+            "description": "__MSG_KB_shortcut_simple_2_desc__"
+        },
+        "generate-password": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+4"
+            },
+            "description": "__MSG_Menu_Button_copyNewPasswordToClipboard_label__"
+        },
+        "detect-forms": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+6"
+            },
+            "description": "__MSG_Menu_Button_fillCurrentDocument_label__"
+        }
+    },
     "applications": {
         "gecko": {
             "id": "keefox@chris.tomlinson",

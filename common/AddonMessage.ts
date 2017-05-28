@@ -10,6 +10,6 @@ interface AddonMessage {
     findMatches?: { uri: string };
     findMatchesResult?: any;
     logins?: keeFoxLoginInfo[];
-    action?: string;
+    action?: "primary" | "detectForms" | "manualFill" | "generatePassword";
     selectedLoginIndex?: number;
 }

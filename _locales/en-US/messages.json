@@ -1,12 +1,7 @@
 {
-  "KB_shortcut_simple_1_desc": {
-    "message": "Show main menu"
-  },
   "KB_shortcut_simple_2_desc": {
-    "message": "Login to KeePass / Select matched login / Show matched logins list"
-  },
-  "KB_shortcut_simple_3_desc": {
-    "message": "Show logins list"
+    "message": "Login to KeePass / Select matched login / Show matched logins list",
+    "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
   },
   "black_list": {
     "message": "Black List"
@@ -387,13 +382,15 @@
     "message": "Choose a different KeePass password database."
   },
   "Menu_Button_copyNewPasswordToClipboard_label": {
-    "message": "Generate new password"
+    "message": "Generate new password",
+    "description": "Generate new password"
   },
   "Menu_Button_copyNewPasswordToClipboard_tip": {
     "message": "Gets a new password from KeePass using the most recently used password generator profile and puts it into your clipboard."
   },
   "Menu_Button_fillCurrentDocument_label": {
-    "message": "Find matching logins"
+    "message": "Find matching logins",
+    "description": "Find matching logins"
   },
   "Menu_Button_fillCurrentDocument_tip": {
     "message": "Force KeeFox to re-detect login forms on this page and search for login entries that match those forms. This is necessary on a small minority of web sites."

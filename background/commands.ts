@@ -1,7 +1,5 @@
 /// <reference path="../common/Logger.ts" />
 
-"use strict";
-
 /*
 TODO:c: will need to split this into commands that can work inside content pages and those that are global via commands manifest settings
 */
@@ -66,32 +64,6 @@ class KFCommands {
             // global.
         },
         {
-            "name": "showMenuKeeFox",
-            "description": "KeeFox_Menu-Button.tip",
-            "keyboardModifierFlags": this.MOD_DEFAULT,
-            "key": 49, // '1'
-            "contextLocationFlags": 0,
-            "speech": {},
-            "gesture": {},
-            "label": "KeeFox_Menu-Button.label",
-            "tooltip": "KeeFox_Menu-Button.tip",
-            "accesskey": ""
-            // global - main browseraction association
-        },
-        {
-            "name": "showMenuChangeDatabase",
-            "description": "KeeFox_Menu-Button.changeDB.label",
-            "keyboardModifierFlags": this.MOD_DEFAULT,
-            "key": 53, // '5'
-            "contextLocationFlags": this.CONTEXT_SUB,
-            "speech": {},
-            "gesture": {},
-            "label": "KeeFox_Menu-Button.changeDB.label",
-            "tooltip": "KeeFox_Menu-Button.changeDB.tip",
-            "accesskey": ""
-            // no. Only makes sense in world where main panel can be given focus programatically.
-        },
-        {
             "name": "detectForms",
             "description": "KeeFox_Menu-Button.fillCurrentDocument.label",
             "keyboardModifierFlags": this.MOD_DEFAULT,
@@ -116,181 +88,39 @@ class KFCommands {
             "tooltip": "KeeFox_Menu-Button.copyNewPasswordToClipboard.tip",
             "accesskey": ""
             // page. Option to insert into text or password field if one is focussed when generator panel is displayed.
-        },
-        {
-            "name": "showMenuLogins",
-            "description": "KeeFox_Logins-Button.label",
-            "keyboardModifierFlags": this.MOD_DEFAULT,
-            "key": 51, // '3'
-            "contextLocationFlags": 0,
-            "speech": {},
-            "gesture": {},
-            "label": "KeeFox_Logins-Button.label",
-            "tooltip": "KeeFox_Logins-Button.tip",
-            "accesskey": ""
-            // no. user should use main browseraction global instead.
         }
-//        {
-//            "name": "autoTypeHere",
-//            "description": $STR("KeeFox-auto-type-here.label"),
-//            "keyboardModifierFlags": this.MOD_DEFAULT,
-//            "key": "4",
-//            "contextLocationFlags": this.CONTEXT_INPUT,
-//            "speech": {},
-//            "gesture": {},
-//            "label": $STR("KeeFox-auto-type-here.label"),
-//            "tooltip": $STR("KeeFox-auto-type-here.tip"),
-//            "accesskey": ""
-//        }
         ];
-    };
-
-    // Hard coded set of command conditions that can determine whether a given command is
-    // allowed to run (or whether a possibly lower priority command can run instead)
-    // sanity checks for valid state should be performed in the main action if you don't
-    // want an alternative action to execute instead
-    // If a condition evaluates to false then it won't be displayed on a context menu
-    conditions = {
-        loginToKeePass: function ()
-        {
-            return keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex == -1;
-        },
-        fillMatchedLogin: function ()
-        {
-            if (!keefox_org.appState.connected || keefox_org.appState.ActiveKeePassDatabaseIndex == -1)
-                return false;
-            //TODO:c: establish if 1 login was found
-            return true;
-        },
-        showMenuMatchedLogins: function (target)
-        {
-            if (!keefox_org.appState.connected || keefox_org.appState.ActiveKeePassDatabaseIndex == -1)
-                return false;
-            //TODO:c: establish if > 1 logins were found
-            return true;
-        },
-        generatePassword: function ()
-        {
-            return keefox_org.appState.connected;
-        },
-        detectForms: function ()
-        {
-            return keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0;
-        },
-        showMenuGeneratePassword: function ()
-        {
-            return keefox_org.appState.connected;
-        }
-    };
-
-    // Hard coded set of command functions that don't care how they were invoked
-    actions = {
-        showMenuKeeFox: function ()
-        {
-            keefox_win.panel.displayPanel();
-            keefox_win.panel.hideSubSections();
-        },
-        loginToKeePass: function ()
-        {
-            keefox_org.loginToKeePass();
-        },
-        detectForms: function ()
-        {
-            //var currentGBrowser = win.gBrowser;
-            // Notify all parts of the UI that might need to clear their matched logins data
-            keefox_win.mainUI.resetSearchInterface();
-            keefox_win.mainUI.removeLogins();
-            // win.gBrowser.selectedBrowser.messageManager.sendAsyncMessage("keefox:findMatches", {
-            //     autofillOnSuccess: true,
-            //     autosubmitOnSuccess: false,
-            //     notifyUserOnSuccess: false
-            // });
-        },
-        generatePassword: function ()
-        {
-
-            keefox_win.panel.displayPanel();
-            keefox_win.panel.hideSubSections();
-            keefox_win.panel.showSubSectionGeneratePassword();
-        },
-        fillMatchedLogin: function ()
-        {
-            //TODO:c: implement
-            return;
-        },
-        showMenuMatchedLogins: function (target)
-        {
-            //TODO:c: implement
-        },
-        autoTypeHere: function ()
-        {
-
-        }
     };
 
     init = function ()
     {
-        this.setDefaultCommands();
-        this.load();
-        this.resolveConfiguration();
-    };
-
-    kbEventHandler = function (e)
-    {
-        //TODO:2: Can we find the context from the event?
-
-        //let keefox_org = keefox_org;
-
-        // establish which key was pressed
-        // let key = e.keyCode;
-
-        // let modifierIndex = (e.ctrlKey ? keefox_org.commandManager.MOD_CTRL : 0) |
-        //                     (e.altKey ? keefox_org.commandManager.MOD_ALT : 0) |
-        //                     (e.shiftKey ? keefox_org.commandManager.MOD_SHIFT : 0) |
-        //                     (e.metaKey ? keefox_org.commandManager.MOD_META : 0);
-        // let keyConfig = keefox_org.commandManager.activeKeys[modifierIndex][key];
-        // if (keyConfig)
-        // {
-        //     for (let i=0; i<keyConfig.length; i++)
-        //     {
-        //         let commandName = keyConfig[i];
-        //         if (typeof keefox_org.commandManager.conditions[commandName] === 'function')
-        //             if (!keefox_org.commandManager.conditions[commandName]())
-        //                 continue;
-        //         keefox_org._KFLog.debug("Executing command action: " + commandName);
-        //         //TODO:2: Pass event target information to action
-        //         keefox_org.commandManager.actions[commandName]();
-        //         break;
-        //     }
-        // }
-    };
-
-    // set of keys we are interested in listening to. KB listening events are always passed through to our event handler so we use this 2d "array" to quickly determine if we are interested in the particular key combination
-    // the user has just fired. The array is initialised in setupListeners()
-    activeKeys = [];
-
-    // No point in registering a listener if we end up not wanting to respond to any events
-    listenToKeyboard = false;
-
-    resolveConfiguration = function ()
-    {
-        // initialise every possible modifier key combination (saves us time and complication when processing a key event)
-        this.activeKeys = [];
-
-        for (let i=0; i<(this.MOD_SHIFT | this.MOD_ALT | this.MOD_CTRL | this.MOD_META); i++)
-            this.activeKeys[i] = {};
-
-        for (let i=0; i<this.commands.length; i++)
-        {
-            // Not interested in keyboard events for this command unless we have a keyboard key configured
-            if (this.commands[i].key != undefined && this.commands[i].key != null && this.commands[i].key > 0)
-            {
-                if (!(this.activeKeys[this.commands[i].keyboardModifierFlags][this.commands[i].key] instanceof Array))
-                    this.activeKeys[this.commands[i].keyboardModifierFlags][this.commands[i].key] = [];
-                this.activeKeys[this.commands[i].keyboardModifierFlags][this.commands[i].key].push(this.commands[i].name);
-                this.listenToKeyboard = true;
+        browser.commands.onCommand.addListener(command => {
+            switch (command) {
+                case "detect-forms":
+                    if (keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0) {
+                        keefox_org.ports.tabs[keefox_org.foregroundTabId].forEach(port => {
+                                port.postMessage({ action: "detectForms" });
+                        }, this);
+                    }
+                break;
+                case "primary-action":
+                    if (keefox_org.appState.ActiveKeePassDatabaseIndex < 0) {
+                        keefox_org.loginToKeePass();
+                    } else {
+                        keefox_org.ports.tabs[keefox_org.foregroundTabId].forEach(port => {
+                                port.postMessage({ action: "primary" });
+                        }, this);
+                    }
+                break;
+                case "generate-password":
+                    if (keefox_org.appState.connected) {
+                        keefox_org.ports.tabs[keefox_org.foregroundTabId].forEach(port => {
+                                port.postMessage({ action: "generatePassword" });
+                        }, this);
+                    }
+                break;
             }
-        }
+        });
     };
 
     contextSubPopupShowing = function (event)
@@ -408,79 +238,9 @@ class KFCommands {
 
     commands = [];
 
-    load = function ()
-    {
-        this._KFLog.debug("Loading commands");
-        //TODO:c:reimplement
-        // var prefService = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService);
-        // var prefBranch = prefService.getBranch("extensions.keefox@chris.tomlinson.");
-
-        // try
-        // {
-        //     var prefData = prefBranch.getComplexValue("commands", Ci.nsISupportsString).data;
-        //     var coms = JSON.parse(prefData);
-        //     var currentVersion = prefBranch.getIntPref("commandsVersion");
-        //     // Backwards migrations are not supported
-        //     if (currentVersion < this.commandsConfigVersion)
-        //         this.migrateConfig(currentVersion, this.commandsConfigVersion, coms);
-        //     else
-        //         this.commands = coms;
-        // } catch (ex) {
-        //     var coms = JSON.parse(JSON.stringify(this.default_commands)); //TODO:2: faster clone? https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
-        //     this.commands = coms;
-        //     this.save();
-        // }
-    };
-
-    save = function ()
-    {
-        this._KFLog.debug("Saving commands");
-
-        //TODO:c:reimplement
-        // var prefService = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService);
-        // var prefBranch = prefService.getBranch("extensions.keefox@chris.tomlinson.");
-
-        // var str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
-        // str.data = JSON.stringify(this.commands);
-        // prefBranch.setComplexValue("commands", Ci.nsISupportsString, str);
-
-        // prefBranch.setIntPref("commandsVersion",this.commandsConfigVersion);
-    };
-
-    migrateConfig = function (currentVersion, newVersion, currentConfig)
-    {
-        // If anything goes wrong with the migration, we just let the catch
-        // in load() deal with it (reset to the latest defaults)
-
-        // Nice and easy to start with; we have only one possible migration path ...
-        if (currentVersion == 1 && newVersion == 2)
-        {
-            // ... and that migration path makes no modifications to the default
-            // configuration of the handful of commands that were supported in
-            // version 1 so we just start with the default v2 config and overwrite
-            // some select objects from the existing configuration
-            const newConfig = this.default_commands;
-            const commandsToMigrate = ["installKeeFox", "launchKeePass", "loginToKeePass",
-                "showMenuMatchedLogins", "fillMatchedLogin", "showMenuKeeFox", "showMenuLogins"];
-            const mergedConfig = newConfig.map(function (newItem) {
-                if (commandsToMigrate.indexOf(newItem.name) >= 0)
-                    return currentConfig.filter(function (currentItem) {
-                        return currentItem.name === newItem.name;
-                    })[0];
-                else
-                    return newItem;
-            });
-            this.commands = mergedConfig;
-            this.save();
-        } else if (currentVersion == 2 && newVersion == 3)
-        {
-            //TODO:c: Delete loads of useless config entries
-        }
-    };
-
 }
 
 //TODO:c: need to do this later I expect
 // initialise the command system
-//var commandManager = new KFCommands;
-//commandManager.init();
+let commandManager = new KFCommands();
+commandManager.init();

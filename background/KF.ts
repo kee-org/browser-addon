@@ -68,8 +68,6 @@ class KeeFox {
         // Create a timer for KPRPC connection establishment
         this.regularKPRPCListenerQueueHandlerTimer = setInterval(this.RegularKPRPCListenerQueueHandler, 5000);
 
-        this.appState.lastKeePassRPCRefresh = 0;
-        this.appState.ActiveKeePassDatabaseIndex = 0;
         this._keeFoxBrowserStartup();
 
         this.ports = {

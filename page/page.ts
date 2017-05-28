@@ -102,6 +102,19 @@ myPort.onMessage.addListener(function (m: AddonMessage) {
         formFilling.closeMatchedLoginsPanel();
         formFilling.fillAndSubmit(false, null, m.selectedLoginIndex);
     }
+
+    if (m.action == "detectForms") {
+        formFilling.removeKeeFoxIconFromAllFields();
+        formFilling.findMatchesInThisFrame();
+    }
+
+    if (m.action == "primary") {
+        formFilling.executePrimaryAction();
+    }
+
+    if (m.action == "generatePassword") {
+        //TODO:c: show panel, etc.
+    }
 });
 
 KeeFoxLog.info("content page ready");

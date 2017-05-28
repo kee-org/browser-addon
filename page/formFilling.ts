@@ -68,10 +68,23 @@ class FormFilling {
         this.keeFoxFieldIcon = new KeeFoxFieldIcon();
     }
 
+    public executePrimaryAction () {
+        if (this.matchResult.logins && this.matchResult.mostRelevantFormIndex >= 0) {
+            if (this.matchResult.logins[this.matchResult.mostRelevantFormIndex].length == 1) {
+                this.fillAndSubmit(false, this.matchResult.mostRelevantFormIndex, 0);
+                this.closeMatchedLoginsPanel();
+            } else if (this.matchResult.logins[this.matchResult.mostRelevantFormIndex].length > 1) {
+                this.closeMatchedLoginsPanel();
+                this.matchedLoginsPanelStub = new MatchedLoginsPanelStub(null);
+                this.matchedLoginsPanelStub.createMatchedLoginsPanel();
+            }
+        }
+    }
+
     public createMatchedLoginsPanelNearNode (target: HTMLElement) {
         this.closeMatchedLoginsPanel();
         this.matchedLoginsPanelStub = new MatchedLoginsPanelStub(target);
-        this.matchedLoginsPanelStub.createMatchedLoginsPanelNearNode();
+        this.matchedLoginsPanelStub.createMatchedLoginsPanel();
         this.matchedLoginsPanelStubRaf = requestAnimationFrame(formFilling.updateMatchedLoginsPanelPosition);
     }
 
