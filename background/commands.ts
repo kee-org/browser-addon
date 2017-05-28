@@ -123,7 +123,8 @@ class KFCommands {
         });
 
         browser.contextMenus.onClicked.addListener((info, tab) => {
-            switch (info.menuItemId) {
+            const id = (info.menuItemId as string);
+            switch (id) {
                 case "detect-forms":
                     if (keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0) {
                         keefox_org.ports.tabs[keefox_org.foregroundTabId].forEach(port => {
@@ -147,6 +148,9 @@ class KFCommands {
                         }, this);
                     }
                 break;
+            }
+            if (id.startsWith("matchedLogin-")) {
+                keefox_org.ports.tabs[keefox_org.foregroundTabId][(info as any).frameId].postMessage({ action: "manualFill", selectedLoginIndex: id.substr(id.indexOf("-")+1) });
             }
         });
     };
@@ -190,6 +194,29 @@ class KFCommands {
             // if (keefox_org.appState.ActiveKeePassDatabaseIndex < 0) {
 
             // }
+
+            if (keefox_org.foregroundTabId >= 0
+            && keefox_org.tabStates[keefox_org.foregroundTabId]
+            && keefox_org.tabStates[keefox_org.foregroundTabId].logins
+            && keefox_org.tabStates[keefox_org.foregroundTabId].logins.length > 0) {
+                for (let i=0; i<keefox_org.tabStates[keefox_org.foregroundTabId].logins.length; i++) {
+                    const login = keefox_org.tabStates[keefox_org.foregroundTabId].logins[i];
+                    try {
+                        browser.contextMenus.create({
+                            id: "matchedLogin-" + i,
+                            title: login.title,
+                            contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
+                    });
+                    } catch (e) {
+                        // try again with Chrome-supported contexts
+                        browser.contextMenus.create({
+                            id: "matchedLogin-" + i,
+                            title: login.title,
+                            contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
+                        });
+                    }
+                }
+            }
         });
     }
 }
