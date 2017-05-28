@@ -45,7 +45,7 @@ class KeeFoxFieldIcon {
 
     private showMatchedLoginsPanel (e) {
         if ((e.clientX - e.target.offsetLeft) > (parseInt(document.defaultView.getComputedStyle(e.target).width) - 16)) {
-            formFilling.createMatchedLoginsPanelNearNode(e.target, this.logins);
+            formFilling.createMatchedLoginsPanelNearNode(e.target);
         }
     }
 
