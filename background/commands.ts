@@ -121,123 +121,75 @@ class KFCommands {
                 break;
             }
         });
-    };
 
-    contextSubPopupShowing = function (event)
-    {
-        const children = event.target.ownerDocument.getElementById("keefox-command-context-sub-popup").children;
-        for (let i=0; i < children.length; i++)
-        {
-            const mi = children[i];
-            if (mi.id.indexOf("keefox-command-context-") != 0)
-                continue;
-
-            //let keefox_org = keefox_org;
-
-            // // Set default visibility for this menu item
-            // // Should always be false but just in case...
-            // mi.hidden = !(mi.keeFoxValidContexts & keefox_org.commandManager.CONTEXT_SUB);
-
-            // // Update visibility for this menu item based upon the current KeeFox state
-            // if (typeof keefox_org.commandManager.conditions[mi.keeFoxCommandName] === 'function')
-            //     mi.hidden = mi.hidden || !keefox_org.commandManager.conditions[mi.keeFoxCommandName]();
-        }
-    };
-
-    contextMainPopupShowing = function (event)
-    {
-        if (event.target.ownerDocument.defaultView.gContextMenu == null)
-            return; // not a context menu (e.g. tooltip)
-
-        const children = event.target.ownerDocument.getElementById("contentAreaContextMenu").children;
-        for (let i=0; i < children.length; i++)
-        {
-            const mi = children[i];
-            if (mi.id.indexOf("keefox-command-context-") != 0)
-                continue;
-
-           // let keefox_org = keefox_org;
-
-            // // Set default visibility for this menu item
-            // let textEnabled = mi.keeFoxValidContexts & keefox_org.commandManager.CONTEXT_INPUT;
-            // let mainEnabled = mi.keeFoxValidContexts & keefox_org.commandManager.CONTEXT_MAIN;
-            // mi.hidden = !((event.target.ownerDocument.defaultView.gContextMenu.onTextInput && textEnabled)
-            //             || (!event.target.ownerDocument.defaultView.gContextMenu.onTextInput && mainEnabled));
-
-            // // Update visibility for this menu item based upon the current KeeFox state
-            // if (typeof keefox_org.commandManager.conditions[mi.keeFoxCommandName] === 'function')
-            //     mi.hidden = mi.hidden || !keefox_org.commandManager.conditions[mi.keeFoxCommandName]();
-        }
-    };
-
-    // Setup listeners and context menus for the supplied window object
-    setupListeners = function (win)
-    {
-        for (let i=0; i<this.commands.length; i++)
-        {
-            //TODO:1.6: ? Need to work on what constitutes a disabled/hidden menu item. need to be invisible and detached in an ideal world.
-            if (this.commands[i].contextLocationFlags & this.CONTEXT_MAIN
-                || this.commands[i].contextLocationFlags & this.CONTEXT_INPUT
-                || this.commands[i].contextLocationFlags & this.CONTEXT_BUTTON)
-            {
-                // Find any existing node with this command's ID and enable it.
-                // nodes can't be disabled again afterwards but that's not a feature we
-                // directly expose to the user so a browser restart is an acceptable compromise
-                let item = document.getElementById("keefox-command-context-" + this.commands[i].name);
-                if (!item)
-                {
-                    // not found in existing dom structure so lets add it
-                    // we only support adding menuitems dynamically like this
-                    // i.e. adding sub menu elements needs to be done by ensuring
-                    // they are already in the dom before this init happens (e.g. via XUL config)
-                    const mi = document.createElement("menuitem");
-                    mi.setAttribute("id", "keefox-command-context-" + this.commands[i].name);
-                    document.getElementById("contentAreaContextMenu").appendChild(mi);
-                    item = mi;
-                }
-                item.setAttribute("disabled", "false");
-                item.setAttribute("label", $STR(this.commands[i].label));
-                item.setAttribute("tooltip", $STR(this.commands[i].tooltip));
-                if (this.commands[i].image)
-                    item.setAttribute("image", this.commands[i].image);
-                else
-                    item.setAttribute("image", "chrome://keefox/skin/KeeFox16.png");
-                item.classList.add("menuitem-iconic");
-
-                // //item.setAttribute("accesskey", this.commands[i].accesskey);
-                // item.keeFoxCommandName = this.commands[i].name;
-                // item.keeFoxValidContexts = this.commands[i].contextLocationFlags;
-                // item.addEventListener("command", function(event) {
-                //         let kf = keefox_org;
-                //         kf.commandManager.actions[this.keeFoxCommandName]();
-                //     }, false);
+        browser.contextMenus.onClicked.addListener((info, tab) => {
+            switch (info.menuItemId) {
+                case "detect-forms":
+                    if (keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0) {
+                        keefox_org.ports.tabs[keefox_org.foregroundTabId].forEach(port => {
+                                port.postMessage({ action: "detectForms" });
+                        }, this);
+                    }
+                break;
+                // case "primary-action":
+                //     if (keefox_org.appState.ActiveKeePassDatabaseIndex < 0) {
+                //         keefox_org.loginToKeePass();
+                //     } else {
+                //         keefox_org.ports.tabs[keefox_org.foregroundTabId].forEach(port => {
+                //                 port.postMessage({ action: "primary" });
+                //         }, this);
+                //     }
+                // break;
+                case "generate-password":
+                    if (keefox_org.appState.connected) {
+                        keefox_org.ports.tabs[keefox_org.foregroundTabId].forEach(port => {
+                                port.postMessage({ action: "generatePassword" });
+                        }, this);
+                    }
+                break;
             }
-
-            //TODO:1.6: repeat for submenu context type
-
-        }
-
-        if (this.listenToKeyboard)
-        {
-            // attach our keyboard listener
-            this._KFLog.debug("Attaching keyboard listener");
-            win.addEventListener("keydown", this.kbEventHandler, false);
-        } else
-        {
-            this._KFLog.debug("No need to attach keyboard listener");
-        }
-
+        });
     };
 
-    cloneObj = function (obj)
-    {
-        //TODO:2: improve speed? See http://jsperf.com/clone/5 https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
-        //TODO:2: Might be useful in a utils location, not just for config manipulation
-        return JSON.parse(JSON.stringify(obj));
-    };
+    public setupContextMenuItems (connected: boolean, dbCount: number, logins) {
+        if (keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0) {
+            try {
+                browser.contextMenus.create({
+                    id: "detect-forms",
+                    title: $STR("Menu_Button_fillCurrentDocument_label"),
+                    contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
+                });
+            } catch (e) {
+                // try again with Chrome-supported contexts
+                browser.contextMenus.create({
+                    id: "detect-forms",
+                    title: $STR("Menu_Button_fillCurrentDocument_label"),
+                    contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
+                });
+            }
+        }
 
-    commands = [];
+        if (keefox_org.appState.connected) {
+            try {
+                browser.contextMenus.create({
+                    id: "generate-password",
+                    title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
+                    contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
+            });
+            } catch (e) {
+                // try again with Chrome-supported contexts
+                browser.contextMenus.create({
+                    id: "generate-password",
+                    title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
+                    contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
+                });
+            }
+        }
 
+        // if (keefox_org.appState.ActiveKeePassDatabaseIndex < 0) {
+
+        // }
+    }
 }
 
 //TODO:c: need to do this later I expect

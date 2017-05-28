@@ -138,6 +138,8 @@ class KeeFox {
                         port.postMessage({ appState: keefox_org.appState, isForegroundTab: true } as AddonMessage);
                     });
                 }
+
+                commandManager.setupContextMenuItems(keefox_org.appState.connected, keefox_org.appState.KeePassDatabases.length, null);
             }
         );
         // browser.tabs.onUpdated.addListener((id, event) =>
@@ -220,6 +222,8 @@ class KeeFox {
             }, this);
         }, this);
 
+        commandManager.setupContextMenuItems(this.appState.connected, this.appState.KeePassDatabases.length, null);
+
         KeeFoxLog.info("KeeFox paused.");
     }
 
@@ -231,7 +235,7 @@ class KeeFox {
 
     updateKeePassDatabases (newDatabases)
     {
-        let newDatabaseActiveIndex = -1; //TODO:c: check if this is a problem. maybe used to be always 0+ but think should be -1 for when no DB is active but might reveal old bugs
+        let newDatabaseActiveIndex = -1;
         for (let i=0; i < newDatabases.length; i++)
         {
             if (newDatabases[i].active)
@@ -271,7 +275,7 @@ class KeeFox {
             }, this);
         }, this);
 
-//TODO:c: update context menu?
+        commandManager.setupContextMenuItems(this.appState.connected, this.appState.KeePassDatabases.length, null);
     }
 
     // if the MRU database is known, open that but otherwise send empty string which will cause user
