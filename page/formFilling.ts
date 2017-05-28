@@ -65,17 +65,60 @@ class FormFilling {
 
     public matchResultReceiver;
 
-    public createMatchedLoginsPanelNearNode (target, logins) {
+    public createMatchedLoginsPanelNearNode (target: HTMLElement, logins) {
 
         this.closeMatchedLoginsPanel();
 
-        //TODO:c: calcualte correct position and update it when page reflows
+        //TODO:c: update position when page reflows
+
         const container = document.createElement("div");
         container.id="KeeFoxAddonPanelMatchedLogins";
-        const top = 1000;
-        const left = 400;
-        container.style.setProperty( "width", "400px", "important" );
-        container.style.setProperty( "height", "300px", "important" );
+
+        const preferredContainerHeight = 300;
+        let containerHeight = preferredContainerHeight;
+        const containerWidth = 400;
+        let positionAbove = false;
+
+        const targetRelativeRect = target.getBoundingClientRect();
+        const targetTop = targetRelativeRect.top + window.scrollY;
+        const targetBottom = targetRelativeRect.bottom + window.scrollY;
+        const preferredArrowXCoord = targetRelativeRect.right - 12;
+
+        const preferredBottom = targetRelativeRect.bottom + preferredContainerHeight;
+        if (preferredBottom > window.innerHeight) {
+            const preferredTop = targetRelativeRect.top - preferredContainerHeight;
+            if (preferredTop >= 0) {
+                positionAbove = true;
+            } else {
+                const overflowBottom = preferredBottom - window.innerHeight;
+                const overflowTop = -preferredTop;
+                if (overflowBottom > overflowTop) {
+                    positionAbove = true;
+                    containerHeight = preferredContainerHeight - overflowTop;
+                } else {
+                    containerHeight = preferredContainerHeight - overflowBottom;
+                }
+            }
+        }
+        //TODO:c: inner iframe can't handle variable heights (or widths, but we don't even try that here)
+
+        // Move as far left as possible while keeping the KeeFox icon above the container and not
+        // going beyond the left edge of the target. We assume the KeeFox icon is always visible because
+        // the user has had to interact with the button initially. That asusmption won't always hold
+        // - e.g. in very narrow screens with keyboard activation or some later window or DOM adjustments but this should
+        // be an edge case that users can work around until we have more time to extend support to those scenarios.
+        const targetWidth = preferredArrowXCoord - targetRelativeRect.left;
+        let relativeLeft: number;
+        if (targetWidth < containerWidth) {
+            relativeLeft = Math.min(targetRelativeRect.left, window.innerWidth - containerWidth);
+        } else {
+            relativeLeft = preferredArrowXCoord - containerWidth;
+        }
+
+        const top = positionAbove ? targetTop - containerHeight: targetBottom;
+        const left = relativeLeft + window.scrollX;
+        container.style.setProperty( "width", containerWidth + "px", "important" );
+        container.style.setProperty( "height", containerHeight + "px", "important" );
         container.style.setProperty( "top", top + "px", "important" );
         container.style.setProperty( "left", left + "px", "important" );
         container.style.setProperty( "display", "block", "important" );
