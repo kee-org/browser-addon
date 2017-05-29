@@ -738,6 +738,14 @@ function browserPopupMessageHandler (msg: AddonMessage) {
             "url": "https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive"
         });
     }
+
+    if (msg.action == "generatePassword") {
+        if (keefox_org.appState.connected) {
+            keefox_org.ports.tabs[keefox_org.foregroundTabId].forEach(port => {
+                    port.postMessage({ action: "generatePassword" });
+            }, this);
+        }
+    }
 };
 
 function browserPopupDisconnect () {

@@ -7,16 +7,16 @@
         <div id="main" class="hidden">
             <div id="connectionStatus"></div>
             <div id="notifications"></div>
-            <div id="helpLink"><a href="http://keefox.org/help">Help</a></div>
+            <div id="generatePasswordLink"><a href="#" data-i18n="Menu_Button_copyNewPasswordToClipboard_label"></a></div>
+            <div id="helpLink"><a href="http://keefox.org/help" target="_blank" data-i18n="Help_Centre_Button_label"></a></div>
+            <div id="optionsLink"><a href="#" data-i18n="Menu_Button_options_label"></a></div>
             <div id="debug"></div>
         </div>
         <div id="loading">Loading...</div>
-        <!--
-            One day this could polyfill so that we can drop the chrome namespace and use webextensions instead but it doesn't work yet.
-            <script src="../common/browser-polyfill.js"></script>
-        -->
 
+        <script src="../common/browser-polyfill.js"></script>
         <script src="../common/dollar-polyfill.js"></script>
+        <script src="../common/i18n.js"></script>
         <script src="popup.js"></script>
 
     </body>

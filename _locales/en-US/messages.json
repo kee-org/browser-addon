@@ -305,7 +305,8 @@
     "message": "OK"
   },
   "Help_Centre_Button_label": {
-    "message": "Help Centre"
+    "message": "Help Centre",
+    "description": "Help Centre"
   },
   "Help_Centre_Button_tip": {
     "message": "Visit the online help centre."
@@ -397,7 +398,8 @@
     "message": "Force KeeFox to re-detect login forms on this page and search for login entries that match those forms. This is necessary on a small minority of web sites."
   },
   "Menu_Button_options_label": {
-    "message": "Options"
+    "message": "Options",
+    "description": "Link to the add-on's settings"
   },
   "Menu_Button_options_tip": {
     "message": "View and change your preferred KeeFox options."
@@ -522,10 +524,12 @@
     "message": "Logged in"
   },
   "loggedIn_tip": {
-    "message": "You are logged in to your '$1' password database"
+    "message": "You are logged in to your '$1' password database",
+    "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
   },
   "loggedInMultiple_tip": {
-    "message": "You are logged in to $1 password databases. '$2' is active."
+    "message": "You are logged in to $1 password databases. '$2' is active.",
+    "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
   },
   "loggedOut_label": {
     "message": "Logged out"
@@ -567,16 +571,19 @@
     "message": "no username"
   },
   "notifyBarLaunchKeePass_label": {
-    "message": "You are not logged in to your password database."
+    "message": "You are not logged in to your password database.",
+    "description": "You are not logged in to your password database."
   },
   "notifyBarLaunchKeePassButton_tip": {
-    "message": "Launch KeePass to enable KeeFox"
+    "message": "Launch KeePass to enable KeeFox",
+    "description": "Launch KeePass to enable KeeFox"
   },
   "notifyBarLogSensitiveData_label": {
     "message": "WARNING: KeeFox is logging your passwords! If you have not intentionally enabled this setting you should disable it immediately"
   },
   "notifyBarLoginToKeePassButton_tip": {
-    "message": "Login to your KeePass database to enable KeeFox"
+    "message": "Login to your KeePass database to enable KeeFox",
+    "description": "Login to your KeePass database to enable KeeFox"
   },
   "notifyBarNeverForSiteButton_key": {
     "message": "e"

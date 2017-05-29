@@ -1,3 +1,7 @@
 .hidden {
     display: none;
 }
+
+body {
+    width: 400px;
+}
