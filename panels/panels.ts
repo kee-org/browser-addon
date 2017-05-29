@@ -48,13 +48,26 @@ switch (params["panel"])
     case "generatePassword":
         generatePasswordPanel = new GeneratePasswordPanel();
         document.getElementById("header").innerText = $STR("Menu_Button_copyNewPasswordToClipboard_label");
+        let passwordReceived = false;
         myPort.onMessage.addListener(function (m: AddonMessage) {
             KeeFoxLog.debug("In iframe script, received message from background script: ");
 
             if (m.appState) this.updateAppState(m.appState);
             if (m.tabState) this.updateTabState(m.tabState);
 
-            generatePasswordPanel.createNearNode(document.getElementById("header"));
+            if (!m.generatedPassword && m.generatedPassword != "") {
+                myPort.postMessage({ action: "generatePassword" });
+            } else {
+                generatePasswordPanel.copyStringToClipboard(m.generatedPassword);
+
+                if (passwordReceived) {
+                    closePanel();
+                } else {
+                    generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles);
+                    passwordReceived = true;
+                }
+            }
+
         });
     break;
 }

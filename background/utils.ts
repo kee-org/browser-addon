@@ -254,16 +254,6 @@ class Utils {
         lut[d1&0xff]+lut[d1>>8&0xff]+"-"+lut[d1>>16&0x0f|0x40]+lut[d1>>24&0xff]+"-"+
         lut[d2&0x3f|0x80]+lut[d2>>8&0xff]+"-"+lut[d2>>16&0xff]+lut[d2>>24&0xff]+    lut[d3&0xff]+lut[d3>>8&0xff]+lut[d3>>16&0xff]+lut[d3>>24&0xff];
     };
-
-    //TODO:c:replace or delete
-    // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Interact_with_the_clipboard says this won't work from a background page.
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=1272869
-    // However, using a content page is not always feasible unless we can fire up an internal extension content page in a hidden tab.
-    // May not be able to write to clipboard unless Mozilla fix this issue.
-    copyStringToClipboard = function (value)
-    {
-        //document.execCommand("copy");
-    };
 };
 
 let utils = new Utils();

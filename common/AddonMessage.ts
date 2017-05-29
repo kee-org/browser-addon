@@ -14,4 +14,7 @@ interface AddonMessage {
     logins?: keeFoxLoginInfo[];
     action?: "primary" | "detectForms" | "manualFill" | "generatePassword" | "closeAllPanels";
     selectedLoginIndex?: number;
+    passwordProfiles: any[];
+    generatedPassword: string;
+    passwordProfile: string;
 }

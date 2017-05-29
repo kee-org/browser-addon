@@ -135,37 +135,23 @@ class jsonrpcClient {
         return;
     }
 
-    getPasswordProfiles () {
+    getPasswordProfiles (callback) {
         const result = this.kprpcClient.request(this, "GetPasswordProfiles", null, function rpc_callback (resultWrapper) {
             if ("result" in resultWrapper && resultWrapper.result !== false) {
                 if (resultWrapper.result !== null)
-                    keefox_win.mainUI.setPasswordProfilesCallback(resultWrapper.result);
-
+                    callback(resultWrapper.result);
             }
         }, ++this.kprpcClient.requestId);
 
         return;
     }
 
-    generatePassword (profileName, url)
+    generatePassword (profileName, url, callback)
     {
         this.kprpcClient.request(this, "GeneratePassword", [profileName, url], function rpc_callback (resultWrapper) {
-            let passwordGenerated = false;
-
-            if ("result" in resultWrapper && resultWrapper.result !== false)
-            {
+            if ("result" in resultWrapper && resultWrapper.result !== false) {
                 if (resultWrapper.result !== null)
-                {
-                    passwordGenerated = true;
-                    keefox_org.utils.copyStringToClipboard(resultWrapper.result);
-                    keefox_org.notifyUser(new KeeFoxNotification(
-                        "keefox-generate-password", [], utils.newGUID(), $STR("generatePassword.copied"), "Medium", false));
-                }
-            }
-            if (!passwordGenerated)
-            {
-                keefox_org.notifyUser(new KeeFoxNotification(
-                        "keefox-generate-password", [], utils.newGUID(), $STR("generatePassword.launch"), "Medium", false));
+                    callback(resultWrapper.result);
             }
         }, ++this.kprpcClient.requestId);
     }

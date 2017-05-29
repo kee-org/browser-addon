@@ -412,7 +412,8 @@
     "message": "KeeFox options"
   },
   "PasswordProfilesExplanation_label": {
-    "message": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles."
+    "message": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles.",
+    "description": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles."
   },
   "change": {
     "message": "Change"
@@ -478,7 +479,8 @@
     "message": "Dismiss this notification without taking any action"
   },
   "generatePassword_copied": {
-    "message": "A new password has been copied to your clipboard."
+    "message": "A new password has been copied to your clipboard.",
+    "description": "A new password has been copied to your clipboard."
   },
   "generatePassword_launch": {
     "message": "Please launch KeePass first."

@@ -29,7 +29,8 @@ body {
 }
 
 /* Default login list item and group style */
-#KeeFox-MatchedLoginsList li
+#KeeFox-MatchedLoginsList li,
+#GeneratePasswordContainer li
 {
     min-height:26px;
     padding:0px 5px 0px 22px;
@@ -43,14 +44,16 @@ body {
     border: 1px solid #FFFFFF;
 }
 
-#KeeFox-MatchedLoginsList li:active
+#KeeFox-MatchedLoginsList li:active,
+#GeneratePasswordContainer li:active
 {
     background-color: #E3E3E3;
     border: 1px solid #C6C6C7;
     border-radius: 3px;
 }
 
-#KeeFox-MatchedLoginsList li:hover
+#KeeFox-MatchedLoginsList li:hover,
+#GeneratePasswordContainer li:hover
 {
     background-color: #EAEAEA;
     border: 1px solid #D6D6D6;
@@ -58,7 +61,8 @@ body {
 }
 
 /* Shade the item that has keyboard focus */
-#KeeFox-MatchedLoginsList li:focus
+#KeeFox-MatchedLoginsList li:focus,
+#GeneratePasswordContainer li:focus
 {
     background-color: #DDDDDD;
 }
@@ -95,7 +99,7 @@ body {
 }
 
 #DatabaseList > ul,
-#PasswordProfileList > ul {
+#GeneratePasswordContainer > ul {
     margin:0 0 0 0px;
     padding:0px 0px 0px 0px;
     list-style:none;
@@ -104,7 +108,7 @@ body {
 
 
 #DatabaseList > ul > li,
-#PasswordProfileList > ul > li
+#GeneratePasswordContainer > ul > li
 {
     min-height:26px;
     padding:0px 5px 0px 26px;
@@ -120,7 +124,7 @@ body {
     background-image: url("../common/images/KeeLock.png");
 }
 
-#PasswordProfileList > ul > li
+#GeneratePasswordContainer > ul > li
 {
     background-image: url("../common/images/KeeOrange.png");
 }

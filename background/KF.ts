@@ -100,10 +100,13 @@ class KeeFox {
                             tabId: p.sender.tab.id,
                             isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
                         } as AddonMessage);
-                        const tab = keefox_org.ports.tabs[p.sender.tab.id];
-                        if (!tab)
+                        if (!keefox_org.ports.tabs[p.sender.tab.id])
                             keefox_org.ports.tabs[p.sender.tab.id] = [];
                         keefox_org.ports.tabs[p.sender.tab.id][p.sender.frameId] = p;
+
+                        if (!keefox_org.tabStates[p.sender.tab.id])
+                            keefox_org.tabStates[p.sender.tab.id] = new TabState();
+                        keefox_org.tabStates[p.sender.tab.id].url = p.sender.tab.url;
                         break;
                     }
                     case "iframe": {
@@ -450,11 +453,11 @@ class KeeFox {
         }
     }
 
-    getPasswordProfiles ()
+    getPasswordProfiles (callback)
     {
         try
         {
-            return this.KeePassRPC.getPasswordProfiles();
+            return this.KeePassRPC.getPasswordProfiles(callback);
         } catch (e)
         {
             KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
@@ -462,11 +465,11 @@ class KeeFox {
         }
     }
 
-    generatePassword (profileName, url)
+    generatePassword (profileName, url, callback)
     {
         try
         {
-            return this.KeePassRPC.generatePassword(profileName, url);
+            return this.KeePassRPC.generatePassword(profileName, url, callback);
         } catch (e)
         {
             KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
@@ -766,15 +769,26 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     console.log("In background script, received message from iframe script: " + msg);
 
+    const tabId = this.sender.tab.id;
+    const frameId = this.sender.frameId;
+    const port = this;
+
     if (msg.action == "closeAllPanels" || (msg.action == "manualFill" && msg.selectedLoginIndex != null)) {
-        const tabId = this.sender.tab.id;
-        const frameId = this.sender.frameId;
         const parentFrameId = keefox_org.tabStates[tabId].mapInjectedIframes[frameId];
         keefox_org.ports.tabs[tabId][parentFrameId].postMessage(msg);
+    }
+
+    if (msg.action == "generatePassword") {
+        keefox_org.getPasswordProfiles(passwordProfiles => {
+            keefox_org.generatePassword(msg.passwordProfile, keefox_org.tabStates[tabId].url, generatedPassword => {
+                port.postMessage({ passwordProfiles: passwordProfiles, generatedPassword: generatedPassword } as AddonMessage);
+            });
+        });
     }
 };
 
 function pageDisconnect () {
+    //TODO:c: need to clear tabStates too but have to make iframes work in general first
     delete keefox_org.ports.tabs[this.sender.tab.id][this.sender.frameId];
     if (keefox_org.ports.tabs[this.sender.tab.id].length == 0)
         delete keefox_org.ports.tabs[this.sender.tab.id];
