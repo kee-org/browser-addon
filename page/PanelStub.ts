@@ -1,17 +1,42 @@
+class PanelStubOptions {
+    id: string;
+    height: number;
+    width: number;
+    name: string;
+    autoCloseTime: number;
 
-class MatchedLoginsPanelStub {
+    public static MatchedLogins: PanelStubOptions = {
+        id: "KeeFoxAddonPanelMatchedLogins",
+        height: 300,
+        width: 400,
+        name: "matchedLogins",
+        autoCloseTime: 0
+    };
+
+    public static GeneratePassword: PanelStubOptions = {
+        id: "KeeFoxAddonPanelGeneratePassword",
+        height: 300,
+        width: 400,
+        name: "generatePassword",
+        autoCloseTime: 5
+    };
+}
+
+class PanelStub {
 
     private target: HTMLElement;
     private container: HTMLElement;
     private targetRelativeRect: ClientRect;
+    private options: PanelStubOptions;
 
-    constructor (target: HTMLElement) {
+    constructor (options: PanelStubOptions, target: HTMLElement) {
         this.target = target;
+        this.options = options;
     }
 
-    public createMatchedLoginsPanel () {
+    public createPanel () {
         this.container = document.createElement("div");
-        this.container.id = "KeeFoxAddonPanelMatchedLogins";
+        this.container.id = this.options.id;
 
         this.container.style.setProperty( "display", "block", "important" );
         this.container.style.setProperty( "position", "absolute", "important" );
@@ -21,10 +46,10 @@ class MatchedLoginsPanelStub {
             this.targetRelativeRect = this.target.getBoundingClientRect();
             this.positionPanel();
         } else {
-            this.container.style.setProperty( "width", "400px", "important" );
-            this.container.style.setProperty( "height", "300px", "important" );
-            this.container.style.setProperty( "top", ((window.innerHeight-300)/2 + window.scrollY)  + "px", "important" );
-            this.container.style.setProperty( "left", ((window.innerWidth-400)/2 + window.scrollX) + "px", "important" );
+            this.container.style.setProperty( "width", this.options.width + "px", "important" );
+            this.container.style.setProperty( "height", this.options.height + "px", "important" );
+            this.container.style.setProperty( "top", ((window.innerHeight-this.options.height)/2 + window.scrollY)  + "px", "important" );
+            this.container.style.setProperty( "left", ((window.innerWidth-this.options.width)/2 + window.scrollX) + "px", "important" );
         }
 
         const iframe = document.createElement("iframe");
@@ -35,7 +60,7 @@ class MatchedLoginsPanelStub {
         iframe.style.setProperty( "position", "relative", "important" );
         iframe.setAttribute("scrolling", "no");
 
-        iframe.src = chrome.extension.getURL("panels/panels.html") + "?parentFrameId=" + frameId + "&panel=matchedLogins";
+        iframe.src = chrome.extension.getURL("panels/panels.html") + "?parentFrameId=" + frameId + "&autoCloseTime=" + this.options.autoCloseTime + "&panel=" + this.options.name;
         this.container.appendChild(iframe);
 
         document.getElementsByTagName("body")[0].appendChild(this.container);
@@ -53,9 +78,9 @@ class MatchedLoginsPanelStub {
 
     private positionPanel () {
 
-        const preferredContainerHeight = 300;
+        const preferredContainerHeight = this.options.height;
         let containerHeight = preferredContainerHeight;
-        const containerWidth = 400;
+        const containerWidth = this.options.width;
         let positionAbove = false;
 
         const targetTop = this.targetRelativeRect.top + window.scrollY;
@@ -78,11 +103,10 @@ class MatchedLoginsPanelStub {
                 }
             }
         }
-        //TODO:c: inner iframe can't handle variable heights (or widths, but we don't even try that here)
 
         // Move as far left as possible while keeping the KeeFox icon above the container and not
         // going beyond the left edge of the target. We assume the KeeFox icon is always visible because
-        // the user has had to interact with the button initially. That asusmption won't always hold
+        // the user has had to interact with the button initially. That assumption won't always hold
         // - e.g. in very narrow screens with keyboard activation or some later window or DOM adjustments but this should
         // be an edge case that users can work around until we have more time to extend support to those scenarios.
         const targetWidth = preferredArrowXCoord - this.targetRelativeRect.left;
@@ -101,8 +125,8 @@ class MatchedLoginsPanelStub {
         this.container.style.setProperty( "left", left + "px", "important" );
     }
 
-    public closeMatchedLoginsPanel () {
-        const panel = document.getElementById("KeeFoxAddonPanelMatchedLogins");
+    public closePanel () {
+        const panel = document.getElementById(this.options.id);
         if (panel) panel.parentNode.removeChild(panel);
     }
 }

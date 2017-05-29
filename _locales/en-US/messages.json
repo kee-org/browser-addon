@@ -113,7 +113,8 @@
     "message": "Further info may follow: $1"
   },
   "matched_logins_label": {
-    "message": "Matched login entries"
+    "message": "Matched login entries",
+    "description": "Header for panels/sections that contain the logins which KeeFox matched for this page/form"
   },
   "placeholder_for_best_match": {
     "message": "Placeholder for best matching login entry"
@@ -619,5 +620,13 @@
   },
   "whichEntry_label": {
     "message": "Choose an entry..."
+  },
+  "close": {
+      "message": "Close",
+      "description": "Action user can click on to close/dismiss a panel or other user interface element"
+  },
+  "autoclose_countdown": {
+      "message": "Auto-close in $1 seconds",
+      "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
   }
 }

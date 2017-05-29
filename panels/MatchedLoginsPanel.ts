@@ -3,11 +3,6 @@
 /// <reference path="../common/TabState.ts" />
 /// <reference path="../common/AddonMessage.ts" />
 
-declare const chrome: typeof browser;
-
-let appState: AppState;
-let tabState: TabState;
-
 class MatchedLoginsPanel {
 
     public createNearNode (node: HTMLElement, logins) {

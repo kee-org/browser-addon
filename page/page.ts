@@ -8,6 +8,7 @@ let appState: AppState;
 let keefoxPopupLoadTime = Date.now();
 let formUtils: FormUtils;
 let formFilling: FormFilling;
+let passwordGenerator: PasswordGenerator;
 let tabId: number;
 let frameId: number;
 
@@ -75,6 +76,7 @@ function startup (currentAppState: AppState, isForegroundTab: boolean, myTabId: 
     KeeFoxLog.configureFromPreferences(currentAppState.config);
     formUtils = new FormUtils(KeeFoxLog);
     formFilling = new FormFilling(formUtils, KeeFoxLog, currentAppState.config, matchResultReceiver, matchFinder);
+    passwordGenerator = new PasswordGenerator();
 
     updateAppState(currentAppState, isForegroundTab);
 }
@@ -113,7 +115,12 @@ myPort.onMessage.addListener(function (m: AddonMessage) {
     }
 
     if (m.action == "generatePassword") {
-        //TODO:c: show panel, etc.
+        passwordGenerator.createGeneratePasswordPanel();
+    }
+
+    if (m.action == "closeAllPanels") {
+        passwordGenerator.closeGeneratePasswordPanel();
+        formFilling.closeMatchedLoginsPanel();
     }
 });
 

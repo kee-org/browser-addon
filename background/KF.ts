@@ -766,7 +766,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     console.log("In background script, received message from iframe script: " + msg);
 
-    if (msg.action == "manualFill" && msg.selectedLoginIndex != null) {
+    if (msg.action == "closeAllPanels" || (msg.action == "manualFill" && msg.selectedLoginIndex != null)) {
         const tabId = this.sender.tab.id;
         const frameId = this.sender.frameId;
         const parentFrameId = keefox_org.tabStates[tabId].mapInjectedIframes[frameId];

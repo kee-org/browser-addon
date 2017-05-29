@@ -2,23 +2,30 @@ body {
     background-color: white;
     padding: 0px;
     margin: 0px;
+    height: 100vh;
 }
 
-#MatchedLoginsListContainer {
-
+#MainContainer {
     border-style: outset;
     border-width: 2px;
     border-color:grey;
     padding: 4px;
     margin: 0px;
+    display: flex;
+    flex-direction:column;
+    justify-content:space-between;
+    height:calc(100% - 12px);
 }
 
-#KeeFox-MatchedLoginsList {
+#header {
+    flex-shrink: 0;
+}
 
-    border: red solid 0px;
+#GeneratePasswordContainer,
+#KeeFox-MatchedLoginsList {
+    flex-grow:1000;
     overflow-y:auto;
     overflow-x:hidden;
-    height:288px;
 }
 
 /* Default login list item and group style */
@@ -85,4 +92,46 @@ body {
 #KeeFox-optionsMenuTrigger:hover
 {
     background-color: #fff;
+}
+
+#DatabaseList > ul,
+#PasswordProfileList > ul {
+    margin:0 0 0 0px;
+    padding:0px 0px 0px 0px;
+    list-style:none;
+    background:none;
+}
+
+
+#DatabaseList > ul > li,
+#PasswordProfileList > ul > li
+{
+    min-height:26px;
+    padding:0px 5px 0px 26px;
+    margin:0px;
+    background-repeat:no-repeat;
+    background-position:6px 5px;
+    cursor:default;
+    line-height:26px;
+}
+
+#DatabaseList > ul > li
+{
+    background-image: url("../common/images/KeeLock.png");
+}
+
+#PasswordProfileList > ul > li
+{
+    background-image: url("../common/images/KeeOrange.png");
+}
+
+#optionsContainer {
+    flex-shrink: 0;
+}
+
+#closeContainer {
+    display: flex;
+    justify-content:space-between;
+    flex-direction:row-reverse;
+    flex-shrink: 0;
 }

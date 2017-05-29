@@ -3,7 +3,7 @@
 /// <reference path="../common/config.ts" />
 /// <reference path="../common/ConfigManager.ts" />
 /// <reference path="keeFoxFieldIcon.ts" />
-/// <reference path="MatchedLoginsPanelStub.ts" />
+/// <reference path="PanelStub.ts" />
 
 class MatchResult {
     logins: keeFoxLoginInfo[][];
@@ -50,7 +50,7 @@ class FormFilling {
 
     private keeFoxFieldIcon: KeeFoxFieldIcon;
 
-    public matchedLoginsPanelStub: MatchedLoginsPanelStub;
+    public matchedLoginsPanelStub: PanelStub;
     private matchedLoginsPanelStubRaf: number;
     public matchResultReceiver;
 
@@ -75,21 +75,21 @@ class FormFilling {
                 this.closeMatchedLoginsPanel();
             } else if (this.matchResult.logins[this.matchResult.mostRelevantFormIndex].length > 1) {
                 this.closeMatchedLoginsPanel();
-                this.matchedLoginsPanelStub = new MatchedLoginsPanelStub(null);
-                this.matchedLoginsPanelStub.createMatchedLoginsPanel();
+                this.matchedLoginsPanelStub = new PanelStub(PanelStubOptions.MatchedLogins, null);
+                this.matchedLoginsPanelStub.createPanel();
             }
         }
     }
 
     public createMatchedLoginsPanelNearNode (target: HTMLElement) {
         this.closeMatchedLoginsPanel();
-        this.matchedLoginsPanelStub = new MatchedLoginsPanelStub(target);
-        this.matchedLoginsPanelStub.createMatchedLoginsPanel();
+        this.matchedLoginsPanelStub = new PanelStub(PanelStubOptions.MatchedLogins, target);
+        this.matchedLoginsPanelStub.createPanel();
         this.matchedLoginsPanelStubRaf = requestAnimationFrame(formFilling.updateMatchedLoginsPanelPosition);
     }
 
     public closeMatchedLoginsPanel () {
-        if (this.matchedLoginsPanelStub) this.matchedLoginsPanelStub.closeMatchedLoginsPanel();
+        if (this.matchedLoginsPanelStub) this.matchedLoginsPanelStub.closePanel();
         this.matchedLoginsPanelStub = null;
         cancelAnimationFrame(this.matchedLoginsPanelStubRaf);
     }
