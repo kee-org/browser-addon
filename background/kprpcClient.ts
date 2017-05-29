@@ -8,10 +8,6 @@ communication using the KeePassRPC protocol >= version 1.3.
 /// <reference path="../common/Logger.ts" />
 /// <reference path="../common/ConfigManager.ts" />
 
-declare var keefox_win: any; //TODO:c: implement? - messaging probably required in some form or another
-
-//Cu.import("resource://gre/modules/ISO8601DateUtils.jsm");
-
 class kprpcClient {
     public requestId: number;
     private callbacks: {};
@@ -638,7 +634,7 @@ class kprpcClient {
         }
 
         if (username.length <= 0) {
-            username = keefox_org.utils.newGUID();
+            username = utils.newGUID();
             configManager.current.KPRPCUsername = username;
             configManager.save();
         }

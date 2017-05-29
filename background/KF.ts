@@ -477,87 +477,26 @@ class KeeFox {
         }
     }
 
-    //TODO:c:implement necessary observers
-    //TODO:c:security - need to notice change of sensitive loggin setting
+    //TODO:c:implement tutorial custom header
     /*
-    _observer :
-    {
-        _kf : null,
-
-        QueryInterface : XPCOMUtils.generateQI([Ci.nsIObserver,
-                                                Ci.nsISupportsWeakReference]),
-        // nsObserver
-        observe = function (subject, topic, data)
+    case "http-on-modify-request":
+        // Send a custom header to the tutorial website so we know that
+        // the user is running KeeFox 1.5 or above. We don't send any
+        // details (such as the exact version) until the tutorial page
+        // requests the information via a custom Javascript event.
+        let httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
+        try {
+            let host = httpChannel.originalURI.host;
+            if (host.startsWith("tutorial") &&
+                (host == "tutorial.keefox.org" ||
+                host == "tutorial-section-b.keefox.org" ||
+                host == "tutorial-section-c.keefox.org" ||
+                host == "tutorial-section-d.keefox.org"))
+                httpChannel.setRequestHeader("X-KeeFox", "Installed", false);
+        } catch (e)
         {
-
-            switch(topic)
-            {
-                case "nsPref:changed":
-                    window.KeeFoxLog.debug("Observed an event: " + subject + "," + topic + "," + data);
-                    var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
-                                       .getService(Ci.nsIWindowMediator);
-                    var window = wm.getMostRecentWindow("navigator:browser") ||
-                        wm.getMostRecentWindow("mail:3pane");
-
-                    // get a reference to the prompt service component.
-                    var promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"]
-                                    .getService(Ci.nsIPromptService);
-                    subject.QueryInterface(Ci.nsIPrefBranch);
-
-                    this.preferenceChangeResponder(subject, data, window, promptService);
-                    break;
-                case "http-on-modify-request":
-                    // Send a custom header to the tutorial website so we know that
-                    // the user is running KeeFox 1.5 or above. We don't send any
-                    // details (such as the exact version) until the tutorial page
-                    // requests the information via a custom Javascript event.
-                    let httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
-
-                    // This can throw a NS_ERROR_FAILURE sometimes. No idea why - maybe some
-                    // requests have no host? Anyway, it's not something we're interested in
-                    // but is unfortunate because we now have to try/catch just in case
-                    try {
-                        let host = httpChannel.originalURI.host;
-                        if (host.startsWith("tutorial") &&
-                            (host == "tutorial.keefox.org" ||
-                            host == "tutorial-section-b.keefox.org" ||
-                            host == "tutorial-section-c.keefox.org" ||
-                            host == "tutorial-section-d.keefox.org"))
-                            httpChannel.setRequestHeader("X-KeeFox", "Installed", false);
-                    } catch (e)
-                    {
-                        // Don't care
-                    }
-                    break;
-            }
+            // Don't care
         }
-
-        preferenceChangeResponder = function (prefBranch, prefName, window, promptService)
-        {
-            switch (prefName)
-            {
-                case "logSensitiveData":
-                    // Allow the change to go ahead but warn the user (in case they did not understand the change that was made)
-                    window.KeeFoxLog.configureFromPreferences();
-                    utils.oneOffSensitiveLogCheckHandler();
-                    break;
-                case "searchAllOpenDBs":
-                    keefox_org.search.reconfigure({
-                        version: 1,
-                        searchAllDatabases: keefox_org._keeFoxExtension.prefs.getValue("searchAllOpenDBs", true)
-                    });
-                    break;
-                case "listAllOpenDBs":
-                    keefox_org._refreshKPDB();
-                    break;
-                case "alwaysDisplayUsernameWhenTitleIsShown":
-                    keefox_org._refreshKPDB();
-                    break;
-            }
-        }
-
-        notify = function (subject, topic, data) { }
-    }
     */
 
     // Could use multiple callback functions but just one keeps KeePassRPC simpler
@@ -711,16 +650,12 @@ let keefox_org: KeeFox;
 // Make sure user knows we're not ready yet
 browser.browserAction.setBadgeText({ text: "OFF" });
 browser.browserAction.setBadgeBackgroundColor({ color: "red" });
-//TODO:c: Disable the browser button entirely until the config, logging and main module have been initialised?
+browser.browserAction.disable();
 
 // Assumes config and logging have been initialised before this is called.
 function startup () {
-
-keefox_org = new KeeFox();
-
-// attach our utils so it can be called from outside this module
-keefox_org.utils = utils;
-
+    keefox_org = new KeeFox();
+    browser.browserAction.enable();
 }
 
 

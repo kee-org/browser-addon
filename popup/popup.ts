@@ -40,7 +40,14 @@ function updateNotifications () {
     while (notificationContainer.hasChildNodes()) {
         notificationContainer.removeChild(notificationContainer.lastChild);
     }
-    for (const notification of appState.notifications) {
+    for (const notificationData of appState.notifications) {
+        const notification = new KeeFoxNotification(
+            notificationData.name,
+            notificationData.buttons,
+            notificationData.id,
+            notificationData.message,
+            notificationData.priority,
+            notificationData.allowMultiple);
         notificationContainer.appendChild(notification.render());
     }
 }

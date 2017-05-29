@@ -57,8 +57,8 @@ class jsonrpcClient {
         this.kprpcClient.request(this, "GetCurrentKFConfig", null, function rpc_callback (resultWrapper) {
             if ("result" in resultWrapper && resultWrapper.result !== false)
             {
-                if (resultWrapper.result !== null)
-                    keefox_win.mainUI.setMRUdatabasesCallback(resultWrapper.result);
+                // if (resultWrapper.result !== null)
+                //     keefox_win.mainUI.setMRUdatabasesCallback(resultWrapper.result);
 
             }
         }, ++this.kprpcClient.requestId);

@@ -44,7 +44,7 @@ class KeeFoxNotification {
         text.textContent = this.message;
         text.classList.add("KeeFox-message");
         msgDiv.appendChild(text);
-        container.firstChild.insertBefore(msgDiv, container.firstChild.firstChild);
+        container.appendChild(msgDiv);
         return container;
     }
 
