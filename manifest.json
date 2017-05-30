@@ -16,7 +16,7 @@
         "persistent": true
     },
     "content_scripts": [{
-        "matches": ["*://*/*"],
+        "matches": ["<all_urls>"],
         "js": [
                 "common/dollar-polyfill.js",
                 "common/browser-polyfill.js",
