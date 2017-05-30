@@ -662,7 +662,7 @@ class FormFilling {
         const usernameIndex = matchResult.usernameIndexArray[matchResult.mostRelevantFormIndex];
         const otherFields = matchResult.otherFieldsArray[matchResult.mostRelevantFormIndex];
 
-        if (!isMatchedLoginRequest) {
+        if (!isMatchedLoginRequest && matchResult.logins[matchResult.mostRelevantFormIndex].length > 0) {
             myPort.postMessage({ logins: matchResult.logins[matchResult.mostRelevantFormIndex] });
 
             // Give the user a way to choose a login interactively
