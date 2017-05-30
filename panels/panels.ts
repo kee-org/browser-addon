@@ -3,16 +3,16 @@
 
 declare const chrome: typeof browser;
 let appState: AppState;
-let tabState: TabState;
+let frameState: FrameState;
 
 function updateAppState (newState: AppState) {
     const oldState = appState;
     appState = newState;
 }
 
-function updateTabState (newState: TabState) {
-    const oldState = tabState;
-    tabState = newState;
+function updateTabState (newState: FrameState) {
+    const oldState = frameState;
+    frameState = newState;
 }
 
 KeeFoxLog.debug("iframe page started");
@@ -39,10 +39,10 @@ switch (params["panel"])
             KeeFoxLog.debug("In iframe script, received message from background script: ");
 
             if (m.appState) this.updateAppState(m.appState);
-            if (m.tabState) this.updateTabState(m.tabState);
+            if (m.frameState) this.updateTabState(m.frameState);
 
             //TODO:c: sometimes don't do this?
-            matchedLoginsPanel.createNearNode(document.getElementById("header"), tabState.logins);
+            matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.logins);
         });
     break;
     case "generatePassword":
@@ -53,7 +53,7 @@ switch (params["panel"])
             KeeFoxLog.debug("In iframe script, received message from background script: ");
 
             if (m.appState) this.updateAppState(m.appState);
-            if (m.tabState) this.updateTabState(m.tabState);
+            if (m.frameState) this.updateTabState(m.frameState);
 
             if (!m.generatedPassword && m.generatedPassword != "") {
                 myPort.postMessage({ action: "generatePassword" });

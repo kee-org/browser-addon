@@ -3,7 +3,7 @@
 
 interface AddonMessage {
     appState?: AppState;
-    tabState?: TabState;
+    frameState?: FrameState;
     isForegroundTab?: boolean;
     tabId?: number;
     frameId?: number;

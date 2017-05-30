@@ -1,7 +1,9 @@
-/// <reference path="../common/kfDataModel.ts" />
+/// <reference path="../common/FrameState.ts" />
 
 class TabState {
-    mapInjectedIframes: number[];
-    logins: keeFoxLoginInfo[];
-    url: string;
+    mapInjectedIframes: number[] = [];
+    frames: FrameState[] = [];
+    url: string = "";
+    framePorts: browser.runtime.Port[] = [];
+    ourIframePorts: browser.runtime.Port[] = [];
 }

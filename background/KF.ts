@@ -6,6 +6,7 @@
 /// <reference path="utils.ts" />
 /// <reference path="../common/AppState.ts" />
 /// <reference path="../common/TabState.ts" />
+/// <reference path="../common/FrameState.ts" />
 /// <reference path="../common/AddonMessage.ts" />
 /// <reference path="../common/KeeFoxNotification.ts" />
 
@@ -29,12 +30,9 @@ class KeeFox {
     processingCallback: boolean;
     pendingCallback: string;
     urlToOpenOnStartup: string;
-    ports: {
-        tabs: browser.runtime.Port[][];
-        iframes: browser.runtime.Port[][];
-        browserPopup: Partial<browser.runtime.Port>;
-        onConnected: any;
-    };
+
+    browserPopupPort: Partial<browser.runtime.Port>;
+    onPortConnected: any;
 
     constructor ()
     {
@@ -72,75 +70,67 @@ class KeeFox {
 
         this._keeFoxBrowserStartup();
 
-        this.ports = {
-            tabs: [],
-            iframes: [],
-            browserPopup: {postMessage: msg => {} },
-            onConnected: function (p: browser.runtime.Port) {
-                let name = p.name;
-                let parentFrameId: number;
-                if (name.startsWith("iframe")) {
-                    parentFrameId = parseInt(name.substr(7));
-                    name = "iframe";
-                }
-                switch (name) {
-                    case "browserPopup": {
-                        p.onMessage.addListener(browserPopupMessageHandler);
-                        p.onDisconnect.addListener(browserPopupDisconnect);
-                        p.postMessage({ appState: keefox_org.appState });
-                        keefox_org.ports.browserPopup = p;
-                        break;
-                    }
-                    case "page": {
-                        p.onMessage.addListener(pageMessageHandler.bind(p));
-                        p.onDisconnect.addListener(pageDisconnect.bind(p));
-                        p.postMessage({
-                            appState: keefox_org.appState,
-                            frameId: p.sender.frameId,
-                            tabId: p.sender.tab.id,
-                            isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
-                        } as AddonMessage);
-                        if (!keefox_org.ports.tabs[p.sender.tab.id])
-                            keefox_org.ports.tabs[p.sender.tab.id] = [];
-                        keefox_org.ports.tabs[p.sender.tab.id][p.sender.frameId] = p;
+        this.browserPopupPort = {postMessage: msg => {} };
+        this.onPortConnected = function (p: browser.runtime.Port) {
+            let name = p.name;
+            let parentFrameId: number;
+            if (name.startsWith("iframe")) {
+                parentFrameId = parseInt(name.substr(7));
+                name = "iframe";
+            }
+            switch (name) {
+                case "browserPopup": {
+                    p.onMessage.addListener(browserPopupMessageHandler);
+                    p.onDisconnect.addListener(browserPopupDisconnect);
 
-                        if (!keefox_org.tabStates[p.sender.tab.id])
-                            keefox_org.tabStates[p.sender.tab.id] = new TabState();
+                    p.postMessage({ appState: keefox_org.appState });
+
+                    keefox_org.browserPopupPort = p;
+                    break;
+                }
+                case "page": {
+                    p.onMessage.addListener(pageMessageHandler.bind(p));
+                    p.onDisconnect.addListener(pageDisconnect.bind(p));
+
+                    p.postMessage({
+                        appState: keefox_org.appState,
+                        frameId: p.sender.frameId,
+                        tabId: p.sender.tab.id,
+                        isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
+                    } as AddonMessage);
+
+                    if (p.sender.frameId === 0) {
+                        keefox_org.tabStates[p.sender.tab.id] = new TabState();
                         keefox_org.tabStates[p.sender.tab.id].url = p.sender.tab.url;
-                        break;
                     }
-                    case "iframe": {
-                        p.onMessage.addListener(iframeMessageHandler.bind(p));
-                        p.onDisconnect.addListener(iframeDisconnect.bind(p));
-                        p.postMessage({
-                            appState: keefox_org.appState,
-                            tabState: keefox_org.tabStates[p.sender.tab.id],
-                            frameId: p.sender.frameId,
-                            tabId: p.sender.tab.id,
-                            isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
-                        } as AddonMessage);
-                        const iframe = keefox_org.ports.iframes[p.sender.tab.id];
-                        if (!iframe)
-                            keefox_org.ports.iframes[p.sender.tab.id] = [];
-                        keefox_org.ports.iframes[p.sender.tab.id][p.sender.frameId] = p;
-
-                        if (!keefox_org.tabStates[p.sender.tab.id])
-                            keefox_org.tabStates[p.sender.tab.id] = new TabState();
-                        if (!keefox_org.tabStates[p.sender.tab.id].mapInjectedIframes)
-                            keefox_org.tabStates[p.sender.tab.id].mapInjectedIframes = [];
-                        keefox_org.tabStates[p.sender.tab.id].mapInjectedIframes[p.sender.frameId] = parentFrameId;
-                        break;
-                    }
+                    keefox_org.tabStates[p.sender.tab.id].frames[p.sender.frameId] = new FrameState();
+                    keefox_org.tabStates[p.sender.tab.id].framePorts[p.sender.frameId] = p;
+                    break;
                 }
+                case "iframe": {
+                    p.onMessage.addListener(iframeMessageHandler.bind(p));
+                    p.onDisconnect.addListener(iframeDisconnect.bind(p));
 
+                    p.postMessage({
+                        appState: keefox_org.appState,
+                        frameState: keefox_org.tabStates[p.sender.tab.id].frames[parentFrameId],
+                        frameId: p.sender.frameId,
+                        tabId: p.sender.tab.id,
+                        isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
+                    } as AddonMessage);
+
+                    keefox_org.tabStates[p.sender.tab.id].ourIframePorts[p.sender.frameId] = p;
+                    keefox_org.tabStates[p.sender.tab.id].mapInjectedIframes[p.sender.frameId] = parentFrameId;
+                    break;
+                }
             }
         };
 
-        browser.runtime.onConnect.addListener(this.ports.onConnected);
+        browser.runtime.onConnect.addListener(this.onPortConnected);
 
         // Setup any ports that we were notified of before the addon finished initialising
         //TODO:c: Check to see if there is any chance these will fail (tab closed during init?) and handle as appropriate
-        portsQueue.forEach(port => this.ports.onConnected(port));
+        portsQueue.forEach(port => this.onPortConnected(port));
         portsQueue = null;
         browser.runtime.onConnect.removeListener(onConnectedBeforeInitialised);
 
@@ -148,11 +138,11 @@ class KeeFox {
                 keefox_org.foregroundTabId = event.tabId;
                 //TODO:c: Is this the right time to send updated appstate and potentially scan for new form fields?
                 //TODO:c: Should we inform all inactive tabs too?
-                const frames = keefox_org.ports.tabs[event.tabId];
+                const tab = keefox_org.tabStates[event.tabId];
 
-                if (frames) // Might not have had time to setup the port yet //TODO:c: (also, existing tabs when extension installed won't have our code running in them until we add support for that)
+                if (tab && tab.framePorts) // Might not have had time to setup the port yet //TODO:c: (also, existing tabs when extension installed won't have our code running in them until we add support for that)
                 {
-                    frames.forEach(port => {
+                    tab.framePorts.forEach(port => {
                         port.postMessage({ appState: keefox_org.appState, isForegroundTab: true } as AddonMessage);
                     });
                 }
@@ -172,12 +162,12 @@ class KeeFox {
             keefox_org.removeUserNotifications((n: KeeFoxNotification) => n.name != notification.name);
         }
         keefox_org.appState.notifications.push(notification);
-        keefox_org.ports.browserPopup.postMessage({appState: keefox_org.appState});
+        keefox_org.browserPopupPort.postMessage({appState: keefox_org.appState});
     }
 
     removeUserNotifications (test: (notification: KeeFoxNotification) => boolean) {
         keefox_org.appState.notifications = keefox_org.appState.notifications.filter(test);
-        keefox_org.ports.browserPopup.postMessage({appState: keefox_org.appState});
+        keefox_org.browserPopupPort.postMessage({appState: keefox_org.appState});
     }
 
     getDBbyFilename (fileName)
@@ -225,14 +215,14 @@ class KeeFox {
         this.appState.KeePassDatabases = null;
         this.appState.ActiveKeePassDatabaseIndex = -1;
         this.appState.connected = false;
-        keefox_org.ports.browserPopup.postMessage( { appState: this.appState });
+        keefox_org.browserPopupPort.postMessage( { appState: this.appState });
 
         browser.browserAction.setBadgeText({ text: "OFF" });
         browser.browserAction.setBadgeBackgroundColor({ color: "red" });
 
         // Poke every port. In future might just limit to active tab?
-        keefox_org.ports.tabs.forEach(frame => {
-            frame.forEach(port => {
+        keefox_org.tabStates.forEach(ts => {
+            ts.framePorts.forEach(port => {
                 port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
             }, this);
         }, this);
@@ -281,11 +271,11 @@ class KeeFox {
                 configManager.save();
         }
 
-        keefox_org.ports.browserPopup.postMessage( { appState: this.appState });
+        keefox_org.browserPopupPort.postMessage( { appState: this.appState });
 
         // Poke every port. In future might just limit to active tab?
-        keefox_org.ports.tabs.forEach(frame => {
-            frame.forEach(port => {
+        keefox_org.tabStates.forEach(ts => {
+            ts.framePorts.forEach(port => {
                 port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
             }, this);
         }, this);
@@ -666,7 +656,7 @@ function browserPopupMessageHandler (msg: AddonMessage) {
 
     if (msg.removeNotification) {
         delete keefox_org.appState.notifications[msg.removeNotification];
-        keefox_org.ports.browserPopup.postMessage({ appState: keefox_org.appState });
+        keefox_org.browserPopupPort.postMessage({ appState: keefox_org.appState });
     }
     if (msg.loadUrlHelpSensitiveLogging) {
         browser.tabs.create({
@@ -676,16 +666,14 @@ function browserPopupMessageHandler (msg: AddonMessage) {
 
     if (msg.action == "generatePassword") {
         if (keefox_org.appState.connected) {
-            keefox_org.ports.tabs[keefox_org.foregroundTabId].forEach(port => {
-                    port.postMessage({ action: "generatePassword" });
-            }, this);
+            keefox_org.tabStates[keefox_org.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
         }
     }
 };
 
 function browserPopupDisconnect () {
     // Just keeps other code neater if we can assume there's always a non-null message reciever
-    keefox_org.ports.browserPopup = {postMessage: msg => {}};
+    keefox_org.browserPopupPort = {postMessage: msg => {}};
 }
 
 function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
@@ -699,13 +687,10 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     }
     if (msg.removeNotification) {
         delete keefox_org.appState.notifications[msg.removeNotification];
-        keefox_org.ports.browserPopup.postMessage({ appState: keefox_org.appState, isForegroundTab: this.sender.tab.id === keefox_org.foregroundTabId } as AddonMessage);
+        keefox_org.browserPopupPort.postMessage({ appState: keefox_org.appState, isForegroundTab: this.sender.tab.id === keefox_org.foregroundTabId } as AddonMessage);
     }
     if (msg.logins) {
-        if (!keefox_org.tabStates[this.sender.tab.id]) {
-            keefox_org.tabStates[this.sender.tab.id] = new TabState();
-        }
-        keefox_org.tabStates[this.sender.tab.id].logins = msg.logins;
+        keefox_org.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
     }
 };
 
@@ -718,7 +703,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
     if (msg.action == "closeAllPanels" || (msg.action == "manualFill" && msg.selectedLoginIndex != null)) {
         const parentFrameId = keefox_org.tabStates[tabId].mapInjectedIframes[frameId];
-        keefox_org.ports.tabs[tabId][parentFrameId].postMessage(msg);
+        keefox_org.tabStates[tabId].framePorts[parentFrameId].postMessage(msg);
     }
 
     if (msg.action == "generatePassword") {
@@ -731,16 +716,16 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 };
 
 function pageDisconnect () {
-    //TODO:c: need to clear tabStates too but have to make iframes work in general first
-    delete keefox_org.ports.tabs[this.sender.tab.id][this.sender.frameId];
-    if (keefox_org.ports.tabs[this.sender.tab.id].length == 0)
-        delete keefox_org.ports.tabs[this.sender.tab.id];
+    delete keefox_org.tabStates[this.sender.tab.id].framePorts[this.sender.frameId];
+
+    // If we have no remaining page ports, we can assume this tab has closed and reclaim some memory
+    if (keefox_org.tabStates[this.sender.tab.id].framePorts.length == 0)
+        delete keefox_org.tabStates[this.sender.tab.id];
 }
 
 function iframeDisconnect () {
-    delete keefox_org.ports.iframes[this.sender.tab.id][this.sender.frameId];
-    if (keefox_org.ports.iframes[this.sender.tab.id].length == 0)
-        delete keefox_org.ports.iframes[this.sender.tab.id];
+    delete keefox_org.tabStates[this.sender.tab.id].ourIframePorts[this.sender.frameId];
+    delete keefox_org.tabStates[this.sender.tab.id].mapInjectedIframes[this.sender.frameId];
 }
 
 let portsQueue = [];
