@@ -79,9 +79,31 @@ function startup (currentAppState: AppState, isForegroundTab: boolean, myTabId: 
     passwordGenerator = new PasswordGenerator();
 
     updateAppState(currentAppState, isForegroundTab);
+
+    iframesObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["src"] });
+
+    // Look for any frames that were added in original page source or before we've done this content script signup
+    myPort.postMessage({ action: "lookForNewIframes" });
 }
 
 KeeFoxLog.debug("content page started");
+
+const iframesObserver = new MutationObserver(mutations => {
+    let rescan = false;
+    mutations.forEach(mutation => {
+        if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+            for (const node of mutation.addedNodes) {
+                if (node.nodeName.toLowerCase() === "iframe") rescan = true;
+            }
+        }
+        if (mutation.type === "attributes"
+        && mutation.attributeName.toLowerCase() === "src"
+        && mutation.target.nodeName.toLowerCase() === "iframe") {
+            rescan = true;
+        }
+    });
+    if (rescan) myPort.postMessage({ action: "lookForNewIframes" });
+});
 
 let myPort = chrome.runtime.connect({ name: "page" });
 myPort.postMessage({ greeting: "hello from content page script" });
@@ -122,6 +144,11 @@ myPort.onMessage.addListener(function (m: AddonMessage) {
         passwordGenerator.closeGeneratePasswordPanel();
         formFilling.closeMatchedLoginsPanel();
     }
+
+    if (m.action == "showMatchedLoginsPanel") {
+        formFilling.createMatchedLoginsPanelInCenter(m.frameId);
+    }
+
 });
 
 KeeFoxLog.info("content page ready");

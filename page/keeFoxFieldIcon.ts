@@ -22,57 +22,71 @@ class KeeFoxFieldIcon {
 
         this.logins = logins;
 
-        //TODO:c: tell user how many matches there were
-        //const image = matchTotal > 1 ? this.getLabelledIcon(matchTotal.toString()) : this.KEEFOX_ICON_16;
-        const image = this.KEEFOX_ICON_16;
+        function afterImageLoaded (image: string) {
+            for (const field of passwordFields.concat(otherFields)) {
+                if (field.type != "password" && field.type != "text") continue;
 
-        for (const field of passwordFields.concat(otherFields)) {
-            if (field.type != "password" && field.type != "text") continue;
+                this.fieldsWithIcons.push(field);
 
-            this.fieldsWithIcons.push(field);
+                const element: HTMLElement = field.DOMInputElement;
+                element.addEventListener("click", this.showMatchedLoginsPanel.bind(this));
+                element.addEventListener("mousemove", this.hoverOverInput);
 
-            const element: HTMLElement = field.DOMInputElement;
-            element.addEventListener("click", this.showMatchedLoginsPanel.bind(this));
-            element.addEventListener("mousemove", this.hoverOverInput);
-
-            element.style.backgroundImage = "url('" + image + "')";
-            element.style.backgroundRepeat = "no-repeat";
-            element.style.backgroundAttachment = "scroll";
-            element.style.backgroundSize = "16px 18px";
-            element.style.backgroundPosition = "98% 50%";
+                element.style.backgroundImage = "url('" + image + "')";
+                element.style.backgroundRepeat = "no-repeat";
+                element.style.backgroundAttachment = "scroll";
+                element.style.backgroundSize = "16px 16px";
+                element.style.backgroundPosition = "calc(100% - 4px) 50%";
+            }
         }
+
+        if (logins.length > 1) {
+            this.getLabelledIcon(logins.length.toString(), afterImageLoaded.bind(this));
+        } else {
+            afterImageLoaded.call(this, this.KEEFOX_ICON_16);
+        }
+
     }
 
     private showMatchedLoginsPanel (e) {
-        if ((e.clientX - e.target.offsetLeft) > (parseInt(document.defaultView.getComputedStyle(e.target).width) - 16)) {
-            formFilling.createMatchedLoginsPanelNearNode(e.target);
+        const cs = document.defaultView.getComputedStyle(e.target);
+        const leftLimit = parseInt(cs.width) - 20 - parseInt(cs.borderLeftWidth);
+        if ((e.clientX - e.target.offsetLeft) > leftLimit) {
+            if (frameId !== 0) {
+            myPort.postMessage({action: "showMatchedLoginsPanel"} as AddonMessage);
+            } else
+            {
+                formFilling.createMatchedLoginsPanelNearNode(e.target);
+            }
         }
     }
 
     private hoverOverInput (e) {
-        if ((e.clientX - e.target.offsetLeft) > (parseInt(document.defaultView.getComputedStyle(e.target).width) - 16)) {
+        const cs = document.defaultView.getComputedStyle(e.target);
+        const leftLimit = parseInt(cs.width) - 20 - parseInt(cs.borderLeftWidth);
+        if ((e.clientX - e.target.offsetLeft) > leftLimit) {
             e.target.style.cursor = "pointer";
             return;
         }
         e.target.style.cursor = "auto";
     }
 
-    private getLabelledIcon (text: string) {
-        //TODO:c: caching image output
-        //TODO:c: This doesn't work at all yet
+    private getLabelledIcon (text: string, callback) {
         const canvas = document.createElement("canvas");
+        canvas.height = 16;
+        canvas.width = 16;
         const img = document.createElement("img");
+        img.addEventListener("load", e => {
+            const context = canvas.getContext("2d");
+            context.drawImage(img, 0, 0);
+            context.fillStyle = "white";
+            context.fillRect(6, 8, 10, 8);
+            context.fillStyle = "red";
+            context.font = "8px Arial";
+            context.fillText(text, 7, 15);
+            callback( canvas.toDataURL());
+        });
         img.src = this.KEEFOX_ICON_16;
-
-        const context = canvas.getContext("2d");
-        context.drawImage(img, 0, 2);
-        context.fillStyle = "rgba(255,0,0,1)";
-        context.fillRect(5, 10, 10, 6);
-        context.fillStyle = "red";
-        context.font = "8px Arial";
-        context.fillText(text, 0, 0);
-
-        return canvas.toDataURL();
     }
 
     /* tslint:disable */

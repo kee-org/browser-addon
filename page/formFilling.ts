@@ -69,7 +69,7 @@ class FormFilling {
     }
 
     public executePrimaryAction () {
-        if (this.matchResult.logins && this.matchResult.mostRelevantFormIndex >= 0) {
+        if (this.matchResult.logins && this.matchResult.logins.length > 0 && this.matchResult.mostRelevantFormIndex != null && this.matchResult.mostRelevantFormIndex >= 0) {
             if (this.matchResult.logins[this.matchResult.mostRelevantFormIndex].length == 1) {
                 this.fillAndSubmit(false, this.matchResult.mostRelevantFormIndex, 0);
                 this.closeMatchedLoginsPanel();
@@ -79,6 +79,12 @@ class FormFilling {
                 this.matchedLoginsPanelStub.createPanel();
             }
         }
+    }
+
+    public createMatchedLoginsPanelInCenter (specificFrameId: number) {
+        this.closeMatchedLoginsPanel();
+        this.matchedLoginsPanelStub = new PanelStub(PanelStubOptions.MatchedLogins, null, specificFrameId);
+        this.matchedLoginsPanelStub.createPanel();
     }
 
     public createMatchedLoginsPanelNearNode (target: HTMLElement) {

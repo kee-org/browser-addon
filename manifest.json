@@ -44,7 +44,10 @@
         "contextMenus",
         "storage",
         "clipboardWrite",
-        "clipboardRead"
+        "clipboardRead",
+        "webNavigation",
+        "activeTab",
+        "<all_urls>"
     ],
     "web_accessible_resources" : [
 		"panels/*"

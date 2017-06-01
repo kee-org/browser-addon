@@ -12,7 +12,7 @@ interface AddonMessage {
     findMatches?: { uri: string };
     findMatchesResult?: any;
     logins?: keeFoxLoginInfo[];
-    action?: "primary" | "detectForms" | "manualFill" | "generatePassword" | "closeAllPanels";
+    action?: "primary" | "detectForms" | "manualFill" | "generatePassword" | "closeAllPanels" | "lookForNewIframes" | "showMatchedLoginsPanel";
     selectedLoginIndex?: number;
     passwordProfiles: any[];
     generatedPassword: string;

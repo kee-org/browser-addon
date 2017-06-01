@@ -22,9 +22,7 @@ class KFCommands {
                 break;
                 case "generate-password":
                     if (keefox_org.appState.connected) {
-                        keefox_org.tabStates[keefox_org.foregroundTabId].framePorts.forEach(port => {
-                                port.postMessage({ action: "generatePassword" });
-                        }, this);
+                        keefox_org.tabStates[keefox_org.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
                     }
                 break;
             }
@@ -51,9 +49,7 @@ class KFCommands {
                 // break;
                 case "generate-password":
                     if (keefox_org.appState.connected) {
-                        keefox_org.tabStates[keefox_org.foregroundTabId].framePorts.forEach(port => {
-                                port.postMessage({ action: "generatePassword" });
-                        }, this);
+                        keefox_org.tabStates[keefox_org.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
                     }
                 break;
             }
@@ -107,25 +103,25 @@ class KFCommands {
             && keefox_org.tabStates[keefox_org.foregroundTabId]
             && keefox_org.tabStates[keefox_org.foregroundTabId].frames
             && keefox_org.tabStates[keefox_org.foregroundTabId].frames.length > 0) {
-                for (let i=0; i<keefox_org.tabStates[keefox_org.foregroundTabId].frames.length; i++) {
-                    for (let j=0; j<keefox_org.tabStates[keefox_org.foregroundTabId].frames[i].logins.length; j++) {
-                        const login = keefox_org.tabStates[keefox_org.foregroundTabId].frames[i].logins[j];
+                keefox_org.tabStates[keefox_org.foregroundTabId].frames.forEach(frame => {
+                    for (let j=0; j<frame.logins.length; j++) {
+                        const login = frame.logins[j];
                         try {
                             browser.contextMenus.create({
-                                id: "matchedLogin-" + i,
+                                id: "matchedLogin-" + j,
                                 title: login.title,
                                 contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
                         });
                         } catch (e) {
                             // try again with Chrome-supported contexts
                             browser.contextMenus.create({
-                                id: "matchedLogin-" + i,
+                                id: "matchedLogin-" + j,
                                 title: login.title,
                                 contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
                             });
                         }
                     }
-                }
+                });
             }
         });
     }

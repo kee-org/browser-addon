@@ -120,7 +120,6 @@ class KeeFox {
                     } as AddonMessage);
 
                     keefox_org.tabStates[p.sender.tab.id].ourIframePorts[p.sender.frameId] = p;
-                    keefox_org.tabStates[p.sender.tab.id].mapInjectedIframes[p.sender.frameId] = parentFrameId;
                     break;
                 }
             }
@@ -692,6 +691,12 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.logins) {
         keefox_org.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
     }
+    if (msg.action === "lookForNewIframes") {
+        injectScriptsToTab(this.sender.tab.id);
+    }
+    if (msg.action === "showMatchedLoginsPanel") {
+        keefox_org.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: "showMatchedLoginsPanel", frameId: this.sender.frameId });
+    }
 };
 
 function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
@@ -701,9 +706,13 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     const frameId = this.sender.frameId;
     const port = this;
 
-    if (msg.action == "closeAllPanels" || (msg.action == "manualFill" && msg.selectedLoginIndex != null)) {
-        const parentFrameId = keefox_org.tabStates[tabId].mapInjectedIframes[frameId];
-        keefox_org.tabStates[tabId].framePorts[parentFrameId].postMessage(msg);
+    if (msg.action == "manualFill" && msg.selectedLoginIndex != null) {
+        keefox_org.tabStates[tabId].framePorts[msg.frameId || 0].postMessage(msg);
+        keefox_org.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
+    }
+
+    if (msg.action == "closeAllPanels") {
+        keefox_org.tabStates[tabId].framePorts[0].postMessage(msg);
     }
 
     if (msg.action == "generatePassword") {
@@ -725,7 +734,19 @@ function pageDisconnect () {
 
 function iframeDisconnect () {
     delete keefox_org.tabStates[this.sender.tab.id].ourIframePorts[this.sender.frameId];
-    delete keefox_org.tabStates[this.sender.tab.id].mapInjectedIframes[this.sender.frameId];
+    delete keefox_org.tabStates[this.sender.tab.id].contentScriptInjected[this.sender.frameId];
+}
+
+function injectScriptsToTab (tabId: number) {
+    chrome.webNavigation.getAllFrames({tabId: tabId}, frames => {
+        for (const frame of frames) {
+            if (frame.frameId === 0) continue;
+            if (!keefox_org.tabStates[tabId].contentScriptInjected[frame.frameId]) {
+                browser.tabs.executeScript(tabId, { frameId: frame.frameId, file: "/page/page.js" } as browser.tabs.InjectDetails);
+                keefox_org.tabStates[tabId].contentScriptInjected[frame.frameId] = true;
+            }
+        }
+    });
 }
 
 let portsQueue = [];

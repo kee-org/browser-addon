@@ -28,10 +28,12 @@ class PanelStub {
     private container: HTMLElement;
     private targetRelativeRect: ClientRect;
     private options: PanelStubOptions;
+    private parentFrameId: number;
 
-    constructor (options: PanelStubOptions, target: HTMLElement) {
+    constructor (options: PanelStubOptions, target: HTMLElement, specificFrameId?: number) {
         this.target = target;
         this.options = options;
+        this.parentFrameId = specificFrameId || frameId;
     }
 
     public createPanel () {
@@ -60,7 +62,7 @@ class PanelStub {
         iframe.style.setProperty( "position", "relative", "important" );
         iframe.setAttribute("scrolling", "no");
 
-        iframe.src = chrome.extension.getURL("panels/panels.html") + "?parentFrameId=" + frameId + "&autoCloseTime=" + this.options.autoCloseTime + "&panel=" + this.options.name;
+        iframe.src = chrome.extension.getURL("panels/panels.html") + "?parentFrameId=" + this.parentFrameId + "&autoCloseTime=" + this.options.autoCloseTime + "&panel=" + this.options.name;
         this.container.appendChild(iframe);
 
         document.getElementsByTagName("body")[0].appendChild(this.container);

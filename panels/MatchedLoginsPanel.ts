@@ -67,7 +67,7 @@ class MatchedLoginsPanel {
                 }
             }, false);
             loginItem.addEventListener("keefoxCommand", function (event) {
-                myPort.postMessage({ action: "manualFill", selectedLoginIndex: this.dataset.loginIndex });
+                myPort.postMessage({ action: "manualFill", selectedLoginIndex: this.dataset.loginIndex, frameId: parentFrameId });
             }, false);
             // loginItem.addEventListener("keefoxContext", function (event) {
             //     keefox_win.panel.addLoginContextActions(document, this.getAttribute("data-uuid"), this.getAttribute("data-fileName"));

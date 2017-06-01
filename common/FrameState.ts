@@ -1,6 +1,6 @@
 /// <reference path="../common/kfDataModel.ts" />
 
 class FrameState {
-    logins: keeFoxLoginInfo[];
+    logins: keeFoxLoginInfo[] = [];
     url: string;
 }
