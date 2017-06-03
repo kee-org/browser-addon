@@ -8,5 +8,4 @@ interface AppState {
     KeePassDatabases: any[];
     notifications: KeeFoxNotification[];
     connected: boolean;
-    config: Config;
 }

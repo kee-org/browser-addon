@@ -16,6 +16,7 @@ let specificSite: SearchResult;
 let searchResults: SearchResult[];
 
 function setupPage () {
+    KeeFoxLog.attachConfig(configManager.current);
     loadInitialConfig();
     setupInputListeners();
     document.getElementById("i18n_root").style.display = "block";

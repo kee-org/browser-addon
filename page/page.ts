@@ -11,6 +11,8 @@ let formFilling: FormFilling;
 let passwordGenerator: PasswordGenerator;
 let tabId: number;
 let frameId: number;
+let myPort: browser.runtime.Port;
+let iframesObserver: MutationObserver;
 
 const sameMembers = (arr1, arr2) =>
     arr1.every(item => arr2.includes(item)) && arr2.every(item => arr1.includes(item));
@@ -69,13 +71,13 @@ function matchFinder (uri: string) {
     myPort.postMessage({ findMatches: { uri } });
 }
 
-function startup (currentAppState: AppState, isForegroundTab: boolean, myTabId: number, myFrameId: number) {
+function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, myTabId: number, myFrameId: number) {
     tabId = myTabId;
     frameId = myFrameId;
 
-    KeeFoxLog.configureFromPreferences(currentAppState.config);
+    KeeFoxLog.attachConfig(configManager.current);
     formUtils = new FormUtils(KeeFoxLog);
-    formFilling = new FormFilling(formUtils, KeeFoxLog, currentAppState.config, matchResultReceiver, matchFinder);
+    formFilling = new FormFilling(formUtils, KeeFoxLog, configManager.current, matchResultReceiver, matchFinder);
     passwordGenerator = new PasswordGenerator();
 
     updateAppState(currentAppState, isForegroundTab);
@@ -86,69 +88,76 @@ function startup (currentAppState: AppState, isForegroundTab: boolean, myTabId: 
     myPort.postMessage({ action: "lookForNewIframes" });
 }
 
-KeeFoxLog.debug("content page started");
+function startup () {
+    KeeFoxLog.debug("content page starting");
 
-const iframesObserver = new MutationObserver(mutations => {
-    let rescan = false;
-    mutations.forEach(mutation => {
-        if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-            for (const node of mutation.addedNodes) {
-                if (node.nodeName.toLowerCase() === "iframe") rescan = true;
+    iframesObserver = new MutationObserver(mutations => {
+        let rescan = false;
+        mutations.forEach(mutation => {
+            if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeName.toLowerCase() === "iframe") rescan = true;
+                }
             }
-        }
-        if (mutation.type === "attributes"
-        && mutation.attributeName.toLowerCase() === "src"
-        && mutation.target.nodeName.toLowerCase() === "iframe") {
-            rescan = true;
-        }
+            if (mutation.type === "attributes"
+            && mutation.attributeName.toLowerCase() === "src"
+            && mutation.target.nodeName.toLowerCase() === "iframe") {
+                rescan = true;
+                //TODO:c: Might need to limit this to only src changes that will cause a page refresh (and hence a socket disconnection)
+                //TODO:c: This doesn't work. The background script thinks that the iframe still has the old about:blank URL when it rescans.
+                // Need to find some way to know when it is safe to inspect the URL
+            }
+        });
+        if (rescan) myPort.postMessage({ action: "lookForNewIframes" });
     });
-    if (rescan) myPort.postMessage({ action: "lookForNewIframes" });
-});
 
-let myPort = chrome.runtime.connect({ name: "page" });
-myPort.postMessage({ greeting: "hello from content page script" });
+    myPort = chrome.runtime.connect({ name: "page" });
 
-myPort.onMessage.addListener(function (m: AddonMessage) {
-    KeeFoxLog.debug("In browser content page script, received message from background script");
+    myPort.onMessage.addListener(function (m: AddonMessage) {
+        KeeFoxLog.debug("In browser content page script, received message from background script");
 
-    if (!appState) {
-        startup(m.appState, m.isForegroundTab, m.tabId, m.frameId);
-    } else if (m.appState) {
-        updateAppState(m.appState, m.isForegroundTab);
-    }
+        if (!appState) {
+            onFirstConnect(m.appState, m.isForegroundTab, m.tabId, m.frameId);
+        } else if (m.appState) {
+            updateAppState(m.appState, m.isForegroundTab);
+        }
 
-    if (m.findMatchesResult) {
-        formFilling.findLoginsResultHandler(m.findMatchesResult);
-        renderMatchedLogins(m.findMatchesResult);
-    }
+        if (m.findMatchesResult) {
+            formFilling.findLoginsResultHandler(m.findMatchesResult);
+            renderMatchedLogins(m.findMatchesResult);
+        }
 
-    if (m.action == "manualFill" && m.selectedLoginIndex != null) {
-        formFilling.closeMatchedLoginsPanel();
-        formFilling.fillAndSubmit(false, null, m.selectedLoginIndex);
-    }
+        if (m.action == "manualFill" && m.selectedLoginIndex != null) {
+            formFilling.closeMatchedLoginsPanel();
+            formFilling.fillAndSubmit(false, null, m.selectedLoginIndex);
+        }
 
-    if (m.action == "detectForms") {
-        formFilling.removeKeeFoxIconFromAllFields();
-        formFilling.findMatchesInThisFrame();
-    }
+        if (m.action == "detectForms") {
+            formFilling.removeKeeFoxIconFromAllFields();
+            formFilling.findMatchesInThisFrame();
+        }
 
-    if (m.action == "primary") {
-        formFilling.executePrimaryAction();
-    }
+        if (m.action == "primary") {
+            formFilling.executePrimaryAction();
+        }
 
-    if (m.action == "generatePassword") {
-        passwordGenerator.createGeneratePasswordPanel();
-    }
+        if (m.action == "generatePassword") {
+            passwordGenerator.createGeneratePasswordPanel();
+        }
 
-    if (m.action == "closeAllPanels") {
-        passwordGenerator.closeGeneratePasswordPanel();
-        formFilling.closeMatchedLoginsPanel();
-    }
+        if (m.action == "closeAllPanels") {
+            passwordGenerator.closeGeneratePasswordPanel();
+            formFilling.closeMatchedLoginsPanel();
+        }
 
-    if (m.action == "showMatchedLoginsPanel") {
-        formFilling.createMatchedLoginsPanelInCenter(m.frameId);
-    }
+        if (m.action == "showMatchedLoginsPanel") {
+            formFilling.createMatchedLoginsPanelInCenter(m.frameId);
+        }
 
-});
+    });
 
-KeeFoxLog.info("content page ready");
+    KeeFoxLog.info("content page ready");
+}
+
+// Load our config and start the page script once done
+configManager.load(startup);

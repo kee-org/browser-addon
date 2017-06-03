@@ -26,10 +26,10 @@ class Utils {
     /*******************************************/
 
     openAndReuseOneTabPerURL = function (url) {
-        if (KeeFoxLog.logSensitiveData)
-            KeeFoxLog.debug("trying to find an already open tab with this url:" + url);
-        else
-            KeeFoxLog.debug("trying to find an already open tab with the requested url");
+        KeeFoxLog.debug({
+            m: "trying to find an already open tab with the requested url",
+            sm: "trying to find an already open tab with this url: " + url,
+            r: true } as LogMessage);
         browser.tabs.query({ url }).then(tabs => {
             tabs.length > 0
                 ? browser.tabs.update(tabs[0].id, { active: true })

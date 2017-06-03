@@ -49,6 +49,20 @@ class ConfigManager {
 
     public constructor () {
         this.current = defaultConfig;
+        browser.storage.onChanged.addListener(this.reloadOnStorageChange);
+    }
+
+    private reloadOnStorageChange (changes: browser.storage.StorageChange, area: string) {
+        // We assume every change requires a reload of the config data. Since we batch and
+        // page the data to enable enough storage space this is likley safe for the
+        // long-term but perhaps performance gains could be found around here one day.
+        //
+        // We also reload after every save which is horribly inefficient but the alternative
+        // is finding a reliabel cross-process lockign mechanism to ensure we only disable
+        // reloading during an async save operation and not for a moment longer. That's just
+        // not worth the risk of missing a change from another process.
+
+        configManager.reload();
     }
 
     public setASAP (values: Partial<Config>) {
@@ -85,18 +99,38 @@ class ConfigManager {
 
             if (pageCount) {
 
-            let configString = "";
-            for (let i=0; i < pageCount; i++)
-            {
-                const nextPage = config["keefoxConfigPage" + i];
-                if (nextPage)
-                    configString += nextPage;
-            }
-            if (configString)
-                this.current = JSON.parse(configString);
+                let configString = "";
+                for (let i=0; i < pageCount; i++)
+                {
+                    const nextPage = config["keefoxConfigPage" + i];
+                    if (nextPage)
+                        configString += nextPage;
+                }
+                if (configString)
+                    this.current = JSON.parse(configString);
             }
             this.migrateToLatestVersion();
             onLoaded();
+        });
+    }
+
+    private reload (onLoaded?) {
+        browser.storage.local.get().then(config => {
+            const pageCount = config["keefoxConfigPageCount"];
+
+            if (pageCount) {
+
+                let configString = "";
+                for (let i=0; i < pageCount; i++)
+                {
+                    const nextPage = config["keefoxConfigPage" + i];
+                    if (nextPage)
+                        configString += nextPage;
+                }
+                if (configString)
+                    this.current = Object.assign(this.current, JSON.parse(configString));
+            }
+            if (onLoaded) onLoaded();
         });
     }
 

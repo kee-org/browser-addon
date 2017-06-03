@@ -54,10 +54,7 @@ class kprpcClient {
             this.callbacksData[requestId] = callbackData;
 
         const data = JSON.stringify({ "params": params, "method": method, "id": requestId });
-        if (KeeFoxLog.logSensitiveData)
-            KeeFoxLog.debug("Sending a JSON-RPC request: " + data);
-        else
-            KeeFoxLog.debug("Sending a JSON-RPC request");
+        KeeFoxLog.debug("Sending a JSON-RPC request", ": "  + data);
 
         try {
             this.sendJSONRPC(data);
@@ -79,10 +76,7 @@ class kprpcClient {
     // interpret the message from the RPC server
     evalJson (method, params) {
         let data = JSON.stringify(params);
-        if (KeeFoxLog.logSensitiveData)
-            KeeFoxLog.debug("Evaluating a JSON-RPC object we just recieved: " + data);
-        else
-            KeeFoxLog.debug("Evaluating a JSON-RPC object we just recieved.");
+        KeeFoxLog.debug("Evaluating a JSON-RPC object we just recieved", ": " + data);
 
         if (data) {
             data = data.match(/\s*\[(.*)\]\s*/)[1];

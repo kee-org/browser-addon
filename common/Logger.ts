@@ -18,21 +18,24 @@ interface LogMessage {
 
 // constructor
 class KeeFoxLogger {
-    constructor (config: {logLevel: number, logSensitiveData: boolean})
+    constructor ()
     {
-        this.configureFromPreferences(config);
-
+        this.config = {logLevel: 3, logSensitiveData: false};
         this.info("Logging system initialised at " + Date());
-        if (this.logSensitiveData)
+        this.config = {logLevel: 2, logSensitiveData: false};
+        if (this.config.logSensitiveData)
             this.warn("WARNING: KeeFox Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
     }
 
-    levelError: boolean;
-    levelWarn: boolean;
-    levelInfo: boolean;
-    levelDebug: boolean;
-    methodConsole: boolean;
-    logSensitiveData: boolean;
+    config: {logLevel: number, logSensitiveData: boolean};
+
+
+    attachConfig (config: {logLevel: number, logSensitiveData: boolean}) {
+        this.info("Logging system config updated at " + Date());
+        this.config = config;
+        if (config.logSensitiveData)
+            this.warn("WARNING: KeeFox Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
+    }
 
     private getMessage (data)
     {
@@ -52,9 +55,9 @@ class KeeFoxLogger {
             if (!message)
                 return data;
 
-            if (!this.logSensitiveData && message.length <= 0)
+            if (!this.config.logSensitiveData && message.length <= 0)
                 return "";
-            if (this.logSensitiveData)
+            if (this.config.logSensitiveData)
             {
                 if (replace)
                     return "!! " + sensitiveMessage;
@@ -72,7 +75,7 @@ class KeeFoxLogger {
         if (typeof data == "string")
             data = { m: data, sm: sensitiveMessage, r: replace };
 
-        if (this.levelDebug)
+        if (this.config.logLevel >= 4)
         {
             const message = this.getMessage(data);
             if (message.length > 0) console.debug(message);
@@ -84,7 +87,7 @@ class KeeFoxLogger {
         if (typeof data == "string")
             data = { m: data, sm: sensitiveMessage, r: replace };
 
-        if (this.levelInfo)
+        if (this.config.logLevel >= 3)
         {
             const message = this.getMessage(data);
             if (message.length > 0) console.info(message);
@@ -96,7 +99,7 @@ class KeeFoxLogger {
         if (typeof data == "string")
             data = { m: data, sm: sensitiveMessage, r: replace };
 
-        if (this.levelWarn)
+        if (this.config.logLevel >= 2)
         {
             const message = this.getMessage(data);
             if (message.length > 0) console.warn(message);
@@ -108,34 +111,13 @@ class KeeFoxLogger {
         if (typeof data == "string")
             data = { m: data, sm: sensitiveMessage, r: replace };
 
-        if (this.levelError)
+        if (this.config.logLevel >= 1)
         {
             const message = this.getMessage(data);
             if (message.length > 0) console.error(message);
         }
     };
 
-    //TODO:c:security call this also (in all pages + background) when settings are changed
-    configureFromPreferences (config: {logLevel: number, logSensitiveData: boolean})
-    {
-        const prefLevel = config.logLevel;
-        this.levelDebug = false;
-        this.levelInfo = false;
-        this.levelWarn = false;
-        this.levelError = false;
-
-        switch (prefLevel)
-        {
-            case 4: this.levelDebug = true;
-            case 3: this.levelInfo = true;
-            case 2: this.levelWarn = true;
-            case 1: this.levelError = true;
-        }
-
-        this.logSensitiveData = config.logSensitiveData;
-    };
-
 };
 
-// Logging before we have been able to get the current configuration asynchronously has to follow some fixed default configuration
-let KeeFoxLog = new KeeFoxLogger({logLevel: 2, logSensitiveData: false});
+let KeeFoxLog = new KeeFoxLogger();

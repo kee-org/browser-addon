@@ -43,8 +43,7 @@ class KeeFox {
             ActiveKeePassDatabaseIndex: -1,
             KeePassDatabases: [],
             notifications: [],
-            connected: false,
-            config: configManager.current
+            connected: false
         };
 
         this.tabStates = [];
@@ -740,8 +739,10 @@ function iframeDisconnect () {
 function injectScriptsToTab (tabId: number) {
     chrome.webNavigation.getAllFrames({tabId: tabId}, frames => {
         for (const frame of frames) {
-            if (frame.frameId === 0) continue;
+            if (frame.frameId === 0 || frame.url.startsWith("about:") || frame.url.startsWith("chrome:")) continue;
             if (!keefox_org.tabStates[tabId].contentScriptInjected[frame.frameId]) {
+                browser.tabs.executeScript(tabId, { frameId: frame.frameId, file: "/common/dollar-polyfill.js" } as browser.tabs.InjectDetails);
+                browser.tabs.executeScript(tabId, { frameId: frame.frameId, file: "/common/browser-polyfill.js" } as browser.tabs.InjectDetails);
                 browser.tabs.executeScript(tabId, { frameId: frame.frameId, file: "/page/page.js" } as browser.tabs.InjectDetails);
                 keefox_org.tabStates[tabId].contentScriptInjected[frame.frameId] = true;
             }

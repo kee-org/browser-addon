@@ -1,5 +1,7 @@
 /// <reference path="../common/Logger.ts" />
 /// <reference path="../common/AppState.ts" />
+/// <reference path="../common/AddonMessage.ts" />
+/// <reference path="../common/ConfigManager.ts" />
 
 // Pretend browser (WebExtensions) is chrome (there's a polyfill from Mozilla but it doesn't work well enough yet so this buys us time)
 //TODO:c: Review before launch - maybe can switch to browser + polyfill? Promises (and Edge support) are sticking points at the moment.
@@ -7,6 +9,7 @@ declare const chrome: typeof browser;
 
 let appState: AppState;
 let keefoxPopupLoadTime = Date.now();
+let myPort: browser.runtime.Port;
 
 function updateConnectionStatus () {
     if (appState.connected) {
@@ -52,27 +55,31 @@ function updateNotifications () {
     }
 }
 
-KeeFoxLog.debug("popup started");
+function startup () {
+    KeeFoxLog.debug("popup started");
 
+    KeeFoxLog.attachConfig(configManager.current);
 
-let myPort = chrome.runtime.connect({ name: "browserPopup" });
-myPort.postMessage({ greeting: "hello from content script" });
+    myPort = chrome.runtime.connect({ name: "browserPopup" });
+    myPort.postMessage({ greeting: "hello from content script" });
 
-myPort.onMessage.addListener(function (m: any) {
-    KeeFoxLog.configureFromPreferences(m.appState.config);
-    KeeFoxLog.debug("In browser popup script, received message from background script: ");
-    KeeFoxLog.debug(m.appState.connected);
-    updateAppState(m.appState);
-    updateConnectionStatus();
-    updateNotifications();
-    if (appState.connected) {
-        document.getElementById("generatePasswordLink").style.display = "block";
-    } else {
-        document.getElementById("generatePasswordLink").style.display = "none";
-    }
-});
+    myPort.onMessage.addListener(function (m: AddonMessage) {
+        KeeFoxLog.debug("In browser popup script, received message from background script: ");
+        updateAppState(m.appState);
+        updateConnectionStatus();
+        updateNotifications();
+        if (appState.connected) {
+            document.getElementById("generatePasswordLink").style.display = "block";
+        } else {
+            document.getElementById("generatePasswordLink").style.display = "none";
+        }
+    });
 
-document.getElementById("optionsLink").addEventListener("click", () => chrome.runtime.openOptionsPage() );
-document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: "generatePassword" }) );
+    document.getElementById("optionsLink").addEventListener("click", () => chrome.runtime.openOptionsPage() );
+    document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: "generatePassword" }) );
 
-KeeFoxLog.info("popup ready");
+    KeeFoxLog.info("popup ready");
+}
+
+// Load our config and start the page script once done
+configManager.load(startup);
