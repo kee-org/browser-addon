@@ -46,9 +46,6 @@ function loadInitialConfig () {
     (document.getElementById("pref_notifyWhenEntryUpdated_label") as HTMLInputElement).checked
         = configManager.current.notifyWhenEntryUpdated ? configManager.current.notifyWhenEntryUpdated : null;
 
-    (document.getElementById("pref_logMethodConsole") as HTMLInputElement).checked
-        = configManager.current.logMethodConsole ? configManager.current.logMethodConsole : null;
-
     (document.getElementById("pref_rememberMRUDB_label") as HTMLInputElement).checked
         = configManager.current.rememberMRUDB ? configManager.current.rememberMRUDB : null;
 
@@ -79,7 +76,6 @@ function setupInputListeners () {
     document.getElementById("pref_saveFavicons_label").addEventListener("change", saveSaveFavicons);
     document.getElementById("pref_rememberMRUGroup_label").addEventListener("change", saveRememberMRUGroup);
     document.getElementById("pref_notifyWhenEntryUpdated_label").addEventListener("change", saveNotifyWhenEntryUpdated);
-    document.getElementById("pref_logMethodConsole").addEventListener("change", saveLogMethodConsole);
     document.getElementById("pref_rememberMRUDB_label").addEventListener("change", saveRememberMRUDB);
 
     document.getElementById("pref_when_keefox_chooses_standard_form_desc").addEventListener("change", saveWhenKeefoxChoosesStandardForm);
@@ -145,11 +141,14 @@ function switchToSpecificSitesMode (e) {
 
         //TODO: disable/enable fields
 
+        (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
     }
 }
 
 function siteChooserKeyPress (e) {
     const searchTerm = (document.getElementById("siteChooserSearch") as HTMLInputElement).value;
+
+    document.getElementById("settings").style.display = "none";
 
     document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
@@ -169,7 +168,7 @@ function siteChooserKeyPress (e) {
         document.getElementById("siteAddButton").style.display = "block";
         return;
     } else if (searchResults.length == 1 && searchResults[0].value == searchTerm) {
-        document.getElementById("siteEditButton").style.display = "block";
+        selectSite(0);
         return;
     }
 
@@ -213,6 +212,7 @@ function siteChooserClearSearch (e) {
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
     document.getElementById("settings").style.display = "none";
+    (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
 }
 
 function findMatchingSiteConfigValues (searchTerm: string) {
@@ -320,11 +320,6 @@ function saveRememberMRUGroup (e) {
 function saveNotifyWhenEntryUpdated (e) {
     e.preventDefault();
     configManager.setASAP({ notifyWhenEntryUpdated: (document.getElementById("pref_notifyWhenEntryUpdated_label") as HTMLInputElement).checked });
-}
-
-function saveLogMethodConsole (e) {
-    e.preventDefault();
-    configManager.setASAP({ logMethodConsole: (document.getElementById("pref_logMethodConsole") as HTMLInputElement).checked });
 }
 
 function saveRememberMRUDB (e) {

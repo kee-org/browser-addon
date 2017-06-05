@@ -1,0 +1,53 @@
+body {
+    min-width: 700px;
+    min-height: 400px;
+}
+
+#settings {
+    clear: left;
+}
+
+#siteModeChooser {
+    margin: 10px 0px;
+}
+
+#siteAddButton, #siteEditButton {
+    margin-bottom: 10px;
+    margin-left: 50px;
+    float: left;
+}
+
+#siteChooserSearch {
+    margin-bottom: 10px;
+}
+
+#siteChooser .dropdown {
+    float: left;
+}
+
+#siteChooser label {
+    margin-top: 6px;
+    margin-right: 10px;
+    float: left;
+}
+
+.panel-body > div {
+    margin: 8px 0px;
+}
+
+.formSettingDropdown, .formSettingInput {
+    margin-left: 10px;
+    margin-right: 15px;
+    flex: 1 0 auto;
+}
+
+.form-horizontal .formSettingGroup {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.formSettingLabel {
+    text-align: right;
+    margin-left: 15px;
+}

@@ -3,44 +3,23 @@
 
 <head>
     <link href="bootstrap.min.css" type="text/css" rel="stylesheet">
-    <style>
-        body {
-            min-width: 700px;
-        }
-
-        fieldset.logging-border {
-            border: 1px groove #ddd !important;
-            padding: 0 1.4em 1.4em 1.4em !important;
-            margin: 0 0 1.5em 0 !important;
-            -webkit-box-shadow: 0px 0px 0px 0px #000;
-            box-shadow: 0px 0px 0px 0px #000;
-        }
-
-        legend.logging-border {
-            font-size: 1.2em !important;
-            font-weight: bold !important;
-            text-align: left !important;
-            width: auto;
-            padding: 0 10px;
-            border-bottom: none;
-        }
-    </style>
+    <link href="settings.css" type="text/css" rel="stylesheet">
 </head>
 
 <body class="container-fluid">
     <div id="i18n_root" style="display:none">
         <div id="siteModeChooser">
             <form>
-                Showing options for: <label class="radio-inline">
-                    <input type="radio" name="siteOptionsMode" id="siteOptionsModeAll" value="all" checked> All websites
+                <span data-i18n="showing_options_for"></span>: <label class="radio-inline">
+                    <input type="radio" name="siteOptionsMode" id="siteOptionsModeAll" value="all" checked> <span data-i18n="all_websites"></span>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="siteOptionsMode" id="siteOptionsModeSpecific" value="specific"> A specific website
+                    <input type="radio" name="siteOptionsMode" id="siteOptionsModeSpecific" value="specific"> <span data-i18n="a_specific_website"></span>
                 </label>
         </div>
         <div id="siteChooser" style="display:none">
             <form class="form-horizontal">
-                <label for="siteChooserSearch"><span>Website:</span></label>
+                <label for="siteChooserSearch"><span data-i18n="website"></span></label>
                 <div class="dropdown">
                     <span class="input-group">
 
@@ -54,8 +33,8 @@
                         <li class="dropdown-menu-item"><a href="#">Test2</a></li>
                     </ul>
                 </div>
-                <button class="btn btn-default" type="button" id="siteAddButton" style="display: none;">Add</button>
-                <button class="btn btn-default" type="button" id="siteEditButton" style="display: none;">Edit</button>
+                <button class="btn btn-default" type="button" id="siteAddButton" style="display: none;" data-i18n="add"></button>
+                <button class="btn btn-default" type="button" id="siteEditButton" style="display: none;" data-i18n="edit"></button>
             </form>
         </div>
         <div id="settings" class="col-md-12">
@@ -84,25 +63,25 @@
 
                     <div class="panel-body">
                         <div class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-xs-7"><span data-i18n="pref_when_keefox_chooses_standard_form_desc"></span></div>
-                                <div class="col-xs-5">
+                            <div class="form-group formSettingGroup">
+                                <div class="formSettingLabel"><span data-i18n="pref_when_keefox_chooses_standard_form_desc"></span></div>
+                                <div class="formSettingDropdown">
                                     <select class="form-control" id="pref_when_keefox_chooses_standard_form_desc">
-                                    <option value="DoNothing" data-i18n="pref_DoNothing_desc"></option>
-                                    <option value="Fill" data-i18n="pref_FillForm_desc"></option>
-                                    <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
-                                </select>
+                                        <option value="DoNothing" data-i18n="pref_DoNothing_desc"></option>
+                                        <option value="Fill" data-i18n="pref_FillForm_desc"></option>
+                                        <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-xs-7"><span data-i18n="pref_when_user_chooses_desc"></span></div>
-                                <div class="col-xs-5">
+                            <div class="form-group formSettingGroup">
+                                <div class="formSettingLabel"><span data-i18n="pref_when_user_chooses_desc"></span></div>
+                                <div class="formSettingDropdown">
                                     <select class="form-control" id="pref_when_user_chooses_desc">
-                                    <option value="Fill" data-i18n="pref_FillForm_desc"></option>
-                                    <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
-                                </select>
+                                        <option value="Fill" data-i18n="pref_FillForm_desc"></option>
+                                        <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -141,24 +120,16 @@
                         <h3 class="panel-title" data-i18n="pref_Logging_heading"></h3>
                     </div>
                     <div class="panel-body">
-                        <fieldset class="logging-border">
-                            <legend class="logging-border" data-i18n="pref_logMethod_desc"></legend>
-                            <div class="control-group">
-                                <div class="checkbox">
-                                    <label><input type="checkbox" id="pref_logMethodConsole" /><span data-i18n="pref_logMethodConsole"></span></label>
-                                </div>
-                            </div>
-                        </fieldset>
                         <div class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-xs-7"><span data-i18n="pref_logLevel_desc"></span></div>
-                                <div class="col-xs-5">
+                            <div class="form-group formSettingGroup">
+                                <div class="formSettingLabel"><span data-i18n="pref_logLevel_desc"></span></div>
+                                <div class="formSettingDropdown">
                                     <select class="form-control" id="pref_logLevel_desc">
-                                    <option value="Debugging" data-i18n="pref_logLevelDebugging_label"></option>
-                                    <option value="Information" data-i18n="pref_logLevelInformation_label"></option>
-                                    <option value="Warnings" data-i18n="pref_logLevelWarnings_label"></option>
-                                    <option value="Errors" data-i18n="pref_logLevelErrors_label"></option>
-                                </select>
+                                        <option value="Debugging" data-i18n="pref_logLevelDebugging_label"></option>
+                                        <option value="Information" data-i18n="pref_logLevelInformation_label"></option>
+                                        <option value="Warnings" data-i18n="pref_logLevelWarnings_label"></option>
+                                        <option value="Errors" data-i18n="pref_logLevelErrors_label"></option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -188,18 +159,18 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-xs-9"><span data-i18n="pref_keePassRPCPort_label"></span></div>
-                                <div class="col-xs-3">
+                            <div class="form-group formSettingGroup">
+                                <div class="formSettingLabel"><span data-i18n="pref_keePassRPCPort_label"></span></div>
+                                <div class="formSettingInput" style="max-width: 100px;">
                                     <input class="form-control" id="pref_keePassRPCPort_label" type="number" min="1" max="65535" step="1">
                                 </div>
                             </div>
                         </div>
                         <div><span data-i18n="pref_keePassRPCPortWarning_label"></span></div>
                         <div class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-xs-5"><span data-i18n="pref_keePassDBToOpen_label"></span></div>
-                                <div class="col-xs-7">
+                            <div class="form-group formSettingGroup">
+                                <div class="formSettingLabel"><span data-i18n="pref_keePassDBToOpen_label"></span></div>
+                                <div class="formSettingInput" style="width: 350px;">
                                     <input class="form-control" id="pref_keePassDBToOpen_label" type="text">
                                 </div>
                             </div>

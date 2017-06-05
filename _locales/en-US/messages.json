@@ -210,14 +210,6 @@
     "message": "Errors",
     "description": "Logging level for problems"
   },
-  "pref_logMethod_desc": {
-    "message": "Select where you would like KeeFox to record a log of its activity.",
-    "description": "Select where you would like KeeFox to record a log of its activity."
-  },
-  "pref_logMethodConsole": {
-    "message": "Javascript console",
-    "description": "Javascript console"
-  },
   "pref_notifyBarRequestPasswordSave_label": {
     "message": "Offer to save passwords",
     "description": "Offer to save passwords"
@@ -297,9 +289,6 @@
   },
   "Back_tip": {
     "message": "Go back to the previous KeeFox menu"
-  },
-  "Dialog_OK_Button_key": {
-    "message": "O"
   },
   "Dialog_OK_Button_label": {
     "message": "OK"
@@ -468,8 +457,21 @@
   "current_website": {
     "message": "Current website"
   },
+  "showing_options_for": {
+    "message": "Showing options for",
+    "desciption": "label for a group of radio buttons that allows the user to change the scope of the settings they are changing - e.g. all websites or just one specific website"
+  },
   "all_websites": {
-    "message": "All websites"
+    "message": "All websites",
+    "description": "All websites"
+  },
+  "a_specific_website": {
+    "message": "A specific website",
+    "description": "A specific website"
+  },
+  "website": {
+    "message": "Website",
+    "description": "Website"
   },
   "database_label": {
     "message": "Database"
@@ -586,14 +588,8 @@
     "message": "Login to your KeePass database to enable KeeFox",
     "description": "Login to your KeePass database to enable KeeFox"
   },
-  "notifyBarNeverForSiteButton_key": {
-    "message": "e"
-  },
   "notifyBarNeverForSiteButton_label": {
     "message": "Never for This Site"
-  },
-  "notifyBarRememberButton_key": {
-    "message": "S"
   },
   "notifyBarRememberButton_label": {
     "message": "Save"
@@ -638,5 +634,13 @@
   "autoclose_countdown": {
       "message": "Auto-close in $1 seconds",
       "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
+  },
+  "add": {
+      "message": "Add",
+      "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
+  },
+  "edit": {
+      "message": "Edit",
+      "description": "Action button for user to edit an item within a collection. E.g. edit an entry within the list of site-specific settings overrides"
   }
 }

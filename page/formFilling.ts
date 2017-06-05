@@ -825,12 +825,7 @@ class FormFilling {
                 if (isMatchedLoginRequest)
                 {
                     matchResult.wantToAutoFillForm = true;
-                    //... but we only autosubmit if this is the first time we've been through this
-                    // process (i.e. don't autosubmit if we've hit this page later in our tab's
-                    // lifetime or via history navigation)
-                    //TODO:c: form submission
-                    //if (tabState.userRecentlyDemandedAutoSubmit)
-                    //    matchResult.wantToAutoSubmitForm = this.config.autoSubmitMatchedForms;
+                    matchResult.wantToAutoSubmitForm = this.config.autoSubmitMatchedForms;
                 }
 
                 if (matchResult.wantToAutoFillForm || matchResult.mustAutoFillForm)
@@ -966,7 +961,7 @@ class FormFilling {
                             score -= 5;
                 }
 
-                //TODO:2: compare values and/or textcontent?
+                //TODO:3: compare values and/or textcontent?
 
                 submitElements.push({"score": score, "el": buttonElements[i]});
             }
@@ -1021,7 +1016,7 @@ class FormFilling {
                 largestScore = submitElements[j].score;
             }
         }
-        //TODO:2: more accurate searching of submit buttons, etc. to avoid password resets if possible
+        //TODO:3: more accurate searching of submit buttons, etc. to avoid password resets if possible
         // maybe special cases for common HTML output patterns (e.g. javascript-only ASP.NET forms)
 
         // Remember that it was KeeFox which initiated this form submission so we can
