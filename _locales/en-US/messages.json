@@ -4,7 +4,8 @@
     "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
   },
   "black_list": {
-    "message": "Black List"
+    "message": "Black List",
+    "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent KeeFox from searching for logins for the form containing that field."
   },
   "browse_label": {
     "message": "Browse",
@@ -104,10 +105,12 @@
     "message": "KeeFox supplied an invalid protocol."
   },
   "form_id": {
-    "message": "Form ID"
+    "message": "Form ID",
+    "description": "Form ID"
   },
   "form_name": {
-    "message": "Form name"
+    "message": "Form name",
+    "description": "Form name"
   },
   "further_info_may_follow": {
     "message": "Further info may follow: $1"
@@ -273,16 +276,19 @@
     "description": "Explains how KeeFox chooses which forms to fill in"
   },
   "text_field_id": {
-    "message": "Text field ID"
+    "message": "Text field ID",
+    "description": "Text field ID"
   },
   "text_field_name": {
-    "message": "Text field name"
+    "message": "Text field name",
+    "description": "Text field name"
   },
   "type_new_shortcut_key_placeholder": {
     "message": "Type a new shortcut key"
   },
   "white_list": {
-    "message": "White List"
+    "message": "White List",
+    "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force KeeFox to search for logins for the form containing that field."
   },
   "Back_label": {
     "message": "Back"
@@ -398,9 +404,6 @@
   },
   "Search_tip": {
     "message": "Start typing to display your matching login entries"
-  },
-  "Tools_Menu_options_label": {
-    "message": "KeeFox options"
   },
   "PasswordProfilesExplanation_label": {
     "message": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles.",
@@ -642,5 +645,9 @@
   "edit": {
       "message": "Edit",
       "description": "Action button for user to edit an item within a collection. E.g. edit an entry within the list of site-specific settings overrides"
+  },
+  "site_specific_settings_checkbox_explanation": {
+      "message": "Settings from \"All Websites\" will apply to each section below unless you enable the setting using the checkbox next to it." ,
+      "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
   }
 }

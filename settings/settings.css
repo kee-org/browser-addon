@@ -21,6 +21,10 @@ body {
     margin-bottom: 10px;
 }
 
+#siteChooserSearchResults {
+    margin-top: -10px;
+}
+
 #siteChooser .dropdown {
     float: left;
 }
@@ -29,6 +33,7 @@ body {
     margin-top: 6px;
     margin-right: 10px;
     float: left;
+    font-weight: initial;
 }
 
 .panel-body > div {
@@ -50,4 +55,36 @@ body {
 .formSettingLabel {
     text-align: right;
     margin-left: 15px;
+}
+
+fieldset.fix-border {
+    border: 1px groove #ddd !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 20px 0 1.5em 0 !important;
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+}
+
+legend.fix-border {
+    font-size: 1.2em !important;
+    text-align: left !important;
+    width: auto;
+    padding: 0 10px;
+    border-bottom: none;
+}
+
+.grid {
+    display: grid;
+    grid-gap: 10px;
+    align-items: center;
+}
+
+.grid > label {
+    grid-column-start: 1;
+    justify-self: end;
+    font-weight: initial;
+}
+
+.grid > div {
+    grid-column-start: 2;
 }

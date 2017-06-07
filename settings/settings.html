@@ -144,12 +144,73 @@
                         <div data-i18n="site_options_valid_form_intro_desc"></div>
                         <div data-i18n="site_options_list_explain_desc"></div>
                         <div data-i18n="site_options_invisible_tip_desc"></div>
-                        <div class="input-group col-md-6">
-                            <span class="input-group-addon siteSpecificToggle">
-                                <input type="checkbox" aria-label="...">
-                            </span>
-                            <input class="form-control" id="disabledInput" type="text" disabled />
-                        </div>
+                        <div class="siteSpecificToggle" data-i18n="site_specific_settings_checkbox_explanation"></div>
+                        <fieldset class="fix-border">
+                            <legend class="fix-border" data-i18n="white_list"></legend>
+                            <div class="grid">
+                                <label for="sssWhiteFormName"><span data-i18n="form_name"></span></span></label>
+                                <div class="input-group formFindingControlGroup">
+                                    <span class="input-group-addon">
+                                        <input class="siteSpecificToggle" type="checkbox" aria-label="...">
+                                    </span>
+                                    <input class="form-control" id="sssWhiteFormName" type="text" />
+                                </div>
+                                <label for="sssWhiteFormId"><span data-i18n="form_id"></span></span></label>
+                                <div class="input-group formFindingControlGroup">
+                                    <span class="input-group-addon">
+                                        <input class="siteSpecificToggle" type="checkbox" aria-label="...">
+                                    </span>
+                                    <input class="form-control" id="sssWhiteFormId" type="text" />
+                                </div>
+                                <label for="sssWhiteFieldName"><span data-i18n="text_field_name"></span></span></label>
+                                <div class="input-group formFindingControlGroup">
+                                    <span class="input-group-addon">
+                                        <input class="siteSpecificToggle" type="checkbox" aria-label="...">
+                                    </span>
+                                    <input class="form-control" id="sssWhiteFieldName" type="text" />
+                                </div>
+                                <label for="sssWhiteFieldId"><span data-i18n="text_field_id"></span></span></label>
+                                <div class="input-group formFindingControlGroup">
+                                    <span class="input-group-addon">
+                                        <input class="siteSpecificToggle" type="checkbox" aria-label="...">
+                                    </span>
+                                    <input class="form-control" id="sssWhiteFieldId" type="text" />
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="fix-border">
+                            <legend class="fix-border" data-i18n="black_list"></legend>
+                            <div class="grid">
+                                <label for="sssBlackFormName"><span data-i18n="form_name"></span></span></label>
+                                <div class="input-group formFindingControlGroup">
+                                    <span class="input-group-addon">
+                                        <input class="siteSpecificToggle" type="checkbox" aria-label="...">
+                                    </span>
+                                    <input class="form-control" id="sssBlackFormName" type="text" />
+                                </div>
+                                <label for="sssBlackFormId"><span data-i18n="form_id"></span></span></label>
+                                <div class="input-group formFindingControlGroup">
+                                    <span class="input-group-addon">
+                                        <input class="siteSpecificToggle" type="checkbox" aria-label="...">
+                                    </span>
+                                    <input class="form-control" id="sssBlackFormId" type="text" />
+                                </div>
+                                <label for="sssBlackFieldName"><span data-i18n="text_field_name"></span></span></label>
+                                <div class="input-group formFindingControlGroup">
+                                    <span class="input-group-addon">
+                                        <input class="siteSpecificToggle" type="checkbox" aria-label="...">
+                                    </span>
+                                    <input class="form-control" id="sssBlackFieldName" type="text" />
+                                </div>
+                                <label for="sssBlackFieldId"><span data-i18n="text_field_id"></span></span></label>
+                                <div class="input-group formFindingControlGroup">
+                                    <span class="input-group-addon">
+                                        <input class="siteSpecificToggle" type="checkbox" aria-label="...">
+                                    </span>
+                                    <input class="form-control" id="sssBlackFieldId" type="text" />
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
 
