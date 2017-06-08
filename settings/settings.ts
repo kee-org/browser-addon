@@ -444,8 +444,7 @@ function findMatchingSiteConfigValues (searchTerm: string) {
         findSiteConfigValues(searchTerm, results, configManager.current.siteConfig.pageRegex, "Page", "Regex");
     }
 
-    //TODO:c: Order results
-    return results;
+    return results.sort((r1, r2) => r1.value.localeCompare(r2.value));
 }
 
 function findSiteConfigValues (
