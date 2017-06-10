@@ -1,6 +1,6 @@
 body {
     min-width: 700px;
-    min-height: 400px;
+    min-height: 550px;
 }
 
 #settings {
@@ -87,4 +87,58 @@ legend.fix-border {
 
 .grid > div {
     grid-column-start: 2;
+}
+
+#sitePropertiesModal {
+    background-color: rgba(0,0,0,0.66);
+}
+
+#sitePropertiesContainer {
+    display: grid;
+    align-items: baseline;
+    grid-gap: 15px;
+}
+
+#sitePropertiesContainer > label {
+    grid-column-start: 1;
+    justify-self: end;
+    font-weight: initial;
+    grid-column-end: 2;
+}
+
+#sitePropertiesContainer > input, #sitePropertiesContainer > div {
+    grid-column-start: 2;
+}
+
+#sitePropertiesValueValidation {
+    font-weight: bold;
+    color: red;
+}
+
+#sitePropertiesTarget,
+#sitePropertiesMethod {
+    display: grid;
+    align-items: baseline;
+    grid-gap: 5px;
+    justify-content: start;
+}
+
+#sitePropertiesTarget > label,
+#sitePropertiesMethod > label {
+    grid-column-start: 2;
+    font-weight: initial;
+}
+
+#sitePropertiesTarget > input,
+#sitePropertiesMethod > input {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    justify-self: start;
+}
+
+#sitePropertiesTarget > div,
+#sitePropertiesMethod > div {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    justify-self: start;
 }

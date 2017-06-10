@@ -11,6 +11,10 @@
 //     weight: number;
 // }
 
+type SiteConfigMethod = "Exact" | "Prefix" | "Regex";
+type SiteConfigTarget = "Domain" | "Host" | "Page";
+type SiteConfigNodeType = "Migration" | "User" | "Default";
+
 class FormMatchConfig {
     form?: {
         names?: string[];
@@ -33,7 +37,7 @@ class SiteConfig {
 class SiteConfigNode {
     config: SiteConfig;
     matchWeight: number; // help to decide which config to use when more than one matches current URL
-    source: string;
+    source: SiteConfigNodeType;
 }
 
 class SiteConfigLookup {

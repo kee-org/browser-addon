@@ -254,17 +254,44 @@ class ConfigManager {
 
     public siteConfigLookupFor (target: "Domain" | "Host" | "Page", method: "Exact" | "Prefix" | "Regex") {
         if (target == "Domain") {
-            if (method == "Exact") return this.current.siteConfig.domainExact;
-            if (method == "Prefix") return this.current.siteConfig.domainPrefix;
-            if (method == "Regex") return this.current.siteConfig.domainRegex;
-        } else if (target = "Host") {
-            if (method == "Exact") return this.current.siteConfig.hostExact;
-            if (method == "Prefix") return this.current.siteConfig.hostPrefix;
-            if (method == "Regex") return this.current.siteConfig.hostRegex;
-        } else if (target = "Page") {
-            if (method == "Exact") return this.current.siteConfig.pageExact;
-            if (method == "Prefix") return this.current.siteConfig.pagePrefix;
-            if (method == "Regex") return this.current.siteConfig.pageRegex;
+            if (method == "Exact") {
+                if (!this.current.siteConfig.domainExact) this.current.siteConfig.domainExact = new SiteConfigLookup();
+                return this.current.siteConfig.domainExact;
+            }
+            if (method == "Prefix") {
+                if (!this.current.siteConfig.domainPrefix) this.current.siteConfig.domainPrefix = new SiteConfigLookup();
+                return this.current.siteConfig.domainPrefix;
+            }
+            if (method == "Regex") {
+                if (!this.current.siteConfig.domainRegex) this.current.siteConfig.domainRegex = new SiteConfigLookup();
+                return this.current.siteConfig.domainRegex;
+            }
+        } else if (target == "Host") {
+            if (method == "Exact") {
+                if (!this.current.siteConfig.hostExact) this.current.siteConfig.hostExact = new SiteConfigLookup();
+                return this.current.siteConfig.hostExact;
+            }
+            if (method == "Prefix") {
+                if (!this.current.siteConfig.hostPrefix) this.current.siteConfig.hostPrefix = new SiteConfigLookup();
+                return this.current.siteConfig.hostPrefix;
+            }
+            if (method == "Regex") {
+                if (!this.current.siteConfig.hostRegex) this.current.siteConfig.hostRegex = new SiteConfigLookup();
+                return this.current.siteConfig.hostRegex;
+            }
+        } else if (target == "Page") {
+            if (method == "Exact") {
+                if (!this.current.siteConfig.pageExact) this.current.siteConfig.pageExact = new SiteConfigLookup();
+                return this.current.siteConfig.pageExact;
+            }
+            if (method == "Prefix") {
+                if (!this.current.siteConfig.pagePrefix) this.current.siteConfig.pagePrefix = new SiteConfigLookup();
+                return this.current.siteConfig.pagePrefix;
+            }
+            if (method == "Regex") {
+                if (!this.current.siteConfig.pageRegex) this.current.siteConfig.pageRegex = new SiteConfigLookup();
+                return this.current.siteConfig.pageRegex;
+            }
         }
         return null;
     }

@@ -5,8 +5,8 @@
 
 class SearchResult extends SiteConfigNode {
     value: string;
-    method: "Exact" | "Prefix" | "Regex";
-    target: "Domain" | "Host" | "Page";
+    method: SiteConfigMethod;
+    target: SiteConfigTarget;
 }
 
 declare const chrome: typeof browser;
@@ -90,11 +90,118 @@ function setupInputListeners () {
 
     document.getElementById("siteChooserSearch").addEventListener("input", siteChooserKeyPress);
     document.getElementById("siteSearchClearButton").addEventListener("click", siteChooserClearSearch);
+    document.getElementById("siteAddButton").addEventListener("click", showSiteProperties);
+    document.getElementById("siteEditButton").addEventListener("click", showSiteProperties);
+    document.getElementById("sitePropertiesValue").addEventListener("change", sitePropertiesValueChanged);
+    document.getElementById("sitePropertiesMethodExact").addEventListener("change", sitePropertiesMethodChanged);
+    document.getElementById("sitePropertiesMethodPrefix").addEventListener("change", sitePropertiesMethodChanged);
+    document.getElementById("sitePropertiesMethodRegex").addEventListener("change", sitePropertiesMethodChanged);
+    document.getElementById("sitePropertiesCancel").addEventListener("click", closeSiteProperties);
+    document.getElementById("sitePropertiesSave").addEventListener("click", saveSiteProperties);
 
     for (const node of $$(".formFindingControlGroup")) {
         (node as HTMLElement).firstElementChild.firstElementChild.addEventListener("change", formFindingControlGroupChange);
         (node as HTMLElement).firstElementChild.nextElementSibling.addEventListener("change", changeSiteConfigItem);
     }
+}
+
+function showSiteProperties (e: Event) {
+    const value = (document.getElementById("sitePropertiesValue") as HTMLInputElement);
+    value.value = (document.getElementById("siteChooserSearch") as HTMLInputElement).value;
+
+    validateSitePropertiesValue();
+
+    let radio = Array.from(document.querySelectorAll("#sitePropertiesTarget input"));
+    const checkedTarget = specificSite ? specificSite.target : "Host";
+    radio.forEach((r: HTMLInputElement) => {
+        if (r.value === checkedTarget) r.checked = true;
+        else r.checked = null;
+    });
+    radio = Array.from(document.querySelectorAll("#sitePropertiesMethod input"));
+    const checkedMethod = specificSite ? specificSite.method : "Exact";
+    radio.forEach((r: HTMLInputElement) => {
+        if (r.value === checkedMethod) r.checked = true;
+        else r.checked = null;
+    });
+    (document.getElementById("sitePropertiesWeight") as HTMLInputElement).value
+        = specificSite ? specificSite.matchWeight.toString() : "100";
+
+    const modal = (document.getElementById("sitePropertiesModal") as HTMLElement);
+    modal.style.display = "block";
+    modal.style.opacity = "1";
+}
+
+function closeSiteProperties (e?: Event) {
+    const modal = (document.getElementById("sitePropertiesModal") as HTMLElement);
+    modal.style.opacity = "0";
+    modal.style.display = "none";
+}
+
+function saveSiteProperties (e: Event) {
+    if (validateSitePropertiesValue()) {
+        const value = (document.getElementById("sitePropertiesValue") as HTMLInputElement).value;
+        const weight = parseInt((document.getElementById("sitePropertiesWeight") as HTMLInputElement).value);
+        let radio = Array.from(document.querySelectorAll("#sitePropertiesTarget input"));
+        const target = (radio.find((r: HTMLInputElement) => r.checked) as HTMLInputElement).value as SiteConfigTarget;
+        radio = Array.from(document.querySelectorAll("#sitePropertiesMethod input"));
+        const method = (radio.find((r: HTMLInputElement) => r.checked) as HTMLInputElement).value as SiteConfigMethod;
+
+        let siteConfig: SiteConfig = {};
+
+        if (specificSite) {
+            siteConfig = specificSite.config;
+            // remove old config entry
+            const configLookup = configManager.siteConfigLookupFor(specificSite.target, specificSite.method);
+            if (configLookup) delete configLookup[specificSite.value];
+        }
+
+        specificSite = {value: value, matchWeight: weight, source: "User", target: target, method: method, config: siteConfig};
+
+        const configLookup = configManager.siteConfigLookupFor(target, method);
+        configLookup[value] = {config: siteConfig, source: "User", matchWeight: weight};
+
+        configManager.save();
+
+        closeSiteProperties();
+        showSpecificSite();
+    }
+}
+
+function sitePropertiesValueChanged (e: Event) {
+    validateSitePropertiesValue();
+}
+
+function sitePropertiesMethodChanged (e: Event) {
+    validateSitePropertiesValue();
+}
+
+function validateSitePropertiesValue () {
+    let isValid = true;
+
+    const saveButton = (document.getElementById("sitePropertiesSave") as HTMLButtonElement);
+    const validation = document.getElementById("sitePropertiesValueValidation");
+
+    if ((document.getElementById("sitePropertiesMethodRegex") as HTMLInputElement).checked) {
+        try {
+            /* tslint:disable */
+            new RegExp((document.getElementById("sitePropertiesValue") as HTMLInputElement).value);
+            /* tslint:enable */
+        } catch (e) {
+            isValid = false;
+        }
+    }
+
+    if (isValid) {
+        saveButton.disabled = null;
+        validation.innerText = "";
+        validation.style.display = "none";
+    } else {
+        saveButton.disabled = true;
+        validation.innerText = $STR("enter_valid_regex");
+        validation.style.display = "block";
+    }
+
+    return isValid;
 }
 
 function formFindingControlGroupChange (e: Event) {
@@ -110,7 +217,6 @@ function formFindingControlGroupChange (e: Event) {
         siteConfig = configManager.current.siteConfig.pageRegex["^.*$"].config;
     } else {
         const siteConfigLookup = configManager.siteConfigLookupFor(specificSite.target, specificSite.method);
-        if (!siteConfigLookup) return; //TODO:c: check if we need to create these lazilly here or do it earlier when adding a new sss
         siteConfig = siteConfigLookup[specificSite.value].config;
     }
 
@@ -217,7 +323,6 @@ function changeSiteConfigItem (e: Event, targetInput?: HTMLInputElement) {
         siteConfig = configManager.current.siteConfig.pageRegex["^.*$"].config;
     } else {
         const siteConfigLookup = configManager.siteConfigLookupFor(specificSite.target, specificSite.method);
-        if (!siteConfigLookup) return; //TODO:c: check if we need to create these lazilly here or do it earlier when adding a new sss
         siteConfig = siteConfigLookup[specificSite.value].config;
     }
 
@@ -307,6 +412,7 @@ function switchToAllSitesMode (e) {
     e.preventDefault();
     if (e.target.checked) {
         siteModeAll = true;
+        specificSite = null;
         document.getElementById("siteChooser").style.display = "none";
 
         document.getElementById("settings").style.display = "block";
@@ -318,6 +424,8 @@ function switchToAllSitesMode (e) {
 
         [].forEach.call($$(".siteSpecificToggle"), node => (node as HTMLElement).style.display = "none");
         [].forEach.call($$(".nonSiteSpecificField"), node => (node as HTMLElement).style.display = null);
+
+        (document.getElementById("siteChooserSearch") as HTMLInputElement).value = "";
 
         // Update field values
         setSiteSpecificConfigValues();
@@ -356,6 +464,8 @@ function siteChooserKeyPress (e) {
     document.getElementById("siteEditButton").style.display = "none";
     document.getElementById("siteChooserSearchResults").innerHTML = "";
 
+    specificSite = null;
+
     if (searchTerm.length < 2) {
         document.getElementById("siteSearchClearButton").style.display = "none";
         return;
@@ -388,8 +498,11 @@ function siteChooserKeyPress (e) {
 }
 
 function selectSite (searchResultIndex) {
-
     specificSite = searchResults[searchResultIndex];
+    showSpecificSite();
+}
+
+function showSpecificSite () {
 
     document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
@@ -497,7 +610,6 @@ function saveOfferToSavePasswords (e) {
         configManager.current.siteConfig.pageRegex["^.*$"].config.preventSaveNotification = save;
     } else {
         const siteConfigLookup = configManager.siteConfigLookupFor(specificSite.target, specificSite.method);
-        if (!siteConfigLookup) return;
         siteConfigLookup[specificSite.value].config.preventSaveNotification = save;
     }
     configManager.save();

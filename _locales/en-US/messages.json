@@ -306,8 +306,9 @@
   "Help_Centre_Button_tip": {
     "message": "Visit the online help centre."
   },
-  "Install_Cancel_Button_label": {
-    "message": "Cancel"
+  "cancel": {
+    "message": "Cancel",
+    "description": "Cancel"
   },
   "Install_Finally_description": {
     "message": "Finally, if you have any trouble getting KeeFox to work correctly, please take a look at the help resources found at"
@@ -594,8 +595,9 @@
   "notifyBarNeverForSiteButton_label": {
     "message": "Never for This Site"
   },
-  "notifyBarRememberButton_label": {
-    "message": "Save"
+  "save": {
+    "message": "Save",
+    "description": "Save"
   },
   "password_management": {
     "message": "Password management"
@@ -649,5 +651,29 @@
   "site_specific_settings_checkbox_explanation": {
       "message": "Settings from \"All Websites\" will apply to each section below unless you enable the setting using the checkbox next to it." ,
       "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
+  },
+  "site_properties": {
+      "message": "Site properties",
+      "description": "Site properties"
+  },
+  "enter_valid_regex": {
+      "message": "Enter a valid Regex or select a different type",
+      "description": "Validation error message displayed to user when they have configured the properties of a site specific configuration to be a regular expression (Regex) but supplied a website value that is not a valid regex"
+  },
+  "site_properties_weight_warning": {
+      "message": "You'll need to carefully check the weights of other configurations if you choose to make use of this advanced feature.",
+      "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
+  },
+  "target": {
+      "message": "Target",
+      "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
+  },
+  "method": {
+      "message": "Method",
+      "description": "For differentiating how a text string will be matched - e.g exact, prefix or regex"
+  },
+  "weight": {
+      "message": "Weight",
+      "description": "A number that can be compared to others in order to decide which associated configuration takes precendence."
   }
 }

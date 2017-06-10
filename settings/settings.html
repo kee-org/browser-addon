@@ -246,6 +246,51 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="sitePropertiesModal" tabindex="-1" role="dialog" aria-labelledby="sitePropertiesModalLabel">
+        <div class="modal-dialog" role="document" style="transform: initial">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="sitePropertiesModalLabel" data-i18n="site_properties"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="sitePropertiesContainer">
+                    <label for="sitePropertiesValue" style="padding-top: 7px;"><span data-i18n="website"></span></label>
+                    <input id="sitePropertiesValue" type="text" class="form-control" />
+                    <div class="formFieldInfo" id="sitePropertiesValueValidation" style="display:none"></div>
+                    <label><span data-i18n="target"></span></label>
+                    <div id="sitePropertiesTarget">
+                        <input id="sitePropertiesTargetDomain" name="sitePropertiesTarget" type="radio" value="Domain" checked />
+                        <label for="sitePropertiesTargetDomain"><span>Domain</span></label>
+                        <input id="sitePropertiesTargetHostname" name="sitePropertiesTarget" type="radio" value="Host" />
+                        <label for="sitePropertiesTargetHostname"><span>Hostname</span></label>
+                        <input id="sitePropertiesTargetPage" name="sitePropertiesTarget" type="radio" value="Page" />
+                        <label for="sitePropertiesTargetPage"><span>Page</span></label>
+                    </div>
+                    <label><span data-i18n="method"></span></label>
+                    <div id="sitePropertiesMethod">
+                        <input id="sitePropertiesMethodExact" name="sitePropertiesMethod" type="radio" value="Exact" checked />
+                        <label for="sitePropertiesMethodExact"><span>Exact</span></label>
+                        <input id="sitePropertiesMethodPrefix" name="sitePropertiesMethod" type="radio" value="Prefix" />
+                        <label for="sitePropertiesMethodPrefix"><span>Prefix</span></label>
+                        <input id="sitePropertiesMethodRegex" name="sitePropertiesMethod" type="radio" value="Regex" />
+                        <label for="sitePropertiesMethodRegex"><span>Regex</span></label>
+                    </div>
+                    <label for="sitePropertiesWeight" style="padding-top: 7px;"><span data-i18n="weight"></span></label>
+                    <input id="sitePropertiesWeight" type="text" class="form-control" />
+
+                    <div class="formFieldInfo"><span data-i18n="site_properties_weight_warning"></span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="sitePropertiesCancel" data-i18n="cancel"></button>
+                <button class="btn btn-primary" type="button" id="sitePropertiesSave" data-i18n="save"></button>
+            </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../common/browser-polyfill.js"></script>
     <script src="../common/dollar-polyfill.js"></script>
     <script src="../common/i18n.js"></script>
