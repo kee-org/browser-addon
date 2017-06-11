@@ -81,35 +81,10 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
     passwordGenerator = new PasswordGenerator();
 
     updateAppState(currentAppState, isForegroundTab);
-
-    iframesObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["src"] });
-
-    // Look for any frames that were added in original page source or before we've done this content script signup
-    myPort.postMessage({ action: "lookForNewIframes" });
 }
 
 function startup () {
     KeeFoxLog.debug("content page starting");
-
-    iframesObserver = new MutationObserver(mutations => {
-        let rescan = false;
-        mutations.forEach(mutation => {
-            if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-                for (const node of mutation.addedNodes) {
-                    if (node.nodeName.toLowerCase() === "iframe") rescan = true;
-                }
-            }
-            if (mutation.type === "attributes"
-            && mutation.attributeName.toLowerCase() === "src"
-            && mutation.target.nodeName.toLowerCase() === "iframe") {
-                rescan = true;
-                //TODO:c: Might need to limit this to only src changes that will cause a page refresh (and hence a socket disconnection)
-                //TODO:c: This doesn't work. The background script thinks that the iframe still has the old about:blank URL when it rescans.
-                // Need to find some way to know when it is safe to inspect the URL
-            }
-        });
-        if (rescan) myPort.postMessage({ action: "lookForNewIframes" });
-    });
 
     myPort = chrome.runtime.connect({ name: "page" });
 

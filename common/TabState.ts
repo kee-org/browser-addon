@@ -5,5 +5,4 @@ class TabState {
     url: string = "";
     framePorts: browser.runtime.Port[] = [];
     ourIframePorts: browser.runtime.Port[] = [];
-    contentScriptInjected: boolean[] = [];
 }

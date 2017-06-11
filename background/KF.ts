@@ -98,8 +98,11 @@ class KeeFox {
                         isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
                     } as AddonMessage);
 
-                    if (p.sender.frameId === 0) {
+                    if (!keefox_org.tabStates[p.sender.tab.id]) {
                         keefox_org.tabStates[p.sender.tab.id] = new TabState();
+                    }
+
+                    if (p.sender.frameId === 0) {
                         keefox_org.tabStates[p.sender.tab.id].url = p.sender.tab.url;
                     }
                     keefox_org.tabStates[p.sender.tab.id].frames[p.sender.frameId] = new FrameState();
@@ -690,9 +693,6 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.logins) {
         keefox_org.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
     }
-    if (msg.action === "lookForNewIframes") {
-        injectScriptsToTab(this.sender.tab.id);
-    }
     if (msg.action === "showMatchedLoginsPanel") {
         keefox_org.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: "showMatchedLoginsPanel", frameId: this.sender.frameId });
     }
@@ -727,27 +727,15 @@ function pageDisconnect () {
     delete keefox_org.tabStates[this.sender.tab.id].framePorts[this.sender.frameId];
 
     // If we have no remaining page ports, we can assume this tab has closed and reclaim some memory
-    if (keefox_org.tabStates[this.sender.tab.id].framePorts.length == 0)
-        delete keefox_org.tabStates[this.sender.tab.id];
+    // This also allows us to identify when a new page is loading in an existing tab (all ports will disconnect first)
+
+    for (const i in keefox_org.tabStates[this.sender.tab.id].framePorts) return;
+
+    delete keefox_org.tabStates[this.sender.tab.id];
 }
 
 function iframeDisconnect () {
     delete keefox_org.tabStates[this.sender.tab.id].ourIframePorts[this.sender.frameId];
-    delete keefox_org.tabStates[this.sender.tab.id].contentScriptInjected[this.sender.frameId];
-}
-
-function injectScriptsToTab (tabId: number) {
-    chrome.webNavigation.getAllFrames({tabId: tabId}, frames => {
-        for (const frame of frames) {
-            if (frame.frameId === 0 || frame.url.startsWith("about:") || frame.url.startsWith("chrome:")) continue;
-            if (!keefox_org.tabStates[tabId].contentScriptInjected[frame.frameId]) {
-                browser.tabs.executeScript(tabId, { frameId: frame.frameId, file: "/common/dollar-polyfill.js" } as browser.tabs.InjectDetails);
-                browser.tabs.executeScript(tabId, { frameId: frame.frameId, file: "/common/browser-polyfill.js" } as browser.tabs.InjectDetails);
-                browser.tabs.executeScript(tabId, { frameId: frame.frameId, file: "/page/page.js" } as browser.tabs.InjectDetails);
-                keefox_org.tabStates[tabId].contentScriptInjected[frame.frameId] = true;
-            }
-        }
-    });
 }
 
 let portsQueue = [];

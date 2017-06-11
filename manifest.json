@@ -16,6 +16,7 @@
         "persistent": true
     },
     "content_scripts": [{
+        "all_frames": true,
         "matches": ["<all_urls>"],
         "js": [
                 "common/dollar-polyfill.js",
