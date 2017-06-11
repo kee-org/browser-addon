@@ -281,7 +281,7 @@ class FormFilling {
                     formFields[i], dataFields[j], currentPage, overWriteFieldsAutomatically);
                 this.Logger.debug("Suitablility of putting data field "+j+" into form field "+i
                     +" (id: "+formFields[i].fieldId + ") is " + score);
-                fields.push({"score": score, "dataFieldIndex": j, "formFieldIndex": i});
+                fields.push({score: score, dataFieldIndex: j, formFieldIndex: i});
             }
         }
 
@@ -609,9 +609,9 @@ class FormFilling {
         // There may be no results for this frame (e.g. no forms found, search failed, etc.)
         if (!findMatchesResult)
             return {
-                "bestFormIndex": 0,
-                "bestRelevanceScore": 0,
-                "bestFindMatchesResult": undefined
+                bestFormIndex: 0,
+                bestRelevanceScore: 0,
+                bestFindMatchesResult: undefined
             };
 
         let mostRelevantFormIndex = 0;
@@ -627,9 +627,9 @@ class FormFilling {
 
         this.Logger.debug("The most relevant form is #" + mostRelevantFormIndex);
         return {
-            "bestFormIndex": mostRelevantFormIndex,
-            "bestRelevanceScore": findMatchesResult.formRelevanceScores[mostRelevantFormIndex],
-            "bestFindMatchesResult": findMatchesResult
+            bestFormIndex: mostRelevantFormIndex,
+            bestRelevanceScore: findMatchesResult.formRelevanceScores[mostRelevantFormIndex],
+            bestFindMatchesResult: findMatchesResult
         };
     };
 
@@ -963,7 +963,7 @@ class FormFilling {
 
                 //TODO:3: compare values and/or textcontent?
 
-                submitElements.push({"score": score, "el": buttonElements[i]});
+                submitElements.push({score: score, el: buttonElements[i]});
             }
         }
 
@@ -994,17 +994,17 @@ class FormFilling {
                         if (inputElements[i].value.toLowerCase().indexOf(badWords[bw]) >= 0)
                             score -= 4;
                 }
-                submitElements.push({"score": score, "el": inputElements[i]});
+                submitElements.push({score: score, el: inputElements[i]});
             } else if (inputElements[i].type != null && inputElements[i].type == "image")
             {
-                submitElements.push({"score": 3, "el": inputElements[i]});
+                submitElements.push({score: 3, el: inputElements[i]});
             }
         }
 
         if (roleElementsForm.length == 1)
-            submitElements.push({"score": 2, "el": roleElementsForm[0]});
+            submitElements.push({score: 2, el: roleElementsForm[0]});
         if (roleElementsDoc.length == 1)
-            submitElements.push({"score": 1, "el": roleElementsDoc[0]});
+            submitElements.push({score: 1, el: roleElementsDoc[0]});
 
         // Find the best submit button
         let largestScore = 0;

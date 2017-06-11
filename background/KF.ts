@@ -658,7 +658,7 @@ function browserPopupMessageHandler (msg: AddonMessage) {
     }
     if (msg.loadUrlHelpSensitiveLogging) {
         browser.tabs.create({
-            "url": "https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive"
+            url: "https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive"
         });
     }
 

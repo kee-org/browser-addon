@@ -4,7 +4,7 @@
         //? rules with a comment and question mark might be worth enabling in future once code has been improved
 
         "no-eval": true,
-        // "no-trailing-whitespace": [true, "ignore-comments"],
+        "no-trailing-whitespace": [true, "ignore-comments"],
         "arrow-parens": [
             true,
             "ban-single-arg-parens"
@@ -39,7 +39,7 @@
         "no-unsafe-finally": true,
         "no-unused-expression": [true, "allow-fast-null-checks"],
         "no-var-keyword": true,
-        //"object-literal-key-quotes": [true, "consistent-as-needed"],
+        "object-literal-key-quotes": [true, "consistent-as-needed"],
         "one-variable-per-declaration": [
             true,
             "ignore-for-loop"
@@ -47,7 +47,7 @@
         //? "only-arrow-functions": [true, "allow-declarations", "allow-named-functions"],
         "prefer-const": true,
         //? "prefer-for-of": true,
-        //? "prefer-switch": true,
+        "prefer-switch": true,
         "quotemark": [
             true,
             "double",

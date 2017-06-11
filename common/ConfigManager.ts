@@ -85,7 +85,7 @@ class ConfigManager {
         const pages = this.splitStringToPages(configString);
 
         //TODO:3: Need to be able to save some config details locally and others synced
-        browser.storage.local.set({ "keefoxConfigPageCount": pages.length });
+        browser.storage.local.set({ keefoxConfigPageCount: pages.length });
 
         for (let i=0; i < pages.length; i++)
         {

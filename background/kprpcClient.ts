@@ -53,7 +53,7 @@ class kprpcClient {
         if (callbackData != null)
             this.callbacksData[requestId] = callbackData;
 
-        const data = JSON.stringify({ "params": params, "method": method, "id": requestId });
+        const data = JSON.stringify({ params: params, method: method, id: requestId });
         KeeFoxLog.debug("Sending a JSON-RPC request", ": "  + data);
 
         try {
@@ -62,11 +62,11 @@ class kprpcClient {
             KeeFoxLog.warn("JSON-RPC request could not be sent. Expect an async error soon.");
             setTimeout(function () {
                 this.processJSONRPCresponse({
-                    "id": requestId,
-                    "error": {
-                        "message": "Send failure. Maybe the server went away?"
+                    id: requestId,
+                    error: {
+                        message: "Send failure. Maybe the server went away?"
                     },
-                    "message": "error"
+                    message: "error"
                 });
             }.bind(this), 50);
         }
@@ -524,7 +524,7 @@ class kprpcClient {
                 KeeFoxLog.warn("An error occurred when processing the error callback for JSON-RPC object id " + obj.id + ": " + e);
             }
         } else if ("method" in obj) {
-            const result: any = { "id": obj.id };
+            const result: any = { id: obj.id };
 
             try {
                 result.result = this.evalJson(obj.method, obj.params);
