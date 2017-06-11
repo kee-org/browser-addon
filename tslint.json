@@ -37,8 +37,7 @@
         "no-string-throw": true,
         "no-unnecessary-initializer": true,
         "no-unsafe-finally": true,
-        //"no-unused-expression": [true, "allow-fast-null-checks"],
-        "no-unused-new": true,
+        "no-unused-expression": [true, "allow-fast-null-checks"],
         "no-var-keyword": true,
         //"object-literal-key-quotes": [true, "consistent-as-needed"],
         "one-variable-per-declaration": [
@@ -48,6 +47,7 @@
         //? "only-arrow-functions": [true, "allow-declarations", "allow-named-functions"],
         "prefer-const": true,
         //? "prefer-for-of": true,
+        //? "prefer-switch": true,
         "quotemark": [
             true,
             "double",

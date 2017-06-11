@@ -87,14 +87,14 @@ class kprpcClient {
         // RPC server versions
         if (method == "KPRPCListener" || method == "callBackToKeeFoxJS")
             this.KPRPCListener(data);
-    };
+    }
 
     KPRPCListener (signal) {
         // call this async so that json reader can get back to listening ASAP and prevent deadlocks
         setTimeout(function () {
             keefox_org.KPRPCListener(signal);
         }, 5);
-    };
+    }
 
 
     // No need to return anything from this function so sync or async implementation is fine
@@ -104,7 +104,7 @@ class kprpcClient {
             this.encrypt(data, this.sendJSONRPCDecrypted);
             return;
         }
-    };
+    }
 
     sendJSONRPCDecrypted (encryptedContainer) {
 
@@ -119,7 +119,7 @@ class kprpcClient {
             };
 
         this.send(JSON.stringify(data2server));
-    };
+    }
 
     send (data) {
         try {
@@ -127,7 +127,7 @@ class kprpcClient {
         } catch (ex) {
             KeeFoxLog.error("Failed to send a websocket message. Exception details: " + ex + ", stack: " + ex.stack);
         }
-    };
+    }
 
 
     // Close the current connection and reset those variables that are shared at the moment (e.g. secret key + authenticated status)
@@ -142,7 +142,7 @@ class kprpcClient {
         // Close the websocket connection if there is one (if it's already closed, nothing will happen)
         if (this.session.webSocket)
             this.session.webSocket.close();
-    };
+    }
 
     // data = JSON (underlying network/transport layer must have already formed incoming message(s) into JSON objects)
     receive (data) {
@@ -192,7 +192,7 @@ class kprpcClient {
             default: return;
         }
 
-    };
+    }
 
     receiveSetup (data) {
         // double check
@@ -256,11 +256,11 @@ class kprpcClient {
             return;
         }
 
-  	    // Versions of KeePassRPC <= 1.6.x will reject connections (send an "error" property) from
-  	    // KeeFox clients that are too new (like this one). For >= 1.7 it will only do so if it also
-  	    // decides that this client does not support features essential for it to function.
-  	    // Therefore if we've reached this far, we can check the server's list of features that get
-  	    // sent back on the server's first handshake response and reject if the server is missing features we need.
+        // Versions of KeePassRPC <= 1.6.x will reject connections (send an "error" property) from
+        // KeeFox clients that are too new (like this one). For >= 1.7 it will only do so if it also
+        // decides that this client does not support features essential for it to function.
+        // Therefore if we've reached this far, we can check the server's list of features that get
+        // sent back on the server's first handshake response and reject if the server is missing features we need.
         if (data.features && !FeatureFlags.required.every(function (feature) { return data.features.indexOf(feature) !== -1; }))
         {
             KeeFoxLog.error($STRF("KeeFox-conn-client-v-high", []));
@@ -305,7 +305,7 @@ class kprpcClient {
                 this.showConnectionMessage($STRF("KeeFox-conn-setup-server-sl-low", [this.getSecurityLevelServerMinimum().toString()]));
             }
         }
-    };
+    }
 
     sendError (errCode, errParams) {
         const data2server =
@@ -321,13 +321,13 @@ class kprpcClient {
             };
 
         this.send(JSON.stringify(data2server));
-    };
+    }
 
     checkServerSecurityLevel (serverSecurityLevel) {
         if (serverSecurityLevel >= this.getSecurityLevelServerMinimum())
             return true;
         return false;
-    };
+    }
 
     keyChallengeResponse1 (data) {
 
@@ -353,7 +353,7 @@ class kprpcClient {
 
             this.send(JSON.stringify(data2server));
         });
-    };
+    }
 
     keyChallengeResponse2 (data) {
         utils.hash("0" + this.getStoredKey() + this.keyChallengeParams.sc + this.keyChallengeParams.cc).then(digest => {
@@ -376,7 +376,7 @@ class kprpcClient {
                 setTimeout(this.onConnectStartup, 50, "CR", this.onConnectStartup);
             }
         });
-    };
+    }
 
     getSideChannelPassword (data) {
 
@@ -426,7 +426,7 @@ class kprpcClient {
 
             this.send(JSON.stringify(data2server));
         });
-    };
+    }
 
     proofToClient (data) {
         this.srpClientInternals.confirm_authentication(data.srp.M2);
@@ -456,7 +456,7 @@ class kprpcClient {
             });
         }
 
-    };
+    }
 
     onConnectStartup (type, thisFunction, timeout) {
 
@@ -468,7 +468,7 @@ class kprpcClient {
         //keefox_org._keeFoxExtension.prefs.setValue("lastConnectedToKeePass", ISO8601DateUtils.create(new Date()));
         keefox_org._refreshKPDB();
         keefox_org.getApplicationMetadata();
-    };
+    }
 
     // No need to return anything from this function so sync or async implementation is fine
     receiveJSONRPC (data) {
@@ -478,7 +478,7 @@ class kprpcClient {
             return;
         }
         throw new Error("Webcrypto required but disabled or broken");
-    };
+    }
 
     receiveJSONRPCDecrypted (data) {
 
@@ -492,7 +492,7 @@ class kprpcClient {
             return;
 
         this.processJSONRPCresponse(obj);
-    };
+    }
 
     processJSONRPCresponse (obj) {
 
@@ -544,7 +544,7 @@ class kprpcClient {
         } else {
             KeeFoxLog.error("Unexpected error processing receiveJSONRPC");
         }
-    };
+    }
 
 
     setup () {
@@ -617,7 +617,7 @@ class kprpcClient {
             KeeFoxLog.debug("Connection state reset ready for next attempt in at least 10 seconds");
         }
 
-    };
+    }
 
     getUsername (securityLevel) {
         let username = "";
@@ -633,17 +633,17 @@ class kprpcClient {
             configManager.save();
         }
         return username;
-    };
+    }
 
     getSecurityLevel () {
         // read these from about:config. Attacker could change about:config to a lower security level but in doing so, a new SRP auth will be triggered during which the server has opportunity
         // to reject the client becuase its security level is too low.
         return configManager.current.connSLClient;
-    };
+    }
 
     getSecurityLevelServerMinimum () {
         return configManager.current.connSLServerMin;
-    };
+    }
 
     getStoredKey (username?, securityLevel = 0) {
         if (username === undefined) {
@@ -657,7 +657,7 @@ class kprpcClient {
             // There is no longer any way to adjust the security of the stored key so we must treat all as if they are securityLevel 1
             return configManager.current.KPRPCStoredKeys[username];
         }
-    };
+    }
 
 
     setStoredKey (username: string, securityLevel, key: string) {
@@ -669,7 +669,7 @@ class kprpcClient {
             configManager.current.KPRPCStoredKeys[username] = key;
             configManager.save();
         }
-    };
+    }
 
     removeStoredKey (username, securityLevel?) {
         if (!securityLevel || securityLevel == 2 || securityLevel == 1) {
@@ -678,7 +678,7 @@ class kprpcClient {
             configManager.current.KPRPCStoredKeys[username] = "";
             configManager.save();
         }
-    };
+    }
 
     //[deprecated]?
     shutdown () {
@@ -763,7 +763,7 @@ class kprpcClient {
                 KeeFoxLog.error("Failed to encrypt. Exception: " + e);
                 callback(null);
             });
-    };
+    }
 
     // Decrypt incoming data from KeePassRPC using AES-CBC and a separate HMAC
     decrypt (encryptedContainer, callback) {
@@ -882,11 +882,11 @@ class kprpcClient {
                 KPRPC.resetConnection();
                 callback(null);
             });
-    };
+    }
 
     showConnectionMessage (msg: string) {
         keefox_org.notifyUser(new KeeFoxNotification(
             "keefox-connection-message", [], utils.newGUID(), msg, "Medium", false));
-    };
+    }
 
 }

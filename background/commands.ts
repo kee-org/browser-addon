@@ -57,7 +57,7 @@ class KFCommands {
                 keefox_org.tabStates[keefox_org.foregroundTabId].framePorts[(info as any).frameId].postMessage({ action: "manualFill", selectedLoginIndex: id.substr(id.indexOf("-")+1) });
             }
         });
-    };
+    }
 
     public setupContextMenuItems () {
         chrome.contextMenus.removeAll(() => {

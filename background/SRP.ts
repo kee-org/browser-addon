@@ -50,7 +50,7 @@ class SRPc {
     // Receive login salts from the server, promise to start calculations
     receive_salts (s, Bstr) {
         return this.calculations(s, Bstr, this.p);
-    };
+    }
 
     // Calculate S, M, and M2
     calculations (s: string, ephemeral: string, pass: string) {
@@ -78,7 +78,7 @@ class SRPc {
             //M2 = H(A, M, S)
             this.M2 = digest;
         });
-    };
+    }
 
     // Receive M2 from the server and verify it
     confirm_authentication (M2server) {
@@ -88,11 +88,11 @@ class SRPc {
         }
         else
             KeeFoxLog.error("Server key does not match");
-    };
+    }
 
     success () {
         return;
-    };
+    }
 
     // When someone wants to use the session key for encrypting traffic, they can
     // access the key with this function. It's a deferred calculation to reduce impact
@@ -113,5 +113,5 @@ class SRPc {
             return Promise.resolve(this.K);
         }
 
-    };
+    }
 }

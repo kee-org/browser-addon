@@ -61,7 +61,7 @@ class Search {
             else
                 results.push(result);
             return true;
-        };
+        }
 
         // allow pre-tokenised search terms to be supplied
         let keywords = [];
@@ -342,4 +342,4 @@ class Search {
         }
         return totalResultCount;
     };
-};
+}

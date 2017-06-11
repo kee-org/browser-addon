@@ -600,7 +600,7 @@ class FormFilling {
             this.Logger.debug("Relevance of form " + i + " (" + findLoginOp.forms[i].id + ") is " + matchResult.formRelevanceScores[i]);
         }
         return matchResult;
-    };
+    }
 
     getMostRelevantForm = function (formIndex?: number)
     {
@@ -1054,7 +1054,7 @@ class FormFilling {
     }
     }
     */
-    };
+    }
 
     private calculateRelevanceScore (login, form,
         usernameIndex, passwordFields, currentPage, otherFields) {
@@ -1176,4 +1176,4 @@ class FormFilling {
         this.keeFoxFieldIcon.removeKeeFoxIconFromAllFields();
     }
 
-};
+}

@@ -30,14 +30,14 @@ countAllDocuments (frame: Window) {
             localDocCount += this.countAllDocuments(frames[i]);
     }
     return localDocCount;
-};
+}
 
 isUriWeCanFill (uri) {
     if (uri.protocol == "http:" || uri.protocol == "https:" || uri.protocol == "file:") {
         return true;
     }
     return false;
-};
+}
 
 isATextFormFieldType (type)
 {
@@ -46,7 +46,7 @@ isATextFormFieldType (type)
         return false;
     else
         return true;
-};
+}
 
 private isAKnownUsernameString (fieldNameIn) {
     const fieldName = fieldNameIn.toLowerCase();
@@ -63,7 +63,7 @@ private isAKnownUsernameString (fieldNameIn) {
         || fieldName == "onlineid") // etc. etc.
         return true;
     return false;
-};
+}
 
 /*
 * _getFormFields
@@ -176,7 +176,7 @@ public getFormFields (form, isSubmission, currentPage?)
     this.Logger.debug("otherFields.length:" + otherFields.length);
 
     return { actualUsernameIndex, pwFields, otherFields };
-};
+}
 
 // private getSaveOnSubmitForSite (siteURL)
 // {

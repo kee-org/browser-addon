@@ -13,21 +13,7 @@
     {
         "taskName": "lint:ts",
         "args": [],
-        "problemMatcher": {
-            "owner": "tslint",
-            "fileLocation": [
-                "absolute"
-            ],
-            "severity": "warning",
-            "pattern": {
-                "regexp": "^(\\(\\S.+\\))\\s(\\S.*)\\[(\\d+), (\\d+)\\]:\\s+(.*)$",
-                "code": 1,
-                "file": 2,
-                "line": 3,
-                "column": 4,
-                "message": 5
-            }
-        }
+        "problemMatcher": "$tslint5"
     },
     {
         "isBuildCommand": true,

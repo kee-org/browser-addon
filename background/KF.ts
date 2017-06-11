@@ -631,7 +631,7 @@ class KeeFox {
         // if we find it neater to integrate with an Observer pattern, etc.
     }
 
-};
+}
 
 let keefox_org: KeeFox;
 
@@ -667,7 +667,7 @@ function browserPopupMessageHandler (msg: AddonMessage) {
             keefox_org.tabStates[keefox_org.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
         }
     }
-};
+}
 
 function browserPopupDisconnect () {
     // Just keeps other code neater if we can assume there's always a non-null message reciever
@@ -696,7 +696,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.action === "showMatchedLoginsPanel") {
         keefox_org.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: "showMatchedLoginsPanel", frameId: this.sender.frameId });
     }
-};
+}
 
 function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     console.log("In background script, received message from iframe script: " + msg);
@@ -721,7 +721,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
             });
         });
     }
-};
+}
 
 function pageDisconnect () {
     delete keefox_org.tabStates[this.sender.tab.id].framePorts[this.sender.frameId];

@@ -98,7 +98,7 @@ startup () {
         KeeFoxLog.debug("Creating a reconnection timer.");
          // Create a timer
          this.reconnectTimer = window.setInterval(this.timerCallback.bind(this), this.reconnectionAttemptFrequency);
-    };
+    }
 
     reconnectVerySoon ()
     {
@@ -108,7 +108,7 @@ startup () {
 
          // Create a timer
          this.reconnectTimer = window.setInterval(this.timerCallback.bind(this), 250);
-    };
+    }
 
     tryToconnectToWebsocket () {
         KeeFoxLog.debug("Attempting to connect to RPC server webSocket.");
@@ -117,7 +117,7 @@ startup () {
             KeeFoxLog.debug("Connection already established.");
         if (connectResult == "locked")
             KeeFoxLog.debug("Connection attempt already underway.");
-    };
+    }
 
     httpConnectionAttemptCallback () {
         // We can't try to connect straight away because the old HTTP ephemeral
@@ -127,7 +127,7 @@ startup () {
         // back to Firefox and causing a deadlock. A small delay gives Firefox
         // a chance to cleanly close the old port
         this.webSocketTimer = window.setTimeout(this.tryToconnectToWebsocket.bind(this), 50);
-    };
+    }
 
     // Initiates a connection to the KPRPC server.
     connect ()
@@ -189,7 +189,7 @@ startup () {
             KeeFoxLog.debug("Websocket connection closed");
         };
 
-    };
+    }
 
     timerCallback () {
         const rpc = this;
@@ -264,5 +264,5 @@ startup () {
             // tracking system in future if it becomes a problem
             xhr.send();
         }
-    };
+    }
 }
