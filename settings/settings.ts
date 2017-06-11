@@ -72,6 +72,7 @@ function setupInputListeners () {
     document.getElementById("pref_triggerChangeInputEventAfterFill_label").addEventListener("change", saveTriggerChangeInputEventAfterFill);
 
     document.getElementById("pref_notifyBarRequestPasswordSave_label").addEventListener("change", saveOfferToSavePasswords);
+    document.getElementById("requestPasswordSaveSelect").addEventListener("change", saveOfferToSavePasswords);
     document.getElementById("pref_saveFavicons_label").addEventListener("change", saveSaveFavicons);
     document.getElementById("pref_rememberMRUGroup_label").addEventListener("change", saveRememberMRUGroup);
     document.getElementById("pref_notifyWhenEntryUpdated_label").addEventListener("change", saveNotifyWhenEntryUpdated);
@@ -383,8 +384,13 @@ function setupFormFindingSetting (id: string, enabled: boolean, values: string[]
 function setSiteSpecificConfigValues () {
     const siteConfig = siteModeAll ? configManager.current.siteConfig.pageRegex["^.*$"].config : specificSite.config;
 
-    (document.getElementById("pref_notifyBarRequestPasswordSave_label") as HTMLInputElement).checked
-        = siteConfig.preventSaveNotification ? siteConfig.preventSaveNotification : null;
+    if (siteModeAll) {
+        (document.getElementById("pref_notifyBarRequestPasswordSave_label") as HTMLInputElement).checked
+            = siteConfig.preventSaveNotification ? siteConfig.preventSaveNotification : null;
+    } else {
+        const save: string = siteConfig.preventSaveNotification === true ? "Yes" : (siteConfig.preventSaveNotification === false ? "No" : "Inherit");
+        (document.getElementById("requestPasswordSaveSelect") as HTMLSelectElement).value = save;
+    }
 
     let enabled: boolean;
 
@@ -604,11 +610,13 @@ function saveTriggerChangeInputEventAfterFill (e) {
 
 function saveOfferToSavePasswords (e) {
     e.preventDefault();
-    const save = (document.getElementById("pref_notifyBarRequestPasswordSave_label") as HTMLInputElement).checked;
 
     if (siteModeAll) {
+        const save = (document.getElementById("pref_notifyBarRequestPasswordSave_label") as HTMLInputElement).checked;
         configManager.current.siteConfig.pageRegex["^.*$"].config.preventSaveNotification = save;
     } else {
+        const value = (document.getElementById("requestPasswordSaveSelect") as HTMLSelectElement).value;
+        const save = value === "Inherit" ? null : (value == "Yes" ? true : false);
         const siteConfigLookup = configManager.siteConfigLookupFor(specificSite.target, specificSite.method);
         siteConfigLookup[specificSite.value].config.preventSaveNotification = save;
     }

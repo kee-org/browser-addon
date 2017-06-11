@@ -675,5 +675,17 @@
   "weight": {
       "message": "Weight",
       "description": "A number that can be compared to others in order to decide which associated configuration takes precendence."
+  },
+  "yes": {
+      "message": "Yes",
+      "description": "Yes"
+  },
+  "no": {
+      "message": "No",
+      "description": "No"
+  },
+  "site_specific_settings_inherit": {
+      "message": "Use the same setting as all websites",
+      "description": "Option for user to say that they want to use whatever the setting is for the top-level settings for all websites, rather than overriding it with a setting for this specific site."
   }
 }

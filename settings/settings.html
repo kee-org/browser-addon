@@ -100,8 +100,20 @@
                         <h3 class="panel-title" data-i18n="pref_SavingEntries_heading"></h3>
                     </div>
                     <div class="panel-body">
-                        <div class="checkbox siteSpecificField">
-                            <label><input type="checkbox" id="pref_notifyBarRequestPasswordSave_label" /><span data-i18n="pref_notifyBarRequestPasswordSave_label"></span></label>
+                        <div class="checkbox">
+                            <label class="nonSiteSpecificField"><input type="checkbox" id="pref_notifyBarRequestPasswordSave_label"><span data-i18n="pref_notifyBarRequestPasswordSave_label"></span></label>
+                            <div class="form-horizontal siteSpecificToggle">
+                                <div class="form-group formSettingGroup">
+                                    <div class="formSettingLabel"><span data-i18n="pref_notifyBarRequestPasswordSave_label"></span></div>
+                                    <div class="formSettingDropdown">
+                                        <select class="form-control" id="requestPasswordSaveSelect">
+                                            <option value="Yes" data-i18n="yes"></option>
+                                            <option value="No" data-i18n="no"></option>
+                                            <option value="Inherit" data-i18n="site_specific_settings_inherit"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="checkbox nonSiteSpecificField">
                             <label><input type="checkbox" id="pref_saveFavicons_label" /><span data-i18n="pref_saveFavicons_label"></span></label>
