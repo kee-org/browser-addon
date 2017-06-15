@@ -68,7 +68,7 @@ class KeeFoxLogger {
                 return message;
             }
         }
-    };
+    }
 
     debug (data: LogMessage | string, sensitiveMessage = "", replace = false)
     {
@@ -80,7 +80,7 @@ class KeeFoxLogger {
             const message = this.getMessage(data);
             if (message.length > 0) console.debug(message);
         }
-    };
+    }
 
     info (data: LogMessage | string, sensitiveMessage = "", replace = false)
     {
@@ -92,7 +92,7 @@ class KeeFoxLogger {
             const message = this.getMessage(data);
             if (message.length > 0) console.info(message);
         }
-    };
+    }
 
     warn (data: LogMessage | string, sensitiveMessage = "", replace = false)
     {
@@ -104,7 +104,7 @@ class KeeFoxLogger {
             const message = this.getMessage(data);
             if (message.length > 0) console.warn(message);
         }
-    };
+    }
 
     error (data: LogMessage | string, sensitiveMessage = "", replace = false)
     {
@@ -116,8 +116,8 @@ class KeeFoxLogger {
             const message = this.getMessage(data);
             if (message.length > 0) console.error(message);
         }
-    };
+    }
 
-};
+}
 
 let KeeFoxLog = new KeeFoxLogger();
