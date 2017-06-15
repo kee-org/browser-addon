@@ -5,3 +5,20 @@
 body {
     width: 400px;
 }
+
+#notifications {
+    border-top:black 2px solid;
+    border-bottom:black 2px solid;
+    padding: 10px 0px;
+    margin: 5px 0px;
+}
+
+#notifications > div {
+    border-top:black 1px solid;
+    margin-top: 10px;
+}
+
+#notifications > div:first-child {
+    border-top: initial;
+    margin-top: 0px;
+}

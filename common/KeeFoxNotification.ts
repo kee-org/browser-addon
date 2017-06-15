@@ -48,9 +48,9 @@ class KeeFoxNotification {
         return container;
     }
 
-    prepareNotificationButton (button, buttonDefinition: Button)
+    prepareNotificationButton (button: HTMLButtonElement, buttonDefinition: Button)
     {
-        button.setAttribute("label", buttonDefinition.label);
+        button.innerHTML = buttonDefinition.label;
         if (buttonDefinition.tooltip != undefined) button.setAttribute("title", buttonDefinition.tooltip);
 
         let callback: {(): void};
@@ -77,8 +77,11 @@ class KeeFoxNotification {
 
     dispatchActionResponse (action: string) {
         switch (action) {
+            case "enableHighSecurityKPRPCConnection":
+                configManager.current.connSLClient = 3;
+                configManager.save();
+                break;
             case "unknown" : break;
-            //TODO:c: what actions will we actually need to send back to the background script from a notification button click?
         }
         window["myPort"].postMessage({ removeNotification: this.id });
     }
