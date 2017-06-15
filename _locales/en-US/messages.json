@@ -7,102 +7,101 @@
     "message": "Black List",
     "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent KeeFox from searching for logins for the form containing that field."
   },
-  "browse_label": {
-    "message": "Browse",
-    "description": "Select a local file location"
-  },
-  "conn_client_v_high": {
-    "message": "You must downgrade to version $1 or upgrade KeePassRPC to match your version of KeeFox. Going to initiate the upgrade wizard now."
-  },
-  "conn_client_v_low": {
-    "message": "You must upgrade to version $1 or downgrade KeePassRPC to match your version of KeeFox. Going to initiate the downgrade wizard now."
-  },
   "conn_display_description": {
-    "message": "A Firefox addon that securely enables automatic login to most websites."
-  },
-  "conn_firewall_problem": {
-    "message": "KeeFox can not connect to KeePass. A firewall is probably blocking communication on TCP port 12546."
+    "message": "A Firefox addon that securely enables automatic login to most websites.",
+    "description": "A brief description of KeeFox that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
   },
   "conn_invalid_message": {
-    "message": "KeeFox sent an invalid command to your password database."
-  },
-  "conn_setup_aborted": {
-    "message": "Authorisation cancelled or denied. The next attempt to connect will be delayed for $1 minutes."
+    "message": "KeeFox sent an invalid command to your password database.",
+    "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
   },
   "conn_setup_client_sl_low": {
-    "message": "KeeFox asked for a security level that was too low to be accepted by the password server. You must restart the authentication process using security level $1."
+    "message": "KeeFox asked for a security level that was too low to be accepted by the password server. You must restart the authentication process using higher security.",
+    "description": "KeeFox asked for a security level that was too low to be accepted by the password server. You must restart the authentication process using higher security."
   },
   "conn_setup_enter_password_title": {
-    "message": "KeeFox Authorisation"
+    "message": "KeeFox Authorisation",
+    "description": "Heading of the popup that asks the user to authorise the connection to KeePass by typing in a password."
   },
   "conn_setup_enter_password": {
-    "message": "Please enter the password displayed by the KeePass \"Authorise a new connection\" window. You do not need to remember this password. If you get it wrong you will be able to try again shortly."
+    "message": "Please enter the password displayed by the KeePass \"Authorise a new connection\" window. You do not need to remember this password. If you get it wrong you will be able to try again shortly.",
+    "description": "Please enter the password displayed by the KeePass \"Authorise a new connection\" window. You do not need to remember this password. If you get it wrong you will be able to try again shortly."
   },
   "conn_setup_expired": {
-    "message": "You have been using the same secret key for too long."
+    "message": "You have been using the same secret key for too long.",
+    "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
   },
   "conn_setup_failed": {
-    "message": "KeeFox was not allowed to connect, probably because you entered the connection password incorrectly."
+    "message": "KeeFox was not allowed to connect, probably because you entered the connection password incorrectly.",
+    "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
   },
   "conn_setup_invalid_param": {
-    "message": "KeeFox supplied an invalid parameter. Further info may follow: $1"
+    "message": "KeeFox supplied an invalid parameter. Further info may follow: $1",
+    "description": "This probably indicates a bug in KeeFox - we sent something to KeePassRPC that it wasn't expecting."
   },
   "conn_setup_missing_param": {
-    "message": "KeeFox failed to supply a required parameter. Further info may follow: $1"
+    "message": "KeeFox failed to supply a required parameter. Further info may follow: $1",
+    "description": "This probably indicates a bug in KeeFox - we failed to send some information to KeePassRPC that it required."
   },
   "conn_setup_restart": {
-    "message": "KeeFox must restart the authorisation process."
+    "message": "KeeFox must restart the authorisation process.",
+    "description": "A technical error occurred during the attempt to authorise the link between KeeFox and KeePassRPC so we need to notify the user that they will need to re-authenticate"
   },
   "conn_setup_retype_password": {
-    "message": "Please type in a new password when prompted."
+    "message": "Please type in the new password when prompted.",
+    "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
   },
   "conn_setup_server_sl_low": {
-    "message": "KeeFox has rejected the connection to the password server because their security level is too low. You must restart the authentication process using security level $1."
+    "message": "KeeFox has rejected the connection to the password server because their security level is too low. You must restart the authentication process using higher security.",
+    "description": "KeeFox has rejected the connection to the password server because their security level is too low. You must restart the authentication process using higher security."
   },
   "conn_setup_client_features_missing": {
-    "message": "KeeFox must be upgraded to connect to your KeePass Password Safe. Ensure you are running the latest version of the browser add-on / extension."
+    "message": "KeeFox must be upgraded to connect to your KeePass Password Safe. Ensure you are running the latest version of the browser add-on / extension.",
+    "description": "The KeePassRPC server requires features from KeeFox that this version does not contain."
   },
   "conn_setup_server_features_missing": {
-    "message": "The KeePassRPC KeePass Password Safe plugin must be upgraded to allow KeeFox to connect to it. Ensure you are running the latest version of the KeePass plugin. You can start the process from the KeePass Help menu - click on \"Check for Updates\"."
+    "message": "The KeePassRPC KeePass Password Safe plugin must be upgraded to allow KeeFox to connect to it. Ensure you are running the latest version of the KeePass plugin. You can start the process from the KeePass Help menu - click on \"Check for Updates\".",
+    "description": "The KeePassRPC server does not offer some features that this version of KeeFox requires."
   },
-  "conn_sl_client_desc": {
-    "message": "This allows you to control how securely KeeFox will store the secret communication key inside Firefox. It is possible to configure different security settings for KeeFox and KeePass but this is rarely useful."
-  },
-  "conn_sl_client": {
-    "message": "KeeFox security level"
-  },
-  "conn_sl_high_warning_desc": {
-    "message": "A high security setting will require you to enter a randomly generated password every time you start Firefox or KeePass."
+  "conn_sl_high_label": {
+    "message": "Ask for a new connection password every time I start Firefox or KeePass.",
+    "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
   },
   "conn_sl_high": {
-    "message": "High"
-  },
-  "conn_sl_low_warning_desc": {
-    "message": "A low security setting could increase the chance of your passwords being stolen. Please make sure you read the information in the manual (see link above)"
+    "message": "High",
+    "description": "High"
   },
   "conn_sl_low": {
-    "message": "Low"
+    "message": "Low",
+    "description": "Low"
   },
   "conn_sl_medium": {
-    "message": "Medium"
+    "message": "Medium",
+    "description": "Medium"
   },
   "conn_sl_server_min_desc": {
-    "message": "This allows you to prevent KeeFox from connecting to KeePass if its security level is set too low. See the options within KeePass to set the actual security level used by KeePass."
+    "message": "This allows you to prevent KeeFox from connecting to KeePass if its security level is set too low. See the options within KeePass to set the actual security level used by KeePass.",
+    "description": "This allows you to prevent KeeFox from connecting to KeePass if its security level is set too low. See the options within KeePass to set the actual security level used by KeePass."
   },
   "conn_sl_server_min": {
-    "message": "Minimum acceptable KeePass security level"
+    "message": "Minimum acceptable KeePass security level",
+    "description": "Minimum acceptable KeePass security level"
   },
   "conn_sl_desc": {
-    "message": "Change the settings below to control how secure the communication link between Firefox and KeePass is. You probably don't need to ever adjust these settings but if you do, please make sure you have read the relevant manual pages first."
+    "message": "Change the settings below to control how secure the communication link between Firefox and KeePass is. You probably don't need to ever adjust these settings but if you do, please make sure you have read the relevant manual pages first.",
+    "description": "Change the settings below to control how secure the communication link between Firefox and KeePass is. You probably don't need to ever adjust these settings but if you do, please make sure you have read the relevant manual pages first."
   },
   "conn_sl_link": {
-    "message": "Learn more about these settings and the communication between Firefox and KeePass in the manual"
+    "message": "Learn more about these settings and the communication between Firefox and KeePass in the manual",
+    "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
   },
   "conn_unknown_error": {
-    "message": "An unexpected error occured when trying to connect to your password database."
+    "message": "An unexpected error occured when trying to connect to your password database.",
+    "description": "Something went wrong with the KeePassRPC link but we have no idea what."
   },
   "conn_unknown_protocol": {
-    "message": "KeeFox supplied an invalid protocol."
+    "message": "KeeFox supplied an invalid protocol.",
+    "description": "Technical error in the communication between KeeFox and KeePassRPC. Not clear how user could resolve this or if they'll ever see it but it might happen."
   },
   "form_id": {
     "message": "Form ID",
@@ -113,7 +112,8 @@
     "description": "Form name"
   },
   "further_info_may_follow": {
-    "message": "Further info may follow: $1"
+    "message": "Further info may follow: $1",
+    "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the KeeFox log rather than in a user-facing place."
   },
   "matched_logins_label": {
     "message": "Matched login entries",
@@ -133,7 +133,20 @@
     "message": "Choose the keyboard shortcuts for the main KeeFox commands."
   },
   "pref_ConnectionSecurity_heading": {
-    "message": "Connection Security"
+    "message": "Connection Security",
+    "description": "Heading for panel that contains settings for the security of the connection between KeeFox and KeePass."
+  },
+  "pref_ConnectionSecurity_explain_change": {
+    "message": "Sometimes making a change to the settings below will cause KeeFox to ask you for a new random password. You do not need to enter the correct password above in order to change these settings, just adjust them and press the button above.",
+    "description": "Explains what happens if user changes settings for the security of the connection between KeeFox and KeePass."
+  },
+  "srp_connect": {
+      "message": "Connect",
+      "description": "Button action to authorise the connection between KeeFox and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
+  },
+  "srp_save_connect": {
+      "message": "Save and connect",
+      "description": "Button action to authorise the connection between KeeFox and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
   },
   "pref_DoNothing_desc": {
     "message": "Do nothing",
@@ -263,9 +276,6 @@
   "site_options_list_explain_desc": {
     "message": "If a form matches against one of the white lists below KeeFox will always try to fill it. If a form matches one of the black lists below KeeFox will never try to fill it. If it matches both lists KeeFox will not try to fill it.",
     "description": "Explains how KeeFox chooses which forms to fill in"
-  },
-  "site_options_siteEnabledExplanation_desc": {
-    "message": "Select the checkboxes on the left to enable a setting"
   },
   "pref_Finding_forms_heading": {
     "message": "Finding forms",
@@ -632,6 +642,12 @@
   "whichEntry_label": {
     "message": "Choose an entry..."
   },
+
+
+
+
+
+
   "close": {
       "message": "Close",
       "description": "Action user can click on to close/dismiss a panel or other user interface element"
@@ -687,5 +703,13 @@
   "site_specific_settings_inherit": {
       "message": "Use the same setting as all websites",
       "description": "Option for user to say that they want to use whatever the setting is for the top-level settings for all websites, rather than overriding it with a setting for this specific site."
+  },
+  "password": {
+      "message": "Password",
+      "description": "Amazingly, didn't have a need for this translation until v2.0 ;-)"
+  },
+  "conn_setup_client_sl_low_resolution": {
+    "message": "Connect using high security",
+    "description": "Button that will change the security level KeeFox attempts to use when connecting to the KeePassRPC server."
   }
 }
