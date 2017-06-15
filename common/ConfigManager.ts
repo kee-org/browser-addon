@@ -80,17 +80,20 @@ class ConfigManager {
         return pages;
     }
 
-    public save () {
+    public save (callback?) {
         const configString = JSON.stringify(this.current);
         const pages = this.splitStringToPages(configString);
+        const configValues: any = {};
 
         //TODO:3: Need to be able to save some config details locally and others synced
-        browser.storage.local.set({ keefoxConfigPageCount: pages.length });
+        configValues.keefoxConfigPageCount = pages.length;
 
         for (let i=0; i < pages.length; i++)
         {
-            browser.storage.local.set({ ["keefoxConfigPage" + i]: pages[i] });
+            configValues["keefoxConfigPage" + i] = pages[i];
         }
+        if (callback) chrome.storage.local.set(configValues, callback);
+        else chrome.storage.local.set(configValues);
     }
 
     public load (onLoaded) {

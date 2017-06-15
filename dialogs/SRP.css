@@ -1,0 +1,45 @@
+.panel-body > div {
+    margin: 8px 0px;
+}
+
+.formSettingDropdown, .formSettingInput {
+    margin-left: 10px;
+    margin-right: 15px;
+}
+
+.form-horizontal .formSettingGroup {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.formSettingLabel {
+    text-align: right;
+    margin-left: 15px;
+}
+
+div.checkbox {
+    margin-top: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-gap: 10px;
+    align-items: center;
+}
+
+.grid > .formSettingLabel {
+    grid-column-start: 1;
+    justify-self: end;
+    font-weight: initial;
+    max-width: 200px;
+}
+
+.grid > .formSettingDropdown {
+    grid-column-start: 2;
+}
+
+.grid > .formSettingDescription {
+    grid-column-start: 2;
+    margin-left: 10px;
+}

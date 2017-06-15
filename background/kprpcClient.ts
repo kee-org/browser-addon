@@ -161,30 +161,30 @@ class kprpcClient {
 
                     if (data.error.code == "VERSION_CLIENT_TOO_LOW") {
                         // This means that the server requires us to support a feature that we don't have
-                        KeeFoxLog.error($STRF("KeeFox-conn-client-v-low", extra));
+                        KeeFoxLog.error($STR("conn_setup_client_features_missing") + " Extra info: " + extra);
                         keefox_org.appState.latestConnectionError = "VERSION_CLIENT_TOO_LOW";
-                        this.showConnectionMessage($STR("KeeFox-conn-setup-client-features-missing"));
+                        this.showConnectionMessage($STR("conn_setup_client_features_missing"));
                     } else if (data.error.code == "UNRECOGNISED_PROTOCOL") {
-                        KeeFoxLog.error($STR("KeeFox-conn-unknown-protocol") + " "
-                            + $STRF("KeeFox-further-info-may-follow", extra));
+                        KeeFoxLog.error($STR("conn_unknown_protocol") + " "
+                            + $STRF("further_info_may_follow", extra));
                         keefox_org.appState.latestConnectionError = "UNRECOGNISED_PROTOCOL";
                     } else if (data.error.code == "INVALID_MESSAGE") {
-                        KeeFoxLog.error($STR("KeeFox-conn-invalid-message") + " "
-                            + $STRF("KeeFox-further-info-may-follow", extra));
+                        KeeFoxLog.error($STR("conn_invalid_message") + " "
+                            + $STRF("further_info_may_follow", extra));
                         keefox_org.appState.latestConnectionError = "INVALID_MESSAGE";
                     } else if (data.error.code == "AUTH_RESTART") {
-                        KeeFoxLog.error($STR("KeeFox-conn-setup-restart") + " "
-                            + $STRF("KeeFox-further-info-may-follow", extra));
+                        KeeFoxLog.error($STR("conn_setup_restart") + " "
+                            + $STRF("further_info_may_follow", extra));
                         keefox_org.appState.latestConnectionError = "AUTH_RESTART";
                         this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
-                        this.showConnectionMessage($STR("KeeFox-conn-setup-restart") + " "
-                            + $STR("KeeFox-conn-setup-retype-password"));
+                        this.showConnectionMessage($STR("conn_setup_restart") + " "
+                            + $STR("conn_setup_retype_password"));
                     } else {
-                        KeeFoxLog.error($STR("KeeFox-conn-unknown-error") + " "
-                            + $STRF("KeeFox-further-info-may-follow", extra));
+                        KeeFoxLog.error($STR("conn_unknown_error") + " "
+                            + $STRF("further_info_may_follow", extra));
                         keefox_org.appState.latestConnectionError = "UNKNOWN_JSONRPC";
-                        this.showConnectionMessage($STR("KeeFox-conn-unknown-error") + " "
-                            + $STRF("KeeFox-further-info-may-follow", ["See KeeFox log"]));
+                        this.showConnectionMessage($STR("conn_unknown_error") + " "
+                            + $STRF("further_info_may_follow", ["See KeeFox log"]));
                     }
                 }
                 this.resetConnection();
@@ -200,11 +200,11 @@ class kprpcClient {
             return;
 
         if (this.authenticated) {
-            KeeFoxLog.warn($STR("KeeFox-conn-setup-restart"));
+            KeeFoxLog.warn($STR("conn_setup_restart"));
             this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
             keefox_org.appState.latestConnectionError = "ALREADY_AUTHENTICATED";
-            this.showConnectionMessage($STR("KeeFox-conn-setup-restart")
-                + " " + $STR("KeeFox-conn-setup-retype-password"));
+            this.showConnectionMessage($STR("conn_setup_restart")
+                + " " + $STR("conn_setup_retype_password"));
             this.resetConnection();
             return; // already authenticated so something went wrong. Do the full Auth process again to be safe.
         }
@@ -214,42 +214,46 @@ class kprpcClient {
             if (data.error.messageParams && data.error.messageParams.length >= 1)
                 extra[0] = data.error.messageParams[0];
             switch (data.error.code) {
-                case "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW": KeeFoxLog.warn($STRF("KeeFox-conn-setup-client-sl-low", extra));
+                case "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW": KeeFoxLog.warn($STR("conn_setup_client_sl_low"));
                     keefox_org.appState.latestConnectionError = "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW";
-                    this.showConnectionMessage($STRF("KeeFox-conn-setup-client-sl-low", extra));
+                    const button: Button = {
+                        label: $STR("conn_setup_client_sl_low_resolution"),
+                        action: "enableHighSecurityKPRPCConnection"
+                    };
+                    this.showConnectionMessage($STR("conn_setup_client_sl_low"), [button]);
                     break;
-                case "AUTH_FAILED": KeeFoxLog.warn($STR("KeeFox-conn-setup-failed") + " "
-                    + $STRF("KeeFox-further-info-may-follow", extra));
+                case "AUTH_FAILED": KeeFoxLog.warn($STR("conn_setup_failed") + " "
+                    + $STRF("further_info_may_follow", extra));
                     keefox_org.appState.latestConnectionError = "AUTH_FAILED";
-                    this.showConnectionMessage($STR("KeeFox-conn-setup-failed")
-                        + " " + $STR("KeeFox-conn-setup-retype-password"));
+                    this.showConnectionMessage($STR("conn_setup_failed")
+                        + " " + $STR("conn_setup_retype_password"));
                     // There may be a stored key that has become corrupt through a change of security level, etc.
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     break;
-                case "AUTH_RESTART": KeeFoxLog.warn($STR("KeeFox-conn-setup-restart") + " "
-                    + $STRF("KeeFox-further-info-may-follow", extra));
+                case "AUTH_RESTART": KeeFoxLog.warn($STR("conn_setup_restart") + " "
+                    + $STRF("further_info_may_follow", extra));
                     keefox_org.appState.latestConnectionError = "AUTH_RESTART";
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
-                    this.showConnectionMessage($STR("KeeFox-conn-setup-restart")
-                        + " " + $STR("KeeFox-conn-setup-retype-password"));
+                    this.showConnectionMessage($STR("conn_setup_restart")
+                        + " " + $STR("conn_setup_retype_password"));
                     break;
-                case "AUTH_EXPIRED": KeeFoxLog.warn($STRF("KeeFox-conn-setup-expired", extra));
+                case "AUTH_EXPIRED": KeeFoxLog.warn($STRF("conn_setup_expired", extra));
                     keefox_org.appState.latestConnectionError = "AUTH_EXPIRED";
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
-                    this.showConnectionMessage($STR("KeeFox-conn-setup-expired")
-                        + " " + $STR("KeeFox-conn-setup-retype-password"));
+                    this.showConnectionMessage($STR("conn_setup_expired")
+                        + " " + $STR("conn_setup_retype_password"));
                     break;
-                case "AUTH_INVALID_PARAM": KeeFoxLog.error($STRF("KeeFox-conn-setup-invalid-param", extra));
+                case "AUTH_INVALID_PARAM": KeeFoxLog.error($STRF("conn_setup_invalid_param", extra));
                     keefox_org.appState.latestConnectionError = "AUTH_INVALID_PARAM";
                     break;
-                case "AUTH_MISSING_PARAM": KeeFoxLog.error($STRF("KeeFox-conn-setup-missing-param", extra));
+                case "AUTH_MISSING_PARAM": KeeFoxLog.error($STRF("conn_setup_missing_param", extra));
                     keefox_org.appState.latestConnectionError = "AUTH_MISSING_PARAM";
                     break;
-                default: KeeFoxLog.error($STR("KeeFox-conn-unknown-error") + " "
-                    + $STRF("KeeFox-further-info-may-follow", extra));
+                default: KeeFoxLog.error($STR("conn_unknown_error") + " "
+                    + $STRF("further_info_may_follow", extra));
                     keefox_org.appState.latestConnectionError = "UNKNOWN_SETUP";
-                    this.showConnectionMessage($STR("KeeFox-conn-unknown-error") + " "
-                        + $STRF("KeeFox-further-info-may-follow", ["See KeeFox log"]));
+                    this.showConnectionMessage($STR("conn_unknown_error") + " "
+                        + $STRF("further_info_may_follow", ["See KeeFox log"]));
                     break;
             }
             this.resetConnection();
@@ -263,9 +267,9 @@ class kprpcClient {
         // sent back on the server's first handshake response and reject if the server is missing features we need.
         if (data.features && !FeatureFlags.required.every(function (feature) { return data.features.indexOf(feature) !== -1; }))
         {
-            KeeFoxLog.error($STRF("KeeFox-conn-client-v-high", []));
+            KeeFoxLog.error($STR("conn_setup_server_features_missing"));
             keefox_org.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
-            this.showConnectionMessage($STR("KeeFox-conn-setup-server-features-missing"));
+            this.showConnectionMessage($STR("conn_setup_server_features_missing"));
             this.resetConnection();
             return;
         }
@@ -283,10 +287,10 @@ class kprpcClient {
 
                 }
             } else {
-                KeeFoxLog.warn($STRF("KeeFox-conn-setup-server-sl-low", [this.getSecurityLevelServerMinimum().toString()]));
+                KeeFoxLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
                 keefox_org.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
                 this.sendError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
-                this.showConnectionMessage($STRF("KeeFox-conn-setup-server-sl-low", [this.getSecurityLevelServerMinimum().toString()]));
+                this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
         }
 
@@ -299,10 +303,10 @@ class kprpcClient {
                     default: return;
                 }
             } else {
-                KeeFoxLog.warn($STRF("KeeFox-conn-setup-server-sl-low", [this.getSecurityLevelServerMinimum().toString()]));
+                KeeFoxLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
                 keefox_org.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
                 this.sendError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
-                this.showConnectionMessage($STRF("KeeFox-conn-setup-server-sl-low", [this.getSecurityLevelServerMinimum().toString()]));
+                this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
         }
     }
@@ -360,10 +364,10 @@ class kprpcClient {
             const sr = digest.toLowerCase();
 
             if (sr != data.key.sr) {
-                KeeFoxLog.warn($STR("KeeFox-conn-setup-failed"));
+                KeeFoxLog.warn($STR("conn_setup_failed"));
                 keefox_org.appState.latestConnectionError = "CHALLENGE_RESPONSE_MISMATCH";
-                this.showConnectionMessage($STR("KeeFox-conn-setup-failed")
-                    + " " + $STR("KeeFox-conn-setup-retype-password"));
+                this.showConnectionMessage($STR("conn_setup_failed")
+                    + " " + $STR("conn_setup_retype_password"));
                 this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                 this.resetConnection();
                 return;
@@ -402,8 +406,8 @@ class kprpcClient {
         const createData = {
             type: "popup",
             url: "/dialogs/SRP.html",
-            width: 450,
-            height: 200
+            width: 700,
+            height: 550
         };
         const creating = (browser as any).windows.create(createData);
     }
@@ -432,10 +436,10 @@ class kprpcClient {
         this.srpClientInternals.confirm_authentication(data.srp.M2);
 
         if (!this.srpClientInternals.authenticated) {
-            KeeFoxLog.warn($STR("KeeFox-conn-setup-failed"));
+            KeeFoxLog.warn($STR("conn_setup_failed"));
             keefox_org.appState.latestConnectionError = "SRP_AUTH_FAILURE";
-            this.showConnectionMessage($STR("KeeFox-conn-setup-failed")
-                + " " + $STR("KeeFox-conn-setup-retype-password"));
+            this.showConnectionMessage($STR("conn_setup_failed")
+                + " " + $STR("conn_setup_retype_password"));
             this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
             this.resetConnection();
             return;
@@ -599,7 +603,7 @@ class kprpcClient {
                     // this request. We can't trust it but it can help the user to understand what's going on.
                     clientTypeId: "keefox",
                     clientDisplayName: "KeeFox",
-                    clientDisplayDescription: $STR("KeeFox-conn-display-description")
+                    clientDisplayDescription: $STR("conn_display_description")
                 };
 
             this.send(JSON.stringify(data2server));
@@ -636,8 +640,8 @@ class kprpcClient {
     }
 
     getSecurityLevel () {
-        // read these from about:config. Attacker could change about:config to a lower security level but in doing so, a new SRP auth will be triggered during which the server has opportunity
-        // to reject the client becuase its security level is too low.
+        // read these from config. Local Firefox attacker could change config to a lower security level but in doing so, a new SRP auth will be triggered during which the server has opportunity
+        // to reject the client because its security level is too low.
         return configManager.current.connSLClient;
     }
 
@@ -674,22 +678,10 @@ class kprpcClient {
     removeStoredKey (username, securityLevel?) {
         if (!securityLevel || securityLevel == 2 || securityLevel == 1) {
             // There is no longer any way to adjust the security of the stored key so we must treat all as if they are securityLevel 1
-            // set the key in about:config
+            // clear the key
             configManager.current.KPRPCStoredKeys[username] = "";
             configManager.save();
         }
-    }
-
-    //[deprecated]?
-    shutdown () {
-        // KeeFoxLog.debug("Shutting down JSON-RPC...");
-        // if (this.reconnectTimer)
-        //     this.reconnectTimer.cancel();
-        // if (this.certFailedReconnectTimer)
-        //     this.certFailedReconnectTimer.cancel();
-        // if (this.onConnectDelayTimer)
-        //     this.onConnectDelayTimer.cancel();
-        KeeFoxLog.debug("JSON-RPC shut down.");
     }
 
     // Encrypt plaintext using web crypto api
@@ -861,10 +853,10 @@ class kprpcClient {
                     .catch(function (e) {
                         KeeFoxLog.error("Failed to decrypt. Exception: " + e);
 
-                        KeeFoxLog.warn($STR("KeeFox-conn-setup-restart"));
+                        KeeFoxLog.warn($STR("conn_setup_restart"));
                         keefox_org.appState.latestConnectionError = "DECRYPTION_FAILED";
-                        KPRPC.showConnectionMessage($STR("KeeFox-conn-setup-restart")
-                            + " " + $STR("KeeFox-conn-setup-retype-password"));
+                        KPRPC.showConnectionMessage($STR("conn_setup_restart")
+                            + " " + $STR("conn_setup_retype_password"));
                         KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
                         KPRPC.resetConnection();
                         callback(null);
@@ -874,19 +866,19 @@ class kprpcClient {
             .catch(function (e) {
                 KeeFoxLog.error("Failed to hash secret key. Exception: " + e);
 
-                KeeFoxLog.warn($STR("KeeFox-conn-setup-restart"));
+                KeeFoxLog.warn($STR("conn_setup_restart"));
                 keefox_org.appState.latestConnectionError = "SECRET_KEY_HASH_FAILED";
-                this.showConnectionMessage($STR("KeeFox-conn-setup-restart")
-                    + " " + $STR("KeeFox-conn-setup-retype-password"));
+                this.showConnectionMessage($STR("conn_setup_restart")
+                    + " " + $STR("conn_setup_retype_password"));
                 KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
                 KPRPC.resetConnection();
                 callback(null);
             });
     }
 
-    showConnectionMessage (msg: string) {
+    showConnectionMessage (msg: string, buttons?: Button[]) {
         keefox_org.notifyUser(new KeeFoxNotification(
-            "keefox-connection-message", [], utils.newGUID(), msg, "Medium", false));
+            "keefox-connection-message", buttons ? buttons : [], utils.newGUID(), msg, "Medium", false));
     }
 
 }

@@ -12,6 +12,7 @@
     "panels/panels.js": true,
     "popup/popup.js": true,
     "settings/settings.js": true,
+    "dialogs/dialogs.js": true,
     "build/**/*": true,
     "dist/**/*": true
   }

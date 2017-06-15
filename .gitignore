@@ -12,5 +12,6 @@
 /page/page.js
 /panels/panels.js
 /settings/settings.js
+/dialogs/dialogs.js
 /dist
 /build

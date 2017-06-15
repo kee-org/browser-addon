@@ -5,9 +5,9 @@ var sourcemaps = require('gulp-sourcemaps');
 var zip = require('gulp-zip');
 
 gulp.task("default", [ "build" ]);
-gulp.task("build", ["ts:background", "ts:popup", "ts:panels", "ts:page", "ts:settings" ]);
+gulp.task("build", ["ts:background", "ts:popup", "ts:panels", "ts:page", "ts:settings", "ts:dialogs" ]);
 
-gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:settings" ]);
+gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:settings", "lint:dialogs" ]);
 
 gulp.task("lint:background", function() {
     return gulp.src(["background/**/*.ts"])
@@ -43,6 +43,14 @@ gulp.task("lint:panels", function() {
 
 gulp.task("lint:settings", function() {
     return gulp.src(["settings/**/*.ts"])
+        .pipe(tslint({
+            formatter: "verbose"
+        }))
+        .pipe(tslint.report())
+});
+
+gulp.task("lint:dialogs", function() {
+    return gulp.src(["dialogs/**/*.ts"])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -109,11 +117,25 @@ gulp.task("ts:settings", ["lint:settings"], function() {
         .pipe(gulp.dest("settings"));
 });
 
+var tsProjectDialogs = ts.createProject("dialogs/tsconfig.json", {
+    outFile: "dialogs.js"
+});
+gulp.task("ts:dialogs", ["lint:dialogs"], function() {
+    return tsProjectDialogs.src()
+        .pipe(sourcemaps.init())
+        .pipe(tsProjectDialogs())
+        .js
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest("dialogs"));
+});
+
 gulp.task('watch', ['build'], function() {
     gulp.watch(['common/**/*.ts', 'popup/**/*.ts'], ['ts:popup']);
     gulp.watch(['common/**/*.ts', 'panels/**/*.ts'], ['ts:panels']);
     gulp.watch(['common/**/*.ts', 'page/**/*.ts'], ['ts:page']);
     gulp.watch(['common/**/*.ts', 'background/**/*.ts'], ['ts:background']);
+    gulp.watch(['common/**/*.ts', 'settings/**/*.ts'], ['ts:settings']);
+    gulp.watch(['common/**/*.ts', 'dialogs/**/*.ts'], ['ts:dialogs']);
 });
 
 gulp.task('collect', function() {
@@ -141,11 +163,17 @@ gulp.task('collect', function() {
 		.pipe(gulp.dest('build/settings'));
 	gulp.src('common/*.js')
 		.pipe(gulp.dest('build/common'));
+	gulp.src('common/*.css')
+		.pipe(gulp.dest('build/common'));
 	gulp.src('common/images/**')
 		.pipe(gulp.dest('build/common/images'));
 	gulp.src('common/fonts/**')
 		.pipe(gulp.dest('build/common/fonts'));
-	gulp.src('dialogs/**')
+	gulp.src('dialogs/*.css')
+		.pipe(gulp.dest('build/dialogs'));
+	gulp.src('dialogs/*.html')
+		.pipe(gulp.dest('build/dialogs'));
+	gulp.src('dialogs/*.js')
 		.pipe(gulp.dest('build/dialogs'));
 	gulp.src('background/*.js')
 		.pipe(gulp.dest('build/background'));
