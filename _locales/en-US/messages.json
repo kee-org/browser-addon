@@ -711,5 +711,9 @@
   "conn_setup_client_sl_low_resolution": {
     "message": "Connect using high security",
     "description": "Button that will change the security level KeeFox attempts to use when connecting to the KeePassRPC server."
+  },
+  "learn_more": {
+      "message": "Learn more",
+      "description": "Action/button/link to send the user to somewhere that they can read more about a topic/concept"
   }
 }

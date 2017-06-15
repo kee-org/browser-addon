@@ -13,7 +13,7 @@ class Utils {
         if (configManager.current.logSensitiveData)
         {
             const button: Button = {
-                label: $STR("KeeFox_FAMS_NotifyBar_A_LearnMore_Button_label"),
+                label: $STR("learn_more"),
                 action: "loadUrlHelpSensitiveLogging"
             };
             keefox_org.notifyUser(new KeeFoxNotification(
