@@ -386,10 +386,6 @@ class kprpcClient {
 
         // get the user to type in the one-time password
 
-        //TODO:c: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/windows/update
-        //TODO:c: above could let us frequently bring attention and focus to the SRP window so user knows KeeFox is broken without their intervention
-        // Could use onFocusChanged to refocus if can find a non-annoying way to do so
-
         const s = data.srp.s;
         const B = data.srp.B;
         const _this = this;
