@@ -5,6 +5,11 @@
 
 /// <reference path="DefaultSiteConfig.ts" />
 /// <reference path="config.ts" />
+/// <reference path="kfDataModel.ts" />
+
+declare const publicSuffixList;
+declare const punycode;
+declare const pslData;
 
 let defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
@@ -44,12 +49,21 @@ defaultConfig.triggerChangeInputEventAfterFill = false;
 
 class ConfigManager {
     public current: Config;
-
     private readonly maxCharsPerPage: number = 10000;
+    private pslInitialised = false;
 
     public constructor () {
         this.current = defaultConfig;
         browser.storage.onChanged.addListener(this.reloadOnStorageChange);
+    }
+
+    get psl () {
+        if (!publicSuffixList) throw new Error("publicSuffixList library not present");
+        if (!this.pslInitialised) {
+            publicSuffixList.parse(pslData.text, punycode.toASCII);
+            this.pslInitialised = true;
+        }
+        return publicSuffixList;
     }
 
     private reloadOnStorageChange (changes: browser.storage.StorageChange, area: string) {
@@ -300,36 +314,166 @@ class ConfigManager {
     }
 
     public siteConfigFor (url: string): SiteConfig {
-
-//TODO:c: Resolve by finding all matches from the 9 lookups, ordering by match weight descending
-//and interate until a config value for every setting has been found.
-        return null;
+        const matchedConfigNodes = this.findAllConfigsFor(url);
+        matchedConfigNodes.sort(node => -node.matchWeight);
+        return this.deriveConfigFromMatches(matchedConfigNodes);
     }
 
-    public isFormInteresting (form: HTMLFormElement) {
+    private findAllConfigsFor (urlString: string) {
+        const matchedConfigNodes: SiteConfigNode[] = [];
+        const url = new URL(urlString);
+        const host = url.host;
+        const page = host + url.pathname;
+        const domain = this.psl.getDomain(host);
+
+        for (const value in this.current.siteConfig.domainExact) {
+            if (value === domain) {
+                matchedConfigNodes.push(this.current.siteConfig.domainExact[value]);
+            }
+        }
+        for (const value in this.current.siteConfig.hostExact) {
+            if (value === host) {
+                matchedConfigNodes.push(this.current.siteConfig.hostExact[value]);
+            }
+        }
+        for (const value in this.current.siteConfig.pageExact) {
+            if (value === page) {
+                matchedConfigNodes.push(this.current.siteConfig.pageExact[value]);
+            }
+        }
+        for (const value in this.current.siteConfig.domainPrefix) {
+            if (domain.startsWith(value)) {
+                matchedConfigNodes.push(this.current.siteConfig.domainPrefix[value]);
+            }
+        }
+        for (const value in this.current.siteConfig.hostPrefix) {
+            if (host.startsWith(value)) {
+                matchedConfigNodes.push(this.current.siteConfig.hostPrefix[value]);
+            }
+        }
+        for (const value in this.current.siteConfig.pagePrefix) {
+            if (page.startsWith(value)) {
+                matchedConfigNodes.push(this.current.siteConfig.pagePrefix[value]);
+            }
+        }
+        for (const value in this.current.siteConfig.domainRegex) {
+            if (new RegExp(value).test(domain)) {
+                matchedConfigNodes.push(this.current.siteConfig.domainRegex[value]);
+            }
+        }
+        for (const value in this.current.siteConfig.hostRegex) {
+            if (new RegExp(value).test(host)) {
+                matchedConfigNodes.push(this.current.siteConfig.hostRegex[value]);
+            }
+        }
+        for (const value in this.current.siteConfig.pageRegex) {
+            if (new RegExp(value).test(page)) {
+                matchedConfigNodes.push(this.current.siteConfig.pageRegex[value]);
+            }
+        }
+
+        return matchedConfigNodes;
+    }
+
+    private deriveConfigFromMatches (matchedConfigNodes: SiteConfigNode[]) {
+        const derivedConfig: SiteConfig = {};
+        matchedConfigNodes.forEach(node => {
+            if (node.config.preventSaveNotification !== undefined && derivedConfig.preventSaveNotification === undefined) {
+                derivedConfig.preventSaveNotification = node.config.preventSaveNotification;
+            }
+
+            if (node.config.blackList !== undefined) {
+                if (derivedConfig.blackList === undefined) {
+                    derivedConfig.blackList = {};
+                }
+                if (node.config.blackList.form !== undefined) {
+                    if (derivedConfig.blackList.form === undefined) {
+                        derivedConfig.blackList.form = {};
+                    }
+                    if (node.config.blackList.form.ids !== undefined) {
+                        if (derivedConfig.blackList.form.ids === undefined) {
+                            derivedConfig.blackList.form.ids = node.config.blackList.form.ids;
+                        }
+                    }
+                    if (node.config.blackList.form.names !== undefined) {
+                        if (derivedConfig.blackList.form.names === undefined) {
+                            derivedConfig.blackList.form.names = node.config.blackList.form.names;
+                        }
+                    }
+                }
+                if (node.config.blackList.fields !== undefined) {
+                    if (derivedConfig.blackList.fields === undefined) {
+                        derivedConfig.blackList.fields = {};
+                    }
+                    if (node.config.blackList.fields.ids !== undefined) {
+                        if (derivedConfig.blackList.fields.ids === undefined) {
+                            derivedConfig.blackList.fields.ids = node.config.blackList.fields.ids;
+                        }
+                    }
+                    if (node.config.blackList.fields.names !== undefined) {
+                        if (derivedConfig.blackList.fields.names === undefined) {
+                            derivedConfig.blackList.fields.names = node.config.blackList.fields.names;
+                        }
+                    }
+                }
+            }
+
+            if (node.config.whiteList !== undefined) {
+                if (derivedConfig.whiteList === undefined) {
+                    derivedConfig.whiteList = {};
+                }
+                if (node.config.whiteList.form !== undefined) {
+                    if (derivedConfig.whiteList.form === undefined) {
+                        derivedConfig.whiteList.form = {};
+                    }
+                    if (node.config.whiteList.form.ids !== undefined) {
+                        if (derivedConfig.whiteList.form.ids === undefined) {
+                            derivedConfig.whiteList.form.ids = node.config.whiteList.form.ids;
+                        }
+                    }
+                    if (node.config.whiteList.form.names !== undefined) {
+                        if (derivedConfig.whiteList.form.names === undefined) {
+                            derivedConfig.whiteList.form.names = node.config.whiteList.form.names;
+                        }
+                    }
+                }
+                if (node.config.whiteList.fields !== undefined) {
+                    if (derivedConfig.whiteList.fields === undefined) {
+                        derivedConfig.whiteList.fields = {};
+                    }
+                    if (node.config.whiteList.fields.ids !== undefined) {
+                        if (derivedConfig.whiteList.fields.ids === undefined) {
+                            derivedConfig.whiteList.fields.ids = node.config.whiteList.fields.ids;
+                        }
+                    }
+                    if (node.config.whiteList.fields.names !== undefined) {
+                        if (derivedConfig.whiteList.fields.names === undefined) {
+                            derivedConfig.whiteList.fields.names = node.config.whiteList.fields.names;
+                        }
+                    }
+                }
+            }
+        });
+        return derivedConfig;
+    }
+
+    public isFormInteresting (form: HTMLFormElement, conf: SiteConfig, otherFields: keeFoxLoginField[]) {
+
+        const blacklisted = (conf.blackList && conf.blackList.form && conf.blackList.form.ids || []).indexOf(form.id) >= 0
+            || (conf.blackList && conf.blackList.form && conf.blackList.form.names || []).indexOf(form.name) >= 0
+            || (conf.blackList && conf.blackList.fields && conf.blackList.fields.ids || []).some(id => otherFields.find(field => id === field.fieldId) !== undefined)
+            || (conf.blackList && conf.blackList.fields && conf.blackList.fields.names || []).some(name => otherFields.find(field => name === field.name) !== undefined);
+
+        if (blacklisted) return false;
+
+        const whitelisted = (conf.whiteList && conf.whiteList.form && conf.whiteList.form.ids || []).indexOf(form.id) >= 0
+            || (conf.whiteList && conf.whiteList.form && conf.whiteList.form.names || []).indexOf(form.name) >= 0
+            || (conf.whiteList && conf.whiteList.fields && conf.whiteList.fields.ids || []).some(id => otherFields.find(field => id === field.fieldId) !== undefined)
+            || (conf.whiteList && conf.whiteList.fields && conf.whiteList.fields.names || []).some(name => otherFields.find(field => name === field.name) !== undefined);
+
+        if (whitelisted) return true;
 
         return null;
-
-        //TODO:c: re-implement
-        // let interestingForm: boolean = null;
-
-        // interestingForm = siteConfigManager.valueAllowed(form.id, conf.interestingForms.id_w, conf.interestingForms.id_b, interestingForm);
-        // interestingForm = siteConfigManager.valueAllowed(form.name, conf.interestingForms.name_w, conf.interestingForms.name_b, interestingForm);
-
-        // if (interestingForm === false)
-        // {
-        //     this.Logger.debug("Lost interest in this form after inspecting form name and ID");
-        //     continue;
-        // }
-
-        // for (const f in otherFields)
-        // {
-        //     interestingForm = siteConfigManager.valueAllowed(otherFields[f].id, conf.interestingForms.f_id_w, conf.interestingForms.f_id_b, interestingForm);
-        //     interestingForm = siteConfigManager.valueAllowed(otherFields[f].name, conf.interestingForms.f_name_w, conf.interestingForms.f_name_b, interestingForm);
-        // }
-
-        // //TODO:1.6: #444 interestingForm = keefox_org.this.config.cssSelectorAllowed(document,conf.interestingForms.f_css_w,conf.interestingForms.f_css_b,interestingForm);
-
     }
 
 }

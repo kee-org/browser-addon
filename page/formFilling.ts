@@ -312,8 +312,6 @@ class FormFilling {
             + autosubmitOnSuccess + ", notifyUserOnSuccess: " + notifyUserOnSuccess
             , "docURI: " + doc.URL);
 
-        const useCachedResults = true;
-
         //TODO:c: create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
         // matchResult = new MatchResult();
         this.matchResult.UUID = "";
@@ -416,7 +414,7 @@ class FormFilling {
             // we check whether any whitelist or blacklist entries must override that behaviour
             let interestingForm: boolean = null;
 
-            interestingForm = configManager.isFormInteresting(form);
+            interestingForm = configManager.isFormInteresting(form, conf, otherFields);
 
             if (interestingForm === false)
             {
