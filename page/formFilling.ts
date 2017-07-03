@@ -54,6 +54,9 @@ class FormFilling {
     private matchedLoginsPanelStubRaf: number;
     public matchResultReceiver;
 
+    // Should really make this private and call indirectly but I'm wary of all performance overheads wrt DOM mutation observers
+    public formFinderTimer: number = null;
+
     constructor (formUtils: FormUtils,
         logger: KeeFoxLogger,
         config: Config,
@@ -298,6 +301,12 @@ class FormFilling {
     */
     public findMatchesInThisFrame (behaviour: FindMatchesBehaviour = {})
     {
+        // Whether or not this was invoked as a result of a DOM mutation, we won't need the timer to fire anymore
+        if (this.formFinderTimer !== null) {
+            clearTimeout(this.formFinderTimer);
+            this.formFinderTimer = null;
+        }
+
         const doc = window.document;
 
         const autofillOnSuccess = behaviour.autofillOnSuccess;

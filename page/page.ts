@@ -12,7 +12,7 @@ let passwordGenerator: PasswordGenerator;
 let tabId: number;
 let frameId: number;
 let myPort: browser.runtime.Port;
-let iframesObserver: MutationObserver;
+let inputsObserver: MutationObserver;
 
 const sameMembers = (arr1, arr2) =>
     arr1.every(item => arr2.includes(item)) && arr2.every(item => arr1.includes(item));
@@ -80,11 +80,34 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
     formFilling = new FormFilling(formUtils, KeeFoxLog, configManager.current, matchResultReceiver, matchFinder);
     passwordGenerator = new PasswordGenerator();
 
+    inputsObserver.observe(document.body, { childList: true, subtree: true });
+
     updateAppState(currentAppState, isForegroundTab);
 }
 
 function startup () {
     KeeFoxLog.debug("content page starting");
+
+    inputsObserver = new MutationObserver(mutations => {
+
+        // If we have already scheduled a rescan recently, no further action required
+        if (formFilling.formFinderTimer !== null) return;
+
+        let rescan = false;
+        const interestingNodes = ["input", "form", "select"];
+        mutations.forEach(mutation => {
+            if (rescan) return;
+            if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+                for (const node of mutation.addedNodes) {
+                    const nodeName = node.nodeName.toLowerCase();
+                    if (interestingNodes.indexOf(nodeName) >= 0) rescan = true;
+                }
+            }
+        });
+
+        // Schedule a rescan soon. Not immediately, in case a batch of mutations are about to be triggered.
+        if (rescan) formFilling.formFinderTimer = setTimeout(formFilling.findMatchesInThisFrame.bind(formFilling), 500);
+    });
 
     myPort = chrome.runtime.connect({ name: "page" });
 
