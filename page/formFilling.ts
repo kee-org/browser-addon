@@ -291,42 +291,13 @@ class FormFilling {
         return this.fillMatchedFields (fields, dataFields, formFields);
     }
 
-    /* Expects this data object:
+    private initMatchResult (behaviour: FindMatchesBehaviour)
     {
-        autofillOnSuccess: true, // This won't override other configuration options if true but if false it will.
-        autosubmitOnSuccess: true, // This won't override other configuration options if true but if false it will.
-        notifyUserOnSuccess: true, // e.g. used when periodic form polling finds a form after the page has loaded.
-        ... others
-    }
-    */
-    public findMatchesInThisFrame (behaviour: FindMatchesBehaviour = {})
-    {
-        // Whether or not this was invoked as a result of a DOM mutation, we won't need the timer to fire anymore
-        if (this.formFinderTimer !== null) {
-            clearTimeout(this.formFinderTimer);
-            this.formFinderTimer = null;
-        }
-
-        const doc = window.document;
-
-        const autofillOnSuccess = behaviour.autofillOnSuccess;
-        const autosubmitOnSuccess = behaviour.autosubmitOnSuccess;
-        const notifyUserOnSuccess = behaviour.notifyUserOnSuccess;
-        const UUID = behaviour.UUID;
-        const dbFileName = behaviour.dbFileName;
-        const mustAutoSubmitForm = behaviour.mustAutoSubmitForm;
-
-        this.Logger.info("Finding matches in a document. readyState: " + doc.readyState
-            + ", autofillOnSuccess: " + autofillOnSuccess + ", autosubmitOnSuccess: "
-            + autosubmitOnSuccess + ", notifyUserOnSuccess: " + notifyUserOnSuccess
-            , "docURI: " + doc.URL);
-
         //TODO:c: create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
         // matchResult = new MatchResult();
         this.matchResult.UUID = "";
         this.matchResult.logins = [];
         this.matchResult.mostRelevantFormIndex = null;
-
 
         // auto fill the form by default unless a preference or tab variable tells us otherwise
         this.matchResult.wantToAutoFillForm = this.config.autoFillForms;
@@ -344,55 +315,28 @@ class FormFilling {
         // overwrite existing username by default unless a preference or tab variable tells us otherwise
         this.matchResult.overWriteFieldsAutomatically = this.config.overWriteFieldsAutomatically;
 
-        if (UUID != undefined && UUID != null && UUID != "")
+        if (behaviour.UUID != undefined && behaviour.UUID != null && behaviour.UUID != "")
         {
             // Keep a record of the specific entry we are going to search for (we delete
             // the tabstate below and re-create it during form fill)
-            this.matchResult.UUID = UUID;
-            this.matchResult.dbFileName = dbFileName;
+            this.matchResult.UUID = behaviour.UUID;
+            this.matchResult.dbFileName = behaviour.dbFileName;
 
             // we want to fill the form with this data
             this.matchResult.mustAutoFillForm = true;
             this.matchResult.overWriteFieldsAutomatically = true;
 
-            if (mustAutoSubmitForm)
+            if (behaviour.mustAutoSubmitForm)
                 this.matchResult.mustAutoSubmitForm = true;
         }
 
-        // Can't append to a HTMLCollection but all we really use it for is iteration
-        // and length so converting to an array sometimes will cause no issues
-        let forms = new Array<HTMLFormElement>();
-        for (let i=0; i < doc.forms.length; i++) {
-            forms.push(doc.forms.item(i));
-        }
-
-        this.matchResult.doc = doc;
-
-        const conf = configManager.siteConfigFor(doc.URL);
-
-        // Forcing a scan for orphaned fields on all pages. May need to change
-        // this if real world performance is too slow.
-        const pseudoForm = this.scanForOrphanedFields(doc);
-        if (pseudoForm) {
-            forms = Array.prototype.slice.call(forms);
-            forms.push(pseudoForm);
-        }
-
-        this.matchResult.forms = forms;
-
-        if (!forms || forms.length == 0)
-        {
-            this.Logger.info("No forms found on this page.");
-            return;
-        }
-
-        this.Logger.debug("findMatches processing " + forms.length + " forms", " on " + doc.URL);
+        this.matchResult.doc = window.document;
 
         this.matchResult.formReadyForSubmit = false; // tracks whether we actually auto-fill on this page
-        this.matchResult.autofillOnSuccess = autofillOnSuccess;
-        this.matchResult.autosubmitOnSuccess = autosubmitOnSuccess;
-        this.matchResult.notifyUserOnSuccess = notifyUserOnSuccess;
-        this.matchResult.formOrigin = doc.URL;
+        this.matchResult.autofillOnSuccess = behaviour.autofillOnSuccess;
+        this.matchResult.autosubmitOnSuccess = behaviour.autosubmitOnSuccess;
+        this.matchResult.notifyUserOnSuccess = behaviour.notifyUserOnSuccess;
+        this.matchResult.formOrigin = window.document.URL;
         this.matchResult.wrappers = [];
         this.matchResult.allMatchingLogins = [];
         this.matchResult.formRelevanceScores = [];
@@ -402,6 +346,60 @@ class FormFilling {
         this.matchResult.requestCount = 0;
         this.matchResult.responseCount = 0;
         this.matchResult.requestIds = []; // the JSONRPC request Ids that reference this matchResult object (to allow deletion after async callback processing)
+
+    }
+
+    /* Expects this data object:
+    {
+        autofillOnSuccess: true, // This won't override other configuration options if true but if false it will.
+        autosubmitOnSuccess: true, // This won't override other configuration options if true but if false it will.
+        notifyUserOnSuccess: true, // e.g. used when periodic form polling finds a form after the page has loaded.
+        ... others
+    }
+    */
+    public findMatchesInThisFrame (behaviour: FindMatchesBehaviour = {})
+    {
+        // Whether or not this was invoked as a result of a DOM mutation, we won't need the timer to fire anymore
+        if (this.formFinderTimer !== null) {
+            clearTimeout(this.formFinderTimer);
+            this.formFinderTimer = null;
+        }
+
+        // Can't append to a HTMLCollection but all we really use it for is iteration
+        // and length so converting to an array sometimes will cause no issues
+        let forms = new Array<HTMLFormElement>();
+        for (let i=0; i < window.document.forms.length; i++) {
+            forms.push(window.document.forms.item(i));
+        }
+
+        // Forcing a scan for orphaned fields on all pages. May need to change
+        // this if real world performance is too slow.
+        const pseudoForm = this.scanForOrphanedFields(window.document);
+        if (pseudoForm) {
+            forms = Array.prototype.slice.call(forms);
+            forms.push(pseudoForm);
+        }
+
+        if (!forms || forms.length == 0)
+        {
+            this.Logger.info("No forms found on this page.");
+            return;
+        }
+
+        this.Logger.info("Finding matches in a document. readyState: " + window.document.readyState,
+            "docURI: " + window.document.URL);
+
+        this.initMatchResult(behaviour);
+        this.matchResult.forms = forms;
+
+        //TODO:c: Some of the init has been moved below the no forms return statement.
+        // should be safe but possible cause of bugs if I have recalled some early algorithm details incorrectly
+
+        const conf = configManager.siteConfigFor(window.document.URL);
+
+        //TODO:c: call function to add listeners to all forms
+
+        this.Logger.debug("findMatches processing " + forms.length + " forms", " on " + window.document.URL);
 
         let searchSentToKeePass = false;
 
