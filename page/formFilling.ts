@@ -4,9 +4,11 @@
 /// <reference path="../common/ConfigManager.ts" />
 /// <reference path="keeFoxFieldIcon.ts" />
 /// <reference path="PanelStub.ts" />
+/// <reference path="formSaving.ts" />
 
 class MatchResult {
     logins: keeFoxLoginInfo[][];
+    submitTargets: HTMLElement[];
     usernameIndexArray: number[];
     passwordFieldsArray: keeFoxLoginField[][];
     otherFieldsArray: keeFoxLoginField[][];
@@ -47,6 +49,7 @@ class FormFilling {
 
     private matchFinder: {(uri: string): void};
     private formUtils: FormUtils;
+    private formSaving: FormSaving;
 
     private keeFoxFieldIcon: KeeFoxFieldIcon;
 
@@ -58,12 +61,14 @@ class FormFilling {
     public formFinderTimer: number = null;
 
     constructor (formUtils: FormUtils,
+        formSaving: FormSaving,
         logger: KeeFoxLogger,
         config: Config,
         matchResultReceiver: {(results: {logins: any[], notifyUserOnSuccess: boolean}): void},
         matchFinder: {(uri: string): void}) {
 
         this.formUtils = formUtils;
+        this.formSaving = formSaving;
         this.Logger = logger;
         this.config = config;
         this.matchResultReceiver = matchResultReceiver;
@@ -340,6 +345,7 @@ class FormFilling {
         this.matchResult.wrappers = [];
         this.matchResult.allMatchingLogins = [];
         this.matchResult.formRelevanceScores = [];
+        this.matchResult.submitTargets = [];
         this.matchResult.usernameIndexArray = [];
         this.matchResult.passwordFieldsArray = [];
         this.matchResult.otherFieldsArray = [];
@@ -397,8 +403,6 @@ class FormFilling {
 
         const conf = configManager.siteConfigFor(window.document.URL);
 
-        //TODO:c: call function to add listeners to all forms
-
         this.Logger.debug("findMatches processing " + forms.length + " forms", " on " + window.document.URL);
 
         let searchSentToKeePass = false;
@@ -437,6 +441,12 @@ class FormFilling {
                     continue;
             }
 
+
+            //TODO:c: support other listeners (e.g. form submit) - need to deduplicate though
+            const submitTarget = this.findSubmitButton(form);
+            submitTarget.addEventListener("click", e => this.formSaving.submitHandler(e, form), true);
+
+            this.matchResult.submitTargets[i] = submitTarget;
             this.matchResult.usernameIndexArray[i] = usernameIndex;
             this.matchResult.passwordFieldsArray[i] = passwordFields;
             this.matchResult.otherFieldsArray[i] = otherFields;
@@ -944,7 +954,7 @@ class FormFilling {
         const inputElements = form.getElementsByTagName("input");
         const roleElementsForm = form.querySelectorAll("[role=button]");
         const roleElementsDoc = form.ownerDocument.querySelectorAll("[role=button]");
-        let submitElement = null;
+        let submitElement: HTMLElement = null;
         const submitElements = [];
 
         // Rank the buttons
@@ -1042,7 +1052,7 @@ class FormFilling {
         // If we've found a button to click, use that; if not, just submit the form.
         if (submitElement != null)
         {
-            this.Logger.debug("Submiting using element: " + submitElement.name + ": " + submitElement.id);
+            this.Logger.debug("Submiting using element: " + (submitElement as any).name + ": " + submitElement.id);
             submitElement.click();
         }
         else

@@ -8,6 +8,7 @@ let appState: AppState;
 let keefoxPopupLoadTime = Date.now();
 let formUtils: FormUtils;
 let formFilling: FormFilling;
+let formSaving: FormSaving;
 let passwordGenerator: PasswordGenerator;
 let tabId: number;
 let frameId: number;
@@ -77,7 +78,8 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
 
     KeeFoxLog.attachConfig(configManager.current);
     formUtils = new FormUtils(KeeFoxLog);
-    formFilling = new FormFilling(formUtils, KeeFoxLog, configManager.current, matchResultReceiver, matchFinder);
+    formSaving = new FormSaving(KeeFoxLog);
+    formFilling = new FormFilling(formUtils, formSaving, KeeFoxLog, configManager.current, matchResultReceiver, matchFinder);
     passwordGenerator = new PasswordGenerator();
 
     inputsObserver.observe(document.body, { childList: true, subtree: true });
