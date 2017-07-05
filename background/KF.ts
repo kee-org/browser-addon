@@ -693,6 +693,9 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.logins) {
         keefox_org.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
     }
+    if (msg.submittedData) {
+        //TODO:c: search for existing logins
+    }
     if (msg.action === "showMatchedLoginsPanel") {
         keefox_org.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: "showMatchedLoginsPanel", frameId: this.sender.frameId });
     }

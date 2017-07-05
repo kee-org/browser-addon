@@ -66,7 +66,7 @@ private isAKnownUsernameString (fieldNameIn) {
 }
 
 /*
-* _getFormFields
+* getFormFields
 *
 * Returns the usernameIndex and password fields found in the form.
 * Can handle complex forms by trying to figure out what the

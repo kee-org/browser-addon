@@ -1,5 +1,6 @@
 /// <reference path="../common/AppState.ts" />
 /// <reference path="../common/TabState.ts" />
+/// <reference path="../common/SubmittedData.ts" />
 
 interface AddonMessage {
     appState?: AppState;
@@ -17,4 +18,5 @@ interface AddonMessage {
     passwordProfiles: any[];
     generatedPassword: string;
     passwordProfile: string;
+    submittedData?: SubmittedData;
 }

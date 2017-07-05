@@ -444,7 +444,7 @@ class FormFilling {
 
             //TODO:c: support other listeners (e.g. form submit) - need to deduplicate though
             const submitTarget = this.findSubmitButton(form);
-            submitTarget.addEventListener("click", e => this.formSaving.submitHandler(e, form), true);
+            this.formSaving.addSubmitHandler(submitTarget, form, "click");
 
             this.matchResult.submitTargets[i] = submitTarget;
             this.matchResult.usernameIndexArray[i] = usernameIndex;

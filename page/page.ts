@@ -48,9 +48,14 @@ function updateAppState (newState: AppState, isForegroundTab: boolean) {
     const shouldRemoveMatches = shouldSearch || (oldState && oldState.connected &&
         (!appState.connected || (oldState.KeePassDatabases.length > 0 && appState.KeePassDatabases.length == 0))
         );
+    const shouldRemoveSubmitListeners = shouldRemoveMatches || (isForegroundTab && shouldSearch);
 
-    if (shouldRemoveMatches)
+    if (shouldRemoveMatches) {
         formFilling.removeKeeFoxIconFromAllFields();
+    }
+    if (shouldRemoveSubmitListeners) {
+        formSaving.removeAllSubmitHandlers();
+    }
     if (isForegroundTab && shouldSearch) {
         formFilling.findMatchesInThisFrame();
     }
@@ -78,7 +83,7 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
 
     KeeFoxLog.attachConfig(configManager.current);
     formUtils = new FormUtils(KeeFoxLog);
-    formSaving = new FormSaving(KeeFoxLog);
+    formSaving = new FormSaving(KeeFoxLog, formUtils, configManager.current);
     formFilling = new FormFilling(formUtils, formSaving, KeeFoxLog, configManager.current, matchResultReceiver, matchFinder);
     passwordGenerator = new PasswordGenerator();
 
