@@ -11,6 +11,8 @@
   enumeration of form field type (e.g. text, checkbox, password, etc.)
 */
 
+/// <reference path="uriUtils.ts" />
+
 let keeFoxFormFieldType =
     {
         radio: "FFTradio",
@@ -145,7 +147,7 @@ class keeFoxLoginInfo {
         this.neverAutoFill = intermediateObject.neverAutoFill;
         this.neverAutoSubmit = intermediateObject.neverAutoSubmit;
         this.database = intermediateObject.database;
-    };
+    }
 
     // assists with serialisation of this object to a string
     // (for attachment to the current tab session)
@@ -159,7 +161,7 @@ class keeFoxLoginInfo {
 
         return "( deserialisedOutputURLs , " + httpRealmParam + " , " + this.usernameIndex
             + " , deserialisedOutputPasswords , " + uniqueIDParam + " , " + titleParam + " , deserialisedOutputOtherFields , " + this.maximumPage + " )";
-    };
+    }
 
     init (aURLs, unusedParameter, aHttpRealm,
         aUsernameIndex, aPasswords,
@@ -180,7 +182,7 @@ class keeFoxLoginInfo {
         this.neverAutoFill = false;
         this.neverAutoSubmit = false;
         this.matchAccuracy = 0;
-    };
+    }
 
     initFromEntry (entry) {
         const passwords = [];
@@ -232,25 +234,25 @@ class keeFoxLoginInfo {
         this.priority = entry.priority;
         this.database = entry.db;
         this.matchAccuracy = entry.matchAccuracy;
-    };
+    }
 
-    private allURLsMatch (URLs, ignoreURIPathsAndSchemes, ignoreURIPaths, uriUtils) {
+    private allURLsMatch (URLs, ignoreURIPathsAndSchemes, ignoreURIPaths) {
         if (this.URLs.length != URLs.length)
             return false;
         for (let i = 0; i < URLs.length; i++) {
             const url1 = URLs[i];
             for (let j = 0; j < this.URLs.length; j++) {
                 const url2 = this.URLs[j];
-                if (!ignoreURIPathsAndSchemes && uriUtils.getURISchemeHostAndPort(url1) != uriUtils.getURISchemeHostAndPort(url2))
+                if (!ignoreURIPathsAndSchemes && getURISchemeHostAndPort(url1) != getURISchemeHostAndPort(url2))
                     return false;
-                else if (ignoreURIPathsAndSchemes && !ignoreURIPaths && uriUtils.getURIHostAndPort(url1) != uriUtils.getURIHostAndPort(url2))
+                else if (ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIHostAndPort(url1) != getURIHostAndPort(url2))
                     return false;
-                else if (!ignoreURIPathsAndSchemes && !ignoreURIPaths && uriUtils.getURIExcludingQS(url1) != uriUtils.getURIExcludingQS(url2))
+                else if (!ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIExcludingQS(url1) != getURIExcludingQS(url2))
                     return false;
             }
         }
         return true;
-    };
+    }
 
     private allPasswordsMatch (passwords) {
         let matches = 0;
@@ -268,7 +270,7 @@ class keeFoxLoginInfo {
             return false;
 
         return true;
-    };
+    }
 
     private usernamesMatch (login: keeFoxLoginInfo) {
         if (this.otherFields.length != login.otherFields.length)
@@ -290,10 +292,10 @@ class keeFoxLoginInfo {
             return false;
 
         return true;
-    };
+    }
 
 
-    allURLsContainedIn (URLs, ignoreURIPathsAndSchemes, ignoreURIPaths, uriUtils) {
+    allURLsContainedIn (URLs, ignoreURIPathsAndSchemes, ignoreURIPaths) {
         let matches = 0;
 
         for (let i = 0; i < this.URLs.length; i++) {
@@ -301,14 +303,14 @@ class keeFoxLoginInfo {
             for (let j = 0; j < URLs.length; j++) {
                 const url2 = URLs[j];
                 if (!ignoreURIPathsAndSchemes && url1.indexOf("://") > 0 &&
-                    uriUtils.getURISchemeHostAndPort(url1) != uriUtils.getURISchemeHostAndPort(url2))
+                    getURISchemeHostAndPort(url1) != getURISchemeHostAndPort(url2))
                 { continue; }
                 else if (!ignoreURIPathsAndSchemes && url1.indexOf("://") <= 0
-                    && uriUtils.getURIHostAndPort(url1) != uriUtils.getURIHostAndPort(url2))
+                    && getURIHostAndPort(url1) != getURIHostAndPort(url2))
                 { continue; }
-                else if (ignoreURIPathsAndSchemes && !ignoreURIPaths && uriUtils.getURIHostAndPort(url1) != uriUtils.getURIHostAndPort(url2))
+                else if (ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIHostAndPort(url1) != getURIHostAndPort(url2))
                 { continue; }
-                else if (!ignoreURIPathsAndSchemes && !ignoreURIPaths && uriUtils.getURIExcludingQS(url1) != uriUtils.getURIExcludingQS(url2))
+                else if (!ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIExcludingQS(url1) != getURIExcludingQS(url2))
                 { continue; }
                 else
                 { matches++; break; }
@@ -319,7 +321,7 @@ class keeFoxLoginInfo {
             return true;
 
         return false;
-    };
+    }
 
     private allPasswordsContainedIn (passwords) {
         let matches = 0;
@@ -335,7 +337,7 @@ class keeFoxLoginInfo {
             return true;
 
         return false;
-    };
+    }
 
     private allOtherFieldsContainedIn (login) {
         let matches = 0;
@@ -351,13 +353,13 @@ class keeFoxLoginInfo {
             return true;
 
         return false;
-    };
+    }
 
     // determines if this matches another supplied login object, with a number
     // of controllable definitions of "match" to support various use cases
     matches (aLogin, ignorePasswords, ignoreURIPaths,
         ignoreURIPathsAndSchemes, ignoreUsernames, uriUtils) {
-        if (!this.allURLsMatch(aLogin.URLs, ignoreURIPathsAndSchemes, ignoreURIPaths, uriUtils))
+        if (!this.allURLsMatch(aLogin.URLs, ignoreURIPathsAndSchemes, ignoreURIPaths))
             return false;
 
         if (this.httpRealm != aLogin.httpRealm && !(this.httpRealm == "" || aLogin.httpRealm == ""))
@@ -370,13 +372,13 @@ class keeFoxLoginInfo {
             return false;
 
         return true;
-    };
+    }
 
     // determines if this login is contained within a supplied login object, with a number
     // of controllable definitions of "containedIn" to support various use cases
     containedIn (aLogin, ignorePasswords, ignoreURIPaths,
-        ignoreURIPathsAndSchemes, ignoreUsernames, uriUtils) {
-        if (!this.allURLsContainedIn(aLogin.URLs, ignoreURIPathsAndSchemes, ignoreURIPaths, uriUtils))
+        ignoreURIPathsAndSchemes, ignoreUsernames) {
+        if (!this.allURLsContainedIn(aLogin.URLs, ignoreURIPathsAndSchemes, ignoreURIPaths))
             return false;
 
         if (this.httpRealm != aLogin.httpRealm && !(this.httpRealm == "" || aLogin.httpRealm == ""))
@@ -389,7 +391,7 @@ class keeFoxLoginInfo {
             return false;
 
         return true;
-    };
+    }
 
     // merge another login into this one. Only certain fields are merged
     // - URLs, passwords and usernames
@@ -429,7 +431,7 @@ class keeFoxLoginInfo {
         }
 
         this.maximumPage = Math.max(this.maximumPage, previousStageLogin.maximumPage);
-    };
+    }
 
     asEntry () {
         const entry: any = {};
@@ -459,7 +461,7 @@ class keeFoxLoginInfo {
         return entry;
     }
 
-};
+}
 
 
 class keeFoxLoginField {
