@@ -411,10 +411,12 @@
     "message": "View and change your preferred KeeFox options."
   },
   "Search_label": {
-    "message": "Search..."
+    "message": "Search...",
+    "description": "Search..."
   },
   "Search_tip": {
-    "message": "Start typing to display your matching login entries"
+    "message": "Start typing to display your matching login entries",
+    "description": "Start typing to display your matching login entries"
   },
   "PasswordProfilesExplanation_label": {
     "message": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles.",
@@ -424,25 +426,32 @@
     "message": "Change"
   },
   "change_field_explanation": {
-    "message": "KeeFox will also update the website icon (favicon) and any HTTP Auth Realm information. More complex modifications will require you to manually edit the entry."
+    "message": "KeeFox will also update the website icon (favicon) and any HTTP Auth Realm information. More complex modifications will require you to manually edit the entry.",
+    "description": "KeeFox will also update the website icon (favicon) and any HTTP Auth Realm information. More complex modifications will require you to manually edit the entry."
   },
   "change_field_status": {
-    "message": "The selected entry will have all username, password and other form fields replaced with the values you have just entered."
+    "message": "The selected entry will have all username, password and other form fields replaced with the values you have just entered.",
+    "description": "The selected entry will have all username, password and other form fields replaced with the values you have just entered."
   },
   "change_url_status": {
-    "message": "The entry's web page address (URL) will be updated with the latest URL."
+    "message": "The entry's web page address (URL) will be updated with the latest URL.",
+    "description": "The entry's web page address (URL) will be updated with the latest URL."
   },
   "change_url_option_1": {
-    "message": "Replace the entry's URL (but still fill forms if you visit the old URL)"
+    "message": "Replace the entry's URL (but still fill forms if you visit the old URL)",
+    "description": "Replace the entry's URL (but still fill forms if you visit the old URL)"
   },
   "change_url_option_2": {
-    "message": "Replace the entry's URL (delete the old URL completely)"
+    "message": "Replace the entry's URL (delete the old URL completely)",
+    "description": "Replace the entry's URL (delete the old URL completely)"
   },
   "change_url_option_3": {
-    "message": "Keep the old entry's URL (but still fill forms if you visit the new URL)"
+    "message": "Keep the old entry's URL (but still fill forms if you visit the new URL)",
+    "description": "Keep the old entry's URL (but still fill forms if you visit the new URL)"
   },
   "change_url_option_4": {
-    "message": "Keep the old entry's URL (don't add the new URL to the entry)"
+    "message": "Keep the old entry's URL (don't add the new URL to the entry)",
+    "description": "Keep the old entry's URL (don't add the new URL to the entry)"
   },
   "changeDBButtonEmpty_label": {
     "message": "No database"
@@ -463,10 +472,12 @@
     "message": "Copy username"
   },
   "create": {
-    "message": "Create"
+    "message": "Create",
+    "description": "Create"
   },
   "create_new_entry": {
-    "message": "Create new entry"
+    "message": "Create new entry",
+    "desciption": "Create new entry"
   },
   "current_website": {
     "message": "Current website"
@@ -488,7 +499,8 @@
     "description": "Website"
   },
   "database_label": {
-    "message": "Database"
+    "message": "Database",
+    "description": "Database"
   },
   "disable_password_manager": {
     "message": "The KeeFox add-on may not work correctly if you allow Firefox to manage your passwords. Should KeeFox disable the built-in Firefox password manager?"
@@ -504,7 +516,8 @@
     "message": "Please launch KeePass first."
   },
   "group_label": {
-    "message": "Group"
+    "message": "Group",
+    "description": "Group"
   },
   "httpAuth_default": {
     "message": "You are logged out of your password database (it may be locked)"
@@ -525,7 +538,8 @@
     "message": "KeeFox enabled"
   },
   "keepass_history_pointer": {
-    "message": "KeePass has an \"undo\" feature which you can access from the KeePass \"edit entry\" dialog window. Click on the \"History\" tab and then use the \"Restore\" button to revert to an older version."
+    "message": "KeePass has an \"undo\" feature which you can access from the KeePass \"edit entry\" dialog window. Click on the \"History\" tab and then use the \"Restore\" button to revert to an older version.",
+    "description": "KeePass has an \"undo\" feature which you can access from the KeePass \"edit entry\" dialog window. Click on the \"History\" tab and then use the \"Restore\" button to revert to an older version."
   },
   "launchKeePass_label": {
     "message": "Launch KeePass"
@@ -569,7 +583,8 @@
     "message": "Login to $1 with this username: $2. Right click for more options."
   },
   "matchedLogin_label": {
-    "message": "$1 - $2"
+    "message": "$1 - $2",
+    "description": "<username> <seperator> <entry title>"
   },
   "matchedLogin_tip": {
     "message": "$1 in the $2 group ($3)"
@@ -578,13 +593,16 @@
     "message": "Matched logins found"
   },
   "more_options": {
-    "message": "More options"
+    "message": "More options",
+    "description": "More options"
   },
   "multi_page_update_warning": {
-    "message": "Multi-page login forms may also require manual editing."
+    "message": "Multi-page login forms may also require manual editing.",
+    "description": "Multi-page login forms may also require manual editing."
   },
   "noUsername_partial_tip": {
-    "message": "no username"
+    "message": "no username",
+    "description": "no username"
   },
   "notifyBarLaunchKeePass_label": {
     "message": "You are not logged in to your password database.",
@@ -613,34 +631,42 @@
     "message": "Password management"
   },
   "password_successfully_updated": {
-    "message": "Password successfully updated."
+    "message": "Password successfully updated.",
+    "description": "Password successfully updated."
   },
   "saveMultiPagePasswordText": {
-    "message": "Do you want KeeFox to save this multi-page password?"
+    "message": "Do you want KeeFox to save this multi-page password?",
+    "description": "Do you want KeeFox to save this multi-page password?"
   },
   "savePasswordLogin_tip": {
-    "message": "Username: $1. Website address (URL): $2"
+    "message": "Username: $1. Website address (URL): $2",
+    "description": "Username: $1. Website address (URL): $2"
   },
   "savePasswordText": {
-    "message": "Do you want KeeFox to save this password?"
+    "message": "Do you want KeeFox to save this password?",
+    "description": "Do you want KeeFox to save this password?"
   },
   "search_again": {
-    "message": "Search again"
+    "message": "Search again",
+    "description": "Search again"
   },
   "selectDefaultKDBXLocation": {
     "message": "Choose a default password database"
   },
   "update": {
-    "message": "Update"
+    "message": "Update",
+    "description": "Update"
   },
   "update_existing_entry": {
-    "message": "Update existing entry"
+    "message": "Update existing entry",
+    "description": "Update existing entry"
   },
   "view_them_in_the_main_keefox_panel": {
     "message": "View them in the main KeeFox panel"
   },
   "whichEntry_label": {
-    "message": "Choose an entry..."
+    "message": "Choose an entry...",
+    "description": "Choose an entry..."
   },
 
 
@@ -715,5 +741,9 @@
   "learn_more": {
       "message": "Learn more",
       "description": "Action/button/link to send the user to somewhere that they can read more about a topic/concept"
+  },
+  "dont_show_again": {
+      "message": "Don't show message again",
+      "description": "Button user can click on to cause a message to hide and not reappear"
   }
 }

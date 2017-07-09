@@ -9,6 +9,7 @@
 /// <reference path="../common/FrameState.ts" />
 /// <reference path="../common/AddonMessage.ts" />
 /// <reference path="../common/KeeFoxNotification.ts" />
+/// <reference path="PersistentTabState.ts" />
 
 declare const chrome: typeof browser;
 
@@ -16,6 +17,7 @@ class KeeFox {
 
     appState: AppState;
     tabStates: TabState[];
+    persistentTabStates: PersistentTabState[];
     utils: Utils;
     search: Search;
     foregroundTabId: number;
@@ -47,6 +49,7 @@ class KeeFox {
         };
 
         this.tabStates = [];
+        this.persistentTabStates = [];
 
         this.foregroundTabId = -1;
 
@@ -91,15 +94,23 @@ class KeeFox {
                     p.onMessage.addListener(pageMessageHandler.bind(p));
                     p.onDisconnect.addListener(pageDisconnect.bind(p));
 
-                    p.postMessage({
+                    const connectMessage = {
                         appState: keefox_org.appState,
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
                         isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
-                    } as AddonMessage);
+                    } as AddonMessage;
 
                     if (!keefox_org.tabStates[p.sender.tab.id]) {
                         keefox_org.tabStates[p.sender.tab.id] = new TabState();
+                        if (keefox_org.persistentTabStates[p.sender.tab.id]) {
+                             keefox_org.persistentTabStates[p.sender.tab.id].items.forEach(item => {
+                                if (item.itemType === "submittedData") {
+                                    connectMessage.submittedData = item.submittedData;
+                                    item.accessCount++;
+                                }
+                            });
+                        }
                     }
 
                     if (p.sender.frameId === 0) {
@@ -107,6 +118,9 @@ class KeeFox {
                     }
                     keefox_org.tabStates[p.sender.tab.id].frames[p.sender.frameId] = new FrameState();
                     keefox_org.tabStates[p.sender.tab.id].framePorts[p.sender.frameId] = p;
+
+                    p.postMessage(connectMessage);
+
                     break;
                 }
                 case "iframe": {
@@ -694,10 +708,87 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         keefox_org.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
     }
     if (msg.submittedData) {
-        //TODO:c: search for existing logins
+        keefox_org.findLogins(msg.submittedData.url, null,
+            null, null, null, null, null, response => {
+
+            let existingLogin = false;
+
+            const submittedLogin = new keeFoxLoginInfo();
+            submittedLogin.init([msg.submittedData.url], null, null, msg.submittedData.usernameIndex,
+            msg.submittedData.passwordFields.map(function (item) {
+                const newField = new keeFoxLoginField();
+                newField.fieldId = item.fieldId;
+                newField.type = item.type;
+                newField.name = item.name;
+                newField.value = item.value;
+                return newField; }),
+            null, msg.submittedData.title,
+            msg.submittedData.otherFields.map(function (item) {
+                const newField = new keeFoxLoginField();
+                newField.fieldId = item.fieldId;
+                newField.type = item.type;
+                newField.name = item.name;
+                newField.value = item.value;
+                return newField; }),
+            1);
+
+            // if no resultWrapper is provided, we just go ahead anyway assuming it's a new login
+            if (response && response.result)
+            {
+                for (const i in response.result)
+                {
+                    const kfl = new keeFoxLoginInfo();
+                    kfl.initFromEntry(response.result[i]);
+                    //TODO:3: Should be able to extend the search in containedIn() so we take into
+                    // account the current page information and therefore can detect that the submitted
+                    // form data is part of a larger multi-page login form. That situation should only
+                    // come up very rarely though (e.g. maybe when user has navigated back to the
+                    // non-first page of a multi-page login form, or when their credentials have been
+                    // invalidated remotely and they end up on one of the non-first pages to
+                    // submit updated credentials)
+                    if (submittedLogin.containedIn(kfl, false, true, true, false))
+                        existingLogin = true;
+                }
+            }
+
+            if (existingLogin) return;
+
+            if (!keefox_org.persistentTabStates[this.sender.tab.id]) {
+                keefox_org.persistentTabStates[this.sender.tab.id] = {items: [] };
+            }
+            const persistentItem = {
+                itemType: "submittedData" as "submittedData",
+                submittedData: msg.submittedData,
+                submittedLogin: submittedLogin,
+                creationDate: new Date(),
+                accessCount: 0,
+                maxAccessCount: 20
+            };
+            keefox_org.persistentTabStates[this.sender.tab.id].items.push(persistentItem);
+
+            // If a few seconds go past without any new page port registration and the current
+            // port is still active, assume the login was ajax or an iframe so post the updated
+            // appdata to the existing port
+            setTimeout(() => {
+                if (persistentItem.accessCount === 0
+                    && keefox_org.tabStates[this.sender.tab.id]
+                    && keefox_org.tabStates[this.sender.tab.id].framePorts
+                    && keefox_org.tabStates[this.sender.tab.id].framePorts[0]) {
+                    keefox_org.tabStates[this.sender.tab.id].framePorts[0].postMessage(
+                        { appState: keefox_org.appState, submittedData: persistentItem.submittedData } as AddonMessage);
+                    persistentItem.accessCount++;
+                }
+            }, 3000);
+        });
     }
     if (msg.action === "showMatchedLoginsPanel") {
         keefox_org.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: "showMatchedLoginsPanel", frameId: this.sender.frameId });
+    }
+    if (msg.action === "removeSubmittedData") {
+        if (keefox_org.persistentTabStates[this.sender.tab.id]) {
+            keefox_org.persistentTabStates[this.sender.tab.id].items =
+                keefox_org.persistentTabStates[this.sender.tab.id].items.filter(item => item.itemType !== "submittedData");
+        }
     }
 }
 
@@ -723,6 +814,28 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
                 port.postMessage({ passwordProfiles: passwordProfiles, generatedPassword: generatedPassword } as AddonMessage);
             });
         });
+    }
+
+    if (msg.saveData) {
+        const persistentItem = keefox_org.persistentTabStates[tabId].items.find(item => item.itemType == "submittedData");
+
+        if (msg.saveData.update) {
+            const result = keefox_org.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.urlMergeMode, msg.saveData.db);
+        }
+        else {
+            const result = keefox_org.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
+            if (configManager.current.rememberMRUGroup) {
+                if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
+                configManager.current.mruGroup[msg.saveData.db] = msg.saveData.group;
+                configManager.save();
+            }
+        }
+
+        keefox_org.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
+
+        //TODO:c: reimplement
+        // if (login.URLs[0].startsWith("http://tutorial-section-b.keefox.org/part2"))
+        //     keefox_org.tutorialHelper.tutorialProgressSaved();
     }
 }
 

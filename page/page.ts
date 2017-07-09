@@ -127,6 +127,10 @@ function startup () {
             updateAppState(m.appState, m.isForegroundTab);
         }
 
+        if (m.submittedData) {
+            formSaving.createSavePasswordPanel();
+        }
+
         if (m.findMatchesResult) {
             formFilling.findLoginsResultHandler(m.findMatchesResult);
             renderMatchedLogins(m.findMatchesResult);
@@ -153,6 +157,8 @@ function startup () {
         if (m.action == "closeAllPanels") {
             passwordGenerator.closeGeneratePasswordPanel();
             formFilling.closeMatchedLoginsPanel();
+            formSaving.closeSavePasswordPanel();
+            myPort.postMessage({action: "removeSubmittedData"} as AddonMessage);
         }
 
         if (m.action == "showMatchedLoginsPanel") {

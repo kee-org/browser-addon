@@ -12,6 +12,8 @@ class FormSaving {
     private formUtils: FormUtils;
     private config: Config;
     private SubmitHandlerAttachments: SubmitHandlerAttachment[] = [];
+    private savePasswordPanelStub: PanelStub;
+    private savePasswordPanelStubRaf: number;
 
     constructor (logger: KeeFoxLogger, formUtils: FormUtils, config: Config) {
         this.Logger = logger;
@@ -30,6 +32,23 @@ class FormSaving {
             attachment => attachment.target.removeEventListener(attachment.action, attachment.handler)
             );
         this.SubmitHandlerAttachments = [];
+    }
+
+    public createSavePasswordPanel () {
+        this.closeSavePasswordPanel();
+        this.savePasswordPanelStub = new PanelStub(PanelStubOptions.SavePassword, null);
+        this.savePasswordPanelStub.createPanel();
+    }
+
+    public closeSavePasswordPanel () {
+        if (this.savePasswordPanelStub) this.savePasswordPanelStub.closePanel();
+        this.savePasswordPanelStub = null;
+        cancelAnimationFrame(this.savePasswordPanelStubRaf);
+    }
+
+    public updateSavePasswordPanelPosition () {
+        formSaving.savePasswordPanelStub.updateBoundingClientRect();
+        formSaving.savePasswordPanelStubRaf = requestAnimationFrame(formSaving.updateSavePasswordPanelPosition);
     }
 
     // This won't always be called before all event handlers on the web page so on

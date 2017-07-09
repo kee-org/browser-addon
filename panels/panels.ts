@@ -1,5 +1,6 @@
 /// <reference path="MatchedLoginsPanel.ts" />
 /// <reference path="GeneratePasswordPanel.ts" />
+/// <reference path="SavePasswordPanel.ts" />
 /// <reference path="../common/ConfigManager.ts" />
 
 declare const chrome: typeof browser;
@@ -68,6 +69,18 @@ function startup () {
 
             });
         break;
+        case "savePassword":
+            savePasswordPanel = new SavePasswordPanel();
+            document.getElementById("header").innerText = "Save password";
+            myPort.onMessage.addListener(function (m: AddonMessage) {
+                KeeFoxLog.debug("In iframe script, received message from background script: ");
+
+                if (m.appState) updateAppState(m.appState);
+                if (m.frameState) updateTabState(m.frameState);
+
+                savePasswordPanel.createNearNode(document.getElementById("header"));
+            });
+        break;
     }
 
     const closeButton = document.createElement("button");
@@ -112,6 +125,7 @@ function startup () {
 
 let matchedLoginsPanel: MatchedLoginsPanel;
 let generatePasswordPanel: GeneratePasswordPanel;
+let savePasswordPanel: SavePasswordPanel;
 let myPort: browser.runtime.Port;
 let params = {};
 

@@ -78,6 +78,7 @@ class Config {
     logSensitiveData: boolean;
     metricsUsageDisabled: boolean;
     metricsUserId: string;
+    mruGroup: {[key: string]: string};
     notifyWhenEntryUpdated: boolean;
     notifyWhenLateDiscovery: boolean;
     notifyWhenLoggedOut: boolean;

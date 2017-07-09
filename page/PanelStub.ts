@@ -20,6 +20,14 @@ class PanelStubOptions {
         name: "generatePassword",
         autoCloseTime: 5
     };
+
+    public static SavePassword: PanelStubOptions = {
+        id: "KeeFoxAddonPanelSavePassword",
+        height: 300,
+        width: 400,
+        name: "savePassword",
+        autoCloseTime: 20
+    };
 }
 
 class PanelStub {

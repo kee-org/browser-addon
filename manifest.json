@@ -29,7 +29,8 @@
                 "common/pslData.js",
                 "common/publicsuffixlist.js",
                 "page/page.js"
-        ]
+        ],
+        "run_at": "document_end"
     }],
     "icons": {
         "32": "common/images/32.png",
