@@ -5,16 +5,6 @@
 
 class GeneratePasswordPanel {
 
-    public copyStringToClipboard (value) {
-        const copyFrom = document.createElement("textarea");
-        copyFrom.textContent = value;
-        const body = document.getElementsByTagName("body")[0];
-        body.appendChild(copyFrom);
-        copyFrom.select();
-        document.execCommand("copy");
-        body.removeChild(copyFrom);
-    }
-
     public createNearNode (node: HTMLElement, passwordProfiles: any[]) {
         const container = document.createElement("div");
         container.id = "GeneratePasswordContainer";

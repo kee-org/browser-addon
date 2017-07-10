@@ -22,6 +22,17 @@ function closePanel () {
     myPort.postMessage( { action: "closeAllPanels" } );
 }
 
+
+function copyStringToClipboard (value) {
+    const copyFrom = document.createElement("textarea");
+    copyFrom.textContent = value;
+    const body = document.getElementsByTagName("body")[0];
+    body.appendChild(copyFrom);
+    copyFrom.select();
+    document.execCommand("copy");
+    body.removeChild(copyFrom);
+}
+
 function startup () {
     KeeFoxLog.debug("iframe page starting");
 
@@ -57,7 +68,7 @@ function startup () {
                 if (!m.generatedPassword && m.generatedPassword != "") {
                     myPort.postMessage({ action: "generatePassword" });
                 } else {
-                    generatePasswordPanel.copyStringToClipboard(m.generatedPassword);
+                    copyStringToClipboard(m.generatedPassword);
 
                     if (passwordReceived) {
                         closePanel();

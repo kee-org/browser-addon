@@ -20,7 +20,7 @@ class MatchedLoginsPanel {
         this.setLoginsAllMatches(logins, container);
     }
 
-    private setLoginsAllMatches (logins, container) {
+    private setLoginsAllMatches (logins: keeFoxLoginInfo[], container) {
         KeeFoxLog.debug("setting " + logins.length + " matched logins");
 
         // add every matched login to the container(s)
@@ -48,67 +48,138 @@ class MatchedLoginsPanel {
             loginItem.style.backgroundImage = "url(data:image/png;base64," + login.iconImageData + ")";
             loginItem.dataset.fileName = login.database.fileName;
             loginItem.dataset.frameKey = login.frameKey;
-            loginItem.dataset.formIndex = login.formIndex;
-            loginItem.dataset.loginIndex = login.loginIndex;
+            loginItem.dataset.formIndex = login.formIndex.toString();
+            loginItem.dataset.loginIndex = login.loginIndex.toString();
             loginItem.dataset.uuid = login.uniqueID;
             loginItem.title = $STRF("matchedLogin_tip", [login.title, displayGroupPath, usernameDisplayValue]);
             loginItem.tabIndex = -1;
 
-            //TODO:c: context menus and keyboard nav
             loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, login.title]);
+
+            const loginContextActions = this.createContextActions(login);
+            loginItem.appendChild(loginContextActions);
+
+            //TODO:c: keyboard nav
             //loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
-            loginItem.addEventListener("mouseup", function (event) {
+            loginItem.addEventListener("click", function (event) {
                 event.stopPropagation();
                 if (event.button == 0 || event.button == 1)
                     this.dispatchEvent(new Event("keefoxCommand"));
-                else if (event.button == 2) {
-                  //  keefox_win.panel.addLoginContextActions(document, this.getAttribute("data-uuid"), this.getAttribute("data-fileName"));
-                  //  keefox_win.panel.displayContextMenu(keefox_win.panel._currentWindow.document, event, "KeeFox-login-context");
-                }
+            }, false);
+            loginItem.addEventListener("contextmenu", function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+                matchedLoginsPanel.showContextActions(loginContextActions);
             }, false);
             loginItem.addEventListener("keefoxCommand", function (event) {
                 myPort.postMessage({ action: "manualFill", selectedLoginIndex: this.dataset.loginIndex, frameId: parentFrameId });
             }, false);
-            // loginItem.addEventListener("keefoxContext", function (event) {
-            //     keefox_win.panel.addLoginContextActions(document, this.getAttribute("data-uuid"), this.getAttribute("data-fileName"));
-            //     keefox_win.panel.displayContextMenu(keefox_win.panel._currentWindow.document,
-            //         { target: event.detail.target, layerX: event.detail.layerX, layerY: event.detail.layerY },
-            //         "KeeFox-login-context");
-            // }, false);
             loginItem.addEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);
 
             container.appendChild(loginItem);
         }
     }
 
+    public showContextActions (element: Element) {
+        element.classList.remove("disabled");
+        element.classList.add("enabled");
+    }
+
+    private createContextActions (kfl: keeFoxLoginInfo) {
+        const loginContextActions = document.createElement("div");
+        loginContextActions.classList.add("disabled");
+
+        const editButton = document.createElement("button");
+            editButton.innerHTML = $STR("Logins_Context_Edit_Login_label");
+            editButton.setAttribute("id", "KeeFox-login-context-edit");
+            //"chrome://keefox/skin/pencil.png"
+            editButton.addEventListener("click", event => {
+                event.stopPropagation();
+                event.preventDefault();
+                //TODO:c: launch editor
+                //keefox_org.launchLoginEditor(kfl.parentGroup.uniqueID, kfl.database.fileName);
+                myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+            }, false);
+            loginContextActions.appendChild(editButton);
+
+        const otherFieldCount = (kfl.otherFields != null && kfl.otherFields.length > 0) ? kfl.otherFields.length : 0;
+        const usernameField = (otherFieldCount > 0) ? kfl.otherFields[kfl.usernameIndex] : null;
+        const passwordFieldCount = (kfl.passwords != null && kfl.passwords.length > 0) ? kfl.passwords.length : 0;
+        const passwordField = (passwordFieldCount > 0) ? kfl.passwords[0] : null;
+
+        if (usernameField != null)
+        {
+            const button = document.createElement("button");
+            button.innerHTML = $STR("copy_username_label");
+            button.setAttribute("id", "KeeFox-login-context-copyuser");
+            //"chrome://keefox/skin/copy.png",
+            button.addEventListener("click", event => {
+                event.stopPropagation();
+                event.preventDefault();
+                copyStringToClipboard(usernameField.value);
+                myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+            }, false);
+            loginContextActions.appendChild(button);
+        }
+
+        if (passwordField != null) {
+            const button = document.createElement("button");
+            button.innerHTML = $STR("copy_password_label");
+            button.setAttribute("id", "KeeFox-login-context-copypass");
+            //"chrome://keefox/skin/copy.png",
+            button.addEventListener("click", event => {
+                event.stopPropagation();
+                event.preventDefault();
+                copyStringToClipboard(passwordField.value);
+                myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+            }, false);
+            loginContextActions.appendChild(button);
+        }
+        if (otherFieldCount > 1 || passwordFieldCount > 1) {
+
+            if (otherFieldCount > 1) {
+                kfl.otherFields.forEach(function (o, i) {
+                    if (i != kfl.usernameIndex && o.type != "checkbox") {
+                        const button = document.createElement("button");
+                        button.innerHTML = $STR("copy") + " " + o.name + " (" + o.fieldId + ")";
+                        //"chrome://keefox/skin/copy.png",
+                        button.addEventListener("click", event => {
+                            event.stopPropagation();
+                            event.preventDefault();
+                            copyStringToClipboard(o.value);
+                            myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+                        }, false);
+                        loginContextActions.appendChild(button);
+                    }
+                });
+            }
+            if (passwordFieldCount > 1) {
+                kfl.passwords.forEach(function (p, i) {
+                    if (i != 0 && p.type != "checkbox") {
+                        const button = document.createElement("button");
+                        button.innerHTML = $STR("copy") + " " + p.name + " (" + p.fieldId + ")";
+                        //"chrome://keefox/skin/copy.png",
+                        button.addEventListener("click", event => {
+                            event.stopPropagation();
+                            event.preventDefault();
+                            copyStringToClipboard(p.value);
+                            myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+                        }, false);
+                        loginContextActions.appendChild(button);
+                    }
+                });
+            }
+        }
+        return loginContextActions;
+    }
 
     public onMouseEnterLogin (event) {
-        if (matchedLoginsPanel.contextMenuShowing)
-            return;
-
         const optionsMenuTrigger = document.createElement("div");
-        optionsMenuTrigger.addEventListener("mouseup", function (evt) {
-
+        optionsMenuTrigger.addEventListener("click", function (evt) {
             evt.preventDefault();
             evt.stopPropagation();
-
-            KeeFoxLog.debug("mouseup: " + this.parentElement.dataset.uuid + ":" + this.parentElement.dataset.fileName);
-
-            //TODO:c: context menus, etc.
-            // keefox_win.panel.addLoginContextActions(document,
-            //     this.parentNode.getAttribute('data-uuid'),
-            //     this.parentNode.getAttribute('data-fileName'));
-
-            // Anchor to the parent li element because this trigger element will disappear soon
-            // keefox_win.panel.displayContextMenu(
-            //     keefox_win.panel._currentWindow.document,
-            //     {
-            //         target: event.target.parentNode,
-            //         layerX: this.offsetLeft + event.layerX,
-            //         layerY: this.offsetTop + event.layerY
-            //     },
-            //     'KeeFox-login-context');
-
+            KeeFoxLog.debug("click: " + this.parentElement.dataset.uuid + ":" + this.parentElement.dataset.fileName);
+            matchedLoginsPanel.showContextActions(this.parentElement.getElementsByTagName("div")[0]);
         }, false);
         optionsMenuTrigger.setAttribute("id", "KeeFox-optionsMenuTrigger");
         event.target.appendChild(optionsMenuTrigger);
@@ -122,7 +193,4 @@ class MatchedLoginsPanel {
         event.target.removeEventListener("mouseleave", matchedLoginsPanel.onMouseLeaveLogin, false);
         event.target.addEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);
     }
-
-    private contextMenuShowing = false; //TODO:c: record when shown
-
 }

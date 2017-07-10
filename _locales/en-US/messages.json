@@ -375,7 +375,8 @@
     "message": "Edit group"
   },
   "Logins_Context_Edit_Login_label": {
-    "message": "Edit login"
+    "message": "Edit login",
+    "description": "Edit login"
   },
   "Matched_Logins_Button_label": {
     "message": "Matched Logins"
@@ -462,14 +463,17 @@
   "changeDBButtonListItem_tip": {
     "message": "Switch to the $1 database"
   },
-  "copy_other_label": {
-    "message": "Copy other field"
-  },
   "copy_password_label": {
-    "message": "Copy password"
+    "message": "Copy password",
+    "description": "Copy password"
   },
   "copy_username_label": {
-    "message": "Copy username"
+    "message": "Copy username",
+    "description": "Copy username"
+  },
+  "copy": {
+    "message": "Copy",
+    "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
   },
   "create": {
     "message": "Create",
