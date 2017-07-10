@@ -2,6 +2,8 @@
 /// <reference path="../common/AppState.ts" />
 /// <reference path="../common/FrameState.ts" />
 /// <reference path="../common/AddonMessage.ts" />
+/// <reference path="../common/search.ts" />
+/// <reference path="../common/SearchFilter.ts" />
 
 interface SaveData {
     db: string;
@@ -14,21 +16,19 @@ class SavePasswordPanel {
 
     private doc: HTMLDocument;
     private saveData: SaveData;
+    private search: Search;
+    private submittedData: SubmittedData;
 
-    constructor ()
+    constructor (submittedData: SubmittedData)
     {
         this.doc = window.document;
+        this.submittedData = submittedData;
 
-//TODO:c: searching support
-/*
-        Cu.import("resource://kfmod/search.js", this);
-
-        this.search = new this.Search(keefox_org, {
+        this.search = new Search(appState, {
             version: 1,
             searchAllDatabases: true,
             maximumResults: 50
         });
-        */
     }
 
     public createNearNode (node: HTMLElement) {
@@ -250,13 +250,12 @@ class SavePasswordPanel {
                 e.target.ownerDocument.getElementById("KeeFox-SaveLogin-searchfilter").selectedOptions[0].value.split(","));
         }.bind(this), false);
 
-        //TODO:c: search
-        //const searchFields = keefox_win.SearchFilter.attachFilterToSearchBox(searchBox, this, keefox_org.utils.stringsToNsIURIs(this.URLs));
+        const searchFields = (new SearchFilter()).attachFilterToSearchBox(searchBox, this, [this.submittedData.url], this.search);
 
         const searchResults = this.doc.createElement("div");
         searchResults.setAttribute("id", "KeeFox-SaveLogin-SearchResults");
 
-        //searchResultspanel.appendChild(searchFields);
+        searchResultspanel.appendChild(searchFields);
         searchResultspanel.appendChild(searchResults);
         panel.appendChild(searchResultspanel);
 
@@ -556,9 +555,12 @@ class SavePasswordPanel {
             container.appendChild(loginItem);
         }
 
-        // Update the UI state to reflect the number of logins found
-        //if (container.childElementCount > 0)
-        //    this.enableUIElement("KeeFox-PanelSubSection-SearchResults");
+        // // Update the UI state to reflect the number of logins found
+        // if (container.childElementCount > 0) {
+        //     const elem = document.getElementById("KeeFox-PanelSubSection-SearchResults");
+        //     elem.classList.add("enabled");
+        //     elem.classList.remove("disabled");
+        // }
 
         KeeFoxLog.debug(logins.length + " search results set.");
     }

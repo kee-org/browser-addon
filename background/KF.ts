@@ -1,6 +1,6 @@
 /// <reference path="../common/config.ts" />
 /// <reference path="../common/ConfigManager.ts" />
-/// <reference path="search.ts" />
+/// <reference path="../common/search.ts" />
 /// <reference path="../common/Logger.ts" />
 /// <reference path="commands.ts" />
 /// <reference path="utils.ts" />
@@ -55,7 +55,7 @@ class KeeFox {
 
         this.utils = utils;
 
-        this.search = new Search(this, {
+        this.search = new Search(this.appState, {
             version: 1,
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
@@ -127,13 +127,23 @@ class KeeFox {
                     p.onMessage.addListener(iframeMessageHandler.bind(p));
                     p.onDisconnect.addListener(iframeDisconnect.bind(p));
 
-                    p.postMessage({
+                    const connectMessage = {
                         appState: keefox_org.appState,
                         frameState: keefox_org.tabStates[p.sender.tab.id].frames[parentFrameId],
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
                         isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
-                    } as AddonMessage);
+                    } as AddonMessage;
+
+                    if (keefox_org.persistentTabStates[p.sender.tab.id]) {
+                        keefox_org.persistentTabStates[p.sender.tab.id].items.forEach(item => {
+                            if (item.itemType === "submittedData") {
+                                connectMessage.submittedData = item.submittedData;
+                            }
+                        });
+                    }
+
+                    p.postMessage(connectMessage);
 
                     keefox_org.tabStates[p.sender.tab.id].ourIframePorts[p.sender.frameId] = p;
                     break;

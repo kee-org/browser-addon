@@ -70,13 +70,14 @@ function startup () {
             });
         break;
         case "savePassword":
-            savePasswordPanel = new SavePasswordPanel();
             document.getElementById("header").innerText = "Save password";
             myPort.onMessage.addListener(function (m: AddonMessage) {
                 KeeFoxLog.debug("In iframe script, received message from background script: ");
 
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateTabState(m.frameState);
+
+                savePasswordPanel = new SavePasswordPanel(m.submittedData);
 
                 savePasswordPanel.createNearNode(document.getElementById("header"));
             });
