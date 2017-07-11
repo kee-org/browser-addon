@@ -21,4 +21,5 @@ interface AddonMessage {
     passwordProfile: string;
     submittedData?: SubmittedData;
     saveData?: SaveData;
+    loginEditor?: { uniqueID: string, DBfilename: string};
 }

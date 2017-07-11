@@ -826,6 +826,10 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         });
     }
 
+    if (msg.loginEditor) {
+        keefox_org.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
+    }
+
     if (msg.saveData) {
         const persistentItem = keefox_org.persistentTabStates[tabId].items.find(item => item.itemType == "submittedData");
 

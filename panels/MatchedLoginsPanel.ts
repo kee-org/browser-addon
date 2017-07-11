@@ -96,8 +96,7 @@ class MatchedLoginsPanel {
             editButton.addEventListener("click", event => {
                 event.stopPropagation();
                 event.preventDefault();
-                //TODO:c: launch editor
-                //keefox_org.launchLoginEditor(kfl.parentGroup.uniqueID, kfl.database.fileName);
+                myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
                 myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
             }, false);
             loginContextActions.appendChild(editButton);
