@@ -63,39 +63,27 @@ class Session {
     }
 
     startup () {
-            const defaultWebSocketPort = 12546;
-            this.webSocketPort = configManager.current.KeePassRPCWebSocketPort;
+        const defaultWebSocketPort = 12546;
+        this.webSocketPort = configManager.current.KeePassRPCWebSocketPort;
 
-            // Don't allow user to select an invalid port
-            if (this.webSocketPort <= 0 || this.webSocketPort > 65535
-                || this.webSocketPort == 19455)
-            {
-                configManager.current.KeePassRPCWebSocketPort = defaultWebSocketPort;
-                configManager.save();
+        // Don't allow user to select an invalid port
+        if (this.webSocketPort <= 0 || this.webSocketPort > 65535
+            || this.webSocketPort == 19455)
+        {
+            configManager.current.KeePassRPCWebSocketPort = defaultWebSocketPort;
+            configManager.save();
 
-                this.webSocketPort = defaultWebSocketPort;
-            }
-            this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
-            this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
+            this.webSocketPort = defaultWebSocketPort;
+        }
+        this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
+        this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
 
-            // start regular attempts to reconnect to KeePassRPC
-            // NB: overheads here include a test whether a socket is alive
-            // and regular timer scheduling overheads - hopefully that's insignificant
-            // but if not we can try more complicated connection strategies
-            this.reconnectSoon();
-    }
-
-    // It would be neater to pause this timer when we know we are connected
-    // but the overhead is so minimal (and so essential in most cases - i.e.
-    // all times when the user does not have KeePass open) that we just
-    // leave it running to avoid complications that would come from trying
-    // to synchronise the state of the timer with the connection state.
-    //TODO:c:review above - should be doable now
-    reconnectSoon ()
-    {
-        KeeFoxLog.debug("Creating a reconnection timer.");
-         // Create a timer
-         this.reconnectTimer = window.setInterval(this.attemptConnection.bind(this), this.reconnectionAttemptFrequency);
+        // start regular attempts to reconnect to KeePassRPC
+        // NB: overheads here include a test whether a socket is alive
+        // and regular timer scheduling overheads - hopefully that's insignificant
+        // but if not we can try more complicated connection strategies
+        this.reconnectTimer = window.setInterval(this.attemptConnection.bind(this), this.reconnectionAttemptFrequency);
+        KeeFoxLog.debug("Created a reconnection timer.");
     }
 
     tryToconnectToWebsocket () {
@@ -182,10 +170,6 @@ class Session {
     attemptConnection () {
         const rpc = this;
 
-        // Check we are allowed to connect
-        if (rpc.connectionProhibitedUntil.getTime() > (new Date()).getTime())
-            return;
-
         // Check we're not in the middle of trying to connect to the websocket
         if (rpc.connectLock)
             return;
@@ -193,6 +177,10 @@ class Session {
         // Check current websocket connection state. No point in trying
         // if we know we're already successfully connected
         if (rpc.webSocket !== undefined && rpc.webSocket !== null && rpc.webSocket.readyState != 3)
+            return;
+
+        // Check we are allowed to connect
+        if (rpc.connectionProhibitedUntil.getTime() > (new Date()).getTime())
             return;
 
         // Every 73 seconds we can try to connect to the WebSocket directly.
