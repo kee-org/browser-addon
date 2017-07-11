@@ -33,57 +33,58 @@ class Session {
     private onOpen;
     private onMessage;
 
-constructor (onOpen, onMessage)
-{
-    this.onOpen = onOpen;
-    this.onMessage = onMessage;
-    this.reconnectionAttemptFrequency = 2000;
-    this.connectionTimeout = 10000; // short timeout for connections
-    this.activityTimeout = 3600000; // long timeout for activity
-    this.connectLock = false;       // protect the connect function so only one event
-                                    // thread (e.g. timer) can execute it at the same time
+    constructor (onOpen, onMessage)
+    {
+        this.onOpen = onOpen;
+        this.onMessage = onMessage;
+        this.reconnectionAttemptFrequency = 2000;
+        this.connectionTimeout = 10000; // short timeout for connections
+        this.activityTimeout = 3600000; // long timeout for activity
+        this.connectLock = false;       // protect the connect function so only one event
+                                        // thread (e.g. timer) can execute it at the same time
 
-    this.webSocketPort = 12546;
-    this.webSocketHost = "127.0.0.1";
-    this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
-    this.webSocket = null;
-
-    // We use a HTTP channel for basic polling of the port listening status of
-    // the KPRPC server because it's quick and not subject to the rate limiting
-    // of webSocket connections as per Firefox bug #711793 and RFC 7.2.3:
-    // http://tools.ietf.org/html/rfc6455#section-7.2.3
-    // See KeeFox issue #189 for connection algorithm overview:
-    // https://github.com/luckyrat/KeeFox/issues/189#issuecomment-23635771
-    this.httpChannel = null;
-    this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
-    this.reconnectTimer = null;
-    this.onConnectDelayTimer = null;
-    this.connectionProhibitedUntil = new Date(0);
-    this.speculativeWebSocketAttemptProhibitedUntil = new Date(0);
-}
-
-startup () {
-        const defaultWebSocketPort = 12546;
-        this.webSocketPort = configManager.current.KeePassRPCWebSocketPort;
-
-        // Don't allow user to select an invalid port
-        if (this.webSocketPort <= 0 || this.webSocketPort > 65535
-            || this.webSocketPort == 19455)
-        {
-            configManager.current.KeePassRPCWebSocketPort = defaultWebSocketPort;
-            configManager.save();
-
-            this.webSocketPort = defaultWebSocketPort;
-        }
+        this.webSocketPort = 12546;
+        this.webSocketHost = "127.0.0.1";
         this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
-        this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
+        this.webSocket = null;
 
-        // start regular attempts to reconnect to KeePassRPC
-        // NB: overheads here include a test whether a socket is alive
-        // and regular timer scheduling overheads - hopefully that's insignificant
-        // but if not we can try more complicated connection strategies
-        this.reconnectSoon();
-}
+        // We use a HTTP channel for basic polling of the port listening status of
+        // the KPRPC server because it's quick and not subject to the rate limiting
+        // of webSocket connections as per Firefox bug #711793 and RFC 7.2.3:
+        // http://tools.ietf.org/html/rfc6455#section-7.2.3
+        // See KeeFox issue #189 for connection algorithm overview:
+        // https://github.com/luckyrat/KeeFox/issues/189#issuecomment-23635771
+        this.httpChannel = null;
+        this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
+        this.reconnectTimer = null;
+        this.onConnectDelayTimer = null;
+        this.connectionProhibitedUntil = new Date(0);
+        this.speculativeWebSocketAttemptProhibitedUntil = new Date(0);
+    }
+
+    startup () {
+            const defaultWebSocketPort = 12546;
+            this.webSocketPort = configManager.current.KeePassRPCWebSocketPort;
+
+            // Don't allow user to select an invalid port
+            if (this.webSocketPort <= 0 || this.webSocketPort > 65535
+                || this.webSocketPort == 19455)
+            {
+                configManager.current.KeePassRPCWebSocketPort = defaultWebSocketPort;
+                configManager.save();
+
+                this.webSocketPort = defaultWebSocketPort;
+            }
+            this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
+            this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
+
+            // start regular attempts to reconnect to KeePassRPC
+            // NB: overheads here include a test whether a socket is alive
+            // and regular timer scheduling overheads - hopefully that's insignificant
+            // but if not we can try more complicated connection strategies
+            this.reconnectSoon();
+    }
+
     // It would be neater to pause this timer when we know we are connected
     // but the overhead is so minimal (and so essential in most cases - i.e.
     // all times when the user does not have KeePass open) that we just
