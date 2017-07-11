@@ -843,7 +843,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
         keefox_org.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
 
-        //TODO:c: reimplement
+        //TODO:c: tutorial guides, etc.
         // if (login.URLs[0].startsWith("http://tutorial-section-b.keefox.org/part2"))
         //     keefox_org.tutorialHelper.tutorialProgressSaved();
     }

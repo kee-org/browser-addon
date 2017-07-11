@@ -3,7 +3,7 @@
 interface SubmitHandlerAttachment {
     target: HTMLElement;
     handler: (e: Event) => void;
-    action: string;
+    form: HTMLFormElement;
 }
 
 class FormSaving {
@@ -21,16 +21,19 @@ class FormSaving {
         this.config = config;
     }
 
-    public addSubmitHandler (target: HTMLElement, formToSubmit: HTMLFormElement, action: string) {
+    public addSubmitHandler (target: HTMLElement, formToSubmit: HTMLFormElement) {
         const handler = (e: Event) => this.submitHandler(e, formToSubmit);
-        this.SubmitHandlerAttachments.push({ target: target, handler: handler, action: action });
-        target.addEventListener(action, handler);
+        this.SubmitHandlerAttachments.push({ target: target, form: formToSubmit, handler: handler });
+        target.addEventListener("click", handler);
+        formToSubmit.addEventListener("submit", handler);
     }
 
     public removeAllSubmitHandlers () {
         this.SubmitHandlerAttachments.forEach(
-            attachment => attachment.target.removeEventListener(attachment.action, attachment.handler)
-            );
+            attachment => {
+                attachment.target.removeEventListener("click", attachment.handler);
+                attachment.form.removeEventListener("submit", attachment.handler);
+            });
         this.SubmitHandlerAttachments = [];
     }
 
@@ -58,6 +61,10 @@ class FormSaving {
     // to every click on the document body or tracking all input events but performance?
     private submitHandler (e: Event, form: HTMLFormElement) {
         this.Logger.debug("submitHandler called");
+
+        // Until the next time we have searched for forms in this page,
+        // don't respond to any form submission related events
+        formSaving.removeAllSubmitHandlers();
 
         //TODO:c: form submission
         //let KeeFoxTriggeredThePendingFormSubmission = tabState.KeeFoxTriggeredThePendingFormSubmission;

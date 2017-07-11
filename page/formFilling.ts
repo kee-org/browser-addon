@@ -438,10 +438,8 @@ class FormFilling {
                     continue;
             }
 
-
-            //TODO:c: support other listeners (e.g. form submit) - need to deduplicate though
             const submitTarget = this.findSubmitButton(form);
-            this.formSaving.addSubmitHandler(submitTarget, form, "click");
+            this.formSaving.addSubmitHandler(submitTarget, form);
 
             this.matchResult.submitTargets[i] = submitTarget;
             this.matchResult.usernameIndexArray[i] = usernameIndex;
