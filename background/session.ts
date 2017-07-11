@@ -111,9 +111,9 @@ startup () {
         // TCP port is still hanging around during this onClose callback and on some
         // machines, ephemeral ports flout IANA guidelines including using
         // KeePassRPC's TCP port. If we tried to connect now, we risk connecting
-        // back to Firefox and causing a deadlock. A small delay gives Firefox
+        // back to the browser and causing a deadlock. A small delay gives the browser
         // a chance to cleanly close the old port
-        this.webSocketTimer = window.setTimeout(this.tryToconnectToWebsocket.bind(this), 50);
+        this.webSocketTimer = window.setTimeout(this.tryToconnectToWebsocket.bind(this), 100);
     }
 
     // Initiates a connection to the KPRPC server.
