@@ -8,11 +8,9 @@ client and an KeePassRPC server.
 
 class Session {
     private reconnectionAttemptFrequency: number;
-    private connectionTimeout: number; // short timeout for connections
-    private activityTimeout: number; // long timeout for activity
-    private connectLock: boolean; // protect the connect function so only one event
-                        // thread (e.g. timer) can execute it at the same time
-    private fastRetries: number;
+    private connectionTimeout: number;
+    private activityTimeout: number;
+    private connectLock: boolean;
 
     private webSocketPort: number;
     private webSocketHost: string;
@@ -42,9 +40,8 @@ constructor (onOpen, onMessage)
     this.reconnectionAttemptFrequency = 2000;
     this.connectionTimeout = 10000; // short timeout for connections
     this.activityTimeout = 3600000; // long timeout for activity
-    this.connectLock = false; // protect the connect function so only one event
-                        // thread (e.g. timer) can execute it at the same time
-    this.fastRetries = 0;
+    this.connectLock = false;       // protect the connect function so only one event
+                                    // thread (e.g. timer) can execute it at the same time
 
     this.webSocketPort = 12546;
     this.webSocketHost = "127.0.0.1";
@@ -97,17 +94,7 @@ startup () {
     {
         KeeFoxLog.debug("Creating a reconnection timer.");
          // Create a timer
-         this.reconnectTimer = window.setInterval(this.timerCallback.bind(this), this.reconnectionAttemptFrequency);
-    }
-
-    reconnectVerySoon ()
-    {
-        KeeFoxLog.debug("Creating a fast reconnection timer.");
-
-        this.fastRetries = 40; // 10 seconds of more frequent connection attempts
-
-         // Create a timer
-         this.reconnectTimer = window.setInterval(this.timerCallback.bind(this), 250);
+         this.reconnectTimer = window.setInterval(this.attemptConnection.bind(this), this.reconnectionAttemptFrequency);
     }
 
     tryToconnectToWebsocket () {
@@ -191,22 +178,8 @@ startup () {
 
     }
 
-    timerCallback () {
+    attemptConnection () {
         const rpc = this;
-
-        if (rpc.fastRetries > 0)
-        {
-            // count this as a fast retry even if it was triggered from
-            // standard retry timer and even if we are already connected
-            rpc.fastRetries--;
-
-            if (rpc.fastRetries <= 0)
-            {
-                if (rpc.reconnectTimer != null)
-                    rpc.reconnectTimer.cancel();
-                rpc.reconnectSoon();
-            }
-        }
 
         // Check we are allowed to connect
         if (rpc.connectionProhibitedUntil.getTime() > (new Date()).getTime())

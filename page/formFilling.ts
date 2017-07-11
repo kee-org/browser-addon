@@ -394,8 +394,9 @@ class FormFilling {
         this.initMatchResult(behaviour);
         this.matchResult.forms = forms;
 
-        //TODO:c: Some of the init has been moved below the no forms return statement.
-        // should be safe but possible cause of bugs if I have recalled some early algorithm details incorrectly
+        //TODO:3: Some of the init has been moved below the no forms return statement.
+        // should be safe but possible cause of bugs if I have recalled some early
+        // algorithm details incorrectly. Remove comment in >= 2.0
 
         const conf = configManager.siteConfigFor(window.document.URL);
 
@@ -917,9 +918,6 @@ class FormFilling {
 
     private findSubmitButton (form: HTMLFormElement)
     {
-
-        //TODO:c: Is form.ownerDocument valid on a pseudo form?! If not, make it so or change algorithm below
-
         // Priority 1: button within form provided: @type != reset
         // Priority 1: button outside form with @form attribute provided: @type != reset
         // Priority 2: input @type=submit within form
