@@ -68,11 +68,6 @@ function renderMatchedLogins (logins: any[]) {
     }
 }
 
-//TODO:c: Update any in page UI that needs to know about the new results
-function matchResultReceiver (results) {
-}
-
-
 function matchFinder (uri: string) {
     myPort.postMessage({ findMatches: { uri } });
 }
@@ -84,7 +79,7 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
     KeeFoxLog.attachConfig(configManager.current);
     formUtils = new FormUtils(KeeFoxLog);
     formSaving = new FormSaving(KeeFoxLog, formUtils, configManager.current);
-    formFilling = new FormFilling(formUtils, formSaving, KeeFoxLog, configManager.current, matchResultReceiver, matchFinder);
+    formFilling = new FormFilling(formUtils, formSaving, KeeFoxLog, configManager.current, matchFinder);
     passwordGenerator = new PasswordGenerator();
 
     inputsObserver.observe(document.body, { childList: true, subtree: true });

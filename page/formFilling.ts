@@ -45,7 +45,6 @@ class FormFilling {
     private config: Config;
     private findLoginOp: any = {};
     private matchResult: MatchResult = new MatchResult();
-    private latestFindMatchesResult: any;
 
     private matchFinder: {(uri: string): void};
     private formUtils: FormUtils;
@@ -55,7 +54,6 @@ class FormFilling {
 
     public matchedLoginsPanelStub: PanelStub;
     private matchedLoginsPanelStubRaf: number;
-    public matchResultReceiver;
 
     // Should really make this private and call indirectly but I'm wary of all performance overheads wrt DOM mutation observers
     public formFinderTimer: number = null;
@@ -64,14 +62,12 @@ class FormFilling {
         formSaving: FormSaving,
         logger: KeeFoxLogger,
         config: Config,
-        matchResultReceiver: {(results: {logins: any[], notifyUserOnSuccess: boolean}): void},
         matchFinder: {(uri: string): void}) {
 
         this.formUtils = formUtils;
         this.formSaving = formSaving;
         this.Logger = logger;
         this.config = config;
-        this.matchResultReceiver = matchResultReceiver;
         this.matchFinder = matchFinder;
         this.keeFoxFieldIcon = new KeeFoxFieldIcon();
     }
@@ -536,16 +532,10 @@ class FormFilling {
 
         if (isError)
         {
-            this.latestFindMatchesResult = null;
             return;
         }
 
         this.matchResult = this.getRelevanceOfLoginMatchesAgainstAllForms(convertedResult, this.findLoginOp, this.matchResult);
-
-        // record the form data associated with this frame
-        //TODO:c: I think this var is now unnecessary? Only acts to indicate we've received our async result but we'll probably
-        // never invoke something to look for results until we know we have them anyway?
-        this.latestFindMatchesResult = this.matchResult;
 
         this.fillAndSubmit(true);
     }
@@ -619,7 +609,7 @@ class FormFilling {
 
     getMostRelevantForm = function (formIndex?: number)
     {
-        const findMatchesResult = this.latestFindMatchesResult;
+        const findMatchesResult = this.matchResult;
 
         // There may be no results for this frame (e.g. no forms found, search failed, etc.)
         if (!findMatchesResult)
@@ -909,16 +899,11 @@ class FormFilling {
         } else
         {
 
-            if (this.latestFindMatchesResult.allMatchingLogins.length > 0)
+            if (this.matchResult.allMatchingLogins.length > 0)
             {
                 if (automated)
                 {
                     this.Logger.debug("Automatic form fill complete.");
-                    //TODO:c: Update all parts of the page UI that might need to know about new matched logins data
-                    // this.matchResultReceiver({
-                    //     "logins": this.latestFindMatchesResult.allMatchingLogins,
-                    //     "notifyUserOnSuccess": matchResult.notifyUserOnSuccess
-                    // });
                 } else
                 {
                     this.Logger.debug("Manual form fill complete.");

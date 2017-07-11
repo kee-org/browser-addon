@@ -51,7 +51,6 @@ function startup () {
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateTabState(m.frameState);
 
-                //TODO:c: sometimes don't do this?
                 matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.logins);
             });
         break;

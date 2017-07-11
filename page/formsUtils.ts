@@ -9,8 +9,6 @@ class FormUtils {
 
 findLoginOps = [];
 matchResults = [];
-latestFindMatchesResults = [];
-latestFindMatchesResultsByURI = [];
 Logger: KeeFoxLogger;
 
 constructor (logger: KeeFoxLogger)
