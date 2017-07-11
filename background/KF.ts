@@ -3,7 +3,8 @@
 /// <reference path="../common/search.ts" />
 /// <reference path="../common/Logger.ts" />
 /// <reference path="commands.ts" />
-/// <reference path="utils.ts" />
+/// <reference path="../common/utils.ts" />
+/// <reference path="backgroundUtils.ts" />
 /// <reference path="../common/AppState.ts" />
 /// <reference path="../common/TabState.ts" />
 /// <reference path="../common/FrameState.ts" />
@@ -65,7 +66,7 @@ class KeeFox {
         //this.sampleChecker = sampleChecker;
 
         // Create a timer for checking whether user is logging sensitive data
-        setTimeout(utils.oneOffSensitiveLogCheckHandler, 45000);
+        setTimeout(backgroundUtils.oneOffSensitiveLogCheckHandler, 45000);
 
         // Create a timer for KPRPC connection establishment
         this.regularKPRPCListenerQueueHandlerTimer = setInterval(this.RegularKPRPCListenerQueueHandler, 5000);
