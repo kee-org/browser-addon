@@ -674,7 +674,6 @@ function startup () {
     browser.browserAction.enable();
 }
 
-
 // callbacks for messaging / ports
 
 function browserPopupMessageHandler (msg: AddonMessage) {
@@ -836,6 +835,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
         if (msg.saveData.update) {
             const result = keefox_org.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.urlMergeMode, msg.saveData.db);
+            showUpdateSuccessNotification();
         }
         else {
             const result = keefox_org.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
@@ -851,6 +851,25 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         //TODO:c: tutorial guides, etc.
         // if (login.URLs[0].startsWith("http://tutorial-section-b.keefox.org/part2"))
         //     keefox_org.tutorialHelper.tutorialProgressSaved();
+    }
+}
+
+function showUpdateSuccessNotification ()
+{
+    if (configManager.current.notifyWhenEntryUpdated)
+    {
+        const button: Button = {
+            label: $STR("dont_show_again"),
+            action: "disableNotifyWhenEntryUpdated"
+        };
+        const messages = [$STR("password_successfully_updated"),
+            $STR("keepass_history_pointer"),
+            $STR("change_field_status"),
+            $STR("change_field_explanation"),
+            $STR("multi_page_update_warning")];
+        const notification = new KeeFoxNotification(
+            "password-updated", [button], utils.newGUID(), messages, "Medium", false);
+        keefox_org.notifyUser(notification);
     }
 }
 

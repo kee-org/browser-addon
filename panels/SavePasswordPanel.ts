@@ -4,6 +4,7 @@
 /// <reference path="../common/AddonMessage.ts" />
 /// <reference path="../common/search.ts" />
 /// <reference path="../common/SearchFilter.ts" />
+/// <reference path="../common/utils.ts" />
 
 interface SaveData {
     db: string;
@@ -470,13 +471,6 @@ class SavePasswordPanel {
         otherButton.classList.remove("selected");
     }
 
-    private abortAndLaunchManualEdit ()
-    {
-        //TODO:c: reimplement
-        // keefox_org.launchLoginEditor(this.saveData.oldLoginUUID, this.saveData.db);
-        // keefox_win.notificationManager.remove("password-save");
-    }
-
     private onSearchComplete (logins)
     {
         logins = logins.sort(function (a, b) {
@@ -581,70 +575,6 @@ class SavePasswordPanel {
         groupContainer.setAttribute("id", id + "-Container");
         panelSection.appendChild(groupContainer);
         return groupContainer;
-    }
-
-    private showUpdateSuccessNotification ()
-    {
-        if (configManager.current.notifyWhenEntryUpdated)
-        {
-            //TODO:c: reimplement
-            const aNotifyBox = null; //keefox_win.UI._getNotificationManager();
-            const buttons = [
-                {
-                    label:     $STR("dont_show_again"),
-                    popup:     null,
-                    callback:  function () {
-                        configManager.current.notifyWhenEntryUpdated = false;
-                        configManager.save();
-                    }
-                }
-            ];
-            const notification = {
-                name: "password-updated",
-                render: function (container) {
-
-                    // We will append the rendered view of our own notification information to the
-                    // standard notification container that we have been supplied
-                    const doc = container.ownerDocument;
-                    container = doc.ownerGlobal.keefox_win.notificationManager
-                        .renderStandardMessage(container, $STR("password_successfully_updated"));
-
-                    const vb = doc.createElement("div");
-                    vb.classList.add("xulvboxflex");
-                    vb.setAttribute("id", "keefox-password-updated-notification");
-
-                    const p1 = doc.createElement("label");
-                    p1.textContent = $STR("keepass_history_pointer");
-                    p1.classList.add("KeeFox-message");
-                    vb.appendChild(p1);
-                    const p2 = doc.createElement("label");
-                    p2.textContent = $STR("change_field_status");
-                    p2.classList.add("KeeFox-message");
-                    vb.appendChild(p2);
-                    const p3 = doc.createElement("label");
-                    p3.textContent = $STR("change_field_explanation");
-                    p3.classList.add("KeeFox-message");
-                    vb.appendChild(p3);
-                    const p4 = doc.createElement("label");
-                    p4.textContent = $STR("multi_page_update_warning");
-                    p4.classList.add("KeeFox-message");
-                    vb.appendChild(p4);
-
-                    container.appendChild(vb);
-
-                    // We might customise other aspects of the notifications but when we want
-                    // to display buttons we can treat them all the same
-                    container = doc.ownerGlobal.keefox_win.notificationManager
-                        .renderButtons(buttons, doc, aNotifyBox, "password-updated", container);
-
-                    return container;
-                },
-                thisTabOnly: true,
-                priority: null,
-                persist: true
-            };
-            aNotifyBox.add(notification);
-        }
     }
 
     private saveButtonCallback () {
