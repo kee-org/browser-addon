@@ -23,6 +23,13 @@ let keeFoxFormFieldType =
         checkbox: "FFTcheckbox"
     };
 
+class Database {
+    name: string;
+    fileName: string;
+    iconImageData: string;
+    root: any;
+}
+
 class keeFoxLoginInfo {
 
     // array of URL strings (normally just one is needed
@@ -79,7 +86,7 @@ class keeFoxLoginInfo {
     alwaysAutoSubmit: boolean;
     neverAutoFill: boolean;
     neverAutoSubmit: boolean;
-    database;
+    database : Database;
 
     lowFieldMatchRatio: any;
     formIndex: number;

@@ -5,7 +5,7 @@ interface AppState {
     latestConnectionError: string;
     lastKeePassRPCRefresh: number;
     ActiveKeePassDatabaseIndex: number;
-    KeePassDatabases: any[];
+    KeePassDatabases: Database[];
     notifications: KeeFoxNotification[];
     connected: boolean;
 }

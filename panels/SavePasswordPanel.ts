@@ -50,6 +50,15 @@ class SavePasswordPanel {
         return container;
     }
 
+    private DBChangeHandler (event: Event) {
+        const select = (event.target as HTMLSelectElement);
+        const opt = select.selectedOptions[0] as HTMLOptionElement;
+        select.style.backgroundImage = opt.style.backgroundImage;
+        this.updateGroups(appState.KeePassDatabases.find(db => db.fileName === select.value),
+            this.doc.getElementById("keefox-save-password-group-select"));
+        this.saveData.db = opt.value;
+    }
+
     private createDBSelect () {
 
         const dbOptions = [];
@@ -69,18 +78,10 @@ class SavePasswordPanel {
             dbOptions.push(opt);
         }
 
-        const changeHandler = function (event) {
-            //TODO:c: reimplement
-            // const opt = event.target.selectedOptions[0];
-            // event.target.style.backgroundImage = opt.style.backgroundImage;
-            // this.updateGroups(keefox_org.getDBbyFilename(event.target.value),
-            //     this.doc.getElementById("keefox-save-password-group-select"));
-            // this.saveData.db = opt.value;
-        };
 
         const sel = this.doc.createElement("select") as HTMLSelectElement;
         sel.setAttribute("id", "keefox-save-password-db-select");
-        sel.addEventListener("change", changeHandler.bind(this), false);
+        sel.addEventListener("change", this.DBChangeHandler.bind(this), false);
         for (const o of dbOptions)
           sel.appendChild(o);
 
@@ -155,10 +156,9 @@ class SavePasswordPanel {
     }
 
     private getCurrentUrlMergeMode ()  {
-        //const radioOptions = this.doc.getElementById("KeeFox-loginURLsUpdateRadioGroup");
-        //TODO:c: radiogroup
-        //return radioOptions.selectedIndex + 1;
-        return 1;
+        const radio = Array.from(document.querySelectorAll("#KeeFox-loginURLsUpdateRadioGroup input"));
+        const mergeMode = (radio.find((r: HTMLInputElement) => r.checked) as HTMLInputElement).value;
+        return mergeMode;
     }
 
     private createSaveTypeChooser ()
@@ -310,6 +310,7 @@ class SavePasswordPanel {
         loginURLsUpdateRadio1.setAttribute("type", "radio");
         loginURLsUpdateRadio1.setAttribute("id", "loginURLsUpdateRadio1");
         loginURLsUpdateRadio1.setAttribute("name", "loginURLsUpdateRadioGroup");
+        loginURLsUpdateRadio1.setAttribute("value", "1");
         loginURLsUpdateRadio1.setAttribute("checked", "true");
         loginURLsUpdateRadio1Label.appendChild(loginURLsUpdateRadio1);
         loginURLsUpdateRadio1Label.appendChild(document.createTextNode($STR("change_url_option_1")));
@@ -320,7 +321,7 @@ class SavePasswordPanel {
         loginURLsUpdateRadio2.setAttribute("type", "radio");
         loginURLsUpdateRadio2.setAttribute("id", "loginURLsUpdateRadio2");
         loginURLsUpdateRadio2.setAttribute("name", "loginURLsUpdateRadioGroup");
-        loginURLsUpdateRadio2.setAttribute("checked", "");
+        loginURLsUpdateRadio2.setAttribute("value", "2");
         loginURLsUpdateRadio2Label.appendChild(loginURLsUpdateRadio2);
         loginURLsUpdateRadio2Label.appendChild(document.createTextNode($STR("change_url_option_2")));
         loginURLsUpdateRadioGroup.appendChild(loginURLsUpdateRadio2Label);
@@ -330,7 +331,7 @@ class SavePasswordPanel {
         loginURLsUpdateRadio3.setAttribute("type", "radio");
         loginURLsUpdateRadio3.setAttribute("id", "loginURLsUpdateRadio3");
         loginURLsUpdateRadio3.setAttribute("name", "loginURLsUpdateRadioGroup");
-        loginURLsUpdateRadio3.setAttribute("checked", "");
+        loginURLsUpdateRadio3.setAttribute("value", "3");
         loginURLsUpdateRadio3Label.appendChild(loginURLsUpdateRadio3);
         loginURLsUpdateRadio3Label.appendChild(document.createTextNode($STR("change_url_option_3")));
         loginURLsUpdateRadioGroup.appendChild(loginURLsUpdateRadio3Label);
@@ -340,7 +341,7 @@ class SavePasswordPanel {
         loginURLsUpdateRadio4.setAttribute("type", "radio");
         loginURLsUpdateRadio4.setAttribute("id", "loginURLsUpdateRadio4");
         loginURLsUpdateRadio4.setAttribute("name", "loginURLsUpdateRadioGroup");
-        loginURLsUpdateRadio4.setAttribute("checked", "");
+        loginURLsUpdateRadio4.setAttribute("value", "4");
         loginURLsUpdateRadio4Label.appendChild(loginURLsUpdateRadio4);
         loginURLsUpdateRadio4Label.appendChild(document.createTextNode($STR("change_url_option_4")));
         loginURLsUpdateRadioGroup.appendChild(loginURLsUpdateRadio4Label);
@@ -578,7 +579,7 @@ class SavePasswordPanel {
     }
 
     private saveButtonCallback () {
-        this.saveData.urlMergeMode = 1; //TODO:c: reimplement
+        this.saveData.urlMergeMode = parseInt(this.getCurrentUrlMergeMode());
         myPort.postMessage({ saveData: this.saveData } as AddonMessage);
     }
 }

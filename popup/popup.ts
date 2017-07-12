@@ -15,7 +15,7 @@ function updateConnectionStatus () {
     if (appState.connected) {
         if (appState.KeePassDatabases.length > 1) {
             $("#connectionStatus").innerText = $STRF("loggedInMultiple_tip", [
-                appState.KeePassDatabases.length,
+                appState.KeePassDatabases.length.toString(),
                 appState.KeePassDatabases[appState.ActiveKeePassDatabaseIndex].name
             ]);
         } else if (appState.KeePassDatabases.length == 1) {

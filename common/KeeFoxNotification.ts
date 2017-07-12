@@ -92,6 +92,6 @@ class KeeFoxNotification {
                 configManager.save();
                 break;
         }
-        this.myPort.postMessage({ removeNotification: this.id });
+        this.myPort.postMessage({ removeNotification: this.id } as AddonMessage);
     }
 }

@@ -196,19 +196,6 @@ class KeeFox {
         keefox_org.browserPopupPort.postMessage({appState: keefox_org.appState});
     }
 
-    getDBbyFilename (fileName)
-    {
-        KeeFoxLog.debug("Getting database for filename: " + fileName);
-        if (fileName == undefined || fileName == null || fileName.length == 0)
-            return this.appState.KeePassDatabases[this.appState.ActiveKeePassDatabaseIndex];
-
-        for (let i=0; i < this.appState.KeePassDatabases.length; i++)
-        {
-            if (this.appState.KeePassDatabases[i].fileName == fileName)
-                return this.appState.KeePassDatabases[i];
-        }
-    }
-
     shutdown ()
     {
         // These log messages never appear. Does this function even get executed?
@@ -292,7 +279,7 @@ class KeeFox {
         if (configManager.current.rememberMRUDB)
         {
             const MRUFN = this.getDatabaseFileName();
-            if (MRUFN != null && MRUFN != undefined && !(MRUFN instanceof Error))
+            if (MRUFN != null && MRUFN != undefined)
                 configManager.current.keePassMRUDB = MRUFN;
                 configManager.save();
         }
