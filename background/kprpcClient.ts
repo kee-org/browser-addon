@@ -874,7 +874,7 @@ class kprpcClient {
 
     showConnectionMessage (msg: string, buttons?: Button[]) {
         keefox_org.notifyUser(new KeeFoxNotification(
-            "keefox-connection-message", buttons ? buttons : [], utils.newGUID(), msg, "Medium", false));
+            "keefox-connection-message", buttons ? buttons : [], utils.newGUID(), [msg], "Medium", false));
     }
 
 }

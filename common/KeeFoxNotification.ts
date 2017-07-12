@@ -6,15 +6,16 @@ class KeeFoxNotification {
             public name: string,
             public buttons: Button[],
             public id: string, //Guid
-            public message: string,
+            public messages: string[],
             public priority: "High" | "Medium" | "Low",
-            public allowMultiple: boolean
+            public allowMultiple: boolean,
+            public myPort?
         ) {}
 
     render () {
         const container = document.createElement("div");
         const doc = container.ownerDocument;
-        this.renderStandardMessage(container);
+        this.renderStandardMessages(container);
         this.renderButtons(container);
         return container;
     }
@@ -37,13 +38,15 @@ class KeeFoxNotification {
         return container;
     }
 
-    renderStandardMessage (container: HTMLDivElement) {
+    renderStandardMessages (container: HTMLDivElement) {
         const msgDiv = document.createElement("div");
         msgDiv.classList.add("flex1");
-        const text = document.createElement("span");
-        text.textContent = this.message;
-        text.classList.add("KeeFox-message");
-        msgDiv.appendChild(text);
+        this.messages.forEach(message => {
+            const text = document.createElement("div");
+            text.textContent = message;
+            text.classList.add("KeeFox-message");
+            msgDiv.appendChild(text);
+        });
         container.appendChild(msgDiv);
         return container;
     }
@@ -75,14 +78,20 @@ class KeeFoxNotification {
         return button;
     }
 
-    dispatchActionResponse (action: string) {
+    dispatchActionResponse (action: ButtonAction) {
         switch (action) {
             case "enableHighSecurityKPRPCConnection":
                 configManager.current.connSLClient = 3;
                 configManager.save();
                 break;
-            case "unknown" : break;
+            case "loadUrlHelpSensitiveLogging":
+                this.myPort.postMessage({ loadUrlHelpSensitiveLogging: true });
+                break;
+            case "disableNotifyWhenEntryUpdated":
+                configManager.current.notifyWhenEntryUpdated = false;
+                configManager.save();
+                break;
         }
-        window["myPort"].postMessage({ removeNotification: this.id });
+        this.myPort.postMessage({ removeNotification: this.id });
     }
 }

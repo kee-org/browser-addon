@@ -48,9 +48,10 @@ function updateNotifications () {
             notificationData.name,
             notificationData.buttons,
             notificationData.id,
-            notificationData.message,
+            notificationData.messages,
             notificationData.priority,
-            notificationData.allowMultiple);
+            notificationData.allowMultiple,
+            myPort);
         notificationContainer.appendChild(notification.render());
     }
 }

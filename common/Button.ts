@@ -1,6 +1,9 @@
+type ButtonAction = "enableHighSecurityKPRPCConnection" |
+    "loadUrlHelpSensitiveLogging" | "disableNotifyWhenEntryUpdated";
+
 interface Button {
     label: string;
-    action?: string; // | { (): void };
+    action?: ButtonAction;
     id?: string;
     tooltip?: string;
 }

@@ -2,6 +2,7 @@
 /// <reference path="../common/TabState.ts" />
 /// <reference path="../common/SubmittedData.ts" />
 /// <reference path="../common/SaveData.ts" />
+/// <reference path="../common/KeeFoxNotification.ts" />
 
 interface AddonMessage {
     appState?: AppState;
@@ -10,6 +11,7 @@ interface AddonMessage {
     tabId?: number;
     frameId?: number;
     loadUrlHelpSensitiveLogging?: boolean;
+    addNotification?: KeeFoxNotification;
     removeNotification?: number;
     findMatches?: { uri: string };
     findMatchesResult?: any;
