@@ -62,7 +62,6 @@ function startup () {
     KeeFoxLog.attachConfig(configManager.current);
 
     myPort = chrome.runtime.connect({ name: "browserPopup" });
-    myPort.postMessage({ greeting: "hello from content script" });
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
         KeeFoxLog.debug("In browser popup script, received message from background script: ");

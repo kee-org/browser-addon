@@ -12,7 +12,7 @@ interface AddonMessage {
     frameId?: number;
     loadUrlHelpSensitiveLogging?: boolean;
     addNotification?: KeeFoxNotification;
-    removeNotification?: number;
+    removeNotification?: string;
     findMatches?: { uri: string };
     findMatchesResult?: any;
     logins?: keeFoxLoginInfo[];

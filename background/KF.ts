@@ -191,8 +191,8 @@ class KeeFox {
         keefox_org.browserPopupPort.postMessage({appState: keefox_org.appState});
     }
 
-    removeUserNotifications (test: (notification: KeeFoxNotification) => boolean) {
-        keefox_org.appState.notifications = keefox_org.appState.notifications.filter(test);
+    removeUserNotifications (unlessTrue: (notification: KeeFoxNotification) => boolean) {
+        keefox_org.appState.notifications = keefox_org.appState.notifications.filter(unlessTrue);
         keefox_org.browserPopupPort.postMessage({appState: keefox_org.appState});
     }
 
@@ -680,8 +680,8 @@ function browserPopupMessageHandler (msg: AddonMessage) {
     console.log("In background script, received message from browser popup script: " + msg);
 
     if (msg.removeNotification) {
-        delete keefox_org.appState.notifications[msg.removeNotification];
-        keefox_org.browserPopupPort.postMessage({ appState: keefox_org.appState });
+        keefox_org.removeUserNotifications((n: KeeFoxNotification) => n.id != msg.removeNotification);
+        keefox_org.browserPopupPort.postMessage({ appState: keefox_org.appState } as AddonMessage);
     }
     if (msg.loadUrlHelpSensitiveLogging) {
         browser.tabs.create({
@@ -711,7 +711,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         });
     }
     if (msg.removeNotification) {
-        delete keefox_org.appState.notifications[msg.removeNotification];
+        keefox_org.removeUserNotifications((n: KeeFoxNotification) => n.id != msg.removeNotification);
         keefox_org.browserPopupPort.postMessage({ appState: keefox_org.appState, isForegroundTab: this.sender.tab.id === keefox_org.foregroundTabId } as AddonMessage);
     }
     if (msg.logins) {
