@@ -11,7 +11,7 @@ class SearchFilter {
         return publicSuffixList;
     }
 
-    public attachFilterToSearchBox (searchBox: HTMLInputElement, searchRequestor, currentURIs, search: Search) {
+    public attachFilterToSearchBox (searchBox: HTMLInputElement, searchRequestor, currentURIs: string[], search: Search) {
         let inMainPanel = false;
         if (searchBox.getAttribute("id") === "KeeFox-PanelSection-searchbox")
             inMainPanel = true;
@@ -68,15 +68,13 @@ class SearchFilter {
         // document to provide a list of all URLs at some future time
         if (currentURL) {
             try {
+                //TODO:c: IP address support
                 const url = new URL(currentURL);
                 const host = url.host;
                 const domain = this.psl.getDomain(host);
                 this.updateSearchFilterFinish(searchFilter, current, [domain]);
             } catch (e) {
-                if (e.name == "NS_ERROR_HOST_IS_IP_ADDRESS")
-                    this.updateSearchFilterFinish(searchFilter, current, [currentURL.hostPort]);
-                else
-                    searchFilter.setAttribute("disabled", "true");
+                searchFilter.setAttribute("disabled", "true");
             }
         } else {
             //TODO:c: main panel support?

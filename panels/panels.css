@@ -30,7 +30,9 @@ body {
 
 /* Default login list item and group style */
 #KeeFox-MatchedLoginsList li,
-#GeneratePasswordContainer li
+#GeneratePasswordContainer li,
+#KeeFox-SaveLogin-SearchResults-Container li,
+#KeeFox-SaveLogin-selectedEntryList li
 {
     min-height:26px;
     padding:0px 5px 0px 22px;
@@ -144,7 +146,7 @@ body {
 
 .xulvbox,
 .xulhbox {
-display:flex;
+    display: flex;
 }
 
 .xulvbox {
@@ -161,18 +163,18 @@ flex: 1;
 }
 
 .xulpackend {
-align-items:flex-end;
+    justify-content: flex-end;
 }
 
 
 .disabled
 {
-	display:none;
+    display:none;
 }
 
 .enabled
 {
-	display:block;
+    display:block;
 }
 
 
@@ -183,7 +185,7 @@ align-items:flex-end;
     width: calc(100% - 12px);
     padding: 3px 5px;
     margin:5px 0px 5px 0px;
-	-moz-box-flex: 1;
+    -moz-box-flex: 1;
 }
 
 .keefox-searchFields {
@@ -223,7 +225,6 @@ align-items:flex-end;
 ul#KeeFox-SaveLogin-selectedEntryList li:hover
 {
     background-color: #FFFFFF;
-    border: 0px solid #FFFFFF;
 }
 
 
@@ -287,25 +288,25 @@ background-repeat: no-repeat;
 
 #keefox-save-password-new-button,
 #keefox-save-password-update-button {
-width:50% !important;
-    min-width:50% !important;
-
     line-height:1;
-
     margin: 0px !important;
     margin-top: 5px !important;
+    padding: 5px;
     border-radius: 0px !important;
     border-top-left-radius: 5px !important;
     border-top-right-radius: 5px !important;
-    -moz-box-flex: 1;
+    flex: 1;
 }
 
 #keefox-save-password-new-button {
+    border-style: solid;
+    border-width: 1px;
     margin-left: 5px !important;
 }
 
 #keefox-save-password-update-button {
-
+    border-style: solid;
+    border-width: 1px;
     margin-right: 5px !important;
 }
 
@@ -365,13 +366,13 @@ width:50% !important;
 
 #KeeFox-SaveLogin-SearchResults {
     overflow-y:scroll;
-    margin: 5px;
+    margin: 5px 5px 5px 5px;
     margin-top: 0px;
     border: #D6D6D6 solid 1px;
     border-top-width: 0px;
-    height:200px;
-    min-height:200px;
-    width:450px;
+    height:150px;
+    min-height:150px;
+    width:350px;
 }
 
 ul#KeeFox-SaveLogin-SearchResults-Container,
@@ -383,13 +384,7 @@ ul#KeeFox-SaveLogin-selectedEntryList {
 }
 
 button.KeeFox-SaveLogin-Change-Setting {
-    -moz-appearance: none !important;
-    padding:0px 3px !important;
-    margin:2px 5px !important;
-    font-size: 0.75em;
-    border-radius: 3px !important;
-    -moz-box-pack: center;
-    -moz-box-align: center;
+    font-size: 0.8em;
 }
 
 button.KeeFox-SaveLogin-Change-Setting > div.xulhbox {
@@ -404,7 +399,12 @@ button.KeeFox-SaveLogin-Change-Setting label {
 }
 
 button.KeeFox-SaveLogin-Abort {
-	margin-bottom:10px !important;
+    margin-bottom:10px !important;
+}
+
+#keefox-save-password-saveTypeContainer button {
+    margin: 5px;
+    padding: 3px 7px;
 }
 
 #KeeFox-loginURLsUpdateRadioGroup {
@@ -414,6 +414,26 @@ button.KeeFox-SaveLogin-Abort {
 }
 
 .KeeFox-message {
+    margin-left: 5px;
     margin-bottom: 5px;
 }
 
+#KeeFox-SaveLogin-SearchResults-Container li.login-item
+{
+    display:list-item;
+    border-left-width:0px;
+    border-right-width:0px;
+    cursor: default;
+}
+
+#KeeFox-SaveLogin-searchfilter {
+    margin-right: 9px;
+}
+
+#SavePasswordContainer {
+    flex: 1;
+}
+
+.xulradiogroup label {
+    display:block;
+}
