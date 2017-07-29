@@ -12,7 +12,7 @@ function updateAppState (newState: AppState) {
     appState = newState;
 }
 
-function updateTabState (newState: FrameState) {
+function updateFrameState (newState: FrameState) {
     const oldState = frameState;
     frameState = newState;
 }
@@ -49,7 +49,7 @@ function startup () {
                 KeeFoxLog.debug("In iframe script, received message from background script: ");
 
                 if (m.appState) updateAppState(m.appState);
-                if (m.frameState) updateTabState(m.frameState);
+                if (m.frameState) updateFrameState(m.frameState);
 
                 matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.logins);
             });
@@ -62,7 +62,7 @@ function startup () {
                 KeeFoxLog.debug("In iframe script, received message from background script: ");
 
                 if (m.appState) updateAppState(m.appState);
-                if (m.frameState) updateTabState(m.frameState);
+                if (m.frameState) updateFrameState(m.frameState);
 
                 if (!m.generatedPassword && m.generatedPassword != "") {
                     myPort.postMessage({ action: "generatePassword" });
@@ -85,7 +85,7 @@ function startup () {
                 KeeFoxLog.debug("In iframe script, received message from background script: ");
 
                 if (m.appState) updateAppState(m.appState);
-                if (m.frameState) updateTabState(m.frameState);
+                if (m.frameState) updateFrameState(m.frameState);
 
                 savePasswordPanel = new SavePasswordPanel(m.submittedData);
 

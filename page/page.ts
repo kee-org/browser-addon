@@ -121,7 +121,8 @@ function startup () {
         } else if (m.appState) {
             updateAppState(m.appState, m.isForegroundTab);
         }
-
+//
+                //if (m.frameState) updateFrameState(m.frameState);
         if (m.submittedData) {
             formSaving.createSavePasswordPanel();
         }

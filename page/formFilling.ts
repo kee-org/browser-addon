@@ -294,7 +294,7 @@ class FormFilling {
 
     private initMatchResult (behaviour: FindMatchesBehaviour)
     {
-        //TODO:c: create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
+        //TODO:#6: create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
         // matchResult = new MatchResult();
         this.matchResult.UUID = "";
         this.matchResult.logins = [];
@@ -760,7 +760,7 @@ class FormFilling {
 
             if (matchingLogin != null)
             {
-                //TODO:c: multi-page
+                //TODO:#6 multi-page
                 // // record / update the info attached to this tab regarding
                 // // the number of pages of forms we want to fill in
                 // // NB: we do this even if we know this is a single form
@@ -781,7 +781,7 @@ class FormFilling {
                 // }
 
                 // If the user manually requested this to be filled in or the current page is unknown
-                if (!automated)//TODO:c: multi-page || tabState.currentPage <= 0)
+                if (!automated)//TODO:#6 multi-page || tabState.currentPage <= 0)
                 {
                     let maximumPageCount = 1;
                     for (let i = 0; i < matchingLogin.passwords.length; i++)
@@ -796,7 +796,7 @@ class FormFilling {
                         if (otherField.formFieldPage > maximumPageCount)
                             maximumPageCount = otherField.formFieldPage;
                     }
-                    //TODO:c: multi-page
+                    //TODO:#6: multi-page
                     // // always assume page 1 (very rare cases will go wrong - see github for relevant enhancement request) //TODO:1.6: #411
                     // // Possible regression since v1.4: We used to ignore currentPage entirely for the first
                     // // page of a submission, now we might try to give preference to page 1 fields (though total
@@ -806,13 +806,6 @@ class FormFilling {
                     // this.Logger.debug("currentPage is: " + tabState.currentPage);
                     // this.Logger.debug("maximumPage is: " + tabState.maximumPage);
                 }
-
-                // Make sure that the state of this tab is reset after a short time ready
-                // for the next website's login form
-                //TODO:c: form submission
-                // if (resetFormFillTimer)
-                //     clearTimeout(resetFormFillTimer);
-                // resetFormFillTimer = setTimeout(resetFormFillSession, KFExtension.prefs.getValue("resetFormFillTimeout", 60) * 1000);
 
                 // update fill and submit preferences from per-entry configuration options
                 if (matchingLogin.alwaysAutoFill)
@@ -834,13 +827,11 @@ class FormFilling {
 
                 if (matchResult.wantToAutoFillForm || matchResult.mustAutoFillForm)
                 {
-                    //TODO:c: multi-page
                     this.Logger.debug("Going to auto-fill a form");
                     const lastFilledPasswords = this.fillManyFormFields(passwordFields, matchingLogin.passwords,
                         -1, matchResult.overWriteFieldsAutomatically || !automated);
                     const lastFilledOther = this.fillManyFormFields(otherFields, matchingLogin.otherFields,
                         -1, matchResult.overWriteFieldsAutomatically || !automated);
-                    //tabState.lastFilledFields = lastFilledPasswords.concat(lastFilledOther);
                     matchResult.formReadyForSubmit = true;
                 }
             }
@@ -860,7 +851,7 @@ class FormFilling {
 
         // If this form fill is the non-final page of a multi-page login process we record the
         // UUID and dbFilename. We also enable auto-submit in some circumstances
-        //TODO:c: multi-page
+        //TODO:#6: multi-page
         // if (matchResult.UUID != undefined && matchResult.UUID != null && matchResult.UUID != "")
         // {
         //     if (tabState.currentPage > 0 && tabState.currentPage < tabState.maximumPage)
@@ -1025,10 +1016,8 @@ class FormFilling {
     {
         const submitElement = this.findSubmitButton(form);
 
-        // Remember that it was KeeFox which initiated this form submission so we can
-        // avoid searching for matching passwords upon submission
-        //TODO:c: form submission
-        //tabState.KeeFoxTriggeredThePendingFormSubmission = true;
+        // Avoid searching for matching passwords upon auto-submission
+        formSaving.removeAllSubmitHandlers();
 
         // If we've found a button to click, use that; if not, just submit the form.
         if (submitElement != null)

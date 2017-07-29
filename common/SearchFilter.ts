@@ -77,7 +77,7 @@ class SearchFilter {
                 searchFilter.setAttribute("disabled", "true");
             }
         } else {
-            //TODO:c: main panel support?
+            //TODO:#7: main panel support?
             // let callbackName = "keefox:";
             // try {
             //     let uuidGenerator = Cc["@mozilla.org/uuid-generator;1"]

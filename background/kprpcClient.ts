@@ -464,7 +464,7 @@ class kprpcClient {
         keefox_org.removeUserNotifications((notification: KeeFoxNotification) => notification.name != "keefox-connection-message");
         keefox_org.appState.latestConnectionError = "";
 
-        //TODO:c:tutorial, etc.
+        //TODO:#9:tutorial, etc.
         //keefox_org._keeFoxExtension.prefs.setValue("lastConnectedToKeePass", ISO8601DateUtils.create(new Date()));
         keefox_org._refreshKPDB();
         keefox_org.getApplicationMetadata();

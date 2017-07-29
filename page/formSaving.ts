@@ -57,7 +57,7 @@ class FormSaving {
     // This won't always be called before all event handlers on the web page so on
     // some sites we will store invalid data (in cases where the login scripts
     // mangle the contents of the fields before submitting them).
-    //TODO:c: Possibly could slightly reduce incidence of this problem by listening
+    //TODO:3: Possibly could slightly reduce incidence of this problem by listening
     // to every click on the document body or tracking all input events but performance?
     private submitHandler (e: Event, form: HTMLFormElement) {
         this.Logger.debug("submitHandler called");
@@ -66,72 +66,18 @@ class FormSaving {
         // don't respond to any form submission related events
         formSaving.removeAllSubmitHandlers();
 
-        //TODO:c: form submission
-        //let KeeFoxTriggeredThePendingFormSubmission = tabState.KeeFoxTriggeredThePendingFormSubmission;
-        //tabState.KeeFoxTriggeredThePendingFormSubmission = false;
-
-        //TODO:c: form submission & multi-page
-        /*
-        // Increment our page count now that the form has been submitted.
-        tabState.currentPage++;
-        Logger.debug("currentPage of next page load will be: " + tabState.currentPage);
-
-        // If we have just submitted the last expected page in this form, we'll reset our page count
-        // tracker on the assumption that this current submission is unrelated to the previous form
-        // fill. Site failures might lead to problems here but probably not big ones very often.
-        if (tabState.currentPage > tabState.maximumPage)
-        {
-            resetFormFillSession();
-        }
-
-        // do nothing if KeeFox auto-submitted the form
-        if (KeeFoxTriggeredThePendingFormSubmission)
-            return;
-        */
-
         const doc = form.ownerDocument;
 
         this.Logger.debug({ m: "", sm: "URL: " + doc.URL, r: true });
         let isPasswordChangeForm = false;
         let isRegistrationForm = false;
 
-        //TODO:c: form submission
-        // under no circumstances will we cancel the form
-        // submit so we can set this value now to help us
-        // track when pages are being navigated without form
-        // submissions and hence aid automatic cancellation
-        // of multi-page login forms
-        //tabState.formSubmitTrackerCount = 1;
-        //tabState.pageLoadSinceSubmitTrackerCount = 0;
-
-        //TODO:c: multi-page
-        /*
-        var currentPage = tabState.recordFormCurrentPage;
-        var savePageCountToTab = true;
-
-        // If this tab has not already recorded the page count, we continue ignoring it.
-        // User can start the count by selecting "multi-page login" on the notification bar
-        // User cancels (removes TabValue) by cancelling or saving from the notification bar
-        // Also cancelled automatically if form count goes beyond 10 (in case user
-        // ignores notification bar and starts filling in search forms or something)
-        if (currentPage == undefined || currentPage == null || currentPage.length <= 0 || currentPage <= 0)
-        {
-            currentPage = 1;
-        } else if (currentPage >= 10)
-        {
-            tabState.recordFormCurrentPage = -1;
-            tabState.recordFormCurrentStateJSON = null;
-            currentPage = 1;
-            savePageCountToTab = false;
-        }
-        */
-
         // Get the appropriate fields from the form.
         const passwordFields = [];
 
         // there must be at least one password or otherField
         const { actualUsernameIndex: usernameIndex, pwFields: passwords, otherFields } =
-            this.formUtils.getFormFields(form, true); //TODO:c: currentPage
+            this.formUtils.getFormFields(form, true);
 
         const conf = configManager.siteConfigFor(doc.URL);
 

@@ -61,7 +61,7 @@ class KeeFox {
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
 
-        //TODO:c: tutorial guides, etc.
+        //TODO:#9: tutorial guides, etc.
         //this.tutorialHelper = tutorialHelper;
         //this.sampleChecker = sampleChecker;
 
@@ -166,7 +166,7 @@ class KeeFox {
                 //TODO:c: Should we inform all inactive tabs too?
                 const tab = keefox_org.tabStates[event.tabId];
 
-                if (tab && tab.framePorts) // Might not have had time to setup the port yet //TODO:c: (also, existing tabs when extension installed won't have our code running in them until we add support for that)
+                if (tab && tab.framePorts) // Might not have had time to setup the port yet
                 {
                     tab.framePorts.forEach(port => {
                         port.postMessage({ appState: keefox_org.appState, isForegroundTab: true } as AddonMessage);
@@ -480,7 +480,7 @@ class KeeFox {
         }
     }
 
-    //TODO:c:implement tutorial custom header
+    //TODO:#9:implement tutorial custom header
     /*
     case "http-on-modify-request":
         // Send a custom header to the tutorial website so we know that
@@ -600,7 +600,7 @@ class KeeFox {
         KeeFoxLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
     }
 
-    //TODO:c: tabs.currentTab().then(tab => tab.favIconUrl) will get the URI for a favicon but then need to make a network request to download
+    //TODO:#8: tabs.currentTab().then(tab => tab.favIconUrl) will get the URI for a favicon but then need to make a network request to download
     // it I think! In any case, must be run from content script rather than background script.
     /*
     loadFavicon= function(url, faviconLoader)
@@ -835,7 +835,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
         keefox_org.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
 
-        //TODO:c: tutorial guides, etc.
+        //TODO:#9: tutorial guides, etc.
         // if (login.URLs[0].startsWith("http://tutorial-section-b.keefox.org/part2"))
         //     keefox_org.tutorialHelper.tutorialProgressSaved();
     }
