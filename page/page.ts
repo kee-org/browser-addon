@@ -61,13 +61,6 @@ function updateAppState (newState: AppState, isForegroundTab: boolean) {
     }
 }
 
-function renderMatchedLogins (logins: any[]) {
-    KeeFoxLog.warn("TODO: Add results to browser panel or do some autofill or something?");
-    for (const login of logins) {
-        KeeFoxLog.info("login: " + login);
-    }
-}
-
 function matchFinder (uri: string) {
     myPort.postMessage({ findMatches: { uri } });
 }
@@ -129,7 +122,6 @@ function startup () {
 
         if (m.findMatchesResult) {
             formFilling.findLoginsResultHandler(m.findMatchesResult);
-            renderMatchedLogins(m.findMatchesResult);
         }
 
         if (m.action == "manualFill" && m.selectedLoginIndex != null) {
