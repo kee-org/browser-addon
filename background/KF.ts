@@ -89,6 +89,7 @@ class KeeFox {
                     p.postMessage({ appState: keefox_org.appState });
 
                     keefox_org.browserPopupPort = p;
+                    keefox_org.resetBrowserActionColor();
                     break;
                 }
                 case "page": {
@@ -189,11 +190,16 @@ class KeeFox {
         }
         keefox_org.appState.notifications.push(notification);
         keefox_org.browserPopupPort.postMessage({appState: keefox_org.appState});
+        browser.browserAction.setIcon({path: "common/images/highlight-48.png" });
     }
 
     removeUserNotifications (unlessTrue: (notification: KeeFoxNotification) => boolean) {
         keefox_org.appState.notifications = keefox_org.appState.notifications.filter(unlessTrue);
         keefox_org.browserPopupPort.postMessage({appState: keefox_org.appState});
+    }
+
+    resetBrowserActionColor () {
+        browser.browserAction.setIcon({path: "common/images/48.png" });
     }
 
     shutdown ()
