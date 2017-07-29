@@ -66,7 +66,6 @@ class Utils {
     {
         let inBuffer: any;
 
-        //TODO: typeguards
         if (typeof(data) == "string" )
             inBuffer = new TextEncoder("utf-8").encode(data);
         else

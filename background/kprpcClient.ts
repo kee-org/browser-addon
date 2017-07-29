@@ -622,8 +622,9 @@ class kprpcClient {
     getUsername (securityLevel) {
         let username = "";
 
-        // if we expect client to be able to retrieve a password from a stored location, we'll re-use the most recent username if we can find it. Otherwise we'll start from scratch
-        if (securityLevel <= 2) {
+        // if we expect client to be able to retrieve a password from a stored location,
+        // we'll re-use the most recent username if we can find it. Otherwise we'll start from scratch
+        if (securityLevel <= 2 && configManager.current.KPRPCUsername) {
             username = configManager.current.KPRPCUsername;
         }
 
@@ -636,7 +637,8 @@ class kprpcClient {
     }
 
     getSecurityLevel () {
-        // read these from config. Local Firefox attacker could change config to a lower security level but in doing so, a new SRP auth will be triggered during which the server has opportunity
+        // read these from config. Local Firefox attacker could change config to a lower security
+        // level but in doing so, a new SRP auth will be triggered during which the server has opportunity
         // to reject the client because its security level is too low.
         return configManager.current.connSLClient;
     }

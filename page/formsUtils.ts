@@ -143,8 +143,8 @@ public getFormFields (form, isSubmission, currentPage?)
     // Work out which DOM form element is most likely to be the username field.
     // This information is only used to display the username to the user so an inaccurate
     // choice won't impact the form detection or filling behaviour.
-    //TODO:2: Extend this to inspect more than just the name of the field. E.g. max length?
-    //TODO:2: For form filling (not submitting) we might want to select based upon found data in KeePass?
+    //TODO:3: Extend this to inspect more than just the name of the field. E.g. max length?
+    //TODO:3: For form filling (not submitting) we might want to select based upon found data in KeePass?
     if (firstPossibleUsernameIndex != -1)
         usernameIndex = firstPossibleUsernameIndex;
     else if (firstPasswordIndex > 0)

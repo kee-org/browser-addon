@@ -555,7 +555,7 @@ class FormFilling {
             // form and login combination. We could be more efficient for the common case of 1 form
             // by avoiding the clone then but keeping the same behaviour gives us a higher chance
             // of noticing bugs.
-            matchResult.logins[i] = JSON.parse(crString); //TODO:2: faster clone? https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
+            matchResult.logins[i] = JSON.parse(crString); //TODO:3: faster clone? https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
 
             // Nothing to do if we have no matching logins available.
             if (matchResult.logins[i].length == 0)
@@ -797,7 +797,7 @@ class FormFilling {
                             maximumPageCount = otherField.formFieldPage;
                     }
                     //TODO:#6: multi-page
-                    // // always assume page 1 (very rare cases will go wrong - see github for relevant enhancement request) //TODO:1.6: #411
+                    // // always assume page 1 (very rare cases will go wrong - see github KeeFox #411 for relevant enhancement request)
                     // // Possible regression since v1.4: We used to ignore currentPage entirely for the first
                     // // page of a submission, now we might try to give preference to page 1 fields (though total
                     // // relevance score shouldn't be shifted by enough to affect otherwise well-matched fields)
@@ -919,8 +919,8 @@ class FormFilling {
         // indirectly due to deprioritisation of other possibilities) but all things equal, they will
         // follow the stated priority.
 
-        const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in"]; //TODO:2: other languages
-        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear"]; //TODO:2: other languages
+        const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in"]; //TODO:3: other languages
+        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear"]; //TODO:3: other languages
 
         const buttonElements = form.ownerDocument.getElementsByTagName("button");
         const inputElements = form.getElementsByTagName("input");
