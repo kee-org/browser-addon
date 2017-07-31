@@ -3,6 +3,7 @@ var tslint = require("gulp-tslint");
 var ts = require("gulp-typescript");
 var sourcemaps = require('gulp-sourcemaps');
 var zip = require('gulp-zip');
+var merge = require('merge-stream');
 
 gulp.task("default", [ "build" ]);
 gulp.task("build", ["ts:background", "ts:popup", "ts:panels", "ts:page", "ts:settings", "ts:dialogs" ]);
@@ -139,50 +140,52 @@ gulp.task('watch', ['build'], function() {
 });
 
 gulp.task('collect', function() {
-    gulp.src('page/page.js')
-		.pipe(gulp.dest('build/page'));
-    gulp.src('page/*.css')
-		.pipe(gulp.dest('build/page'));
-    gulp.src('popup/popup.js')
-		.pipe(gulp.dest('build/popup'));
-    gulp.src('popup/popup.css')
-		.pipe(gulp.dest('build/popup'));
-    gulp.src('popup/popup.html')
-		.pipe(gulp.dest('build/popup'));
-    gulp.src('panels/panels.js')
-		.pipe(gulp.dest('build/panels'));
-    gulp.src('panels/panels.css')
-		.pipe(gulp.dest('build/panels'));
-    gulp.src('panels/panels.html')
-		.pipe(gulp.dest('build/panels'));
-    gulp.src('settings/settings.html')
-		.pipe(gulp.dest('build/settings'));
-    gulp.src('settings/*.css')
-		.pipe(gulp.dest('build/settings'));
-    gulp.src('settings/*.js')
-		.pipe(gulp.dest('build/settings'));
-	gulp.src('common/*.js')
-		.pipe(gulp.dest('build/common'));
-	gulp.src('common/*.css')
-		.pipe(gulp.dest('build/common'));
-	gulp.src('common/images/**')
-		.pipe(gulp.dest('build/common/images'));
-	gulp.src('common/fonts/**')
-		.pipe(gulp.dest('build/common/fonts'));
-	gulp.src('dialogs/*.css')
-		.pipe(gulp.dest('build/dialogs'));
-	gulp.src('dialogs/*.html')
-		.pipe(gulp.dest('build/dialogs'));
-	gulp.src('dialogs/*.js')
-		.pipe(gulp.dest('build/dialogs'));
-	gulp.src('background/*.js')
-		.pipe(gulp.dest('build/background'));
-	gulp.src('_locales/**')
-		.pipe(gulp.dest('build/_locales'));
-	gulp.src('_locales/en-US/**')
-		.pipe(gulp.dest('build/_locales/en_US')); //TODO:c: remove this hack when Firefox fixes locale location bug
-	return gulp.src('manifest.json')
-        .pipe(gulp.dest('build'));
+    return merge(
+        gulp.src('page/page.js')
+            .pipe(gulp.dest('build/page')),
+        gulp.src('page/*.css')
+            .pipe(gulp.dest('build/page')),
+        gulp.src('popup/popup.js')
+            .pipe(gulp.dest('build/popup')),
+        gulp.src('popup/popup.css')
+            .pipe(gulp.dest('build/popup')),
+        gulp.src('popup/popup.html')
+            .pipe(gulp.dest('build/popup')),
+        gulp.src('panels/panels.js')
+            .pipe(gulp.dest('build/panels')),
+        gulp.src('panels/panels.css')
+            .pipe(gulp.dest('build/panels')),
+        gulp.src('panels/panels.html')
+            .pipe(gulp.dest('build/panels')),
+        gulp.src('settings/settings.html')
+            .pipe(gulp.dest('build/settings')),
+        gulp.src('settings/*.css')
+            .pipe(gulp.dest('build/settings')),
+        gulp.src('settings/*.js')
+            .pipe(gulp.dest('build/settings')),
+        gulp.src('common/*.js')
+            .pipe(gulp.dest('build/common')),
+        gulp.src('common/*.css')
+            .pipe(gulp.dest('build/common')),
+        gulp.src('common/images/**')
+            .pipe(gulp.dest('build/common/images')),
+        gulp.src('common/fonts/**')
+            .pipe(gulp.dest('build/common/fonts')),
+        gulp.src('dialogs/*.css')
+            .pipe(gulp.dest('build/dialogs')),
+        gulp.src('dialogs/*.html')
+            .pipe(gulp.dest('build/dialogs')),
+        gulp.src('dialogs/*.js')
+            .pipe(gulp.dest('build/dialogs')),
+        gulp.src('background/*.js')
+            .pipe(gulp.dest('build/background')),
+        gulp.src('_locales/**')
+            .pipe(gulp.dest('build/_locales')),
+        gulp.src('_locales/en-US/**')
+            .pipe(gulp.dest('build/_locales/en_US')), //TODO:c: remove this hack when Firefox fixes locale location bug
+        gulp.src('manifest.json')
+            .pipe(gulp.dest('build'))
+    );
 });
 
 gulp.task('zip', ['collect'], function() {
