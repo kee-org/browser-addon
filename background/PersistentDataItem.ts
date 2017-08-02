@@ -4,7 +4,7 @@
 class PersistentDataItem {
     itemType: "submittedData";
     submittedData?: SubmittedData;
-    submittedLogin?: keeFoxLoginInfo;
+    submittedLogin?: keeLoginInfo;
     creationDate: Date;
     accessCount: number;
     maxAccessCount: number;

@@ -55,7 +55,7 @@ class SavePasswordPanel {
         const opt = select.selectedOptions[0] as HTMLOptionElement;
         select.style.backgroundImage = opt.style.backgroundImage;
         this.updateGroups(appState.KeePassDatabases.find(db => db.fileName === select.value),
-            this.doc.getElementById("keefox-save-password-group-select"));
+            this.doc.getElementById("kee-save-password-group-select"));
         this.saveData.db = opt.value;
     }
 
@@ -80,7 +80,7 @@ class SavePasswordPanel {
 
 
         const sel = this.doc.createElement("select") as HTMLSelectElement;
-        sel.setAttribute("id", "keefox-save-password-db-select");
+        sel.setAttribute("id", "kee-save-password-db-select");
         sel.addEventListener("change", this.DBChangeHandler.bind(this), false);
         for (const o of dbOptions)
           sel.appendChild(o);
@@ -103,7 +103,7 @@ class SavePasswordPanel {
 
         const sel = this.doc.createElement("select") as HTMLSelectElement;
         sel.addEventListener("change", changeHandler.bind(this), false);
-        sel.setAttribute("id", "keefox-save-password-group-select");
+        sel.setAttribute("id", "kee-save-password-group-select");
 
         return sel;
     }
@@ -156,7 +156,7 @@ class SavePasswordPanel {
     }
 
     private getCurrentUrlMergeMode ()  {
-        const radio = Array.from(document.querySelectorAll("#KeeFox-loginURLsUpdateRadioGroup input"));
+        const radio = Array.from(document.querySelectorAll("#Kee-loginURLsUpdateRadioGroup input"));
         const mergeMode = (radio.find((r: HTMLInputElement) => r.checked) as HTMLInputElement).value;
         return mergeMode;
     }
@@ -166,12 +166,12 @@ class SavePasswordPanel {
         const saveTypeChooser = this.doc.createElement("div");
         saveTypeChooser.classList.add("xulhbox");
         const createButton = this.doc.createElement("button");
-        createButton.setAttribute("id", "keefox-save-password-new-button");
+        createButton.setAttribute("id", "kee-save-password-new-button");
         createButton.innerHTML = $STR("create_new_entry");
         createButton.addEventListener("click", this.enableNewEntry.bind(this));
         createButton.classList.add("selected");
         const updateButton = this.doc.createElement("button");
-        updateButton.setAttribute("id", "keefox-save-password-update-button");
+        updateButton.setAttribute("id", "kee-save-password-update-button");
         updateButton.innerHTML = $STR("update_existing_entry");
         updateButton.addEventListener("click", this.enableEditEntry.bind(this));
         updateButton.classList.add("unselected");
@@ -185,7 +185,7 @@ class SavePasswordPanel {
     {
         const saveTypeContainer = this.doc.createElement("div");
         saveTypeContainer.classList.add("xulvbox");
-        saveTypeContainer.setAttribute("id", "keefox-save-password-saveTypeContainer");
+        saveTypeContainer.setAttribute("id", "kee-save-password-saveTypeContainer");
 
         const typeNew = this.createSaveTypeNew();
         const typeUpdate1 = this.createSaveTypeUpdate1();
@@ -200,14 +200,14 @@ class SavePasswordPanel {
     private createSaveTypeNew ()
     {
         const panel = this.doc.createElement("div");
-        panel.setAttribute("id", "keefox-save-password-new-panel");
+        panel.setAttribute("id", "kee-save-password-new-panel");
         panel.classList.add("enabled", "xulvbox");
 
         const dbSel = this.createDBSelect();
         dbSel.style.backgroundImage = (dbSel.selectedOptions[0] as any).style.backgroundImage;
 
         const dbSelContainer = this.doc.createElement("div");
-        dbSelContainer.classList.add("xulhbox", "keeFox-save-password");
+        dbSelContainer.classList.add("xulhbox", "kee-save-password");
         const dbSelLabel = this.doc.createElement("label");
         dbSelLabel.setAttribute("for", dbSel.id);
         dbSelLabel.textContent = $STR("database_label");
@@ -232,10 +232,10 @@ class SavePasswordPanel {
     {
         const panel = this.doc.createElement("div");
         panel.classList.add("disabled", "xulvbox");
-        panel.setAttribute("id", "keefox-save-password-update-panel1");
+        panel.setAttribute("id", "kee-save-password-update-panel1");
         const whichEntryLabel = this.doc.createElement("label");
         whichEntryLabel.textContent = $STR("whichEntry_label");
-        whichEntryLabel.classList.add("KeeFox-message");
+        whichEntryLabel.classList.add("Kee-message");
         panel.appendChild(whichEntryLabel);
 
         const searchResultspanel = this.doc.createElement("div");
@@ -243,18 +243,18 @@ class SavePasswordPanel {
         const searchBox = this.doc.createElement("input");
         searchBox.setAttribute("placeholder", $STR("Search_label"));
         searchBox.setAttribute("type", "text");
-        searchBox.setAttribute("id", "KeeFox-SaveLogin-searchbox");
+        searchBox.setAttribute("id", "Kee-SaveLogin-searchbox");
         searchBox.setAttribute("title", $STR("Search_tip"));
-        searchBox.classList.add("KeeFox-Search");
+        searchBox.classList.add("Kee-Search");
         searchBox.addEventListener("input", function (e){
             this.search.execute(e.target.value, this.onSearchComplete.bind(this),
-                e.target.ownerDocument.getElementById("KeeFox-SaveLogin-searchfilter").selectedOptions[0].value.split(","));
+                e.target.ownerDocument.getElementById("Kee-SaveLogin-searchfilter").selectedOptions[0].value.split(","));
         }.bind(this), false);
 
         const searchFields = (new SearchFilter()).attachFilterToSearchBox(searchBox, this, [this.submittedData.url], this.search);
 
         const searchResults = this.doc.createElement("div");
-        searchResults.setAttribute("id", "KeeFox-SaveLogin-SearchResults");
+        searchResults.setAttribute("id", "Kee-SaveLogin-SearchResults");
 
         searchResultspanel.appendChild(searchFields);
         searchResultspanel.appendChild(searchResults);
@@ -267,43 +267,43 @@ class SavePasswordPanel {
     {
         const panel = this.doc.createElement("div");
         panel.classList.add("disabled", "xulvbox");
-        panel.setAttribute("id", "keefox-save-password-update-panel2");
+        panel.setAttribute("id", "kee-save-password-update-panel2");
 
         const selectedEntryContainer = this.doc.createElement("div");
         selectedEntryContainer.classList.add("xulhbox");
         const selectedEntryList = this.doc.createElement("ul");
-        selectedEntryList.setAttribute("id", "KeeFox-SaveLogin-selectedEntryList");
+        selectedEntryList.setAttribute("id", "Kee-SaveLogin-selectedEntryList");
         selectedEntryContainer.appendChild(selectedEntryList);
         const spacer1 = this.doc.createElement("span");
         spacer1.classList.add("xulspacer");
         selectedEntryContainer.appendChild(spacer1);
         const selectedEntryChangeButton = this.doc.createElement("button");
         selectedEntryChangeButton.innerHTML = $STR("search_again");
-        selectedEntryChangeButton.classList.add("KeeFox-SaveLogin-Change-Setting");
+        selectedEntryChangeButton.classList.add("Kee-SaveLogin-Change-Setting");
         selectedEntryChangeButton.addEventListener("click", this.enableSelectEntryToUpdate.bind(this));
         selectedEntryContainer.appendChild(selectedEntryChangeButton);
         panel.appendChild(selectedEntryContainer);
 
         const loginURLsUpdateStatusContainer = this.doc.createElement("div");
         loginURLsUpdateStatusContainer.classList.add("xulhbox");
-        loginURLsUpdateStatusContainer.setAttribute("id", "KeeFox-loginURLsUpdateStatusContainer");
+        loginURLsUpdateStatusContainer.setAttribute("id", "Kee-loginURLsUpdateStatusContainer");
         const loginURLsUpdateStatus = this.doc.createElement("label");
         loginURLsUpdateStatus.innerHTML = $STR("change_url_status");
-        loginURLsUpdateStatus.classList.add("KeeFox-message");
+        loginURLsUpdateStatus.classList.add("Kee-message");
         loginURLsUpdateStatusContainer.appendChild(loginURLsUpdateStatus);
         const spacer3 = this.doc.createElement("span");
         spacer3.classList.add("xulspacer");
         loginURLsUpdateStatusContainer.appendChild(spacer3);
         const loginURLsUpdateButton = this.doc.createElement("button");
         loginURLsUpdateButton.innerHTML = $STR("more_options");
-        loginURLsUpdateButton.classList.add("KeeFox-SaveLogin-Change-Setting");
+        loginURLsUpdateButton.classList.add("Kee-SaveLogin-Change-Setting");
         loginURLsUpdateButton.addEventListener("click", this.enableEditURLs.bind(this));
         loginURLsUpdateStatusContainer.appendChild(loginURLsUpdateButton);
         panel.appendChild(loginURLsUpdateStatusContainer);
 
         const loginURLsUpdateRadioGroup = this.doc.createElement("div");
         loginURLsUpdateRadioGroup.classList.add("disabled", "xulradiogroup");
-        loginURLsUpdateRadioGroup.setAttribute("id", "KeeFox-loginURLsUpdateRadioGroup");
+        loginURLsUpdateRadioGroup.setAttribute("id", "Kee-loginURLsUpdateRadioGroup");
 
         const loginURLsUpdateRadio1Label = this.doc.createElement("label");
         const loginURLsUpdateRadio1 = this.doc.createElement("input");
@@ -380,7 +380,7 @@ class SavePasswordPanel {
            appState.KeePassDatabases[appState.ActiveKeePassDatabaseIndex], groupSel);
 
         const groupSelContainer = this.doc.createElement("div");
-        groupSelContainer.classList.add("keeFox-save-password", "xulhbox");
+        groupSelContainer.classList.add("kee-save-password", "xulhbox");
         const groupSelLabel = this.doc.createElement("label");
         groupSelLabel.setAttribute("for", groupSel.id);
         groupSelLabel.textContent = $STR("group_label");
@@ -401,8 +401,8 @@ class SavePasswordPanel {
 
     private enableEditURLs ()
     {
-        const loginURLsUpdateStatusContainer = this.doc.getElementById("KeeFox-loginURLsUpdateStatusContainer");
-        const loginURLsUpdateRadioGroup = this.doc.getElementById("KeeFox-loginURLsUpdateRadioGroup");
+        const loginURLsUpdateStatusContainer = this.doc.getElementById("Kee-loginURLsUpdateStatusContainer");
+        const loginURLsUpdateRadioGroup = this.doc.getElementById("Kee-loginURLsUpdateRadioGroup");
         loginURLsUpdateStatusContainer.classList.add("disabled");
         loginURLsUpdateStatusContainer.classList.remove("enabled");
         loginURLsUpdateRadioGroup.classList.add("enabled");
@@ -411,9 +411,9 @@ class SavePasswordPanel {
 
     private enableNewEntry ()
     {
-        const panel1 = this.doc.getElementById("keefox-save-password-new-panel");
-        const panel2 = this.doc.getElementById("keefox-save-password-update-panel1");
-        const panel3 = this.doc.getElementById("keefox-save-password-update-panel2");
+        const panel1 = this.doc.getElementById("kee-save-password-new-panel");
+        const panel2 = this.doc.getElementById("kee-save-password-update-panel1");
+        const panel3 = this.doc.getElementById("kee-save-password-update-panel2");
         panel1.classList.add("enabled");
         panel2.classList.add("disabled");
         panel3.classList.add("disabled");
@@ -422,14 +422,14 @@ class SavePasswordPanel {
         panel3.classList.remove("enabled");
         this.saveData.update = false;
 
-        this.setTypeChooserButtonState("keefox-save-password-new-button", "keefox-save-password-update-button");
+        this.setTypeChooserButtonState("kee-save-password-new-button", "kee-save-password-update-button");
     }
 
     private enableSelectEntryToUpdate ()
     {
-        const panel1 = this.doc.getElementById("keefox-save-password-new-panel");
-        const panel2 = this.doc.getElementById("keefox-save-password-update-panel1");
-        const panel3 = this.doc.getElementById("keefox-save-password-update-panel2");
+        const panel1 = this.doc.getElementById("kee-save-password-new-panel");
+        const panel2 = this.doc.getElementById("kee-save-password-update-panel1");
+        const panel3 = this.doc.getElementById("kee-save-password-update-panel2");
         panel1.classList.add("disabled");
         panel2.classList.add("enabled");
         panel3.classList.add("disabled");
@@ -437,20 +437,20 @@ class SavePasswordPanel {
         panel2.classList.remove("disabled");
         panel3.classList.remove("enabled");
         this.saveData.update = true;
-        const selectedEntryList = this.doc.getElementById("KeeFox-SaveLogin-selectedEntryList");
+        const selectedEntryList = this.doc.getElementById("Kee-SaveLogin-selectedEntryList");
         while (selectedEntryList.firstChild)
             selectedEntryList.removeChild(selectedEntryList.firstChild);
         this.saveData.oldLoginUUID = null;
         this.saveData.db = null;
 
-        this.setTypeChooserButtonState("keefox-save-password-update-button", "keefox-save-password-new-button");
+        this.setTypeChooserButtonState("kee-save-password-update-button", "kee-save-password-new-button");
     }
 
     private enableUpdateEntryDetails ()
     {
-        const panel1 = this.doc.getElementById("keefox-save-password-new-panel");
-        const panel2 = this.doc.getElementById("keefox-save-password-update-panel1");
-        const panel3 = this.doc.getElementById("keefox-save-password-update-panel2");
+        const panel1 = this.doc.getElementById("kee-save-password-new-panel");
+        const panel2 = this.doc.getElementById("kee-save-password-update-panel1");
+        const panel3 = this.doc.getElementById("kee-save-password-update-panel2");
         panel1.classList.add("disabled");
         panel2.classList.add("disabled");
         panel3.classList.add("enabled");
@@ -459,7 +459,7 @@ class SavePasswordPanel {
         panel3.classList.remove("disabled");
         this.saveData.update = true;
 
-        this.setTypeChooserButtonState("keefox-save-password-update-button", "keefox-save-password-new-button");
+        this.setTypeChooserButtonState("kee-save-password-update-button", "kee-save-password-new-button");
     }
 
     private setTypeChooserButtonState (selectedId, unselectedId)
@@ -487,16 +487,16 @@ class SavePasswordPanel {
     // Calling this function with null or empty logins array will clear all existing search results
     private showSearchResults (logins)
     {
-        KeeFoxLog.debug("passwordSaver showSearchResults started");
+        KeeLog.debug("passwordSaver showSearchResults started");
 
         const ps = this;
 
         // The container that we want to add our search results to.
-        const container = this.getEmptyContainerFor("KeeFox-SaveLogin-SearchResults");
+        const container = this.getEmptyContainerFor("Kee-SaveLogin-SearchResults");
         if (container === undefined || container == null || logins == null || logins.length == 0)
             return;
 
-        KeeFoxLog.debug(logins.length + " search results found");
+        KeeLog.debug(logins.length + " search results found");
 
         for (let i = 0; i < logins.length; i++) {
             const login = logins[i];
@@ -529,10 +529,10 @@ class SavePasswordPanel {
 
                 if (event.button == 0 || event.button == 1)
                 {
-                    this.dispatchEvent(new CustomEvent("keefoxCommand", { detail: { button: event.button, ctrlKey: event.ctrlKey }}));
+                    this.dispatchEvent(new CustomEvent("keeCommand", { detail: { button: event.button, ctrlKey: event.ctrlKey }}));
                 }
             }, false);
-            loginItem.addEventListener("keefoxCommand", function (event) {
+            loginItem.addEventListener("keeCommand", function (event) {
                 ps.saveData.oldLoginUUID = this.getAttribute("data-uuid");
                 ps.saveData.db = this.getAttribute("data-fileName");
 
@@ -542,7 +542,7 @@ class SavePasswordPanel {
                 item.setAttribute("title", this.getAttribute("title"));
                 item.setAttribute("tabindex", "-1");
                 item.textContent = this.textContent;
-                ps.doc.getElementById("KeeFox-SaveLogin-selectedEntryList").appendChild(item);
+                ps.doc.getElementById("Kee-SaveLogin-selectedEntryList").appendChild(item);
 
                 ps.enableUpdateEntryDetails();
             }, false);
@@ -552,12 +552,12 @@ class SavePasswordPanel {
 
         // // Update the UI state to reflect the number of logins found
         // if (container.childElementCount > 0) {
-        //     const elem = document.getElementById("KeeFox-PanelSubSection-SearchResults");
+        //     const elem = document.getElementById("Kee-PanelSubSection-SearchResults");
         //     elem.classList.add("enabled");
         //     elem.classList.remove("disabled");
         // }
 
-        KeeFoxLog.debug(logins.length + " search results set.");
+        KeeLog.debug(logins.length + " search results set.");
     }
 
     private getEmptyContainerFor (id)

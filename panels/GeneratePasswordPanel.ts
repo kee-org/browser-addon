@@ -28,10 +28,10 @@ class GeneratePasswordPanel {
                     if (event.button == 0 || event.button == 1)
                     {
                         event.stopPropagation();
-                        this.dispatchEvent(new Event("keefoxCommand"));
+                        this.dispatchEvent(new Event("keeCommand"));
                     }
                 }, false);
-                profileItem.addEventListener("keefoxCommand", function (event) {
+                profileItem.addEventListener("keeCommand", function (event) {
                     myPort.postMessage({ action: "generatePassword", passwordProfile: this.textContent });
                 }, false);
 

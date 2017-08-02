@@ -2,7 +2,7 @@
 /// <reference path="../common/TabState.ts" />
 /// <reference path="../common/SubmittedData.ts" />
 /// <reference path="../common/SaveData.ts" />
-/// <reference path="../common/KeeFoxNotification.ts" />
+/// <reference path="../common/KeeNotification.ts" />
 
 interface AddonMessage {
     appState?: AppState;
@@ -11,11 +11,11 @@ interface AddonMessage {
     tabId?: number;
     frameId?: number;
     loadUrlHelpSensitiveLogging?: boolean;
-    addNotification?: KeeFoxNotification;
+    addNotification?: KeeNotification;
     removeNotification?: string;
     findMatches?: { uri: string };
     findMatchesResult?: any;
-    logins?: keeFoxLoginInfo[];
+    logins?: keeLoginInfo[];
     action?: "primary" | "detectForms" | "manualFill" | "generatePassword" | "closeAllPanels" | "showMatchedLoginsPanel" | "removeSubmittedData";
     selectedLoginIndex?: number;
     passwordProfiles: any[];

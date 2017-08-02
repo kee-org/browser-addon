@@ -8,14 +8,14 @@ interface SubmitHandlerAttachment {
 
 class FormSaving {
 
-    private Logger: KeeFoxLogger;
+    private Logger: KeeLogger;
     private formUtils: FormUtils;
     private config: Config;
     private SubmitHandlerAttachments: SubmitHandlerAttachment[] = [];
     private savePasswordPanelStub: PanelStub;
     private savePasswordPanelStubRaf: number;
 
-    constructor (logger: KeeFoxLogger, formUtils: FormUtils, config: Config) {
+    constructor (logger: KeeLogger, formUtils: FormUtils, config: Config) {
         this.Logger = logger;
         this.formUtils = formUtils;
         this.config = config;

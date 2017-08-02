@@ -9,9 +9,9 @@ class FormUtils {
 
 findLoginOps = [];
 matchResults = [];
-Logger: KeeFoxLogger;
+Logger: KeeLogger;
 
-constructor (logger: KeeFoxLogger)
+constructor (logger: KeeLogger)
 {
     this.Logger = logger;
 }
@@ -77,14 +77,14 @@ private isAKnownUsernameString (fieldNameIn) {
 public getFormFields (form, isSubmission, currentPage?)
 {
     const DOMusernameField = null;
-    const pwFields: keeFoxLoginField[] = [];
-    const otherFields: keeFoxLoginField[] = [];
-    const allFields: { index: number; element: keeFoxLoginField; type: string; }[] = [];
+    const pwFields: keeLoginField[] = [];
+    const otherFields: keeLoginField[] = [];
+    const allFields: { index: number; element: keeLoginField; type: string; }[] = [];
     let firstPasswordIndex = -1;
     let firstPossibleUsernameIndex = -1;
     let usernameIndex = -1;
     const usernameField = null;
-    const kfLoginField = new keeFoxLoginField();
+    const kfLoginField = new keeLoginField();
 
     // search the DOM for any form fields we might be interested in
     for (let i = 0; i < form.elements.length; i++)
@@ -115,7 +115,7 @@ public getFormFields (form, isSubmission, currentPage?)
         allFields[allFields.length] =
         {
             index   : i,
-            element : new keeFoxLoginField(),
+            element : new keeLoginField(),
             type    : DOMtype
         };
         let fieldValue = form.elements[i].value;
@@ -179,7 +179,7 @@ public getFormFields (form, isSubmission, currentPage?)
 // private getSaveOnSubmitForSite (siteURL)
 // {
 //     var showSaveNotification = false;
-//     if (sendSyncMessage("keefox:isKeePassDatabaseOpen")[0])
+//     if (sendSyncMessage("kee:isKeePassDatabaseOpen")[0])
 //     {
 //         // We don't do this unless we think we have a KeePassRPC connection
 //         let conf = config.getConfigForURL(siteURL);

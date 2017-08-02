@@ -6,7 +6,7 @@ class PanelStubOptions {
     autoCloseTime: number;
 
     public static MatchedLogins: PanelStubOptions = {
-        id: "KeeFoxAddonPanelMatchedLogins",
+        id: "KeeAddonPanelMatchedLogins",
         height: 300,
         width: 400,
         name: "matchedLogins",
@@ -14,7 +14,7 @@ class PanelStubOptions {
     };
 
     public static GeneratePassword: PanelStubOptions = {
-        id: "KeeFoxAddonPanelGeneratePassword",
+        id: "KeeAddonPanelGeneratePassword",
         height: 300,
         width: 400,
         name: "generatePassword",
@@ -22,7 +22,7 @@ class PanelStubOptions {
     };
 
     public static SavePassword: PanelStubOptions = {
-        id: "KeeFoxAddonPanelSavePassword",
+        id: "KeeAddonPanelSavePassword",
         height: 300,
         width: 400,
         name: "savePassword",
@@ -114,8 +114,8 @@ class PanelStub {
             }
         }
 
-        // Move as far left as possible while keeping the KeeFox icon above the container and not
-        // going beyond the left edge of the target. We assume the KeeFox icon is always visible because
+        // Move as far left as possible while keeping the Kee icon above the container and not
+        // going beyond the left edge of the target. We assume the Kee icon is always visible because
         // the user has had to interact with the button initially. That assumption won't always hold
         // - e.g. in very narrow screens with keyboard activation or some later window or DOM adjustments but this should
         // be an edge case that users can work around until we have more time to extend support to those scenarios.

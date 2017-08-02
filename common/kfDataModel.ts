@@ -1,19 +1,19 @@
 /*
-  keeFoxLoginInfo:
+  keeLoginInfo:
   This was loosly based on the LoginInfo object that Mozilla provided with Firefox 3.0
   but it has been heavily modified to support some of the extra features
-  that KeeFox can support compared to the built-in Firefox login manager.
+  that Kee can support compared to the built-in Firefox login manager.
 
-  keeFoxLoginField:
+  keeLoginField:
   Represents an individual form field
 
-  keeFoxFormFieldType:
+  keeFormFieldType:
   enumeration of form field type (e.g. text, checkbox, password, etc.)
 */
 
 /// <reference path="uriUtils.ts" />
 
-let keeFoxFormFieldType =
+let keeFormFieldType =
     {
         radio: "FFTradio",
         username: "FFTusername",
@@ -30,7 +30,7 @@ class Database {
     root: any;
 }
 
-class keeFoxLoginInfo {
+class keeLoginInfo {
 
     // array of URL strings (normally just one is needed
     // but a given login can be associated with more than one site
@@ -53,7 +53,7 @@ class keeFoxLoginInfo {
 
     // array of kfLoginField objects representing all passwords
     // on this (potentially multi-page) form
-    passwords: keeFoxLoginField[];
+    passwords: keeLoginField[];
 
     // The KeePass entry's uniqueID (if known)
     uniqueID: string;
@@ -63,7 +63,7 @@ class keeFoxLoginInfo {
 
     // array of kfLoginField objects representing all non-passwords
     // on this (potentially multi-page) form
-    otherFields: keeFoxLoginField[];
+    otherFields: keeLoginField[];
 
     // How relevant this login entry is to the current form in
     // the browser - transient (not stored in KeePass)
@@ -138,12 +138,12 @@ class keeFoxLoginInfo {
         this.usernameIndex = intermediateObject.usernameIndex;
         this.passwords = intermediateObject.passwords
             .filter(function (element, index, array) { return (element != null); })
-            .map(function (item) { const newField = new keeFoxLoginField(); newField.fromJSONifiable(item); return newField; });
+            .map(function (item) { const newField = new keeLoginField(); newField.fromJSONifiable(item); return newField; });
         this.uniqueID = intermediateObject.uniqueID;
         this.title = intermediateObject.title;
         this.otherFields = intermediateObject.otherFields
             .filter(function (element, index, array) { return (element != null); })
-            .map(function (item) { const newField = new keeFoxLoginField(); newField.fromJSONifiable(item); return newField; });
+            .map(function (item) { const newField = new keeLoginField(); newField.fromJSONifiable(item); return newField; });
         this.relevanceScore = intermediateObject.relevanceScore;
         this.maximumPage = intermediateObject.maximumPage;
         this.iconImageData = intermediateObject.iconImageData;
@@ -199,32 +199,32 @@ class keeFoxLoginInfo {
 
         for (let j = 0; j < entry.formFieldList.length; j++) {
             const kpff = entry.formFieldList[j];
-            if (kpff.type == keeFoxFormFieldType.password) {
+            if (kpff.type == keeFormFieldType.password) {
                 if (kpff.page > maximumPage)
                     maximumPage = kpff.page;
 
-                const newField = new keeFoxLoginField();
+                const newField = new keeLoginField();
                 newField.init(kpff.name, kpff.value, kpff.id, "password", kpff.page);
                 passwords.push(newField);
 
-            } else if (kpff.type == keeFoxFormFieldType.text || kpff.type == keeFoxFormFieldType.username
-                || kpff.type == keeFoxFormFieldType.select || kpff.type == keeFoxFormFieldType.radio
-                || kpff.type == keeFoxFormFieldType.checkbox) {
+            } else if (kpff.type == keeFormFieldType.text || kpff.type == keeFormFieldType.username
+                || kpff.type == keeFormFieldType.select || kpff.type == keeFormFieldType.radio
+                || kpff.type == keeFormFieldType.checkbox) {
                 const otherLength = otherFields.length;
                 let type = "unknown";
 
                 switch (kpff.type) {
-                    case keeFoxFormFieldType.username: usernameIndex = otherLength; type = "text"; break;
-                    case keeFoxFormFieldType.text: type = "text"; break;
-                    case keeFoxFormFieldType.radio: type = "radio"; break;
-                    case keeFoxFormFieldType.checkbox: type = "checkbox"; break;
-                    case keeFoxFormFieldType.select: type = "select-one"; break;
+                    case keeFormFieldType.username: usernameIndex = otherLength; type = "text"; break;
+                    case keeFormFieldType.text: type = "text"; break;
+                    case keeFormFieldType.radio: type = "radio"; break;
+                    case keeFormFieldType.checkbox: type = "checkbox"; break;
+                    case keeFormFieldType.select: type = "select-one"; break;
                 }
 
                 if (kpff.page > maximumPage)
                     maximumPage = kpff.page;
 
-                const newField = new keeFoxLoginField();
+                const newField = new keeLoginField();
                 newField.init(kpff.name, kpff.value, kpff.id, type, kpff.page);
                 otherFields.push(newField);
             }
@@ -279,7 +279,7 @@ class keeFoxLoginInfo {
         return true;
     }
 
-    private usernamesMatch (login: keeFoxLoginInfo) {
+    private usernamesMatch (login: keeLoginInfo) {
         if (this.otherFields.length != login.otherFields.length)
             return false;
 
@@ -471,7 +471,7 @@ class keeFoxLoginInfo {
 }
 
 
-class keeFoxLoginField {
+class keeLoginField {
 
     // "name" attribute on the HTML form element
     name: string;
@@ -549,11 +549,11 @@ class keeFoxLoginField {
         formField.page = this.formFieldPage;
 
         switch (this.type) {
-            case "password": formField.type = keeFoxFormFieldType.password; break;
-            case "radio": formField.type = keeFoxFormFieldType.radio; break;
-            case "checkbox": formField.type = keeFoxFormFieldType.checkbox; break;
-            case "select-one": formField.type = keeFoxFormFieldType.select; break;
-            default: formField.type = isUsername ? keeFoxFormFieldType.username : keeFoxFormFieldType.text; break;
+            case "password": formField.type = keeFormFieldType.password; break;
+            case "radio": formField.type = keeFormFieldType.radio; break;
+            case "checkbox": formField.type = keeFormFieldType.checkbox; break;
+            case "select-one": formField.type = keeFormFieldType.select; break;
+            default: formField.type = isUsername ? keeFormFieldType.username : keeFormFieldType.text; break;
         }
 
         return formField;

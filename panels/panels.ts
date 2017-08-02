@@ -34,9 +34,9 @@ function copyStringToClipboard (value) {
 }
 
 function startup () {
-    KeeFoxLog.debug("iframe page starting");
+    KeeLog.debug("iframe page starting");
 
-    KeeFoxLog.attachConfig(configManager.current);
+    KeeLog.attachConfig(configManager.current);
 
     myPort = chrome.runtime.connect({ name: "iframe_" + parentFrameId });
 
@@ -46,7 +46,7 @@ function startup () {
             matchedLoginsPanel = new MatchedLoginsPanel();
             document.getElementById("header").innerText = $STR("matched_logins_label");
             myPort.onMessage.addListener(function (m: AddonMessage) {
-                KeeFoxLog.debug("In iframe script, received message from background script: ");
+                KeeLog.debug("In iframe script, received message from background script: ");
 
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateFrameState(m.frameState);
@@ -59,7 +59,7 @@ function startup () {
             document.getElementById("header").innerText = $STR("Menu_Button_copyNewPasswordToClipboard_label");
             let passwordReceived = false;
             myPort.onMessage.addListener(function (m: AddonMessage) {
-                KeeFoxLog.debug("In iframe script, received message from background script: ");
+                KeeLog.debug("In iframe script, received message from background script: ");
 
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateFrameState(m.frameState);
@@ -82,7 +82,7 @@ function startup () {
         case "savePassword":
             document.getElementById("header").innerText = "Save password";
             myPort.onMessage.addListener(function (m: AddonMessage) {
-                KeeFoxLog.debug("In iframe script, received message from background script: ");
+                KeeLog.debug("In iframe script, received message from background script: ");
 
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateFrameState(m.frameState);
@@ -131,7 +131,7 @@ function startup () {
             document.getElementById("closeContainer").appendChild(autoClose);
         }
     }
-    KeeFoxLog.info("iframe page ready");
+    KeeLog.info("iframe page ready");
 }
 
 let matchedLoginsPanel: MatchedLoginsPanel;

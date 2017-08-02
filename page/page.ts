@@ -5,7 +5,7 @@
 declare const chrome: typeof browser;
 
 let appState: AppState;
-let keefoxPopupLoadTime = Date.now();
+let keePopupLoadTime = Date.now();
 let formUtils: FormUtils;
 let formFilling: FormFilling;
 let formSaving: FormSaving;
@@ -51,7 +51,7 @@ function updateAppState (newState: AppState, isForegroundTab: boolean) {
     const shouldRemoveSubmitListeners = shouldRemoveMatches || (isForegroundTab && shouldSearch);
 
     if (shouldRemoveMatches) {
-        formFilling.removeKeeFoxIconFromAllFields();
+        formFilling.removeKeeIconFromAllFields();
     }
     if (shouldRemoveSubmitListeners) {
         formSaving.removeAllSubmitHandlers();
@@ -69,10 +69,10 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
     tabId = myTabId;
     frameId = myFrameId;
 
-    KeeFoxLog.attachConfig(configManager.current);
-    formUtils = new FormUtils(KeeFoxLog);
-    formSaving = new FormSaving(KeeFoxLog, formUtils, configManager.current);
-    formFilling = new FormFilling(formUtils, formSaving, KeeFoxLog, configManager.current, matchFinder);
+    KeeLog.attachConfig(configManager.current);
+    formUtils = new FormUtils(KeeLog);
+    formSaving = new FormSaving(KeeLog, formUtils, configManager.current);
+    formFilling = new FormFilling(formUtils, formSaving, KeeLog, configManager.current, matchFinder);
     passwordGenerator = new PasswordGenerator();
 
     inputsObserver.observe(document.body, { childList: true, subtree: true });
@@ -81,7 +81,7 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
 }
 
 function startup () {
-    KeeFoxLog.debug("content page starting");
+    KeeLog.debug("content page starting");
 
     inputsObserver = new MutationObserver(mutations => {
 
@@ -107,7 +107,7 @@ function startup () {
     myPort = chrome.runtime.connect({ name: "page" });
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
-        KeeFoxLog.debug("In browser content page script, received message from background script");
+        KeeLog.debug("In browser content page script, received message from background script");
 
         if (!appState) {
             onFirstConnect(m.appState, m.isForegroundTab, m.tabId, m.frameId);
@@ -130,7 +130,7 @@ function startup () {
         }
 
         if (m.action == "detectForms") {
-            formFilling.removeKeeFoxIconFromAllFields();
+            formFilling.removeKeeIconFromAllFields();
             formFilling.findMatchesInThisFrame();
         }
 
@@ -155,7 +155,7 @@ function startup () {
 
     });
 
-    KeeFoxLog.info("content page ready");
+    KeeLog.info("content page ready");
 }
 
 // Load our config and start the page script once done

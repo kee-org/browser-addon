@@ -54,12 +54,12 @@ class kprpcClient {
             this.callbacksData[requestId] = callbackData;
 
         const data = JSON.stringify({ params: params, method: method, id: requestId });
-        KeeFoxLog.debug("Sending a JSON-RPC request", ": "  + data);
+        KeeLog.debug("Sending a JSON-RPC request", ": "  + data);
 
         try {
             this.sendJSONRPC(data);
         } catch (ex) {
-            KeeFoxLog.warn("JSON-RPC request could not be sent. Expect an async error soon.");
+            KeeLog.warn("JSON-RPC request could not be sent. Expect an async error soon.");
             setTimeout(function () {
                 this.processJSONRPCresponse({
                     id: requestId,
@@ -76,7 +76,7 @@ class kprpcClient {
     // interpret the message from the RPC server
     evalJson (method, params) {
         let data = JSON.stringify(params);
-        KeeFoxLog.debug("Evaluating a JSON-RPC object we just recieved", ": " + data);
+        KeeLog.debug("Evaluating a JSON-RPC object we just recieved", ": " + data);
 
         if (data) {
             data = data.match(/\s*\[(.*)\]\s*/)[1];
@@ -92,7 +92,7 @@ class kprpcClient {
     KPRPCListener (signal) {
         // call this async so that json reader can get back to listening ASAP and prevent deadlocks
         setTimeout(function () {
-            keefox_org.KPRPCListener(signal);
+            kee.KPRPCListener(signal);
         }, 5);
     }
 
@@ -125,13 +125,13 @@ class kprpcClient {
         try {
             this.session.webSocket.send(data);
         } catch (ex) {
-            KeeFoxLog.error("Failed to send a websocket message. Exception details: " + ex + ", stack: " + ex.stack);
+            KeeLog.error("Failed to send a websocket message. Exception details: " + ex + ", stack: " + ex.stack);
         }
     }
 
 
     // Close the current connection and reset those variables that are shared at the moment (e.g. secret key + authenticated status)
-    // NB: Legacy support complicates the situation at the moment but in a future KeeFox release we'll
+    // NB: Legacy support complicates the situation at the moment but in a future Kee release we'll
     // probably create a more concrete representation for an existing connection so it's clearer
     // what we have to reset and what is just boilerplate around every connection
     resetConnection () {
@@ -161,30 +161,30 @@ class kprpcClient {
 
                     if (data.error.code == "VERSION_CLIENT_TOO_LOW") {
                         // This means that the server requires us to support a feature that we don't have
-                        KeeFoxLog.error($STR("conn_setup_client_features_missing") + " Extra info: " + extra);
-                        keefox_org.appState.latestConnectionError = "VERSION_CLIENT_TOO_LOW";
+                        KeeLog.error($STR("conn_setup_client_features_missing") + " Extra info: " + extra);
+                        kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_LOW";
                         this.showConnectionMessage($STR("conn_setup_client_features_missing"));
                     } else if (data.error.code == "UNRECOGNISED_PROTOCOL") {
-                        KeeFoxLog.error($STR("conn_unknown_protocol") + " "
+                        KeeLog.error($STR("conn_unknown_protocol") + " "
                             + $STRF("further_info_may_follow", extra));
-                        keefox_org.appState.latestConnectionError = "UNRECOGNISED_PROTOCOL";
+                        kee.appState.latestConnectionError = "UNRECOGNISED_PROTOCOL";
                     } else if (data.error.code == "INVALID_MESSAGE") {
-                        KeeFoxLog.error($STR("conn_invalid_message") + " "
+                        KeeLog.error($STR("conn_invalid_message") + " "
                             + $STRF("further_info_may_follow", extra));
-                        keefox_org.appState.latestConnectionError = "INVALID_MESSAGE";
+                        kee.appState.latestConnectionError = "INVALID_MESSAGE";
                     } else if (data.error.code == "AUTH_RESTART") {
-                        KeeFoxLog.error($STR("conn_setup_restart") + " "
+                        KeeLog.error($STR("conn_setup_restart") + " "
                             + $STRF("further_info_may_follow", extra));
-                        keefox_org.appState.latestConnectionError = "AUTH_RESTART";
+                        kee.appState.latestConnectionError = "AUTH_RESTART";
                         this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                         this.showConnectionMessage($STR("conn_setup_restart") + " "
                             + $STR("conn_setup_retype_password"));
                     } else {
-                        KeeFoxLog.error($STR("conn_unknown_error") + " "
+                        KeeLog.error($STR("conn_unknown_error") + " "
                             + $STRF("further_info_may_follow", extra));
-                        keefox_org.appState.latestConnectionError = "UNKNOWN_JSONRPC";
+                        kee.appState.latestConnectionError = "UNKNOWN_JSONRPC";
                         this.showConnectionMessage($STR("conn_unknown_error") + " "
-                            + $STRF("further_info_may_follow", ["See KeeFox log"]));
+                            + $STRF("further_info_may_follow", ["See Kee log"]));
                     }
                 }
                 this.resetConnection();
@@ -200,9 +200,9 @@ class kprpcClient {
             return;
 
         if (this.authenticated) {
-            KeeFoxLog.warn($STR("conn_setup_restart"));
+            KeeLog.warn($STR("conn_setup_restart"));
             this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
-            keefox_org.appState.latestConnectionError = "ALREADY_AUTHENTICATED";
+            kee.appState.latestConnectionError = "ALREADY_AUTHENTICATED";
             this.showConnectionMessage($STR("conn_setup_restart")
                 + " " + $STR("conn_setup_retype_password"));
             this.resetConnection();
@@ -214,46 +214,46 @@ class kprpcClient {
             if (data.error.messageParams && data.error.messageParams.length >= 1)
                 extra[0] = data.error.messageParams[0];
             switch (data.error.code) {
-                case "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW": KeeFoxLog.warn($STR("conn_setup_client_sl_low"));
-                    keefox_org.appState.latestConnectionError = "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW";
+                case "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW": KeeLog.warn($STR("conn_setup_client_sl_low"));
+                    kee.appState.latestConnectionError = "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW";
                     const button: Button = {
                         label: $STR("conn_setup_client_sl_low_resolution"),
                         action: "enableHighSecurityKPRPCConnection"
                     };
                     this.showConnectionMessage($STR("conn_setup_client_sl_low"), [button]);
                     break;
-                case "AUTH_FAILED": KeeFoxLog.warn($STR("conn_setup_failed") + " "
+                case "AUTH_FAILED": KeeLog.warn($STR("conn_setup_failed") + " "
                     + $STRF("further_info_may_follow", extra));
-                    keefox_org.appState.latestConnectionError = "AUTH_FAILED";
+                    kee.appState.latestConnectionError = "AUTH_FAILED";
                     this.showConnectionMessage($STR("conn_setup_failed")
                         + " " + $STR("conn_setup_retype_password"));
                     // There may be a stored key that has become corrupt through a change of security level, etc.
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     break;
-                case "AUTH_RESTART": KeeFoxLog.warn($STR("conn_setup_restart") + " "
+                case "AUTH_RESTART": KeeLog.warn($STR("conn_setup_restart") + " "
                     + $STRF("further_info_may_follow", extra));
-                    keefox_org.appState.latestConnectionError = "AUTH_RESTART";
+                    kee.appState.latestConnectionError = "AUTH_RESTART";
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     this.showConnectionMessage($STR("conn_setup_restart")
                         + " " + $STR("conn_setup_retype_password"));
                     break;
-                case "AUTH_EXPIRED": KeeFoxLog.warn($STRF("conn_setup_expired", extra));
-                    keefox_org.appState.latestConnectionError = "AUTH_EXPIRED";
+                case "AUTH_EXPIRED": KeeLog.warn($STRF("conn_setup_expired", extra));
+                    kee.appState.latestConnectionError = "AUTH_EXPIRED";
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     this.showConnectionMessage($STR("conn_setup_expired")
                         + " " + $STR("conn_setup_retype_password"));
                     break;
-                case "AUTH_INVALID_PARAM": KeeFoxLog.error($STRF("conn_setup_invalid_param", extra));
-                    keefox_org.appState.latestConnectionError = "AUTH_INVALID_PARAM";
+                case "AUTH_INVALID_PARAM": KeeLog.error($STRF("conn_setup_invalid_param", extra));
+                    kee.appState.latestConnectionError = "AUTH_INVALID_PARAM";
                     break;
-                case "AUTH_MISSING_PARAM": KeeFoxLog.error($STRF("conn_setup_missing_param", extra));
-                    keefox_org.appState.latestConnectionError = "AUTH_MISSING_PARAM";
+                case "AUTH_MISSING_PARAM": KeeLog.error($STRF("conn_setup_missing_param", extra));
+                    kee.appState.latestConnectionError = "AUTH_MISSING_PARAM";
                     break;
-                default: KeeFoxLog.error($STR("conn_unknown_error") + " "
+                default: KeeLog.error($STR("conn_unknown_error") + " "
                     + $STRF("further_info_may_follow", extra));
-                    keefox_org.appState.latestConnectionError = "UNKNOWN_SETUP";
+                    kee.appState.latestConnectionError = "UNKNOWN_SETUP";
                     this.showConnectionMessage($STR("conn_unknown_error") + " "
-                        + $STRF("further_info_may_follow", ["See KeeFox log"]));
+                        + $STRF("further_info_may_follow", ["See Kee log"]));
                     break;
             }
             this.resetConnection();
@@ -261,14 +261,14 @@ class kprpcClient {
         }
 
         // Versions of KeePassRPC <= 1.6.x will reject connections (send an "error" property) from
-        // KeeFox clients that are too new (like this one). For >= 1.7 it will only do so if it also
+        // Kee clients that are too new (like this one). For >= 1.7 it will only do so if it also
         // decides that this client does not support features essential for it to function.
         // Therefore if we've reached this far, we can check the server's list of features that get
         // sent back on the server's first handshake response and reject if the server is missing features we need.
         if (data.features && !FeatureFlags.required.every(function (feature) { return data.features.indexOf(feature) !== -1; }))
         {
-            KeeFoxLog.error($STR("conn_setup_server_features_missing"));
-            keefox_org.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
+            KeeLog.error($STR("conn_setup_server_features_missing"));
+            kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
             this.showConnectionMessage($STR("conn_setup_server_features_missing"));
             this.resetConnection();
             return;
@@ -287,8 +287,8 @@ class kprpcClient {
 
                 }
             } else {
-                KeeFoxLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
-                keefox_org.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
+                KeeLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
+                kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
                 this.sendError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
                 this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
@@ -303,8 +303,8 @@ class kprpcClient {
                     default: return;
                 }
             } else {
-                KeeFoxLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
-                keefox_org.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
+                KeeLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
+                kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
                 this.sendError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
                 this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
@@ -364,8 +364,8 @@ class kprpcClient {
             const sr = digest.toLowerCase();
 
             if (sr != data.key.sr) {
-                KeeFoxLog.warn($STR("conn_setup_failed"));
-                keefox_org.appState.latestConnectionError = "CHALLENGE_RESPONSE_MISMATCH";
+                KeeLog.warn($STR("conn_setup_failed"));
+                kee.appState.latestConnectionError = "CHALLENGE_RESPONSE_MISMATCH";
                 this.showConnectionMessage($STR("conn_setup_failed")
                     + " " + $STR("conn_setup_retype_password"));
                 this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
@@ -376,7 +376,7 @@ class kprpcClient {
                 // note down our agreed secret key somewhere that we can find it easily later
                 this.secretKey = this.getStoredKey();
 
-                // 0.025 second delay before we try to do the KeeFox connection startup stuff
+                // 0.025 second delay before we try to do the Kee connection startup stuff
                 setTimeout(this.onConnectStartup, 50, "CR", this.onConnectStartup);
             }
         });
@@ -432,8 +432,8 @@ class kprpcClient {
         this.srpClientInternals.confirm_authentication(data.srp.M2);
 
         if (!this.srpClientInternals.authenticated) {
-            KeeFoxLog.warn($STR("conn_setup_failed"));
-            keefox_org.appState.latestConnectionError = "SRP_AUTH_FAILURE";
+            KeeLog.warn($STR("conn_setup_failed"));
+            kee.appState.latestConnectionError = "SRP_AUTH_FAILURE";
             this.showConnectionMessage($STR("conn_setup_failed")
                 + " " + $STR("conn_setup_retype_password"));
             this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
@@ -451,7 +451,7 @@ class kprpcClient {
                 // store the key somewhere persistent (according to the security level rules)
                 this.setStoredKey(this.srpClientInternals.I, this.getSecurityLevel(), key);
 
-                // 0.025 second delay before we try to do the KeeFox connection startup stuff
+                // 0.025 second delay before we try to do the Kee connection startup stuff
                 setTimeout(this.onConnectStartup, 50, "SRP", this.onConnectStartup);
             });
         }
@@ -461,13 +461,13 @@ class kprpcClient {
     onConnectStartup (type, thisFunction, timeout) {
 
         // if any errors were shown, they are now resolved
-        keefox_org.removeUserNotifications((notification: KeeFoxNotification) => notification.name != "keefox-connection-message");
-        keefox_org.appState.latestConnectionError = "";
+        kee.removeUserNotifications((notification: KeeNotification) => notification.name != "kee-connection-message");
+        kee.appState.latestConnectionError = "";
 
         //TODO:#9:tutorial, etc.
-        //keefox_org._keeFoxExtension.prefs.setValue("lastConnectedToKeePass", ISO8601DateUtils.create(new Date()));
-        keefox_org._refreshKPDB();
-        keefox_org.getApplicationMetadata();
+        //kee._keeExtension.prefs.setValue("lastConnectedToKeePass", ISO8601DateUtils.create(new Date()));
+        kee._refreshKPDB();
+        kee.getApplicationMetadata();
     }
 
     // No need to return anything from this function so sync or async implementation is fine
@@ -509,11 +509,11 @@ class kprpcClient {
             } catch (e) {
                 delete this.callbacks[obj.id];
                 delete this.callbacksData[obj.id];
-                KeeFoxLog.warn("An error occurred when processing the result callback for JSON-RPC object id " + obj.id + ": " + e);
+                KeeLog.warn("An error occurred when processing the result callback for JSON-RPC object id " + obj.id + ": " + e);
             }
         } else if ("error" in obj) {
             try {
-                KeeFoxLog.error("An error occurred in KeePassRPC object id: " + obj.id + " with this message: " + obj.message + " and this error: " + obj.error + " and this error message: " + obj.error.message);
+                KeeLog.error("An error occurred in KeePassRPC object id: " + obj.id + " with this message: " + obj.message + " and this error: " + obj.error + " and this error message: " + obj.error.message);
                 if (this.callbacks[obj.id] != null)
                     this.callbacks[obj.id](obj, this.callbacksData[obj.id]);
                 delete this.callbacks[obj.id];
@@ -521,7 +521,7 @@ class kprpcClient {
             } catch (e) {
                 delete this.callbacks[obj.id];
                 delete this.callbacksData[obj.id];
-                KeeFoxLog.warn("An error occurred when processing the error callback for JSON-RPC object id " + obj.id + ": " + e);
+                KeeLog.warn("An error occurred when processing the error callback for JSON-RPC object id " + obj.id + ": " + e);
             }
         } else if ("method" in obj) {
             const result: any = { id: obj.id };
@@ -532,7 +532,7 @@ class kprpcClient {
                     result.result = null;
             } catch (e) {
                 result.error = e;
-                KeeFoxLog.error("An error occurred when processing a JSON-RPC request: " + e);
+                KeeLog.error("An error occurred when processing a JSON-RPC request: " + e);
             }
             // json rpc not specific about notifications, other than the fact
             // they do not have the id in the request.  do not respond to
@@ -542,7 +542,7 @@ class kprpcClient {
             //if ("id" in obj)
             //    session.writeData(JSON.stringify(result));
         } else {
-            KeeFoxLog.error("Unexpected error processing receiveJSONRPC");
+            KeeLog.error("Unexpected error processing receiveJSONRPC");
         }
     }
 
@@ -598,7 +598,7 @@ class kprpcClient {
                     // these parameters allows KPRPC to identify which type of client is making
                     // this request. We can't trust it but it can help the user to understand what's going on.
                     clientTypeId: "keefox",
-                    clientDisplayName: "KeeFox",
+                    clientDisplayName: "Kee",
                     clientDisplayDescription: $STR("conn_display_description")
                 };
 
@@ -608,13 +608,13 @@ class kprpcClient {
             // closed so we are able to retry the connection a bit later but we'll
             // enforce a little delay just in case the reason for the problem is
             // that the application startup is progressing very slowly for some other reason
-            KeeFoxLog.warn("An attempt to setup the KPRPC secure channel has failed. It will not be retried for at least 10 seconds." +
+            KeeLog.warn("An attempt to setup the KPRPC secure channel has failed. It will not be retried for at least 10 seconds." +
                 " If you see this message regularly and are not sure why, please ask on the help forum. Technical detail about the problem follows: " + ex);
             this.session.connectionProhibitedUntil = new Date();
             this.session.connectionProhibitedUntil.setTime(
                 this.session.connectionProhibitedUntil.getTime() + 10000);
             this.resetConnection();
-            KeeFoxLog.debug("Connection state reset ready for next attempt in at least 10 seconds");
+            KeeLog.debug("Connection state reset ready for next attempt in at least 10 seconds");
         }
 
     }
@@ -685,7 +685,7 @@ class kprpcClient {
     // Encrypt plaintext using web crypto api
     encrypt (plaintext, callback) {
 
-        KeeFoxLog.debug("starting webcrypto encryption");
+        KeeLog.debug("starting webcrypto encryption");
 
         const KPRPC = this;
         const wc = crypto.subtle;
@@ -744,20 +744,20 @@ class kprpcClient {
                     });
                 })
                     .catch(function (e) {
-                        KeeFoxLog.error("Failed to calculate HMAC. Exception: " + e);
+                        KeeLog.error("Failed to calculate HMAC. Exception: " + e);
                         callback(null);
                     });
 
             })
             .catch(function (e) {
-                KeeFoxLog.error("Failed to encrypt. Exception: " + e);
+                KeeLog.error("Failed to encrypt. Exception: " + e);
                 callback(null);
             });
     }
 
     // Decrypt incoming data from KeePassRPC using AES-CBC and a separate HMAC
     decrypt (encryptedContainer, callback) {
-        KeeFoxLog.debug("starting webcrypto decryption");
+        KeeLog.debug("starting webcrypto decryption");
 
         const KPRPC = this;
         let t = (new Date()).getTime();
@@ -785,13 +785,13 @@ class kprpcClient {
         const ivAB = hmacData.subarray(len - 16);
 
         let tn = (new Date()).getTime();
-        KeeFoxLog.debug("decryption stage 'data prep 1' took: " + (tn - t));
+        KeeLog.debug("decryption stage 'data prep 1' took: " + (tn - t));
         t = tn;
 
         const typescriptHack4 = wc.digest({ name: "SHA-1" }, secretKeyAB) as Promise<ArrayBuffer>;
         typescriptHack4.then(function (secretkeyHash) {
             tn = (new Date()).getTime();
-            KeeFoxLog.debug("decryption stage 'key hash' took: " + (tn - t));
+            KeeLog.debug("decryption stage 'key hash' took: " + (tn - t));
             t = tn;
 
             // fill the hmacData bytearray with the rest of the data
@@ -799,7 +799,7 @@ class kprpcClient {
             utils.base64toByteArrayForHMAC(iv, 0, ivAB);
 
             tn = (new Date()).getTime();
-            KeeFoxLog.debug("decryption stage 'data prep 2' took: " + (tn - t));
+            KeeLog.debug("decryption stage 'data prep 2' took: " + (tn - t));
             t = tn;
 
             // We could get a promise from crypto.subtle.digest({name: "SHA-1"}, hmacData)
@@ -813,7 +813,7 @@ class kprpcClient {
         }).then(digest => {
             const ourHMAC = digest;
             tn = (new Date()).getTime();
-            KeeFoxLog.debug("decryption stage 'generate HMAC' took: " + (tn - t));
+            KeeLog.debug("decryption stage 'generate HMAC' took: " + (tn - t));
             t = tn;
 
             if (ourHMAC == hmac) {
@@ -826,18 +826,18 @@ class kprpcClient {
                 ) as Promise<CryptoKey>;
                 typescriptHack3.then(function (pwKey) {
                     tn = (new Date()).getTime();
-                    KeeFoxLog.debug("decryption stage 'import key' took: " + (tn - t));
+                    KeeLog.debug("decryption stage 'import key' took: " + (tn - t));
                     t = tn;
                     const alg = { name: "AES-CBC", iv: ivAB };
                     return wc.decrypt(alg, pwKey, messageAB);
                 })
                     .then(function (decrypted) {
                         tn = (new Date()).getTime();
-                        KeeFoxLog.debug("decryption stage 'aes-cbc' took: " + (tn - t));
+                        KeeLog.debug("decryption stage 'aes-cbc' took: " + (tn - t));
                         t = tn;
                         const plainText = new TextDecoder("utf-8").decode(decrypted);
                         tn = (new Date()).getTime();
-                        KeeFoxLog.debug("decryption stage 'utf-8 conversion' took: " + (tn - t));
+                        KeeLog.debug("decryption stage 'utf-8 conversion' took: " + (tn - t));
                         t = tn;
 
                         const callbackTarget = function (func, data) {
@@ -849,10 +849,10 @@ class kprpcClient {
                         setTimeout(callbackTarget, 1, callback.bind(KPRPC), plainText);
                     })
                     .catch(function (e) {
-                        KeeFoxLog.error("Failed to decrypt. Exception: " + e);
+                        KeeLog.error("Failed to decrypt. Exception: " + e);
 
-                        KeeFoxLog.warn($STR("conn_setup_restart"));
-                        keefox_org.appState.latestConnectionError = "DECRYPTION_FAILED";
+                        KeeLog.warn($STR("conn_setup_restart"));
+                        kee.appState.latestConnectionError = "DECRYPTION_FAILED";
                         KPRPC.showConnectionMessage($STR("conn_setup_restart")
                             + " " + $STR("conn_setup_retype_password"));
                         KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
@@ -862,10 +862,10 @@ class kprpcClient {
             }
         })
             .catch(function (e) {
-                KeeFoxLog.error("Failed to hash secret key. Exception: " + e);
+                KeeLog.error("Failed to hash secret key. Exception: " + e);
 
-                KeeFoxLog.warn($STR("conn_setup_restart"));
-                keefox_org.appState.latestConnectionError = "SECRET_KEY_HASH_FAILED";
+                KeeLog.warn($STR("conn_setup_restart"));
+                kee.appState.latestConnectionError = "SECRET_KEY_HASH_FAILED";
                 this.showConnectionMessage($STR("conn_setup_restart")
                     + " " + $STR("conn_setup_retype_password"));
                 KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
@@ -875,8 +875,8 @@ class kprpcClient {
     }
 
     showConnectionMessage (msg: string, buttons?: Button[]) {
-        keefox_org.notifyUser(new KeeFoxNotification(
-            "keefox-connection-message", buttons ? buttons : [], utils.newGUID(), [msg], "Medium", false));
+        kee.notifyUser(new KeeNotification(
+            "kee-connection-message", buttons ? buttons : [], utils.newGUID(), [msg], "Medium", false));
     }
 
 }

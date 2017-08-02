@@ -2,16 +2,16 @@
 /// <reference path="../common/kfDataModel.ts" />
 /// <reference path="../common/config.ts" />
 /// <reference path="../common/ConfigManager.ts" />
-/// <reference path="keeFoxFieldIcon.ts" />
+/// <reference path="keeFieldIcon.ts" />
 /// <reference path="PanelStub.ts" />
 /// <reference path="formSaving.ts" />
 
 class MatchResult {
-    logins: keeFoxLoginInfo[][];
+    logins: keeLoginInfo[][];
     submitTargets: HTMLElement[];
     usernameIndexArray: number[];
-    passwordFieldsArray: keeFoxLoginField[][];
-    otherFieldsArray: keeFoxLoginField[][];
+    passwordFieldsArray: keeLoginField[][];
+    otherFieldsArray: keeLoginField[][];
     currentPage: number;
     allMatchingLogins: any[];
     formRelevanceScores: number[];
@@ -41,7 +41,7 @@ class MatchResult {
 
 class FormFilling {
 
-    private Logger: KeeFoxLogger;
+    private Logger: KeeLogger;
     private config: Config;
     private findLoginOp: any = {};
     private matchResult: MatchResult = new MatchResult();
@@ -50,7 +50,7 @@ class FormFilling {
     private formUtils: FormUtils;
     private formSaving: FormSaving;
 
-    private keeFoxFieldIcon: KeeFoxFieldIcon;
+    private keeFieldIcon: KeeFieldIcon;
 
     public matchedLoginsPanelStub: PanelStub;
     private matchedLoginsPanelStubRaf: number;
@@ -60,7 +60,7 @@ class FormFilling {
 
     constructor (formUtils: FormUtils,
         formSaving: FormSaving,
-        logger: KeeFoxLogger,
+        logger: KeeLogger,
         config: Config,
         matchFinder: {(uri: string): void}) {
 
@@ -69,7 +69,7 @@ class FormFilling {
         this.Logger = logger;
         this.config = config;
         this.matchFinder = matchFinder;
-        this.keeFoxFieldIcon = new KeeFoxFieldIcon();
+        this.keeFieldIcon = new KeeFieldIcon();
     }
 
     public executePrimaryAction () {
@@ -273,7 +273,7 @@ class FormFilling {
         // we try to fill every form field. We try to match by id first and then name before just guessing.
         // Generally we'll only fill if the matched field is of the same type as the form field but
         // we are flexible RE text and username fields because that's an artificial difference
-        // for the sake of the KeeFox password management software. However, usernames will be chosen above
+        // for the sake of the Kee password management software. However, usernames will be chosen above
         // text fields if all else is equal
         const fields = [];
 
@@ -484,8 +484,8 @@ class FormFilling {
         {
             pseudoForm = {
                 elements: orphanedFields,
-                id: "KeeFox-pseudo-form",
-                name: "KeeFox-pseudo-form",
+                id: "Kee-pseudo-form",
+                name: "Kee-pseudo-form",
                 ownerDocument: doc,
                 getElementsByTagName: function () { return this.elements; }, // Only use is for listing input elements
                 querySelectorAll: function () { return []; }, // Only use is for listing button elements
@@ -513,7 +513,7 @@ class FormFilling {
 
                 for (const i in foundLogins)
                 {
-                    const kfl = new keeFoxLoginInfo();
+                    const kfl = new keeLoginInfo();
                     kfl.initFromEntry(foundLogins[i]);
 
                     // Only consider logins that have some kind of form data to fill in
@@ -676,7 +676,7 @@ class FormFilling {
             myPort.postMessage({ logins: matchResult.logins[matchResult.mostRelevantFormIndex] });
 
             // Give the user a way to choose a login interactively
-            this.keeFoxFieldIcon.addKeeFoxIconToFields(passwordFields, otherFields, matchResult.logins[matchResult.mostRelevantFormIndex]);
+            this.keeFieldIcon.addKeeIconToFields(passwordFields, otherFields, matchResult.logins[matchResult.mostRelevantFormIndex]);
         }
 
         // this records the login that we eventually choose as the one to fill the chosen form with
@@ -1063,7 +1063,7 @@ class FormFilling {
         if (login.priority > 0)
             score = 1000000000 - login.priority * 1000;
 
-        // KeeFox 1.5+ no longer considers action URLs in relevance weighting. Since the only
+        // Kee 1.5+ no longer considers action URLs in relevance weighting. Since the only
         // login entries of interest are already pre-matched by KeePass, this should have been
         // adding negligable accuracy to the form matching.
 
@@ -1167,8 +1167,8 @@ class FormFilling {
         return {score: score, lowFieldMatchRatio: lowFieldMatchRatio};
     }
 
-    public removeKeeFoxIconFromAllFields () {
-        this.keeFoxFieldIcon.removeKeeFoxIconFromAllFields();
+    public removeKeeIconFromAllFields () {
+        this.keeFieldIcon.removeKeeIconFromAllFields();
     }
 
 }

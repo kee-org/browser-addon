@@ -17,14 +17,14 @@ interface LogMessage {
 }
 
 // constructor
-class KeeFoxLogger {
+class KeeLogger {
     constructor ()
     {
         this.config = {logLevel: 3, logSensitiveData: false};
         this.info("Logging system initialised at " + Date());
         this.config = {logLevel: 2, logSensitiveData: false};
         if (this.config.logSensitiveData)
-            this.warn("WARNING: KeeFox Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
+            this.warn("WARNING: Kee Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
     }
 
     config: {logLevel: number, logSensitiveData: boolean};
@@ -34,7 +34,7 @@ class KeeFoxLogger {
         this.info("Logging system config updated at " + Date());
         this.config = config;
         if (config.logSensitiveData)
-            this.warn("WARNING: KeeFox Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
+            this.warn("WARNING: Kee Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
     }
 
     private getMessage (data)
@@ -120,4 +120,4 @@ class KeeFoxLogger {
 
 }
 
-let KeeFoxLog = new KeeFoxLogger();
+let KeeLog = new KeeLogger();

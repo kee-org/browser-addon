@@ -17,8 +17,8 @@ class BackgroundUtils {
                 label: $STR("learn_more"),
                 action: "loadUrlHelpSensitiveLogging"
             };
-            keefox_org.notifyUser(new KeeFoxNotification(
-                "keefox-sensitivelog", [button], utils.newGUID(), [$STR("notifyBarLogSensitiveData_label")], "High", false));
+            kee.notifyUser(new KeeNotification(
+                "kee-sensitivelog", [button], utils.newGUID(), [$STR("notifyBarLogSensitiveData_label")], "High", false));
         }
     };
 
@@ -27,7 +27,7 @@ class BackgroundUtils {
     /*******************************************/
 
     openAndReuseOneTabPerURL = function (url) {
-        KeeFoxLog.debug({
+        KeeLog.debug({
             m: "trying to find an already open tab with the requested url",
             sm: "trying to find an already open tab with this url: " + url,
             r: true } as LogMessage);

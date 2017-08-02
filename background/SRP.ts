@@ -87,7 +87,7 @@ class SRPc {
             this.success();
         }
         else
-            KeeFoxLog.error("Server key does not match");
+            KeeLog.error("Server key does not match");
     }
 
     success () {
@@ -106,7 +106,7 @@ class SRPc {
                 });
             }
             else {
-                KeeFoxLog.error("User has not been authenticated.");
+                KeeLog.error("User has not been authenticated.");
                 return Promise.resolve(null);
             }
         } else {

@@ -5,24 +5,24 @@ class KFCommands {
         browser.commands.onCommand.addListener(command => {
             switch (command) {
                 case "detect-forms":
-                    if (keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0) {
-                        keefox_org.tabStates[keefox_org.foregroundTabId].framePorts.forEach(port => {
+                    if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
+                        kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
                                 port.postMessage({ action: "detectForms" });
                         }, this);
                     }
                 break;
                 case "primary-action":
-                    if (keefox_org.appState.ActiveKeePassDatabaseIndex < 0) {
-                        keefox_org.loginToKeePass();
+                    if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
+                        kee.loginToKeePass();
                     } else {
-                        keefox_org.tabStates[keefox_org.foregroundTabId].framePorts.forEach(port => {
+                        kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
                                 port.postMessage({ action: "primary" });
                         }, this);
                     }
                 break;
                 case "generate-password":
-                    if (keefox_org.appState.connected) {
-                        keefox_org.tabStates[keefox_org.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
+                    if (kee.appState.connected) {
+                        kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
                     }
                 break;
             }
@@ -32,36 +32,36 @@ class KFCommands {
             const id = (info.menuItemId as string);
             switch (id) {
                 case "detect-forms":
-                    if (keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0) {
-                        keefox_org.tabStates[keefox_org.foregroundTabId].framePorts.forEach(port => {
+                    if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
+                        kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
                                 port.postMessage({ action: "detectForms" });
                         }, this);
                     }
                 break;
                 // case "primary-action":
-                //     if (keefox_org.appState.ActiveKeePassDatabaseIndex < 0) {
-                //         keefox_org.loginToKeePass();
+                //     if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
+                //         kee.loginToKeePass();
                 //     } else {
-                //         keefox_org.tabStates[keefox_org.foregroundTabId].framePorts.forEach(port => {
+                //         kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
                 //                 port.postMessage({ action: "primary" });
                 //         }, this);
                 //     }
                 // break;
                 case "generate-password":
-                    if (keefox_org.appState.connected) {
-                        keefox_org.tabStates[keefox_org.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
+                    if (kee.appState.connected) {
+                        kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
                     }
                 break;
             }
             if (id.startsWith("matchedLogin-")) {
-                keefox_org.tabStates[keefox_org.foregroundTabId].framePorts[(info as any).frameId].postMessage({ action: "manualFill", selectedLoginIndex: id.substr(id.indexOf("-")+1) });
+                kee.tabStates[kee.foregroundTabId].framePorts[(info as any).frameId].postMessage({ action: "manualFill", selectedLoginIndex: id.substr(id.indexOf("-")+1) });
             }
         });
     }
 
     public setupContextMenuItems () {
         chrome.contextMenus.removeAll(() => {
-            if (keefox_org.appState.connected && keefox_org.appState.ActiveKeePassDatabaseIndex >= 0) {
+            if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
                 try {
                     browser.contextMenus.create({
                         id: "detect-forms",
@@ -78,7 +78,7 @@ class KFCommands {
                 }
             }
 
-            if (keefox_org.appState.connected) {
+            if (kee.appState.connected) {
                 try {
                     browser.contextMenus.create({
                         id: "generate-password",
@@ -95,15 +95,15 @@ class KFCommands {
                 }
             }
 
-            // if (keefox_org.appState.ActiveKeePassDatabaseIndex < 0) {
+            // if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
 
             // }
 
-            if (keefox_org.foregroundTabId >= 0
-            && keefox_org.tabStates[keefox_org.foregroundTabId]
-            && keefox_org.tabStates[keefox_org.foregroundTabId].frames
-            && keefox_org.tabStates[keefox_org.foregroundTabId].frames.length > 0) {
-                keefox_org.tabStates[keefox_org.foregroundTabId].frames.forEach(frame => {
+            if (kee.foregroundTabId >= 0
+            && kee.tabStates[kee.foregroundTabId]
+            && kee.tabStates[kee.foregroundTabId].frames
+            && kee.tabStates[kee.foregroundTabId].frames.length > 0) {
+                kee.tabStates[kee.foregroundTabId].frames.forEach(frame => {
                     for (let j=0; j<frame.logins.length; j++) {
                         const login = frame.logins[j];
                         try {

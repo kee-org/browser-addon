@@ -13,7 +13,7 @@ class SearchFilter {
 
     public attachFilterToSearchBox (searchBox: HTMLInputElement, searchRequestor, currentURIs: string[], search: Search) {
         let inMainPanel = false;
-        if (searchBox.getAttribute("id") === "KeeFox-PanelSection-searchbox")
+        if (searchBox.getAttribute("id") === "Kee-PanelSection-searchbox")
             inMainPanel = true;
 
         const doc = searchBox.ownerDocument;
@@ -23,17 +23,17 @@ class SearchFilter {
 
         const searchFilter = doc.createElement("select");
         searchFilter.setAttribute("disabled", "true");
-        searchFilter.setAttribute("id", "KeeFox-" + prefix + "-searchfilter");
-        searchFilter.classList.add("KeeFox-Search-Filter");
+        searchFilter.setAttribute("id", "Kee-" + prefix + "-searchfilter");
+        searchFilter.classList.add("Kee-Search-Filter");
         const searchFilterOptionAll = doc.createElement("option");
         searchFilterOptionAll.setAttribute("value", "");
-        searchFilterOptionAll.setAttribute("id", "KeeFox-"+prefix+"-searchfilter-all");
-        searchFilterOptionAll.classList.add("KeeFox-Search-Filter");
+        searchFilterOptionAll.setAttribute("id", "Kee-"+prefix+"-searchfilter-all");
+        searchFilterOptionAll.classList.add("Kee-Search-Filter");
         searchFilterOptionAll.textContent = $STR("all-websites");
         const searchFilterOptionCurrent = doc.createElement("option");
         searchFilterOptionCurrent.setAttribute("value", "");
-        searchFilterOptionCurrent.setAttribute("id", "KeeFox-"+prefix+"-searchfilter-current");
-        searchFilterOptionCurrent.classList.add("KeeFox-Search-Filter");
+        searchFilterOptionCurrent.setAttribute("id", "Kee-"+prefix+"-searchfilter-current");
+        searchFilterOptionCurrent.classList.add("Kee-Search-Filter");
         searchFilterOptionCurrent.textContent = $STR("current-website");
 
         if (inMainPanel)
@@ -47,15 +47,15 @@ class SearchFilter {
         searchFilter.appendChild(searchFilterOptionAll);
         searchFilter.appendChild(searchFilterOptionCurrent);
         const searchFilterChangeHandler = function (e) {
-            search.execute(e.target.ownerDocument.getElementById("KeeFox-"+prefix+"-searchbox").value,
+            search.execute(e.target.ownerDocument.getElementById("Kee-"+prefix+"-searchbox").value,
                 searchRequestor.onSearchComplete.bind(searchRequestor),
                 e.target.selectedOptions[0].value.split(","));
-            e.target.ownerDocument.getElementById("KeeFox-"+prefix+"-searchbox").focus();
+            e.target.ownerDocument.getElementById("Kee-"+prefix+"-searchbox").focus();
         };
         searchFilter.addEventListener("change", searchFilterChangeHandler.bind(this), false);
 
         const searchFields = doc.createElement("div");
-        searchFields.classList.add("keefox-searchFields", "xulhbox");
+        searchFields.classList.add("kee-searchFields", "xulhbox");
         searchFields.appendChild(searchBox);
         searchFields.appendChild(searchFilter);
 
@@ -78,7 +78,7 @@ class SearchFilter {
             }
         } else {
             //TODO:#7: main panel support?
-            // let callbackName = "keefox:";
+            // let callbackName = "kee:";
             // try {
             //     let uuidGenerator = Cc["@mozilla.org/uuid-generator;1"]
             //         .getService(Ci.nsIUUIDGenerator);
@@ -94,7 +94,7 @@ class SearchFilter {
             //     this.updateSearchFilterFinish(searchFilter, current, message.data.domains);
             // }.bind(this);
             // messageManager.addMessageListener(callbackName, myCallback);
-            // messageManager.sendAsyncMessage("keefox:getAllFrameDomains", { callbackName: callbackName });
+            // messageManager.sendAsyncMessage("kee:getAllFrameDomains", { callbackName: callbackName });
         }
     }
 
@@ -113,7 +113,7 @@ class SearchFilter {
 
     private getFilterState (doc, prefix)
     {
-        if (doc.getElementById("KeeFox-" + prefix + "-searchfilter").selectedOptions[0].id == "KeeFox-"+prefix+"-searchfilter-all")
+        if (doc.getElementById("Kee-" + prefix + "-searchfilter").selectedOptions[0].id == "Kee-"+prefix+"-searchfilter-all")
             return "all";
         else
             return "current";

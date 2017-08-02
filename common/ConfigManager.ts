@@ -100,11 +100,11 @@ class ConfigManager {
         const configValues: any = {};
 
         //TODO:3: Need to be able to save some config details locally and others synced
-        configValues.keefoxConfigPageCount = pages.length;
+        configValues.keeConfigPageCount = pages.length;
 
         for (let i=0; i < pages.length; i++)
         {
-            configValues["keefoxConfigPage" + i] = pages[i];
+            configValues["keeConfigPage" + i] = pages[i];
         }
         if (callback) chrome.storage.local.set(configValues, callback);
         else chrome.storage.local.set(configValues);
@@ -112,14 +112,14 @@ class ConfigManager {
 
     public load (onLoaded) {
         browser.storage.local.get().then(config => {
-            const pageCount = config["keefoxConfigPageCount"];
+            const pageCount = config["keeConfigPageCount"];
 
             if (pageCount) {
 
                 let configString = "";
                 for (let i=0; i < pageCount; i++)
                 {
-                    const nextPage = config["keefoxConfigPage" + i];
+                    const nextPage = config["keeConfigPage" + i];
                     if (nextPage)
                         configString += nextPage;
                 }
@@ -133,14 +133,14 @@ class ConfigManager {
 
     private reload (onLoaded?) {
         browser.storage.local.get().then(config => {
-            const pageCount = config["keefoxConfigPageCount"];
+            const pageCount = config["keeConfigPageCount"];
 
             if (pageCount) {
 
                 let configString = "";
                 for (let i=0; i < pageCount; i++)
                 {
-                    const nextPage = config["keefoxConfigPage" + i];
+                    const nextPage = config["keeConfigPage" + i];
                     if (nextPage)
                         configString += nextPage;
                 }
@@ -457,7 +457,7 @@ class ConfigManager {
         return derivedConfig;
     }
 
-    public isFormInteresting (form: HTMLFormElement, conf: SiteConfig, otherFields: keeFoxLoginField[]) {
+    public isFormInteresting (form: HTMLFormElement, conf: SiteConfig, otherFields: keeLoginField[]) {
 
         const blacklisted = (conf.blackList && conf.blackList.form && conf.blackList.form.ids || []).indexOf(form.id) >= 0
             || (conf.blackList && conf.blackList.form && conf.blackList.form.names || []).indexOf(form.name) >= 0

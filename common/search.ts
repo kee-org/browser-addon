@@ -3,13 +3,13 @@
 */
 
 class SearchConfig {
-    // KeeFox will check the supplied version number and behave consistently
-    // for each version, regardless of the current KeeFox addon version.
+    // Kee will check the supplied version number and behave consistently
+    // for each version, regardless of the current Kee addon version.
     // If you supply a config object, you must at least include this property
     version: number;
 
     // Whether to search all logged in databases or just the active one
-    // (generally will want to respect the KeeFox option with this name)
+    // (generally will want to respect the Kee option with this name)
     searchAllDatabases: boolean;
 
     // Disable searching in some parts of the entries if required
@@ -68,7 +68,7 @@ class Search {
             && filterURLs[0].length > 0) ? true : false;
 
         if (!this.configIsValid) {
-            KeeFoxLog.error("You can't execute a search while the search configuration is invalid. Please fix it by calling reconfigure().");
+            KeeLog.error("You can't execute a search while the search configuration is invalid. Please fix it by calling reconfigure().");
             abort = true;
         }
 
@@ -159,7 +159,7 @@ class Search {
             config = {};
         else {
             if (config.version != 1)
-                KeeFoxLog.warn("Unknown search config version. Will use version 1 defaults");
+                KeeLog.warn("Unknown search config version. Will use version 1 defaults");
         }
 
         this.searchConfig = {
@@ -183,67 +183,67 @@ class Search {
         this.configIsValid = true;
 
         if (this.searchConfig.version != 1) {
-            KeeFoxLog.warn("Unknown config version");
+            KeeLog.warn("Unknown config version");
             this.configIsValid = false;
         }
 
         if (this.searchConfig.searchAllDatabases !== true && this.searchConfig.searchAllDatabases !== false) {
-            KeeFoxLog.warn("searchAllDatabases should be a boolean");
+            KeeLog.warn("searchAllDatabases should be a boolean");
             this.configIsValid = false;
         }
 
         if (this.searchConfig.searchTitles !== true && this.searchConfig.searchTitles !== false) {
-            KeeFoxLog.warn("searchTitles should be a boolean");
+            KeeLog.warn("searchTitles should be a boolean");
             this.configIsValid = false;
         }
 
         if (this.searchConfig.searchUsernames !== true && this.searchConfig.searchUsernames !== false) {
-            KeeFoxLog.warn("searchUsernames should be a boolean");
+            KeeLog.warn("searchUsernames should be a boolean");
             this.configIsValid = false;
         }
 
         if (this.searchConfig.searchGroups !== true && this.searchConfig.searchGroups !== false) {
-            KeeFoxLog.warn("searchGroups should be a boolean");
+            KeeLog.warn("searchGroups should be a boolean");
             this.configIsValid = false;
         }
 
         if (this.searchConfig.searchURLs !== true && this.searchConfig.searchURLs !== false) {
-            KeeFoxLog.warn("searchURLs should be a boolean");
+            KeeLog.warn("searchURLs should be a boolean");
             this.configIsValid = false;
         }
 
         if (isNaN(this.searchConfig.weightTitles) || this.searchConfig.weightTitles <= 0) {
-            KeeFoxLog.warn("weightTitles should be a positive number");
+            KeeLog.warn("weightTitles should be a positive number");
             this.configIsValid = false;
         }
 
         if (isNaN(this.searchConfig.weightUsernames) || this.searchConfig.weightUsernames <= 0) {
-            KeeFoxLog.warn("weightUsernames should be a positive number");
+            KeeLog.warn("weightUsernames should be a positive number");
             this.configIsValid = false;
         }
 
         if (isNaN(this.searchConfig.weightGroups) || this.searchConfig.weightGroups <= 0) {
-            KeeFoxLog.warn("weightGroups should be a positive number");
+            KeeLog.warn("weightGroups should be a positive number");
             this.configIsValid = false;
         }
 
         if (isNaN(this.searchConfig.weightURLs) || this.searchConfig.weightURLs <= 0) {
-            KeeFoxLog.warn("weightURLs should be a positive number");
+            KeeLog.warn("weightURLs should be a positive number");
             this.configIsValid = false;
         }
 
         if (isNaN(this.searchConfig.maximumResults) || this.searchConfig.maximumResults <= 0) {
-            KeeFoxLog.warn("maximumResults should be a positive number");
+            KeeLog.warn("maximumResults should be a positive number");
             this.configIsValid = false;
         }
 
         if (this.searchConfig.onComplete != null && typeof (this.searchConfig.onComplete) !== "function") {
-            KeeFoxLog.warn("onComplete should be a function (or ommitted)");
+            KeeLog.warn("onComplete should be a function (or ommitted)");
             this.configIsValid = false;
         }
 
         if (this.searchConfig.onMatch != null && typeof (this.searchConfig.onMatch) !== "function") {
-            KeeFoxLog.warn("onMatch should be a function (or ommitted)");
+            KeeLog.warn("onMatch should be a function (or ommitted)");
             this.configIsValid = false;
         }
 

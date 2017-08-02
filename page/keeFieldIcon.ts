@@ -1,9 +1,9 @@
-class KeeFoxFieldIcon {
+class KeeFieldIcon {
 
-    private fieldsWithIcons: keeFoxLoginField[] = [];
-    private logins: keeFoxLoginInfo[];
+    private fieldsWithIcons: keeLoginField[] = [];
+    private logins: keeLoginInfo[];
 
-    public removeKeeFoxIconFromAllFields () {
+    public removeKeeIconFromAllFields () {
         for (const field of this.fieldsWithIcons) {
             const element: HTMLElement = field.DOMInputElement;
             element.removeEventListener("click", this.showMatchedLoginsPanel);
@@ -18,7 +18,7 @@ class KeeFoxFieldIcon {
         this.logins = null;
     }
 
-    public addKeeFoxIconToFields (passwordFields: keeFoxLoginField[], otherFields: keeFoxLoginField[], logins: keeFoxLoginInfo[]) {
+    public addKeeIconToFields (passwordFields: keeLoginField[], otherFields: keeLoginField[], logins: keeLoginInfo[]) {
 
         this.logins = logins;
 

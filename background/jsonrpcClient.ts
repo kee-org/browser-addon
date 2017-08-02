@@ -1,6 +1,6 @@
 /*
 jsonrpcClient provides a JSON-RPC client and method proxies for
-communication between KeeFox and a KeePassRPC server.
+communication between Kee and a KeePassRPC server.
 */
 
 /// <reference path="../common/ConfigManager.ts" />
@@ -58,7 +58,7 @@ class jsonrpcClient {
             if ("result" in resultWrapper && resultWrapper.result !== false)
             {
                 // if (resultWrapper.result !== null)
-                //     keefox_win.mainUI.setMRUdatabasesCallback(resultWrapper.result);
+                //     kee_win.mainUI.setMRUdatabasesCallback(resultWrapper.result);
 
             }
         }, ++this.kprpcClient.requestId);
@@ -91,7 +91,7 @@ class jsonrpcClient {
         if (dbFileName == undefined || dbFileName == null || dbFileName == "")
         {
             if (!configManager.current.searchAllOpenDBs)
-                dbFileName = keefox_org.appState.KeePassDatabases[keefox_org.appState.ActiveKeePassDatabaseIndex].fileName;
+                dbFileName = kee.appState.KeePassDatabases[kee.appState.ActiveKeePassDatabaseIndex].fileName;
             else
                 dbFileName = "";
         }
@@ -109,7 +109,7 @@ class jsonrpcClient {
             if ("result" in resultWrapper && resultWrapper.result !== false)
             {
                 if (resultWrapper.result !== null)
-                    keefox_org.updateKeePassDatabases(resultWrapper.result);
+                    kee.updateKeePassDatabases(resultWrapper.result);
             }
         }, ++this.kprpcClient.requestId);
         return;

@@ -22,17 +22,17 @@ body {
 }
 
 #GeneratePasswordContainer,
-#KeeFox-MatchedLoginsList {
+#Kee-MatchedLoginsList {
     flex-grow:1000;
     overflow-y:auto;
     overflow-x:hidden;
 }
 
 /* Default login list item and group style */
-#KeeFox-MatchedLoginsList li,
+#Kee-MatchedLoginsList li,
 #GeneratePasswordContainer li,
-#KeeFox-SaveLogin-SearchResults-Container li,
-#KeeFox-SaveLogin-selectedEntryList li
+#Kee-SaveLogin-SearchResults-Container li,
+#Kee-SaveLogin-selectedEntryList li
 {
     min-height:26px;
     padding:0px 5px 0px 22px;
@@ -46,7 +46,7 @@ body {
     border: 1px solid #FFFFFF;
 }
 
-#KeeFox-MatchedLoginsList li:active,
+#Kee-MatchedLoginsList li:active,
 #GeneratePasswordContainer li:active
 {
     background-color: #E3E3E3;
@@ -54,7 +54,7 @@ body {
     border-radius: 3px;
 }
 
-#KeeFox-MatchedLoginsList li:hover,
+#Kee-MatchedLoginsList li:hover,
 #GeneratePasswordContainer li:hover
 {
     background-color: #EAEAEA;
@@ -63,20 +63,20 @@ body {
 }
 
 /* Shade the item that has keyboard focus */
-#KeeFox-MatchedLoginsList li:focus,
+#Kee-MatchedLoginsList li:focus,
 #GeneratePasswordContainer li:focus
 {
     background-color: #DDDDDD;
 }
 
 /* Basic login list styles */
-#KeeFox-MatchedLoginsList ul {
+#Kee-MatchedLoginsList ul {
     margin:0 0 0 0px;
     padding:0px 0px 0px 4px;
     list-style:none;
 }
 
-#KeeFox-optionsMenuTrigger
+#Kee-optionsMenuTrigger
 {
     width:18px;
     min-width:18px;
@@ -95,7 +95,7 @@ body {
     cursor: pointer;
 }
 
-#KeeFox-optionsMenuTrigger:hover
+#Kee-optionsMenuTrigger:hover
 {
     background-color: #fff;
 }
@@ -180,7 +180,7 @@ flex: 1;
 
 
 /* search box */
-#KeeFox-PanelSection-searchbox
+#Kee-PanelSection-searchbox
 {
     width: calc(100% - 12px);
     padding: 3px 5px;
@@ -188,53 +188,53 @@ flex: 1;
     -moz-box-flex: 1;
 }
 
-.keefox-searchFields {
+.kee-searchFields {
     width:100%;
 }
 
 /* default appearence of list items to match australis look and feel */
-#keefox-panelview li,
-#KeeFox-SaveLogin-SearchResults-Container li
+#kee-panelview li,
+#Kee-SaveLogin-SearchResults-Container li
 {
     background-color: #FFFFFF;
     border: 1px solid #FFFFFF;
     margin: 0px 0px;
 }
 
-#KeeFox-PanelSection-search li
+#Kee-PanelSection-search li
 {
     margin: 0px 0px !important;
 }
 
-#keefox-panelview li:active,
-#KeeFox-SaveLogin-SearchResults-Container li:active
+#kee-panelview li:active,
+#Kee-SaveLogin-SearchResults-Container li:active
 {
     background-color: #E3E3E3;
     border: 1px solid #C6C6C7;
     border-radius: 3px;
 }
 
-#keefox-panelview li:hover,
-#KeeFox-SaveLogin-SearchResults-Container li:hover
+#kee-panelview li:hover,
+#Kee-SaveLogin-SearchResults-Container li:hover
 {
     background-color: #EAEAEA;
     border: 1px solid #D6D6D6;
     border-radius: 3px;
 }
 
-ul#KeeFox-SaveLogin-selectedEntryList li:hover
+ul#Kee-SaveLogin-selectedEntryList li:hover
 {
     background-color: #FFFFFF;
 }
 
 
-#KeeFox-SaveLogin-SearchResults-Container,
-#KeeFox-SaveLogin-selectedEntryList {
+#Kee-SaveLogin-SearchResults-Container,
+#Kee-SaveLogin-selectedEntryList {
 display: block;
 }
 
-#keefox-save-password-db-select,
-#keefox-save-password-group-select
+#kee-save-password-db-select,
+#kee-save-password-group-select
 {
     background-repeat: no-repeat;
     border: 1px solid #D6D6D6;
@@ -244,50 +244,50 @@ display: block;
     background-color: #FFFFFF;
 }
 
-#keefox-save-password-db-select
+#kee-save-password-db-select
 {
     padding-left: 20px;
     background-position: 5px 5px;
 }
 
-#KeeFox-PanelSection-searchfilter,
-#KeeFox-SaveLogin-searchfilter {
+#Kee-PanelSection-searchfilter,
+#Kee-SaveLogin-searchfilter {
     display:inline-block;
     border: 1px solid #D6D6D6;
     padding: 3px 5px;
     background-color: #FFFFFF;
 }
-#KeeFox-PanelSection-searchfilter {
+#Kee-PanelSection-searchfilter {
     margin:5px 0px 5px 0px;
 }
 
-#KeeFox-SaveLogin-searchfilter {
+#Kee-SaveLogin-searchfilter {
     margin:5px 5px 0px 0px;
 }
 
-.keeFox-save-password label {
+.kee-save-password label {
     white-space:nowrap;
     margin-left: 5px;
 }
 
-.keeFox-save-password {
+.kee-save-password {
     white-space:nowrap;
 }
 
-#keefox-save-password-db-select option{
+#kee-save-password-db-select option{
 padding: 3px 0 3px 25px;
     background-repeat: no-repeat;
     background-position: 5px 5px;
 }
 
-#keefox-save-password-group-select option {
+#kee-save-password-group-select option {
 background-repeat: no-repeat;
     padding: 3px 0px 3px 20px;
 
 }
 
-#keefox-save-password-new-button,
-#keefox-save-password-update-button {
+#kee-save-password-new-button,
+#kee-save-password-update-button {
     line-height:1;
     margin: 0px !important;
     margin-top: 5px !important;
@@ -298,65 +298,65 @@ background-repeat: no-repeat;
     flex: 1;
 }
 
-#keefox-save-password-new-button {
+#kee-save-password-new-button {
     border-style: solid;
     border-width: 1px;
     margin-left: 5px !important;
 }
 
-#keefox-save-password-update-button {
+#kee-save-password-update-button {
     border-style: solid;
     border-width: 1px;
     margin-right: 5px !important;
 }
 
-#keefox-save-password-new-button.unselected,
-#keefox-save-password-update-button.unselected {
+#kee-save-password-new-button.unselected,
+#kee-save-password-update-button.unselected {
     border-bottom-color: #D6D6D6;
 }
 
-#keefox-save-password-new-button.selected,
-#keefox-save-password-update-button.selected {
+#kee-save-password-new-button.selected,
+#kee-save-password-update-button.selected {
     border-bottom-color: white !important;
     background-color: white !important;
 }
 
-#keefox-save-password-new-panel,
-#keefox-save-password-update-panel1,
-#keefox-save-password-update-panel2 {
+#kee-save-password-new-panel,
+#kee-save-password-update-panel1,
+#kee-save-password-update-panel2 {
     border: #D6D6D6 solid 1px;
     border-top-width: 0px;
     margin: 0px 5px;
     padding: 5px;
 }
 
-#keefox-save-password-update-panel2 label.KeeFox-message,
-#keefox-password-updated-notification label.KeeFox-message {
+#kee-save-password-update-panel2 label.Kee-message,
+#kee-password-updated-notification label.Kee-message {
     width:500px;
 }
 
-#keefox-save-password-update-panel2 > .xulhbox {
+#kee-save-password-update-panel2 > .xulhbox {
     text-align:center;
 }
 
-#keefox-save-password-update-panel2 > div.xulhbox:nth-child(1) {
+#kee-save-password-update-panel2 > div.xulhbox:nth-child(1) {
     padding-top:10px;
 }
 
-#keefox-save-password-update-panel2 > div.xulhbox:nth-child(2) {
+#kee-save-password-update-panel2 > div.xulhbox:nth-child(2) {
     padding-top:10px;
     margin-top:10px;
     border-top:1px solid #D6D6D6;
 }
 
-#keefox-save-password-update-panel2 > div.xulhbox#KeeFox-loginURLsUpdateStatusContainer {
+#kee-save-password-update-panel2 > div.xulhbox#Kee-loginURLsUpdateStatusContainer {
     padding-top:10px;
     margin-top:10px;
     margin-bottom:0px;
     border-top:1px solid #D6D6D6;
 }
 
-#KeeFox-SaveLogin-searchbox
+#Kee-SaveLogin-searchbox
 {
     width: calc(100% - 12px);
     padding: 3px 5px;
@@ -364,7 +364,7 @@ background-repeat: no-repeat;
     -moz-box-flex: 1;
 }
 
-#KeeFox-SaveLogin-SearchResults {
+#Kee-SaveLogin-SearchResults {
     overflow-y:scroll;
     margin: 5px 5px 5px 5px;
     margin-top: 0px;
@@ -375,50 +375,50 @@ background-repeat: no-repeat;
     width:350px;
 }
 
-ul#KeeFox-SaveLogin-SearchResults-Container,
-ul#KeeFox-SaveLogin-selectedEntryList {
+ul#Kee-SaveLogin-SearchResults-Container,
+ul#Kee-SaveLogin-selectedEntryList {
     padding:0px;
     list-style:none;
     background:none;
     margin:0px 5px;
 }
 
-button.KeeFox-SaveLogin-Change-Setting {
+button.Kee-SaveLogin-Change-Setting {
     font-size: 0.8em;
 }
 
-button.KeeFox-SaveLogin-Change-Setting > div.xulhbox {
+button.Kee-SaveLogin-Change-Setting > div.xulhbox {
     padding:0px !important;
     margin: 0px !important;
 
 }
-button.KeeFox-SaveLogin-Change-Setting label {
+button.Kee-SaveLogin-Change-Setting label {
     padding:0px !important;
     margin: 0px !important;
 
 }
 
-button.KeeFox-SaveLogin-Abort {
+button.Kee-SaveLogin-Abort {
     margin-bottom:10px !important;
 }
 
-#keefox-save-password-saveTypeContainer button {
+#kee-save-password-saveTypeContainer button {
     margin: 5px;
     padding: 3px 7px;
 }
 
-#KeeFox-loginURLsUpdateRadioGroup {
+#Kee-loginURLsUpdateRadioGroup {
     margin:10px 0px 0px 0px;
     padding-top:10px;
     border-top:1px solid #D6D6D6;
 }
 
-.KeeFox-message {
+.Kee-message {
     margin-left: 5px;
     margin-bottom: 5px;
 }
 
-#KeeFox-SaveLogin-SearchResults-Container li.login-item
+#Kee-SaveLogin-SearchResults-Container li.login-item
 {
     display:list-item;
     border-left-width:0px;
@@ -426,7 +426,7 @@ button.KeeFox-SaveLogin-Abort {
     cursor: default;
 }
 
-#KeeFox-SaveLogin-searchfilter {
+#Kee-SaveLogin-searchfilter {
     margin-right: 9px;
 }
 

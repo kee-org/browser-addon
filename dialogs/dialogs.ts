@@ -6,7 +6,7 @@ declare const dialogMode: string;
 let srp: SrpDialog;
 
 function setupPage () {
-    KeeFoxLog.attachConfig(configManager.current);
+    KeeLog.attachConfig(configManager.current);
 
     switch (dialogMode)
     {

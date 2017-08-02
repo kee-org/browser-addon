@@ -9,12 +9,12 @@
 /// <reference path="../common/TabState.ts" />
 /// <reference path="../common/FrameState.ts" />
 /// <reference path="../common/AddonMessage.ts" />
-/// <reference path="../common/KeeFoxNotification.ts" />
+/// <reference path="../common/KeeNotification.ts" />
 /// <reference path="PersistentTabState.ts" />
 
 declare const chrome: typeof browser;
 
-class KeeFox {
+class Kee {
 
     appState: AppState;
     tabStates: TabState[];
@@ -71,7 +71,7 @@ class KeeFox {
         // Create a timer for KPRPC connection establishment
         this.regularKPRPCListenerQueueHandlerTimer = setInterval(this.RegularKPRPCListenerQueueHandler, 5000);
 
-        this._keeFoxBrowserStartup();
+        this._keeBrowserStartup();
 
         this.browserPopupPort = {postMessage: msg => {} };
         this.onPortConnected = function (p: browser.runtime.Port) {
@@ -86,10 +86,10 @@ class KeeFox {
                     p.onMessage.addListener(browserPopupMessageHandler);
                     p.onDisconnect.addListener(browserPopupDisconnect);
 
-                    p.postMessage({ appState: keefox_org.appState });
+                    p.postMessage({ appState: kee.appState });
 
-                    keefox_org.browserPopupPort = p;
-                    keefox_org.resetBrowserActionColor();
+                    kee.browserPopupPort = p;
+                    kee.resetBrowserActionColor();
                     break;
                 }
                 case "page": {
@@ -97,16 +97,16 @@ class KeeFox {
                     p.onDisconnect.addListener(pageDisconnect.bind(p));
 
                     const connectMessage = {
-                        appState: keefox_org.appState,
+                        appState: kee.appState,
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
-                        isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
+                        isForegroundTab: p.sender.tab.id === kee.foregroundTabId
                     } as AddonMessage;
 
-                    if (!keefox_org.tabStates[p.sender.tab.id]) {
-                        keefox_org.tabStates[p.sender.tab.id] = new TabState();
-                        if (keefox_org.persistentTabStates[p.sender.tab.id]) {
-                             keefox_org.persistentTabStates[p.sender.tab.id].items.forEach(item => {
+                    if (!kee.tabStates[p.sender.tab.id]) {
+                        kee.tabStates[p.sender.tab.id] = new TabState();
+                        if (kee.persistentTabStates[p.sender.tab.id]) {
+                             kee.persistentTabStates[p.sender.tab.id].items.forEach(item => {
                                 if (item.itemType === "submittedData") {
                                     connectMessage.submittedData = item.submittedData;
                                     item.accessCount++;
@@ -116,10 +116,10 @@ class KeeFox {
                     }
 
                     if (p.sender.frameId === 0) {
-                        keefox_org.tabStates[p.sender.tab.id].url = p.sender.tab.url;
+                        kee.tabStates[p.sender.tab.id].url = p.sender.tab.url;
                     }
-                    keefox_org.tabStates[p.sender.tab.id].frames[p.sender.frameId] = new FrameState();
-                    keefox_org.tabStates[p.sender.tab.id].framePorts[p.sender.frameId] = p;
+                    kee.tabStates[p.sender.tab.id].frames[p.sender.frameId] = new FrameState();
+                    kee.tabStates[p.sender.tab.id].framePorts[p.sender.frameId] = p;
 
                     p.postMessage(connectMessage);
 
@@ -130,15 +130,15 @@ class KeeFox {
                     p.onDisconnect.addListener(iframeDisconnect.bind(p));
 
                     const connectMessage = {
-                        appState: keefox_org.appState,
-                        frameState: keefox_org.tabStates[p.sender.tab.id].frames[parentFrameId],
+                        appState: kee.appState,
+                        frameState: kee.tabStates[p.sender.tab.id].frames[parentFrameId],
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
-                        isForegroundTab: p.sender.tab.id === keefox_org.foregroundTabId
+                        isForegroundTab: p.sender.tab.id === kee.foregroundTabId
                     } as AddonMessage;
 
-                    if (keefox_org.persistentTabStates[p.sender.tab.id]) {
-                        keefox_org.persistentTabStates[p.sender.tab.id].items.forEach(item => {
+                    if (kee.persistentTabStates[p.sender.tab.id]) {
+                        kee.persistentTabStates[p.sender.tab.id].items.forEach(item => {
                             if (item.itemType === "submittedData") {
                                 connectMessage.submittedData = item.submittedData;
                             }
@@ -147,7 +147,7 @@ class KeeFox {
 
                     p.postMessage(connectMessage);
 
-                    keefox_org.tabStates[p.sender.tab.id].ourIframePorts[p.sender.frameId] = p;
+                    kee.tabStates[p.sender.tab.id].ourIframePorts[p.sender.frameId] = p;
                     break;
                 }
             }
@@ -162,15 +162,15 @@ class KeeFox {
         browser.runtime.onConnect.removeListener(onConnectedBeforeInitialised);
 
         browser.tabs.onActivated.addListener(event => {
-                keefox_org.foregroundTabId = event.tabId;
+                kee.foregroundTabId = event.tabId;
                 //TODO:c: Is this the right time to send updated appstate and potentially scan for new form fields?
                 //TODO:c: Should we inform all inactive tabs too?
-                const tab = keefox_org.tabStates[event.tabId];
+                const tab = kee.tabStates[event.tabId];
 
                 if (tab && tab.framePorts) // Might not have had time to setup the port yet
                 {
                     tab.framePorts.forEach(port => {
-                        port.postMessage({ appState: keefox_org.appState, isForegroundTab: true } as AddonMessage);
+                        port.postMessage({ appState: kee.appState, isForegroundTab: true } as AddonMessage);
                     });
                 }
 
@@ -184,18 +184,18 @@ class KeeFox {
     }
 
 
-    notifyUser (notification: KeeFoxNotification) {
+    notifyUser (notification: KeeNotification) {
         if (!notification.allowMultiple) {
-            keefox_org.removeUserNotifications((n: KeeFoxNotification) => n.name != notification.name);
+            kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
         }
-        keefox_org.appState.notifications.push(notification);
-        keefox_org.browserPopupPort.postMessage({appState: keefox_org.appState});
+        kee.appState.notifications.push(notification);
+        kee.browserPopupPort.postMessage({appState: kee.appState});
         browser.browserAction.setIcon({path: "common/images/highlight-48.png" });
     }
 
-    removeUserNotifications (unlessTrue: (notification: KeeFoxNotification) => boolean) {
-        keefox_org.appState.notifications = keefox_org.appState.notifications.filter(unlessTrue);
-        keefox_org.browserPopupPort.postMessage({appState: keefox_org.appState});
+    removeUserNotifications (unlessTrue: (notification: KeeNotification) => boolean) {
+        kee.appState.notifications = kee.appState.notifications.filter(unlessTrue);
+        kee.browserPopupPort.postMessage({appState: kee.appState});
     }
 
     resetBrowserActionColor () {
@@ -205,42 +205,42 @@ class KeeFox {
     shutdown ()
     {
         // These log messages never appear. Does this function even get executed?
-        KeeFoxLog.debug("KeeFox module shutting down...");
+        KeeLog.debug("Kee module shutting down...");
         // if (this.KeePassRPC != undefined && this.KeePassRPC != null)
         //     this.KeePassRPC..session.shutdown();
         // if (this.regularKPRPCListenerQueueHandlerTimer != undefined && this.regularKPRPCListenerQueueHandlerTimer != null)
         //     clearInterval(this.regularKPRPCListenerQueueHandlerTimer);
         // this.KeePassRPC = null;
 
-        KeeFoxLog.debug("KeeFox module shut down.");
-        KeeFoxLog = null;
+        KeeLog.debug("Kee module shut down.");
+        KeeLog = null;
     }
 
-    _keeFoxBrowserStartup ()
+    _keeBrowserStartup ()
     {
-        KeeFoxLog.info("KeeFox initialising");
+        KeeLog.info("Kee initialising");
 
-        //this._keeFoxVariableInit();
+        //this._keeVariableInit();
         this.KeePassRPC = new jsonrpcClient();
         this.KeePassRPC.startup();
 
-        KeeFoxLog.info("KeeFox initialised OK although the connection to KeePass may not be established just yet...");
+        KeeLog.info("Kee initialised OK although the connection to KeePass may not be established just yet...");
     }
 
-    // Temporarilly disable KeeFox. Used (for e.g.) when KeePass is shut down.
-    _pauseKeeFox ()
+    // Temporarilly disable Kee. Used (for e.g.) when KeePass is shut down.
+    _pauseKee ()
     {
-        KeeFoxLog.debug("Pausing KeeFox.");
+        KeeLog.debug("Pausing Kee.");
         this.appState.KeePassDatabases = null;
         this.appState.ActiveKeePassDatabaseIndex = -1;
         this.appState.connected = false;
-        keefox_org.browserPopupPort.postMessage( { appState: this.appState });
+        kee.browserPopupPort.postMessage( { appState: this.appState });
 
         browser.browserAction.setBadgeText({ text: "OFF" });
         browser.browserAction.setBadgeBackgroundColor({ color: "red" });
 
         // Poke every port. In future might just limit to active tab?
-        keefox_org.tabStates.forEach(ts => {
+        kee.tabStates.forEach(ts => {
             ts.framePorts.forEach(port => {
                 port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
             }, this);
@@ -248,13 +248,13 @@ class KeeFox {
 
         commandManager.setupContextMenuItems();
 
-        KeeFoxLog.info("KeeFox paused.");
+        KeeLog.info("Kee paused.");
     }
 
     _refreshKPDB ()
     {
         this.getAllDatabases();
-        KeeFoxLog.debug("Refresh of KeeFox's view of the KeePass database initiated.");
+        KeeLog.debug("Refresh of Kee's view of the KeePass database initiated.");
     }
 
     updateKeePassDatabases (newDatabases)
@@ -272,7 +272,7 @@ class KeeFox {
         this.appState.KeePassDatabases = newDatabases;
         this.appState.ActiveKeePassDatabaseIndex = newDatabaseActiveIndex;
 
-        KeeFoxLog.info("Number of databases open: " + newDatabases.length);
+        KeeLog.info("Number of databases open: " + newDatabases.length);
 
         if (newDatabases.length > 0) {
             browser.browserAction.setBadgeText({ text: "" });
@@ -290,10 +290,10 @@ class KeeFox {
                 configManager.save();
         }
 
-        keefox_org.browserPopupPort.postMessage( { appState: this.appState });
+        kee.browserPopupPort.postMessage( { appState: this.appState });
 
         // Poke every port. In future might just limit to active tab?
-        keefox_org.tabStates.forEach(ts => {
+        kee.tabStates.forEach(ts => {
             ts.framePorts.forEach(port => {
                 port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
             }, this);
@@ -315,7 +315,7 @@ class KeeFox {
 
     /*******************************************
     / These functions are essentially wrappers for the actions that
-    / KeeFox needs to take against KeePass via the KeePassRPC plugin connection.
+    / Kee needs to take against KeePass via the KeePassRPC plugin connection.
     /*******************************************/
 
     getDatabaseName (index)
@@ -349,7 +349,7 @@ class KeeFox {
             return this.KeePassRPC.getMRUdatabases();
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -361,7 +361,7 @@ class KeeFox {
             this.KeePassRPC.changeDB(fileName, closeCurrent);
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -373,7 +373,7 @@ class KeeFox {
             this.KeePassRPC.changeLocation(locationId);
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -385,7 +385,7 @@ class KeeFox {
             return this.KeePassRPC.addLogin(login, parentUUID, dbFileName);
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -397,7 +397,7 @@ class KeeFox {
             return this.KeePassRPC.updateLogin(login, oldLoginUUID, urlMergeMode, dbFileName);
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -409,7 +409,7 @@ class KeeFox {
             return this.KeePassRPC.getAllDatabases();
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -421,7 +421,7 @@ class KeeFox {
             return this.KeePassRPC.getApplicationMetadata();
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -433,7 +433,7 @@ class KeeFox {
             return this.KeePassRPC.findLogins(fullURL, formSubmitURL, httpRealm, uniqueID, dbFileName, freeText, username, callback, callbackData);
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -445,7 +445,7 @@ class KeeFox {
             this.KeePassRPC.launchLoginEditor(uuid, dbFileName);
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -457,7 +457,7 @@ class KeeFox {
             this.KeePassRPC.launchGroupEditor(uuid, dbFileName);
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -469,7 +469,7 @@ class KeeFox {
             return this.KeePassRPC.getPasswordProfiles(callback);
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -481,7 +481,7 @@ class KeeFox {
             return this.KeePassRPC.generatePassword(profileName, url, callback);
         } catch (e)
         {
-            KeeFoxLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the KeeFox team that they should be handling this exception: " + e);
+            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
             throw e;
         }
     }
@@ -490,7 +490,7 @@ class KeeFox {
     /*
     case "http-on-modify-request":
         // Send a custom header to the tutorial website so we know that
-        // the user is running KeeFox 1.5 or above. We don't send any
+        // the user is running Kee 1.5 or above. We don't send any
         // details (such as the exact version) until the tutorial page
         // requests the information via a custom Javascript event.
         let httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
@@ -501,7 +501,7 @@ class KeeFox {
                 host == "tutorial-section-b.keefox.org" ||
                 host == "tutorial-section-c.keefox.org" ||
                 host == "tutorial-section-d.keefox.org"))
-                httpChannel.setRequestHeader("X-KeeFox", "Installed", false);
+                httpChannel.setRequestHeader("X-Kee", "Installed", false);
         } catch (e)
         {
             // Don't care
@@ -517,35 +517,35 @@ class KeeFox {
     {
         const sigTime = Date();
 
-        KeeFoxLog.debug("Signal received by KPRPCListener (" + sig + ") @" + sigTime);
+        KeeLog.debug("Signal received by KPRPCListener (" + sig + ") @" + sigTime);
 
         let executeNow = false;
         let pause = false;
         let refresh = false;
 
         switch (sig) {
-            case "0": KeeFoxLog.info("KeePassRPC is requesting authentication [deprecated]."); break;
-            case "3": KeeFoxLog.info("KeePass' currently active DB is about to be opened."); break;
-            case "4": KeeFoxLog.info("KeePass' currently active DB has just been opened.");
+            case "0": KeeLog.info("KeePassRPC is requesting authentication [deprecated]."); break;
+            case "3": KeeLog.info("KeePass' currently active DB is about to be opened."); break;
+            case "4": KeeLog.info("KeePass' currently active DB has just been opened.");
                 refresh = true;
                 break;
-            case "5": KeeFoxLog.info("KeePass' currently active DB is about to be closed."); break;
-            case "6": KeeFoxLog.info("KeePass' currently active DB has just been closed.");
+            case "5": KeeLog.info("KeePass' currently active DB is about to be closed."); break;
+            case "6": KeeLog.info("KeePass' currently active DB has just been closed.");
                 refresh = true;
                 break;
-            case "7": KeeFoxLog.info("KeePass' currently active DB is about to be saved."); break;
-            case "8": KeeFoxLog.info("KeePass' currently active DB has just been saved.");
+            case "7": KeeLog.info("KeePass' currently active DB is about to be saved."); break;
+            case "8": KeeLog.info("KeePass' currently active DB has just been saved.");
                 refresh = true;
                 break;
-            case "9": KeeFoxLog.info("KeePass' currently active DB is about to be deleted."); break;
-            case "10": KeeFoxLog.info("KeePass' currently active DB has just been deleted."); break;
-            case "11": KeeFoxLog.info("KeePass' active DB has been changed/selected.");
+            case "9": KeeLog.info("KeePass' currently active DB is about to be deleted."); break;
+            case "10": KeeLog.info("KeePass' currently active DB has just been deleted."); break;
+            case "11": KeeLog.info("KeePass' active DB has been changed/selected.");
                 refresh = true;
                 break;
-            case "12": KeeFoxLog.info("KeePass is shutting down.");
+            case "12": KeeLog.info("KeePass is shutting down.");
                 pause = true;
                 break;
-            default: KeeFoxLog.error("Invalid signal received by KPRPCListener (" + sig + ")"); break;
+            default: KeeLog.error("Invalid signal received by KPRPCListener (" + sig + ")"); break;
         }
 
         if (!pause && !refresh)
@@ -554,56 +554,56 @@ class KeeFox {
         const now = (new Date()).getTime();
 
         // If there is nothing in the queue at the moment we can process this callback straight away
-        if (!keefox_org.processingCallback && keefox_org.pendingCallback == "")
+        if (!kee.processingCallback && kee.pendingCallback == "")
         {
-            KeeFoxLog.debug("Signal executing now. @" + sigTime);
-            keefox_org.processingCallback = true;
+            KeeLog.debug("Signal executing now. @" + sigTime);
+            kee.processingCallback = true;
             executeNow = true;
         }
         // Otherwise we need to add the action for this callback to a queue and leave it up to the regular callback processor to execute the action
 
-        // if we want to pause KeeFox then we do it immediately or make sure it's the next (and only) pending task after the current task has finished
+        // if we want to pause Kee then we do it immediately or make sure it's the next (and only) pending task after the current task has finished
         if (pause)
         {
-            if (executeNow) keefox_org._pauseKeeFox(); else keefox_org.pendingCallback = "_pauseKeeFox";
+            if (executeNow) kee._pauseKee(); else kee.pendingCallback = "_pauseKee";
         }
 
         if (refresh)
         {
-            if (executeNow) { keefox_org.appState.lastKeePassRPCRefresh = now; keefox_org._refreshKPDB(); } else keefox_org.pendingCallback = "_refreshKPDB";
+            if (executeNow) { kee.appState.lastKeePassRPCRefresh = now; kee._refreshKPDB(); } else kee.pendingCallback = "_refreshKPDB";
         }
 
-        KeeFoxLog.info("Signal handled or queued. @" + sigTime);
+        KeeLog.info("Signal handled or queued. @" + sigTime);
         if (executeNow)
         {
             //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
-            if (keefox_org.pendingCallback=="_pauseKeeFox")
-                keefox_org._pauseKeeFox();
-            else if (keefox_org.pendingCallback=="_refreshKPDB")
-                keefox_org._refreshKPDB();
+            if (kee.pendingCallback=="_pauseKee")
+                kee._pauseKee();
+            else if (kee.pendingCallback=="_refreshKPDB")
+                kee._refreshKPDB();
             else
-                KeeFoxLog.info("A pending signal was found and handled.");
-            keefox_org.pendingCallback = "";
-            keefox_org.processingCallback = false;
-            KeeFoxLog.info("Signal handled. @" + sigTime);
+                KeeLog.info("A pending signal was found and handled.");
+            kee.pendingCallback = "";
+            kee.processingCallback = false;
+            KeeLog.info("Signal handled. @" + sigTime);
         }
     }
 
     RegularKPRPCListenerQueueHandler ()
     {
         // If there is nothing in the queue at the moment or we are already processing a callback, we give up for now
-        if (keefox_org.processingCallback || keefox_org.pendingCallback == "")
+        if (kee.processingCallback || kee.pendingCallback == "")
             return;
 
-        KeeFoxLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
-        keefox_org.processingCallback = true;
-        if (keefox_org.pendingCallback=="_pauseKeeFox")
-            keefox_org._pauseKeeFox();
-        else if (keefox_org.pendingCallback=="_refreshKPDB")
-            keefox_org._refreshKPDB();
-        keefox_org.pendingCallback = "";
-        keefox_org.processingCallback = false;
-        KeeFoxLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
+        KeeLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
+        kee.processingCallback = true;
+        if (kee.pendingCallback=="_pauseKee")
+            kee._pauseKee();
+        else if (kee.pendingCallback=="_refreshKPDB")
+            kee._refreshKPDB();
+        kee.pendingCallback = "";
+        kee.processingCallback = false;
+        KeeLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
     }
 
     //TODO:#8: tabs.currentTab().then(tab => tab.favIconUrl) will get the URI for a favicon but then need to make a network request to download
@@ -632,13 +632,13 @@ class KeeFox {
         {
             // something failed so we can't get the favicon. We don't really mind too much...
             faviconLoader.onComplete(null,0,null,null);
-            if (KeeFoxLog.logSensitiveData)
+            if (KeeLog.logSensitiveData)
             {
-                KeeFoxLog.info("favicon load failed for " + url + " : " + ex);
+                KeeLog.info("favicon load failed for " + url + " : " + ex);
                 throw "We couldn't find a favicon for this URL: " + url + " BECAUSE: " + ex;
             } else
             {
-                KeeFoxLog.info("favicon load failed: " + ex);
+                KeeLog.info("favicon load failed: " + ex);
                 throw "We couldn't find a favicon BECAUSE: " + ex;
             }
         }
@@ -654,7 +654,7 @@ class KeeFox {
 
 }
 
-let keefox_org: KeeFox;
+let kee: Kee;
 
 // Make sure user knows we're not ready yet
 browser.browserAction.setBadgeText({ text: "OFF" });
@@ -663,7 +663,7 @@ browser.browserAction.disable();
 
 // Assumes config and logging have been initialised before this is called.
 function startup () {
-    keefox_org = new KeeFox();
+    kee = new Kee();
     browser.browserAction.enable();
 }
 
@@ -673,8 +673,8 @@ function browserPopupMessageHandler (msg: AddonMessage) {
     console.log("In background script, received message from browser popup script: " + msg);
 
     if (msg.removeNotification) {
-        keefox_org.removeUserNotifications((n: KeeFoxNotification) => n.id != msg.removeNotification);
-        keefox_org.browserPopupPort.postMessage({ appState: keefox_org.appState } as AddonMessage);
+        kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
+        kee.browserPopupPort.postMessage({ appState: kee.appState } as AddonMessage);
     }
     if (msg.loadUrlHelpSensitiveLogging) {
         browser.tabs.create({
@@ -683,43 +683,43 @@ function browserPopupMessageHandler (msg: AddonMessage) {
     }
 
     if (msg.action == "generatePassword") {
-        if (keefox_org.appState.connected) {
-            keefox_org.tabStates[keefox_org.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
+        if (kee.appState.connected) {
+            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
         }
     }
 }
 
 function browserPopupDisconnect () {
     // Just keeps other code neater if we can assume there's always a non-null message reciever
-    keefox_org.browserPopupPort = {postMessage: msg => {}};
+    kee.browserPopupPort = {postMessage: msg => {}};
 }
 
 function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     console.log("In background script, received message from page script: " + msg);
 
     if (msg.findMatches) {
-        keefox_org.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
-            this.postMessage({ appState: keefox_org.appState, isForegroundTab: this.sender.tab.id === keefox_org.foregroundTabId,
+        kee.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
+            this.postMessage({ appState: kee.appState, isForegroundTab: this.sender.tab.id === kee.foregroundTabId,
             findMatchesResult: result.result } as AddonMessage);
         });
     }
     if (msg.removeNotification) {
-        keefox_org.removeUserNotifications((n: KeeFoxNotification) => n.id != msg.removeNotification);
-        keefox_org.browserPopupPort.postMessage({ appState: keefox_org.appState, isForegroundTab: this.sender.tab.id === keefox_org.foregroundTabId } as AddonMessage);
+        kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
+        kee.browserPopupPort.postMessage({ appState: kee.appState, isForegroundTab: this.sender.tab.id === kee.foregroundTabId } as AddonMessage);
     }
     if (msg.logins) {
-        keefox_org.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
+        kee.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
     }
     if (msg.submittedData) {
-        keefox_org.findLogins(msg.submittedData.url, null,
+        kee.findLogins(msg.submittedData.url, null,
             null, null, null, null, null, response => {
 
             let existingLogin = false;
 
-            const submittedLogin = new keeFoxLoginInfo();
+            const submittedLogin = new keeLoginInfo();
             submittedLogin.init([msg.submittedData.url], null, null, msg.submittedData.usernameIndex,
             msg.submittedData.passwordFields.map(function (item) {
-                const newField = new keeFoxLoginField();
+                const newField = new keeLoginField();
                 newField.fieldId = item.fieldId;
                 newField.type = item.type;
                 newField.name = item.name;
@@ -727,7 +727,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
                 return newField; }),
             null, msg.submittedData.title,
             msg.submittedData.otherFields.map(function (item) {
-                const newField = new keeFoxLoginField();
+                const newField = new keeLoginField();
                 newField.fieldId = item.fieldId;
                 newField.type = item.type;
                 newField.name = item.name;
@@ -740,7 +740,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
             {
                 for (const i in response.result)
                 {
-                    const kfl = new keeFoxLoginInfo();
+                    const kfl = new keeLoginInfo();
                     kfl.initFromEntry(response.result[i]);
                     //TODO:3: Should be able to extend the search in containedIn() so we take into
                     // account the current page information and therefore can detect that the submitted
@@ -756,8 +756,8 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
             if (existingLogin) return;
 
-            if (!keefox_org.persistentTabStates[this.sender.tab.id]) {
-                keefox_org.persistentTabStates[this.sender.tab.id] = {items: [] };
+            if (!kee.persistentTabStates[this.sender.tab.id]) {
+                kee.persistentTabStates[this.sender.tab.id] = {items: [] };
             }
             const persistentItem = {
                 itemType: "submittedData" as "submittedData",
@@ -767,30 +767,30 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
                 accessCount: 0,
                 maxAccessCount: 20
             };
-            keefox_org.persistentTabStates[this.sender.tab.id].items.push(persistentItem);
+            kee.persistentTabStates[this.sender.tab.id].items.push(persistentItem);
 
             // If a few seconds go past without any new page port registration and the current
             // port is still active, assume the login was ajax or an iframe so post the updated
             // appdata to the existing port
             setTimeout(() => {
                 if (persistentItem.accessCount === 0
-                    && keefox_org.tabStates[this.sender.tab.id]
-                    && keefox_org.tabStates[this.sender.tab.id].framePorts
-                    && keefox_org.tabStates[this.sender.tab.id].framePorts[0]) {
-                    keefox_org.tabStates[this.sender.tab.id].framePorts[0].postMessage(
-                        { appState: keefox_org.appState, submittedData: persistentItem.submittedData } as AddonMessage);
+                    && kee.tabStates[this.sender.tab.id]
+                    && kee.tabStates[this.sender.tab.id].framePorts
+                    && kee.tabStates[this.sender.tab.id].framePorts[0]) {
+                    kee.tabStates[this.sender.tab.id].framePorts[0].postMessage(
+                        { appState: kee.appState, submittedData: persistentItem.submittedData } as AddonMessage);
                     persistentItem.accessCount++;
                 }
             }, 3000);
         });
     }
     if (msg.action === "showMatchedLoginsPanel") {
-        keefox_org.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: "showMatchedLoginsPanel", frameId: this.sender.frameId });
+        kee.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: "showMatchedLoginsPanel", frameId: this.sender.frameId });
     }
     if (msg.action === "removeSubmittedData") {
-        if (keefox_org.persistentTabStates[this.sender.tab.id]) {
-            keefox_org.persistentTabStates[this.sender.tab.id].items =
-                keefox_org.persistentTabStates[this.sender.tab.id].items.filter(item => item.itemType !== "submittedData");
+        if (kee.persistentTabStates[this.sender.tab.id]) {
+            kee.persistentTabStates[this.sender.tab.id].items =
+                kee.persistentTabStates[this.sender.tab.id].items.filter(item => item.itemType !== "submittedData");
         }
     }
 }
@@ -803,35 +803,35 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     const port = this;
 
     if (msg.action == "manualFill" && msg.selectedLoginIndex != null) {
-        keefox_org.tabStates[tabId].framePorts[msg.frameId || 0].postMessage(msg);
-        keefox_org.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
+        kee.tabStates[tabId].framePorts[msg.frameId || 0].postMessage(msg);
+        kee.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
     }
 
     if (msg.action == "closeAllPanels") {
-        keefox_org.tabStates[tabId].framePorts[0].postMessage(msg);
+        kee.tabStates[tabId].framePorts[0].postMessage(msg);
     }
 
     if (msg.action == "generatePassword") {
-        keefox_org.getPasswordProfiles(passwordProfiles => {
-            keefox_org.generatePassword(msg.passwordProfile, keefox_org.tabStates[tabId].url, generatedPassword => {
+        kee.getPasswordProfiles(passwordProfiles => {
+            kee.generatePassword(msg.passwordProfile, kee.tabStates[tabId].url, generatedPassword => {
                 port.postMessage({ passwordProfiles: passwordProfiles, generatedPassword: generatedPassword } as AddonMessage);
             });
         });
     }
 
     if (msg.loginEditor) {
-        keefox_org.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
+        kee.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
     }
 
     if (msg.saveData) {
-        const persistentItem = keefox_org.persistentTabStates[tabId].items.find(item => item.itemType == "submittedData");
+        const persistentItem = kee.persistentTabStates[tabId].items.find(item => item.itemType == "submittedData");
 
         if (msg.saveData.update) {
-            const result = keefox_org.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.urlMergeMode, msg.saveData.db);
+            const result = kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.urlMergeMode, msg.saveData.db);
             showUpdateSuccessNotification();
         }
         else {
-            const result = keefox_org.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
+            const result = kee.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
             if (configManager.current.rememberMRUGroup) {
                 if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
                 configManager.current.mruGroup[msg.saveData.db] = msg.saveData.group;
@@ -839,11 +839,11 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
             }
         }
 
-        keefox_org.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
+        kee.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
 
         //TODO:#9: tutorial guides, etc.
         // if (login.URLs[0].startsWith("http://tutorial-section-b.keefox.org/part2"))
-        //     keefox_org.tutorialHelper.tutorialProgressSaved();
+        //     kee.tutorialHelper.tutorialProgressSaved();
     }
 }
 
@@ -860,25 +860,25 @@ function showUpdateSuccessNotification ()
             $STR("change_field_status"),
             $STR("change_field_explanation"),
             $STR("multi_page_update_warning")];
-        const notification = new KeeFoxNotification(
+        const notification = new KeeNotification(
             "password-updated", [button], utils.newGUID(), messages, "Medium", false);
-        keefox_org.notifyUser(notification);
+        kee.notifyUser(notification);
     }
 }
 
 function pageDisconnect () {
-    delete keefox_org.tabStates[this.sender.tab.id].framePorts[this.sender.frameId];
+    delete kee.tabStates[this.sender.tab.id].framePorts[this.sender.frameId];
 
     // If we have no remaining page ports, we can assume this tab has closed and reclaim some memory
     // This also allows us to identify when a new page is loading in an existing tab (all ports will disconnect first)
 
-    for (const i in keefox_org.tabStates[this.sender.tab.id].framePorts) return;
+    for (const i in kee.tabStates[this.sender.tab.id].framePorts) return;
 
-    delete keefox_org.tabStates[this.sender.tab.id];
+    delete kee.tabStates[this.sender.tab.id];
 }
 
 function iframeDisconnect () {
-    delete keefox_org.tabStates[this.sender.tab.id].ourIframePorts[this.sender.frameId];
+    delete kee.tabStates[this.sender.tab.id].ourIframePorts[this.sender.frameId];
 }
 
 let portsQueue = [];

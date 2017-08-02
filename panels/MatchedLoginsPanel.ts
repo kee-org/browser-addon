@@ -7,7 +7,7 @@ class MatchedLoginsPanel {
 
     public createNearNode (node: HTMLElement, logins) {
         const container = document.createElement("div");
-        container.id = "KeeFox-MatchedLoginsList";
+        container.id = "Kee-MatchedLoginsList";
         const list = document.createElement("ul");
         this.setLogins(logins, list);
         container.appendChild(list);
@@ -20,8 +20,8 @@ class MatchedLoginsPanel {
         this.setLoginsAllMatches(logins, container);
     }
 
-    private setLoginsAllMatches (logins: keeFoxLoginInfo[], container) {
-        KeeFoxLog.debug("setting " + logins.length + " matched logins");
+    private setLoginsAllMatches (logins: keeLoginInfo[], container) {
+        KeeLog.debug("setting " + logins.length + " matched logins");
 
         // add every matched login to the container(s)
         for (let i = 0; i < logins.length; i++) {
@@ -64,14 +64,14 @@ class MatchedLoginsPanel {
             loginItem.addEventListener("click", function (event) {
                 event.stopPropagation();
                 if (event.button == 0 || event.button == 1)
-                    this.dispatchEvent(new Event("keefoxCommand"));
+                    this.dispatchEvent(new Event("keeCommand"));
             }, false);
             loginItem.addEventListener("contextmenu", function (event) {
                 event.stopPropagation();
                 event.preventDefault();
                 matchedLoginsPanel.showContextActions(loginContextActions);
             }, false);
-            loginItem.addEventListener("keefoxCommand", function (event) {
+            loginItem.addEventListener("keeCommand", function (event) {
                 myPort.postMessage({ action: "manualFill", selectedLoginIndex: this.dataset.loginIndex, frameId: parentFrameId });
             }, false);
             loginItem.addEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);
@@ -85,14 +85,14 @@ class MatchedLoginsPanel {
         element.classList.add("enabled");
     }
 
-    private createContextActions (kfl: keeFoxLoginInfo) {
+    private createContextActions (kfl: keeLoginInfo) {
         const loginContextActions = document.createElement("div");
         loginContextActions.classList.add("disabled");
 
         const editButton = document.createElement("button");
             editButton.innerHTML = $STR("Logins_Context_Edit_Login_label");
-            editButton.setAttribute("id", "KeeFox-login-context-edit");
-            //"chrome://keefox/skin/pencil.png"
+            editButton.setAttribute("id", "Kee-login-context-edit");
+            //"chrome://kee/skin/pencil.png"
             editButton.addEventListener("click", event => {
                 event.stopPropagation();
                 event.preventDefault();
@@ -110,8 +110,8 @@ class MatchedLoginsPanel {
         {
             const button = document.createElement("button");
             button.innerHTML = $STR("copy_username_label");
-            button.setAttribute("id", "KeeFox-login-context-copyuser");
-            //"chrome://keefox/skin/copy.png",
+            button.setAttribute("id", "Kee-login-context-copyuser");
+            //"chrome://kee/skin/copy.png",
             button.addEventListener("click", event => {
                 event.stopPropagation();
                 event.preventDefault();
@@ -124,8 +124,8 @@ class MatchedLoginsPanel {
         if (passwordField != null) {
             const button = document.createElement("button");
             button.innerHTML = $STR("copy_password_label");
-            button.setAttribute("id", "KeeFox-login-context-copypass");
-            //"chrome://keefox/skin/copy.png",
+            button.setAttribute("id", "Kee-login-context-copypass");
+            //"chrome://kee/skin/copy.png",
             button.addEventListener("click", event => {
                 event.stopPropagation();
                 event.preventDefault();
@@ -141,7 +141,7 @@ class MatchedLoginsPanel {
                     if (i != kfl.usernameIndex && o.type != "checkbox") {
                         const button = document.createElement("button");
                         button.innerHTML = $STR("copy") + " " + o.name + " (" + o.fieldId + ")";
-                        //"chrome://keefox/skin/copy.png",
+                        //"chrome://kee/skin/copy.png",
                         button.addEventListener("click", event => {
                             event.stopPropagation();
                             event.preventDefault();
@@ -157,7 +157,7 @@ class MatchedLoginsPanel {
                     if (i != 0 && p.type != "checkbox") {
                         const button = document.createElement("button");
                         button.innerHTML = $STR("copy") + " " + p.name + " (" + p.fieldId + ")";
-                        //"chrome://keefox/skin/copy.png",
+                        //"chrome://kee/skin/copy.png",
                         button.addEventListener("click", event => {
                             event.stopPropagation();
                             event.preventDefault();
@@ -177,17 +177,17 @@ class MatchedLoginsPanel {
         optionsMenuTrigger.addEventListener("click", function (evt) {
             evt.preventDefault();
             evt.stopPropagation();
-            KeeFoxLog.debug("click: " + this.parentElement.dataset.uuid + ":" + this.parentElement.dataset.fileName);
+            KeeLog.debug("click: " + this.parentElement.dataset.uuid + ":" + this.parentElement.dataset.fileName);
             matchedLoginsPanel.showContextActions(this.parentElement.getElementsByTagName("div")[0]);
         }, false);
-        optionsMenuTrigger.setAttribute("id", "KeeFox-optionsMenuTrigger");
+        optionsMenuTrigger.setAttribute("id", "Kee-optionsMenuTrigger");
         event.target.appendChild(optionsMenuTrigger);
         event.target.removeEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);
         event.target.addEventListener("mouseleave", matchedLoginsPanel.onMouseLeaveLogin, false);
     }
 
     public onMouseLeaveLogin (event) {
-        const optionsMenuTrigger = document.getElementById("KeeFox-optionsMenuTrigger");
+        const optionsMenuTrigger = document.getElementById("Kee-optionsMenuTrigger");
         event.target.removeChild(optionsMenuTrigger);
         event.target.removeEventListener("mouseleave", matchedLoginsPanel.onMouseLeaveLogin, false);
         event.target.addEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);

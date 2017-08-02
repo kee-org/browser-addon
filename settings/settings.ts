@@ -16,7 +16,7 @@ let specificSite: SearchResult;
 let searchResults: SearchResult[];
 
 function setupPage () {
-    KeeFoxLog.attachConfig(configManager.current);
+    KeeLog.attachConfig(configManager.current);
     loadInitialConfig();
     [].forEach.call($$(".siteSpecificToggle"), node => (node as HTMLElement).style.display = "none");
     setupInputListeners();
@@ -47,7 +47,7 @@ function loadInitialConfig () {
     (document.getElementById("pref_rememberMRUDB_label") as HTMLInputElement).checked
         = configManager.current.rememberMRUDB ? configManager.current.rememberMRUDB : null;
 
-    (document.getElementById("pref_when_keefox_chooses_standard_form_desc") as HTMLSelectElement).value =
+    (document.getElementById("pref_when_kee_chooses_standard_form_desc") as HTMLSelectElement).value =
         configManager.current.autoSubmitForms ? "FillAndSubmit" : (configManager.current.autoFillForms ? "Fill" : "DoNothing");
     (document.getElementById("pref_when_user_chooses_desc") as HTMLSelectElement).value =
         configManager.current.autoSubmitMatchedForms ? "FillAndSubmit" : "Fill";
@@ -78,7 +78,7 @@ function setupInputListeners () {
     document.getElementById("pref_notifyWhenEntryUpdated_label").addEventListener("change", saveNotifyWhenEntryUpdated);
     document.getElementById("pref_rememberMRUDB_label").addEventListener("change", saveRememberMRUDB);
 
-    document.getElementById("pref_when_keefox_chooses_standard_form_desc").addEventListener("change", saveWhenKeefoxChoosesStandardForm);
+    document.getElementById("pref_when_kee_chooses_standard_form_desc").addEventListener("change", saveWhenKeefoxChoosesStandardForm);
     document.getElementById("pref_when_user_chooses_desc").addEventListener("change", saveWhenUserChooses);
     document.getElementById("pref_logLevel_desc").addEventListener("change", saveLogLevel);
 
@@ -645,7 +645,7 @@ function saveRememberMRUDB (e) {
 
 function saveWhenKeefoxChoosesStandardForm (e) {
     e.preventDefault();
-    const selectedValue = (document.getElementById("pref_when_keefox_chooses_standard_form_desc") as HTMLSelectElement).value;
+    const selectedValue = (document.getElementById("pref_when_kee_chooses_standard_form_desc") as HTMLSelectElement).value;
     configManager.setASAP({ autoFillForms: selectedValue != "DoNothing" });
     configManager.setASAP({ autoSubmitForms: selectedValue == "FillAndSubmit" });
 }
@@ -688,7 +688,7 @@ function stringFromLogLevel (level) {
         case 3: return "Information";
         case 2: return "Warnings";
         case 1: return "Errors";
-        default: return "Internal error - report to KeeFox team";
+        default: return "Internal error - report to Kee team";
     }
 }
 

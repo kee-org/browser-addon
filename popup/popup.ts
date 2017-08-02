@@ -8,7 +8,7 @@
 declare const chrome: typeof browser;
 
 let appState: AppState;
-let keefoxPopupLoadTime = Date.now();
+let keePopupLoadTime = Date.now();
 let myPort: browser.runtime.Port;
 
 function updateConnectionStatus () {
@@ -30,7 +30,7 @@ function updateConnectionStatus () {
 
 function updateAppState (newState) {
     if (!appState) {
-        //$("#debug").innerText = "Render time: " + (Date.now() - keefoxPopupLoadTime);
+        //$("#debug").innerText = "Render time: " + (Date.now() - keePopupLoadTime);
         $("#main").classList.remove("hidden");
         $("#loading").classList.add("hidden");
     }
@@ -44,7 +44,7 @@ function updateNotifications () {
         notificationContainer.removeChild(notificationContainer.lastChild);
     }
     for (const notificationData of appState.notifications) {
-        const notification = new KeeFoxNotification(
+        const notification = new KeeNotification(
             notificationData.name,
             notificationData.buttons,
             notificationData.id,
@@ -57,14 +57,14 @@ function updateNotifications () {
 }
 
 function startup () {
-    KeeFoxLog.debug("popup started");
+    KeeLog.debug("popup started");
 
-    KeeFoxLog.attachConfig(configManager.current);
+    KeeLog.attachConfig(configManager.current);
 
     myPort = chrome.runtime.connect({ name: "browserPopup" });
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
-        KeeFoxLog.debug("In browser popup script, received message from background script: ");
+        KeeLog.debug("In browser popup script, received message from background script: ");
         updateAppState(m.appState);
         updateConnectionStatus();
         updateNotifications();
@@ -78,7 +78,7 @@ function startup () {
     document.getElementById("optionsLink").addEventListener("click", () => chrome.runtime.openOptionsPage() );
     document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: "generatePassword" }) );
 
-    KeeFoxLog.info("popup ready");
+    KeeLog.info("popup ready");
 }
 
 // Load our config and start the page script once done

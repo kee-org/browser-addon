@@ -1,6 +1,6 @@
 /// <reference path="../common/Button.ts" />
 
-class KeeFoxNotification {
+class KeeNotification {
 
     constructor (
             public name: string,
@@ -24,7 +24,7 @@ class KeeFoxNotification {
 
         let buttonContainer = null;
         buttonContainer = document.createElement("div");
-        buttonContainer.classList.add("keefox-button-actions");
+        buttonContainer.classList.add("kee-button-actions");
 
         for (const buttonDefinition of this.buttons)
         {
@@ -44,7 +44,7 @@ class KeeFoxNotification {
         this.messages.forEach(message => {
             const text = document.createElement("div");
             text.textContent = message;
-            text.classList.add("KeeFox-message");
+            text.classList.add("Kee-message");
             msgDiv.appendChild(text);
         });
         container.appendChild(msgDiv);

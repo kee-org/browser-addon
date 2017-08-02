@@ -1,11 +1,11 @@
 /// <reference path="config.ts" />
-/// <reference path="KeeFoxNotification.ts" />
+/// <reference path="KeeNotification.ts" />
 
 interface AppState {
     latestConnectionError: string;
     lastKeePassRPCRefresh: number;
     ActiveKeePassDatabaseIndex: number;
     KeePassDatabases: Database[];
-    notifications: KeeFoxNotification[];
+    notifications: KeeNotification[];
     connected: boolean;
 }

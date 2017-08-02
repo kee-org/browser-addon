@@ -1,12 +1,12 @@
 {
     "manifest_version": 2,
     "content_security_policy": "script-src 'self' 'sha256-9r49GIoYfwBXOrr1gXAIDRojIYlo+vTeUqdoEnwcP5M='; object-src 'self'",
-    "name": "KeeFox",
+    "name": "Kee",
     "default_locale": "en_US",
     "version": "2.0.0.3",
     "version_name": "2.0.0 alpha 3",
     "author": "Chris Tomlinson",
-    "description": "Simple and secure password management. Login automatically, never forget another password, stay in control of your passwords and improve their security.",
+    "description": "Simple and secure password management. Login automatically, never forget another password and stay in control.",
     "background": {
         "scripts": [
             "common/dollar-polyfill.js",
@@ -42,7 +42,7 @@
         "default_icon": {
             "48": "common/images/48.png"
         },
-        "default_title": "KeeFox",
+        "default_title": "Kee",
         "default_popup": "popup/popup.html"
     },
     "options_ui": {
