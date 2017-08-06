@@ -4,9 +4,6 @@ communication using the KeePassRPC protocol >= version 1.3.
 */
 
 /// <reference path="session.ts" />
-/// <reference path="../common/FeatureFlags.ts" />
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/ConfigManager.ts" />
 
 class kprpcClient {
     public requestId: number;

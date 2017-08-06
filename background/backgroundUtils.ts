@@ -1,7 +1,3 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/ConfigManager.ts" />
-/// <reference path="../common/utils.ts" />
-
 // constructor
 class BackgroundUtils {
     constructor ()

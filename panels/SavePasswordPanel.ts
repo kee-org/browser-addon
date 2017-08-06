@@ -1,11 +1,3 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/AppState.ts" />
-/// <reference path="../common/FrameState.ts" />
-/// <reference path="../common/AddonMessage.ts" />
-/// <reference path="../common/search.ts" />
-/// <reference path="../common/SearchFilter.ts" />
-/// <reference path="../common/utils.ts" />
-
 interface SaveData {
     db: string;
     group: string;

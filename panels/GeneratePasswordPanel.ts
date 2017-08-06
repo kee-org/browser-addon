@@ -1,8 +1,3 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/AppState.ts" />
-/// <reference path="../common/FrameState.ts" />
-/// <reference path="../common/AddonMessage.ts" />
-
 class GeneratePasswordPanel {
 
     public createNearNode (node: HTMLElement, passwordProfiles: any[]) {

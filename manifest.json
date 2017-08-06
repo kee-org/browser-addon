@@ -3,7 +3,7 @@
     "content_security_policy": "script-src 'self' 'sha256-9r49GIoYfwBXOrr1gXAIDRojIYlo+vTeUqdoEnwcP5M='; object-src 'self'",
     "name": "Kee",
     "default_locale": "en_US",
-    "version": "2.0.0.3",
+    "version": "2.0.0.4",
     "version_name": "2.0.0 alpha 3",
     "author": "Chris Tomlinson",
     "description": "Simple and secure password management. Login automatically, never forget another password and stay in control.",
@@ -14,6 +14,7 @@
             "common/punycode.js",
             "common/pslData.js",
             "common/publicsuffixlist.js",
+            "common/common.js",
             "background/biginteger.js",
             "background/app.js"
         ],
@@ -28,6 +29,7 @@
                 "common/punycode.js",
                 "common/pslData.js",
                 "common/publicsuffixlist.js",
+                "common/common.js",
                 "page/page.js"
         ],
         "run_at": "document_end"

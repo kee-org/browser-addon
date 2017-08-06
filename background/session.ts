@@ -3,9 +3,6 @@ session.js manages the low-level transport connection between this
 client and an KeePassRPC server.
 */
 
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/ConfigManager.ts" />
-
 class Session {
     private reconnectionAttemptFrequency: number;
     private connectionTimeout: number;

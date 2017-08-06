@@ -1,9 +1,3 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/AppState.ts" />
-/// <reference path="../common/AddonMessage.ts" />
-
-declare const chrome: typeof browser;
-
 let appState: AppState;
 let keePopupLoadTime = Date.now();
 let formUtils: FormUtils;

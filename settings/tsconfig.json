@@ -10,7 +10,8 @@
             "../typedefs/filewriter",
             "../typedefs/browser",
             "../typedefs/biginteger",
-            "../typedefs/dollar-polyfill"
+            "../typedefs/dollar-polyfill",
+            "../typedefs/common"
         ]
     },
     "include": [

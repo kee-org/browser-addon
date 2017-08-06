@@ -11,6 +11,10 @@ declare const publicSuffixList;
 declare const punycode;
 declare const pslData;
 
+// Pretend browser (WebExtensions) is chrome (there's a polyfill from Mozilla but it doesn't work well enough yet so this buys us time)
+//TODO:c: Review before launch - maybe can switch to browser + polyfill? Promises (and Edge support) are sticking points at the moment.
+declare const chrome;
+
 let defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
 defaultConfig.autoFillForms = true;

@@ -7,7 +7,6 @@ var merge = require('merge-stream');
 
 gulp.task("default", [ "build" ]);
 gulp.task("build", ["ts:background", "ts:popup", "ts:panels", "ts:page", "ts:settings", "ts:dialogs" ]);
-
 gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:settings", "lint:dialogs" ]);
 
 gulp.task("lint:background", function() {
@@ -58,75 +57,98 @@ gulp.task("lint:dialogs", function() {
         .pipe(tslint.report())
 });
 
+gulp.task("lint:common", function() {
+    return gulp.src(["common/**/*.ts"])
+        .pipe(tslint({
+            formatter: "verbose"
+        }))
+        .pipe(tslint.report())
+});
+
+var tsProjectCommon = ts.createProject("common/tsconfig.json", {
+    outFile: "common.js",
+    declaration: true
+});
+gulp.task("ts:common", ["lint:common"], function() {
+
+var tsResult = tsProjectCommon.src()
+    .pipe(sourcemaps.init())
+    .pipe(tsProjectCommon());
+    return merge(
+      tsResult.dts.pipe(gulp.dest('typedefs')),
+      tsResult.js.pipe(sourcemaps.write('.')).pipe(gulp.dest('common'))
+    );
+});
+
 var tsProjectBackground = ts.createProject("background/tsconfig.json", {
     outFile: "app.js"
 });
-gulp.task("ts:background", ["lint:background"], function() {
+gulp.task("ts:background", ["lint:background", "ts:common"], function() {
     return tsProjectBackground.src()
         .pipe(sourcemaps.init())
         .pipe(tsProjectBackground())
         .js
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("background"));
 });
 
 var tsProjectPopup = ts.createProject("popup/tsconfig.json", {
     outFile: "popup.js"
 });
-gulp.task("ts:popup", ["lint:popup"], function() {
+gulp.task("ts:popup", ["lint:popup", "ts:common"], function() {
     return tsProjectPopup.src()
         .pipe(sourcemaps.init())
         .pipe(tsProjectPopup())
         .js
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("popup"));
 });
 
 var tsProjectPanels = ts.createProject("panels/tsconfig.json", {
     outFile: "panels.js"
 });
-gulp.task("ts:panels", ["lint:panels"], function() {
+gulp.task("ts:panels", ["lint:panels", "ts:common"], function() {
     return tsProjectPanels.src()
         .pipe(sourcemaps.init())
         .pipe(tsProjectPanels())
         .js
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("panels"));
 });
 
 var tsProjectPage = ts.createProject("page/tsconfig.json", {
     outFile: "page.js"
 });
-gulp.task("ts:page", ["lint:page"], function() {
+gulp.task("ts:page", ["lint:page", "ts:common"], function() {
     return tsProjectPage.src()
         .pipe(sourcemaps.init())
         .pipe(tsProjectPage())
         .js
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("page"));
 });
 
 var tsProjectSettings = ts.createProject("settings/tsconfig.json", {
     outFile: "settings.js"
 });
-gulp.task("ts:settings", ["lint:settings"], function() {
+gulp.task("ts:settings", ["lint:settings", "ts:common"], function() {
     return tsProjectSettings.src()
         .pipe(sourcemaps.init())
         .pipe(tsProjectSettings())
         .js
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("settings"));
 });
 
 var tsProjectDialogs = ts.createProject("dialogs/tsconfig.json", {
     outFile: "dialogs.js"
 });
-gulp.task("ts:dialogs", ["lint:dialogs"], function() {
+gulp.task("ts:dialogs", ["lint:dialogs", "ts:common"], function() {
     return tsProjectDialogs.src()
         .pipe(sourcemaps.init())
         .pipe(tsProjectDialogs())
         .js
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("dialogs"));
 });
 
@@ -141,43 +163,23 @@ gulp.task('watch', ['build'], function() {
 
 gulp.task('collect', function() {
     return merge(
-        gulp.src('page/page.js')
+        gulp.src('page/*.{js,css,html,map}')
             .pipe(gulp.dest('build/page')),
-        gulp.src('page/*.css')
-            .pipe(gulp.dest('build/page')),
-        gulp.src('popup/popup.js')
+        gulp.src('popup/popup.{js,css,html,map}')
             .pipe(gulp.dest('build/popup')),
-        gulp.src('popup/popup.css')
-            .pipe(gulp.dest('build/popup')),
-        gulp.src('popup/popup.html')
-            .pipe(gulp.dest('build/popup')),
-        gulp.src('panels/panels.js')
+        gulp.src('panels/panels.{js,css,html,map}')
             .pipe(gulp.dest('build/panels')),
-        gulp.src('panels/panels.css')
-            .pipe(gulp.dest('build/panels')),
-        gulp.src('panels/panels.html')
-            .pipe(gulp.dest('build/panels')),
-        gulp.src('settings/settings.html')
+        gulp.src('settings/*.{js,css,html,map}')
             .pipe(gulp.dest('build/settings')),
-        gulp.src('settings/*.css')
-            .pipe(gulp.dest('build/settings')),
-        gulp.src('settings/*.js')
-            .pipe(gulp.dest('build/settings')),
-        gulp.src('common/*.js')
-            .pipe(gulp.dest('build/common')),
-        gulp.src('common/*.css')
+        gulp.src('common/*.{js,css,html,map}')
             .pipe(gulp.dest('build/common')),
         gulp.src('common/images/**')
             .pipe(gulp.dest('build/common/images')),
         gulp.src('common/fonts/**')
             .pipe(gulp.dest('build/common/fonts')),
-        gulp.src('dialogs/*.css')
+        gulp.src('dialogs/*.{js,css,html,map}')
             .pipe(gulp.dest('build/dialogs')),
-        gulp.src('dialogs/*.html')
-            .pipe(gulp.dest('build/dialogs')),
-        gulp.src('dialogs/*.js')
-            .pipe(gulp.dest('build/dialogs')),
-        gulp.src('background/*.js')
+        gulp.src('background/*.{js,css,html,map}')
             .pipe(gulp.dest('build/background')),
         gulp.src('_locales/**')
             .pipe(gulp.dest('build/_locales')),
@@ -191,7 +193,7 @@ gulp.task('collect', function() {
 gulp.task('zip', ['collect'], function() {
 	var manifest = require('./manifest'),
 		distFileName = manifest.name + '-v' + manifest.version + '.zip';
-	return gulp.src('build/**')
+	return gulp.src(['build/**','!**/*.map'])
 		.pipe(zip(distFileName))
 		.pipe(gulp.dest('dist'));
 });
@@ -199,7 +201,7 @@ gulp.task('zip', ['collect'], function() {
 gulp.task('xpi', ['collect'], function() {
 	var manifest = require('./manifest'),
 		distFileName = manifest.name + '-v' + manifest.version + '.xpi';
-	return gulp.src('build/**')
+	return gulp.src(['build/**','!**/*.map'])
 		.pipe(zip(distFileName))
 		.pipe(gulp.dest('dist'));
 });

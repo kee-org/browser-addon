@@ -1,12 +1,3 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/AppState.ts" />
-/// <reference path="../common/AddonMessage.ts" />
-/// <reference path="../common/ConfigManager.ts" />
-
-// Pretend browser (WebExtensions) is chrome (there's a polyfill from Mozilla but it doesn't work well enough yet so this buys us time)
-//TODO:c: Review before launch - maybe can switch to browser + polyfill? Promises (and Edge support) are sticking points at the moment.
-declare const chrome: typeof browser;
-
 let appState: AppState;
 let keePopupLoadTime = Date.now();
 let myPort: browser.runtime.Port;

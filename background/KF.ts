@@ -1,18 +1,6 @@
-/// <reference path="../common/config.ts" />
-/// <reference path="../common/ConfigManager.ts" />
-/// <reference path="../common/search.ts" />
-/// <reference path="../common/Logger.ts" />
 /// <reference path="commands.ts" />
-/// <reference path="../common/utils.ts" />
 /// <reference path="backgroundUtils.ts" />
-/// <reference path="../common/AppState.ts" />
-/// <reference path="../common/TabState.ts" />
-/// <reference path="../common/FrameState.ts" />
-/// <reference path="../common/AddonMessage.ts" />
-/// <reference path="../common/KeeNotification.ts" />
 /// <reference path="PersistentTabState.ts" />
-
-declare const chrome: typeof browser;
 
 class Kee {
 
@@ -60,10 +48,6 @@ class Kee {
             version: 1,
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
-
-        //TODO:#9: tutorial guides, etc.
-        //this.tutorialHelper = tutorialHelper;
-        //this.sampleChecker = sampleChecker;
 
         // Create a timer for checking whether user is logging sensitive data
         setTimeout(backgroundUtils.oneOffSensitiveLogCheckHandler, 45000);
@@ -485,28 +469,6 @@ class Kee {
             throw e;
         }
     }
-
-    //TODO:#9:implement tutorial custom header
-    /*
-    case "http-on-modify-request":
-        // Send a custom header to the tutorial website so we know that
-        // the user is running Kee 1.5 or above. We don't send any
-        // details (such as the exact version) until the tutorial page
-        // requests the information via a custom Javascript event.
-        let httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
-        try {
-            let host = httpChannel.originalURI.host;
-            if (host.startsWith("tutorial") &&
-                (host == "tutorial.keefox.org" ||
-                host == "tutorial-section-b.keefox.org" ||
-                host == "tutorial-section-c.keefox.org" ||
-                host == "tutorial-section-d.keefox.org"))
-                httpChannel.setRequestHeader("X-Kee", "Installed", false);
-        } catch (e)
-        {
-            // Don't care
-        }
-    */
 
     // Could use multiple callback functions but just one keeps KeePassRPC simpler
     // this is only called once no matter how many windows are open. so functions

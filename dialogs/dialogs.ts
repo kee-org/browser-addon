@@ -1,7 +1,3 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/ConfigManager.ts" />
-
-declare const chrome: typeof browser;
 declare const dialogMode: string;
 let srp: SrpDialog;
 

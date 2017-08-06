@@ -3,9 +3,7 @@ jsonrpcClient provides a JSON-RPC client and method proxies for
 communication between Kee and a KeePassRPC server.
 */
 
-/// <reference path="../common/ConfigManager.ts" />
 /// <reference path="kprpcClient.ts" />
-/// <reference path="../common/Logger.ts" />
 
 class jsonrpcClient {
     private kprpcClient: kprpcClient;

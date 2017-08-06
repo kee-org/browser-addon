@@ -2,9 +2,6 @@
   This contains code related to the management and manipulation of forms and form fields.
 */
 
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/kfDataModel.ts" />
-
 class FormUtils {
 
 findLoginOps = [];

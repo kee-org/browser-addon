@@ -1,9 +1,3 @@
-/// <reference path="MatchedLoginsPanel.ts" />
-/// <reference path="GeneratePasswordPanel.ts" />
-/// <reference path="SavePasswordPanel.ts" />
-/// <reference path="../common/ConfigManager.ts" />
-
-declare const chrome: typeof browser;
 let appState: AppState;
 let frameState: FrameState;
 

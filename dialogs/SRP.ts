@@ -1,6 +1,3 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/ConfigManager.ts" />
-
 class SrpDialog {
     public setupPage () {
         (document.getElementById("pref_sl_server") as HTMLSelectElement).value =

@@ -1,5 +1,3 @@
-/// <reference path="../common/Logger.ts" />
-
 interface SubmitHandlerAttachment {
     target: HTMLElement;
     handler: (e: Event) => void;

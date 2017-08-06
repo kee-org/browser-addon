@@ -1,7 +1,3 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/kfDataModel.ts" />
-/// <reference path="../common/config.ts" />
-/// <reference path="../common/ConfigManager.ts" />
 /// <reference path="keeFieldIcon.ts" />
 /// <reference path="PanelStub.ts" />
 /// <reference path="formSaving.ts" />

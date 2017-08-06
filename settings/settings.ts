@@ -1,15 +1,8 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/AppState.ts" />
-/// <reference path="../common/AddonMessage.ts" />
-/// <reference path="../common/ConfigManager.ts" />
-
 class SearchResult extends SiteConfigNode {
     value: string;
     method: SiteConfigMethod;
     target: SiteConfigTarget;
 }
-
-declare const chrome: typeof browser;
 
 let siteModeAll: boolean = true;
 let specificSite: SearchResult;
