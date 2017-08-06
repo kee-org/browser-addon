@@ -119,18 +119,9 @@
     "message": "Matched login entries",
     "description": "Header for panels/sections that contain the logins which Kee matched for this page/form"
   },
-  "placeholder_for_best_match": {
-    "message": "Placeholder for best matching login entry"
-  },
   "pref_Advanced_heading": {
     "message": "Advanced",
     "description": "Advanced"
-  },
-  "pref_Commands_heading": {
-    "message": "Commands"
-  },
-  "pref_Commands_intro": {
-    "message": "Choose the keyboard shortcuts for the main Kee commands."
   },
   "pref_ConnectionSecurity_heading": {
     "message": "Connection Security",
@@ -157,7 +148,8 @@
     "description": "Fill in and submit the form"
   },
   "pref_FillAndSubmitPrompt_desc": {
-    "message": "Fill in and submit the login prompt"
+    "message": "Fill in and submit the login prompt",
+    "description": "Fill in and submit the login prompt"
   },
   "pref_FillForm_desc": {
     "message": "Fill in the form",
@@ -172,7 +164,8 @@
     "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
   },
   "pref_FillPrompt_desc": {
-    "message": "Fill in the login prompt"
+    "message": "Fill in the login prompt",
+    "description": "Fill in the login prompt"
   },
   "pref_FindingEntries_heading": {
     "message": "Finding entries",
@@ -255,7 +248,8 @@
     "description": "Search all open KeePass databases"
   },
   "pref_when_kee_chooses_prompt_desc": {
-    "message": "When Kee chooses a matching login for an HTTPAuth, NTLM or proxy prompt, Kee should"
+    "message": "When Kee chooses a matching login for an HTTP (basic) Auth prompt, Kee should",
+    "description": "Context/label for user when changing setting relating to HTTP auth auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
   },
   "pref_when_kee_chooses_standard_form_desc": {
     "message": "When Kee chooses a matching login for a standard form, Kee should",
@@ -293,123 +287,33 @@
     "message": "Text field name",
     "description": "Text field name"
   },
-  "type_new_shortcut_key_placeholder": {
-    "message": "Type a new shortcut key"
-  },
   "white_list": {
     "message": "White List",
     "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
-  },
-  "Back_label": {
-    "message": "Back"
-  },
-  "Back_tip": {
-    "message": "Go back to the previous Kee menu"
-  },
-  "Dialog_OK_Button_label": {
-    "message": "OK"
   },
   "Help_Centre_Button_label": {
     "message": "Help Centre",
     "description": "Help Centre"
   },
-  "Help_Centre_Button_tip": {
-    "message": "Visit the online help centre."
-  },
   "cancel": {
     "message": "Cancel",
     "description": "Cancel"
-  },
-  "Install_Finally_description": {
-    "message": "Finally, if you have any trouble getting Kee to work correctly, please take a look at the help resources found at"
-  },
-  "Install_IC1KRPCdownloaded_description": {
-    "message": "Nearly finished..."
-  },
-  "Install_monoManual_description": {
-    "message": "Kee can run on Mac and Linux systems, but requires manual installation by following these steps:"
-  },
-  "Install_monoManual2_description": {
-    "message": "Customisation instructions:"
-  },
-  "Install_monoManualStep1_description": {
-    "message": "1) Download and install Mono from the website below. Linux users can usually install the latest version of Mono from your distribution's package repository but please ensure you install the complete Mono package (some distributions seperate Mono into multiple sub-packages)."
-  },
-  "Install_monoManualStep2_description": {
-    "message": "2) Download KeePass Password Safe 2.19 (or higher) Portable (ZIP Package) from the website below or try your distribution's package manager (make sure you get a new enough version though!)"
-  },
-  "Install_monoManualStep3_description": {
-    "message": "3) Unzip KeePass to ~/KeePass (this default can be customised) where ~ represents your home directory"
-  },
-  "Install_monoManualStep4_description": {
-    "message": "4) Copy the KeePassRPC.plgx file to a subdirectory called plugins in the directory that contains your KeePass installation (e.g. ~/KeePass/plugins) "
-  },
-  "Install_monoManualStep5_description": {
-    "message": "5) Restart Firefox"
-  },
-  "Install_monoManualStep6_description": {
-    "message": "The KeePassRPC.plgx file you need to manually copy is at:"
-  },
-  "Install_monoManualUpgrade_description": {
-    "message": "To upgrade Kee:"
-  },
-  "Install_monoManualUpgradeStep1_description": {
-    "message": "1) Copy the KeePassRPC.plgx file to the plugins subdirectory inside the directory that contains your KeePass installation (e.g. ~/KeePass/plugins where ~ represents your home directory)"
-  },
-  "Install_monoManualUpgradeStep2_description": {
-    "message": "2) Restart Firefox"
-  },
-  "Install_setupNET35ExeInstallExpandeeManualStep1_description": {
-    "message": "1) Download and install .NET from Microsoft"
-  },
-  "Install_setupNET35ExeInstallExpandeeManualStep2_description": {
-    "message": "2) Download and install KeePass Password Safe 2 setup or ZIP from http://keepass.info"
-  },
-  "Logins_Button_label": {
-    "message": "Logins"
-  },
-  "Logins_Button_tip": {
-    "message": "Explore all your logins and quickly log in to your websites."
-  },
-  "Logins_Context_Edit_Group_label": {
-    "message": "Edit group"
   },
   "Logins_Context_Edit_Login_label": {
     "message": "Edit login",
     "description": "Edit login"
   },
-  "Matched_Logins_Button_label": {
-    "message": "Matched Logins"
-  },
-  "Matched_Logins_Button_tip": {
-    "message": "See the logins that matched the current page"
-  },
-  "Menu_Button_changeDB_label": {
-    "message": "Change database"
-  },
-  "Menu_Button_changeDB_tip": {
-    "message": "Choose a different KeePass password database."
-  },
   "Menu_Button_copyNewPasswordToClipboard_label": {
     "message": "Generate new password",
     "description": "Generate new password"
-  },
-  "Menu_Button_copyNewPasswordToClipboard_tip": {
-    "message": "Gets a new password from KeePass using the most recently used password generator profile and puts it into your clipboard."
   },
   "Menu_Button_fillCurrentDocument_label": {
     "message": "Find matching logins",
     "description": "Find matching logins"
   },
-  "Menu_Button_fillCurrentDocument_tip": {
-    "message": "Force Kee to re-detect login forms on this page and search for login entries that match those forms. This is necessary on a small minority of web sites."
-  },
   "Menu_Button_options_label": {
     "message": "Options",
     "description": "Link to the add-on's settings"
-  },
-  "Menu_Button_options_tip": {
-    "message": "View and change your preferred Kee options."
   },
   "Search_label": {
     "message": "Search...",
@@ -422,9 +326,6 @@
   "PasswordProfilesExplanation_label": {
     "message": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles.",
     "description": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles."
-  },
-  "change": {
-    "message": "Change"
   },
   "change_field_explanation": {
     "message": "Kee will also update the website icon (favicon) and any HTTP Auth Realm information. More complex modifications will require you to manually edit the entry.",
@@ -454,15 +355,6 @@
     "message": "Keep the old entry's URL (don't add the new URL to the entry)",
     "description": "Keep the old entry's URL (don't add the new URL to the entry)"
   },
-  "changeDBButtonEmpty_label": {
-    "message": "No database"
-  },
-  "changeDBButtonEmpty_tip": {
-    "message": "There are no databases in your KeePass Recent databases list. Use KeePass to open your preferred database."
-  },
-  "changeDBButtonListItem_tip": {
-    "message": "Switch to the $1 database"
-  },
   "copy_password_label": {
     "message": "Copy password",
     "description": "Copy password"
@@ -482,9 +374,6 @@
   "create_new_entry": {
     "message": "Create new entry",
     "desciption": "Create new entry"
-  },
-  "current_website": {
-    "message": "Current website"
   },
   "showing_options_for": {
     "message": "Showing options for",
@@ -506,56 +395,17 @@
     "message": "Database",
     "description": "Database"
   },
-  "disable_password_manager": {
-    "message": "The Kee add-on may not work correctly if you allow Firefox to manage your passwords. Should Kee disable the built-in Firefox password manager?"
-  },
-  "dismiss_notification": {
-    "message": "Dismiss this notification without taking any action"
-  },
   "generatePassword_copied": {
     "message": "A new password has been copied to your clipboard.",
     "description": "A new password has been copied to your clipboard."
-  },
-  "generatePassword_launch": {
-    "message": "Please launch KeePass first."
   },
   "group_label": {
     "message": "Group",
     "description": "Group"
   },
-  "httpAuth_default": {
-    "message": "You are logged out of your password database (it may be locked)"
-  },
-  "httpAuth_loadingPasswords": {
-    "message": "Loading passwords"
-  },
-  "httpAuth_noMatches": {
-    "message": "No matching entries found"
-  },
-  "install_somethingsWrong": {
-    "message": "Something went wrong"
-  },
-  "installKee_label": {
-    "message": "Install Kee"
-  },
-  "kee_enabled": {
-    "message": "Kee enabled"
-  },
   "keepass_history_pointer": {
     "message": "KeePass has an \"undo\" feature which you can access from the KeePass \"edit entry\" dialog window. Click on the \"History\" tab and then use the \"Restore\" button to revert to an older version.",
     "description": "KeePass has an \"undo\" feature which you can access from the KeePass \"edit entry\" dialog window. Click on the \"History\" tab and then use the \"Restore\" button to revert to an older version."
-  },
-  "launchKeePass_label": {
-    "message": "Launch KeePass"
-  },
-  "launchKeePass_tip": {
-    "message": "You need to open and log into KeePass to use Kee. Click here to do that."
-  },
-  "loading": {
-    "message": "Loading"
-  },
-  "loggedIn_label": {
-    "message": "Logged in"
   },
   "loggedIn_tip": {
     "message": "You are logged in to your '$1' password database",
@@ -565,36 +415,13 @@
     "message": "You are logged in to $1 password databases. '$2' is active.",
     "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
   },
-  "loggedOut_label": {
-    "message": "Logged out"
-  },
-  "loggedOut_tip": {
-    "message": "You are logged out of your password database (it may be locked)"
-  },
-  "loginToKeePass_label": {
-    "message": "Login to KeePass"
-  },
-  "loginsButtonEmpty_label": {
-    "message": "Empty"
-  },
-  "loginsButtonEmpty_tip": {
-    "message": "This folder has no logins inside it"
-  },
-  "loginsButtonGroup_tip": {
-    "message": "Explore the logins inside this folder."
-  },
-  "loginsButtonLogin_tip": {
-    "message": "Login to $1 with this username: $2. Right click for more options."
-  },
   "matchedLogin_label": {
     "message": "$1 - $2",
     "description": "<username> <seperator> <entry title>"
   },
   "matchedLogin_tip": {
-    "message": "$1 in the $2 group ($3)"
-  },
-  "matched_logins_found": {
-    "message": "Matched logins found"
+    "message": "$1 in the $2 group ($3)",
+    "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
   },
   "more_options": {
     "message": "More options",
@@ -625,14 +452,12 @@
     "description": "Login to your KeePass database to enable Kee"
   },
   "notifyBarNeverForSiteButton_label": {
-    "message": "Never for This Site"
+    "message": "Never for This Site",
+    "description": "Never for This Site"
   },
   "save": {
     "message": "Save",
     "description": "Save"
-  },
-  "password_management": {
-    "message": "Password management"
   },
   "password_successfully_updated": {
     "message": "Password successfully updated.",
@@ -654,9 +479,6 @@
     "message": "Search again",
     "description": "Search again"
   },
-  "selectDefaultKDBXLocation": {
-    "message": "Choose a default password database"
-  },
   "update": {
     "message": "Update",
     "description": "Update"
@@ -665,17 +487,10 @@
     "message": "Update existing entry",
     "description": "Update existing entry"
   },
-  "view_them_in_the_main_kee_panel": {
-    "message": "View them in the main Kee panel"
-  },
   "whichEntry_label": {
     "message": "Choose an entry...",
     "description": "Choose an entry..."
   },
-
-
-
-
 
 
   "close": {
