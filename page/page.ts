@@ -59,6 +59,21 @@ function matchFinder (uri: string) {
     myPort.postMessage({ findMatches: { uri } });
 }
 
+function tutorialIntegration () {
+    if (window.location.hostname.endsWith("tutorial-addon-1.kee.pm")
+    || window.location.hostname.endsWith("tutorial-addon.kee.pm")) {
+        const transferElement = document.createElement("KeeFoxAddonStateTransferElement");
+        transferElement.setAttribute("state", JSON.stringify({
+                    connected: appState.connected,
+                    version: browser.runtime.getManifest().version,
+                    dbLoaded: appState.KeePassDatabases && appState.KeePassDatabases.length > 0 }));
+        document.documentElement.appendChild(transferElement);
+
+        const event = new Event("KeeFoxAddonStateTransferEvent", { bubbles: true, cancelable: false });
+        transferElement.dispatchEvent(event);
+    }
+}
+
 function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, myTabId: number, myFrameId: number) {
     tabId = myTabId;
     frameId = myFrameId;
@@ -72,6 +87,8 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
     inputsObserver.observe(document.body, { childList: true, subtree: true });
 
     updateAppState(currentAppState, isForegroundTab);
+
+    tutorialIntegration();
 }
 
 function startup () {
