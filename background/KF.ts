@@ -165,6 +165,12 @@ class Kee {
         //     event.url
         // );
 
+        browser.privacy.services.passwordSavingEnabled.set({ value: false }, function () {
+            if (chrome.runtime.lastError !== undefined) {
+                KeeLog.warn("KeeFox was unable to disable built-in password manager saving - confusion may ensue! " + chrome.runtime.lastError);
+            }
+        });
+
     }
 
 

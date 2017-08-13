@@ -58,6 +58,7 @@
         "clipboardRead",
         "webNavigation",
         "activeTab",
+        "privacy",
         "<all_urls>"
     ],
     "web_accessible_resources" : [
