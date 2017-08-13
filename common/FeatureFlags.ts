@@ -16,7 +16,10 @@ class FeatureFlags {
     public static readonly required: string[] = [
 
         // Full feature set as of KeeFox 1.6
-        "KPRPC_FEATURE_VERSION_1_6"
+        "KPRPC_FEATURE_VERSION_1_6",
+
+        // Allow clients without the name KeeFox to connect
+        "KPRPC_GENERAL_CLIENTS"
 
     ];
 
