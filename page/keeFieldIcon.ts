@@ -49,9 +49,9 @@ class KeeFieldIcon {
     }
 
     private showMatchedLoginsPanel (e) {
-        const cs = document.defaultView.getComputedStyle(e.target);
-        const leftLimit = parseInt(cs.width) - 20 - parseInt(cs.borderLeftWidth);
-        if ((e.clientX - e.target.offsetLeft) > leftLimit) {
+        const bcrect = e.target.getBoundingClientRect();
+        const leftLimit = bcrect.left + bcrect.width - 22;
+        if (e.clientX > leftLimit) {
             if (frameId !== 0) {
             myPort.postMessage({action: "showMatchedLoginsPanel"} as AddonMessage);
             } else
@@ -62,9 +62,9 @@ class KeeFieldIcon {
     }
 
     private hoverOverInput (e) {
-        const cs = document.defaultView.getComputedStyle(e.target);
-        const leftLimit = parseInt(cs.width) - 20 - parseInt(cs.borderLeftWidth);
-        if ((e.clientX - e.target.offsetLeft) > leftLimit) {
+        const bcrect = e.target.getBoundingClientRect();
+        const leftLimit = bcrect.left + bcrect.width - 22;
+        if (e.clientX > leftLimit) {
             e.target.style.cursor = "pointer";
             return;
         }
