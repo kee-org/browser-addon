@@ -679,6 +679,11 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         kee.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
     }
     if (msg.submittedData) {
+
+        // Record the URL of the favicon now but don't resolve it to
+        // data until we know we want to actually save this login
+        msg.submittedData.favIconUrl = this.sender.tab.favIconUrl;
+
         kee.findLogins(msg.submittedData.url, null,
             null, null, null, null, null, response => {
 
@@ -794,25 +799,54 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.saveData) {
         const persistentItem = kee.persistentTabStates[tabId].items.find(item => item.itemType == "submittedData");
 
-        if (msg.saveData.update) {
-            const result = kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.urlMergeMode, msg.saveData.db);
-            showUpdateSuccessNotification();
-        }
-        else {
-            const result = kee.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
-            if (configManager.current.rememberMRUGroup) {
-                if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
-                configManager.current.mruGroup[msg.saveData.db] = msg.saveData.group;
-                configManager.save();
-            }
-        }
+        fetchFavicon(persistentItem.submittedData.favIconUrl).then(dataUrl => {
 
-        kee.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
+            if (dataUrl) {
+                persistentItem.submittedLogin.iconImageData = dataUrl.substr(22);
+            }
+
+            if (msg.saveData.update) {
+                const result = kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.urlMergeMode, msg.saveData.db);
+                showUpdateSuccessNotification();
+            }
+            else {
+                const result = kee.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
+                if (configManager.current.rememberMRUGroup) {
+                    if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
+                    configManager.current.mruGroup[msg.saveData.db] = msg.saveData.group;
+                    configManager.save();
+                }
+            }
+
+            kee.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
+        });
 
         //TODO:#9: tutorial guides, etc.
         // if (login.URLs[0].startsWith("http://tutorial-section-b.keefox.org/part2"))
         //     kee.tutorialHelper.tutorialProgressSaved();
     }
+}
+
+function fetchFavicon (url): Promise<string> {
+    return new Promise(function (resolve, reject) {
+        if (!url) {
+            resolve(undefined);
+            return;
+        }
+        const img = new Image();
+        img.onload = function () {
+            const canvas = document.createElement("canvas");
+            canvas.width = (this as any).width;
+            canvas.height = (this as any).height;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage((this as any), 0, 0);
+
+            const dataURL = canvas.toDataURL("image/png");
+            resolve(dataURL);
+        };
+        img.src = url;
+    });
 }
 
 function showUpdateSuccessNotification ()

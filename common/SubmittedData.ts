@@ -8,4 +8,5 @@ interface SubmittedData {
     isPasswordChangeForm: boolean;
     isRegistrationForm: boolean;
     //,savePageCountToTab
+    favIconUrl: string;
 }
