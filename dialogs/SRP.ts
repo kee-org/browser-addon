@@ -65,3 +65,14 @@ class SrpDialog {
         });
     }
 }
+
+let srp: SrpDialog;
+
+function setupPage () {
+    KeeLog.attachConfig(configManager.current);
+    srp = new SrpDialog();
+    srp.setupPage();
+    document.getElementById("i18n_root").style.display = "block";
+}
+
+document.addEventListener("DOMContentLoaded", () => configManager.load(setupPage));

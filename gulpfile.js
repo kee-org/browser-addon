@@ -141,7 +141,7 @@ gulp.task("ts:settings", ["lint:settings", "ts:common"], function() {
 });
 
 var tsProjectDialogs = ts.createProject("dialogs/tsconfig.json", {
-    outFile: "dialogs.js"
+    //outFile: "dialogs.js"
 });
 gulp.task("ts:dialogs", ["lint:dialogs", "ts:common"], function() {
     return tsProjectDialogs.src()
