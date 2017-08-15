@@ -87,6 +87,9 @@ class KeeNotification {
             case "loadUrlHelpSensitiveLogging":
                 this.myPort.postMessage({ loadUrlHelpSensitiveLogging: true });
                 break;
+            case "loadUrlUpgradeKee":
+                this.myPort.postMessage({ loadUrlUpgradeKee: true });
+                break;
             case "disableNotifyWhenEntryUpdated":
                 configManager.current.notifyWhenEntryUpdated = false;
                 configManager.save();

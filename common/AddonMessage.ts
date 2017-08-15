@@ -11,6 +11,7 @@ interface AddonMessage {
     tabId?: number;
     frameId?: number;
     loadUrlHelpSensitiveLogging?: boolean;
+    loadUrlUpgradeKee?: boolean;
     addNotification?: KeeNotification;
     removeNotification?: string;
     findMatches?: { uri: string };

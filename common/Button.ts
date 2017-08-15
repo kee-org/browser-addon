@@ -1,5 +1,6 @@
 type ButtonAction = "enableHighSecurityKPRPCConnection" |
-    "loadUrlHelpSensitiveLogging" | "disableNotifyWhenEntryUpdated";
+    "loadUrlHelpSensitiveLogging" | "disableNotifyWhenEntryUpdated" |
+    "loadUrlUpgradeKee";
 
 interface Button {
     label: string;

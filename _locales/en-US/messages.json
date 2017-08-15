@@ -60,7 +60,7 @@
     "description": "The KeePassRPC server requires features from Kee that this version does not contain."
   },
   "conn_setup_server_features_missing": {
-    "message": "The KeePassRPC KeePass Password Safe plugin must be upgraded to allow Kee to connect to it. Ensure you are running the latest version of the KeePass plugin. You can start the process from the KeePass Help menu - click on \"Check for Updates\".",
+    "message": "The KeePassRPC KeePass Password Safe plugin must be upgraded to allow Kee to connect to it. Ensure you are running the latest version of the KeePassRPC plugin by following the quick and easy instructions at $1",
     "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
   },
   "conn_sl_high_label": {
@@ -564,5 +564,9 @@
   "dont_show_again": {
       "message": "Don't show message again",
       "description": "Button user can click on to cause a message to hide and not reappear"
+  },
+  "upgrade_kee": {
+      "message": "Upgrade Kee",
+      "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
   }
 }

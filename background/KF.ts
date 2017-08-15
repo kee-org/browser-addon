@@ -649,7 +649,11 @@ function browserPopupMessageHandler (msg: AddonMessage) {
             url: "https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive"
         });
     }
-
+    if (msg.loadUrlUpgradeKee) {
+        browser.tabs.create({
+            url: "https://www.kee.pm/upgrade-kprpc"
+        });
+    }
     if (msg.action == "generatePassword") {
         if (kee.appState.connected) {
             kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });

@@ -264,9 +264,13 @@ class kprpcClient {
         // sent back on the server's first handshake response and reject if the server is missing features we need.
         if (data.features && !FeatureFlags.required.every(function (feature) { return data.features.indexOf(feature) !== -1; }))
         {
-            KeeLog.error($STR("conn_setup_server_features_missing"));
+            KeeLog.error($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]));
             kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
-            this.showConnectionMessage($STR("conn_setup_server_features_missing"));
+            const button: Button = {
+                label: $STR("upgrade_kee"),
+                action: "loadUrlUpgradeKee"
+            };
+            this.showConnectionMessage($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]), [button]);
             this.resetConnection();
             return;
         }
