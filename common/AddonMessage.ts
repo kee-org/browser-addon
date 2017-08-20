@@ -19,10 +19,11 @@ interface AddonMessage {
     logins?: keeLoginInfo[];
     action?: "primary" | "detectForms" | "manualFill" | "generatePassword" | "closeAllPanels" | "showMatchedLoginsPanel" | "removeSubmittedData";
     selectedLoginIndex?: number;
-    passwordProfiles: any[];
-    generatedPassword: string;
-    passwordProfile: string;
+    passwordProfiles?: any[];
+    generatedPassword?: string;
+    passwordProfile?: string;
     submittedData?: SubmittedData;
     saveData?: SaveData;
     loginEditor?: { uniqueID: string, DBfilename: string};
+    neverSave?: boolean;
 }

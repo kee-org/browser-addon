@@ -382,7 +382,7 @@ class ConfigManager {
     private deriveConfigFromMatches (matchedConfigNodes: SiteConfigNode[]) {
         const derivedConfig: SiteConfig = {};
         matchedConfigNodes.forEach(node => {
-            if (node.config.preventSaveNotification !== undefined && derivedConfig.preventSaveNotification === undefined) {
+            if (node.config.preventSaveNotification !== undefined && derivedConfig.preventSaveNotification == null) {
                 derivedConfig.preventSaveNotification = node.config.preventSaveNotification;
             }
 

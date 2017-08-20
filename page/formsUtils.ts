@@ -173,19 +173,6 @@ public getFormFields (form, isSubmission, currentPage?)
     return { actualUsernameIndex, pwFields, otherFields };
 }
 
-// private getSaveOnSubmitForSite (siteURL)
-// {
-//     var showSaveNotification = false;
-//     if (sendSyncMessage("kee:isKeePassDatabaseOpen")[0])
-//     {
-//         // We don't do this unless we think we have a KeePassRPC connection
-//         let conf = config.getConfigForURL(siteURL);
-//         if (!conf.preventSaveNotification)
-//             showSaveNotification = true;
-//     }
-//     return showSaveNotification;
-// };
-
 // // used for multipage stuff that we might not be able to support yet in webextensions
 // resetFormFillSession () {
 //     if (resetFormFillTimer != null) {

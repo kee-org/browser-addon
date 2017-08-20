@@ -379,9 +379,9 @@ function setSiteSpecificConfigValues () {
 
     if (siteModeAll) {
         (document.getElementById("pref_notifyBarRequestPasswordSave_label") as HTMLInputElement).checked
-            = siteConfig.preventSaveNotification ? siteConfig.preventSaveNotification : null;
+            = siteConfig.preventSaveNotification === true ? null : true;
     } else {
-        const save: string = siteConfig.preventSaveNotification === true ? "Yes" : (siteConfig.preventSaveNotification === false ? "No" : "Inherit");
+        const save: string = siteConfig.preventSaveNotification === true ? "No" : (siteConfig.preventSaveNotification === false ? "Yes" : "Inherit");
         (document.getElementById("requestPasswordSaveSelect") as HTMLSelectElement).value = save;
     }
 
@@ -606,12 +606,12 @@ function saveOfferToSavePasswords (e) {
 
     if (siteModeAll) {
         const save = (document.getElementById("pref_notifyBarRequestPasswordSave_label") as HTMLInputElement).checked;
-        configManager.current.siteConfig.pageRegex["^.*$"].config.preventSaveNotification = save;
+        configManager.current.siteConfig.pageRegex["^.*$"].config.preventSaveNotification = !save;
     } else {
         const value = (document.getElementById("requestPasswordSaveSelect") as HTMLSelectElement).value;
-        const save = value === "Inherit" ? null : (value == "Yes" ? true : false);
+        const preventSave = value === "Inherit" ? null : (value == "No" ? true : false);
         const siteConfigLookup = configManager.siteConfigLookupFor(specificSite.target, specificSite.method);
-        siteConfigLookup[specificSite.value].config.preventSaveNotification = save;
+        siteConfigLookup[specificSite.value].config.preventSaveNotification = preventSave;
     }
     configManager.save();
 }

@@ -830,10 +830,19 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
             kee.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
         });
+    }
 
-        //TODO:#9: tutorial guides, etc.
-        // if (login.URLs[0].startsWith("http://tutorial-section-b.keefox.org/part2"))
-        //     kee.tutorialHelper.tutorialProgressSaved();
+    if (msg.neverSave) {
+        const persistentItem = kee.persistentTabStates[tabId].items.find(item => item.itemType == "submittedData");
+        const url = new URL(persistentItem.submittedData.url);
+        const host = url.host;
+        const configLookup = configManager.siteConfigLookupFor("Host", "Exact");
+        if (!configLookup[host]) {
+            configLookup[host] = {config: new SiteConfig(), source: "User", matchWeight: 100};
+        }
+        configLookup[host].config.preventSaveNotification = true;
+        configManager.save();
+        kee.tabStates[tabId].framePorts[0].postMessage({ action: "closeAllPanels" });
     }
 }
 

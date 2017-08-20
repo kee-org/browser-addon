@@ -67,17 +67,18 @@ class FormSaving {
         const doc = form.ownerDocument;
 
         this.Logger.debug({ m: "", sm: "URL: " + doc.URL, r: true });
+
+        const conf = configManager.siteConfigFor(doc.URL);
+        if (conf.preventSaveNotification) return;
+
         let isPasswordChangeForm = false;
         let isRegistrationForm = false;
 
         // Get the appropriate fields from the form.
         const passwordFields = [];
-
-        // there must be at least one password or otherField
         const { actualUsernameIndex: usernameIndex, pwFields: passwords, otherFields } =
             this.formUtils.getFormFields(form, true);
 
-        const conf = configManager.siteConfigFor(doc.URL);
 
         if (passwords.length > 1) // could be password change form or multi-password login form or sign up form
         {

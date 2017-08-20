@@ -39,6 +39,12 @@ class SavePasswordPanel {
         container.appendChild(saveTypeChooser);
         const saveTypeContainer = this.createSaveTypeContainer();
         container.appendChild(saveTypeContainer);
+        const neverButton = document.createElement("button");
+        neverButton.textContent = $STR("notifyBarNeverForSiteButton_label");
+        neverButton.addEventListener("click", e => {
+            myPort.postMessage({ neverSave: true } as AddonMessage);
+        });
+        container.appendChild(neverButton);
         return container;
     }
 
@@ -541,13 +547,6 @@ class SavePasswordPanel {
 
             container.appendChild(loginItem);
         }
-
-        // // Update the UI state to reflect the number of logins found
-        // if (container.childElementCount > 0) {
-        //     const elem = document.getElementById("Kee-PanelSubSection-SearchResults");
-        //     elem.classList.add("enabled");
-        //     elem.classList.remove("disabled");
-        // }
 
         KeeLog.debug(logins.length + " search results set.");
     }

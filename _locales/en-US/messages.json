@@ -448,8 +448,8 @@
     "description": "Login to your KeePass database to enable Kee"
   },
   "notifyBarNeverForSiteButton_label": {
-    "message": "Never for This Site",
-    "description": "Never for This Site"
+    "message": "Never for this site",
+    "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
   },
   "save": {
     "message": "Save",
@@ -592,5 +592,9 @@
   "network_auth_choose": {
     "message": "Choose a login from the list below or close this window to manually enter the required login information.",
     "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
+  },
+  "save_login": {
+      "message": "Save login",
+      "description": "Heading for panel that allows user to create or update a new login entry"
   }
 }

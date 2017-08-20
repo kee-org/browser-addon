@@ -74,7 +74,7 @@ function startup () {
             });
         break;
         case "savePassword":
-            document.getElementById("header").innerText = "Save password";
+            document.getElementById("header").innerText = $STR("save_login");
             myPort.onMessage.addListener(function (m: AddonMessage) {
                 KeeLog.debug("In iframe script, received message from background script: ");
 
