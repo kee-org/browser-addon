@@ -1,0 +1,50 @@
+body {
+    background-color: white;
+    padding: 0px;
+    margin: 0px;
+    height: 100vh;
+}
+
+#header {
+    flex-shrink: 0;
+}
+
+#GeneratePasswordContainer,
+#Kee-MatchedLoginsList {
+    flex-grow:1000;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+/* Default login list item and group style */
+#Kee-MatchedLoginsList li,
+#GeneratePasswordContainer li,
+#Kee-SaveLogin-SearchResults-Container li,
+#Kee-SaveLogin-selectedEntryList li
+{
+    min-height:26px;
+    padding:0px 5px 0px 22px;
+    margin:0px;
+    background-repeat:no-repeat;
+    background-position:2px 4px;
+    cursor:default;
+    line-height:26px;
+    position:relative;
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+}
+
+#Kee-MatchedLoginsList li:hover,
+#GeneratePasswordContainer li:hover
+{
+    background-color: #EAEAEA;
+    border: 1px solid #D6D6D6;
+    border-radius: 3px;
+}
+
+/* Basic login list styles */
+#Kee-MatchedLoginsList ul {
+    margin:0 0 0 0px;
+    padding:0px 0px 0px 4px;
+    list-style:none;
+}

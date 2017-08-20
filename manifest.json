@@ -58,6 +58,8 @@
         "webNavigation",
         "activeTab",
         "privacy",
+        "webRequestBlocking",
+        "webRequest",
         "<all_urls>"
     ],
     "web_accessible_resources" : [

@@ -247,10 +247,6 @@
     "message": "Search all open KeePass databases",
     "description": "Search all open KeePass databases"
   },
-  "pref_when_kee_chooses_prompt_desc": {
-    "message": "When Kee chooses a matching login for an HTTP (basic) Auth prompt, Kee should",
-    "description": "Context/label for user when changing setting relating to HTTP auth auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
-  },
   "pref_when_kee_chooses_standard_form_desc": {
     "message": "When Kee chooses a matching login for a standard form, Kee should",
     "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
@@ -568,5 +564,33 @@
   "upgrade_kee": {
       "message": "Upgrade Kee",
       "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
+  },
+  "pref_when_kee_chooses_prompt_desc": {
+    "message": "For network logins (e.g. HTTP Auth) ask me when Kee finds",
+    "description": "Context/label for user when changing setting relating to HTTP auth auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
+  },
+  "pref_any_matching_login": {
+    "message": "any matching login",
+    "description": "When the user selects this option, they will always be shown the popup dialog with all matching entries for network authentication, even if there is only one match."
+  },
+  "pref_more_than_one_matching_login": {
+    "message": "more than one matching login",
+    "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match."
+  },
+  "network_authentication": {
+    "message": "Network authentication",
+    "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
+  },
+  "network_auth_proxy_description": {
+    "message": "A proxy requires you to authenticate with it before you can access $1",
+    "description": "Instructions for popup dialog displayed when a proxy requires authentication."
+  },
+  "network_auth_http_auth_description": {
+    "message": "A website requires you to authenticate with it before you can access $1. The website says: $2",
+    "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
+  },
+  "network_auth_choose": {
+    "message": "Choose a login from the list below or close this window to manually enter the required login information.",
+    "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
   }
 }

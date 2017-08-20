@@ -25,6 +25,8 @@ class Kee {
     browserPopupPort: Partial<browser.runtime.Port>;
     onPortConnected: any;
 
+    networkAuth: NetworkAuth;
+
     constructor ()
     {
 
@@ -164,6 +166,9 @@ class Kee {
         // browser.tabs.onUpdated.addListener((id, event) =>
         //     event.url
         // );
+
+        this.networkAuth = new NetworkAuth();
+        this.networkAuth.startListening();
 
         browser.privacy.services.passwordSavingEnabled.set({ value: false }, function () {
             if (chrome.runtime.lastError !== undefined) {
@@ -631,6 +636,7 @@ browser.browserAction.disable();
 
 // Assumes config and logging have been initialised before this is called.
 function startup () {
+    KeeLog.attachConfig(configManager.current);
     kee = new Kee();
     browser.browserAction.enable();
 }

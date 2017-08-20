@@ -18,3 +18,4 @@
 /typedefs/common.d.ts
 *.map
 /common/common.js
+/dialogs/NetworkAuth.js
