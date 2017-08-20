@@ -579,45 +579,6 @@ class Kee {
         KeeLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
     }
 
-    //TODO:#8: tabs.currentTab().then(tab => tab.favIconUrl) will get the URI for a favicon but then need to make a network request to download
-    // it I think! In any case, must be run from content script rather than background script.
-    /*
-    loadFavicon= function(url, faviconLoader)
-    {
-        try
-        {
-            var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
-                .getService(Components.interfaces.nsIIOService);
-
-            var pageURI = ioservice.newURI(url, null, null);
-
-            var faviconService =
-                Components.classes["@mozilla.org/browser/favicon-service;1"]
-                    .getService(Components.interfaces.nsIFaviconService);
-
-            // find out if we can used the new async service
-            faviconService = faviconService.QueryInterface(Components.interfaces.mozIAsyncFavicons);
-
-            faviconService.getFaviconDataForPage(pageURI,faviconLoader);
-            return;
-
-        } catch (ex)
-        {
-            // something failed so we can't get the favicon. We don't really mind too much...
-            faviconLoader.onComplete(null,0,null,null);
-            if (KeeLog.logSensitiveData)
-            {
-                KeeLog.info("favicon load failed for " + url + " : " + ex);
-                throw "We couldn't find a favicon for this URL: " + url + " BECAUSE: " + ex;
-            } else
-            {
-                KeeLog.info("favicon load failed: " + ex);
-                throw "We couldn't find a favicon BECAUSE: " + ex;
-            }
-        }
-    }
-    */
-
     onSearchCompleted (results)
     {
         // a default search results handler. In practice I expect that each search
