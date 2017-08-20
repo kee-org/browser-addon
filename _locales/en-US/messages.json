@@ -561,17 +561,9 @@
       "message": "Upgrade Kee",
       "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
   },
-  "pref_when_kee_chooses_prompt_desc": {
-    "message": "For network logins (e.g. HTTP Auth) ask me when Kee finds",
-    "description": "Context/label for user when changing setting relating to HTTP auth auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
-  },
-  "pref_any_matching_login": {
-    "message": "any matching login",
-    "description": "When the user selects this option, they will always be shown the popup dialog with all matching entries for network authentication, even if there is only one match."
-  },
-  "pref_more_than_one_matching_login": {
-    "message": "more than one matching login",
-    "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match."
+  "pref_when_one_matching_network_login": {
+    "message": "When Kee finds only one matching network login (e.g. HTTP Auth), automatically login",
+    "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
   },
   "network_authentication": {
     "message": "Network authentication",

@@ -27,6 +27,8 @@ function loadInitialConfig () {
 
     (document.getElementById("pref_autoFillFormsWithMultipleMatches_label") as HTMLInputElement).checked
         = configManager.current.autoFillFormsWithMultipleMatches ? configManager.current.autoFillFormsWithMultipleMatches : null;
+    (document.getElementById("pref_when_one_matching_network_login") as HTMLInputElement).checked
+        = configManager.current.autoSubmitNetworkAuthWithSingleMatch ? configManager.current.autoSubmitNetworkAuthWithSingleMatch : null;
 
     (document.getElementById("pref_saveFavicons_label") as HTMLInputElement).checked
         = configManager.current.saveFavicons ? configManager.current.saveFavicons : null;
@@ -60,6 +62,7 @@ function setupInputListeners () {
     document.getElementById("pref_listAllOpenDBs_label").addEventListener("change", saveListAllOpenDBs);
     document.getElementById("pref_notifyWhenLateDiscovery_label").addEventListener("change", saveNotifyWhenLateDiscovery);
     document.getElementById("pref_autoFillFormsWithMultipleMatches_label").addEventListener("change", saveAutoFillFormsWithMultipleMatches);
+    document.getElementById("pref_when_one_matching_network_login").addEventListener("change", saveAutoSubmitNetworkAuthWithSingleMatch);
 
     document.getElementById("pref_notifyBarRequestPasswordSave_label").addEventListener("change", saveOfferToSavePasswords);
     document.getElementById("requestPasswordSaveSelect").addEventListener("change", saveOfferToSavePasswords);
@@ -591,6 +594,11 @@ function saveNotifyWhenLateDiscovery (e) {
 function saveAutoFillFormsWithMultipleMatches (e) {
     e.preventDefault();
     configManager.setASAP({ autoFillFormsWithMultipleMatches: (document.getElementById("pref_autoFillFormsWithMultipleMatches_label") as HTMLInputElement).checked });
+}
+
+function saveAutoSubmitNetworkAuthWithSingleMatch (e) {
+    e.preventDefault();
+    configManager.setASAP({ autoSubmitNetworkAuthWithSingleMatch: (document.getElementById("pref_when_one_matching_network_login") as HTMLInputElement).checked });
 }
 
 function saveOfferToSavePasswords (e) {

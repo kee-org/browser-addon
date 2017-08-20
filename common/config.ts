@@ -92,4 +92,5 @@ class Config {
     tutorialProgress: string;
     version: number;
     triggerChangeInputEventAfterFill: boolean;
+    autoSubmitNetworkAuthWithSingleMatch: boolean;
 }

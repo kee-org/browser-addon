@@ -71,6 +71,12 @@ class NetworkAuth {
                         return;
                     }
 
+                    if (convertedResult.length === 1 && configManager.current.autoSubmitNetworkAuthWithSingleMatch) {
+                        const login = convertedResult[0];
+                        resolve({ authCredentials: { username: login.otherFields[login.usernameIndex].value, password: login.passwords[0].value } });
+                        return;
+                    }
+
                     function handleMessage (request, sender: browser.runtime.MessageSender, sendResponse) {
                         switch (request.action) {
                             case "NetworkAuth_ok":
