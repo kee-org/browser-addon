@@ -255,10 +255,6 @@
     "message": "When you choose a matched login, Kee should",
     "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
   },
-  "pref_triggerChangeInputEventAfterFill_label": {
-    "message": "Trigger Change/Input Event after auto-fill",
-    "description": "Trigger Change/Input Event after auto-fill"
-  },
   "site_options_invisible_tip_desc": {
     "message": "NB: The names and IDs may not be the same as visible labels on the page (they are set in the source code of the page)",
     "description": "Explains that the configuration settings might not be what the casual user expects"

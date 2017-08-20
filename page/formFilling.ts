@@ -248,6 +248,9 @@ class FormFilling {
         {
             domElement.value = value;
         }
+
+        domElement.dispatchEvent(new UIEvent("input", {view: window, bubbles: true, cancelable: true}));
+        domElement.dispatchEvent(new UIEvent("change", {view: window, bubbles: true, cancelable: true}));
     }
 
     private fillManyFormFields (formFields, dataFields, currentPage, overWriteFieldsAutomatically)
