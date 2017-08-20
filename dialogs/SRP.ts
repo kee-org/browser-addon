@@ -17,7 +17,7 @@ class SrpDialog {
 
         document.getElementById("ok").addEventListener("click", this.primaryButtonClicked.bind(this));
 
-        window.addEventListener("unload", e => chrome.runtime.sendMessage({action: "ok", password: "" }));
+        window.addEventListener("unload", e => chrome.runtime.sendMessage({action: "SRP_ok", password: "" }));
     }
 
     updateButtonState () {
@@ -60,7 +60,7 @@ class SrpDialog {
 
     continueSRP (password: string) {
         (chrome as any).windows.getCurrent(win => {
-            chrome.runtime.sendMessage({action: "ok", password: password });
+            chrome.runtime.sendMessage({action: "SRP_ok", password: password });
             const removing = (chrome as any).windows.remove(win.id);
         });
     }

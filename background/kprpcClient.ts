@@ -10,7 +10,6 @@ class kprpcClient {
     private callbacks: {};
     private callbacksData: {};
     private clientVersion: number[];
-    private authPromptAborted: boolean;
     private srpClientInternals: SRPc;
     private secretKey;
     private securityLevel: number;
@@ -24,7 +23,6 @@ class kprpcClient {
         this.callbacks = {};
         this.callbacksData = {};
         this.clientVersion = [2, 0, 0];
-        this.authPromptAborted = false;
         this.srpClientInternals = null;
         this.secretKey = null;
         this.securityLevel = 3;
@@ -392,13 +390,12 @@ class kprpcClient {
         const _this = this;
 
         function handleMessage (request, sender, sendResponse) {
+            if (request.action !== "SRP_ok") return;
             _this.identifyToClient(request.password, s, B);
             browser.runtime.onMessage.removeListener(handleMessage);
         }
 
         browser.runtime.onMessage.addListener(handleMessage);
-
-        this.authPromptAborted = false;
 
         const createData = {
             type: "popup",
