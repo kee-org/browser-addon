@@ -207,3 +207,21 @@ gulp.task('xpi', ['collect'], function() {
 });
 
 gulp.task('package', ['xpi','zip']);
+
+gulp.task('zip:beta', ['collect'], function() {
+	var manifest = require('./manifest'),
+		distFileName = manifest.name + '-v' + manifest.version + '-beta.zip';
+	return gulp.src(['build/**'])
+		.pipe(zip(distFileName))
+		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('xpi:beta', ['collect'], function() {
+	var manifest = require('./manifest'),
+		distFileName = manifest.name + '-v' + manifest.version + '-beta.xpi';
+	return gulp.src(['build/**'])
+		.pipe(zip(distFileName))
+		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('package:beta', ['xpi:beta','zip:beta']);
