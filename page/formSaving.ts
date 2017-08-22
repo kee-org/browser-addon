@@ -141,9 +141,9 @@ class FormSaving {
         const submittedData = {
             url: doc.URL,
             usernameIndex,
-            passwordFields,
+            passwordFields: passwordFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
             title: doc.title,
-            otherFields,
+            otherFields: otherFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
             //currentPage,
             isPasswordChangeForm,
             isRegistrationForm
