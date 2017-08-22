@@ -8,16 +8,34 @@ class NetworkAuth {
         }
     }
 
-    public provideCredentialsAsyncCallback (
+    public provideCredentialsBlockingCallback (
         requestDetails: browser.webRequest.WebAuthenticationChallengeDetails,
         callback: (response: browser.webRequest.BlockingResponse) => void
     ) {
+        if (!callback) {
+            // Firefox treats this handler as a sync or async block, depending on the return type.
+            // We return a Promise to indicate we want to run an async lookup for credentials
+            return this.provideCredentialsAsync(requestDetails);
+        } else {
+            // Chrome & Edge treat this handler as a sync block so we need to return immediately
+            // provideCredentialsAsyncBlockingCallback will take the necessary action
+            return { cancel: false };
+        }
+    }
+
+    public provideCredentialsAsyncBlockingCallback (
+        requestDetails: browser.webRequest.WebAuthenticationChallengeDetails,
+        callback: (response: browser.webRequest.BlockingResponse) => void
+    ) {
+        // Firefox fails to register the event listener so this function
+        // only executes in other browsers
+
         this.provideCredentialsAsync(requestDetails)
         .then(
             result => callback(result)
         ).catch(
             reason => {
-                KeeLog.error("BlockingResponse promise failed: " + reason);
+                KeeLog.error("AsyncBlockingCallback promise failed: " + reason);
                 callback({ cancel: false });
             }
         );
@@ -31,7 +49,7 @@ class NetworkAuth {
             return Promise.resolve({ cancel: false });
         } else {
             this.pendingRequests.push(requestDetails.requestId);
-            KeeLog.debug("providing credentials for: " + requestDetails.requestId);
+            KeeLog.debug("Providing credentials for: " + requestDetails.requestId);
 
             return new Promise<browser.webRequest.BlockingResponse>((resolve, reject) => {
 
@@ -54,7 +72,7 @@ class NetworkAuth {
                                 const kfl = new keeLoginInfo();
                                 kfl.initFromEntry(foundLogins[i]);
 
-                                // Only consider logins that a username and password to fill in
+                                // Only consider logins that contain a username and password to fill in
                                 if (kfl.passwords != null && kfl.passwords.length > 0
                                     && kfl.otherFields != null && kfl.otherFields.length > 0)
                                     convertedResult.push(kfl);
@@ -89,7 +107,7 @@ class NetworkAuth {
                                 chrome.runtime.onMessage.removeListener(handleMessage);
                                 break;
                             case "NetworkAuth_load":
-                                // Can't use sendResponse because Mozilla chose to not implement it, contrary to the MDN docs
+                                // Can't use sendResponse() because Mozilla chose to not implement it, contrary to the MDN docs
                                 chrome.tabs.sendMessage(sender.tab.id, {
                                     action: "NetworkAuth_matchedLogins",
                                     logins: convertedResult,
@@ -116,20 +134,25 @@ class NetworkAuth {
 
     public startListening () {
         try {
-            // Chrome, Edge
-            chrome.webRequest.onAuthRequired.addListener(
-                (requestDetails, callback) => { this.provideCredentialsAsyncCallback(requestDetails, callback); },
+            // Firefox currently logs an error message to console which isn't ideal but is the
+            // only way to get cross-browser support for this API.
+            // (Error: Invalid option asyncBlocking)
+            // We try/catch just in case that ever changes, although it's likely code changes
+            // would also be required to retain functionality if this change were made.
+            const aThing = chrome.webRequest.onAuthRequired.addListener(
+                (requestDetails, callback) => { this.provideCredentialsAsyncBlockingCallback(requestDetails, callback); },
                 { urls: ["<all_urls>"] },
                 ["asyncBlocking"]
             );
         } catch (e) {
-            // Firefox
-            browser.webRequest.onAuthRequired.addListener(
-                requestDetails => { this.provideCredentialsAsync(requestDetails); },
-                { urls: ["<all_urls>"] },
-                ["blocking"]
-            );
+            KeeLog.error("Unexpected exception calling an asyncBlocking chrome.webRequest.onAuthRequired.addListener");
         }
+
+        const aThing = chrome.webRequest.onAuthRequired.addListener(
+            (requestDetails, callback) => this.provideCredentialsBlockingCallback(requestDetails, callback),
+            { urls: ["<all_urls>"] },
+            ["blocking"]
+        );
 
         browser.webRequest.onCompleted.addListener(
             requestDetails => { this.completed(requestDetails); },
@@ -140,5 +163,7 @@ class NetworkAuth {
             requestDetails => { this.completed(requestDetails); },
             { urls: ["<all_urls>"] }
         );
+
+        KeeLog.debug("Network authentication listeners started");
     }
 }
