@@ -167,6 +167,8 @@ class Kee {
         //     event.url
         // );
 
+        browser.webNavigation.onCommitted.addListener(pageNavigationCommitted);
+
         this.networkAuth = new NetworkAuth();
         this.networkAuth.startListening();
 
@@ -848,15 +850,20 @@ function showUpdateSuccessNotification ()
     }
 }
 
+// This allows us to identify when a new page is loading in an existing tab
+function pageNavigationCommitted (details: browser.webNavigation.WebNavigationTransitionCallbackDetails) {
+    if (details.frameId === 0) delete kee.tabStates[details.tabId];
+}
+
+// If we don't need the port any more, tidy up. Note that Firefox invokes this
+// intermittently and often a long time after the ports are no longer needed
+// so top level ports are rarely still around by the time this happens (deleted in pageNavigationCommitted)
 function pageDisconnect () {
-    delete kee.tabStates[this.sender.tab.id].framePorts[this.sender.frameId];
-
-    // If we have no remaining page ports, we can assume this tab has closed and reclaim some memory
-    // This also allows us to identify when a new page is loading in an existing tab (all ports will disconnect first)
-
-    for (const i in kee.tabStates[this.sender.tab.id].framePorts) return;
-
-    delete kee.tabStates[this.sender.tab.id];
+    if (kee.tabStates[this.sender.tab.id]
+        && kee.tabStates[this.sender.tab.id].framePorts
+        && kee.tabStates[this.sender.tab.id].framePorts[this.sender.frameId]) {
+        delete kee.tabStates[this.sender.tab.id].framePorts[this.sender.frameId];
+        }
 }
 
 function iframeDisconnect () {
