@@ -379,6 +379,10 @@
     "message": "A specific website",
     "description": "A specific website"
   },
+  "current_website": {
+    "message": "Current website",
+    "description": "Current website"
+  },
   "website": {
     "message": "Website",
     "description": "Website"

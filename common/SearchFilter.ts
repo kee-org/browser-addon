@@ -29,12 +29,12 @@ class SearchFilter {
         searchFilterOptionAll.setAttribute("value", "");
         searchFilterOptionAll.setAttribute("id", "Kee-"+prefix+"-searchfilter-all");
         searchFilterOptionAll.classList.add("Kee-Search-Filter");
-        searchFilterOptionAll.textContent = $STR("all-websites");
+        searchFilterOptionAll.textContent = $STR("all_websites");
         const searchFilterOptionCurrent = doc.createElement("option");
         searchFilterOptionCurrent.setAttribute("value", "");
         searchFilterOptionCurrent.setAttribute("id", "Kee-"+prefix+"-searchfilter-current");
         searchFilterOptionCurrent.classList.add("Kee-Search-Filter");
-        searchFilterOptionCurrent.textContent = $STR("current-website");
+        searchFilterOptionCurrent.textContent = $STR("current_website");
 
         if (inMainPanel)
             searchFilterOptionAll.setAttribute("selected", "true");
