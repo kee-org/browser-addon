@@ -497,6 +497,10 @@
       "message": "Auto-close in $1 seconds",
       "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
   },
+  "autoclose_cancelled": {
+      "message": "Auto-close cancelled",
+      "description": "Tells the user that the panel auto-close functionality has been disabled for this panel."
+  },
   "add": {
       "message": "Add",
       "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"

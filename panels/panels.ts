@@ -116,6 +116,8 @@ function startup () {
             autoCloseSetting.checked = true;
             autoCloseSetting.addEventListener("change", e => {
                 clearInterval(autoCloseInterval);
+                autoCloseSetting.style.display = "none";
+                autoCloseLabel.textContent = $STR("autoclose_cancelled");
             });
             const autoCloseLabel = document.createElement("label");
             autoCloseLabel.textContent = $STRF("autoclose_countdown", autoCloseTime.toString());
