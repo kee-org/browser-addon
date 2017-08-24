@@ -70,7 +70,6 @@ class Kee {
             switch (name) {
                 case "browserPopup": {
                     p.onMessage.addListener(browserPopupMessageHandler);
-                    p.onDisconnect.addListener(browserPopupDisconnect);
 
                     p.postMessage({ appState: kee.appState });
 
@@ -80,7 +79,6 @@ class Kee {
                 }
                 case "page": {
                     p.onMessage.addListener(pageMessageHandler.bind(p));
-                    p.onDisconnect.addListener(pageDisconnect.bind(p));
 
                     const connectMessage = {
                         appState: kee.appState,
@@ -113,7 +111,6 @@ class Kee {
                 }
                 case "iframe": {
                     p.onMessage.addListener(iframeMessageHandler.bind(p));
-                    p.onDisconnect.addListener(iframeDisconnect.bind(p));
 
                     const connectMessage = {
                         appState: kee.appState,
@@ -630,11 +627,6 @@ function browserPopupMessageHandler (msg: AddonMessage) {
     }
 }
 
-function browserPopupDisconnect () {
-    // Just keeps other code neater if we can assume there's always a non-null message reciever
-    kee.browserPopupPort = {postMessage: msg => {}};
-}
-
 function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     console.log("In background script, received message from page script: " + msg);
 
@@ -853,21 +845,6 @@ function showUpdateSuccessNotification ()
 // This allows us to identify when a new page is loading in an existing tab
 function pageNavigationCommitted (details: browser.webNavigation.WebNavigationTransitionCallbackDetails) {
     if (details.frameId === 0) delete kee.tabStates[details.tabId];
-}
-
-// If we don't need the port any more, tidy up. Note that Firefox invokes this
-// intermittently and often a long time after the ports are no longer needed
-// so top level ports are rarely still around by the time this happens (deleted in pageNavigationCommitted)
-function pageDisconnect () {
-    if (kee.tabStates[this.sender.tab.id]
-        && kee.tabStates[this.sender.tab.id].framePorts
-        && kee.tabStates[this.sender.tab.id].framePorts[this.sender.frameId]) {
-        delete kee.tabStates[this.sender.tab.id].framePorts[this.sender.frameId];
-        }
-}
-
-function iframeDisconnect () {
-    delete kee.tabStates[this.sender.tab.id].ourIframePorts[this.sender.frameId];
 }
 
 let portsQueue = [];
