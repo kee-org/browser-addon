@@ -26,11 +26,17 @@ class SavePasswordPanel {
 
     public createNearNode (node: HTMLElement) {
         this.saveData = {} as any;
-        //this.saveButtonCallback = saveButtonCallback;
         const container = document.createElement("div");
         container.id = "SavePasswordContainer";
         this.generateUI(container);
         node.parentNode.insertBefore(container, node.nextSibling);
+
+        // Set initial results for current website
+        const filter = (document.getElementById("Kee-SaveLogin-searchfilter-current") as HTMLOptionElement);
+        this.search.execute((document.getElementById("Kee-SaveLogin-searchbox") as any).value,
+            this.onSearchComplete.bind(this),
+            filter.value.split(",")
+        );
     }
 
 
