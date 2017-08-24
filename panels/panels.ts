@@ -111,6 +111,7 @@ function startup () {
             const autoClose = document.createElement("div");
             autoClose.id="autoClose";
             const autoCloseSetting = document.createElement("input");
+            autoCloseSetting.id = "autoCloseCheckbox";
             autoCloseSetting.type = "checkbox";
             autoCloseSetting.checked = true;
             autoCloseSetting.addEventListener("change", e => {
@@ -118,7 +119,7 @@ function startup () {
             });
             const autoCloseLabel = document.createElement("label");
             autoCloseLabel.textContent = $STRF("autoclose_countdown", autoCloseTime.toString());
-            autoCloseLabel.htmlFor = "autoClose";
+            autoCloseLabel.htmlFor = "autoCloseCheckbox";
             autoCloseLabel.id = "autoCloseLabel";
             autoClose.appendChild(autoCloseSetting);
             autoClose.appendChild(autoCloseLabel);
