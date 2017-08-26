@@ -183,13 +183,13 @@ class Kee {
             kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
         }
         kee.appState.notifications.push(notification);
-        kee.browserPopupPort.postMessage({appState: kee.appState});
+        try { kee.browserPopupPort.postMessage({appState: kee.appState}); } catch (e) {}
         browser.browserAction.setIcon({path: "common/images/highlight-48.png" });
     }
 
     removeUserNotifications (unlessTrue: (notification: KeeNotification) => boolean) {
         kee.appState.notifications = kee.appState.notifications.filter(unlessTrue);
-        kee.browserPopupPort.postMessage({appState: kee.appState});
+        try { kee.browserPopupPort.postMessage({appState: kee.appState}); } catch (e) {}
     }
 
     resetBrowserActionColor () {
@@ -228,7 +228,7 @@ class Kee {
         this.appState.KeePassDatabases = null;
         this.appState.ActiveKeePassDatabaseIndex = -1;
         this.appState.connected = false;
-        kee.browserPopupPort.postMessage( { appState: this.appState });
+        try { kee.browserPopupPort.postMessage( { appState: this.appState }); } catch (e) {}
 
         browser.browserAction.setBadgeText({ text: "OFF" });
         browser.browserAction.setBadgeBackgroundColor({ color: "red" });
@@ -284,7 +284,7 @@ class Kee {
                 configManager.save();
         }
 
-        kee.browserPopupPort.postMessage( { appState: this.appState });
+        try { kee.browserPopupPort.postMessage( { appState: this.appState }); } catch (e) {}
 
         // Poke every port. In future might just limit to active tab?
         kee.tabStates.forEach(ts => {
@@ -608,7 +608,7 @@ function browserPopupMessageHandler (msg: AddonMessage) {
 
     if (msg.removeNotification) {
         kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
-        kee.browserPopupPort.postMessage({ appState: kee.appState } as AddonMessage);
+        try { kee.browserPopupPort.postMessage({ appState: kee.appState } as AddonMessage); } catch (e) {}
     }
     if (msg.loadUrlHelpSensitiveLogging) {
         browser.tabs.create({
@@ -638,7 +638,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     }
     if (msg.removeNotification) {
         kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
-        kee.browserPopupPort.postMessage({ appState: kee.appState, isForegroundTab: this.sender.tab.id === kee.foregroundTabId } as AddonMessage);
+        try { kee.browserPopupPort.postMessage({ appState: kee.appState, isForegroundTab: this.sender.tab.id === kee.foregroundTabId } as AddonMessage); } catch (e) {}
     }
     if (msg.logins) {
         kee.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
