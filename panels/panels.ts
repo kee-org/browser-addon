@@ -34,6 +34,8 @@ function startup () {
 
     myPort = chrome.runtime.connect({ name: "iframe_" + parentFrameId });
 
+    let cancelAutoClose: () => void;
+
     switch (params["panel"])
     {
         case "matchedLogins":
@@ -45,7 +47,8 @@ function startup () {
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateFrameState(m.frameState);
 
-                matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.logins);
+                const mainPanel = matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.logins);
+                if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
             });
         break;
         case "generatePassword":
@@ -66,7 +69,8 @@ function startup () {
                     if (passwordReceived) {
                         closePanel();
                     } else {
-                        generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles);
+                        const mainPanel = generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles);
+                        if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
                         passwordReceived = true;
                     }
                 }
@@ -83,7 +87,8 @@ function startup () {
 
                 savePasswordPanel = new SavePasswordPanel(m.submittedData);
 
-                savePasswordPanel.createNearNode(document.getElementById("header"));
+                const mainPanel = savePasswordPanel.createNearNode(document.getElementById("header"));
+                if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
             });
         break;
     }
@@ -98,6 +103,13 @@ function startup () {
     if (params["autoCloseTime"]) {
         const autoCloseTime = parseInt(params["autoCloseTime"]);
         if (!Number.isNaN(autoCloseTime) && autoCloseTime > 0) {
+
+            cancelAutoClose = () => {
+                clearInterval(autoCloseInterval);
+                autoCloseSetting.style.display = "none";
+                autoCloseLabel.textContent = $STR("autoclose_cancelled");
+            };
+
             const autoCloseTimerEnd = Date.now() + autoCloseTime*1000;
             const autoCloseInterval = setInterval(() => {
                 const now = Date.now();
@@ -114,11 +126,7 @@ function startup () {
             autoCloseSetting.id = "autoCloseCheckbox";
             autoCloseSetting.type = "checkbox";
             autoCloseSetting.checked = true;
-            autoCloseSetting.addEventListener("change", e => {
-                clearInterval(autoCloseInterval);
-                autoCloseSetting.style.display = "none";
-                autoCloseLabel.textContent = $STR("autoclose_cancelled");
-            });
+            autoCloseSetting.addEventListener("change", cancelAutoClose);
             const autoCloseLabel = document.createElement("label");
             autoCloseLabel.textContent = $STRF("autoclose_countdown", autoCloseTime.toString());
             autoCloseLabel.htmlFor = "autoCloseCheckbox";
@@ -126,6 +134,8 @@ function startup () {
             autoClose.appendChild(autoCloseSetting);
             autoClose.appendChild(autoCloseLabel);
             document.getElementById("closeContainer").appendChild(autoClose);
+
+            document.getElementById("optionsContainer").addEventListener("click", cancelAutoClose);
         }
     }
     KeeLog.info("iframe page ready");

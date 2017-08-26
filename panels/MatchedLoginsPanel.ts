@@ -7,6 +7,8 @@ class MatchedLoginsPanel {
         this.setLogins(logins, list);
         container.appendChild(list);
         node.parentNode.insertBefore(container, node.nextSibling);
+
+        return container;
     }
 
     private setLogins (logins, container)

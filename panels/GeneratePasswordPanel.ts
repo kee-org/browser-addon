@@ -8,6 +8,8 @@ class GeneratePasswordPanel {
         this.setPasswordProfiles(list, passwordProfiles);
         container.appendChild(list);
         node.parentNode.insertBefore(container, node.nextSibling);
+
+        return container;
     }
 
     private setPasswordProfiles (list: HTMLUListElement, passwordProfiles: string[]) {

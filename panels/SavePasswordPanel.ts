@@ -37,6 +37,8 @@ class SavePasswordPanel {
             this.onSearchComplete.bind(this),
             filter.value.split(",")
         );
+
+        return container;
     }
 
 
