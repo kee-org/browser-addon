@@ -1,3 +1,10 @@
+html,
+body {
+  font: caption;
+  font-size:14px;
+  line-height: 1.4;
+}
+
 body {
     background-color: white;
     padding: 0px;
@@ -17,8 +24,18 @@ body {
     height:calc(100% - 12px);
 }
 
-#header {
+#MainContainer > div#closeContainer {
+    margin-left: 5px;
+}
+
+#MainContainer > div#GeneratePasswordContainer > div {
+    margin: 0px 5px 5px 5px;
+}
+
+#MainContainer > #header {
     flex-shrink: 0;
+    font-weight: bold;
+    margin: 2px 0px 5px 5px;
 }
 
 #GeneratePasswordContainer,
@@ -140,6 +157,7 @@ body {
     justify-content:space-between;
     flex-direction:row-reverse;
     flex-shrink: 0;
+    margin-top: 10px;
 }
 
 

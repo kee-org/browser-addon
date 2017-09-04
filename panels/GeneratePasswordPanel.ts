@@ -3,7 +3,9 @@ class GeneratePasswordPanel {
     public createNearNode (node: HTMLElement, passwordProfiles: any[]) {
         const container = document.createElement("div");
         container.id = "GeneratePasswordContainer";
-        container.innerText = $STR("generatePassword_copied") + " " + $STR("PasswordProfilesExplanation_label");
+        const text = document.createElement("div");
+        text.innerText = $STR("generatePassword_copied") + " " + $STR("PasswordProfilesExplanation_label");
+        container.appendChild(text);
         const list = document.createElement("ul");
         this.setPasswordProfiles(list, passwordProfiles);
         container.appendChild(list);
