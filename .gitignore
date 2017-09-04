@@ -19,3 +19,4 @@
 *.map
 /common/common.js
 /dialogs/NetworkAuth.js
+/dialogs/SRP.js
