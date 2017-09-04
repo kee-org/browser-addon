@@ -5,6 +5,10 @@ body {
     height: 100vh;
 }
 
+#i18n_root > div {
+   margin: 10px 0px;
+}
+
 #header {
     flex-shrink: 0;
 }
