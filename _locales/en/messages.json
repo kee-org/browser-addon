@@ -64,7 +64,7 @@
     "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
   },
   "conn_sl_high_label": {
-    "message": "Ask for a new connection password every time I start Firefox or KeePass.",
+    "message": "Ask for a new connection password every time I start my web browser or KeePass.",
     "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
   },
   "conn_sl_high": {
@@ -88,11 +88,11 @@
     "description": ""
   },
   "conn_sl_desc": {
-    "message": "Change the settings below to control how secure the communication link between Firefox and KeePass is. You probably don't need to ever adjust these settings but if you do, please make sure you have read the relevant manual pages first.",
+    "message": "Change the settings below to control how secure the communication link between your web browser and KeePass is. You probably don't need to ever adjust these settings but if you do, please make sure you have read the relevant manual pages first.",
     "description": ""
   },
   "conn_sl_link": {
-    "message": "Learn more about these settings and the communication between Firefox and KeePass in the manual",
+    "message": "Learn more about these settings and the communication between your web browser and KeePass in the manual",
     "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
   },
   "conn_unknown_error": {
