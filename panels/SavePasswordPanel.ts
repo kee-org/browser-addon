@@ -48,6 +48,7 @@ class SavePasswordPanel {
         const saveTypeContainer = this.createSaveTypeContainer();
         container.appendChild(saveTypeContainer);
         const neverButton = document.createElement("button");
+        neverButton.id = "neverForThisSiteButton";
         neverButton.textContent = $STR("notifyBarNeverForSiteButton_label");
         neverButton.addEventListener("click", e => {
             myPort.postMessage({ neverSave: true } as AddonMessage);

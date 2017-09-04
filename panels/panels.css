@@ -358,7 +358,7 @@ background-repeat: no-repeat;
 }
 
 #kee-save-password-update-panel2 > div.xulhbox:nth-child(1) {
-    padding-top:10px;
+    padding-top:0px;
 }
 
 #kee-save-password-update-panel2 > div.xulhbox:nth-child(2) {
@@ -368,8 +368,8 @@ background-repeat: no-repeat;
 }
 
 #kee-save-password-update-panel2 > div.xulhbox#Kee-loginURLsUpdateStatusContainer {
-    padding-top:10px;
-    margin-top:10px;
+    padding-top:5px;
+    margin-top:0px;
     margin-bottom:0px;
     border-top:1px solid #D6D6D6;
 }
@@ -388,8 +388,8 @@ background-repeat: no-repeat;
     margin-top: 0px;
     border: #D6D6D6 solid 1px;
     border-top-width: 0px;
-    height:150px;
-    min-height:150px;
+    height:100px;
+    min-height:100px;
     width:350px;
 }
 
@@ -426,9 +426,13 @@ button.Kee-SaveLogin-Abort {
 }
 
 #Kee-loginURLsUpdateRadioGroup {
-    margin:10px 0px 0px 0px;
-    padding-top:10px;
+    margin:0px;
+    padding-top:5px;
     border-top:1px solid #D6D6D6;
+    min-height: 80px;
+    height: 80px;
+    overflow-y: auto;
+    font-size: 0.8em;
 }
 
 .Kee-message {
@@ -454,4 +458,9 @@ button.Kee-SaveLogin-Abort {
 
 .xulradiogroup label {
     display:block;
+}
+
+#neverForThisSiteButton {
+    margin: 5px;
+    padding: 3px 7px;
 }
