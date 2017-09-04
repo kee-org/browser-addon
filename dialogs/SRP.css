@@ -1,3 +1,7 @@
+body {
+    margin: 10px 0px;
+}
+
 .panel-body > div {
     margin: 8px 0px;
 }
@@ -42,4 +46,8 @@ div.checkbox {
 .grid > .formSettingDescription {
     grid-column-start: 2;
     margin-left: 10px;
+}
+
+#conn_sl_link, .formSettingDescription {
+    font-size: 0.85em;
 }
