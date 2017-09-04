@@ -17,7 +17,7 @@
   },
   "conn_setup_client_sl_low": {
     "message": "Kee asked for a security level that was too low to be accepted by the password server. You must restart the authentication process using higher security.",
-    "description": "Kee asked for a security level that was too low to be accepted by the password server. You must restart the authentication process using higher security."
+    "description": ""
   },
   "conn_setup_enter_password_title": {
     "message": "Kee Authorisation",
@@ -25,7 +25,7 @@
   },
   "conn_setup_enter_password": {
     "message": "Please enter the password displayed by the KeePass \"Authorise a new connection\" window. You do not need to remember this password. If you get it wrong you will be able to try again shortly.",
-    "description": "Please enter the password displayed by the KeePass \"Authorise a new connection\" window. You do not need to remember this password. If you get it wrong you will be able to try again shortly."
+    "description": ""
   },
   "conn_setup_expired": {
     "message": "You have been using the same secret key for too long.",
@@ -53,7 +53,7 @@
   },
   "conn_setup_server_sl_low": {
     "message": "Kee has rejected the connection to the password server because their security level is too low. You must restart the authentication process using higher security.",
-    "description": "Kee has rejected the connection to the password server because their security level is too low. You must restart the authentication process using higher security."
+    "description": ""
   },
   "conn_setup_client_features_missing": {
     "message": "Kee must be upgraded to connect to your KeePass Password Safe. Ensure you are running the latest version of the browser add-on / extension.",
@@ -69,27 +69,27 @@
   },
   "conn_sl_high": {
     "message": "High",
-    "description": "High"
+    "description": ""
   },
   "conn_sl_low": {
     "message": "Low",
-    "description": "Low"
+    "description": ""
   },
   "conn_sl_medium": {
     "message": "Medium",
-    "description": "Medium"
+    "description": ""
   },
   "conn_sl_server_min_desc": {
     "message": "This allows you to prevent Kee from connecting to KeePass if its security level is set too low. See the options within KeePass to set the actual security level used by KeePass.",
-    "description": "This allows you to prevent Kee from connecting to KeePass if its security level is set too low. See the options within KeePass to set the actual security level used by KeePass."
+    "description": ""
   },
   "conn_sl_server_min": {
     "message": "Minimum acceptable KeePass security level",
-    "description": "Minimum acceptable KeePass security level"
+    "description": ""
   },
   "conn_sl_desc": {
     "message": "Change the settings below to control how secure the communication link between Firefox and KeePass is. You probably don't need to ever adjust these settings but if you do, please make sure you have read the relevant manual pages first.",
-    "description": "Change the settings below to control how secure the communication link between Firefox and KeePass is. You probably don't need to ever adjust these settings but if you do, please make sure you have read the relevant manual pages first."
+    "description": ""
   },
   "conn_sl_link": {
     "message": "Learn more about these settings and the communication between Firefox and KeePass in the manual",
@@ -105,11 +105,11 @@
   },
   "form_id": {
     "message": "Form ID",
-    "description": "Form ID"
+    "description": ""
   },
   "form_name": {
     "message": "Form name",
-    "description": "Form name"
+    "description": ""
   },
   "further_info_may_follow": {
     "message": "Further info may follow: $1",
@@ -121,7 +121,7 @@
   },
   "pref_Advanced_heading": {
     "message": "Advanced",
-    "description": "Advanced"
+    "description": ""
   },
   "pref_ConnectionSecurity_heading": {
     "message": "Connection Security",
@@ -145,15 +145,15 @@
   },
   "pref_FillAndSubmitForm_desc": {
     "message": "Fill in and submit the form",
-    "description": "Fill in and submit the form"
+    "description": ""
   },
   "pref_FillAndSubmitPrompt_desc": {
     "message": "Fill in and submit the login prompt",
-    "description": "Fill in and submit the login prompt"
+    "description": ""
   },
   "pref_FillForm_desc": {
     "message": "Fill in the form",
-    "description": "Fill in the form"
+    "description": ""
   },
   "pref_FillingEntries_heading": {
     "message": "Filling entries",
@@ -165,7 +165,7 @@
   },
   "pref_FillPrompt_desc": {
     "message": "Fill in the login prompt",
-    "description": "Fill in the login prompt"
+    "description": ""
   },
   "pref_FindingEntries_heading": {
     "message": "Finding entries",
@@ -181,15 +181,15 @@
   },
   "pref_autoFillFormsWithMultipleMatches_label": {
     "message": "Forms with multiple matches should be automatically filled and submitted",
-    "description": "Forms with multiple matches should be automatically filled and submitted"
+    "description": ""
   },
   "pref_keePassDBToOpen_label": {
     "message": "When opening or logging in to KeePass, use this database file",
-    "description": "When opening or logging in to KeePass, use this database file"
+    "description": ""
   },
   "pref_keePassRPCPort_label": {
     "message": "Communicate with KeePass using this TCP/IP port",
-    "description": "Communicate with KeePass using this TCP/IP port"
+    "description": ""
   },
   "pref_keePassRPCPortWarning_label": {
     "message": "NB: change the setting in KeePass.config or else Kee will not always be able to communicate with KeePass",
@@ -197,11 +197,11 @@
   },
   "pref_listAllOpenDBs_label": {
     "message": "List logins from all open KeePass databases",
-    "description": "List logins from all open KeePass databases"
+    "description": ""
   },
   "pref_logLevel_desc": {
     "message": "Choose how verbose you want the log to be. Each higher log level produces more output.",
-    "description": "Choose how verbose you want the log to be. Each higher log level produces more output."
+    "description": ""
   },
   "pref_logLevelDebugging_label": {
     "message": "Debugging",
@@ -221,7 +221,7 @@
   },
   "pref_notifyBarRequestPasswordSave_label": {
     "message": "Offer to save passwords",
-    "description": "Offer to save passwords"
+    "description": ""
   },
   "pref_notifyWhenEntryUpdated_label": {
     "message": "Display the \"Password successfully updated\" notification",
@@ -229,11 +229,11 @@
   },
   "pref_notifyWhenLateDiscovery_label": {
     "message": "Display a notification when Kee finds logins matching a form added after the web page has finished loading",
-    "description": "Display a notification when Kee finds logins matching a form added after the web page has finished loading"
+    "description": ""
   },
   "pref_rememberMRUDB_label": {
     "message": "Remember the most recently used KeePass database",
-    "description": "Remember the most recently used KeePass database"
+    "description": ""
   },
   "pref_rememberMRUGroup_label": {
     "message": "Remember the group you most recently saved to",
@@ -245,7 +245,7 @@
   },
   "pref_searchAllOpenDBs_label": {
     "message": "Search all open KeePass databases",
-    "description": "Search all open KeePass databases"
+    "description": ""
   },
   "pref_when_kee_chooses_standard_form_desc": {
     "message": "When Kee chooses a matching login for a standard form, Kee should",
@@ -273,11 +273,11 @@
   },
   "text_field_id": {
     "message": "Text field ID",
-    "description": "Text field ID"
+    "description": ""
   },
   "text_field_name": {
     "message": "Text field name",
-    "description": "Text field name"
+    "description": ""
   },
   "white_list": {
     "message": "White List",
@@ -285,23 +285,23 @@
   },
   "Help_Centre_Button_label": {
     "message": "Help Centre",
-    "description": "Help Centre"
+    "description": ""
   },
   "cancel": {
     "message": "Cancel",
-    "description": "Cancel"
+    "description": ""
   },
   "Logins_Context_Edit_Login_label": {
     "message": "Edit login",
-    "description": "Edit login"
+    "description": ""
   },
   "Menu_Button_copyNewPasswordToClipboard_label": {
     "message": "Generate new password",
-    "description": "Generate new password"
+    "description": ""
   },
   "Menu_Button_fillCurrentDocument_label": {
     "message": "Find matching logins",
-    "description": "Find matching logins"
+    "description": ""
   },
   "Menu_Button_options_label": {
     "message": "Options",
@@ -309,51 +309,51 @@
   },
   "Search_label": {
     "message": "Search...",
-    "description": "Search..."
+    "description": ""
   },
   "Search_tip": {
     "message": "Start typing to display your matching login entries",
-    "description": "Start typing to display your matching login entries"
+    "description": ""
   },
   "PasswordProfilesExplanation_label": {
     "message": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles.",
-    "description": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles."
+    "description": ""
   },
   "change_field_explanation": {
     "message": "Kee will also update the website icon (favicon) and any HTTP Auth Realm information. More complex modifications will require you to manually edit the entry.",
-    "description": "Kee will also update the website icon (favicon) and any HTTP Auth Realm information. More complex modifications will require you to manually edit the entry."
+    "description": ""
   },
   "change_field_status": {
     "message": "The selected entry will have all username, password and other form fields replaced with the values you have just entered.",
-    "description": "The selected entry will have all username, password and other form fields replaced with the values you have just entered."
+    "description": ""
   },
   "change_url_status": {
     "message": "The entry's web page address (URL) will be updated with the latest URL.",
-    "description": "The entry's web page address (URL) will be updated with the latest URL."
+    "description": ""
   },
   "change_url_option_1": {
     "message": "Replace the entry's URL (but still fill forms if you visit the old URL)",
-    "description": "Replace the entry's URL (but still fill forms if you visit the old URL)"
+    "description": ""
   },
   "change_url_option_2": {
     "message": "Replace the entry's URL (delete the old URL completely)",
-    "description": "Replace the entry's URL (delete the old URL completely)"
+    "description": ""
   },
   "change_url_option_3": {
     "message": "Keep the old entry's URL (but still fill forms if you visit the new URL)",
-    "description": "Keep the old entry's URL (but still fill forms if you visit the new URL)"
+    "description": ""
   },
   "change_url_option_4": {
     "message": "Keep the old entry's URL (don't add the new URL to the entry)",
-    "description": "Keep the old entry's URL (don't add the new URL to the entry)"
+    "description": ""
   },
   "copy_password_label": {
     "message": "Copy password",
-    "description": "Copy password"
+    "description": ""
   },
   "copy_username_label": {
     "message": "Copy username",
-    "description": "Copy username"
+    "description": ""
   },
   "copy": {
     "message": "Copy",
@@ -361,7 +361,7 @@
   },
   "create": {
     "message": "Create",
-    "description": "Create"
+    "description": ""
   },
   "create_new_entry": {
     "message": "Create new entry",
@@ -373,35 +373,35 @@
   },
   "all_websites": {
     "message": "All websites",
-    "description": "All websites"
+    "description": ""
   },
   "a_specific_website": {
     "message": "A specific website",
-    "description": "A specific website"
+    "description": ""
   },
   "current_website": {
     "message": "Current website",
-    "description": "Current website"
+    "description": ""
   },
   "website": {
     "message": "Website",
-    "description": "Website"
+    "description": ""
   },
   "database_label": {
     "message": "Database",
-    "description": "Database"
+    "description": ""
   },
   "generatePassword_copied": {
     "message": "A new password has been copied to your clipboard.",
-    "description": "A new password has been copied to your clipboard."
+    "description": ""
   },
   "group_label": {
     "message": "Group",
-    "description": "Group"
+    "description": ""
   },
   "keepass_history_pointer": {
     "message": "KeePass has an \"undo\" feature which you can access from the KeePass \"edit entry\" dialog window. Click on the \"History\" tab and then use the \"Restore\" button to revert to an older version.",
-    "description": "KeePass has an \"undo\" feature which you can access from the KeePass \"edit entry\" dialog window. Click on the \"History\" tab and then use the \"Restore\" button to revert to an older version."
+    "description": ""
   },
   "loggedIn_tip": {
     "message": "You are logged in to your '$1' password database",
@@ -421,23 +421,23 @@
   },
   "more_options": {
     "message": "More options",
-    "description": "More options"
+    "description": ""
   },
   "multi_page_update_warning": {
     "message": "Multi-page login forms may also require manual editing.",
-    "description": "Multi-page login forms may also require manual editing."
+    "description": ""
   },
   "noUsername_partial_tip": {
     "message": "no username",
-    "description": "no username"
+    "description": ""
   },
   "notifyBarLaunchKeePass_label": {
     "message": "You are not logged in to your password database.",
-    "description": "You are not logged in to your password database."
+    "description": ""
   },
   "notifyBarLaunchKeePassButton_tip": {
     "message": "Launch KeePass to enable Kee",
-    "description": "Launch KeePass to enable Kee"
+    "description": ""
   },
   "notifyBarLogSensitiveData_label": {
     "message": "WARNING: Kee is logging your passwords! If you have not intentionally enabled this setting you should disable it immediately",
@@ -445,7 +445,7 @@
   },
   "notifyBarLoginToKeePassButton_tip": {
     "message": "Login to your KeePass database to enable Kee",
-    "description": "Login to your KeePass database to enable Kee"
+    "description": ""
   },
   "notifyBarNeverForSiteButton_label": {
     "message": "Never for this site",
@@ -453,39 +453,39 @@
   },
   "save": {
     "message": "Save",
-    "description": "Save"
+    "description": ""
   },
   "password_successfully_updated": {
     "message": "Password successfully updated.",
-    "description": "Password successfully updated."
+    "description": ""
   },
   "saveMultiPagePasswordText": {
     "message": "Do you want Kee to save this multi-page password?",
-    "description": "Do you want Kee to save this multi-page password?"
+    "description": ""
   },
   "savePasswordLogin_tip": {
     "message": "Username: $1. Website address (URL): $2",
-    "description": "Username: $1. Website address (URL): $2"
+    "description": ""
   },
   "savePasswordText": {
     "message": "Do you want Kee to save this password?",
-    "description": "Do you want Kee to save this password?"
+    "description": ""
   },
   "search_again": {
     "message": "Search again",
-    "description": "Search again"
+    "description": ""
   },
   "update": {
     "message": "Update",
-    "description": "Update"
+    "description": ""
   },
   "update_existing_entry": {
     "message": "Update existing entry",
-    "description": "Update existing entry"
+    "description": ""
   },
   "whichEntry_label": {
     "message": "Choose an entry...",
-    "description": "Choose an entry..."
+    "description": ""
   },
 
 
