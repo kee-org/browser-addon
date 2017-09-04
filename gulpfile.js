@@ -183,8 +183,6 @@ gulp.task('collect', function() {
             .pipe(gulp.dest('build/background')),
         gulp.src('_locales/**')
             .pipe(gulp.dest('build/_locales')),
-        gulp.src('_locales/en-US/**')
-            .pipe(gulp.dest('build/_locales/en_US')), //TODO:c: remove this hack when Firefox fixes locale location bug
         gulp.src('manifest.json')
             .pipe(gulp.dest('build'))
     );
