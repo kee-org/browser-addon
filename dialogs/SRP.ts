@@ -24,16 +24,16 @@ class SrpDialog {
         const passwordSet = (document.getElementById("password") as HTMLInputElement).value.length > 0;
         const settingsChanged = this.settingsChanged();
         if (passwordSet && settingsChanged) {
-            document.getElementById("ok").innerHTML = $STR("srp_save_connect");
+            document.getElementById("ok").textContent = $STR("srp_save_connect");
             (document.getElementById("ok") as HTMLButtonElement).disabled = null;
         } else if (passwordSet && !settingsChanged) {
-            document.getElementById("ok").innerHTML = $STR("srp_connect");
+            document.getElementById("ok").textContent = $STR("srp_connect");
             (document.getElementById("ok") as HTMLButtonElement).disabled = null;
         } else if (!passwordSet && settingsChanged) {
-            document.getElementById("ok").innerHTML = $STR("save");
+            document.getElementById("ok").textContent = $STR("save");
             (document.getElementById("ok") as HTMLButtonElement).disabled = null;
         } else {
-            document.getElementById("ok").innerHTML = $STR("srp_connect");
+            document.getElementById("ok").textContent = $STR("srp_connect");
             (document.getElementById("ok") as HTMLButtonElement).disabled = true;
         }
     }

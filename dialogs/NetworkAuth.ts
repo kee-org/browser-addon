@@ -1,7 +1,7 @@
 class NetworkAuth {
     public setupPage (logins: keeLoginInfo[], realm: string, url: string, isProxy: boolean) {
         const instructions = isProxy ? $STRF("network_auth_proxy_description", [url]) : $STRF("network_auth_http_auth_description", [url, realm] );
-        document.getElementById("network_auth_instructions").innerHTML = instructions;
+        document.getElementById("network_auth_instructions").textContent = instructions;
         this.createNearNode(document.getElementById("network_auth_choose"), logins);
     }
 

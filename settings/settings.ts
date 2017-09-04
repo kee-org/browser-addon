@@ -461,7 +461,7 @@ function siteChooserKeyPress (e) {
     document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
-    document.getElementById("siteChooserSearchResults").innerHTML = "";
+    document.getElementById("siteChooserSearchResults").textContent = "";
 
     specificSite = null;
 

@@ -173,12 +173,12 @@ class SavePasswordPanel {
         saveTypeChooser.classList.add("xulhbox");
         const createButton = this.doc.createElement("button");
         createButton.setAttribute("id", "kee-save-password-new-button");
-        createButton.innerHTML = $STR("create_new_entry");
+        createButton.textContent = $STR("create_new_entry");
         createButton.addEventListener("click", this.enableNewEntry.bind(this));
         createButton.classList.add("selected");
         const updateButton = this.doc.createElement("button");
         updateButton.setAttribute("id", "kee-save-password-update-button");
-        updateButton.innerHTML = $STR("update_existing_entry");
+        updateButton.textContent = $STR("update_existing_entry");
         updateButton.addEventListener("click", this.enableEditEntry.bind(this));
         updateButton.classList.add("unselected");
 
@@ -284,7 +284,7 @@ class SavePasswordPanel {
         spacer1.classList.add("xulspacer");
         selectedEntryContainer.appendChild(spacer1);
         const selectedEntryChangeButton = this.doc.createElement("button");
-        selectedEntryChangeButton.innerHTML = $STR("search_again");
+        selectedEntryChangeButton.textContent = $STR("search_again");
         selectedEntryChangeButton.classList.add("Kee-SaveLogin-Change-Setting");
         selectedEntryChangeButton.addEventListener("click", this.enableSelectEntryToUpdate.bind(this));
         selectedEntryContainer.appendChild(selectedEntryChangeButton);
@@ -294,14 +294,14 @@ class SavePasswordPanel {
         loginURLsUpdateStatusContainer.classList.add("xulhbox");
         loginURLsUpdateStatusContainer.setAttribute("id", "Kee-loginURLsUpdateStatusContainer");
         const loginURLsUpdateStatus = this.doc.createElement("label");
-        loginURLsUpdateStatus.innerHTML = $STR("change_url_status");
+        loginURLsUpdateStatus.textContent = $STR("change_url_status");
         loginURLsUpdateStatus.classList.add("Kee-message");
         loginURLsUpdateStatusContainer.appendChild(loginURLsUpdateStatus);
         const spacer3 = this.doc.createElement("span");
         spacer3.classList.add("xulspacer");
         loginURLsUpdateStatusContainer.appendChild(spacer3);
         const loginURLsUpdateButton = this.doc.createElement("button");
-        loginURLsUpdateButton.innerHTML = $STR("more_options");
+        loginURLsUpdateButton.textContent = $STR("more_options");
         loginURLsUpdateButton.classList.add("Kee-SaveLogin-Change-Setting");
         loginURLsUpdateButton.addEventListener("click", this.enableEditURLs.bind(this));
         loginURLsUpdateStatusContainer.appendChild(loginURLsUpdateButton);
@@ -373,7 +373,7 @@ class SavePasswordPanel {
         const hbox = this.doc.createElement("div");
         hbox.classList.add("xulhbox", "xulpackend");
         const button = this.doc.createElement("button");
-        button.innerHTML = label;
+        button.textContent = label;
         button.addEventListener("click", e => this.saveButtonCallback());
         hbox.appendChild(button);
         return hbox;

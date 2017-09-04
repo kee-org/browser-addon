@@ -53,7 +53,7 @@ class KeeNotification {
 
     prepareNotificationButton (button: HTMLButtonElement, buttonDefinition: Button)
     {
-        button.innerHTML = buttonDefinition.label;
+        button.textContent = buttonDefinition.label;
         if (buttonDefinition.tooltip != undefined) button.setAttribute("title", buttonDefinition.tooltip);
 
         let callback: {(): void};

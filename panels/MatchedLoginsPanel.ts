@@ -87,7 +87,7 @@ class MatchedLoginsPanel {
         loginContextActions.classList.add("disabled");
 
         const editButton = document.createElement("button");
-            editButton.innerHTML = $STR("Logins_Context_Edit_Login_label");
+            editButton.textContent = $STR("Logins_Context_Edit_Login_label");
             editButton.setAttribute("id", "Kee-login-context-edit");
             //"chrome://kee/skin/pencil.png"
             editButton.addEventListener("click", event => {
@@ -106,7 +106,7 @@ class MatchedLoginsPanel {
         if (usernameField != null)
         {
             const button = document.createElement("button");
-            button.innerHTML = $STR("copy_username_label");
+            button.textContent = $STR("copy_username_label");
             button.setAttribute("id", "Kee-login-context-copyuser");
             //"chrome://kee/skin/copy.png",
             button.addEventListener("click", event => {
@@ -120,7 +120,7 @@ class MatchedLoginsPanel {
 
         if (passwordField != null) {
             const button = document.createElement("button");
-            button.innerHTML = $STR("copy_password_label");
+            button.textContent = $STR("copy_password_label");
             button.setAttribute("id", "Kee-login-context-copypass");
             //"chrome://kee/skin/copy.png",
             button.addEventListener("click", event => {
@@ -137,7 +137,7 @@ class MatchedLoginsPanel {
                 kfl.otherFields.forEach(function (o, i) {
                     if (i != kfl.usernameIndex && o.type != "checkbox") {
                         const button = document.createElement("button");
-                        button.innerHTML = $STR("copy") + " " + o.name + " (" + o.fieldId + ")";
+                        button.textContent = $STR("copy") + " " + o.name + " (" + o.fieldId + ")";
                         //"chrome://kee/skin/copy.png",
                         button.addEventListener("click", event => {
                             event.stopPropagation();
@@ -153,7 +153,7 @@ class MatchedLoginsPanel {
                 kfl.passwords.forEach(function (p, i) {
                     if (i != 0 && p.type != "checkbox") {
                         const button = document.createElement("button");
-                        button.innerHTML = $STR("copy") + " " + p.name + " (" + p.fieldId + ")";
+                        button.textContent = $STR("copy") + " " + p.name + " (" + p.fieldId + ")";
                         //"chrome://kee/skin/copy.png",
                         button.addEventListener("click", event => {
                             event.stopPropagation();
