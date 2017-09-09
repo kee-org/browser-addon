@@ -1,0 +1,594 @@
+{
+    "change_url_option_4": {
+        "message": "Zachovat URL staré položky (nevkládat nové URL do položky)",
+        "description": ""
+    },
+    "pref_when_one_matching_network_login": {
+        "message": "Pokud Kee nalezne jen jedno siťové přihlašovací jméno (např. HTTP Auth) automaticky vás přihlásí",
+        "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
+    },
+    "black_list": {
+        "message": "Černá listina",
+        "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
+    },
+    "pref_autoFillFormsWithMultipleMatches_label": {
+        "message": "Formuláře s více shodami by měly být automaticky vyplněny a potvrzeny",
+        "description": ""
+    },
+    "conn_sl_high_label": {
+        "message": "Ask for a new connection password every time I start my web browser or KeePass.",
+        "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
+    },
+    "conn_sl_medium": {
+        "message": "Střední",
+        "description": ""
+    },
+    "change_url_status": {
+        "message": "Adresa (URL) položky bude aktualizována nejposlednější URL.",
+        "description": ""
+    },
+    "Search_tip": {
+        "message": "Začněte psát, aby se začala zobrazovat nalezená přihlášení",
+        "description": ""
+    },
+    "loggedIn_tip": {
+        "message": "Jste přihlášeni do databáze hesel '$1'",
+        "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
+    },
+    "a_specific_website": {
+        "message": "A specific website",
+        "description": ""
+    },
+    "network_auth_proxy_description": {
+        "message": "Proxy vyžaduje ověření před tím, než přistoupíte $1",
+        "description": "Instructions for popup dialog displayed when a proxy requires authentication."
+    },
+    "matchedLogin_tip": {
+        "message": "$1 ve skupině $2 ($3)",
+        "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
+    },
+    "Menu_Button_options_label": {
+        "message": "Nastavení",
+        "description": "Link to the add-on's settings"
+    },
+    "yes": {
+        "message": "Ano",
+        "description": "Yes"
+    },
+    "pref_keePassRPCPortWarning_label": {
+        "message": "Pozn.: Nezapomeňte změnit nastavení portu i v souboru KeePass.config, jinak Kee nebude moci s KeePassem komunikovat",
+        "description": "Displayed to the user near the setting for changing the KeePassRPC port"
+    },
+    "notifyBarLogSensitiveData_label": {
+        "message": "UPOZORNĚNÍ: Kee nyní zaznamenává (loguje) vaše hesla! Pokud toto nebyl váš záměr, mělo by být toto nastavení ihned deaktivováno",
+        "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
+    },
+    "create": {
+        "message": "Vytvořit",
+        "description": ""
+    },
+    "savePasswordText": {
+        "message": "Chcete, aby Kee uložil toto heslo?",
+        "description": ""
+    },
+    "change_url_option_2": {
+        "message": "Změnit URL položky (smazat staré URL)",
+        "description": ""
+    },
+    "pref_listAllOpenDBs_label": {
+        "message": "Prohledávat všechny databáze otevřené v KeePass",
+        "description": ""
+    },
+    "pref_Logging_heading": {
+        "message": "Logování",
+        "description": "The output of text information that reports on the inner-workings of Kee."
+    },
+    "notifyBarNeverForSiteButton_label": {
+        "message": "Nikdy pro tento web",
+        "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
+    },
+    "change_url_option_3": {
+        "message": "Zachovat URL staré položky (ale ještě vyplňovat formuláře, pokud navštívíte nové URL)",
+        "description": ""
+    },
+    "website": {
+        "message": "Web",
+        "description": ""
+    },
+    "Menu_Button_fillCurrentDocument_label": {
+        "message": "Hledat odpovídající přihlašovací údaje",
+        "description": ""
+    },
+    "update": {
+        "message": "Aktualizovat",
+        "description": ""
+    },
+    "save_login": {
+        "message": "Uložit přihlášení",
+        "description": "Heading for panel that allows user to create or update a new login entry"
+    },
+    "loggedInMultiple_tip": {
+        "message": "Jste přihlášeni do $1 databází hesel. Aktivní je '$2'.",
+        "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "change_field_status": {
+        "message": "U označené položky budou nahrazena všechna formulářová pole jako uživatelské jméno, heslo a další hodnotami, které jste právě zadali.",
+        "description": ""
+    },
+    "current_website": {
+        "message": "Aktuální web",
+        "description": ""
+    },
+    "pref_logLevelErrors_label": {
+        "message": "Chyby",
+        "description": "Logging level for problems"
+    },
+    "keepass_history_pointer": {
+        "message": "KeePass má funkci \"zpět\", která je dostupná z dialogového okna \"editace položky\" v KeePassu. Klikněte na záložku \"Historie\" a pak na tlačítko \"Obnovit\", které vrátí starou verzi.",
+        "description": ""
+    },
+    "PasswordProfilesExplanation_label": {
+        "message": "Volitelně můžete vytvořit nové volbou profilu hesel níže. Pro uložení nových profilů použijte KeePass.",
+        "description": ""
+    },
+    "pref_FillPrompt_desc": {
+        "message": "Vyplnit přihlašovací dialog",
+        "description": ""
+    },
+    "edit": {
+        "message": "Upravit",
+        "description": "Action button for user to edit an item within a collection. E.g. edit an entry within the list of site-specific settings overrides"
+    },
+    "pref_keePassDBToOpen_label": {
+        "message": "Používat tuto databázi hesel při spouštění KeePassu nebo přihlašování do něj",
+        "description": ""
+    },
+    "pref_ConnectionSecurity_explain_change": {
+        "message": "Sometimes making a change to the settings below will cause Kee to ask you for a new random password. You do not need to enter the correct password above in order to change these settings, just adjust them and press the button above.",
+        "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
+    },
+    "update_existing_entry": {
+        "message": "Aktualizovat existující záznam",
+        "description": ""
+    },
+    "site_properties_weight_warning": {
+        "message": "You'll need to carefully check the weights of other configurations if you choose to make use of this advanced feature.",
+        "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
+    },
+    "further_info_may_follow": {
+        "message": "Další informace: $1",
+        "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "change_url_option_1": {
+        "message": "Změnit URL položky (ale ještě vyplňovat formuláře, pokud navštívíte staré URL)",
+        "description": ""
+    },
+    "pref_rememberMRUDB_label": {
+        "message": "Pamatovat si posledně použitou databázi hesel",
+        "description": ""
+    },
+    "no": {
+        "message": "Ne",
+        "description": "No"
+    },
+    "conn_sl_server_min_desc": {
+        "message": "Nastavení umožňuje zvolit, zda bude Kee odmítat spojení s aplikací KeePass, pokud její úroveň zabezpečení je příliš nízká. Zabezpečení aplikace KeePass se nastavuje přímo v ní.",
+        "description": ""
+    },
+    "form_id": {
+        "message": "Atribut id formuláře",
+        "description": ""
+    },
+    "copy_username_label": {
+        "message": "Kopírovat uživatelské jméno",
+        "description": ""
+    },
+    "search_again": {
+        "message": "Hledat znovu",
+        "description": ""
+    },
+    "conn_sl_link": {
+        "message": "Learn more about these settings and the communication between your web browser and KeePass in the manual",
+        "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
+    },
+    "conn_setup_enter_password_title": {
+        "message": "Autorizace programu Kee",
+        "description": "Heading of the popup that asks the user to authorise the connection to KeePass by typing in a password."
+    },
+    "site_options_list_explain_desc": {
+        "message": "If a form matches against one of the white lists below Kee will always try to fill it. If a form matches one of the black lists below Kee will never try to fill it. If it matches both lists Kee will not try to fill it.",
+        "description": "Explains how Kee chooses which forms to fill in"
+    },
+    "noUsername_partial_tip": {
+        "message": "žádné uživatelské jméno",
+        "description": ""
+    },
+    "group_label": {
+        "message": "Skupina",
+        "description": ""
+    },
+    "network_authentication": {
+        "message": "Síťové ověření",
+        "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
+    },
+    "Logins_Context_Edit_Login_label": {
+        "message": "Upravit přihlášení",
+        "description": ""
+    },
+    "weight": {
+        "message": "Váha",
+        "description": "A number that can be compared to others in order to decide which associated configuration takes precendence."
+    },
+    "pref_notifyBarRequestPasswordSave_label": {
+        "message": "Nabízet uložení hesla",
+        "description": ""
+    },
+    "site_options_valid_form_intro_desc": {
+        "message": "Kee se pokusí vyplnit formuláře, kde je pole s heslem, odpovídajícími položkami z KeePassu. Toto chování můžete upravit níže.",
+        "description": "Explains how Kee chooses which forms to fill in"
+    },
+    "close": {
+        "message": "Zavřít",
+        "description": "Action user can click on to close/dismiss a panel or other user interface element"
+    },
+    "notifyBarLoginToKeePassButton_tip": {
+        "message": "Pro aktivaci Kee je nutné se přihlásit do KeePass",
+        "description": ""
+    },
+    "conn_setup_expired": {
+        "message": "Používáte příliš dlouho stejný tajný klíč.",
+        "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
+    },
+    "network_auth_http_auth_description": {
+        "message": "A website requires you to authenticate with it before you can access $1. The website says: $2",
+        "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
+    },
+    "conn_sl_server_min": {
+        "message": "Minimální přípustná úroveň zabezpečení KeePassu",
+        "description": ""
+    },
+    "conn_sl_high": {
+        "message": "Vysoká",
+        "description": ""
+    },
+    "password": {
+        "message": "Heslo",
+        "description": "Amazingly, didn't have a need for this translation until v2.0 ;-)"
+    },
+    "pref_ConnectionSecurity_heading": {
+        "message": "Zabezpečení spojení",
+        "description": "Heading for panel that contains settings for the security of the connection between Kee and KeePass."
+    },
+    "conn_display_description": {
+        "message": "Doplněk prohlížeče, který umožňuje se automaticky a bezpečně přihlašovat k webům. Dříve známý jako KeeFox.",
+        "description": "A brief description of Kee that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
+    },
+    "copy": {
+        "message": "Kopírovat",
+        "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
+    },
+    "srp_connect": {
+        "message": "Připojit",
+        "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
+    },
+    "pref_FillNote_desc": {
+        "message": "Můžete přepsat chování \"Kee zvolí\" pro individulání položky v KeePass dialogu \"editovat položku\".",
+        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
+    },
+    "pref_keePassRPCPort_label": {
+        "message": "Komunikovat s KeePassem pomocí tohoto portu TCP/IP",
+        "description": ""
+    },
+    "network_auth_choose": {
+        "message": "Choose a login from the list below or close this window to manually enter the required login information.",
+        "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
+    },
+    "conn_unknown_error": {
+        "message": "Vyskytla se neočekávaná chyba při pokusu o připojení k vaší databázi hesel.",
+        "description": "Something went wrong with the KeePassRPC link but we have no idea what."
+    },
+    "pref_when_user_chooses_desc": {
+        "message": "Když zvolíte odpovídající přihlašení, Kee by měl",
+        "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
+    },
+    "pref_FillAndSubmitForm_desc": {
+        "message": "Vyplnit a potvrdit formulář",
+        "description": ""
+    },
+    "notifyBarLaunchKeePass_label": {
+        "message": "Nejste přihlášeni do vaší databáze hesel.",
+        "description": ""
+    },
+    "conn_invalid_message": {
+        "message": "Kee poslal chybný příkaz do databáze hesel.",
+        "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
+    },
+    "pref_Advanced_heading": {
+        "message": "Rozšířené",
+        "description": ""
+    },
+    "pref_when_kee_chooses_standard_form_desc": {
+        "message": "Když Kee zvolí odpovídající přihlašení pro standardní formulář, Kee by měl",
+        "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
+    },
+    "whichEntry_label": {
+        "message": "Zvolit záznam...",
+        "description": ""
+    },
+    "pref_logLevelDebugging_label": {
+        "message": "Ladění",
+        "description": "Logging level for the most verbose information about Kee's operation"
+    },
+    "pref_notifyWhenEntryUpdated_label": {
+        "message": "Zobrazovat notifikaci \"Heslo bylo úspěšně zaktualizováno\"",
+        "description": "Option to enable or diable the information displayed when a password has been updated"
+    },
+    "conn_sl_desc": {
+        "message": "Change the settings below to control how secure the communication link between your web browser and KeePass is. You probably don't need to ever adjust these settings but if you do, please make sure you have read the relevant manual pages first.",
+        "description": ""
+    },
+    "savePasswordLogin_tip": {
+        "message": "Uživatelské jméno: $1. Adresa webu (URL): $2",
+        "description": ""
+    },
+    "method": {
+        "message": "Metoda",
+        "description": "For differentiating how a text string will be matched - e.g exact, prefix or regex"
+    },
+    "site_specific_settings_inherit": {
+        "message": "Použít stejné nastavení jako všechny weby",
+        "description": "Option for user to say that they want to use whatever the setting is for the top-level settings for all websites, rather than overriding it with a setting for this specific site."
+    },
+    "more_options": {
+        "message": "Více možností",
+        "description": ""
+    },
+    "pref_FindingEntries_heading": {
+        "message": "Hledání položek",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
+    },
+    "conn_setup_invalid_param": {
+        "message": "Kee dodal nesprávný parametr. Další informace: $1",
+        "description": "This probably indicates a bug in Kee - we sent something to KeePassRPC that it wasn't expecting."
+    },
+    "create_new_entry": {
+        "message": "Vytvořit nový záznam",
+        "description": ""
+    },
+    "conn_unknown_protocol": {
+        "message": "Kee dodal nesprávný protokol.",
+        "description": "Technical error in the communication between Kee and KeePassRPC. Not clear how user could resolve this or if they'll ever see it but it might happen."
+    },
+    "generatePassword_copied": {
+        "message": "Nové heslo bylo zkopírováno do schránky.",
+        "description": ""
+    },
+    "showing_options_for": {
+        "message": "Zobrazovat nastavení pro",
+        "description": ""
+    },
+    "autoclose_cancelled": {
+        "message": "Auto-close cancelled",
+        "description": "Tells the user that the panel auto-close functionality has been disabled for this panel."
+    },
+    "conn_setup_missing_param": {
+        "message": "Kee nedodal požadovaný parametr. Další informace: $1",
+        "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
+    },
+    "KB_shortcut_simple_2_desc": {
+        "message": "Přihlásit se do aplikace KeePass / Vybrat nalezené přihlášení / Zobrazit seznam nalezených přihlášení",
+        "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
+    },
+    "pref_rememberMRUGroup_label": {
+        "message": "Pamatovat nejčastěji používanou skupinu pro ukládání",
+        "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
+    },
+    "conn_setup_server_features_missing": {
+        "message": "Plugin KeePassRPC KeePass Password Safe musí být upgradován, aby bylo možné se připojit ke Kee. Zkontrolujte si, že používáte poslení verzi pluginu KeePassRPC pomocí návodů Rychle a jednoduše na $1",
+        "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
+    },
+    "site_options_invisible_tip_desc": {
+        "message": "Pozn.: Atributy name a id nemusí být stejné jako zobrazené popisky na stránce (jsou nastavena ve zdrojovém kódu stránky)",
+        "description": "Explains that the configuration settings might not be what the casual user expects"
+    },
+    "pref_FillAndSubmitPrompt_desc": {
+        "message": "Vyplnit a potvrdit přihlašovací dialog",
+        "description": ""
+    },
+    "save": {
+        "message": "Uložit",
+        "description": ""
+    },
+    "saveMultiPagePasswordText": {
+        "message": "Chcete, aby Kee uložil toto vícestránkové heslo?",
+        "description": ""
+    },
+    "pref_notifyWhenLateDiscovery_label": {
+        "message": "Zobrazovat notifikaci, když Kee najde odpovidající pole po načtení stránky.",
+        "description": ""
+    },
+    "password_successfully_updated": {
+        "message": "Heslo bylo úspěšně zaktualizováno.",
+        "description": ""
+    },
+    "pref_FillForm_desc": {
+        "message": "Vyplnit formulář",
+        "description": ""
+    },
+    "matched_logins_label": {
+        "message": "Odpovídající přihlášení",
+        "description": "Header for panels/sections that contain the logins which Kee matched for this page/form"
+    },
+    "pref_SavingEntries_heading": {
+        "message": "Ukládání položek",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
+    },
+    "pref_DoNothing_desc": {
+        "message": "Nedělat nic",
+        "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
+    },
+    "srp_save_connect": {
+        "message": "Uložit a připojit",
+        "description": "Button action to authorise the connection between Kee and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
+    },
+    "conn_setup_restart": {
+        "message": "Kee se musí znovu autorizovat.",
+        "description": "A technical error occurred during the attempt to authorise the link between Kee and KeePassRPC so we need to notify the user that they will need to re-authenticate"
+    },
+    "all_websites": {
+        "message": "Všechny weby",
+        "description": ""
+    },
+    "cancel": {
+        "message": "Zrušit",
+        "description": ""
+    },
+    "Menu_Button_copyNewPasswordToClipboard_label": {
+        "message": "Generovat nové heslo",
+        "description": ""
+    },
+    "conn_setup_client_sl_low_resolution": {
+        "message": "Připojit použitím vyššího zabezpečení",
+        "description": "Button that will change the security level Kee attempts to use when connecting to the KeePassRPC server."
+    },
+    "add": {
+        "message": "Přidat",
+        "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
+    },
+    "pref_logLevelInformation_label": {
+        "message": "Informace",
+        "description": "Logging level for important information about Kee's operation"
+    },
+    "pref_logLevel_desc": {
+        "message": "Úroveň logování. Vyšší úrovně vytvářejí delší a podrobnější výstup.",
+        "description": ""
+    },
+    "text_field_id": {
+        "message": "Atribut id textového pole",
+        "description": ""
+    },
+    "conn_setup_server_sl_low": {
+        "message": "Kee odmítl spojení k serveru s hesly, protože jeho úroveň zabezpečení je příliš nízká. Musíte znovu spustit autentizaci s vyšší úrovní zabezpečení.",
+        "description": ""
+    },
+    "pref_saveFavicons_label": {
+        "message": "Uložit logo/ikonu (favicon) webu",
+        "description": "Whether or not Kee will save the website's icon when a new entry is saved"
+    },
+    "matchedLogin_label": {
+        "message": "$1 - $2",
+        "description": "<username> <seperator> <entry title>"
+    },
+    "conn_setup_retype_password": {
+        "message": "Zadejte prosím nové heslo, jakmile budete vyzváni.",
+        "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
+    },
+    "dont_show_again": {
+        "message": "Tuto zprávu už nezobrazovat",
+        "description": "Button user can click on to cause a message to hide and not reappear"
+    },
+    "conn_setup_client_features_missing": {
+        "message": "Aby bylo možné připojit se k aplikaci KeePass Password Safe, musí být Kee upgradován. Zkotrolujte si, že používáte poslední verzi KeeFox rozšíření.",
+        "description": "The KeePassRPC server requires features from Kee that this version does not contain."
+    },
+    "notifyBarLaunchKeePassButton_tip": {
+        "message": "Pro aktivaci Kee spusťte KeePass.",
+        "description": ""
+    },
+    "pref_searchAllOpenDBs_label": {
+        "message": "Prohledávat všechny databáze otevřené v KeePass",
+        "description": ""
+    },
+    "enter_valid_regex": {
+        "message": "Zadejte správný Regex nebo zvolte jiný typ",
+        "description": "Validation error message displayed to user when they have configured the properties of a site specific configuration to be a regular expression (Regex) but supplied a website value that is not a valid regex"
+    },
+    "Help_Centre_Button_label": {
+        "message": "Centrum pomoci",
+        "description": ""
+    },
+    "site_specific_settings_checkbox_explanation": {
+        "message": "Settings from \"All Websites\" will apply to each section below unless you enable the setting using the checkbox next to it.",
+        "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
+    },
+    "autoclose_countdown": {
+        "message": "Auto-close in $1 seconds",
+        "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
+    },
+    "conn_setup_failed": {
+        "message": "Kee se nemohl připojit, pravděpodobně jste zadali špatně heslo.",
+        "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
+    },
+    "Search_label": {
+        "message": "Hledat...",
+        "description": ""
+    },
+    "target": {
+        "message": "Cíl",
+        "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
+    },
+    "learn_more": {
+        "message": "Další informace",
+        "description": "Action/button/link to send the user to somewhere that they can read more about a topic/concept"
+    },
+    "conn_setup_client_sl_low": {
+        "message": "Kee asked for a security level that was too low to be accepted by the password server. You must restart the authentication process using higher security.",
+        "description": ""
+    },
+    "copy_password_label": {
+        "message": "Kopírovat heslo",
+        "description": ""
+    },
+    "conn_setup_enter_password": {
+        "message": "Vložte prosím heslo zobrazené v okně \"Autorizovat nové spojení\". Toto heslo si nemusíte pamatovat. Pokud jej zadáte špatně, za chvíli se zobrazí nová výzva.",
+        "description": ""
+    },
+    "text_field_name": {
+        "message": "Atribut name textového pole",
+        "description": ""
+    },
+    "change_field_explanation": {
+        "message": "Kee také aktualizuje ikonu webu (favicon) a všechny HTTP Auth Realm informace. Další složitější modifikace od vás vyžadují ruční editaci položky.",
+        "description": ""
+    },
+    "site_properties": {
+        "message": "Vlastnosti webu",
+        "description": "Site properties"
+    },
+    "pref_Finding_forms_heading": {
+        "message": "Hledání položek",
+        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from KeePass"
+    },
+    "pref_FillingEntries_heading": {
+        "message": "Vyplňování položek",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
+    },
+    "database_label": {
+        "message": "Databáze",
+        "description": ""
+    },
+    "form_name": {
+        "message": "Atribut name formuláře",
+        "description": ""
+    },
+    "white_list": {
+        "message": "Bílá listina",
+        "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
+    },
+    "upgrade_kee": {
+        "message": "Aktualizovat Kee",
+        "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
+    },
+    "pref_logLevelWarnings_label": {
+        "message": "Upozornění",
+        "description": "Logging level for potential problems"
+    },
+    "conn_sl_low": {
+        "message": "Nízká",
+        "description": ""
+    },
+    "multi_page_update_warning": {
+        "message": "Vícestránkové přihlašovací formuláře mohou také vyžadovat ruční editaci.",
+        "description": ""
+    }
+}

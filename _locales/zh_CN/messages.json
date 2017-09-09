@@ -1,0 +1,594 @@
+{
+    "change_url_option_4": {
+        "message": "保留记录的旧网址（不将新网址添加到记录）",
+        "description": ""
+    },
+    "pref_when_one_matching_network_login": {
+        "message": "Kee 只找到一个匹配的网络登录项（例如 HTTP 身份验证）时，自动登录",
+        "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
+    },
+    "black_list": {
+        "message": "黑名单",
+        "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
+    },
+    "pref_autoFillFormsWithMultipleMatches_label": {
+        "message": "多处匹配的表单应自动填写并提交",
+        "description": ""
+    },
+    "conn_sl_high_label": {
+        "message": "每次我启动浏览器或 KeePass 时，都询问新的连接密码。 ",
+        "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
+    },
+    "conn_sl_medium": {
+        "message": "中",
+        "description": ""
+    },
+    "change_url_status": {
+        "message": "该记录的网页地址（URL）将用最新的网址更新。",
+        "description": ""
+    },
+    "Search_tip": {
+        "message": "开始输入以显示您的登录项",
+        "description": ""
+    },
+    "loggedIn_tip": {
+        "message": "您已登录您的“$1”密码数据库",
+        "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
+    },
+    "a_specific_website": {
+        "message": "特定网站",
+        "description": ""
+    },
+    "network_auth_proxy_description": {
+        "message": "代理服务器要求您在访问 $1 前验证身份",
+        "description": "Instructions for popup dialog displayed when a proxy requires authentication."
+    },
+    "matchedLogin_tip": {
+        "message": "$1 位于 $2 组 ($3)",
+        "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
+    },
+    "Menu_Button_options_label": {
+        "message": "选项",
+        "description": "Link to the add-on's settings"
+    },
+    "yes": {
+        "message": "是",
+        "description": "Yes"
+    },
+    "pref_keePassRPCPortWarning_label": {
+        "message": "注意：一同更改 KeePass.config 中的设置，否则 Kee 将不能始终与 KeePass 保持通讯",
+        "description": "Displayed to the user near the setting for changing the KeePassRPC port"
+    },
+    "notifyBarLogSensitiveData_label": {
+        "message": "警告：Kee 正在记录您的密码！如果您不是刻意的启用此设置，您就应该立即禁用它",
+        "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
+    },
+    "create": {
+        "message": "创建",
+        "description": ""
+    },
+    "savePasswordText": {
+        "message": "您希望 Kee 保存此密码吗？",
+        "description": ""
+    },
+    "change_url_option_2": {
+        "message": "替换该记录的网址（完全删除旧网址）",
+        "description": ""
+    },
+    "pref_listAllOpenDBs_label": {
+        "message": "列出已打开的所有 KeePass 数据库的记录",
+        "description": ""
+    },
+    "pref_Logging_heading": {
+        "message": "日志",
+        "description": "The output of text information that reports on the inner-workings of Kee."
+    },
+    "notifyBarNeverForSiteButton_label": {
+        "message": "不再提示此网站",
+        "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
+    },
+    "change_url_option_3": {
+        "message": "保留该记录的旧网址（但仍填写表单，如果您访问新网址）",
+        "description": ""
+    },
+    "website": {
+        "message": "网站",
+        "description": ""
+    },
+    "Menu_Button_fillCurrentDocument_label": {
+        "message": "查找匹配的记录",
+        "description": ""
+    },
+    "update": {
+        "message": "更新",
+        "description": ""
+    },
+    "save_login": {
+        "message": "保存记录",
+        "description": "Heading for panel that allows user to create or update a new login entry"
+    },
+    "loggedInMultiple_tip": {
+        "message": "您已登录 $1 个密码数据库。“$2”目前活动。",
+        "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "change_field_status": {
+        "message": "所选记录将把所有的用户名、密码和其他表单字段替换成您刚刚输入的值。",
+        "description": ""
+    },
+    "current_website": {
+        "message": "当前网站",
+        "description": ""
+    },
+    "pref_logLevelErrors_label": {
+        "message": "错误",
+        "description": "Logging level for problems"
+    },
+    "keepass_history_pointer": {
+        "message": "您可以在 KeePass 的“编辑记录”对话框中访问 KeePass 的“撤销”功能。点击“历史记录”选项卡，使用“恢复”按钮撤销到以前的版本。",
+        "description": ""
+    },
+    "PasswordProfilesExplanation_label": {
+        "message": "您可以在下面选择密码配置然后创建。使用 KeePass 保存新的配置。",
+        "description": ""
+    },
+    "pref_FillPrompt_desc": {
+        "message": "填写登录提示",
+        "description": ""
+    },
+    "edit": {
+        "message": "编辑",
+        "description": "Action button for user to edit an item within a collection. E.g. edit an entry within the list of site-specific settings overrides"
+    },
+    "pref_keePassDBToOpen_label": {
+        "message": "打开或登录 KeePass 时使用此数据库文件",
+        "description": ""
+    },
+    "pref_ConnectionSecurity_explain_change": {
+        "message": "有时更改下面的设置将使 Kee 向您询问一个新的随机密码。更改上面的设置不需要输入正确的密码，只需调整然后按上面的按钮。",
+        "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
+    },
+    "update_existing_entry": {
+        "message": "更新现有记录",
+        "description": ""
+    },
+    "site_properties_weight_warning": {
+        "message": "如果您选择使用此高级功能，则需要仔细检查其他配置的权重。",
+        "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
+    },
+    "further_info_may_follow": {
+        "message": "进一步信息参考: $1",
+        "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "change_url_option_1": {
+        "message": "替换该记录的网址（但如果访问旧网址，仍填写表单）",
+        "description": ""
+    },
+    "pref_rememberMRUDB_label": {
+        "message": "记住最近使用的 KeePass 数据库",
+        "description": ""
+    },
+    "no": {
+        "message": "否",
+        "description": "No"
+    },
+    "conn_sl_server_min_desc": {
+        "message": "这允许您避免 Kee 连接到 KeePass 的安全级别过低。参考并设置为 KeePass 实际使用的安全级别。",
+        "description": ""
+    },
+    "form_id": {
+        "message": "表单 ID",
+        "description": ""
+    },
+    "copy_username_label": {
+        "message": "复制用户名",
+        "description": ""
+    },
+    "search_again": {
+        "message": "再次搜索",
+        "description": ""
+    },
+    "conn_sl_link": {
+        "message": "在手册中了解这些设置和浏览器与 KeePass 之间的通信机制",
+        "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
+    },
+    "conn_setup_enter_password_title": {
+        "message": "Kee 授权",
+        "description": "Heading of the popup that asks the user to authorise the connection to KeePass by typing in a password."
+    },
+    "site_options_list_explain_desc": {
+        "message": "如果一个表单匹配以下任意白名单，Kee 将总是尝试填写。如果一个表单匹配以下任意黑名单，Kee 将总不尝试填写。如果两个名单都匹配了，Kee 也将不尝试填写。",
+        "description": "Explains how Kee chooses which forms to fill in"
+    },
+    "noUsername_partial_tip": {
+        "message": "无用户名",
+        "description": ""
+    },
+    "group_label": {
+        "message": "组",
+        "description": ""
+    },
+    "network_authentication": {
+        "message": "网络身份验证",
+        "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
+    },
+    "Logins_Context_Edit_Login_label": {
+        "message": "编辑记录",
+        "description": ""
+    },
+    "weight": {
+        "message": "权重",
+        "description": "A number that can be compared to others in order to decide which associated configuration takes precendence."
+    },
+    "pref_notifyBarRequestPasswordSave_label": {
+        "message": "建议保存密码",
+        "description": ""
+    },
+    "site_options_valid_form_intro_desc": {
+        "message": "Kee 将尝试为所有有密码框的表单填写匹配的 KeePass 记录。您可以在下面调整这个行为。",
+        "description": "Explains how Kee chooses which forms to fill in"
+    },
+    "close": {
+        "message": "关闭",
+        "description": "Action user can click on to close/dismiss a panel or other user interface element"
+    },
+    "notifyBarLoginToKeePassButton_tip": {
+        "message": "登录您的 KeePass 数据库以启用 Kee",
+        "description": ""
+    },
+    "conn_setup_expired": {
+        "message": "您使用相同安全密钥太久了。",
+        "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
+    },
+    "network_auth_http_auth_description": {
+        "message": "网站要求您在访问 $1 前验证身份。网站说：$2",
+        "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
+    },
+    "conn_sl_server_min": {
+        "message": "KeePass 最小可接受安全级别",
+        "description": ""
+    },
+    "conn_sl_high": {
+        "message": "高",
+        "description": ""
+    },
+    "password": {
+        "message": "密码",
+        "description": "Amazingly, didn't have a need for this translation until v2.0 ;-)"
+    },
+    "pref_ConnectionSecurity_heading": {
+        "message": "连接安全性",
+        "description": "Heading for panel that contains settings for the security of the connection between Kee and KeePass."
+    },
+    "conn_display_description": {
+        "message": "帮助您安全登录大多数网站的浏览器扩展。以前名为 KeeFox。",
+        "description": "A brief description of Kee that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
+    },
+    "copy": {
+        "message": "复制",
+        "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
+    },
+    "srp_connect": {
+        "message": "连接",
+        "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
+    },
+    "pref_FillNote_desc": {
+        "message": "您可以在 KeePass 的各项“编辑记录”对话框中覆盖上述的“Kee 选择”行为。",
+        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
+    },
+    "pref_keePassRPCPort_label": {
+        "message": "使用此 TCP/IP 端口与 KeePass 通信",
+        "description": ""
+    },
+    "network_auth_choose": {
+        "message": "从下面的列表中选择一个记录，或者关闭此窗口来手动输入所需的登录信息。",
+        "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
+    },
+    "conn_unknown_error": {
+        "message": "尝试连接您的密码数据库时发生意外错误。",
+        "description": "Something went wrong with the KeePassRPC link but we have no idea what."
+    },
+    "pref_when_user_chooses_desc": {
+        "message": "选择一个匹配的记录后，Kee 应该",
+        "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
+    },
+    "pref_FillAndSubmitForm_desc": {
+        "message": "填写并提交表单",
+        "description": ""
+    },
+    "notifyBarLaunchKeePass_label": {
+        "message": "您还没有登录到您的密码数据库。",
+        "description": ""
+    },
+    "conn_invalid_message": {
+        "message": "Kee 发送了一个无效的命令到您的密码数据库。",
+        "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
+    },
+    "pref_Advanced_heading": {
+        "message": "高级",
+        "description": ""
+    },
+    "pref_when_kee_chooses_standard_form_desc": {
+        "message": "当 Kee 为一个标准表单选择了一个匹配的登录项时，Kee 应该",
+        "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
+    },
+    "whichEntry_label": {
+        "message": "选择一项...",
+        "description": ""
+    },
+    "pref_logLevelDebugging_label": {
+        "message": "调试",
+        "description": "Logging level for the most verbose information about Kee's operation"
+    },
+    "pref_notifyWhenEntryUpdated_label": {
+        "message": "显示“密码更新成功”通知",
+        "description": "Option to enable or diable the information displayed when a password has been updated"
+    },
+    "conn_sl_desc": {
+        "message": "更改下面的设置控制在您的网页浏览器与 KeePass 之间的安全通信链路。您通常不需要调整这些设置，如果您想调整，请确保您已先阅读了相关的手册页。",
+        "description": ""
+    },
+    "savePasswordLogin_tip": {
+        "message": "用户名: $1。网址（URL）: $2",
+        "description": ""
+    },
+    "method": {
+        "message": "方法",
+        "description": "For differentiating how a text string will be matched - e.g exact, prefix or regex"
+    },
+    "site_specific_settings_inherit": {
+        "message": "为所有网站使用相同设置",
+        "description": "Option for user to say that they want to use whatever the setting is for the top-level settings for all websites, rather than overriding it with a setting for this specific site."
+    },
+    "more_options": {
+        "message": "更多选项",
+        "description": ""
+    },
+    "pref_FindingEntries_heading": {
+        "message": "正在查找记录",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
+    },
+    "conn_setup_invalid_param": {
+        "message": "Kee 提供了一个无效的参数。进一步信息可能如下：$1",
+        "description": "This probably indicates a bug in Kee - we sent something to KeePassRPC that it wasn't expecting."
+    },
+    "create_new_entry": {
+        "message": "创建新记录",
+        "description": ""
+    },
+    "conn_unknown_protocol": {
+        "message": "Kee 提供了一个无效的协议。",
+        "description": "Technical error in the communication between Kee and KeePassRPC. Not clear how user could resolve this or if they'll ever see it but it might happen."
+    },
+    "generatePassword_copied": {
+        "message": "一个新密码已复制到您的剪贴板。",
+        "description": ""
+    },
+    "showing_options_for": {
+        "message": "显示选项：",
+        "description": ""
+    },
+    "autoclose_cancelled": {
+        "message": "自动关闭已取消",
+        "description": "Tells the user that the panel auto-close functionality has been disabled for this panel."
+    },
+    "conn_setup_missing_param": {
+        "message": "Kee 因未提供必要的参数而失败。进一步信息可能如下：$1",
+        "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
+    },
+    "KB_shortcut_simple_2_desc": {
+        "message": "登录 KeePass / 选择匹配的记录 / 显示匹配记录的列表",
+        "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
+    },
+    "pref_rememberMRUGroup_label": {
+        "message": "记住最后使用的组",
+        "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
+    },
+    "conn_setup_server_features_missing": {
+        "message": "必须升级 KeePassRPC KeePass Password Safe 插件才能允许 Kee 连接。请确保您已运行 KeePassRPC 插件的最新版本，快速、简便的操作说明见 $1",
+        "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
+    },
+    "site_options_invisible_tip_desc": {
+        "message": "注：这些名称和 ID 可能与网页上可见的标签不同，它们设置于该页面的源代码。",
+        "description": "Explains that the configuration settings might not be what the casual user expects"
+    },
+    "pref_FillAndSubmitPrompt_desc": {
+        "message": "填写并提交登录提示",
+        "description": ""
+    },
+    "save": {
+        "message": "保存",
+        "description": ""
+    },
+    "saveMultiPagePasswordText": {
+        "message": "您想让 Kee 保存这个多页面密码吗？",
+        "description": ""
+    },
+    "pref_notifyWhenLateDiscovery_label": {
+        "message": "网页完成加载并且 Kee 找到匹配表单的登录项时，显示通知",
+        "description": ""
+    },
+    "password_successfully_updated": {
+        "message": "密码更新成功。",
+        "description": ""
+    },
+    "pref_FillForm_desc": {
+        "message": "填写表单",
+        "description": ""
+    },
+    "matched_logins_label": {
+        "message": "匹配的登录信息",
+        "description": "Header for panels/sections that contain the logins which Kee matched for this page/form"
+    },
+    "pref_SavingEntries_heading": {
+        "message": "保存记录",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
+    },
+    "pref_DoNothing_desc": {
+        "message": "无动作",
+        "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
+    },
+    "srp_save_connect": {
+        "message": "保存并连接",
+        "description": "Button action to authorise the connection between Kee and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
+    },
+    "conn_setup_restart": {
+        "message": "Kee 必须重启授权进程。",
+        "description": "A technical error occurred during the attempt to authorise the link between Kee and KeePassRPC so we need to notify the user that they will need to re-authenticate"
+    },
+    "all_websites": {
+        "message": "所有网站",
+        "description": ""
+    },
+    "cancel": {
+        "message": "取消",
+        "description": ""
+    },
+    "Menu_Button_copyNewPasswordToClipboard_label": {
+        "message": "生成新密码",
+        "description": ""
+    },
+    "conn_setup_client_sl_low_resolution": {
+        "message": "高安全级别连接",
+        "description": "Button that will change the security level Kee attempts to use when connecting to the KeePassRPC server."
+    },
+    "add": {
+        "message": "添加",
+        "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
+    },
+    "pref_logLevelInformation_label": {
+        "message": "信息",
+        "description": "Logging level for important information about Kee's operation"
+    },
+    "pref_logLevel_desc": {
+        "message": "选择想记录多详细的日志。越高的级别输出越详细的信息。",
+        "description": ""
+    },
+    "text_field_id": {
+        "message": "文本栏 ID",
+        "description": ""
+    },
+    "conn_setup_server_sl_low": {
+        "message": "因安全级别太低，Kee 已拒绝连接密码服务器。您必须使用更高安全级别来重启授权过程。",
+        "description": ""
+    },
+    "pref_saveFavicons_label": {
+        "message": "保存网站小图标 (favicon)",
+        "description": "Whether or not Kee will save the website's icon when a new entry is saved"
+    },
+    "matchedLogin_label": {
+        "message": "$1 - $2",
+        "description": "<username> <seperator> <entry title>"
+    },
+    "conn_setup_retype_password": {
+        "message": "请在弹出的提示中输入新密码。",
+        "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
+    },
+    "dont_show_again": {
+        "message": "不再显示",
+        "description": "Button user can click on to cause a message to hide and not reappear"
+    },
+    "conn_setup_client_features_missing": {
+        "message": "Kee 必须升级才能连接您的 KeePass Password Safe。请确保您在运行最新版本的浏览器扩展。",
+        "description": "The KeePassRPC server requires features from Kee that this version does not contain."
+    },
+    "notifyBarLaunchKeePassButton_tip": {
+        "message": "启动 KeePass 以启用 Kee",
+        "description": ""
+    },
+    "pref_searchAllOpenDBs_label": {
+        "message": "搜索已打开的所有 KeePass 数据库",
+        "description": ""
+    },
+    "enter_valid_regex": {
+        "message": "输入一条有效的正则表达式，或选择其他类型",
+        "description": "Validation error message displayed to user when they have configured the properties of a site specific configuration to be a regular expression (Regex) but supplied a website value that is not a valid regex"
+    },
+    "Help_Centre_Button_label": {
+        "message": "帮助中心",
+        "description": ""
+    },
+    "site_specific_settings_checkbox_explanation": {
+        "message": "“所有网站”的设置将适用于以下每个部分，除非您使用其旁边的复选框来启用设置。",
+        "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
+    },
+    "autoclose_countdown": {
+        "message": "$1 秒后自动关闭",
+        "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
+    },
+    "conn_setup_failed": {
+        "message": "Kee 未被准许连接，可能是您输入的连接密码不正确。",
+        "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
+    },
+    "Search_label": {
+        "message": "搜索...",
+        "description": ""
+    },
+    "target": {
+        "message": "目标",
+        "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
+    },
+    "learn_more": {
+        "message": "了解更多",
+        "description": "Action/button/link to send the user to somewhere that they can read more about a topic/concept"
+    },
+    "conn_setup_client_sl_low": {
+        "message": "Kee 要求的安全级别太低，无法被密码服务器接受。您必须使用更高安全级别来重启授权过程。",
+        "description": ""
+    },
+    "copy_password_label": {
+        "message": "复制密码",
+        "description": ""
+    },
+    "conn_setup_enter_password": {
+        "message": "请输入在 KeePass 授权新连接 窗口中显示的密码。您不必记住此密码。如果你出错了，也可以稍候再试。",
+        "description": ""
+    },
+    "text_field_name": {
+        "message": "文本栏名称",
+        "description": ""
+    },
+    "change_field_explanation": {
+        "message": "Kee 也将更新网站图标（小图标）和所有 HTTP 基本验证信息。\n更复杂的修改需要您手动编辑该记录。",
+        "description": ""
+    },
+    "site_properties": {
+        "message": "网站属性",
+        "description": "Site properties"
+    },
+    "pref_Finding_forms_heading": {
+        "message": "填写表单",
+        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from KeePass"
+    },
+    "pref_FillingEntries_heading": {
+        "message": "填写记录",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
+    },
+    "database_label": {
+        "message": "数据库",
+        "description": ""
+    },
+    "form_name": {
+        "message": "表单名称",
+        "description": ""
+    },
+    "white_list": {
+        "message": "白名单",
+        "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
+    },
+    "upgrade_kee": {
+        "message": "升级 Kee",
+        "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
+    },
+    "pref_logLevelWarnings_label": {
+        "message": "警告",
+        "description": "Logging level for potential problems"
+    },
+    "conn_sl_low": {
+        "message": "低",
+        "description": ""
+    },
+    "multi_page_update_warning": {
+        "message": "多页面登录表单可能也需要手动编辑。",
+        "description": ""
+    }
+}

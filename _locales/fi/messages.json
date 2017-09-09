@@ -1,0 +1,594 @@
+{
+    "change_url_option_4": {
+        "message": "Säilytä aiempi URL-osoite (älä lisää uutta URL-osoitetta)",
+        "description": ""
+    },
+    "pref_when_one_matching_network_login": {
+        "message": "Kun Kee havaitsee vain yhden sopivan kirjautumistiedon (esim. HTTP Auth), kirjaudu automaattisesti",
+        "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
+    },
+    "black_list": {
+        "message": "Estetyt",
+        "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
+    },
+    "pref_autoFillFormsWithMultipleMatches_label": {
+        "message": "Lomakkeet useilla sopivilla tiedoilla täytetään ja lähetetään automaattisesti",
+        "description": ""
+    },
+    "conn_sl_high_label": {
+        "message": "Kysy tietokantayhteydelle salasanaa joka kerta kun käynnistän selaimen tai KeePassin.",
+        "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
+    },
+    "conn_sl_medium": {
+        "message": "Keskitaso",
+        "description": ""
+    },
+    "change_url_status": {
+        "message": "Kohteen verkko-osoite (URL) päivitetään uudempaan",
+        "description": ""
+    },
+    "Search_tip": {
+        "message": "Etsi KeePass kirjautumistietoja",
+        "description": ""
+    },
+    "loggedIn_tip": {
+        "message": "Olet yhteydessä tietokantaan '$1'",
+        "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
+    },
+    "a_specific_website": {
+        "message": "Tietty nettisivu",
+        "description": ""
+    },
+    "network_auth_proxy_description": {
+        "message": "Välityspalvelin vaatii todennuksen ennen kuin voit jatkaa  $1",
+        "description": "Instructions for popup dialog displayed when a proxy requires authentication."
+    },
+    "matchedLogin_tip": {
+        "message": "$1 ryhmässä $2 ($3)",
+        "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
+    },
+    "Menu_Button_options_label": {
+        "message": "Asetukset",
+        "description": "Link to the add-on's settings"
+    },
+    "yes": {
+        "message": "Kyllä",
+        "description": "Yes"
+    },
+    "pref_keePassRPCPortWarning_label": {
+        "message": "Huom: Muista vaihtaa portti myös KeePassin Kee:n asetuksista tai muuten Kee ei toimi oikein",
+        "description": "Displayed to the user near the setting for changing the KeePassRPC port"
+    },
+    "notifyBarLogSensitiveData_label": {
+        "message": "VAROITUS: Kee on kerää salasanojasi. Jos et ole tarkoituksella sallinut tätä, on suositeltavaa poistaa toiminto käytöstä",
+        "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
+    },
+    "create": {
+        "message": "Tallenna",
+        "description": ""
+    },
+    "savePasswordText": {
+        "message": "Haluatko että Kee tallentaa salasanan?",
+        "description": ""
+    },
+    "change_url_option_2": {
+        "message": "Korvaa URL-osoite (poista aiempi URL-osoite)",
+        "description": ""
+    },
+    "pref_listAllOpenDBs_label": {
+        "message": "Listaa kirjautumistiedot kaikista avoinna olevista KeePass tietokannoista",
+        "description": ""
+    },
+    "pref_Logging_heading": {
+        "message": "Lokitiedot",
+        "description": "The output of text information that reports on the inner-workings of Kee."
+    },
+    "notifyBarNeverForSiteButton_label": {
+        "message": "Ei tälle sivulle",
+        "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
+    },
+    "change_url_option_3": {
+        "message": "Säilytä aiempi URL-osoite (mutta täytä lomakkeet myös kun käytetään uutta URL-osoitetta)",
+        "description": ""
+    },
+    "website": {
+        "message": "Nettisivu",
+        "description": ""
+    },
+    "Menu_Button_fillCurrentDocument_label": {
+        "message": "Havaitse lomakkeet",
+        "description": ""
+    },
+    "update": {
+        "message": "Päivitä",
+        "description": ""
+    },
+    "save_login": {
+        "message": "Tallenna kirjautumistieto",
+        "description": "Heading for panel that allows user to create or update a new login entry"
+    },
+    "loggedInMultiple_tip": {
+        "message": "Sinulla on auki $1 salasanatietokantaa. '$2' on käytössä.",
+        "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "change_field_status": {
+        "message": "Valitun kohteen kaikki tiedot, kuten käyttäjätunnus ja salasana korvataan",
+        "description": ""
+    },
+    "current_website": {
+        "message": "Nykyinen nettisivu",
+        "description": ""
+    },
+    "pref_logLevelErrors_label": {
+        "message": "1-Virheet",
+        "description": "Logging level for problems"
+    },
+    "keepass_history_pointer": {
+        "message": "KeePass sisältää \"kumoa\" toiminnon jota voit käyttää KeePassin \"Tietueen muokkaus\" ikkunassa. Valitse \"Historia\" välilehti ja sen jälkeen \"Palauta\" painiketta palauttaakesi vanhat tiedot.",
+        "description": ""
+    },
+    "PasswordProfilesExplanation_label": {
+        "message": "Voit luoda uuden salasanan valitsemalla alta salasanaprofiilin. Tallenna uusia salasanaprofiileja KeePassissa.",
+        "description": ""
+    },
+    "pref_FillPrompt_desc": {
+        "message": "Täytä kirjautumiskehote",
+        "description": ""
+    },
+    "edit": {
+        "message": "Muokkaa",
+        "description": "Action button for user to edit an item within a collection. E.g. edit an entry within the list of site-specific settings overrides"
+    },
+    "pref_keePassDBToOpen_label": {
+        "message": "Käytä tätä tietokantaa kun kirjaudun tai avaan KeePassin",
+        "description": ""
+    },
+    "pref_ConnectionSecurity_explain_change": {
+        "message": "Ajoittain Kee saattaa kysyä sinulta uutta satunnaista salasanaa, jos muutat alla olevia asetuksia. Sinun ei tarvitse antaa oikeaa salasanaa muuttaaksesi näitä asetuksia. Paina vain yllä olevaa painiketta kun olet valmis.",
+        "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
+    },
+    "update_existing_entry": {
+        "message": "Muuta tietoja",
+        "description": ""
+    },
+    "site_properties_weight_warning": {
+        "message": "On suositeltavaa käydä huolella läpi muiden asetuksien vaikutukset, mikäli aiot käyttää lisäasetuksia.",
+        "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
+    },
+    "further_info_may_follow": {
+        "message": "Lisätietoja: $1",
+        "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "change_url_option_1": {
+        "message": "Korvaa URL-osoite (mutta täytä lomakkeet myös kun käytetään aiempaa URL-osoitetta)",
+        "description": ""
+    },
+    "pref_rememberMRUDB_label": {
+        "message": "Muista viimeksi käytetty KeePass tietokanta",
+        "description": ""
+    },
+    "no": {
+        "message": "Ei",
+        "description": "No"
+    },
+    "conn_sl_server_min_desc": {
+        "message": "Tämä asetus estää Kee:ta yhdistämästä KeePassiin jos turvaluokitus on liian alhainen. Tarkista vastaavat asetukset KeePassista muuttaaksesi turvaluokitusta.",
+        "description": ""
+    },
+    "form_id": {
+        "message": "Lomakkeen ID",
+        "description": ""
+    },
+    "copy_username_label": {
+        "message": "Kopioi käyttäjätunnus",
+        "description": ""
+    },
+    "search_again": {
+        "message": "Etsi uudelleen",
+        "description": ""
+    },
+    "conn_sl_link": {
+        "message": "Lue lisää näistä asetuksista sekä selaimsesi ja KeePassin välisestä yhteydestä",
+        "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
+    },
+    "conn_setup_enter_password_title": {
+        "message": "Kee yhteyden todennus",
+        "description": "Heading of the popup that asks the user to authorise the connection to KeePass by typing in a password."
+    },
+    "site_options_list_explain_desc": {
+        "message": "Jos lomake sisältää yhden sallituista kohteista, Kee yrittää täyttää sen. Jos lomake sisältää yhden estetyistä kohteista, Kee ei täytä sitä. Jos lomake sisältää molempien listojen kohteita, sitä ei täytetä.",
+        "description": "Explains how Kee chooses which forms to fill in"
+    },
+    "noUsername_partial_tip": {
+        "message": "ei käyttäjänimeä",
+        "description": ""
+    },
+    "group_label": {
+        "message": "Ryhmä",
+        "description": ""
+    },
+    "network_authentication": {
+        "message": "Verkkotodennus vaaditaan",
+        "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
+    },
+    "Logins_Context_Edit_Login_label": {
+        "message": "Muokkaa",
+        "description": ""
+    },
+    "weight": {
+        "message": "Tärkeys",
+        "description": "A number that can be compared to others in order to decide which associated configuration takes precendence."
+    },
+    "pref_notifyBarRequestPasswordSave_label": {
+        "message": "Tarjoa salasanojen tallennusta",
+        "description": ""
+    },
+    "site_options_valid_form_intro_desc": {
+        "message": "Kee yrittää täyttää lomakkeet, jotka sisältävät salasanakentän. Voit muuttaa toimintaa alla olevilla valinnoilla.",
+        "description": "Explains how Kee chooses which forms to fill in"
+    },
+    "close": {
+        "message": "Sulje",
+        "description": "Action user can click on to close/dismiss a panel or other user interface element"
+    },
+    "notifyBarLoginToKeePassButton_tip": {
+        "message": "Kirjaudu KeePass tietokantaan käyttääksesi Kee:ta.",
+        "description": ""
+    },
+    "conn_setup_expired": {
+        "message": "Olet käyttänyt samaa turva-avainta liian pitkään.",
+        "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
+    },
+    "network_auth_http_auth_description": {
+        "message": "Nettisivu vaatii todennuksen ennen kuin voit jatkaa $1.\nSivun viesti: $2",
+        "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
+    },
+    "conn_sl_server_min": {
+        "message": "Alhaisin hyväksyttävä KeePass turvaluokitus",
+        "description": ""
+    },
+    "conn_sl_high": {
+        "message": "Korkea",
+        "description": ""
+    },
+    "password": {
+        "message": "Salasana",
+        "description": "Amazingly, didn't have a need for this translation until v2.0 ;-)"
+    },
+    "pref_ConnectionSecurity_heading": {
+        "message": "Turvaluokitus",
+        "description": "Heading for panel that contains settings for the security of the connection between Kee and KeePass."
+    },
+    "conn_display_description": {
+        "message": "Selainlisäosa joka tarjoaa turvallista automaattista kirjautumista useimmille nettisivuille. Aiemmin tunnettu nimellä KeeFox.",
+        "description": "A brief description of Kee that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
+    },
+    "copy": {
+        "message": "Kopioi",
+        "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
+    },
+    "srp_connect": {
+        "message": "Yhdistä",
+        "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
+    },
+    "pref_FillNote_desc": {
+        "message": "Voit muuttaa Kee:n toimintaa yksittäisille kohteille KeePassissa \"Muokkaa tietuetta\" toiminnolla.",
+        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
+    },
+    "pref_keePassRPCPort_label": {
+        "message": "Yhdistä KeePass tämän TCP/IP portin kautta",
+        "description": ""
+    },
+    "network_auth_choose": {
+        "message": "Valitse kirjautumistieto alla olevasta listasta tai sulje tämä ikkuna ja syötä tarvittavat tiedot itse.",
+        "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
+    },
+    "conn_unknown_error": {
+        "message": "Tuntematon virhe esti yhdistämästä salasanatietokantaasi",
+        "description": "Something went wrong with the KeePassRPC link but we have no idea what."
+    },
+    "pref_when_user_chooses_desc": {
+        "message": "Kun valitsen sopivan kirjautumistiedon",
+        "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
+    },
+    "pref_FillAndSubmitForm_desc": {
+        "message": "Täytä ja lähetä lomake",
+        "description": ""
+    },
+    "notifyBarLaunchKeePass_label": {
+        "message": "Et ole kirjautuneena tietokantaan",
+        "description": ""
+    },
+    "conn_invalid_message": {
+        "message": "Kee lähetti kelpaamattoman komennon tietokantaasi",
+        "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
+    },
+    "pref_Advanced_heading": {
+        "message": "Lisäasetukset",
+        "description": ""
+    },
+    "pref_when_kee_chooses_standard_form_desc": {
+        "message": "Kun Kee valitsee sopivan kirjautumistiedon tavalliselle lomakkeelle",
+        "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
+    },
+    "whichEntry_label": {
+        "message": "Valitse",
+        "description": ""
+    },
+    "pref_logLevelDebugging_label": {
+        "message": "4-Virheenjäljitys",
+        "description": "Logging level for the most verbose information about Kee's operation"
+    },
+    "pref_notifyWhenEntryUpdated_label": {
+        "message": "Näytä viesti \"Salasana vaihdettu onnistuneesti\"",
+        "description": "Option to enable or diable the information displayed when a password has been updated"
+    },
+    "conn_sl_desc": {
+        "message": "Muuttamalla alla olevia asetuksia voit määrittää kuinka turvallinen selaimen ja KeePassin välinen yhteys on. Sinun ei todennäköisesti tarvitse muuttaa näitä säädöksiä koskaan, mutta jos muutat, varmistathan että tiedät mitä teet.",
+        "description": ""
+    },
+    "savePasswordLogin_tip": {
+        "message": "Käyttäjätunnus: $1. Nettisivun osoite (URL): $2",
+        "description": ""
+    },
+    "method": {
+        "message": "Havaintomenetelmä",
+        "description": "For differentiating how a text string will be matched - e.g exact, prefix or regex"
+    },
+    "site_specific_settings_inherit": {
+        "message": "Käytä samaa asetusta kuin muillakin nettisivuilla",
+        "description": "Option for user to say that they want to use whatever the setting is for the top-level settings for all websites, rather than overriding it with a setting for this specific site."
+    },
+    "more_options": {
+        "message": "Lisäasetukset",
+        "description": ""
+    },
+    "pref_FindingEntries_heading": {
+        "message": "Lomakkeet",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
+    },
+    "conn_setup_invalid_param": {
+        "message": "Kee lähetti kelpamattomat parametrit. Lisätietoja: $1",
+        "description": "This probably indicates a bug in Kee - we sent something to KeePassRPC that it wasn't expecting."
+    },
+    "create_new_entry": {
+        "message": "Luo uusi",
+        "description": ""
+    },
+    "conn_unknown_protocol": {
+        "message": "Kee lähetti kelpaamattoman protokollan",
+        "description": "Technical error in the communication between Kee and KeePassRPC. Not clear how user could resolve this or if they'll ever see it but it might happen."
+    },
+    "generatePassword_copied": {
+        "message": "Uusi salasana on kopioitu leikepöydälle.",
+        "description": ""
+    },
+    "showing_options_for": {
+        "message": "Näytetään asetukset kohteelle ",
+        "description": ""
+    },
+    "autoclose_cancelled": {
+        "message": "Automaattinen sulkeminen peruutettu",
+        "description": "Tells the user that the panel auto-close functionality has been disabled for this panel."
+    },
+    "conn_setup_missing_param": {
+        "message": "Kee ei kyennyt lähettämään tarvittavia parametrejä. Lisätietoja: : $1",
+        "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
+    },
+    "KB_shortcut_simple_2_desc": {
+        "message": "Kirjaudu KeePass/Valitse kirjautumistieto/Näytä sopivat kirjautumistiedot",
+        "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
+    },
+    "pref_rememberMRUGroup_label": {
+        "message": "Muista viimeisin ryhmä johon tallensit salasanan",
+        "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
+    },
+    "conn_setup_server_features_missing": {
+        "message": "KeePassRPC KeePass Password Safe lisäosa on päivitettävä, jotta Kee voi muodostaa yhteyden. Varmista, että käytössäsi on viimeisin KeePassRPC lisäosan versio. Tarkemmat ohjeet $1",
+        "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
+    },
+    "site_options_invisible_tip_desc": {
+        "message": "Huom: Nimi ja ID tiedot eivät välttämättä ole samat kuin lomakkeen näkyvässä osassa (vaan löytyvät sivun lähdekoodista).",
+        "description": "Explains that the configuration settings might not be what the casual user expects"
+    },
+    "pref_FillAndSubmitPrompt_desc": {
+        "message": "Täytä ja lähetä kirjautumiskehote",
+        "description": ""
+    },
+    "save": {
+        "message": "Tallenna",
+        "description": ""
+    },
+    "saveMultiPagePasswordText": {
+        "message": "Haluatko että Kee tallentaa monisivuisen salasanan?",
+        "description": ""
+    },
+    "pref_notifyWhenLateDiscovery_label": {
+        "message": "Näytä ilmoitus kun Kee löytää sopivat kirjautumistiedot sivun latautumisen jälkeen",
+        "description": ""
+    },
+    "password_successfully_updated": {
+        "message": "Salasana vaihdettu onnistuneesti",
+        "description": ""
+    },
+    "pref_FillForm_desc": {
+        "message": "Täytä lomake",
+        "description": ""
+    },
+    "matched_logins_label": {
+        "message": "Sopivat kirjautumistiedot",
+        "description": "Header for panels/sections that contain the logins which Kee matched for this page/form"
+    },
+    "pref_SavingEntries_heading": {
+        "message": "Tallentaminen",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
+    },
+    "pref_DoNothing_desc": {
+        "message": "Älä tee mitään",
+        "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
+    },
+    "srp_save_connect": {
+        "message": "Tallenna ja yhdistä",
+        "description": "Button action to authorise the connection between Kee and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
+    },
+    "conn_setup_restart": {
+        "message": "Kee:n täytyy käynnistää todennusprosessi uudelleen",
+        "description": "A technical error occurred during the attempt to authorise the link between Kee and KeePassRPC so we need to notify the user that they will need to re-authenticate"
+    },
+    "all_websites": {
+        "message": "Kaikki nettisivut",
+        "description": ""
+    },
+    "cancel": {
+        "message": "Peruuta",
+        "description": ""
+    },
+    "Menu_Button_copyNewPasswordToClipboard_label": {
+        "message": "Luo salasana",
+        "description": ""
+    },
+    "conn_setup_client_sl_low_resolution": {
+        "message": "Korjaa turvaluokitus ja yhdistä",
+        "description": "Button that will change the security level Kee attempts to use when connecting to the KeePassRPC server."
+    },
+    "add": {
+        "message": "Lisää",
+        "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
+    },
+    "pref_logLevelInformation_label": {
+        "message": "3-Lisätiedot",
+        "description": "Logging level for important information about Kee's operation"
+    },
+    "pref_logLevel_desc": {
+        "message": "Valitse kuinka tarkasti lokitietoja kerätään. Mitä korkeampi taso, sitä enemmän lokirivejä (4 on korkein).",
+        "description": ""
+    },
+    "text_field_id": {
+        "message": "Tekstikentän ID",
+        "description": ""
+    },
+    "conn_setup_server_sl_low": {
+        "message": "Kee hylkäsi yhteydet salasanatietokantaan, koska sen käyttämä turvaluokitus oli liian alhainen. Sinun täytyy käynnistää todennusprosessi uudelleen käyttäen korkeampaa turvaluokitusta.",
+        "description": ""
+    },
+    "pref_saveFavicons_label": {
+        "message": "Tallenna nettisivun logo/kuvake (favicon)",
+        "description": "Whether or not Kee will save the website's icon when a new entry is saved"
+    },
+    "matchedLogin_label": {
+        "message": "$1 - $2",
+        "description": "<username> <seperator> <entry title>"
+    },
+    "conn_setup_retype_password": {
+        "message": "Kirjoita uusi salasana kun pyydetään",
+        "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
+    },
+    "dont_show_again": {
+        "message": "Älä näytä ilmoitusta uudelleen",
+        "description": "Button user can click on to cause a message to hide and not reappear"
+    },
+    "conn_setup_client_features_missing": {
+        "message": "Kee on päivitettävä jotta se voi yhdistää KeePass tietokantaan. Varmista, että käytössäsi on viimeisin versio Kee selainlisäosasta.",
+        "description": "The KeePassRPC server requires features from Kee that this version does not contain."
+    },
+    "notifyBarLaunchKeePassButton_tip": {
+        "message": "Avaa KeePass käyttääksesi Kee:ta",
+        "description": ""
+    },
+    "pref_searchAllOpenDBs_label": {
+        "message": "Etsi kaikista avoinna olevista KeePass tietokannoista",
+        "description": ""
+    },
+    "enter_valid_regex": {
+        "message": "Anna toimiva Regex arvo tai valitse eri menetelmä",
+        "description": "Validation error message displayed to user when they have configured the properties of a site specific configuration to be a regular expression (Regex) but supplied a website value that is not a valid regex"
+    },
+    "Help_Centre_Button_label": {
+        "message": "Ohjekeskus",
+        "description": ""
+    },
+    "site_specific_settings_checkbox_explanation": {
+        "message": "Valinnat \"Kaikki nettisivut\" osiosta vaikuttavat alla oleviin kohtiin jos alla olevia asetuksia ei muuteta.",
+        "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
+    },
+    "autoclose_countdown": {
+        "message": "Sulje automaattisesti $1 sekunnin jälkeen",
+        "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
+    },
+    "conn_setup_failed": {
+        "message": "Kee yhteys estettiin. Luultavasti kirjoitit salasanan väärin.",
+        "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
+    },
+    "Search_label": {
+        "message": "Etsi...",
+        "description": ""
+    },
+    "target": {
+        "message": "Kohdetieto",
+        "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
+    },
+    "learn_more": {
+        "message": "Lue lisää",
+        "description": "Action/button/link to send the user to somewhere that they can read more about a topic/concept"
+    },
+    "conn_setup_client_sl_low": {
+        "message": "Kee yritti käyttää tietokantaa liian alhaisella turvaluokituksella. Sinun täytyy käynnistää todennusprosessi uudelleen käyttäen korkeampaa turvaluokitusta.",
+        "description": ""
+    },
+    "copy_password_label": {
+        "message": "Kopioi salasana",
+        "description": ""
+    },
+    "conn_setup_enter_password": {
+        "message": "Kirjoita tai kopioi todennuskoodi joka näkyy KeePassin \"Authorise a new connection\" ikkunassa. Sinun ei tarvitse muistaa tätä todennuskoodia. Jos kirjoitat sen väärin, joudut odottamaan hetken.",
+        "description": ""
+    },
+    "text_field_name": {
+        "message": "Tekstikentän nimi",
+        "description": ""
+    },
+    "change_field_explanation": {
+        "message": "Kee päivittää myös nettisivun kuvakkeen (favicon) ja HTTP Auth kirjautumiskehotteiden tiedot. Tarkemmat muutokset vaativat kohteen muokkaamista käsin.",
+        "description": ""
+    },
+    "site_properties": {
+        "message": "Sivun ominaisuudet",
+        "description": "Site properties"
+    },
+    "pref_Finding_forms_heading": {
+        "message": "Automaattinen täyttö",
+        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from KeePass"
+    },
+    "pref_FillingEntries_heading": {
+        "message": "Automaattinen täyttö",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
+    },
+    "database_label": {
+        "message": "Tietokanta",
+        "description": ""
+    },
+    "form_name": {
+        "message": "Lomakkeen nimi",
+        "description": ""
+    },
+    "white_list": {
+        "message": "Sallitut",
+        "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
+    },
+    "upgrade_kee": {
+        "message": "Päivitä Kee",
+        "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
+    },
+    "pref_logLevelWarnings_label": {
+        "message": "2-Varoitukset",
+        "description": "Logging level for potential problems"
+    },
+    "conn_sl_low": {
+        "message": "Alhainen",
+        "description": ""
+    },
+    "multi_page_update_warning": {
+        "message": "Monisivuiset kirjautumislomakkeet voivat myös vaatia käsin muokkaamista.",
+        "description": ""
+    }
+}

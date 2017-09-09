@@ -1,0 +1,594 @@
+{
+    "change_url_option_4": {
+        "message": "Зберегти стару URL-адресу запису (не додавати нову адресу до запису)",
+        "description": ""
+    },
+    "pref_when_one_matching_network_login": {
+        "message": "Коли Kee знаходить лише один відповідний запис мережі (н-д, HTTP Auth), автоматично входити",
+        "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
+    },
+    "black_list": {
+        "message": "Чорний список",
+        "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
+    },
+    "pref_autoFillFormsWithMultipleMatches_label": {
+        "message": "Форми з кількома відповідними записами повинні бути автоматично заповнені та відправлені",
+        "description": ""
+    },
+    "conn_sl_high_label": {
+        "message": "Запитувати новий пароль з'єднання щоразу при запуску браузера чи KeePass.",
+        "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
+    },
+    "conn_sl_medium": {
+        "message": "Середній",
+        "description": ""
+    },
+    "change_url_status": {
+        "message": "Адреса (URL) веб-сторінки запису буде оновлена на останню відвідану.",
+        "description": ""
+    },
+    "Search_tip": {
+        "message": "Почніть вводити для показу відповідних записів",
+        "description": ""
+    },
+    "loggedIn_tip": {
+        "message": "Ви увійшли в свою базу паролів '$1'",
+        "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
+    },
+    "a_specific_website": {
+        "message": "Певний веб-сайт",
+        "description": ""
+    },
+    "network_auth_proxy_description": {
+        "message": "Проксі вимагає про авторизацію для доступу до $1",
+        "description": "Instructions for popup dialog displayed when a proxy requires authentication."
+    },
+    "matchedLogin_tip": {
+        "message": "$1 із групи $2 ($3)",
+        "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
+    },
+    "Menu_Button_options_label": {
+        "message": "Налаштування",
+        "description": "Link to the add-on's settings"
+    },
+    "yes": {
+        "message": "Так",
+        "description": "Yes"
+    },
+    "pref_keePassRPCPortWarning_label": {
+        "message": "Зверніть увагу: зміна налаштувань KeePass.config або Kee може порушити зв'язок з KeePass",
+        "description": "Displayed to the user near the setting for changing the KeePassRPC port"
+    },
+    "notifyBarLogSensitiveData_label": {
+        "message": "УВАГА: Kee відслідковує ваші паролі! Якщо ви активували цю функцію випадково, вам слід вимкнути її негайно",
+        "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
+    },
+    "create": {
+        "message": "Створити",
+        "description": ""
+    },
+    "savePasswordText": {
+        "message": "Ви хочете щоб Kee зберіг цей пароль?",
+        "description": ""
+    },
+    "change_url_option_2": {
+        "message": "Замінити URL-адресу запису (повністю видалити стару адресу)",
+        "description": ""
+    },
+    "pref_listAllOpenDBs_label": {
+        "message": "Показувати записи з усіх відкритих баз KeePass",
+        "description": ""
+    },
+    "pref_Logging_heading": {
+        "message": "Журнал",
+        "description": "The output of text information that reports on the inner-workings of Kee."
+    },
+    "notifyBarNeverForSiteButton_label": {
+        "message": "Ніколи для цього сайту",
+        "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
+    },
+    "change_url_option_3": {
+        "message": "Зберегти стару адресу URL запису (поля форми все одно будуть заповнюватись при відвідуванні нової адреси)",
+        "description": ""
+    },
+    "website": {
+        "message": "Веб-сайт",
+        "description": ""
+    },
+    "Menu_Button_fillCurrentDocument_label": {
+        "message": "Знайти відповідні записи",
+        "description": ""
+    },
+    "update": {
+        "message": "Оновити",
+        "description": ""
+    },
+    "save_login": {
+        "message": "Зберегти запис",
+        "description": "Heading for panel that allows user to create or update a new login entry"
+    },
+    "loggedInMultiple_tip": {
+        "message": "Ви увійшли в бази паролів $1. Зараз активна '$2'.",
+        "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "change_field_status": {
+        "message": "Обраний запис буде мати ім'я користувача, пароль та інші поля форми, які замінені щойно введеними вами значеннями.",
+        "description": ""
+    },
+    "current_website": {
+        "message": "Поточний веб-сайт",
+        "description": ""
+    },
+    "pref_logLevelErrors_label": {
+        "message": "Помилки",
+        "description": "Logging level for problems"
+    },
+    "keepass_history_pointer": {
+        "message": "KeePass має функцію \"повернути\", до якої ви можете отримати доступ з діалогового вікна \"змінити запис\". Натисніть на вкладку \"Історія\" і потім використайте кнопку \"Відновити\" для повернення до старішої версії.",
+        "description": ""
+    },
+    "PasswordProfilesExplanation_label": {
+        "message": "Ви можете за бажанням створити інший, обравши профіль пароля внизу. Використовуйте KeePass, щоб зберігати нові профілі.",
+        "description": ""
+    },
+    "pref_FillPrompt_desc": {
+        "message": "Заповнити запит",
+        "description": ""
+    },
+    "edit": {
+        "message": "Змінити",
+        "description": "Action button for user to edit an item within a collection. E.g. edit an entry within the list of site-specific settings overrides"
+    },
+    "pref_keePassDBToOpen_label": {
+        "message": "При відкритті чи вході в KeePass, використовувати цей файл бази даних",
+        "description": ""
+    },
+    "pref_ConnectionSecurity_explain_change": {
+        "message": "Іноді при зміні налаштувань внизу Kee запитає вас про новий випадковий пароль. Щоб змінити ці налаштування, вам не потрібно вводити правильний пароль вгорі. Просто змініть їх і натисніть кнопку вгорі.",
+        "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
+    },
+    "update_existing_entry": {
+        "message": "Оновити наявний запис",
+        "description": ""
+    },
+    "site_properties_weight_warning": {
+        "message": "Якщо ви будете користуватися цією розширеною можливістю, вам слід ретельно перевіряти вплив інших конфігурацій.",
+        "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
+    },
+    "further_info_may_follow": {
+        "message": "Детальна інформація: $1",
+        "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "change_url_option_1": {
+        "message": "Замінити URL-адресу запису (поля форми все одно будуть заповнюватись при відвідуванні старої адреси)",
+        "description": ""
+    },
+    "pref_rememberMRUDB_label": {
+        "message": "Пам'ятати останню використану базу даних KeePass",
+        "description": ""
+    },
+    "no": {
+        "message": "Ні",
+        "description": "No"
+    },
+    "conn_sl_server_min_desc": {
+        "message": "Зміна цього параметру дозволяє вам запобігати з'єднанню Kee та KeePass, якщо їх рівень безпеки надто низький. Відкрийте налаштування KeePass, щоб встановити потрібний рівень безпеки.",
+        "description": ""
+    },
+    "form_id": {
+        "message": "ID форми",
+        "description": ""
+    },
+    "copy_username_label": {
+        "message": "Копіювати ім'я користувача",
+        "description": ""
+    },
+    "search_again": {
+        "message": "Шукати знову",
+        "description": ""
+    },
+    "conn_sl_link": {
+        "message": "Дізнайтеся більше про ці налаштування, а також про зв'язок між вашим браузером та KeePass в інструкції",
+        "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
+    },
+    "conn_setup_enter_password_title": {
+        "message": "Авторизація Kee",
+        "description": "Heading of the popup that asks the user to authorise the connection to KeePass by typing in a password."
+    },
+    "site_options_list_explain_desc": {
+        "message": "Якщо форма відповідає запису з білого списку, Kee буде завжди намагатися заповнити її. Якщо форма відповідає запису з чорного списку, Kee ніколи не буде заповнювати її. Якщо форма відповідає записам з обох списків, Kee не буде її заповнювати.",
+        "description": "Explains how Kee chooses which forms to fill in"
+    },
+    "noUsername_partial_tip": {
+        "message": "немає імені користувача",
+        "description": ""
+    },
+    "group_label": {
+        "message": "Група",
+        "description": ""
+    },
+    "network_authentication": {
+        "message": "Авторизація мережі",
+        "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
+    },
+    "Logins_Context_Edit_Login_label": {
+        "message": "Редагувати запис",
+        "description": ""
+    },
+    "weight": {
+        "message": "Вплив",
+        "description": "A number that can be compared to others in order to decide which associated configuration takes precendence."
+    },
+    "pref_notifyBarRequestPasswordSave_label": {
+        "message": "Пропонувати зберігати паролі",
+        "description": ""
+    },
+    "site_options_valid_form_intro_desc": {
+        "message": "Kee намагатиметься заповнити відповідними записами KeePass всі форми, які містять поле вводу пароля. Ви можете змінити цю дію внизу.",
+        "description": "Explains how Kee chooses which forms to fill in"
+    },
+    "close": {
+        "message": "Закрити",
+        "description": "Action user can click on to close/dismiss a panel or other user interface element"
+    },
+    "notifyBarLoginToKeePassButton_tip": {
+        "message": "Увійдіть у свою базу паролів Kee для активації KeeFox",
+        "description": ""
+    },
+    "conn_setup_expired": {
+        "message": "Ви використовуєте цей секретний ключ надто довго.",
+        "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
+    },
+    "network_auth_http_auth_description": {
+        "message": "Веб-сайт вимагає про авторизацію для доступу до $1. Повідомлення сайту: $2",
+        "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
+    },
+    "conn_sl_server_min": {
+        "message": "Найменший допустимий рівень безпеки KeeFox",
+        "description": ""
+    },
+    "conn_sl_high": {
+        "message": "Високий",
+        "description": ""
+    },
+    "password": {
+        "message": "Пароль",
+        "description": "Amazingly, didn't have a need for this translation until v2.0 ;-)"
+    },
+    "pref_ConnectionSecurity_heading": {
+        "message": "Безпека з'єднання",
+        "description": "Heading for panel that contains settings for the security of the connection between Kee and KeePass."
+    },
+    "conn_display_description": {
+        "message": "Додаток для браузера, що дозволяє безпечно й автоматично входити на більшість веб-сайтів. Раніше відомий, як KeeFox.",
+        "description": "A brief description of Kee that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
+    },
+    "copy": {
+        "message": "Копіювати",
+        "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
+    },
+    "srp_connect": {
+        "message": "З'єднатися",
+        "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
+    },
+    "pref_FillNote_desc": {
+        "message": "Вгорі ви можете перевизначити поведінку Kee для окремих записів у діалоговому вікні \"Змінити запис\".",
+        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
+    },
+    "pref_keePassRPCPort_label": {
+        "message": "З'єднуватись з KeePass, використовуючи цей порт TCP/IP",
+        "description": ""
+    },
+    "network_auth_choose": {
+        "message": "Оберіть запис зі списку внизу, або закрийте це вікно, щоб ввести необхідну інформацію вручну.",
+        "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
+    },
+    "conn_unknown_error": {
+        "message": "Сталася неочікувана помилка під час спроби з'єднання з вашою базою паролів.",
+        "description": "Something went wrong with the KeePassRPC link but we have no idea what."
+    },
+    "pref_when_user_chooses_desc": {
+        "message": "Коли ви обираєте відповідний запис, Kee повинен",
+        "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
+    },
+    "pref_FillAndSubmitForm_desc": {
+        "message": "Заповнити й відправити форму",
+        "description": ""
+    },
+    "notifyBarLaunchKeePass_label": {
+        "message": "Ви не увійшли в свою базу паролів.",
+        "description": ""
+    },
+    "conn_invalid_message": {
+        "message": "Kee надіслав недійсну команду до вашої бази паролів.",
+        "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
+    },
+    "pref_Advanced_heading": {
+        "message": "Розширені",
+        "description": ""
+    },
+    "pref_when_kee_chooses_standard_form_desc": {
+        "message": "Коли Kee вибирає відповідний запис для стандартної форми, він повинен",
+        "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
+    },
+    "whichEntry_label": {
+        "message": "Оберіть запис...",
+        "description": ""
+    },
+    "pref_logLevelDebugging_label": {
+        "message": "Зневадження",
+        "description": "Logging level for the most verbose information about Kee's operation"
+    },
+    "pref_notifyWhenEntryUpdated_label": {
+        "message": "Показувати сповіщення \"Пароль успішно оновлено\"",
+        "description": "Option to enable or diable the information displayed when a password has been updated"
+    },
+    "conn_sl_desc": {
+        "message": "Зміна цих налаштувань контролює рівень захищеності з'єднання між вашим браузером та KeePass. Зазвичай немає необхідності їх змінювати, але якщо ви все ж захочете зробити це, ознайомтеся спершу з відповідними інструкціями.",
+        "description": ""
+    },
+    "savePasswordLogin_tip": {
+        "message": "Ім'я користувача: $1. Адреса веб-сайту (URL): $2",
+        "description": ""
+    },
+    "method": {
+        "message": "Спосіб",
+        "description": "For differentiating how a text string will be matched - e.g exact, prefix or regex"
+    },
+    "site_specific_settings_inherit": {
+        "message": "Використовувати таке саме налаштування, як і для всіх веб-сайтів",
+        "description": "Option for user to say that they want to use whatever the setting is for the top-level settings for all websites, rather than overriding it with a setting for this specific site."
+    },
+    "more_options": {
+        "message": "Більше налаштувань",
+        "description": ""
+    },
+    "pref_FindingEntries_heading": {
+        "message": "Пошук записів",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
+    },
+    "conn_setup_invalid_param": {
+        "message": "Kee надав недійсний параметр. Детальна інформація: $1",
+        "description": "This probably indicates a bug in Kee - we sent something to KeePassRPC that it wasn't expecting."
+    },
+    "create_new_entry": {
+        "message": "Створити новий запис",
+        "description": ""
+    },
+    "conn_unknown_protocol": {
+        "message": "Kee надав недійсний протокол.",
+        "description": "Technical error in the communication between Kee and KeePassRPC. Not clear how user could resolve this or if they'll ever see it but it might happen."
+    },
+    "generatePassword_copied": {
+        "message": "Новий пароль був скопійований до буферу.",
+        "description": ""
+    },
+    "showing_options_for": {
+        "message": "Показ налаштувань для",
+        "description": ""
+    },
+    "autoclose_cancelled": {
+        "message": "Автоматичне закриття скасовано",
+        "description": "Tells the user that the panel auto-close functionality has been disabled for this panel."
+    },
+    "conn_setup_missing_param": {
+        "message": "Kee не зміг надати необхідний параметр. Детальна інформація: $1",
+        "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
+    },
+    "KB_shortcut_simple_2_desc": {
+        "message": "Увійти в KeePass / Вибрати відповідний запис / Показати список відповідних записів",
+        "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
+    },
+    "pref_rememberMRUGroup_label": {
+        "message": "Пам'ятати групу, в яку ви востаннє зберігали дані",
+        "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
+    },
+    "conn_setup_server_features_missing": {
+        "message": "Плагін KeePassRPC для KeePass Password Safe необхідно оновити, щоб дозволити з'єднання з Kee. Переконайтеся, що ви використовуєте найновішу версію плагіна KeePassRPC, користуючись простою інструкцією $1",
+        "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
+    },
+    "site_options_invisible_tip_desc": {
+        "message": "Зверніть увагу: Імена та ідентифікатори можуть не відповідати тому, що ви бачите на сторінці (вони встановлені в програмному коді сторінки)",
+        "description": "Explains that the configuration settings might not be what the casual user expects"
+    },
+    "pref_FillAndSubmitPrompt_desc": {
+        "message": "Заповнити й відправити запит",
+        "description": ""
+    },
+    "save": {
+        "message": "Зберегти",
+        "description": ""
+    },
+    "saveMultiPagePasswordText": {
+        "message": "Ви хочете щоб Kee зберіг цей багатосторінковий пароль?",
+        "description": ""
+    },
+    "pref_notifyWhenLateDiscovery_label": {
+        "message": "Показувати сповіщення, коли Kee знаходить записи, які відповідають формі веб-сторінки після її завантаження.",
+        "description": ""
+    },
+    "password_successfully_updated": {
+        "message": "Пароль успішно оновлено.",
+        "description": ""
+    },
+    "pref_FillForm_desc": {
+        "message": "Заповнити форму",
+        "description": ""
+    },
+    "matched_logins_label": {
+        "message": "Відповідні записи",
+        "description": "Header for panels/sections that contain the logins which Kee matched for this page/form"
+    },
+    "pref_SavingEntries_heading": {
+        "message": "Збереження записів",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
+    },
+    "pref_DoNothing_desc": {
+        "message": "Нічого не робити",
+        "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
+    },
+    "srp_save_connect": {
+        "message": "Зберегти і з'єднатись",
+        "description": "Button action to authorise the connection between Kee and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
+    },
+    "conn_setup_restart": {
+        "message": "Kee повинен перезапустити процес авторизації.",
+        "description": "A technical error occurred during the attempt to authorise the link between Kee and KeePassRPC so we need to notify the user that they will need to re-authenticate"
+    },
+    "all_websites": {
+        "message": "Всі веб-сайти",
+        "description": ""
+    },
+    "cancel": {
+        "message": "Скасувати",
+        "description": ""
+    },
+    "Menu_Button_copyNewPasswordToClipboard_label": {
+        "message": "Генерувати новий пароль",
+        "description": ""
+    },
+    "conn_setup_client_sl_low_resolution": {
+        "message": "З'єднання з високим рівнем безпеки",
+        "description": "Button that will change the security level Kee attempts to use when connecting to the KeePassRPC server."
+    },
+    "add": {
+        "message": "Додати",
+        "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
+    },
+    "pref_logLevelInformation_label": {
+        "message": "Інформація",
+        "description": "Logging level for important information about Kee's operation"
+    },
+    "pref_logLevel_desc": {
+        "message": "Виберіть наскільки детальним повинен бути журнал. Кожен вищий рівень журналу містить більше подробиць.",
+        "description": ""
+    },
+    "text_field_id": {
+        "message": "ID текстового поля",
+        "description": ""
+    },
+    "conn_setup_server_sl_low": {
+        "message": "Kee відхилив з'єднання з сервером паролів через надто низький рівень безпеки. Необхідно перезапустити процес авторизації, використовуючи вищий рівень безпеки.",
+        "description": ""
+    },
+    "pref_saveFavicons_label": {
+        "message": "Зберігати піктограму веб-сайту (favicon)",
+        "description": "Whether or not Kee will save the website's icon when a new entry is saved"
+    },
+    "matchedLogin_label": {
+        "message": "$1 - $2",
+        "description": "<username> <seperator> <entry title>"
+    },
+    "conn_setup_retype_password": {
+        "message": "Введіть новий пароль при запиті.",
+        "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
+    },
+    "dont_show_again": {
+        "message": "Не показувати повідомлення знову",
+        "description": "Button user can click on to cause a message to hide and not reappear"
+    },
+    "conn_setup_client_features_missing": {
+        "message": "Kee необхідно оновити для можливості встановлення зв'язку з KeePass Password Safe. Переконайтеся, що ви використовуєте найновішу версію розширення браузера.",
+        "description": "The KeePassRPC server requires features from Kee that this version does not contain."
+    },
+    "notifyBarLaunchKeePassButton_tip": {
+        "message": "Запустіть KeePass для активації",
+        "description": ""
+    },
+    "pref_searchAllOpenDBs_label": {
+        "message": "Пошук у всіх відкритих базах KeePass",
+        "description": ""
+    },
+    "enter_valid_regex": {
+        "message": "Введіть правильний Regex чи оберіть інший тип",
+        "description": "Validation error message displayed to user when they have configured the properties of a site specific configuration to be a regular expression (Regex) but supplied a website value that is not a valid regex"
+    },
+    "Help_Centre_Button_label": {
+        "message": "Центр допомоги",
+        "description": ""
+    },
+    "site_specific_settings_checkbox_explanation": {
+        "message": "Налаштування з \"Всі веб-сайти\" застосовуються до всіх розділів внизу, якщо ви не увімкнете налаштування за допомогою прапорця навпроти нього.",
+        "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
+    },
+    "autoclose_countdown": {
+        "message": "Автоматично закривати через $1 секунд",
+        "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
+    },
+    "conn_setup_failed": {
+        "message": "Kee не отримав дозвіл на з'єднання. Можливо, ви неправильно ввели пароль з'єднання.",
+        "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
+    },
+    "Search_label": {
+        "message": "Пошук...",
+        "description": ""
+    },
+    "target": {
+        "message": "Ціль",
+        "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
+    },
+    "learn_more": {
+        "message": "Дізнатись більше",
+        "description": "Action/button/link to send the user to somewhere that they can read more about a topic/concept"
+    },
+    "conn_setup_client_sl_low": {
+        "message": "Kee запитав надто низький рівень безпеки, щоб бути підтвердженим сервером паролів. Необхідно перезапустити процес авторизації, використавши вищий рівень безпеки.",
+        "description": ""
+    },
+    "copy_password_label": {
+        "message": "Копіювати пароль",
+        "description": ""
+    },
+    "conn_setup_enter_password": {
+        "message": "Введіть пароль, який показано у вікні KeePass \"Авторизація нового з'єднання\". Вам не треба пам'ятати цей пароль. У разі помилки, ви зможете відразу ж спробувати знову.",
+        "description": ""
+    },
+    "text_field_name": {
+        "message": "Назва текстового поля",
+        "description": ""
+    },
+    "change_field_explanation": {
+        "message": "Kee також оновить піктограму веб-сайту (favicon) і будь-яку інформацію HTTP Auth Realm. Складніші модифікації будуть потребувати ручного редагування запису.",
+        "description": ""
+    },
+    "site_properties": {
+        "message": "Властивості сайту",
+        "description": "Site properties"
+    },
+    "pref_Finding_forms_heading": {
+        "message": "Пошук форм",
+        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from KeePass"
+    },
+    "pref_FillingEntries_heading": {
+        "message": "Заповнити записи",
+        "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
+    },
+    "database_label": {
+        "message": "База даних",
+        "description": ""
+    },
+    "form_name": {
+        "message": "Назва форми",
+        "description": ""
+    },
+    "white_list": {
+        "message": "Білий список",
+        "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
+    },
+    "upgrade_kee": {
+        "message": "Оновити Kee",
+        "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
+    },
+    "pref_logLevelWarnings_label": {
+        "message": "Попередження",
+        "description": "Logging level for potential problems"
+    },
+    "conn_sl_low": {
+        "message": "Низький",
+        "description": ""
+    },
+    "multi_page_update_warning": {
+        "message": "Багатосторінкові форми входу можуть також потребувати ручного редагування.",
+        "description": ""
+    }
+}
