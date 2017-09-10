@@ -51,13 +51,7 @@ class Kee {
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
 
-        // Create a timer for checking whether user is logging sensitive data
-        setTimeout(backgroundUtils.oneOffSensitiveLogCheckHandler, 45000);
-
-        // Create a timer for KPRPC connection establishment
-        this.regularKPRPCListenerQueueHandlerTimer = setInterval(this.RegularKPRPCListenerQueueHandler, 5000);
-
-        this._keeBrowserStartup();
+        this.networkAuth = new NetworkAuth();
 
         this.browserPopupPort = {postMessage: msg => {} };
         this.onPortConnected = function (p: browser.runtime.Port) {
@@ -136,13 +130,25 @@ class Kee {
             }
         };
 
+    }
+
+    init () {
+
+        // Create a timer for checking whether user is logging sensitive data
+        setTimeout(backgroundUtils.oneOffSensitiveLogCheckHandler, 45000);
+
+        // Create a timer for KPRPC connection establishment
+        this.regularKPRPCListenerQueueHandlerTimer = setInterval(this.RegularKPRPCListenerQueueHandler, 5000);
+
+        this._keeBrowserStartup();
+
         browser.runtime.onConnect.addListener(this.onPortConnected);
+        browser.runtime.onConnect.removeListener(onConnectedBeforeInitialised);
 
         // Setup any ports that we were notified of before the addon finished initialising
         //TODO:c: Check to see if there is any chance these will fail (tab closed during init?) and handle as appropriate
         portsQueue.forEach(port => this.onPortConnected(port));
         portsQueue = null;
-        browser.runtime.onConnect.removeListener(onConnectedBeforeInitialised);
 
         browser.tabs.onActivated.addListener(event => {
                 kee.foregroundTabId = event.tabId;
@@ -166,7 +172,6 @@ class Kee {
 
         browser.webNavigation.onCommitted.addListener(pageNavigationCommitted);
 
-        this.networkAuth = new NetworkAuth();
         this.networkAuth.startListening();
 
         browser.privacy.services.passwordSavingEnabled.set({ value: false }, function () {
@@ -598,6 +603,7 @@ browser.browserAction.disable();
 function startup () {
     KeeLog.attachConfig(configManager.current);
     kee = new Kee();
+    kee.init();
     browser.browserAction.enable();
 }
 
