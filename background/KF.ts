@@ -150,26 +150,6 @@ class Kee {
         portsQueue.forEach(port => this.onPortConnected(port));
         portsQueue = null;
 
-        browser.tabs.onActivated.addListener(event => {
-                kee.foregroundTabId = event.tabId;
-                //TODO:c: Is this the right time to send updated appstate and potentially scan for new form fields?
-                //TODO:c: Should we inform all inactive tabs too?
-                const tab = kee.tabStates[event.tabId];
-
-                if (tab && tab.framePorts) // Might not have had time to setup the port yet
-                {
-                    tab.framePorts.forEach(port => {
-                        port.postMessage({ appState: kee.appState, isForegroundTab: true } as AddonMessage);
-                    });
-                }
-
-                commandManager.setupContextMenuItems();
-            }
-        );
-        // browser.tabs.onUpdated.addListener((id, event) =>
-        //     event.url
-        // );
-
         browser.webNavigation.onCommitted.addListener(pageNavigationCommitted);
 
         this.networkAuth.startListening();
@@ -862,6 +842,29 @@ function onConnectedBeforeInitialised (port: browser.runtime.Port) {
 // Before we've initialised this main module, we might receive connection
 // attempts from content pages, etc. so we store them for later processing.
 browser.runtime.onConnect.addListener(onConnectedBeforeInitialised);
+
+
+browser.tabs.onActivated.addListener(event => {
+    if (kee) // May not have set up kee yet
+    {
+        kee.foregroundTabId = event.tabId;
+        //TODO:c: Is this the right time to send updated appstate and potentially scan for new form fields?
+        //TODO:c: Should we inform all inactive tabs too?
+        const tab = kee.tabStates[event.tabId];
+
+        if (tab && tab.framePorts) // Might not have had time to setup the port yet
+        {
+            tab.framePorts.forEach(port => {
+                port.postMessage({ appState: kee.appState, isForegroundTab: true } as AddonMessage);
+            });
+        }
+
+        commandManager.setupContextMenuItems();
+    }
+});
+// browser.tabs.onUpdated.addListener((id, event) =>
+//     event.url
+// );
 
 // Load our config and start the addon once done
 configManager.load(startup);
