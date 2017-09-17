@@ -866,5 +866,34 @@ browser.tabs.onActivated.addListener(event => {
 //     event.url
 // );
 
+// Some browsers (e.g. Firefox) automatically inject content scripts on install/update
+// but others don't (e.g. Chrome). To ensure every existing tab has exactly one
+// instance of this content script running in it, we programatically inject the script.
+// Only Firefox has the getBrowserInfo function and only Firefox injects content scripts to existing tabs
+// on startup (a fragile assumption but the best that the API allow us to do for the time being)
+if (!(browser.runtime as any).getBrowserInfo) {
+    browser.runtime.onInstalled.addListener((details: browser.runtime.InstalledDetails) => {
+        const showErrors = () => {
+            if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError);
+            }
+        };
+        browser.runtime.getManifest().content_scripts.forEach(script => {
+            const allFrames = script.all_frames;
+            const url = script.matches;
+            const loadContentScripts = (tab: browser.tabs.Tab) => {
+                if (tab.url && tab.url.startsWith("chrome://")) return;
+                (script.js || []).forEach(file => {
+                    chrome.tabs.executeScript(tab.id, { allFrames, file }, showErrors);
+                });
+                (script.css || []).forEach(file => {
+                    chrome.tabs.insertCSS(tab.id, { allFrames, file }, showErrors);
+                });
+            };
+            chrome.tabs.query({ url }, tabs => tabs.forEach(loadContentScripts));
+        });
+    });
+}
+
 // Load our config and start the addon once done
 configManager.load(startup);

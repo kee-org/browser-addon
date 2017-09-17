@@ -1,5 +1,5 @@
 let appState: AppState;
-let keePopupLoadTime = Date.now();
+const keePopupLoadTime = Date.now();
 let formUtils: FormUtils;
 let formFilling: FormFilling;
 let formSaving: FormSaving;
@@ -41,7 +41,7 @@ function updateAppState (newState: AppState, isForegroundTab: boolean) {
     const shouldSearch = shouldSearchForMatches(oldState, appState);
     const shouldRemoveMatches = shouldSearch || (oldState && oldState.connected &&
         (!appState.connected || (oldState.KeePassDatabases.length > 0 && appState.KeePassDatabases.length == 0))
-        );
+    );
     const shouldRemoveSubmitListeners = shouldRemoveMatches || (isForegroundTab && shouldSearch);
 
     if (shouldRemoveMatches) {
@@ -61,12 +61,13 @@ function matchFinder (uri: string) {
 
 function tutorialIntegration () {
     if (window.location.hostname.endsWith("tutorial-addon-1.kee.pm")
-    || window.location.hostname.endsWith("tutorial-addon.kee.pm")) {
+        || window.location.hostname.endsWith("tutorial-addon.kee.pm")) {
         const transferElement = document.createElement("KeeFoxAddonStateTransferElement");
         transferElement.setAttribute("state", JSON.stringify({
-                    connected: appState.connected,
-                    version: browser.runtime.getManifest().version,
-                    dbLoaded: appState.KeePassDatabases && appState.KeePassDatabases.length > 0 }));
+            connected: appState.connected,
+            version: browser.runtime.getManifest().version,
+            dbLoaded: appState.KeePassDatabases && appState.KeePassDatabases.length > 0
+        }));
         document.documentElement.appendChild(transferElement);
 
         const event = new Event("KeeFoxAddonStateTransferEvent", { bubbles: true, cancelable: false });
@@ -125,8 +126,8 @@ function startup () {
         } else if (m.appState) {
             updateAppState(m.appState, m.isForegroundTab);
         }
-//
-                //if (m.frameState) updateFrameState(m.frameState);
+        //
+        //if (m.frameState) updateFrameState(m.frameState);
         if (m.submittedData) {
             formSaving.createSavePasswordPanel();
         }
@@ -157,7 +158,7 @@ function startup () {
             passwordGenerator.closeGeneratePasswordPanel();
             formFilling.closeMatchedLoginsPanel();
             formSaving.closeSavePasswordPanel();
-            myPort.postMessage({action: "removeSubmittedData"} as AddonMessage);
+            myPort.postMessage({ action: "removeSubmittedData" } as AddonMessage);
         }
 
         if (m.action == "showMatchedLoginsPanel") {
