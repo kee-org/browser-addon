@@ -50,7 +50,7 @@ class PanelStub {
 
         this.container.style.setProperty( "display", "block", "important" );
         this.container.style.setProperty( "position", "absolute", "important" );
-        this.container.style.setProperty( "zIndex", "2147483647", "important" );
+        this.container.style.setProperty( "z-index", "2147483647", "important" );
 
         if (this.target) {
             this.targetRelativeRect = this.target.getBoundingClientRect();
