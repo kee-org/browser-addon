@@ -592,5 +592,9 @@
   "save_login": {
       "message": "Save login",
       "description": "Heading for panel that allows user to create or update a new login entry"
+  },
+  "saveLatestLogin": {
+      "message": "Save latest login",
+      "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
   }
 }

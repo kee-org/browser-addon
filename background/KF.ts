@@ -65,7 +65,20 @@ class Kee {
                 case "browserPopup": {
                     p.onMessage.addListener(browserPopupMessageHandler);
 
-                    p.postMessage({ appState: kee.appState });
+                    const connectMessage = {
+                        appState: kee.appState
+                    } as AddonMessage;
+
+                    if (kee.persistentTabStates[kee.foregroundTabId]) {
+                        kee.persistentTabStates[kee.foregroundTabId].items.forEach(item => {
+                            if (item.itemType === "submittedData") {
+                                connectMessage.submittedData = item.submittedData;
+                                item.accessCount++;
+                            }
+                        });
+                    }
+
+                    p.postMessage(connectMessage);
 
                     kee.browserPopupPort = p;
                     kee.resetBrowserActionColor();
@@ -83,14 +96,6 @@ class Kee {
 
                     if (!kee.tabStates[p.sender.tab.id]) {
                         kee.tabStates[p.sender.tab.id] = new TabState();
-                        if (kee.persistentTabStates[p.sender.tab.id]) {
-                             kee.persistentTabStates[p.sender.tab.id].items.forEach(item => {
-                                if (item.itemType === "submittedData") {
-                                    connectMessage.submittedData = item.submittedData;
-                                    item.accessCount++;
-                                }
-                            });
-                        }
                     }
 
                     if (p.sender.frameId === 0) {
@@ -606,9 +611,17 @@ function browserPopupMessageHandler (msg: AddonMessage) {
             url: "https://www.kee.pm/upgrade-kprpc"
         });
     }
-    if (msg.action == "generatePassword") {
+    if (msg.action === "generatePassword") {
         if (kee.appState.connected) {
             kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
+        }
+    }
+    if (msg.action === "saveLatestLogin") {
+        if (kee.appState.connected) {
+            const persistentItem = kee.persistentTabStates[kee.foregroundTabId].items.find(item => item.itemType == "submittedData");
+            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage(
+                { appState: kee.appState, submittedData: persistentItem.submittedData } as AddonMessage);
+            persistentItem.accessCount++;
         }
     }
 }
@@ -635,78 +648,45 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         // data until we know we want to actually save this login
         msg.submittedData.favIconUrl = this.sender.tab.favIconUrl;
 
-        kee.findLogins(msg.submittedData.url, null,
-            null, null, null, null, null, response => {
+        const submittedLogin = new keeLoginInfo();
+        submittedLogin.init([msg.submittedData.url], null, null, msg.submittedData.usernameIndex,
+        msg.submittedData.passwordFields.map(function (item) {
+            const newField = new keeLoginField();
+            newField.fieldId = item.fieldId;
+            newField.type = item.type;
+            newField.name = item.name;
+            newField.value = item.value;
+            return newField; }),
+        null, msg.submittedData.title,
+        msg.submittedData.otherFields.map(function (item) {
+            const newField = new keeLoginField();
+            newField.fieldId = item.fieldId;
+            newField.type = item.type;
+            newField.name = item.name;
+            newField.value = item.value;
+            return newField; }),
+        1);
 
-            let existingLogin = false;
+        const persistentItem = {
+            itemType: "submittedData" as "submittedData",
+            submittedData: msg.submittedData,
+            submittedLogin: submittedLogin,
+            creationDate: new Date(),
+            accessCount: 0,
+            maxAccessCount: 20
+        };
 
-            const submittedLogin = new keeLoginInfo();
-            submittedLogin.init([msg.submittedData.url], null, null, msg.submittedData.usernameIndex,
-            msg.submittedData.passwordFields.map(function (item) {
-                const newField = new keeLoginField();
-                newField.fieldId = item.fieldId;
-                newField.type = item.type;
-                newField.name = item.name;
-                newField.value = item.value;
-                return newField; }),
-            null, msg.submittedData.title,
-            msg.submittedData.otherFields.map(function (item) {
-                const newField = new keeLoginField();
-                newField.fieldId = item.fieldId;
-                newField.type = item.type;
-                newField.name = item.name;
-                newField.value = item.value;
-                return newField; }),
-            1);
+        if (!kee.persistentTabStates[this.sender.tab.id]) {
+            kee.persistentTabStates[this.sender.tab.id] = {items: [] };
+        }
 
-            // if no resultWrapper is provided, we just go ahead anyway assuming it's a new login
-            if (response && response.result)
-            {
-                for (const i in response.result)
-                {
-                    const kfl = new keeLoginInfo();
-                    kfl.initFromEntry(response.result[i]);
-                    //TODO:3: Should be able to extend the search in containedIn() so we take into
-                    // account the current page information and therefore can detect that the submitted
-                    // form data is part of a larger multi-page login form. That situation should only
-                    // come up very rarely though (e.g. maybe when user has navigated back to the
-                    // non-first page of a multi-page login form, or when their credentials have been
-                    // invalidated remotely and they end up on one of the non-first pages to
-                    // submit updated credentials)
-                    if (submittedLogin.containedIn(kfl, false, true, true, false))
-                        existingLogin = true;
-                }
-            }
+        // Don't allow more than one login to be tracked for this tab
+        if (kee.persistentTabStates[this.sender.tab.id]) {
+            kee.persistentTabStates[this.sender.tab.id].items =
+                kee.persistentTabStates[this.sender.tab.id].items.filter(item => item.itemType !== "submittedData");
+        }
 
-            if (existingLogin) return;
-
-            if (!kee.persistentTabStates[this.sender.tab.id]) {
-                kee.persistentTabStates[this.sender.tab.id] = {items: [] };
-            }
-            const persistentItem = {
-                itemType: "submittedData" as "submittedData",
-                submittedData: msg.submittedData,
-                submittedLogin: submittedLogin,
-                creationDate: new Date(),
-                accessCount: 0,
-                maxAccessCount: 20
-            };
-            kee.persistentTabStates[this.sender.tab.id].items.push(persistentItem);
-
-            // If a few seconds go past without any new page port registration and the current
-            // port is still active, assume the login was ajax or an iframe so post the updated
-            // appdata to the existing port
-            setTimeout(() => {
-                if (persistentItem.accessCount === 0
-                    && kee.tabStates[this.sender.tab.id]
-                    && kee.tabStates[this.sender.tab.id].framePorts
-                    && kee.tabStates[this.sender.tab.id].framePorts[0]) {
-                    kee.tabStates[this.sender.tab.id].framePorts[0].postMessage(
-                        { appState: kee.appState, submittedData: persistentItem.submittedData } as AddonMessage);
-                    persistentItem.accessCount++;
-                }
-            }, 3000);
-        });
+        kee.persistentTabStates[this.sender.tab.id].items.push(persistentItem);
     }
     if (msg.action === "showMatchedLoginsPanel") {
         kee.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: "showMatchedLoginsPanel", frameId: this.sender.frameId });

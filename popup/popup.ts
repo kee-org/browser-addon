@@ -64,10 +64,16 @@ function startup () {
         } else {
             document.getElementById("generatePasswordLink").style.display = "none";
         }
+        if (appState.connected && m.submittedData) {
+            document.getElementById("saveLatestLogin").style.display = "block";
+        } else {
+            document.getElementById("saveLatestLogin").style.display = "none";
+        }
     });
 
     document.getElementById("optionsLink").addEventListener("click", () => chrome.runtime.openOptionsPage() );
     document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: "generatePassword" }) );
+    document.getElementById("saveLatestLogin").addEventListener("click", () => myPort.postMessage({ action: "saveLatestLogin" }) );
 
     KeeLog.info("popup ready");
 }
