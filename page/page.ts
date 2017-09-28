@@ -8,6 +8,7 @@ let tabId: number;
 let frameId: number;
 let myPort: browser.runtime.Port;
 let inputsObserver: MutationObserver;
+let messagingPortConnectionRetryTimer: number;
 
 const sameMembers = (arr1, arr2) =>
     arr1.every(item => arr2.includes(item)) && arr2.every(item => arr1.includes(item));
@@ -119,6 +120,36 @@ function startup () {
         if (rescan) formFilling.formFinderTimer = setTimeout(formFilling.findMatchesInThisFrame.bind(formFilling), 500);
     });
 
+    try {
+        connectToMessagingPort();
+        if (myPort == null) {
+            KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
+        }
+    } catch (ex) {
+        KeeLog.warn("Failed to connect to messaging port. We'll try again later. Exception message: " + ex.message);
+    }
+
+    messagingPortConnectionRetryTimer = setInterval(() => {
+        if (myPort == null || appState == null) {
+            KeeLog.info("Messaging port was not established at page startup. Retrying now...");
+            try {
+                connectToMessagingPort();
+                if (myPort == null) {
+                    KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
+                }
+            } catch (ex) {
+                KeeLog.warn("Failed to connect to messaging port. We'll try again later. Exception message: " + ex.message);
+            }
+        } else {
+            clearInterval(messagingPortConnectionRetryTimer);
+        }
+    }, 5000);
+
+    KeeLog.info("content page ready");
+}
+
+function connectToMessagingPort () {
+
     myPort = chrome.runtime.connect({ name: "page" });
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
@@ -169,8 +200,6 @@ function startup () {
         }
 
     });
-
-    KeeLog.info("content page ready");
 }
 
 // Load our config and start the page script once done
