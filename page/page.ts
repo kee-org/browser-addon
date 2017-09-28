@@ -100,6 +100,9 @@ function startup () {
         // If we have already scheduled a rescan recently, no further action required
         if (formFilling.formFinderTimer !== null) return;
 
+        // Only proceed if we have a DB to search
+        if (!appState.connected || appState.ActiveKeePassDatabaseIndex < 0) return;
+
         let rescan = false;
         const interestingNodes = ["input", "form", "select"];
         mutations.forEach(mutation => {
