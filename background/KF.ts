@@ -835,14 +835,28 @@ function onConnectedBeforeInitialised (port: browser.runtime.Port) {
 // attempts from content pages, etc. so we store them for later processing.
 browser.runtime.onConnect.addListener(onConnectedBeforeInitialised);
 
+chrome.windows.onFocusChanged.addListener(windowId => {
+    console.log("focus changed: " + windowId);
+    if (windowId !== chrome.windows.WINDOW_ID_NONE)
+    {
+        chrome.tabs.query({active: true, windowId: windowId}, function ( tabs ) {
+            if (tabs[0] && tabs[0].id != null) updateForegroundTab(tabs[0].id);
+        });
+    }
+});
 
 browser.tabs.onActivated.addListener(event => {
+    console.log("tab activated: " + event.tabId);
+    updateForegroundTab(event.tabId);
+});
+
+function updateForegroundTab (tabId) {
+    console.log("updateForegroundTab: " + tabId);
     if (kee) // May not have set up kee yet
     {
-        kee.foregroundTabId = event.tabId;
-        //TODO:c: Is this the right time to send updated appstate and potentially scan for new form fields?
-        //TODO:c: Should we inform all inactive tabs too?
-        const tab = kee.tabStates[event.tabId];
+        console.log("kee activated: " + tabId);
+        kee.foregroundTabId = tabId;
+        const tab = kee.tabStates[tabId];
 
         if (tab && tab.framePorts) // Might not have had time to setup the port yet
         {
@@ -853,10 +867,7 @@ browser.tabs.onActivated.addListener(event => {
 
         commandManager.setupContextMenuItems();
     }
-});
-// browser.tabs.onUpdated.addListener((id, event) =>
-//     event.url
-// );
+}
 
 // Some browsers (e.g. Firefox) automatically inject content scripts on install/update
 // but others don't (e.g. Chrome). To ensure every existing tab has exactly one
