@@ -78,7 +78,11 @@ class Kee {
                         });
                     }
 
-                    p.postMessage(connectMessage);
+                    // Give content process a chance to execute through to the attachment of the listener
+                    //TODO:c: event loop on content process should mean this is unnecessary but we see
+                    // weird behaviour in Firefox so lets try this out for a while in case messaging
+                    // is independent of the normal process event loop.
+                    setTimeout(() => p.postMessage(connectMessage), 25);
 
                     kee.browserPopupPort = p;
                     kee.resetBrowserActionColor();
@@ -104,7 +108,11 @@ class Kee {
                     kee.tabStates[p.sender.tab.id].frames[p.sender.frameId] = new FrameState();
                     kee.tabStates[p.sender.tab.id].framePorts[p.sender.frameId] = p;
 
-                    p.postMessage(connectMessage);
+                    // Give content process a chance to execute through to the attachment of the listener
+                    //TODO:c: event loop on content process should mean this is unnecessary but we see
+                    // weird behaviour in Firefox so lets try this out for a while in case messaging
+                    // is independent of the normal process event loop.
+                    setTimeout(() => p.postMessage(connectMessage), 25);
 
                     break;
                 }
@@ -127,7 +135,11 @@ class Kee {
                         });
                     }
 
-                    p.postMessage(connectMessage);
+                    // Give content process a chance to execute through to the attachment of the listener
+                    //TODO:c: event loop on content process should mean this is unnecessary but we see
+                    // weird behaviour in Firefox so lets try this out for a while in case messaging
+                    // is independent of the normal process event loop.
+                    setTimeout(() => p.postMessage(connectMessage), 25);
 
                     kee.tabStates[p.sender.tab.id].ourIframePorts[p.sender.frameId] = p;
                     break;
