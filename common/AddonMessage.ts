@@ -26,4 +26,5 @@ interface AddonMessage {
     saveData?: SaveData;
     loginEditor?: { uniqueID: string, DBfilename: string};
     neverSave?: boolean;
+    loginsFound?: boolean;
 }

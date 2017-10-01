@@ -78,6 +78,11 @@ class Kee {
                         });
                     }
 
+                    if (kee.tabStates[kee.foregroundTabId]
+                        && kee.frameIdWithMatchedLogins(kee.tabStates[kee.foregroundTabId].frames) >= 0) {
+                        connectMessage.loginsFound = true;
+                    }
+
                     // Give content process a chance to execute through to the attachment of the listener
                     //TODO:c: event loop on content process should mean this is unnecessary but we see
                     // weird behaviour in Firefox so lets try this out for a while in case messaging
@@ -147,6 +152,14 @@ class Kee {
             }
         };
 
+    }
+
+    frameIdWithMatchedLogins (frames: FrameState[]) {
+        for (let i=0; i < frames.length; i++)
+        {
+            if (frames[i].logins && frames[i].logins.length > 0) return i;
+        }
+        return -1;
     }
 
     init () {
@@ -626,6 +639,13 @@ function browserPopupMessageHandler (msg: AddonMessage) {
     if (msg.action === "generatePassword") {
         if (kee.appState.connected) {
             kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
+        }
+    }
+    if (msg.action === "showMatchedLoginsPanel") {
+        if (kee.appState.connected) {
+            let frameIdWithMatchedLogins = kee.frameIdWithMatchedLogins(kee.tabStates[kee.foregroundTabId].frames);
+            if (frameIdWithMatchedLogins == -1) frameIdWithMatchedLogins = 0;
+            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({action: "showMatchedLoginsPanel", frameId: frameIdWithMatchedLogins });
         }
     }
     if (msg.action === "saveLatestLogin") {

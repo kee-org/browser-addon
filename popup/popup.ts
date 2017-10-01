@@ -69,11 +69,17 @@ function startup () {
         } else {
             document.getElementById("saveLatestLogin").style.display = "none";
         }
+        if (appState.connected && m.loginsFound) {
+            document.getElementById("showMatchedLogins").style.display = "block";
+        } else {
+            document.getElementById("showMatchedLogins").style.display = "none";
+        }
     });
 
     document.getElementById("optionsLink").addEventListener("click", () => chrome.runtime.openOptionsPage() );
     document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: "generatePassword" }) );
     document.getElementById("saveLatestLogin").addEventListener("click", () => myPort.postMessage({ action: "saveLatestLogin" }) );
+    document.getElementById("showMatchedLogins").addEventListener("click", () => myPort.postMessage({ action: "showMatchedLoginsPanel" }) );
 
     KeeLog.info("popup ready");
 }
