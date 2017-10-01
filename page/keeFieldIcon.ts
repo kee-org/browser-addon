@@ -24,7 +24,7 @@ class KeeFieldIcon {
 
         function afterImageLoaded (image: string) {
             for (const field of passwordFields.concat(otherFields)) {
-                if (field.type != "password" && field.type != "text") continue;
+                if (!formUtils.isATextFormFieldType(field.type) && field.type != "password") continue;
 
                 this.fieldsWithIcons.push(field);
 
