@@ -171,6 +171,8 @@ gulp.task('collect', function() {
             .pipe(gulp.dest('build/panels')),
         gulp.src('settings/*.{js,css,html,map}')
             .pipe(gulp.dest('build/settings')),
+        gulp.src('release-notes/*.{js,css,html,map}')
+            .pipe(gulp.dest('build/release-notes')),
         gulp.src('common/*.{js,css,html,map}')
             .pipe(gulp.dest('build/common')),
         gulp.src('common/images/**')

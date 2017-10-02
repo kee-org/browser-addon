@@ -918,5 +918,19 @@ if (!(browser.runtime as any).getBrowserInfo) {
     });
 }
 
+function handleInstalled (details) {
+    if (details.reason === "update") {
+        browser.tabs.create({
+            url: "release-notes/update-notes.html"
+        });
+    } else if (details.reason === "install") {
+        browser.tabs.create({
+            url: "release-notes/install-notes.html"
+        });
+    }
+}
+
+browser.runtime.onInstalled.addListener(handleInstalled);
+
 // Load our config and start the addon once done
 configManager.load(startup);
