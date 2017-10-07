@@ -429,15 +429,23 @@ class FormFilling {
                 continue;
             }
 
+            let submitTargetNeighbour: HTMLElement;
             if (passwordFields == null || passwordFields.length <= 0 || passwordFields[0] == null)
             {
                 this.Logger.debug("no password field found in this form");
                 // so we now only want to fill in the form if it has been whitelisted
                 if (interestingForm !== true)
                     continue;
+                submitTargetNeighbour = otherFields[usernameIndex].DOMInputElement || otherFields[usernameIndex].DOMSelectElement;
+            } else {
+                submitTargetNeighbour = passwordFields[0].DOMInputElement;
             }
 
-            const submitTarget = this.findSubmitButton(form);
+            const submitTarget = this.findSubmitButton(form, submitTargetNeighbour);
+            if (!submitTarget) {
+                this.Logger.debug("No submission possibility found in this form");
+                continue;
+            }
             this.formSaving.addSubmitHandler(submitTarget, form);
 
             this.matchResult.submitTargets[i] = submitTarget;
@@ -646,6 +654,7 @@ class FormFilling {
             + ", formIndex: " + formIndex + ", loginIndex: " + loginIndex);
 
         const matchResult = this.matchResult;
+        let submitTargetNeighbour;
 
         // Give up if we have no results for this frame (i.e. there were no forms to fill)
         if (!matchResult)
@@ -832,6 +841,11 @@ class FormFilling {
                     const lastFilledOther = this.fillManyFormFields(otherFields, matchingLogin.otherFields,
                         -1, matchResult.overWriteFieldsAutomatically || !automated);
                     matchResult.formReadyForSubmit = true;
+                    if (lastFilledPasswords && lastFilledPasswords.length > 0) {
+                        submitTargetNeighbour = lastFilledPasswords[0].DOMelement;
+                    } else if (lastFilledOther && lastFilledOther.length > 0) {
+                        submitTargetNeighbour = lastFilledOther[0].DOMelement;
+                    }
                 }
             }
         }
@@ -881,7 +895,7 @@ class FormFilling {
             && matchResult.formReadyForSubmit)
         {
             this.Logger.info("Auto-submitting form...");
-            this.submitForm(form);
+            this.submitForm(form, submitTargetNeighbour);
         } else if (isMatchedLoginRequest)
         {
             this.Logger.debug("Matched login request is not being auto-submitted.");
@@ -904,7 +918,7 @@ class FormFilling {
         }
     }
 
-    private findSubmitButton (form: HTMLFormElement)
+    private findSubmitButton (form: HTMLFormElement, submitTargetNeighbour: HTMLElement)
     {
         // Priority 1: button within form provided: @type != reset
         // Priority 1: button outside form with @form attribute provided: @type != reset
@@ -918,13 +932,27 @@ class FormFilling {
         // indirectly due to deprioritisation of other possibilities) but all things equal, they will
         // follow the stated priority.
 
-        const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in"]; //TODO:3: other languages
-        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear"]; //TODO:3: other languages
+        const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in", "next"]; //TODO:3: other languages
+        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp"]; //TODO:3: other languages
 
         const buttonElements = form.ownerDocument.getElementsByTagName("button");
         const inputElements = form.getElementsByTagName("input");
-        const roleElementsForm = form.querySelectorAll("[role=button]");
-        const roleElementsDoc = form.ownerDocument.querySelectorAll("[role=button]");
+        const roleElementsForm = Array.from(form.querySelectorAll("[role=button]"))
+            .filter((element: any) => {
+                for (const bw in badWords) {
+                    if (element.name && element.name.toLowerCase().indexOf(badWords[bw]) >= 0) return false;
+                    if (element.id && element.id.toLowerCase().indexOf(badWords[bw]) >= 0) return false;
+                }
+                return true;
+            });
+        const roleElementsDoc = Array.from(form.ownerDocument.querySelectorAll("[role=button]"))
+            .filter((element: any) => {
+                for (const bw in badWords) {
+                    if (element.name && element.name.toLowerCase().indexOf(badWords[bw]) >= 0) return false;
+                    if (element.id && element.id.toLowerCase().indexOf(badWords[bw]) >= 0) return false;
+                }
+                return true;
+            });
         let submitElement: HTMLElement = null;
         const submitElements = [];
 
@@ -989,10 +1017,21 @@ class FormFilling {
             }
         }
 
-        if (roleElementsForm.length == 1)
+        if (roleElementsForm.length == 1) {
             submitElements.push({score: 2, el: roleElementsForm[0]});
-        if (roleElementsDoc.length == 1)
+        } else if (roleElementsForm.length > 1 && submitTargetNeighbour) {
+
+            const bestRoleElementMatch = this.bestRoleElementMatch(roleElementsForm, submitTargetNeighbour);
+            submitElements.push({score: 2, el: bestRoleElementMatch});
+        }
+
+        if (roleElementsDoc.length == 1) {
             submitElements.push({score: 1, el: roleElementsDoc[0]});
+        } else if (roleElementsDoc.length > 1 && submitTargetNeighbour) {
+
+            const bestRoleElementMatch = this.bestRoleElementMatch(roleElementsDoc, submitTargetNeighbour);
+            submitElements.push({score: 1, el: bestRoleElementMatch});
+        }
 
         // Find the best submit button
         let largestScore = 0;
@@ -1010,10 +1049,39 @@ class FormFilling {
         return submitElement;
     }
 
-    // Submit a form
-    private submitForm (form: HTMLFormElement)
+    private bestRoleElementMatch (elements: Element[], targetNode) {
+        let bestRoleElementMatch;
+        let lowestCommonParentDistance = 9007199254740991;
+        for (let i =0; i < elements.length; i++)
+        {
+             const distance = this.commonParentDistance(elements[i], targetNode);
+             if (distance < lowestCommonParentDistance) {
+                 bestRoleElementMatch = elements[i];
+                 lowestCommonParentDistance = distance;
+             }
+        }
+        return bestRoleElementMatch;
+    }
+
+    private commonParentDistance (nodeA, nodeB)
     {
-        const submitElement = this.findSubmitButton(form);
+        let distance = 0;
+        while (nodeA = nodeA.parentElement)
+        {
+            if (nodeA.contains(nodeB))
+            {
+                return distance;
+            }
+            distance++;
+        }
+
+        return 9007199254740991;
+    }
+
+    // Submit a form
+    private submitForm (form: HTMLFormElement, submitTargetNeighbour: HTMLElement)
+    {
+        const submitElement = this.findSubmitButton(form, submitTargetNeighbour);
 
         // Avoid searching for matching passwords upon auto-submission
         formSaving.removeAllSubmitHandlers();
