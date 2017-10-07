@@ -73,7 +73,15 @@ class PanelStub {
         iframe.src = chrome.extension.getURL("panels/panels.html") + "?parentFrameId=" + this.parentFrameId + "&autoCloseTime=" + this.options.autoCloseTime + "&panel=" + this.options.name;
         this.container.appendChild(iframe);
 
-        document.getElementsByTagName("body")[0].appendChild(this.container);
+        const bodyElements = document.getElementsByTagName("body");
+        if (bodyElements && bodyElements.length > 0) {
+            bodyElements[0].appendChild(this.container);
+        } else {
+            const framesetElements = document.getElementsByTagName("frameset");
+            if (framesetElements && framesetElements.length > 0) {
+                framesetElements[0].insertAdjacentElement("afterend", this.container);
+            }
+        }
     }
 
      public updateBoundingClientRect () {
