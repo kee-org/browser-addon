@@ -157,7 +157,7 @@ class Kee {
     frameIdWithMatchedLogins (frames: FrameState[]) {
         for (let i=0; i < frames.length; i++)
         {
-            if (frames[i].logins && frames[i].logins.length > 0) return i;
+            if (frames[i] && frames[i].logins && frames[i].logins.length > 0) return i;
         }
         return -1;
     }
