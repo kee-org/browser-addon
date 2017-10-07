@@ -130,6 +130,22 @@ class ConfigManager {
                 }
                 if (configString)
                     this.current = JSON.parse(configString);
+            } else {
+                const oldPageCount = config["keefoxConfigPageCount"];
+
+                if (oldPageCount) {
+
+                    let configString = "";
+                    for (let i=0; i < oldPageCount; i++)
+                    {
+                        const nextPage = config["keefoxConfigPage" + i];
+                        if (nextPage)
+                            configString += nextPage;
+                    }
+                    if (configString)
+                        this.current = JSON.parse(configString);
+                    //TODO:3: Delete the old keefox prefixed data to save space
+                }
             }
             this.migrateToLatestVersion();
             onLoaded();
