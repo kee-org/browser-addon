@@ -29,6 +29,7 @@ class Session {
     private webSocketTimer;
     private onOpen;
     private onMessage;
+    private pendingPortChange;
 
     constructor (onOpen, onMessage)
     {
@@ -57,6 +58,20 @@ class Session {
     }
 
     startup () {
+        this.pendingPortChange = null;
+        browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+            if (request.action !== "KPRPC_Port_Change") return;
+            if (this.pendingPortChange != null){
+                clearTimeout(this.pendingPortChange);
+            }
+            this.pendingPortChange = setTimeout(() => {
+                this.configureConnectionURIs();
+                if (this.webSocket !== undefined && this.webSocket !== null && this.webSocket.readyState != 3) {
+                    this.webSocket.close();
+                }
+            }, 1000);
+        });
+
         this.configureConnectionURIs();
 
         // start regular attempts to reconnect to KeePassRPC

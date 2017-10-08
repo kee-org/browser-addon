@@ -657,7 +657,8 @@ function saveLogLevel (e) {
 
 function saveKPRPCPort (e) {
     e.preventDefault();
-    configManager.setASAP({ KeePassRPCWebSocketPort: parseInt((document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value) });
+    configManager.current.KeePassRPCWebSocketPort = parseInt((document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value);
+    configManager.save(() => browser.runtime.sendMessage({action: "KPRPC_Port_Change" }));
 }
 
 function saveKPRPCDBToOpen (e) {

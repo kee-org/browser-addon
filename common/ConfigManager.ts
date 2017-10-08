@@ -12,7 +12,6 @@ declare const punycode;
 declare const pslData;
 
 // Pretend browser (WebExtensions) is chrome (there's a polyfill from Mozilla but it doesn't work well enough yet so this buys us time)
-//TODO:c: Review before launch - maybe can switch to browser + polyfill? Promises (and Edge support) are sticking points at the moment.
 declare const chrome;
 
 let defaultConfig = new Config();
@@ -77,7 +76,7 @@ class ConfigManager {
         // long-term but perhaps performance gains could be found around here one day.
         //
         // We also reload after every save which is horribly inefficient but the alternative
-        // is finding a reliabel cross-process lockign mechanism to ensure we only disable
+        // is finding a reliable cross-process locking mechanism to ensure we only disable
         // reloading during an async save operation and not for a moment longer. That's just
         // not worth the risk of missing a change from another process.
 
