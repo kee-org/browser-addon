@@ -860,33 +860,40 @@ chrome.windows.onFocusChanged.addListener(windowId => {
     if (windowId !== chrome.windows.WINDOW_ID_NONE)
     {
         chrome.tabs.query({active: true, windowId: windowId}, function ( tabs ) {
-            if (tabs[0] && tabs[0].id != null) updateForegroundTab(tabs[0].id);
+            if (tabs[0] && tabs[0].id != null) onTabActivated(tabs[0].id);
         });
     }
 });
 
 browser.tabs.onActivated.addListener(event => {
     console.log("tab activated: " + event.tabId);
-    updateForegroundTab(event.tabId);
+    onTabActivated(event.tabId);
 });
 
-function updateForegroundTab (tabId) {
-    console.log("updateForegroundTab: " + tabId);
+function onTabActivated (tabId) {
+    console.log("onTabActivated: " + tabId);
+
+    updateForegroundTab(tabId);
+
     if (kee) // May not have set up kee yet
+    {
+        commandManager.setupContextMenuItems();
+    }
+}
+
+function updateForegroundTab (tabId) {
+    if (kee && kee.tabStates[tabId] && kee.tabStates[tabId].framePorts) // May not have set up kee or port yet
     {
         console.log("kee activated: " + tabId);
         kee.foregroundTabId = tabId;
-        const tab = kee.tabStates[tabId];
-
-        if (tab && tab.framePorts) // Might not have had time to setup the port yet
-        {
-            tab.framePorts.forEach(port => {
-                port.postMessage({ appState: kee.appState, isForegroundTab: true } as AddonMessage);
-            });
-        }
-
-        commandManager.setupContextMenuItems();
+        kee.tabStates[tabId].framePorts.forEach(port => {
+            port.postMessage({ appState: kee.appState, isForegroundTab: true } as AddonMessage);
+        });
+        return;
     }
+    setTimeout(id => {
+        updateForegroundTab(tabId);
+    }, 1000, tabId);
 }
 
 // Some browsers (e.g. Firefox) automatically inject content scripts on install/update
