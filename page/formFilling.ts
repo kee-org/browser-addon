@@ -933,7 +933,7 @@ class FormFilling {
         // follow the stated priority.
 
         const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in", "next"]; //TODO:3: other languages
-        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp"]; //TODO:3: other languages
+        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp", "forgot"]; //TODO:3: other languages
 
         const buttonElements = form.ownerDocument.getElementsByTagName("button");
         const inputElements = form.getElementsByTagName("input");
@@ -967,17 +967,33 @@ class FormFilling {
                 else
                     continue;
 
+                const semanticValues: string[] = [];
                 if (buttonElements[i].name !== undefined && buttonElements[i].name !== null)
                 {
-                    for (const gw in goodWords)
-                        if (buttonElements[i].name.toLowerCase().indexOf(goodWords[gw]) >= 0)
-                            score += 5;
-                    for (const bw in badWords)
-                        if (buttonElements[i].name.toLowerCase().indexOf(badWords[bw]) >= 0)
-                            score -= 5;
+                    semanticValues.push(buttonElements[i].name.toLowerCase());
                 }
+                if (buttonElements[i].textContent !== undefined && buttonElements[i].textContent !== null)
+                {
+                    semanticValues.push(buttonElements[i].textContent.toLowerCase());
+                }
+                if (buttonElements[i].value !== undefined && buttonElements[i].value !== null)
+                {
+                    semanticValues.push(buttonElements[i].value.toLowerCase());
+                }
+                if (semanticValues.length > 0) {
+                    let goodScore = false;
+                    let badScore = false;
 
-                //TODO:3: compare values and/or textcontent?
+                    for (const gw in goodWords)
+                        if (semanticValues.findIndex(value => value.indexOf(goodWords[gw]) >= 0) >= 0)
+                            goodScore = true;
+                    for (const bw in badWords)
+                        if (semanticValues.findIndex(value => value.indexOf(badWords[bw]) >= 0) >= 0)
+                            badScore = true;
+
+                    if (goodScore) score += 5;
+                    if (badScore) score -= 5;
+                }
 
                 submitElements.push({score: score, el: buttonElements[i]});
             }
