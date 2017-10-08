@@ -887,7 +887,7 @@ function updateForegroundTab (tabId) {
         console.log("kee activated: " + tabId);
         kee.foregroundTabId = tabId;
         kee.tabStates[tabId].framePorts.forEach(port => {
-            port.postMessage({ appState: kee.appState, isForegroundTab: true } as AddonMessage);
+            port.postMessage({ appState: kee.appState, isForegroundTab: true, action: "detectForms" } as AddonMessage);
         });
         return;
     }
