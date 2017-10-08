@@ -40,9 +40,7 @@ class Session {
         this.connectLock = false;       // protect the connect function so only one event
                                         // thread (e.g. timer) can execute it at the same time
 
-        this.webSocketPort = 12546;
         this.webSocketHost = "127.0.0.1";
-        this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
         this.webSocket = null;
 
         // We use a HTTP channel for basic polling of the port listening status of
@@ -52,7 +50,6 @@ class Session {
         // See KeeFox issue #189 for connection algorithm overview:
         // https://github.com/luckyrat/KeeFox/issues/189#issuecomment-23635771
         this.httpChannel = null;
-        this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
         this.reconnectTimer = null;
         this.onConnectDelayTimer = null;
         this.connectionProhibitedUntil = new Date(0);
@@ -60,6 +57,17 @@ class Session {
     }
 
     startup () {
+        this.configureConnectionURIs();
+
+        // start regular attempts to reconnect to KeePassRPC
+        // NB: overheads here include a test whether a socket is alive
+        // and regular timer scheduling overheads - hopefully that's insignificant
+        // but if not we can try more complicated connection strategies
+        this.reconnectTimer = window.setInterval(this.attemptConnection.bind(this), this.reconnectionAttemptFrequency);
+        KeeLog.debug("Created a reconnection timer.");
+    }
+
+    configureConnectionURIs () {
         const defaultWebSocketPort = 12546;
         this.webSocketPort = configManager.current.KeePassRPCWebSocketPort;
 
@@ -74,13 +82,6 @@ class Session {
         }
         this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
         this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
-
-        // start regular attempts to reconnect to KeePassRPC
-        // NB: overheads here include a test whether a socket is alive
-        // and regular timer scheduling overheads - hopefully that's insignificant
-        // but if not we can try more complicated connection strategies
-        this.reconnectTimer = window.setInterval(this.attemptConnection.bind(this), this.reconnectionAttemptFrequency);
-        KeeLog.debug("Created a reconnection timer.");
     }
 
     tryToconnectToWebsocket () {
