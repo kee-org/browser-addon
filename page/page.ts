@@ -14,9 +14,6 @@ const sameMembers = (arr1, arr2) =>
     arr1.every(item => arr2.includes(item)) && arr2.every(item => arr1.includes(item));
 
 function shouldSearchForMatches (oldState: AppState, newState: AppState) {
-    // Initially at least, we won't ever autofill a matching login - will require user to click to say they want it to be filled in. Can work out how/if/when we support that later.
-    //TODO:c: consider prefs for autofill + whether invoked by page load (or dom mutation?) that should search or just something like a tab change (or non-top-level frame?) which should not.
-
     if (newState.connected) {
         if (newState.KeePassDatabases.length > 0) {
             if (!oldState) {
@@ -177,7 +174,9 @@ function connectToMessagingPort () {
 
         if (m.action == "detectForms") {
             formFilling.removeKeeIconFromAllFields();
-            formFilling.findMatchesInThisFrame();
+            if (appState.connected && appState.KeePassDatabases.length > 0) {
+                formFilling.findMatchesInThisFrame();
+            }
         }
 
         if (m.action == "primary") {
