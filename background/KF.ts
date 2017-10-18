@@ -642,7 +642,7 @@ function startup () {
 // callbacks for messaging / ports
 
 function browserPopupMessageHandler (msg: AddonMessage) {
-    console.log("In background script, received message from browser popup script: " + msg);
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from browser popup script: " + msg);
 
     if (msg.removeNotification) {
         kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
@@ -681,7 +681,7 @@ function browserPopupMessageHandler (msg: AddonMessage) {
 }
 
 function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
-    console.log("In background script, received message from page script: " + msg);
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script: " + msg);
 
     if (msg.findMatches) {
         kee.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
@@ -754,7 +754,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 }
 
 function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
-    console.log("In background script, received message from iframe script: " + msg);
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from iframe script: " + msg);
 
     const tabId = this.sender.tab.id;
     const frameId = this.sender.frameId;
@@ -878,7 +878,7 @@ function onConnectedBeforeInitialised (port: browser.runtime.Port) {
 browser.runtime.onConnect.addListener(onConnectedBeforeInitialised);
 
 chrome.windows.onFocusChanged.addListener(windowId => {
-    console.log("focus changed: " + windowId);
+    if (KeeLog && KeeLog.debug) KeeLog.debug("Focus changed for id: " + windowId);
     if (windowId !== chrome.windows.WINDOW_ID_NONE)
     {
         chrome.tabs.query({active: true, windowId: windowId}, function ( tabs ) {
@@ -888,12 +888,11 @@ chrome.windows.onFocusChanged.addListener(windowId => {
 });
 
 browser.tabs.onActivated.addListener(event => {
-    console.log("tab activated: " + event.tabId);
+    if (KeeLog && KeeLog.debug) KeeLog.debug("Tab activated with id: " + event.tabId);
     onTabActivated(event.tabId);
 });
 
 function onTabActivated (tabId) {
-    console.log("onTabActivated: " + tabId);
 
     updateForegroundTab(tabId);
 
@@ -906,7 +905,7 @@ function onTabActivated (tabId) {
 function updateForegroundTab (tabId) {
     if (kee && kee.tabStates[tabId] && kee.tabStates[tabId].framePorts) // May not have set up kee or port yet
     {
-        console.log("kee activated: " + tabId);
+        if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
         kee.foregroundTabId = tabId;
         kee.tabStates[tabId].framePorts.forEach(port => {
             port.postMessage({ appState: kee.appState, isForegroundTab: true, action: "detectForms" } as AddonMessage);
@@ -927,7 +926,8 @@ if (!(browser.runtime as any).getBrowserInfo) {
     browser.runtime.onInstalled.addListener((details: browser.runtime.InstalledDetails) => {
         const showErrors = () => {
             if (chrome.runtime.lastError) {
-                console.error(chrome.runtime.lastError);
+                if (KeeLog && KeeLog.debug) KeeLog.error(chrome.runtime.lastError);
+                else console.error(chrome.runtime.lastError);
             }
         };
         browser.runtime.getManifest().content_scripts.forEach(script => {
