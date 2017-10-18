@@ -243,17 +243,25 @@ class Kee {
         this.appState.KeePassDatabases = null;
         this.appState.ActiveKeePassDatabaseIndex = -1;
         this.appState.connected = false;
-        try { kee.browserPopupPort.postMessage( { appState: this.appState }); } catch (e) {}
+
+        try
+        {
+            kee.browserPopupPort.postMessage( { appState: this.appState });
+
+            // Poke every port. In future might just limit to active tab?
+            kee.tabStates.forEach(ts => {
+                ts.framePorts.forEach(port => {
+                    port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
+                }, this);
+            }, this);
+        }
+        catch (e)
+        {
+            KeeLog.warn("Exception posting message: " + e.message + " : " + e.stack);
+        }
 
         browser.browserAction.setBadgeText({ text: "OFF" });
         browser.browserAction.setBadgeBackgroundColor({ color: "red" });
-
-        // Poke every port. In future might just limit to active tab?
-        kee.tabStates.forEach(ts => {
-            ts.framePorts.forEach(port => {
-                port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
-            }, this);
-        }, this);
 
         commandManager.setupContextMenuItems();
 
@@ -299,14 +307,21 @@ class Kee {
                 configManager.save();
         }
 
-        try { kee.browserPopupPort.postMessage( { appState: this.appState }); } catch (e) {}
+        try
+        {
+            kee.browserPopupPort.postMessage( { appState: this.appState });
 
-        // Poke every port. In future might just limit to active tab?
-        kee.tabStates.forEach(ts => {
-            ts.framePorts.forEach(port => {
-                port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
+            // Poke every port. In future might just limit to active tab?
+            kee.tabStates.forEach(ts => {
+                ts.framePorts.forEach(port => {
+                    port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
+                }, this);
             }, this);
-        }, this);
+        }
+        catch (e)
+        {
+            KeeLog.warn("Exception posting message: " + e.message + " : " + e.stack);
+        }
 
         commandManager.setupContextMenuItems();
     }
@@ -564,14 +579,17 @@ class Kee {
         if (executeNow)
         {
             //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
-            if (kee.pendingCallback=="_pauseKee")
-                kee._pauseKee();
-            else if (kee.pendingCallback=="_refreshKPDB")
-                kee._refreshKPDB();
-            else
-                KeeLog.info("A pending signal was found and handled.");
-            kee.pendingCallback = "";
-            kee.processingCallback = false;
+            try {
+                if (kee.pendingCallback=="_pauseKee")
+                    kee._pauseKee();
+                else if (kee.pendingCallback=="_refreshKPDB")
+                    kee._refreshKPDB();
+                else
+                    KeeLog.info("A pending signal was found and handled.");
+            } finally {
+                kee.pendingCallback = "";
+                kee.processingCallback = false;
+            }
             KeeLog.info("Signal handled. @" + sigTime);
         }
     }
@@ -584,12 +602,16 @@ class Kee {
 
         KeeLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
         kee.processingCallback = true;
-        if (kee.pendingCallback=="_pauseKee")
-            kee._pauseKee();
-        else if (kee.pendingCallback=="_refreshKPDB")
-            kee._refreshKPDB();
-        kee.pendingCallback = "";
-        kee.processingCallback = false;
+        try {
+            if (kee.pendingCallback=="_pauseKee")
+                kee._pauseKee();
+            else if (kee.pendingCallback=="_refreshKPDB")
+                kee._refreshKPDB();
+        } finally
+        {
+            kee.pendingCallback = "";
+            kee.processingCallback = false;
+        }
         KeeLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
     }
 
