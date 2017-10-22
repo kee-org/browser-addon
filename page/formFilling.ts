@@ -924,8 +924,9 @@ class FormFilling {
         // Priority 1: button outside form with @form attribute provided: @type != reset
         // Priority 2: input @type=submit within form
         // Priority 3: input @type=image within form
-        // Priority 4: <any element>@role=button within form provided: there is only 1 match
-        // Priority 5: <any element>@role=button outside form provided: there is only 1 match
+        // Priority 4: input @type=button within form
+        // Priority 5: <any element>@role=button within form provided: there is only 1 match
+        // Priority 6: <any element>@role=button outside form provided: there is only 1 match
 
         // Priority 1-3 can all be prioritised over each other if the element in question matches
         // a goodWord or deprioritised if it matches a badWord (images can only be affected
@@ -1002,9 +1003,14 @@ class FormFilling {
         // Rank the input buttons
         for (let i = 0; i < inputElements.length; i++)
         {
-            if (inputElements[i].type != null && inputElements[i].type == "submit")
+            if (inputElements[i].type != null && 
+                (inputElements[i].type == "submit" || inputElements[i].type == "button"))
             {
-                let score = 4;
+                let score = 3;
+                //input type submit has higher priority than button
+                if (inputElements[i].type == "submit")
+                    score = 5;
+                
                 if (inputElements[i].name !== undefined && inputElements[i].name !== null)
                 {
                     for (const gw in goodWords)
@@ -1029,7 +1035,7 @@ class FormFilling {
                 submitElements.push({score: score, el: inputElements[i]});
             } else if (inputElements[i].type != null && inputElements[i].type == "image")
             {
-                submitElements.push({score: 3, el: inputElements[i]});
+                submitElements.push({score: 4, el: inputElements[i]});
             }
         }
 
