@@ -625,9 +625,13 @@
       "message": "If you have not upgraded KeeFox recently, you will need to manually copy a file into your KeePass plugins folder. Instructions can be found at:",
       "description": "Will have a URL suffixed after the colon"
   },
-  "point_user_to_install_instructions": {
-      "message": "Instructions for both above steps can be found at:",
-      "description": "Will have a URL suffixed after the colon"
+  "point_user_to_install_instructions_start": {
+      "message": "Instructions for both of the above steps can be found on our",
+      "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
+  },
+  "point_user_to_install_instructions_end": {
+      "message": ".",
+      "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
   },
   "point_user_to_tutorial_start": {
       "message": "Please spend a few minutes going through the new",
@@ -648,6 +652,10 @@
   "point_user_to_tutorial_link_text": {
       "message": "interactive tutorial",
       "description": "Name of the link to the interactive tutorial page"
+  },
+  "point_user_to_forum_link_text": {
+      "message": "community forum",
+      "description": "Name of the link to the community forum"
   },
   "version_2_upgrade_intro": {
       "message": "Version 2.0 brings exciting new features and some enforced changes in order to support Firefox 57 and higher.",
