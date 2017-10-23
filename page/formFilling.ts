@@ -1003,14 +1003,14 @@ class FormFilling {
         // Rank the input buttons
         for (let i = 0; i < inputElements.length; i++)
         {
-            if (inputElements[i].type != null && 
+            if (inputElements[i].type != null &&
                 (inputElements[i].type == "submit" || inputElements[i].type == "button"))
             {
                 let score = 3;
                 //input type submit has higher priority than button
                 if (inputElements[i].type == "submit")
                     score = 5;
-                
+
                 if (inputElements[i].name !== undefined && inputElements[i].name !== null)
                 {
                     for (const gw in goodWords)
