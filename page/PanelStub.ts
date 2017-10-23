@@ -26,7 +26,7 @@ class PanelStubOptions {
         height: 300,
         width: 400,
         name: "savePassword",
-        autoCloseTime: 20
+        autoCloseTime: 0
     };
 }
 
