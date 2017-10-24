@@ -444,7 +444,6 @@ class FormFilling {
             const submitTarget = this.findSubmitButton(form, submitTargetNeighbour);
             if (!submitTarget) {
                 this.Logger.debug("No submission possibility found in this form");
-                continue;
             }
             this.formSaving.addSubmitHandler(submitTarget, form);
 
@@ -921,14 +920,14 @@ class FormFilling {
     private findSubmitButton (form: HTMLFormElement, submitTargetNeighbour: HTMLElement)
     {
         // Priority 1: button within form provided: @type != reset
-        // Priority 1: button outside form with @form attribute provided: @type != reset
         // Priority 2: input @type=submit within form
+        // Priority 3: button outside form with @form attribute provided: @type != reset
         // Priority 3: input @type=image within form
         // Priority 4: input @type=button within form
         // Priority 5: <any element>@role=button within form provided: there is only 1 match
         // Priority 6: <any element>@role=button outside form provided: there is only 1 match
 
-        // Priority 1-3 can all be prioritised over each other if the element in question matches
+        // Priority 1-4 can all be prioritised over each other if the element in question matches
         // a goodWord or deprioritised if it matches a badWord (images can only be affected
         // indirectly due to deprioritisation of other possibilities) but all things equal, they will
         // follow the stated priority.
@@ -966,7 +965,7 @@ class FormFilling {
                 if (buttonElements[i].form && buttonElements[i].form == form)
                     score = 6;
                 else
-                    continue;
+                    score = 4;
 
                 const semanticValues: string[] = [];
                 if (buttonElements[i].name !== undefined && buttonElements[i].name !== null)

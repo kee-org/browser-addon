@@ -22,14 +22,14 @@ class FormSaving {
     public addSubmitHandler (target: HTMLElement, formToSubmit: HTMLFormElement) {
         const handler = (e: Event) => this.submitHandler(e, formToSubmit);
         this.SubmitHandlerAttachments.push({ target: target, form: formToSubmit, handler: handler });
-        target.addEventListener("click", handler);
+        if (target) target.addEventListener("click", handler);
         formToSubmit.addEventListener("submit", handler);
     }
 
     public removeAllSubmitHandlers () {
         this.SubmitHandlerAttachments.forEach(
             attachment => {
-                attachment.target.removeEventListener("click", attachment.handler);
+                if (attachment.target) attachment.target.removeEventListener("click", attachment.handler);
                 attachment.form.removeEventListener("submit", attachment.handler);
             });
         this.SubmitHandlerAttachments = [];
