@@ -413,6 +413,9 @@ class FormFilling {
             // matching entries (so we fill the most relevant form)
             this.matchResult.formRelevanceScores[i] = 0;
 
+            // ignore invisible forms
+            if (!formUtils.isDOMElementVisible(form)) continue;
+
             this.Logger.debug("about to get form fields");
             const { actualUsernameIndex: usernameIndex, pwFields: passwordFields, otherFields } =
                 this.formUtils.getFormFields(form, false);
@@ -495,7 +498,8 @@ class FormFilling {
                 ownerDocument: doc,
                 getElementsByTagName: function () { return this.elements; }, // Only use is for listing input elements
                 querySelectorAll: function () { return []; }, // Only use is for listing button elements
-                submit: function () { return; } // Not possible to submit a pseudo form unless a button with custom JS has already been found
+                submit: function () { return; }, // Not possible to submit a pseudo form unless a button with custom JS has already been found
+                offsetParent: true // This tricks element visibility checks into treating this as visible to the user
             };
         }
 
