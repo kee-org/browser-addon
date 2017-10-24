@@ -173,6 +173,14 @@ public getFormFields (form, isSubmission, currentPage?)
     return { actualUsernameIndex, pwFields, otherFields };
 }
 
+// A basic, slightly flawed but fast visibility test
+public isDOMElementVisible (element: HTMLElement) {
+    if (!element.offsetParent && element.offsetHeight === 0 && element.offsetWidth === 0) {
+        return false;
+    }
+    return true;
+}
+
 // // used for multipage stuff that we might not be able to support yet in webextensions
 // resetFormFillSession () {
 //     if (resetFormFillTimer != null) {

@@ -956,6 +956,8 @@ class FormFilling {
         let submitElement: HTMLElement = null;
         const submitElements = [];
 
+        const rankedButtonDistances = this.rankElementsByDistance(buttonElements, submitTargetNeighbour);
+
         // Rank the buttons
         for (let i = 0; i < buttonElements.length; i++)
         {
@@ -966,6 +968,9 @@ class FormFilling {
                     score = 6;
                 else
                     score = 4;
+
+                // Boost the score if the button is closer to our form target than other options
+                score += rankedButtonDistances[i];
 
                 const semanticValues: string[] = [];
                 if (buttonElements[i].name !== undefined && buttonElements[i].name !== null)
@@ -995,6 +1000,9 @@ class FormFilling {
                     if (badScore) score -= 5;
                 }
 
+                // Heavy penalty for invisible elements
+                if (!formUtils.isDOMElementVisible(buttonElements[i])) score -= 6;
+
                 submitElements.push({score: score, el: buttonElements[i]});
             }
         }
@@ -1002,14 +1010,16 @@ class FormFilling {
         // Rank the input buttons
         for (let i = 0; i < inputElements.length; i++)
         {
-            if (inputElements[i].type != null &&
-                (inputElements[i].type == "submit" || inputElements[i].type == "button"))
-            {
-                let score = 3;
-                //input type submit has higher priority than button
-                if (inputElements[i].type == "submit")
-                    score = 5;
+            if (inputElements[i].type != null) continue;
 
+            let score = 0;
+
+            if (inputElements[i].type == "button") score = 3;
+            else if (inputElements[i].type == "image") score = 4;
+            else if (inputElements[i].type == "submit") score = 5;
+
+            if (inputElements[i].type == "submit" || inputElements[i].type == "button")
+            {
                 if (inputElements[i].name !== undefined && inputElements[i].name !== null)
                 {
                     for (const gw in goodWords)
@@ -1031,27 +1041,36 @@ class FormFilling {
                         if (inputElements[i].value.toLowerCase().indexOf(badWords[bw]) >= 0)
                             score -= 4;
                 }
-                submitElements.push({score: score, el: inputElements[i]});
-            } else if (inputElements[i].type != null && inputElements[i].type == "image")
-            {
-                submitElements.push({score: 4, el: inputElements[i]});
             }
+
+            // Heavy penalty for invisible elements
+            if (!formUtils.isDOMElementVisible(inputElements[i])) score -= 6;
+
+            submitElements.push({score: score, el: inputElements[i]});
         }
 
         if (roleElementsForm.length == 1) {
-            submitElements.push({score: 2, el: roleElementsForm[0]});
+            const el = roleElementsForm[0] as HTMLElement;
+            submitElements.push({score: formUtils.isDOMElementVisible(el) ? 2 : -4, el: el});
         } else if (roleElementsForm.length > 1 && submitTargetNeighbour) {
-
             const bestRoleElementMatch = this.bestRoleElementMatch(roleElementsForm, submitTargetNeighbour);
-            submitElements.push({score: 2, el: bestRoleElementMatch});
+            // If best match element is invisible, ignore
+            if (formUtils.isDOMElementVisible(bestRoleElementMatch))
+            {
+                submitElements.push({score: 2, el: bestRoleElementMatch});
+            }
         }
 
         if (roleElementsDoc.length == 1) {
-            submitElements.push({score: 1, el: roleElementsDoc[0]});
+            const el = roleElementsDoc[0] as HTMLElement;
+            submitElements.push({score: formUtils.isDOMElementVisible(el) ? 1 : -5, el: el});
         } else if (roleElementsDoc.length > 1 && submitTargetNeighbour) {
-
             const bestRoleElementMatch = this.bestRoleElementMatch(roleElementsDoc, submitTargetNeighbour);
-            submitElements.push({score: 1, el: bestRoleElementMatch});
+            // If best match element is invisible, ignore
+            if (formUtils.isDOMElementVisible(bestRoleElementMatch))
+            {
+                submitElements.push({score: 1, el: bestRoleElementMatch});
+            }
         }
 
         // Find the best submit button
@@ -1068,6 +1087,22 @@ class FormFilling {
         // maybe special cases for common HTML output patterns (e.g. javascript-only ASP.NET forms)
 
         return submitElement;
+    }
+
+    private rankElementsByDistance (elements: HTMLElement[] | NodeListOf<HTMLElement>, targetNode) {
+
+        function rank (v) {
+            const rankindex = v.slice().sort((a, b) => b-a).reduceRight(
+                (acc, item, index) => { acc[item] = index; return acc; }, Object.create(null));
+            return v.map(item => rankindex[item]+1);
+        }
+
+        const distances = [];
+        for (let i = 0; i < elements.length; i++)
+        {
+            distances[i] = this.commonParentDistance(elements[i], targetNode);
+        }
+        return rank(distances);
     }
 
     private bestRoleElementMatch (elements: Element[], targetNode) {
