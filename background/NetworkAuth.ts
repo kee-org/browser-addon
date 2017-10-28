@@ -139,7 +139,7 @@ class NetworkAuth {
             // (Error: Invalid option asyncBlocking)
             // We try/catch just in case that ever changes, although it's likely code changes
             // would also be required to retain functionality if this change were made.
-            const aThing = chrome.webRequest.onAuthRequired.addListener(
+            chrome.webRequest.onAuthRequired.addListener(
                 (requestDetails, callback) => { this.provideCredentialsAsyncBlockingCallback(requestDetails, callback); },
                 { urls: ["<all_urls>"] },
                 ["asyncBlocking"]
@@ -148,7 +148,7 @@ class NetworkAuth {
             KeeLog.error("Unexpected exception calling an asyncBlocking chrome.webRequest.onAuthRequired.addListener");
         }
 
-        const aThing = chrome.webRequest.onAuthRequired.addListener(
+        chrome.webRequest.onAuthRequired.addListener(
             (requestDetails, callback) => this.provideCredentialsBlockingCallback(requestDetails, callback),
             { urls: ["<all_urls>"] },
             ["blocking"]

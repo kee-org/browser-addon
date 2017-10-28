@@ -13,9 +13,9 @@
             "common/punycode.js",
             "common/pslData.js",
             "common/publicsuffixlist.js",
-            "common/common.js",
+            "common.js",
             "background/biginteger.js",
-            "background/app.js"
+            "app.js"
         ],
         "persistent": true
     },
@@ -28,8 +28,8 @@
                 "common/punycode.js",
                 "common/pslData.js",
                 "common/publicsuffixlist.js",
-                "common/common.js",
-                "page/page.js"
+                "common.js",
+                "page.js"
         ],
         "run_at": "document_end"
     }],
@@ -93,12 +93,6 @@
                 "default": "Ctrl+Shift+6"
             },
             "description": "__MSG_Menu_Button_fillCurrentDocument_label__"
-        }
-    },
-    "applications": {
-        "gecko": {
-            "id": "keefox@chris.tomlinson",
-            "strict_min_version": "56.0"
         }
     }
 }
