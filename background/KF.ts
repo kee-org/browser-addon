@@ -117,7 +117,7 @@ class Kee {
                     //TODO:c: event loop on content process should mean this is unnecessary but we see
                     // weird behaviour in Firefox so lets try this out for a while in case messaging
                     // is independent of the normal process event loop.
-                    setTimeout(() => p.postMessage(connectMessage), 25);
+                    setTimeout(() => p.postMessage(connectMessage), 500);
 
                     break;
                 }
