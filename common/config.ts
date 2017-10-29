@@ -93,4 +93,5 @@ class Config {
     version: number;
     triggerChangeInputEventAfterFill: boolean;
     autoSubmitNetworkAuthWithSingleMatch: boolean;
+    searchNetworkAuth: boolean;
 }
