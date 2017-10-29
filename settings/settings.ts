@@ -47,6 +47,9 @@ function loadInitialConfig () {
     (document.getElementById("pref_logLevel_desc") as HTMLSelectElement).value =
         stringFromLogLevel(configManager.current.logLevel);
 
+    (document.getElementById("pref_portDelay_label") as HTMLInputElement).value =
+        configManager.current.portConnectionDelay ? configManager.current.portConnectionDelay.toString() : "";
+
     (document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value =
         configManager.current.KeePassRPCWebSocketPort ? configManager.current.KeePassRPCWebSocketPort.toString() : "";
 
@@ -76,6 +79,8 @@ function setupInputListeners () {
     document.getElementById("pref_logLevel_desc").addEventListener("change", saveLogLevel);
 
     document.getElementById("pref_keePassRPCPort_label").addEventListener("change", saveKPRPCPort);
+
+    document.getElementById("pref_portDelay_label").addEventListener("change", savePortDelay);
 
     document.getElementById("pref_keePassDBToOpen_label").addEventListener("change", saveKPRPCDBToOpen);
 
@@ -659,6 +664,11 @@ function saveKPRPCPort (e) {
     e.preventDefault();
     configManager.current.KeePassRPCWebSocketPort = parseInt((document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value);
     configManager.save(() => browser.runtime.sendMessage({action: "KPRPC_Port_Change" }));
+}
+
+function savePortDelay (e) {
+    e.preventDefault();
+    configManager.setASAP({ portConnectionDelay: parseInt((document.getElementById("pref_portDelay_label") as HTMLInputElement).value) });
 }
 
 function saveKPRPCDBToOpen (e) {

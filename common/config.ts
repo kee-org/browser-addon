@@ -94,4 +94,5 @@ class Config {
     triggerChangeInputEventAfterFill: boolean;
     autoSubmitNetworkAuthWithSingleMatch: boolean;
     searchNetworkAuth: boolean;
+    portConnectionDelay: number;
 }
