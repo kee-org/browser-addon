@@ -403,10 +403,6 @@
         "message": "Ви хочете щоб Kee зберіг цей багатосторінковий пароль?",
         "description": ""
     },
-    "pref_notifyWhenLateDiscovery_label": {
-        "message": "Показувати сповіщення, коли Kee знаходить записи, які відповідають формі веб-сторінки після її завантаження.",
-        "description": ""
-    },
     "password_successfully_updated": {
         "message": "Пароль успішно оновлено.",
         "description": ""
