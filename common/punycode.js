@@ -17,7 +17,7 @@ const delimiter = '-'; // '\x2D'
 
 /** Regular expressions */
 const regexPunycode = /^xn--/;
-const regexNonASCII = /[^\x20-\x7E]/; // unprintable ASCII chars + non-ASCII chars
+const regexNonASCII = /[^\0-\x7E]/; // non-ASCII chars
 const regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g; // RFC 3490 separators
 
 /** Error messages */
@@ -421,7 +421,7 @@ window.punycode = {
 	 * @memberOf punycode
 	 * @type String
 	 */
-	'version': '2.0.0',
+	'version': '2.1.0',
 	/**
 	 * An object of methods to convert from JavaScript's internal character
 	 * representation (UCS-2) to Unicode code points, and back.
