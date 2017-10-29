@@ -65,11 +65,12 @@ class FormSaving {
         formSaving.removeAllSubmitHandlers();
 
         const doc = form.ownerDocument;
-        const url = punycode.decode(doc.URL);
+        const url = new URL(doc.URL);
+        url.hostname = punycode.toUnicode(url.hostname);
 
-        this.Logger.debug({ m: "", sm: "URL: " + url, r: true });
+        this.Logger.debug({ m: "", sm: "URL: " + url.href, r: true });
 
-        const conf = configManager.siteConfigFor(url);
+        const conf = configManager.siteConfigFor(url.href);
         if (conf.preventSaveNotification) return;
 
         let isPasswordChangeForm = false;
@@ -140,7 +141,7 @@ class FormSaving {
         // be a new registration form or password change form
 
         const submittedData = {
-            url: url,
+            url: url.href,
             usernameIndex,
             passwordFields: passwordFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
             title: doc.title,

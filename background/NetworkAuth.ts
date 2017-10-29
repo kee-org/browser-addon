@@ -58,9 +58,10 @@ class NetworkAuth {
                     return;
                 }
 
-                const url = punycode.decode(requestDetails.url);
+                const url = new URL(requestDetails.url);
+                url.hostname = punycode.toUnicode(url.hostname);
 
-                kee.findLogins(url, null, requestDetails.realm, null, null, null, null, result => {
+                kee.findLogins(url.href, null, requestDetails.realm, null, null, null, null, result => {
 
                     let foundLogins = null;
                     const convertedResult: keeLoginInfo[] = [];
@@ -114,7 +115,7 @@ class NetworkAuth {
                                     action: "NetworkAuth_matchedLogins",
                                     logins: convertedResult,
                                     realm: requestDetails.realm,
-                                    url: url,
+                                    url: url.href,
                                     isProxy: requestDetails.isProxy });
                                 break;
                         }

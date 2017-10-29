@@ -27,7 +27,6 @@ class MatchResult {
     autofillOnSuccess: boolean;
     autosubmitOnSuccess: boolean;
     notifyUserOnSuccess: boolean;
-    formOrigin: string;
     wrappers: any[];
     requestCount: number;
     responseCount: number;
@@ -336,7 +335,6 @@ class FormFilling {
         this.matchResult.autofillOnSuccess = behaviour.autofillOnSuccess;
         this.matchResult.autosubmitOnSuccess = behaviour.autosubmitOnSuccess;
         this.matchResult.notifyUserOnSuccess = behaviour.notifyUserOnSuccess;
-        this.matchResult.formOrigin = punycode.decode(window.document.URL);
         this.matchResult.wrappers = [];
         this.matchResult.allMatchingLogins = [];
         this.matchResult.formRelevanceScores = [];
@@ -386,10 +384,12 @@ class FormFilling {
             this.Logger.info("No forms found on this page.");
             return;
         }
-        const url = punycode.decode(window.document.URL);
+
+        const url = new URL(window.document.URL);
+        url.hostname = punycode.toUnicode(url.hostname);
 
         this.Logger.info("Finding matches in a document. readyState: " + window.document.readyState,
-            "docURI: " + url);
+            "docURI: " + url.href);
 
         this.initMatchResult(behaviour);
         this.matchResult.forms = forms;
@@ -398,9 +398,9 @@ class FormFilling {
         // should be safe but possible cause of bugs if I have recalled some early
         // algorithm details incorrectly. Remove comment in >= 2.0
 
-        const conf = configManager.siteConfigFor(url);
+        const conf = configManager.siteConfigFor(url.href);
 
-        this.Logger.debug("findMatches processing " + forms.length + " forms", " on " + url);
+        this.Logger.debug("findMatches processing " + forms.length + " forms", " on " + url.href);
 
         let searchSentToKeePass = false;
 
@@ -466,7 +466,7 @@ class FormFilling {
                 this.matchResult.requestCount++;
 
                 // Search for matching logins for the relevant URL. This request is asynchronous.
-                this.matchFinder(this.matchResult.formOrigin);
+                this.matchFinder(url.href);
                 searchSentToKeePass = true;
             } else {
                 this.Logger.debug("form[" + i + "]: reusing logins from last form.");
