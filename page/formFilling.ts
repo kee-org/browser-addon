@@ -336,7 +336,7 @@ class FormFilling {
         this.matchResult.autofillOnSuccess = behaviour.autofillOnSuccess;
         this.matchResult.autosubmitOnSuccess = behaviour.autosubmitOnSuccess;
         this.matchResult.notifyUserOnSuccess = behaviour.notifyUserOnSuccess;
-        this.matchResult.formOrigin = window.document.URL;
+        this.matchResult.formOrigin = punycode.decode(window.document.URL);
         this.matchResult.wrappers = [];
         this.matchResult.allMatchingLogins = [];
         this.matchResult.formRelevanceScores = [];
@@ -386,9 +386,10 @@ class FormFilling {
             this.Logger.info("No forms found on this page.");
             return;
         }
+        const url = punycode.decode(window.document.URL);
 
         this.Logger.info("Finding matches in a document. readyState: " + window.document.readyState,
-            "docURI: " + window.document.URL);
+            "docURI: " + url);
 
         this.initMatchResult(behaviour);
         this.matchResult.forms = forms;
@@ -397,9 +398,9 @@ class FormFilling {
         // should be safe but possible cause of bugs if I have recalled some early
         // algorithm details incorrectly. Remove comment in >= 2.0
 
-        const conf = configManager.siteConfigFor(window.document.URL);
+        const conf = configManager.siteConfigFor(url);
 
-        this.Logger.debug("findMatches processing " + forms.length + " forms", " on " + window.document.URL);
+        this.Logger.debug("findMatches processing " + forms.length + " forms", " on " + url);
 
         let searchSentToKeePass = false;
 
