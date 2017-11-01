@@ -10,6 +10,16 @@ let myPort: browser.runtime.Port;
 let inputsObserver: MutationObserver;
 let messagingPortConnectionRetryTimer: number;
 
+let keeDuplicationCount;
+
+if (keeDuplicationCount) {
+    console.error("Duplicate Kee instance detected! Found this many other instances: " + keeDuplicationCount);
+    KeeLog.error("Duplicate Kee instance detected! Found this many other instances: " + keeDuplicationCount);
+} else {
+    keeDuplicationCount = 0;
+}
+keeDuplicationCount += 1;
+
 const sameMembers = (arr1, arr2) =>
     arr1.every(item => arr2.includes(item)) && arr2.every(item => arr1.includes(item));
 
@@ -147,13 +157,21 @@ function startup () {
 
 function connectToMessagingPort () {
 
+    if (myPort) {
+        KeeLog.warn("port already set to: " + myPort.name + "; " + myPort);
+    }
     myPort = chrome.runtime.connect({ name: "page" });
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
         KeeLog.debug("In browser content page script, received message from background script");
 
         if (!appState) {
-            onFirstConnect(m.appState, m.isForegroundTab, m.tabId, m.frameId);
+            if (m.appState) {
+                onFirstConnect(m.appState, m.isForegroundTab, m.tabId, m.frameId);
+            } else {
+                KeeLog.warn("browser content page script received message before initialisation complete");
+                return;
+            }
         } else if (m.appState) {
             updateAppState(m.appState, m.isForegroundTab);
         }
