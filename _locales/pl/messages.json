@@ -403,10 +403,6 @@
         "message": "Czy chcesz aby Kee zapisał to kilkuetapowe hasło?",
         "description": ""
     },
-    "pref_notifyWhenLateDiscovery_label": {
-        "message": "Wyświetl powiadomienie, gdy Kee znajdzie pasujący login po załadowaniu strony",
-        "description": ""
-    },
     "password_successfully_updated": {
         "message": "Hasło pomyślnie zaktualizowano.",
         "description": ""

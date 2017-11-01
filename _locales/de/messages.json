@@ -403,10 +403,6 @@
         "message": "Möchten Sie, dass Kee dieses mehrseitige Passwort speichert?",
         "description": ""
     },
-    "pref_notifyWhenLateDiscovery_label": {
-        "message": "Eine Benachrichtigung anzeigen, wenn Kee passende Logins zu Formularen gefunden hat, die nach dem vollständigem Laden der Seite angezeigt werden",
-        "description": ""
-    },
     "password_successfully_updated": {
         "message": "Passwort erfolgreich aktualisiert.",
         "description": ""

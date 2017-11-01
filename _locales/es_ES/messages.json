@@ -403,10 +403,6 @@
         "message": "¿Quieres que Kee guarde esta contraseña multi-página?",
         "description": ""
     },
-    "pref_notifyWhenLateDiscovery_label": {
-        "message": "Mostrar una notificación cuando Kee encuentre logins coincidentes después de que la página web haya terminado de cargar.",
-        "description": ""
-    },
     "password_successfully_updated": {
         "message": "Contraseña actualizada correctamente",
         "description": ""

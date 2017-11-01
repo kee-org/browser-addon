@@ -22,8 +22,8 @@ function loadInitialConfig () {
         = configManager.current.searchAllOpenDBs ? configManager.current.searchAllOpenDBs : null;
     (document.getElementById("pref_listAllOpenDBs_label") as HTMLInputElement).checked
         = configManager.current.listAllOpenDBs ? configManager.current.listAllOpenDBs : null;
-    (document.getElementById("pref_notifyWhenLateDiscovery_label") as HTMLInputElement).checked
-        = configManager.current.notifyWhenLateDiscovery ? configManager.current.notifyWhenLateDiscovery : null;
+    (document.getElementById("pref_searchNetworkAuth_label") as HTMLInputElement).checked
+        = configManager.current.searchNetworkAuth ? configManager.current.searchNetworkAuth : null;
 
     (document.getElementById("pref_autoFillFormsWithMultipleMatches_label") as HTMLInputElement).checked
         = configManager.current.autoFillFormsWithMultipleMatches ? configManager.current.autoFillFormsWithMultipleMatches : null;
@@ -47,6 +47,9 @@ function loadInitialConfig () {
     (document.getElementById("pref_logLevel_desc") as HTMLSelectElement).value =
         stringFromLogLevel(configManager.current.logLevel);
 
+    (document.getElementById("pref_portDelay_label") as HTMLInputElement).value =
+        configManager.current.portConnectionDelay ? configManager.current.portConnectionDelay.toString() : "";
+
     (document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value =
         configManager.current.KeePassRPCWebSocketPort ? configManager.current.KeePassRPCWebSocketPort.toString() : "";
 
@@ -60,7 +63,7 @@ function setupInputListeners () {
 
     document.getElementById("pref_searchAllOpenDBs_label").addEventListener("change", saveSearchAllOpenDBs);
     document.getElementById("pref_listAllOpenDBs_label").addEventListener("change", saveListAllOpenDBs);
-    document.getElementById("pref_notifyWhenLateDiscovery_label").addEventListener("change", saveNotifyWhenLateDiscovery);
+    document.getElementById("pref_searchNetworkAuth_label").addEventListener("change", saveSearchNetworkAuth);
     document.getElementById("pref_autoFillFormsWithMultipleMatches_label").addEventListener("change", saveAutoFillFormsWithMultipleMatches);
     document.getElementById("pref_when_one_matching_network_login").addEventListener("change", saveAutoSubmitNetworkAuthWithSingleMatch);
 
@@ -76,6 +79,8 @@ function setupInputListeners () {
     document.getElementById("pref_logLevel_desc").addEventListener("change", saveLogLevel);
 
     document.getElementById("pref_keePassRPCPort_label").addEventListener("change", saveKPRPCPort);
+
+    document.getElementById("pref_portDelay_label").addEventListener("change", savePortDelay);
 
     document.getElementById("pref_keePassDBToOpen_label").addEventListener("change", saveKPRPCDBToOpen);
 
@@ -586,9 +591,9 @@ function saveListAllOpenDBs (e) {
     configManager.setASAP({ listAllOpenDBs: (document.getElementById("pref_listAllOpenDBs_label") as HTMLInputElement).checked });
 }
 
-function saveNotifyWhenLateDiscovery (e) {
+function saveSearchNetworkAuth (e) {
     e.preventDefault();
-    configManager.setASAP({ notifyWhenLateDiscovery: (document.getElementById("pref_notifyWhenLateDiscovery_label") as HTMLInputElement).checked });
+    configManager.setASAP({ searchNetworkAuth: (document.getElementById("pref_searchNetworkAuth_label") as HTMLInputElement).checked });
 }
 
 function saveAutoFillFormsWithMultipleMatches (e) {
@@ -659,6 +664,11 @@ function saveKPRPCPort (e) {
     e.preventDefault();
     configManager.current.KeePassRPCWebSocketPort = parseInt((document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value);
     configManager.save(() => browser.runtime.sendMessage({action: "KPRPC_Port_Change" }));
+}
+
+function savePortDelay (e) {
+    e.preventDefault();
+    configManager.setASAP({ portConnectionDelay: parseInt((document.getElementById("pref_portDelay_label") as HTMLInputElement).value) });
 }
 
 function saveKPRPCDBToOpen (e) {

@@ -50,6 +50,8 @@ defaultConfig.tutorialProgress = "";
 defaultConfig.version = 2;
 defaultConfig.triggerChangeInputEventAfterFill = false;
 defaultConfig.autoSubmitNetworkAuthWithSingleMatch = false;
+defaultConfig.searchNetworkAuth = true;
+defaultConfig.portConnectionDelay = 500;
 
 class ConfigManager {
     public current: Config;

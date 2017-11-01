@@ -403,10 +403,6 @@
         "message": "Chcete, aby Kee uložil toto vícestránkové heslo?",
         "description": ""
     },
-    "pref_notifyWhenLateDiscovery_label": {
-        "message": "Zobrazovat notifikaci, když Kee najde odpovidající pole po načtení stránky.",
-        "description": ""
-    },
     "password_successfully_updated": {
         "message": "Heslo bylo úspěšně zaktualizováno.",
         "description": ""

@@ -199,6 +199,10 @@
     "message": "List logins from all open KeePass databases",
     "description": ""
   },
+  "pref_searchNetworkAuth_label": {
+      "message": "Find entries for network authentication requests (e.g. HTTP Auth and proxies)",
+      "description": "Setting to enable network authentication searches"
+  },
   "pref_logLevel_desc": {
     "message": "Choose how verbose you want the log to be. Each higher log level produces more output.",
     "description": ""
@@ -226,10 +230,6 @@
   "pref_notifyWhenEntryUpdated_label": {
     "message": "Display the \"Password successfully updated\" notification",
     "description": "Option to enable or diable the information displayed when a password has been updated"
-  },
-  "pref_notifyWhenLateDiscovery_label": {
-    "message": "Display a notification when Kee finds logins matching a form added after the web page has finished loading",
-    "description": ""
   },
   "pref_rememberMRUDB_label": {
     "message": "Remember the most recently used KeePass database",
