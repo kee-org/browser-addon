@@ -182,9 +182,7 @@ class Kee {
 
         browser.webNavigation.onCommitted.addListener(pageNavigationCommitted);
 
-        if (configManager.current.searchNetworkAuth) {
-            this.networkAuth.startListening();
-        }
+        this.networkAuth.startListening();
 
         browser.privacy.services.passwordSavingEnabled.set({ value: false }, function () {
             if (chrome.runtime.lastError != null) {

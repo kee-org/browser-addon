@@ -22,8 +22,6 @@ function loadInitialConfig () {
         = configManager.current.searchAllOpenDBs ? configManager.current.searchAllOpenDBs : null;
     (document.getElementById("pref_listAllOpenDBs_label") as HTMLInputElement).checked
         = configManager.current.listAllOpenDBs ? configManager.current.listAllOpenDBs : null;
-    (document.getElementById("pref_searchNetworkAuth_label") as HTMLInputElement).checked
-        = configManager.current.searchNetworkAuth ? configManager.current.searchNetworkAuth : null;
 
     (document.getElementById("pref_autoFillFormsWithMultipleMatches_label") as HTMLInputElement).checked
         = configManager.current.autoFillFormsWithMultipleMatches ? configManager.current.autoFillFormsWithMultipleMatches : null;
@@ -63,7 +61,6 @@ function setupInputListeners () {
 
     document.getElementById("pref_searchAllOpenDBs_label").addEventListener("change", saveSearchAllOpenDBs);
     document.getElementById("pref_listAllOpenDBs_label").addEventListener("change", saveListAllOpenDBs);
-    document.getElementById("pref_searchNetworkAuth_label").addEventListener("change", saveSearchNetworkAuth);
     document.getElementById("pref_autoFillFormsWithMultipleMatches_label").addEventListener("change", saveAutoFillFormsWithMultipleMatches);
     document.getElementById("pref_when_one_matching_network_login").addEventListener("change", saveAutoSubmitNetworkAuthWithSingleMatch);
 
@@ -589,11 +586,6 @@ function saveSearchAllOpenDBs (e) {
 function saveListAllOpenDBs (e) {
     e.preventDefault();
     configManager.setASAP({ listAllOpenDBs: (document.getElementById("pref_listAllOpenDBs_label") as HTMLInputElement).checked });
-}
-
-function saveSearchNetworkAuth (e) {
-    e.preventDefault();
-    configManager.setASAP({ searchNetworkAuth: (document.getElementById("pref_searchNetworkAuth_label") as HTMLInputElement).checked });
 }
 
 function saveAutoFillFormsWithMultipleMatches (e) {
