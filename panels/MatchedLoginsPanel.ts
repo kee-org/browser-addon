@@ -69,7 +69,7 @@ class MatchedLoginsPanel {
                 matchedLoginsPanel.showContextActions(loginContextActions);
             }, false);
             loginItem.addEventListener("keeCommand", function (event) {
-                myPort.postMessage({ action: "manualFill", selectedLoginIndex: this.dataset.loginIndex, frameId: parentFrameId });
+                myPort.postMessage({ action: Actions.ManualFill, selectedLoginIndex: this.dataset.loginIndex, frameId: parentFrameId });
             }, false);
             loginItem.addEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);
 
@@ -94,7 +94,7 @@ class MatchedLoginsPanel {
                 event.stopPropagation();
                 event.preventDefault();
                 myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
-                myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+                myPort.postMessage({action: Actions.CloseAllPanels} as AddonMessage);
             }, false);
             loginContextActions.appendChild(editButton);
 
@@ -113,7 +113,7 @@ class MatchedLoginsPanel {
                 event.stopPropagation();
                 event.preventDefault();
                 copyStringToClipboard(usernameField.value);
-                myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+                myPort.postMessage({action: Actions.CloseAllPanels} as AddonMessage);
             }, false);
             loginContextActions.appendChild(button);
         }
@@ -127,7 +127,7 @@ class MatchedLoginsPanel {
                 event.stopPropagation();
                 event.preventDefault();
                 copyStringToClipboard(passwordField.value);
-                myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+                myPort.postMessage({action: Actions.CloseAllPanels} as AddonMessage);
             }, false);
             loginContextActions.appendChild(button);
         }
@@ -143,7 +143,7 @@ class MatchedLoginsPanel {
                             event.stopPropagation();
                             event.preventDefault();
                             copyStringToClipboard(o.value);
-                            myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+                            myPort.postMessage({action: Actions.CloseAllPanels} as AddonMessage);
                         }, false);
                         loginContextActions.appendChild(button);
                     }
@@ -159,7 +159,7 @@ class MatchedLoginsPanel {
                             event.stopPropagation();
                             event.preventDefault();
                             copyStringToClipboard(p.value);
-                            myPort.postMessage({action: "closeAllPanels"} as AddonMessage);
+                            myPort.postMessage({action: Actions.CloseAllPanels} as AddonMessage);
                         }, false);
                         loginContextActions.appendChild(button);
                     }
