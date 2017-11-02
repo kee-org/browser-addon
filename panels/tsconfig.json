@@ -11,7 +11,7 @@
             "../typedefs/browser",
             "../typedefs/biginteger",
             "../typedefs/dollar-polyfill",
-            "../typedefs/common"
+            "../common"
         ]
     },
     "include": [
