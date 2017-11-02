@@ -185,34 +185,34 @@ function connectToMessagingPort () {
             formFilling.findLoginsResultHandler(m.findMatchesResult);
         }
 
-        if (m.action == "manualFill" && m.selectedLoginIndex != null) {
+        if (m.action == Actions.ManualFill && m.selectedLoginIndex != null) {
             formFilling.closeMatchedLoginsPanel();
             formFilling.fillAndSubmit(false, null, m.selectedLoginIndex);
         }
 
-        if (m.action == "detectForms") {
+        if (m.action == Actions.DetectForms) {
             formFilling.removeKeeIconFromAllFields();
             if (appState.connected && appState.KeePassDatabases.length > 0) {
                 formFilling.findMatchesInThisFrame();
             }
         }
 
-        if (m.action == "primary") {
+        if (m.action == Actions.Primary) {
             formFilling.executePrimaryAction();
         }
 
-        if (m.action == "generatePassword") {
+        if (m.action == Actions.GeneratePassword) {
             passwordGenerator.createGeneratePasswordPanel();
         }
 
-        if (m.action == "closeAllPanels") {
+        if (m.action == Actions.CloseAllPanels) {
             passwordGenerator.closeGeneratePasswordPanel();
             formFilling.closeMatchedLoginsPanel();
             formSaving.closeSavePasswordPanel();
-            myPort.postMessage({ action: "removeSubmittedData" } as AddonMessage);
+            myPort.postMessage({ action: Actions.RemoveSubmittedData } as AddonMessage);
         }
 
-        if (m.action == "showMatchedLoginsPanel") {
+        if (m.action == Actions.ShowMatchedLoginsPanel) {
             formFilling.createMatchedLoginsPanelInCenter(m.frameId);
         }
 

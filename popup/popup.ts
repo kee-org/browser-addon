@@ -77,9 +77,9 @@ function startup () {
     });
 
     document.getElementById("optionsLink").addEventListener("click", () => chrome.runtime.openOptionsPage() );
-    document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: "generatePassword" }) );
-    document.getElementById("saveLatestLogin").addEventListener("click", () => myPort.postMessage({ action: "saveLatestLogin" }) );
-    document.getElementById("showMatchedLogins").addEventListener("click", () => myPort.postMessage({ action: "showMatchedLoginsPanel" }) );
+    document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: Actions.GeneratePassword }) );
+    document.getElementById("saveLatestLogin").addEventListener("click", () => myPort.postMessage({ action: Actions.SaveLatestLogin }) );
+    document.getElementById("showMatchedLogins").addEventListener("click", () => myPort.postMessage({ action: Actions.ShowMatchedLoginsPanel }) );
 
     KeeLog.info("popup ready");
 }
