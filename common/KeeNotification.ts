@@ -63,7 +63,7 @@ class KeeNotification {
         //    callback = buttonDefinition.action;
         //}
 
-        button.addEventListener("click", callback, false); //TODO:c:keyboard nav support
+        button.addEventListener("click", callback, false); //TODO:3:keyboard nav support
         if (buttonDefinition.id != null)
             button.setAttribute("id", buttonDefinition.id);
         // if (buttonDefinition.values != null)

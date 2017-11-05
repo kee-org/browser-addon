@@ -56,7 +56,7 @@ class MatchedLoginsPanel {
             const loginContextActions = this.createContextActions(login);
             loginItem.appendChild(loginContextActions);
 
-            //TODO:c: keyboard nav
+            //TODO:3: keyboard nav
             //loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
             loginItem.addEventListener("click", function (event) {
                 event.stopPropagation();

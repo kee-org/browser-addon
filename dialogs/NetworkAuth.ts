@@ -62,7 +62,7 @@ class NetworkAuth {
 
             loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, login.title]);
 
-            //TODO:c: keyboard nav
+            //TODO:3: keyboard nav
             //loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
             loginItem.addEventListener("click", function (event) {
                 event.stopPropagation();
