@@ -60,12 +60,23 @@ class Search {
         return this.validateConfig();
     }
 
-    public execute (query, onComplete, filterURLs) {
+    private pslInitialised = false;
+
+    get psl () {
+        if (!publicSuffixList) throw new Error("publicSuffixList library not present");
+        if (!this.pslInitialised) {
+            publicSuffixList.parse(pslData.text, punycode.toASCII);
+            this.pslInitialised = true;
+        }
+        return publicSuffixList;
+    }
+
+    public execute (query, onComplete, filterDomains: string[]) {
         let abort = false;
-        const filteringByURL = (filterURLs
-            && filterURLs.length > 0
-            && Array.isArray(filterURLs)
-            && filterURLs[0].length > 0) ? true : false;
+        const filteringByURL = (filterDomains
+            && filterDomains.length > 0
+            && Array.isArray(filterDomains)
+            && filterDomains[0].length > 0) ? true : false;
 
         if (!this.configIsValid) {
             KeeLog.error("You can't execute a search while the search configuration is invalid. Please fix it by calling reconfigure().");
@@ -113,16 +124,31 @@ class Search {
         let filter;
 
         if (filteringByURL) {
-            filter = function (item) {
+            filter = item => {
                 if (!item.uRLs || item.uRLs.length <= 0)
                     return false;
 
-                for (const url of filterURLs) {
-                    //TODO:3: Might need to do something more complex here to avoid false
-                    // matches in other parts of the item's URL. We don't use these results
-                    // for anything security sensitive though so might not be a high priority.
-                    if (item.uRLs.filter(function (i) { return (i.toLowerCase().indexOf(url) >= 0); }).length > 0)
-                        return true;
+                for (const filterDomain of filterDomains) {
+                    try {
+                        const filteredItems = item.uRLs.filter(itemURL => {
+                            try {
+                                let itemHostname: string;
+                                // We're only really interested in the domain so can be lax about
+                                // protocols and just prepend if necessary in order to make valid URLs
+                                if (!itemURL.startsWith("https://") && !itemURL.startsWith("http://") && !itemURL.startsWith("file://"))
+                                {
+                                    itemHostname = new URL("http://" + itemURL).hostname;
+                                } else
+                                {
+                                    itemHostname = new URL(itemURL).hostname;
+                                }
+                                const itemIsIPAddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/.test(itemHostname);
+                                const itemDomain = itemIsIPAddress ? itemHostname : this.psl.getDomain(itemHostname);
+                                return (filterDomain === itemDomain);
+                            } catch (e) { return false; } // ignore invalid URLs
+                            });
+                        if (filteredItems.length > 0) return true;
+                    } catch (e) { } // ignore invalid URLs
                 }
                 return false;
             };

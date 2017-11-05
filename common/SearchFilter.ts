@@ -46,7 +46,7 @@ class SearchFilter {
 
         searchFilter.appendChild(searchFilterOptionAll);
         searchFilter.appendChild(searchFilterOptionCurrent);
-        const searchFilterChangeHandler = function (e) {
+        const searchFilterChangeHandler = e => {
             search.execute(e.target.ownerDocument.getElementById("Kee-"+prefix+"-searchbox").value,
                 searchRequestor.onSearchComplete.bind(searchRequestor),
                 e.target.selectedOptions[0].value.split(","));
@@ -68,10 +68,9 @@ class SearchFilter {
         // document to provide a list of all URLs at some future time
         if (currentURL) {
             try {
-                //TODO:c: IP address support
-                const url = new URL(currentURL);
-                const host = url.host;
-                const domain = this.psl.getDomain(host);
+                const hostname = new URL(currentURL).hostname;
+                const isIPAddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/.test(hostname);
+                const domain = isIPAddress ? hostname : this.psl.getDomain(hostname);
                 this.updateSearchFilterFinish(searchFilter, current, [domain]);
             } catch (e) {
                 searchFilter.setAttribute("disabled", "true");
