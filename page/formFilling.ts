@@ -1015,7 +1015,7 @@ class FormFilling {
         // Rank the input buttons
         for (let i = 0; i < inputElements.length; i++)
         {
-            if (inputElements[i].type != null) continue;
+            if (inputElements[i].type == null) continue;
 
             let score = 0;
 
