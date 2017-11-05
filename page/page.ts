@@ -158,7 +158,7 @@ function startup () {
 function connectToMessagingPort () {
 
     if (myPort) {
-        KeeLog.warn("port already set to: " + myPort.name + "; " + myPort);
+        KeeLog.warn("port already set to: " + myPort.name);
     }
     myPort = chrome.runtime.connect({ name: "page" });
 

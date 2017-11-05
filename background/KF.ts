@@ -173,12 +173,6 @@ class Kee {
         this._keeBrowserStartup();
 
         browser.runtime.onConnect.addListener(this.onPortConnected);
-        browser.runtime.onConnect.removeListener(onConnectedBeforeInitialised);
-
-        // Setup any ports that we were notified of before the addon finished initialising
-        //TODO:c: Check to see if there is any chance these will fail (tab closed during init?) and handle as appropriate
-        portsQueue.forEach(port => this.onPortConnected(port));
-        portsQueue = null;
 
         browser.webNavigation.onCommitted.addListener(pageNavigationCommitted);
 
@@ -191,7 +185,6 @@ class Kee {
         });
 
     }
-
 
     notifyUser (notification: KeeNotification) {
         if (!notification.allowMultiple) {
@@ -866,16 +859,6 @@ function showUpdateSuccessNotification ()
 function pageNavigationCommitted (details: browser.webNavigation.WebNavigationTransitionCallbackDetails) {
     if (details.frameId === 0) delete kee.tabStates[details.tabId];
 }
-
-let portsQueue = [];
-
-function onConnectedBeforeInitialised (port: browser.runtime.Port) {
-    portsQueue.push(port);
-}
-
-// Before we've initialised this main module, we might receive connection
-// attempts from content pages, etc. so we store them for later processing.
-browser.runtime.onConnect.addListener(onConnectedBeforeInitialised);
 
 chrome.windows.onFocusChanged.addListener(windowId => {
     if (KeeLog && KeeLog.debug) KeeLog.debug("Focus changed for id: " + windowId);
