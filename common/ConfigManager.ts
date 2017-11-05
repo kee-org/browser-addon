@@ -148,9 +148,17 @@ class ConfigManager {
                     //TODO:3: Delete the old keefox prefixed data to save space
                 }
             }
+            this.fixInvalidConfigData();
             this.migrateToLatestVersion();
             onLoaded();
         });
+    }
+
+    private fixInvalidConfigData () {
+        if (this.current.KPRPCStoredKeys == null) {
+            this.current.KPRPCStoredKeys = {};
+            this.save();
+        }
     }
 
     private reload (onLoaded?) {
