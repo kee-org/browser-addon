@@ -147,8 +147,8 @@ function saveSiteProperties (e: Event) {
         if (specificSite) {
             siteConfig = specificSite.config;
             // remove old config entry
-            const configLookup = configManager.siteConfigLookupFor(specificSite.target, specificSite.method);
-            if (configLookup) delete configLookup[specificSite.value];
+            const siteConfigLookup = configManager.siteConfigLookupFor(specificSite.target, specificSite.method);
+            if (siteConfigLookup) delete siteConfigLookup[specificSite.value];
         }
 
         specificSite = {value: value, matchWeight: weight, source: "User", target: target, method: method, config: siteConfig};
