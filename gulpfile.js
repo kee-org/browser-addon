@@ -66,7 +66,7 @@ gulp.task("lint:common", function() {
 });
 
 var tsProjectCommon = ts.createProject("common/tsconfig.json", {
-    outFile: "common.js",
+    outFile: "common/common.js",
     declaration: true
 });
 gulp.task("ts:common", ["lint:common"], function() {
@@ -81,7 +81,7 @@ var tsResult = tsProjectCommon.src()
 });
 
 var tsProjectBackground = ts.createProject("background/tsconfig.json", {
-    outFile: "app.js"
+    outFile: "background/app.js"
 });
 gulp.task("ts:background", ["lint:background", "ts:common"], function() {
     return tsProjectBackground.src()
@@ -93,7 +93,7 @@ gulp.task("ts:background", ["lint:background", "ts:common"], function() {
 });
 
 var tsProjectPopup = ts.createProject("popup/tsconfig.json", {
-    outFile: "popup.js"
+    outFile: "popup/popup.js"
 });
 gulp.task("ts:popup", ["lint:popup", "ts:common"], function() {
     return tsProjectPopup.src()
@@ -105,7 +105,7 @@ gulp.task("ts:popup", ["lint:popup", "ts:common"], function() {
 });
 
 var tsProjectPanels = ts.createProject("panels/tsconfig.json", {
-    outFile: "panels.js"
+    outFile: "panels/panels.js"
 });
 gulp.task("ts:panels", ["lint:panels", "ts:common"], function() {
     return tsProjectPanels.src()
@@ -117,7 +117,7 @@ gulp.task("ts:panels", ["lint:panels", "ts:common"], function() {
 });
 
 var tsProjectPage = ts.createProject("page/tsconfig.json", {
-    outFile: "page.js"
+    outFile: "page/page.js"
 });
 gulp.task("ts:page", ["lint:page", "ts:common"], function() {
     return tsProjectPage.src()
@@ -129,7 +129,7 @@ gulp.task("ts:page", ["lint:page", "ts:common"], function() {
 });
 
 var tsProjectSettings = ts.createProject("settings/tsconfig.json", {
-    outFile: "settings.js"
+    outFile: "settings/settings.js"
 });
 gulp.task("ts:settings", ["lint:settings", "ts:common"], function() {
     return tsProjectSettings.src()
