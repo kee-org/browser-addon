@@ -17,7 +17,7 @@ interface AddonMessage {
     findMatches?: { uri: string };
     findMatchesResult?: any;
     logins?: keeLoginInfo[];
-    action?: Actions.Primary | Actions.DetectForms | Actions.ManualFill | Actions.GeneratePassword | Actions.CloseAllPanels | Actions.ShowMatchedLoginsPanel | Actions.RemoveSubmittedData | Actions.SaveLatestLogin;
+    action?: Action.Primary | Action.DetectForms | Action.ManualFill | Action.GeneratePassword | Action.CloseAllPanels | Action.ShowMatchedLoginsPanel | Action.RemoveSubmittedData | Action.SaveLatestLogin;
     selectedLoginIndex?: number;
     passwordProfiles?: any[];
     generatedPassword?: string;

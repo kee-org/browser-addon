@@ -1,4 +1,4 @@
-const enum Actions {
+const enum Action {
   CloseAllPanels = "closeAllPanels",
   DetectForms = "detectForms",
   GeneratePassword = "generatePassword",

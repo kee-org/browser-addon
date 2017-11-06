@@ -13,7 +13,7 @@ function updateFrameState (newState: FrameState) {
 
 function closePanel () {
     //TODO:3: Might want more fine-grained closing in future
-    myPort.postMessage( { action: Actions.CloseAllPanels } );
+    myPort.postMessage( { action: Action.CloseAllPanels } );
 }
 
 
@@ -62,7 +62,7 @@ function startup () {
                 if (m.frameState) updateFrameState(m.frameState);
 
                 if (!m.generatedPassword && m.generatedPassword != "") {
-                    myPort.postMessage({ action: Actions.GeneratePassword });
+                    myPort.postMessage({ action: Action.GeneratePassword });
                 } else {
                     copyStringToClipboard(m.generatedPassword);
 

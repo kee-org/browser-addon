@@ -651,19 +651,19 @@ function browserPopupMessageHandler (msg: AddonMessage) {
             url: "https://www.kee.pm/upgrade-kprpc"
         });
     }
-    if (msg.action === Actions.GeneratePassword) {
+    if (msg.action === Action.GeneratePassword) {
         if (kee.appState.connected) {
-            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: Actions.GeneratePassword });
+            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: Action.GeneratePassword });
         }
     }
-    if (msg.action === Actions.ShowMatchedLoginsPanel) {
+    if (msg.action === Action.ShowMatchedLoginsPanel) {
         if (kee.appState.connected) {
             let frameIdWithMatchedLogins = kee.frameIdWithMatchedLogins(kee.tabStates[kee.foregroundTabId].frames);
             if (frameIdWithMatchedLogins == -1) frameIdWithMatchedLogins = 0;
-            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({action: Actions.ShowMatchedLoginsPanel, frameId: frameIdWithMatchedLogins });
+            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({action: Action.ShowMatchedLoginsPanel, frameId: frameIdWithMatchedLogins });
         }
     }
-    if (msg.action === Actions.SaveLatestLogin) {
+    if (msg.action === Action.SaveLatestLogin) {
         if (kee.appState.connected) {
             const persistentItem = kee.persistentTabStates[kee.foregroundTabId].items.find(item => item.itemType == "submittedData");
             kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage(
@@ -735,10 +735,10 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
         kee.persistentTabStates[this.sender.tab.id].items.push(persistentItem);
     }
-    if (msg.action === Actions.ShowMatchedLoginsPanel) {
-        kee.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: Actions.ShowMatchedLoginsPanel, frameId: this.sender.frameId });
+    if (msg.action === Action.ShowMatchedLoginsPanel) {
+        kee.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: Action.ShowMatchedLoginsPanel, frameId: this.sender.frameId });
     }
-    if (msg.action === Actions.RemoveSubmittedData) {
+    if (msg.action === Action.RemoveSubmittedData) {
         if (kee.persistentTabStates[this.sender.tab.id]) {
             kee.persistentTabStates[this.sender.tab.id].items =
                 kee.persistentTabStates[this.sender.tab.id].items.filter(item => item.itemType !== "submittedData");
@@ -753,16 +753,16 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     const frameId = this.sender.frameId;
     const port = this;
 
-    if (msg.action == Actions.ManualFill && msg.selectedLoginIndex != null) {
+    if (msg.action == Action.ManualFill && msg.selectedLoginIndex != null) {
         kee.tabStates[tabId].framePorts[msg.frameId || 0].postMessage(msg);
-        kee.tabStates[tabId].framePorts[0].postMessage({ action: Actions.CloseAllPanels });
+        kee.tabStates[tabId].framePorts[0].postMessage({ action: Action.CloseAllPanels });
     }
 
-    if (msg.action == Actions.CloseAllPanels) {
+    if (msg.action == Action.CloseAllPanels) {
         kee.tabStates[tabId].framePorts[0].postMessage(msg);
     }
 
-    if (msg.action == Actions.GeneratePassword) {
+    if (msg.action == Action.GeneratePassword) {
         kee.getPasswordProfiles(passwordProfiles => {
             kee.generatePassword(msg.passwordProfile, kee.tabStates[tabId].url, generatedPassword => {
                 port.postMessage({ passwordProfiles: passwordProfiles, generatedPassword: generatedPassword } as AddonMessage);
@@ -796,7 +796,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
                 }
             }
 
-            kee.tabStates[tabId].framePorts[0].postMessage({ action: Actions.CloseAllPanels });
+            kee.tabStates[tabId].framePorts[0].postMessage({ action: Action.CloseAllPanels });
         });
     }
 
@@ -810,7 +810,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         }
         configLookup[host].config.preventSaveNotification = true;
         configManager.save();
-        kee.tabStates[tabId].framePorts[0].postMessage({ action: Actions.CloseAllPanels });
+        kee.tabStates[tabId].framePorts[0].postMessage({ action: Action.CloseAllPanels });
     }
 }
 
@@ -891,7 +891,7 @@ function updateForegroundTab (tabId) {
         if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
         kee.foregroundTabId = tabId;
         kee.tabStates[tabId].framePorts.forEach(port => {
-            port.postMessage({ appState: kee.appState, isForegroundTab: true, action: Actions.DetectForms } as AddonMessage);
+            port.postMessage({ appState: kee.appState, isForegroundTab: true, action: Action.DetectForms } as AddonMessage);
         });
         return;
     }
