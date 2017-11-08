@@ -59,9 +59,9 @@ class SrpDialog {
     }
 
     continueSRP (password: string) {
-        (chrome as any).windows.getCurrent(win => {
+        (chrome as any).tabs.getCurrent(tab => {
             chrome.runtime.sendMessage({action: "SRP_ok", password: password });
-            const removing = (chrome as any).windows.remove(win.id);
+            const removing = (chrome as any).tabs.remove(tab.id);
         });
     }
 }
