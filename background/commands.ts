@@ -6,7 +6,7 @@ class KFCommands {
             switch (command) {
                 case "detect-forms":
                     if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
-                        kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
                                 port.postMessage({ action: "detectForms" });
                         }, this);
                     }
@@ -15,14 +15,14 @@ class KFCommands {
                     if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
                         kee.loginToKeePass();
                     } else {
-                        kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
                                 port.postMessage({ action: "primary" });
                         }, this);
                     }
                 break;
                 case "generate-password":
                     if (kee.appState.connected) {
-                        kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage({ action: "generatePassword" });
                     }
                 break;
             }
@@ -33,7 +33,7 @@ class KFCommands {
             switch (id) {
                 case "detect-forms":
                     if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
-                        kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
                                 port.postMessage({ action: "detectForms" });
                         }, this);
                     }
@@ -42,19 +42,19 @@ class KFCommands {
                 //     if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
                 //         kee.loginToKeePass();
                 //     } else {
-                //         kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
+                //         kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
                 //                 port.postMessage({ action: "primary" });
                 //         }, this);
                 //     }
                 // break;
                 case "generate-password":
                     if (kee.appState.connected) {
-                        kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: "generatePassword" });
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage({ action: "generatePassword" });
                     }
                 break;
             }
             if (id.startsWith("matchedLogin-")) {
-                kee.tabStates[kee.foregroundTabId].framePorts[(info as any).frameId].postMessage({ action: "manualFill", selectedLoginIndex: id.substr(id.indexOf("-")+1) });
+                kee.tabStates.get(kee.foregroundTabId).framePorts.get((info as any).frameId).postMessage({ action: "manualFill", selectedLoginIndex: id.substr(id.indexOf("-")+1) });
             }
         });
     }
@@ -100,10 +100,9 @@ class KFCommands {
             // }
 
             if (kee.foregroundTabId >= 0
-            && kee.tabStates[kee.foregroundTabId]
-            && kee.tabStates[kee.foregroundTabId].frames
-            && kee.tabStates[kee.foregroundTabId].frames.length > 0) {
-                kee.tabStates[kee.foregroundTabId].frames.forEach(frame => {
+            && kee.tabStates.has(kee.foregroundTabId)
+            && kee.tabStates.get(kee.foregroundTabId).frames) {
+                kee.tabStates.get(kee.foregroundTabId).frames.forEach(frame => {
                     for (let j=0; j<frame.logins.length; j++) {
                         const login = frame.logins[j];
                         try {
