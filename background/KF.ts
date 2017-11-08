@@ -236,10 +236,9 @@ class Kee {
         this.appState.ActiveKeePassDatabaseIndex = -1;
         this.appState.connected = false;
 
+        try { kee.browserPopupPort.postMessage({appState: this.appState}); } catch (e) {}
         try
         {
-            kee.browserPopupPort.postMessage( { appState: this.appState });
-
             // Poke every port. In future might just limit to active tab?
             kee.tabStates.forEach(ts => {
                 ts.framePorts.forEach(port => {
@@ -299,10 +298,9 @@ class Kee {
                 configManager.save();
         }
 
+        try { kee.browserPopupPort.postMessage({appState: this.appState}); } catch (e) {}
         try
         {
-            kee.browserPopupPort.postMessage( { appState: this.appState });
-
             // Poke every port. In future might just limit to active tab?
             kee.tabStates.forEach(ts => {
                 ts.framePorts.forEach(port => {
