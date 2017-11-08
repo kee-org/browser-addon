@@ -616,6 +616,7 @@ class Kee {
 }
 
 let kee: Kee;
+let updateForegroundTabRetryTimer;
 
 // Make sure user knows we're not ready yet
 browser.browserAction.setBadgeText({ text: "OFF" });
@@ -884,8 +885,10 @@ function onTabActivated (tabId) {
 }
 
 function updateForegroundTab (tabId: number) {
-    if (kee && kee.tabStates.get(tabId) && kee.tabStates.get(tabId).framePorts) // May not have set up kee or port yet
+    if (kee && kee.tabStates.has(tabId) && kee.tabStates.get(tabId).framePorts) // May not have set up kee or port yet
     {
+        // make sure only one tab can be trying to set itself as the foreground tab
+        clearTimeout(updateForegroundTabRetryTimer);
         if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
         kee.foregroundTabId = tabId;
         kee.tabStates.get(tabId).framePorts.forEach(port => {
@@ -893,8 +896,8 @@ function updateForegroundTab (tabId: number) {
         });
         return;
     }
-    setTimeout(id => {
-        updateForegroundTab(tabId);
+    updateForegroundTabRetryTimer = setTimeout(id => {
+        updateForegroundTab(id);
     }, 1000, tabId);
 }
 
