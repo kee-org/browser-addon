@@ -55,6 +55,7 @@ class Kee {
 
         this.browserPopupPort = {postMessage: msg => {} };
         this.onPortConnected = function (p: browser.runtime.Port) {
+            if (KeeLog && KeeLog.debug) KeeLog.debug(p.name + " port connected");
             let name = p.name;
             let parentFrameId: number;
             if (name.startsWith("iframe")) {
