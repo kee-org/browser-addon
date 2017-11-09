@@ -403,6 +403,10 @@
         "message": "您想让 Kee 保存这个多页面密码吗？",
         "description": ""
     },
+    "pref_notifyWhenLateDiscovery_label": {
+        "message": "网页完成加载并且 Kee 找到匹配表单的登录项时，显示通知",
+        "description": ""
+    },
     "password_successfully_updated": {
         "message": "密码更新成功。",
         "description": ""

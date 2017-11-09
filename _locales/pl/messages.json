@@ -4,7 +4,7 @@
         "description": ""
     },
     "pref_when_one_matching_network_login": {
-        "message": "When Kee finds only one matching network login (e.g. HTTP Auth), automatically login",
+        "message": "Automatycznie zaloguj, jeśli Kee znajdzie tylko jeden pasujący login (np. HTTP Auth)",
         "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
     },
     "black_list": {
@@ -16,7 +16,7 @@
         "description": ""
     },
     "conn_sl_high_label": {
-        "message": "Ask for a new connection password every time I start my web browser or KeePass.",
+        "message": "Pytaj o nowe hasło połączenia przy każdym uruchomieniu przeglądarki lub KeePassa",
         "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
     },
     "conn_sl_medium": {
@@ -40,7 +40,7 @@
         "description": ""
     },
     "network_auth_proxy_description": {
-        "message": "A proxy requires you to authenticate with it before you can access $1",
+        "message": "Proxy wymaga uwierzytelnienia, aby uzyskać dostęp do $1",
         "description": "Instructions for popup dialog displayed when a proxy requires authentication."
     },
     "matchedLogin_tip": {
@@ -112,7 +112,7 @@
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
     "change_field_status": {
-        "message": "The selected entry will have all username, password and other form fields replaced with the values you have just entered.",
+        "message": "W wybranym wpisie nazwa użytkownika, hasło i inne wypełnione pola zostaną zastąpione danymi, które teraz wprowadziłeś.",
         "description": ""
     },
     "current_website": {
@@ -124,11 +124,11 @@
         "description": "Logging level for problems"
     },
     "keepass_history_pointer": {
-        "message": "KeePass has an \"undo\" feature which you can access from the KeePass \"edit entry\" dialog window. Click on the \"History\" tab and then use the \"Restore\" button to revert to an older version.",
+        "message": "KeePass posiada funkcję \"Cofnij\", której możesz użyć otwierając okno \"Edytuj wpis\". Wybierz zakładkę \"Historia\" i użyj przycisku \"Przywróć\", aby cofnąć wpis do starszej wersji.",
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
-        "message": "You can optionally create a different one by selecting a password profile below. Use KeePass to save new profiles.",
+        "message": "Możesz też wygenerować nowe wybierając jeden z profili hasła poniżej. Użyj KeePassa, aby dodać nowe profile.",
         "description": ""
     },
     "pref_FillPrompt_desc": {
@@ -144,7 +144,7 @@
         "description": ""
     },
     "pref_ConnectionSecurity_explain_change": {
-        "message": "Sometimes making a change to the settings below will cause Kee to ask you for a new random password. You do not need to enter the correct password above in order to change these settings, just adjust them and press the button above.",
+        "message": "Czasami zmiana poniższych ustawień spowoduje, że Kee zapyta o nowe losowe hasło. Nie musisz wprowadzać prawidłowego hasła powyżej, aby zmienić te ustawienia. Po prostu  zmień je i naciśnij przycisk powyżej.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
     },
     "update_existing_entry": {
@@ -152,7 +152,7 @@
         "description": ""
     },
     "site_properties_weight_warning": {
-        "message": "You'll need to carefully check the weights of other configurations if you choose to make use of this advanced feature.",
+        "message": "Powinieneś dokładnie sprawdzić wagi innych konfiguracji jeśli chcesz włączyć tę zaawansowaną funkcję.",
         "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
     },
     "further_info_may_follow": {
@@ -208,7 +208,7 @@
         "description": ""
     },
     "network_authentication": {
-        "message": "Network authentication",
+        "message": "Logowanie",
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
     },
     "Logins_Context_Edit_Login_label": {
@@ -232,7 +232,7 @@
         "description": "Action user can click on to close/dismiss a panel or other user interface element"
     },
     "notifyBarLoginToKeePassButton_tip": {
-        "message": "Zaloguj się do KeePassa aby włączyć Kee",
+        "message": "Zaloguj się do KeePassa, aby włączyć Kee",
         "description": ""
     },
     "conn_setup_expired": {
@@ -240,7 +240,7 @@
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
     "network_auth_http_auth_description": {
-        "message": "A website requires you to authenticate with it before you can access $1. The website says: $2",
+        "message": "Witryna wymaga uwierzytelnienia, aby uzyskać dostęp do $1. Komunikat witryny: $2",
         "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
     },
     "conn_sl_server_min": {
@@ -384,7 +384,7 @@
         "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
     },
     "conn_setup_server_features_missing": {
-        "message": "The KeePassRPC KeePass Password Safe plugin must be upgraded to allow Kee to connect to it. Ensure you are running the latest version of the KeePassRPC plugin by following the quick and easy instructions at $1",
+        "message": " Wtyczka KeePassRPC  dla KeePass Password Safe musi zostać zaktualizowana, aby Kee mógł się z nią połączyć. Upewnij się, że używasz najnowszej wersji wtyczki KeePassRPC stosując się do instrukcji zawartej na stronie$1",
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "site_options_invisible_tip_desc": {
@@ -401,6 +401,10 @@
     },
     "saveMultiPagePasswordText": {
         "message": "Czy chcesz aby Kee zapisał to kilkuetapowe hasło?",
+        "description": ""
+    },
+    "pref_notifyWhenLateDiscovery_label": {
+        "message": "Wyświetl powiadomienie, gdy Kee znajdzie pasujący login po załadowaniu strony",
         "description": ""
     },
     "password_successfully_updated": {
@@ -476,7 +480,7 @@
         "description": "<username> <seperator> <entry title>"
     },
     "conn_setup_retype_password": {
-        "message": "Wpisz nowe hasło gdy zostaniesz o to poproszony.",
+        "message": "Wpisz nowe hasło, gdy zostaniesz o to poproszony.",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
     },
     "dont_show_again": {
@@ -488,7 +492,7 @@
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "notifyBarLaunchKeePassButton_tip": {
-        "message": "Uruchom KeePass aby aktywować Kee",
+        "message": "Uruchom KeePass, aby aktywować Kee",
         "description": ""
     },
     "pref_searchAllOpenDBs_label": {
@@ -504,7 +508,7 @@
         "description": ""
     },
     "site_specific_settings_checkbox_explanation": {
-        "message": "Settings from \"All Websites\" will apply to each section below unless you enable the setting using the checkbox next to it.",
+        "message": "Ustawienia \"Wszystkie witryny\" będą stosowane do każdej z poniższej sekcji, dopóki nie włączysz ustawień zaznaczając pole wyboru obok nich.",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
     "autoclose_countdown": {
@@ -544,7 +548,7 @@
         "description": ""
     },
     "change_field_explanation": {
-        "message": "Kee will also update the website icon (favicon) and any HTTP Auth Realm information. More complex modifications will require you to manually edit the entry.",
+        "message": "Kee zaktualizuje też ikonę witryny (favicon) i wszelkie dane HTTP Auth Realm. Bardziej zaawansowane modyfikacje wymagają ręcznej edycji wpisu.",
         "description": ""
     },
     "site_properties": {
@@ -556,7 +560,7 @@
         "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from KeePass"
     },
     "pref_FillingEntries_heading": {
-        "message": "Filling entries",
+        "message": "Wypełnianie formularza",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "database_label": {
@@ -584,7 +588,7 @@
         "description": ""
     },
     "multi_page_update_warning": {
-        "message": "Multi-page login forms may also require manual editing.",
+        "message": "Logowanie rozłożone na wielu stronach może wymagać ręcznej edycji.",
         "description": ""
     }
 }

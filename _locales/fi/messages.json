@@ -403,6 +403,10 @@
         "message": "Haluatko että Kee tallentaa monisivuisen salasanan?",
         "description": ""
     },
+    "pref_notifyWhenLateDiscovery_label": {
+        "message": "Näytä ilmoitus kun Kee löytää sopivat kirjautumistiedot sivun latautumisen jälkeen",
+        "description": ""
+    },
     "password_successfully_updated": {
         "message": "Salasana vaihdettu onnistuneesti",
         "description": ""

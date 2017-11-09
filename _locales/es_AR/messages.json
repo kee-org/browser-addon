@@ -403,6 +403,10 @@
         "message": "¿Querés que Kee guarde ésta contraseña multipágina?",
         "description": ""
     },
+    "pref_notifyWhenLateDiscovery_label": {
+        "message": "Desplegar notificación cuando Kee encuentre accesos de conexión a un formulario agregado, después de que la página web termine de cargar.",
+        "description": ""
+    },
     "password_successfully_updated": {
         "message": "Contraseña correctamente actualizada",
         "description": ""
