@@ -199,10 +199,6 @@
     "message": "List logins from all open KeePass databases",
     "description": ""
   },
-  "pref_searchNetworkAuth_label": {
-      "message": "Find entries for network authentication requests (e.g. HTTP Auth and proxies)",
-      "description": "Setting to enable network authentication searches"
-  },
   "pref_logLevel_desc": {
     "message": "Choose how verbose you want the log to be. Each higher log level produces more output.",
     "description": ""
