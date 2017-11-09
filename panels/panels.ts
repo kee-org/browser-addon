@@ -152,7 +152,7 @@ document.location.search.substr(1).split("&").forEach(pair => {
     params[key] = value;
 });
 
-const parentFrameId = params["parentFrameId"];
+const parentFrameId = parseInt(params["parentFrameId"]);
 
 // Load our config and start the panel once done
 configManager.load(startup);
