@@ -6,6 +6,11 @@ body {
     margin: 8px 0px;
 }
 
+.span-short {
+    max-width: 600px;
+    display: block;
+}
+
 .formSettingDropdown, .formSettingInput {
     margin-left: 10px;
     margin-right: 15px;
@@ -36,11 +41,12 @@ div.checkbox {
     grid-column-start: 1;
     justify-self: end;
     font-weight: initial;
-    max-width: 200px;
+    max-width: 220px;
 }
 
 .grid > .formSettingDropdown {
     grid-column-start: 2;
+    max-width: 220px;
 }
 
 .grid > .formSettingDescription {
