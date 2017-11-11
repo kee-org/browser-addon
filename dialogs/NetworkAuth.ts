@@ -81,7 +81,7 @@ class NetworkAuth {
 let networkAuth: NetworkAuth;
 
 function setupNetworkAuthDialog () {
-    window.addEventListener("unload", e => chrome.runtime.sendMessage({ action: "NetworkAuth_cancel" }));
+    window.addEventListener("beforeunload", e => chrome.runtime.sendMessage({ action: "NetworkAuth_cancel" }));
     KeeLog.attachConfig(configManager.current);
     networkAuth = new NetworkAuth();
     chrome.runtime.onMessage.addListener(message => {
