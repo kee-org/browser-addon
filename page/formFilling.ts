@@ -34,6 +34,26 @@ class MatchResult {
     mostRelevantFormIndex?: number;
 }
 
+enum SubmitCategory {
+    Unknown,
+    ButtonInForm,
+    SubmitInputInForm,
+    ButtonOutsideForm,
+    ImageInputInForm,
+    ButtonInputInForm,
+    ButtonRoleInForm,
+    ButtonRoleOutsideForm
+}
+
+class SubmitCandidate {
+    distance: number;
+    category: SubmitCategory;
+    element: HTMLElement;
+    semanticScore: number;
+    score: number;
+    visible: boolean;
+}
+
 class FormFilling {
 
     private Logger: KeeLogger;
@@ -924,190 +944,149 @@ class FormFilling {
 
     private findSubmitButton (form: HTMLFormElement, submitTargetNeighbour: HTMLElement)
     {
-        // Priority 1: button within form provided: @type != reset
-        // Priority 2: input @type=submit within form
-        // Priority 3: button outside form with @form attribute provided: @type != reset
-        // Priority 3: input @type=image within form
-        // Priority 4: input @type=button within form
-        // Priority 5: <any element>@role=button within form provided: there is only 1 match
-        // Priority 6: <any element>@role=button outside form provided: there is only 1 match
+        const candidates: SubmitCandidate[] = [];
 
-        // Priority 1-4 can all be prioritised over each other if the element in question matches
-        // a goodWord or deprioritised if it matches a badWord (images can only be affected
-        // indirectly due to deprioritisation of other possibilities) but all things equal, they will
-        // follow the stated priority.
+        //TODO: Improve performance by re-ordering adjustment types and bailing out
+        // early once we reach a point that we know the element can't "win"
 
-        const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in", "next"]; //TODO:3: other languages
-        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp", "forgot"]; //TODO:3: other languages
-
-        const buttonElements = form.ownerDocument.getElementsByTagName("button");
-        const inputElements = form.getElementsByTagName("input");
-        const roleElementsForm = Array.from(form.querySelectorAll("[role=button]"))
-            .filter((element: any) => {
-                for (const bw in badWords) {
-                    if (element.name && element.name.toLowerCase().indexOf(badWords[bw]) >= 0) return false;
-                    if (element.id && element.id.toLowerCase().indexOf(badWords[bw]) >= 0) return false;
-                }
-                return true;
-            });
-        const roleElementsDoc = Array.from(form.ownerDocument.querySelectorAll("[role=button]"))
-            .filter((element: any) => {
-                for (const bw in badWords) {
-                    if (element.name && element.name.toLowerCase().indexOf(badWords[bw]) >= 0) return false;
-                    if (element.id && element.id.toLowerCase().indexOf(badWords[bw]) >= 0) return false;
-                }
-                return true;
-            });
-        let submitElement: HTMLElement = null;
-        const submitElements = [];
-
-        const rankedButtonDistances = this.rankElementsByDistance(buttonElements, submitTargetNeighbour);
-
-        // Rank the buttons
-        for (let i = 0; i < buttonElements.length; i++)
-        {
-            if (!buttonElements[i].type || buttonElements[i].type != "reset")
+        Array.from(form.ownerDocument.getElementsByTagName("button")).forEach( value => {
+            if (!value.type || value.type != "reset")
             {
-                let score = 0;
-                if (buttonElements[i].form && buttonElements[i].form == form)
-                    score = 6;
-                else
-                    score = 4;
-
-                // Boost the score if the button is closer to our form target than other options
-                score += rankedButtonDistances[i];
-
                 const semanticValues: string[] = [];
-                if (buttonElements[i].name !== undefined && buttonElements[i].name !== null)
+                if (value.name !== undefined && value.name !== null)
                 {
-                    semanticValues.push(buttonElements[i].name.toLowerCase());
+                    semanticValues.push(value.name.toLowerCase());
                 }
-                if (buttonElements[i].textContent !== undefined && buttonElements[i].textContent !== null)
+                if (value.textContent !== undefined && value.textContent !== null)
                 {
-                    semanticValues.push(buttonElements[i].textContent.toLowerCase());
+                    semanticValues.push(value.textContent.toLowerCase());
                 }
-                if (buttonElements[i].value !== undefined && buttonElements[i].value !== null)
+                if (value.value !== undefined && value.value !== null)
                 {
-                    semanticValues.push(buttonElements[i].value.toLowerCase());
-                }
-                if (semanticValues.length > 0) {
-                    let goodScore = false;
-                    let badScore = false;
-
-                    for (const gw in goodWords)
-                        if (semanticValues.findIndex(value => value.indexOf(goodWords[gw]) >= 0) >= 0)
-                            goodScore = true;
-                    for (const bw in badWords)
-                        if (semanticValues.findIndex(value => value.indexOf(badWords[bw]) >= 0) >= 0)
-                            badScore = true;
-
-                    if (goodScore) score += 5;
-                    if (badScore) score -= 5;
+                    semanticValues.push(value.value.toLowerCase());
                 }
 
-                // Heavy penalty for invisible elements
-                if (!formUtils.isDOMElementVisible(buttonElements[i])) score -= 6;
+                const semanticScore = this.scoreAdjustmentForMagicWords(semanticValues, 50);
 
-                submitElements.push({score: score, el: buttonElements[i]});
+                candidates.push({
+                    distance: this.commonParentDistance(value, submitTargetNeighbour),
+                    category: (value.form && value.form == form) ? SubmitCategory.ButtonInForm : SubmitCategory.ButtonOutsideForm,
+                    element: value,
+                    score: 0,
+                    semanticScore: semanticScore,
+                    visible: formUtils.isDOMElementVisible(value)
+                });
             }
-        }
+        });
 
-        // Rank the input buttons
-        for (let i = 0; i < inputElements.length; i++)
-        {
-            if (inputElements[i].type == null) continue;
-
-            let score = 0;
-
-            if (inputElements[i].type == "button") score = 3;
-            else if (inputElements[i].type == "image") score = 4;
-            else if (inputElements[i].type == "submit") score = 5;
-
-            if (inputElements[i].type == "submit" || inputElements[i].type == "button")
+        Array.from(form.getElementsByTagName("input")).forEach( value => {
+            if (value.type != null)
             {
-                if (inputElements[i].name !== undefined && inputElements[i].name !== null)
+                let semanticScore = 0;
+
+                if (value.type == "submit" || value.type == "button")
                 {
-                    for (const gw in goodWords)
-                        if (inputElements[i].name.toLowerCase().indexOf(goodWords[gw]) >= 0)
-                            score += 5;
-                    for (const bw in badWords)
-                        if (inputElements[i].name.toLowerCase().indexOf(badWords[bw]) >= 0)
-                            score -= 5;
+                    if (value.name !== undefined && value.name !== null)
+                    {
+                        semanticScore += this.scoreAdjustmentForMagicWords([value.name.toLowerCase()], 50);
+                    }
+
+                    // Names are more important but sometimes they don't exist or are random
+                    // so check what is actually displayed to the user
+                    if (value.value !== undefined && value.value !== null)
+                    {
+                        semanticScore += this.scoreAdjustmentForMagicWords([value.value.toLowerCase()], 40);
+                    }
                 }
 
-                // Names are more important but sometimes they don't exist or are random
-                // so check what is actually displayed to the user
-                if (inputElements[i].value !== undefined && inputElements[i].value !== null)
+                if (value.type == "submit" || value.type == "button" || value.type == "image")
                 {
-                    for (const gw in goodWords)
-                        if (inputElements[i].value.toLowerCase().indexOf(goodWords[gw]) >= 0)
-                            score += 4;
-                    for (const bw in badWords)
-                        if (inputElements[i].value.toLowerCase().indexOf(badWords[bw]) >= 0)
-                            score -= 4;
+
+                    candidates.push({
+                        distance: this.commonParentDistance(value, submitTargetNeighbour),
+                        category: value.type == "button" ? SubmitCategory.ButtonInputInForm :
+                                    (value.type == "image" ? SubmitCategory.ImageInputInForm :
+                                    SubmitCategory.SubmitInputInForm),
+                        element: value,
+                        score: 0,
+                        semanticScore,
+                        visible: formUtils.isDOMElementVisible(value)
+                    });
                 }
             }
+        });
 
-            // Heavy penalty for invisible elements
-            if (!formUtils.isDOMElementVisible(inputElements[i])) score -= 6;
-
-            submitElements.push({score: score, el: inputElements[i]});
-        }
-
-        if (roleElementsForm.length == 1) {
-            const el = roleElementsForm[0] as HTMLElement;
-            submitElements.push({score: formUtils.isDOMElementVisible(el) ? 2 : -4, el: el});
-        } else if (roleElementsForm.length > 1 && submitTargetNeighbour) {
-            const bestRoleElementMatch = this.bestRoleElementMatch(roleElementsForm, submitTargetNeighbour);
-            // If best match element is invisible, ignore
-            if (formUtils.isDOMElementVisible(bestRoleElementMatch))
+        Array.from(form.ownerDocument.querySelectorAll("[role=button]")).forEach( (value: any) => {
+            const semanticValues: string[] = [];
+            if (value.name !== undefined && value.name !== null)
             {
-                submitElements.push({score: 2, el: bestRoleElementMatch});
+                semanticValues.push(value.name.toLowerCase());
             }
-        }
-
-        if (roleElementsDoc.length == 1) {
-            const el = roleElementsDoc[0] as HTMLElement;
-            submitElements.push({score: formUtils.isDOMElementVisible(el) ? 1 : -5, el: el});
-        } else if (roleElementsDoc.length > 1 && submitTargetNeighbour) {
-            const bestRoleElementMatch = this.bestRoleElementMatch(roleElementsDoc, submitTargetNeighbour);
-            // If best match element is invisible, ignore
-            if (formUtils.isDOMElementVisible(bestRoleElementMatch))
+            if (value.id !== undefined && value.id !== null)
             {
-                submitElements.push({score: 1, el: bestRoleElementMatch});
+                semanticValues.push(value.id.toLowerCase());
             }
-        }
 
-        // Find the best submit button
-        let largestScore = 0;
-        for (let j = 0; j < submitElements.length; j++)
-        {
-            if (submitElements[j].score > largestScore)
-            {
-                submitElement = submitElements[j].el;
-                largestScore = submitElements[j].score;
+            const semanticScore = this.scoreAdjustmentForMagicWords(semanticValues, 50);
+
+            candidates.push({
+                distance: this.commonParentDistance(value, submitTargetNeighbour),
+                category: (value.form && value.form == form) ? SubmitCategory.ButtonRoleInForm : SubmitCategory.ButtonRoleOutsideForm,
+                element: value,
+                score: 0,
+                semanticScore,
+                visible: formUtils.isDOMElementVisible(value)
+            });
+        });
+
+        const submitElements = candidates.sort((a, b) => {
+            if (a.distance > b.distance) return 1;
+            if (a.distance < b.distance) return -1;
+            return 0;
+        });
+
+        submitElements.forEach((candidate, index, elements) => {
+            candidate.score = index/elements.length;
+            switch (candidate.category) {
+                case SubmitCategory.ButtonInForm: candidate.score += 60; break;
+                case SubmitCategory.SubmitInputInForm: candidate.score += 50; break;
+                case SubmitCategory.ButtonOutsideForm: candidate.score += 40; break;
+                case SubmitCategory.ImageInputInForm: candidate.score += 40; break;
+                case SubmitCategory.ButtonInputInForm: candidate.score += 30; break;
+                case SubmitCategory.ButtonRoleInForm: candidate.score += 20; break;
+                case SubmitCategory.ButtonRoleOutsideForm: candidate.score += 10; break;
             }
-        }
+            candidate.score += candidate.semanticScore;
+            candidate.score += candidate.visible ? 0 : -60;
+        });
+
         //TODO:3: more accurate searching of submit buttons, etc. to avoid password resets if possible
         // maybe special cases for common HTML output patterns (e.g. javascript-only ASP.NET forms)
 
-        return submitElement;
+        return submitElements.sort((a, b) => {
+            if (a.score < b.score) return 1;
+            if (a.score > b.score) return -1;
+            return 0;
+        })[0].element;
     }
 
-    private rankElementsByDistance (elements: HTMLElement[] | NodeListOf<HTMLElement>, targetNode) {
+    private scoreAdjustmentForMagicWords (semanticValues: string[], factor: number) {
+        const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in", "next"]; //TODO:3: other languages
+        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp", "forgot"]; //TODO:3: other languages
+        let goodScore = false;
+        let badScore = false;
 
-        function rank (v) {
-            const rankindex = v.slice().sort((a, b) => b-a).reduceRight(
-                (acc, item, index) => { acc[item] = index; return acc; }, Object.create(null));
-            return v.map(item => rankindex[item]+1);
-        }
+        for (const gw in goodWords)
+            if (semanticValues.findIndex(value => value.indexOf(goodWords[gw]) >= 0) >= 0)
+                goodScore = true;
+        for (const bw in badWords)
+            if (semanticValues.findIndex(value => value.indexOf(badWords[bw]) >= 0) >= 0)
+                badScore = true;
 
-        const distances = [];
-        for (let i = 0; i < elements.length; i++)
-        {
-            distances[i] = this.commonParentDistance(elements[i], targetNode);
-        }
-        return rank(distances);
+        if (goodScore && badScore) return 0;
+        if (badScore) return -1*factor;
+        if (goodScore) return factor;
+        return 0;
     }
 
     private bestRoleElementMatch (elements: Element[], targetNode) {
