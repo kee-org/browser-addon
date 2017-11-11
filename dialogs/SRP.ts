@@ -16,6 +16,10 @@ class SrpDialog {
         });
 
         document.getElementById("ok").addEventListener("click", this.primaryButtonClicked.bind(this));
+        document.getElementById("form").addEventListener("submit", (event => {
+            event.preventDefault();
+            this.primaryButtonClicked();
+        }).bind(this));
 
         window.addEventListener("beforeunload", e => chrome.runtime.sendMessage({action: "SRP_ok", password: "" }));
     }
