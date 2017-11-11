@@ -17,7 +17,7 @@ class SrpDialog {
 
         document.getElementById("ok").addEventListener("click", this.primaryButtonClicked.bind(this));
 
-        window.addEventListener("unload", e => chrome.runtime.sendMessage({action: "SRP_ok", password: "" }));
+        window.addEventListener("beforeunload", e => chrome.runtime.sendMessage({action: "SRP_ok", password: "" }));
     }
 
     updateButtonState () {
