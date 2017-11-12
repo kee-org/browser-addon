@@ -437,9 +437,6 @@ class FormFilling {
             // matching entries (so we fill the most relevant form)
             this.matchResult.formRelevanceScores[i] = 0;
 
-            // ignore invisible forms
-            if (!formUtils.isDOMElementVisible(form)) continue;
-
             this.Logger.debug("about to get form fields");
             const { actualUsernameIndex: usernameIndex, pwFields: passwordFields, otherFields } =
                 this.formUtils.getFormFields(form, false);
