@@ -6,11 +6,23 @@ body {
     width: 400px;
 }
 
+#connectionStatus {
+    margin-bottom: 5px;
+}
+#menu-items {
+    margin-bottom: 0px !important;
+}
+#loading {
+    margin-bottom: 0px !important;
+}
+#main {
+    margin-bottom: 0px !important;
+}
 #notifications {
     border-top:black 2px solid;
     border-bottom:black 2px solid;
     padding: 10px 0px;
-    margin: 5px 0px;
+    margin: 5px 5px 10px 0px;
 }
 
 #notifications > div {
