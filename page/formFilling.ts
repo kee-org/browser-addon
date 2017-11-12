@@ -1066,6 +1066,8 @@ class FormFilling {
         //TODO:3: more accurate searching of submit buttons, etc. to avoid password resets if possible
         // maybe special cases for common HTML output patterns (e.g. javascript-only ASP.NET forms)
 
+        if (submitElements.length <= 0) return null;
+
         return submitElements.sort((a, b) => {
             if (a.score < b.score) return 1;
             if (a.score > b.score) return -1;
