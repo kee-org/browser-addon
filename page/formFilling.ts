@@ -1046,7 +1046,7 @@ class FormFilling {
         });
 
         submitElements.forEach((candidate, index, elements) => {
-            candidate.score = index/elements.length;
+            candidate.score = index/elements.length*100;
             switch (candidate.category) {
                 case SubmitCategory.ButtonInForm: candidate.score += 60; break;
                 case SubmitCategory.SubmitInputInForm: candidate.score += 50; break;
