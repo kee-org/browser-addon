@@ -156,10 +156,11 @@ class Kee {
     }
 
     frameIdWithMatchedLogins (frames: Map<number, FrameState>) {
-        frames.forEach((frame, frameId) => {
-            if (frame && frame.logins && frame.logins.length > 0) return frameId;
+        let frameId = -1;
+        frames.forEach((frame, i) => {
+            if (frameId == -1 && frame && frame.logins && frame.logins.length > 0) frameId = i;
         });
-        return -1;
+        return frameId;
     }
 
     init () {
