@@ -520,7 +520,9 @@ class FormFilling {
                 getElementsByTagName: function () { return this.elements; }, // Only use is for listing input elements
                 querySelectorAll: function () { return []; }, // Only use is for listing button elements
                 submit: function () { return; }, // Not possible to submit a pseudo form unless a button with custom JS has already been found
-                offsetParent: true // This tricks element visibility checks into treating this as visible to the user
+                offsetParent: true, // This tricks element visibility checks into treating this as visible to the user
+                addEventListener: function (name: string, handler) { return; }, //TODO:3: hook up to the submit function to simulate real form submission
+                removeEventListener: function (name: string, handler) { return; }
             };
         }
 
