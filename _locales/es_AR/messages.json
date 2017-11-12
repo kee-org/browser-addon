@@ -75,6 +75,10 @@
         "message": "Reemplazar la URL de entrada (borrar la antigua URL completamente)",
         "description": ""
     },
+    "point_user_to_tutorial_start": {
+        "message": "Please spend a few minutes going through the new",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
+    },
     "pref_listAllOpenDBs_label": {
         "message": "Listar conexiones de todas las bases de datos abiertas de KeePass",
         "description": ""
@@ -111,6 +115,10 @@
         "message": "Estás conectado a $1 base de datos de contraseñas  $2está activo.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
+    "point_user_to_kee_news_announcement": {
+        "message": "You can find much more information about Kee 2.0 in the following news article and the links included within it:",
+        "description": "Will have a URL suffixed after the colon"
+    },
     "change_field_status": {
         "message": "La entrada seleccionada tendrá todos los usuarios, contraseñas y otros campos de formularios, reemplazados con los valores que ingresaste.",
         "description": ""
@@ -118,6 +126,14 @@
     "current_website": {
         "message": "El presente sitio web",
         "description": ""
+    },
+    "point_user_to_forum_link_text": {
+        "message": "community forum",
+        "description": "Name of the link to the community forum"
+    },
+    "point_user_to_tutorial_start_install": {
+        "message": "Please then spend a few minutes going through the new",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
     },
     "pref_logLevelErrors_label": {
         "message": "Errores",
@@ -143,6 +159,10 @@
         "message": "Para abrir o conectarse a KeePass, usar éste archivo de base de datos.",
         "description": ""
     },
+    "kee_install_notes_keepass": {
+        "message": "You need to run KeePass so that Kee can connect to it. If KeePass is not installed on your computer, you can easily download and install it yourself.",
+        "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
+    },
     "pref_ConnectionSecurity_explain_change": {
         "message": "A veces hacer un cambio a las configuraciones de abajo causará que Kee te pida una nueva contraseña aleatoria. No necesitás ingresar arriba la contraseña correcta para cambiar éstas configuraciones, sólo ajustalas y apretá el botón de arriba. ",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
@@ -151,6 +171,10 @@
         "message": "Actualizá la entrada existente",
         "description": ""
     },
+    "notification_only_shown_some_times": {
+        "message": "This additional popup notification will only be shown a small number of times.",
+        "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
+    },
     "site_properties_weight_warning": {
         "message": "Necesitarás chequear cuidadosamente las ponderaciones de otras configuraciones si elegís hacer uso de ésta característica avanzada.",
         "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
@@ -158,6 +182,14 @@
     "further_info_may_follow": {
         "message": "Para más información puede seguir: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "saveLatestLogin": {
+        "message": "Save latest login",
+        "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
+    },
+    "welcome_to_kee": {
+        "message": "Welcome to Kee",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "change_url_option_1": {
         "message": "Reemplazar la URL de entrada (pero aún rellenar formularios si visitás la antigua URL)",
@@ -186,6 +218,10 @@
     "search_again": {
         "message": "Buscar de nuevo",
         "description": ""
+    },
+    "point_user_to_install_instructions_end": {
+        "message": ".",
+        "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "conn_sl_link": {
         "message": "Aprendé más sobre éstas configuraciones y la comunicación entre tu navegador  y KeePass en el manual.",
@@ -239,6 +275,14 @@
         "message": "Has estado usando la misma llave secreta por semasiado tiempo.",
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
+    "version_2_upgrade_intro": {
+        "message": "Version 2.0 brings exciting new features and some enforced changes in order to support Firefox 57 and higher.",
+        "description": "Explains that version 2.0 is different."
+    },
+    "notification_yellow_background": {
+        "message": "The Kee button has a yellow background when a new notification appears.",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
+    },
     "network_auth_http_auth_description": {
         "message": "Un sitio web requiere que te autentifiques con él antes de que puedas acceder $1. El sitio web dice: $2",
         "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
@@ -246,6 +290,10 @@
     "conn_sl_server_min": {
         "message": "Nivel de seguridad de KeePass mínimo aceptable",
         "description": ""
+    },
+    "notification_raised_title": {
+        "message": "Kee has a notification to show you",
+        "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "conn_sl_high": {
         "message": "Alto",
@@ -270,6 +318,14 @@
     "srp_connect": {
         "message": "Conectar",
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
+    },
+    "kee_install_notes_keepassrpc": {
+        "message": "You'll need to install the KeePassRPC.plgx plugin for KeePass too, if you haven't already. It is as easy as putting a file in the right place on your computer and restarting KeePass.",
+        "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
+    },
+    "point_user_to_tutorial_link_text": {
+        "message": "interactive tutorial",
+        "description": "Name of the link to the interactive tutorial page"
     },
     "pref_FillNote_desc": {
         "message": "Podés ignorar las \"opciones de Kee\" de arriba sobre comportamientos por entradas individuales en el dialogo de KeePass \"editar entrada\",",
@@ -347,6 +403,10 @@
         "message": "Encontrando entradas",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
     },
+    "point_user_to_upgrade_instructions": {
+        "message": "If you have not upgraded KeeFox recently, you will need to manually copy a file into your KeePass plugins folder. Instructions can be found at:",
+        "description": "Will have a URL suffixed after the colon"
+    },
     "conn_setup_invalid_param": {
         "message": "Kee suministró un parámetro no válido. Para más información puede seguir: $1",
         "description": "This probably indicates a bug in Kee - we sent something to KeePassRPC that it wasn't expecting."
@@ -403,10 +463,6 @@
         "message": "¿Querés que Kee guarde ésta contraseña multipágina?",
         "description": ""
     },
-    "pref_notifyWhenLateDiscovery_label": {
-        "message": "Desplegar notificación cuando Kee encuentre accesos de conexión a un formulario agregado, después de que la página web termine de cargar.",
-        "description": ""
-    },
     "password_successfully_updated": {
         "message": "Contraseña correctamente actualizada",
         "description": ""
@@ -426,6 +482,10 @@
     "pref_DoNothing_desc": {
         "message": "No hacer nada",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
+    },
+    "point_user_to_tutorial_end": {
+        "message": "to learn how to use the new version.",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
     },
     "srp_save_connect": {
         "message": "Guardar y conectar",
@@ -511,6 +571,10 @@
         "message": "Configuraciones de \"Todos los sitios\" serán aplicados a cada sección debajo salvo que habilités la configuración, usando la casilla de verificaión de al lado ",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
+    "the_new_name_for_keefox": {
+        "message": "The new name for KeeFox",
+        "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
+    },
     "autoclose_countdown": {
         "message": "Autocerrarse en $1segundos",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -523,6 +587,10 @@
         "message": "Buscar...",
         "description": ""
     },
+    "point_user_to_tutorial_end_install": {
+        "message": "to learn how to use Kee.",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
+    },
     "target": {
         "message": "Objetivo",
         "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
@@ -534,6 +602,10 @@
     "conn_setup_client_sl_low": {
         "message": "Kee pidió un nivel de seguridad que era demasiado bajo para ser aceptado por el servidor de contraseñas. Debés reiniciar el proceso de autenticación utilizando más alta seguridad.",
         "description": ""
+    },
+    "kee_install_notes_intro": {
+        "message": "Kee stores your passwords in a secure separate password manager called KeePass Password Safe 2. It's full of great features and Kee keeps your everyday internet login tasks simple and secure.",
+        "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
     },
     "copy_password_label": {
         "message": "Copiar contraseña",
@@ -562,6 +634,14 @@
     "pref_FillingEntries_heading": {
         "message": "Completando entradas\n",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
+    },
+    "notification_save_password_tip": {
+        "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+    },
+    "point_user_to_install_instructions_start": {
+        "message": "Instructions for both of the above steps can be found on our",
+        "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "database_label": {
         "message": "Base de datos",

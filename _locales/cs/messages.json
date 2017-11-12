@@ -75,6 +75,10 @@
         "message": "Změnit URL položky (smazat staré URL)",
         "description": ""
     },
+    "point_user_to_tutorial_start": {
+        "message": "Prosím, věnujte pár minut k seznámení se s novinkami",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
+    },
     "pref_listAllOpenDBs_label": {
         "message": "Prohledávat všechny databáze otevřené v KeePass",
         "description": ""
@@ -111,6 +115,10 @@
         "message": "Jste přihlášeni do $1 databází hesel. Aktivní je '$2'.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
+    "point_user_to_kee_news_announcement": {
+        "message": "Více informací o Kee můžete nalézt v následujících článcích a odkazech v nich obsažených:",
+        "description": "Will have a URL suffixed after the colon"
+    },
     "change_field_status": {
         "message": "U označené položky budou nahrazena všechna formulářová pole jako uživatelské jméno, heslo a další hodnotami, které jste právě zadali.",
         "description": ""
@@ -118,6 +126,14 @@
     "current_website": {
         "message": "Aktuální web",
         "description": ""
+    },
+    "point_user_to_forum_link_text": {
+        "message": "fórum komunity",
+        "description": "Name of the link to the community forum"
+    },
+    "point_user_to_tutorial_start_install": {
+        "message": "Prosím, potom věnujte pár minut k seznámení se s novinkami",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
     },
     "pref_logLevelErrors_label": {
         "message": "Chyby",
@@ -143,6 +159,10 @@
         "message": "Používat tuto databázi hesel při spouštění KeePassu nebo přihlašování do něj",
         "description": ""
     },
+    "kee_install_notes_keepass": {
+        "message": "Musíte spustit KeePass, aby se s ním Kee mohl spojit. Pokud není na vašem počítači KeePass nainstalován, můžete si ho jednoduše stáhnout a nainstalovat sami.",
+        "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
+    },
     "pref_ConnectionSecurity_explain_change": {
         "message": "Změna následujících nastavení může vyvolat dialogové okno, kde Kee znovu vyžaduje nové náhodné heslo. Není nutné zadávat správné heslo, aby se provedla změna těchto nastavení. Prostě je nastavte a stiskněte tlačítko výše.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
@@ -151,6 +171,10 @@
         "message": "Aktualizovat existující záznam",
         "description": ""
     },
+    "notification_only_shown_some_times": {
+        "message": "This additional popup notification will only be shown a small number of times.",
+        "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
+    },
     "site_properties_weight_warning": {
         "message": "Pokud chcete změnit toto rozšířené nastavení, opravdu pečlivě zkontrolujte váhu dalších nastavení.",
         "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
@@ -158,6 +182,14 @@
     "further_info_may_follow": {
         "message": "Další informace: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "saveLatestLogin": {
+        "message": "Uložit poslení přihlášení",
+        "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
+    },
+    "welcome_to_kee": {
+        "message": "Vítejte v Kee",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "change_url_option_1": {
         "message": "Změnit URL položky (ale ještě vyplňovat formuláře, pokud navštívíte staré URL)",
@@ -186,6 +218,10 @@
     "search_again": {
         "message": "Hledat znovu",
         "description": ""
+    },
+    "point_user_to_install_instructions_end": {
+        "message": ".",
+        "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "conn_sl_link": {
         "message": "Zjistěte více o těchto nastaveních a o komunikaci mezi webovým prohlížečem a aplikací KeePass v uživatelské příručce",
@@ -239,6 +275,14 @@
         "message": "Používáte příliš dlouho stejný tajný klíč.",
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
+    "version_2_upgrade_intro": {
+        "message": "Verze 2.0 přináší nové vzrušující funkce a některé vynucené změny, aby rozšíření Kee bylo možné provozovat s Firefoxem 57 a vyšší.",
+        "description": "Explains that version 2.0 is different."
+    },
+    "notification_yellow_background": {
+        "message": "The Kee button has a yellow background when a new notification appears.",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
+    },
     "network_auth_http_auth_description": {
         "message": "Web vyžaduje ověření před tím, než přistoupíte na $1. Web hlásí: $2",
         "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
@@ -246,6 +290,10 @@
     "conn_sl_server_min": {
         "message": "Minimální přípustná úroveň zabezpečení KeePassu",
         "description": ""
+    },
+    "notification_raised_title": {
+        "message": "Kee has a notification to show you",
+        "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "conn_sl_high": {
         "message": "Vysoká",
@@ -270,6 +318,14 @@
     "srp_connect": {
         "message": "Připojit",
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
+    },
+    "kee_install_notes_keepassrpc": {
+        "message": "Bude také nutné nainstalovat plugin KeePassRPC.plgx, pokud jste již tak neučinili. Je to tak jednoduché jako vložení souboru na správné místo v počítačí a restartování KeePassu.",
+        "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
+    },
+    "point_user_to_tutorial_link_text": {
+        "message": "interaktivní průvodce",
+        "description": "Name of the link to the interactive tutorial page"
     },
     "pref_FillNote_desc": {
         "message": "Můžete přepsat chování \"Kee zvolí\" pro individulání položky v KeePass dialogu \"editovat položku\".",
@@ -347,6 +403,10 @@
         "message": "Hledání položek",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
     },
+    "point_user_to_upgrade_instructions": {
+        "message": "Pokud jste nedávno neupgradovali KeeFox, bude třeba ručně zkopírovat soubor do složky plugins vašeho KeePassu. Postup najdete na:",
+        "description": "Will have a URL suffixed after the colon"
+    },
     "conn_setup_invalid_param": {
         "message": "Kee dodal nesprávný parametr. Další informace: $1",
         "description": "This probably indicates a bug in Kee - we sent something to KeePassRPC that it wasn't expecting."
@@ -403,10 +463,6 @@
         "message": "Chcete, aby Kee uložil toto vícestránkové heslo?",
         "description": ""
     },
-    "pref_notifyWhenLateDiscovery_label": {
-        "message": "Zobrazovat notifikaci, když Kee najde odpovidající pole po načtení stránky.",
-        "description": ""
-    },
     "password_successfully_updated": {
         "message": "Heslo bylo úspěšně zaktualizováno.",
         "description": ""
@@ -426,6 +482,10 @@
     "pref_DoNothing_desc": {
         "message": "Nedělat nic",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
+    },
+    "point_user_to_tutorial_end": {
+        "message": "naučit se jak používat tuto novou verzi",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
     },
     "srp_save_connect": {
         "message": "Uložit a připojit",
@@ -511,6 +571,10 @@
         "message": "Nastavení \"Všechny weby\" se aplikuje na každou sekci níže, pokud není zaštkrtnuto zatržítko vedle něj.",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
+    "the_new_name_for_keefox": {
+        "message": "Nové jméno pro KeeFox",
+        "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
+    },
     "autoclose_countdown": {
         "message": "Automatické zavření za $1 vteřin(-y)",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -523,6 +587,10 @@
         "message": "Hledat...",
         "description": ""
     },
+    "point_user_to_tutorial_end_install": {
+        "message": "naučit se jak používat Kee",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
+    },
     "target": {
         "message": "Cíl",
         "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
@@ -534,6 +602,10 @@
     "conn_setup_client_sl_low": {
         "message": "Kee požádal o úroveň zabezpečení, která je přiliš nízká než jakou povoluje server hesel. Musíte znovu spustit autentizaci s použitím vyššího zabezpečení.",
         "description": ""
+    },
+    "kee_install_notes_intro": {
+        "message": "Kee ukládá vaše hesla v odděleném bezpečném správci hesel s názvem KeePass Password Safe 2. Je plný skvělých funkcí, ale Kee zjednodušuje vaše každodenní přihlašování k internetovým účtům.",
+        "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
     },
     "copy_password_label": {
         "message": "Kopírovat heslo",
@@ -562,6 +634,14 @@
     "pref_FillingEntries_heading": {
         "message": "Vyplňování položek",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
+    },
+    "notification_save_password_tip": {
+        "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+    },
+    "point_user_to_install_instructions_start": {
+        "message": "Pokyny pro oba výše zmíněné kroky jsou k dispozici na",
+        "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "database_label": {
         "message": "Databáze",
