@@ -124,7 +124,7 @@ class FormFilling {
         formFilling.matchedLoginsPanelStubRaf = requestAnimationFrame(formFilling.updateMatchedLoginsPanelPosition);
     }
 
-    private calculateFieldMatchScore (formField, dataField, currentPage, overWriteFieldsAutomatically)
+    private calculateFieldMatchScore (formField: keeLoginField, dataField, currentPage, overWriteFieldsAutomatically)
     {
         // Default score is 1 so that bad matches which are at least the correct type
         // have a chance of being selected if no good matches are found
@@ -179,6 +179,9 @@ class FormFilling {
 
         // If page # is unestablished (<=0)
         //else do nothing
+
+        if (formUtils.isDOMElementVisible(formField.DOMInputElement || formField.DOMSelectElement))
+            score += 25;
 
         return score;
     }
