@@ -31,6 +31,11 @@ function updateAppState (newState) {
 
 function updateNotifications () {
     const notificationContainer = $("#notifications");
+    if (appState.notifications.length > 0) {
+        notificationContainer.classList.remove("hidden");
+    } else {
+        notificationContainer.classList.add("hidden");
+    }
     while (notificationContainer.hasChildNodes()) {
         notificationContainer.removeChild(notificationContainer.lastChild);
     }
