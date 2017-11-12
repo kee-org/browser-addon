@@ -1,5 +1,10 @@
 /// <reference path="../common/Button.ts" />
 
+// These notifications are displayed within the Kee browser action popup.
+// They may persist for significant lengths of time.
+// For transient system notification popups (sometimes known as growls)
+// look at the background/NativeNotification class
+
 class KeeNotification {
 
     constructor (

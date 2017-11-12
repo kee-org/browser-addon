@@ -187,13 +187,31 @@ class Kee {
 
     }
 
-    notifyUser (notification: KeeNotification) {
+    notifyUser (notification: KeeNotification, nativeNotification?: NativeNotification) {
         if (!notification.allowMultiple) {
             kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
         }
         kee.appState.notifications.push(notification);
         try { kee.browserPopupPort.postMessage({appState: kee.appState}); } catch (e) {}
         browser.browserAction.setIcon({path: "common/images/highlight-48.png" });
+        if (nativeNotification) {
+            browser.notifications.create({
+                type: "basic",
+                iconUrl: browser.extension.getURL("common/images/128.png"),
+                title: nativeNotification.title,
+                message: nativeNotification.message
+            });
+        } else {
+            if (configManager.current.notificationCountGeneric < 5) {
+                browser.notifications.create({
+                    type: "basic",
+                    iconUrl: browser.extension.getURL("common/images/128.png"),
+                    title: $STR("notification_raised_title"),
+                    message: $STR("notification_yellow_background") + "\n" + $STR("notification_only_shown_some_times")
+                });
+                configManager.setASAP({notificationCountGeneric: configManager.current.notificationCountGeneric+1});
+            }
+        }
     }
 
     removeUserNotifications (unlessTrue: (notification: KeeNotification) => boolean) {
@@ -734,6 +752,16 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         }
 
         kee.persistentTabStates.get(this.sender.tab.id).items.push(persistentItem);
+
+        if (configManager.current.notificationCountSavePassword < 10) {
+            browser.notifications.create({
+                type: "basic",
+                iconUrl: browser.extension.getURL("common/images/128.png"),
+                title: $STR("savePasswordText"),
+                message: $STR("notification_save_password_tip") + "\n" + $STR("notification_only_shown_some_times")
+            });
+            configManager.setASAP({notificationCountSavePassword: configManager.current.notificationCountSavePassword+1});
+        }
     }
     if (msg.action === "showMatchedLoginsPanel") {
         kee.tabStates.get(this.sender.tab.id).framePorts.get(0).postMessage({action: "showMatchedLoginsPanel", frameId: this.sender.frameId });

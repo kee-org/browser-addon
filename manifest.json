@@ -2,8 +2,8 @@
     "manifest_version": 2,
     "name": "Kee",
     "default_locale": "en",
-    "version": "2.0.0.22",
-    "version_name": "2.0.0 Beta 4",
+    "version": "2.0.0.23",
+    "version_name": "2.0.0 Beta 5",
     "author": "Chris Tomlinson",
     "description": "Simple and secure password management. Login automatically, never forget another password and stay in control.",
     "background": {
@@ -65,7 +65,8 @@
         "privacy",
         "webRequestBlocking",
         "webRequest",
-        "<all_urls>"
+        "<all_urls>",
+        "notifications"
     ],
     "web_accessible_resources" : [
 		"panels/*"

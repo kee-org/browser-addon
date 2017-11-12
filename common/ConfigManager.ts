@@ -52,6 +52,8 @@ defaultConfig.triggerChangeInputEventAfterFill = false;
 defaultConfig.autoSubmitNetworkAuthWithSingleMatch = false;
 defaultConfig.searchNetworkAuth = true;
 defaultConfig.portConnectionDelay = 500;
+defaultConfig.notificationCountGeneric = 0;
+defaultConfig.notificationCountSavePassword = 0;
 
 class ConfigManager {
     public current: Config;
@@ -154,11 +156,24 @@ class ConfigManager {
         });
     }
 
+    // This is typically invalid due to the previous execution of alpha and beta code
+    // on the user's system. Maybe should just bump up config versions every time but
+    // with only a few hours until 2.0 launch, it's not the time to test such a new migration process.
     private fixInvalidConfigData () {
+        let saveNeeded: boolean = false;
         if (this.current.KPRPCStoredKeys == null) {
             this.current.KPRPCStoredKeys = {};
-            this.save();
+            saveNeeded = true;
         }
+        if (this.current.notificationCountGeneric == null) {
+            this.current.notificationCountGeneric = 0;
+            saveNeeded = true;
+        }
+        if (this.current.notificationCountSavePassword == null) {
+            this.current.notificationCountSavePassword = 0;
+            saveNeeded = true;
+        }
+        if (saveNeeded) this.save();
     }
 
     private reload (onLoaded?) {
