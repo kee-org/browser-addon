@@ -112,13 +112,18 @@ function startup () {
         if (!appState.connected || appState.ActiveKeePassDatabaseIndex < 0) return;
 
         let rescan = false;
-        const interestingNodes = ["input", "form", "select"];
+        const interestingNodes = ["form", "input", "select"];
         mutations.forEach(mutation => {
             if (rescan) return;
             if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
                 for (const node of mutation.addedNodes) {
-                    const nodeName = node.nodeName.toLowerCase();
-                    if (interestingNodes.indexOf(nodeName) >= 0) rescan = true;
+                    if (rescan) break;
+                    for (let i=0; i<interestingNodes.length; i++) {
+                        if ((node as Element).querySelector(interestingNodes[i])) {
+                            rescan = true;
+                            break;
+                        }
+                    }
                 }
             }
         });
