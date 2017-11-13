@@ -51,7 +51,7 @@ defaultConfig.version = 2;
 defaultConfig.triggerChangeInputEventAfterFill = false;
 defaultConfig.autoSubmitNetworkAuthWithSingleMatch = false;
 defaultConfig.searchNetworkAuth = true;
-defaultConfig.portConnectionDelay = 500;
+defaultConfig.portConnectionDelay = 25;
 defaultConfig.notificationCountGeneric = 0;
 defaultConfig.notificationCountSavePassword = 0;
 
