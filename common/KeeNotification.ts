@@ -46,7 +46,7 @@ class KeeNotification {
 
     renderCloseButton (container: HTMLDivElement) {
         const button = document.createElement("span");
-        
+
         button.classList.add("close-button", "glyphicon", "glyphicon-remove");
         button.setAttribute("title", $STR("close"));
 
