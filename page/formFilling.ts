@@ -32,6 +32,15 @@ class MatchResult {
     responseCount: number;
     requestIds: any[];
     mostRelevantFormIndex?: number;
+    lastFilledOther: SubmittedField[];
+    lastFilledPasswords: SubmittedField[];
+}
+
+class SubmittedField {
+    id: string;
+    DOMelement: HTMLInputElement | HTMLSelectElement;
+    name: string;
+    value: string;
 }
 
 enum SubmitCategory {
@@ -216,7 +225,7 @@ class FormFilling {
         // the DOMelement itself because some websites do not specify an ID and some
         // may remove the DOMelement before we submit the form (sometimes under user
         // direction but ocasionally automaticaly too)
-        const submittedFields = [];
+        const submittedFields: SubmittedField[] = [];
 
         // Keep filling in fields until we find no more with a positive score
         while (fields.length > 0 && fields[0].score > 0)
@@ -867,11 +876,14 @@ class FormFilling {
                     const lastFilledOther = this.fillManyFormFields(otherFields, matchingLogin.otherFields,
                         -1, matchResult.overWriteFieldsAutomatically || !automated);
                     matchResult.formReadyForSubmit = true;
+                    matchResult.lastFilledPasswords = lastFilledPasswords;
+                    matchResult.lastFilledOther = lastFilledOther;
                     if (lastFilledPasswords && lastFilledPasswords.length > 0) {
                         submitTargetNeighbour = lastFilledPasswords[0].DOMelement;
                     } else if (lastFilledOther && lastFilledOther.length > 0) {
                         submitTargetNeighbour = lastFilledOther[0].DOMelement;
                     }
+                    this.formSaving.updateMatchResult(matchResult);
                 }
             }
         }

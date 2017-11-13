@@ -12,6 +12,7 @@ class FormSaving {
     private SubmitHandlerAttachments: SubmitHandlerAttachment[] = [];
     private savePasswordPanelStub: PanelStub;
     private savePasswordPanelStubRaf: number;
+    private matchResult: MatchResult; //TODO:3: May be overkill to have all this data available for saving
 
     constructor (logger: KeeLogger, formUtils: FormUtils, config: Config) {
         this.Logger = logger;
@@ -50,6 +51,10 @@ class FormSaving {
     public updateSavePasswordPanelPosition () {
         formSaving.savePasswordPanelStub.updateBoundingClientRect();
         formSaving.savePasswordPanelStubRaf = requestAnimationFrame(formSaving.updateSavePasswordPanelPosition);
+    }
+
+    public updateMatchResult (matchResult: MatchResult) {
+        this.matchResult = matchResult;
     }
 
     // This won't always be called before all event handlers on the web page so on
@@ -140,18 +145,48 @@ class FormSaving {
         // we have also determined whether this form fill is likely to
         // be a new registration form or password change form
 
-        const submittedData = {
-            url: url.href,
-            usernameIndex,
-            passwordFields: passwordFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
-            title: doc.title,
-            otherFields: otherFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
-            //currentPage,
-            isPasswordChangeForm,
-            isRegistrationForm
-            //,savePageCountToTab
-        };
 
-        myPort.postMessage({submittedData} as AddonMessage);
+        // Find the first filled password that is not being submitted or has a changed value
+        const differentPassword = !this.matchResult || !this.matchResult.lastFilledPasswords ||
+            this.matchResult.lastFilledPasswords.find(filledField => {
+            const submittedField = passwordFields.find(f => filledField.DOMelement == f.DOMInputElement || filledField.DOMelement == f.DOMSelectElement);
+
+            // If we haven't submitted the same DOM element we filled in
+            if (!submittedField) return true;
+
+            if (submittedField.value != filledField.value) return true;
+
+            return false;
+        });
+
+        // Find the first filled other field that is not being submitted or has a changed value
+        const differentOther = !this.matchResult || !this.matchResult.lastFilledOther ||
+            this.matchResult.lastFilledOther.find(filledField => {
+            const submittedField = otherFields.find(f => filledField.DOMelement == f.DOMInputElement || filledField.DOMelement == f.DOMSelectElement);
+
+            // If we haven't submitted the same DOM element we filled in
+            if (!submittedField) return true;
+
+            if (submittedField.value != filledField.value) return true;
+
+            return false;
+        });
+
+        if (differentPassword || differentOther) {
+
+            const submittedData = {
+                url: url.href,
+                usernameIndex,
+                passwordFields: passwordFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
+                title: doc.title,
+                otherFields: otherFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
+                //currentPage,
+                isPasswordChangeForm,
+                isRegistrationForm
+                //,savePageCountToTab
+            };
+
+            myPort.postMessage({submittedData} as AddonMessage);
+        }
     }
 }
