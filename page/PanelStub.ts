@@ -67,6 +67,7 @@ class PanelStub {
         iframe.style.setProperty( "height", "100%", "important" );
         iframe.style.setProperty( "border", "none", "important" );
         iframe.style.setProperty( "visibility", "visible", "important" );
+        iframe.style.setProperty( "display", "block", "important" );
         iframe.style.setProperty( "position", "relative", "important" );
         iframe.setAttribute("scrolling", "no");
 
