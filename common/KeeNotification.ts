@@ -48,13 +48,11 @@ class KeeNotification {
         const button = document.createElement("span");
         
         button.classList.add("close-button", "glyphicon", "glyphicon-remove");
-        // TODO: should we add hint to this obvious action button? 
-        // in this case we need i18n for this hint
-        // button.setAttribute("title", "Hide notification");
+        button.setAttribute("title", $STR("close"));
 
-        button.addEventListener("click", function () {
+        button.addEventListener("click", () => {
             this.myPort.postMessage({ removeNotification: this.id } as AddonMessage);
-        }.bind(this));
+        });
 
         container.appendChild(button);
         return container;
