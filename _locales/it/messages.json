@@ -4,7 +4,7 @@
         "description": ""
     },
     "pref_when_one_matching_network_login": {
-        "message": "Quando Kee trova solo una voce di rete corrispondente (es. autenticazione HTTP), effettua il login",
+        "message": "Quando Kee trova solo una voce per un accesso di rete (es. autenticazione HTTP), effettua il login automaticamente",
         "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
     },
     "black_list": {
@@ -32,7 +32,7 @@
         "description": ""
     },
     "loggedIn_tip": {
-        "message": "Hai effettuato l'accesso al tuo '$1' password database",
+        "message": "Hai effettuato l'accesso al tuo '$1'  password database",
         "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
     },
     "a_specific_website": {
@@ -76,11 +76,11 @@
         "description": ""
     },
     "point_user_to_tutorial_start": {
-        "message": "Trascorri alcuni minuti per scoprire i nuovi",
+        "message": "Dedica pochi minuti per scoprire il nuovo",
         "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
     },
     "pref_listAllOpenDBs_label": {
-        "message": "Mostra le voci da tutti i database aperti in KeePass",
+        "message": "Elenca voci da tutti i database aperti in KeePass",
         "description": ""
     },
     "pref_Logging_heading": {
@@ -132,7 +132,7 @@
         "description": "Name of the link to the community forum"
     },
     "point_user_to_tutorial_start_install": {
-        "message": "Quindi trascorri alcuni minuti per scoprire i nuovi",
+        "message": "Quindi dedica pochi minuti per scoprire il nuovo",
         "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
     },
     "pref_logLevelErrors_label": {
@@ -144,7 +144,7 @@
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
-        "message": "Se vuoi puoi crearne uno diverso, selezionando un profilo password qui sotto. Usa KeePass per salvare nuovi profili",
+        "message": "Se vuoi puoi crearne una diversa, selezionando un profilo password qui sotto. Usa KeePass per salvare nuovi profili.",
         "description": ""
     },
     "pref_FillPrompt_desc": {
@@ -164,7 +164,7 @@
         "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
     },
     "pref_ConnectionSecurity_explain_change": {
-        "message": "Effettuare un cambiamento alle impostazioni sottostanti potrebbe attivare una richiesta da Kee per una nuova password casuale. Non devi inserire la password corretta per cambiare queste impostazioni, correggile a piacimento e premi il tasto sovrastante.",
+        "message": "Effettuare un cambiamento alle impostazioni sottostanti potrebbe attivare una richiesta da Kee per una nuova password casuale. Non devi inserire la password corretta per cambiare queste impostazioni, correggile a piacimento e premi il pulsante sovrastante.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
     },
     "update_existing_entry": {
@@ -172,7 +172,7 @@
         "description": ""
     },
     "notification_only_shown_some_times": {
-        "message": "This additional popup notification will only be shown a small number of times.",
+        "message": "Questa notifica aggiuntiva verrà mostrata solo saltuariamente.",
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "site_properties_weight_warning": {
@@ -224,7 +224,7 @@
         "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "conn_sl_link": {
-        "message": "Visita il manuale per saperne di più su queste impostazioni e la comunicazione fra il tuo browser web e KeePass",
+        "message": "Consulta il manuale per saperne di più su queste impostazioni e la comunicazione fra il tuo browser web e KeePass",
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_setup_enter_password_title": {
@@ -232,7 +232,7 @@
         "description": "Heading of the popup that asks the user to authorise the connection to KeePass by typing in a password."
     },
     "site_options_list_explain_desc": {
-        "message": "Se un modulo è incluso in nella whitelist sottostante, Kee cercherà sempre di riempirlo. Se un modulo non è incluso nella blacklist sottostante, Kee non eseguirà il riempimento. Se un modulo è stato inserito in entrambe le liste, Kee non eseguirà il riempimento.",
+        "message": "Se un campo è incluso in nella whitelist sottostante, Kee cercherà sempre di riempirlo. Se un campo non è incluso nella blacklist sottostante, Kee non eseguirà il riempimento. Se un campo è stato inserito in entrambe le liste, Kee non eseguirà il riempimento.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "noUsername_partial_tip": {
@@ -280,7 +280,7 @@
         "description": "Explains that version 2.0 is different."
     },
     "notification_yellow_background": {
-        "message": "The Kee button has a yellow background when a new notification appears.",
+        "message": "Il pulsante di Kee assume uno sfondo giallo quando arriva una nuova notifica.",
         "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "network_auth_http_auth_description": {
@@ -292,7 +292,7 @@
         "description": ""
     },
     "notification_raised_title": {
-        "message": "Kee has a notification to show you",
+        "message": "Kee ha una notifica per te",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "conn_sl_high": {
@@ -308,7 +308,7 @@
         "description": "Heading for panel that contains settings for the security of the connection between Kee and KeePass."
     },
     "conn_display_description": {
-        "message": "Un componente aggiuntivo che permette l'accesso automatico ai tuoi siti web in tutta sicurezza. Precedentemente chiamato KeeFox.",
+        "message": "Un componente aggiuntivo per il tuo browser che permette l'accesso automatico ai tuoi siti web in tutta sicurezza. Precedentemente chiamato KeeFox.",
         "description": "A brief description of Kee that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
     },
     "copy": {
@@ -348,7 +348,7 @@
         "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "pref_FillAndSubmitForm_desc": {
-        "message": "Riempi ed invia il modulo",
+        "message": "Riempire il campo ed inviare",
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
@@ -364,7 +364,7 @@
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
-        "message": "Quando Kee sceglie una voce corrispondente per un campo normale, deve",
+        "message": "Quando Kee sceglie una voce corrispondente per un campo, deve",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "whichEntry_label": {
@@ -400,11 +400,11 @@
         "description": ""
     },
     "pref_FindingEntries_heading": {
-        "message": "Ricerca voci in corso",
+        "message": "Ricerca voci",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
     },
     "point_user_to_upgrade_instructions": {
-        "message": "Se non hai aggiornato Kee di recente, dovrai copiare manualmente il file nella cartella Plugins di KeePass. Puoi trovare le istruzioni qui:",
+        "message": "Se non hai aggiornato Kee di recente, dovrai copiare manualmente un file nella cartella Plugins di KeePass. Puoi trovare le istruzioni qui:",
         "description": "Will have a URL suffixed after the colon"
     },
     "conn_setup_invalid_param": {
@@ -468,7 +468,7 @@
         "description": ""
     },
     "pref_FillForm_desc": {
-        "message": "Riempi il modulo",
+        "message": "Riempire il campo",
         "description": ""
     },
     "matched_logins_label": {
@@ -492,7 +492,7 @@
         "description": "Button action to authorise the connection between Kee and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
     },
     "conn_setup_restart": {
-        "message": "Kee deve riavviare il processo di autorizzazione",
+        "message": "Kee deve riavviare il processo di autorizzazione.",
         "description": "A technical error occurred during the attempt to authorise the link between Kee and KeePassRPC so we need to notify the user that they will need to re-authenticate"
     },
     "all_websites": {
@@ -636,7 +636,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "notification_save_password_tip": {
-        "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
+        "message": "Clicca sul pulsante Kee (nella barra degli strumenti) e seleziona \"Salva ultima voce\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
     },
     "point_user_to_install_instructions_start": {

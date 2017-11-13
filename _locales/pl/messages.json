@@ -104,7 +104,7 @@
         "description": ""
     },
     "update": {
-        "message": "Aktualizuj",
+        "message": "Zapisz zmiany",
         "description": ""
     },
     "save_login": {
@@ -168,11 +168,11 @@
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
     },
     "update_existing_entry": {
-        "message": "Aktualizuj istniejący wpis",
+        "message": "Aktualizuj wpis",
         "description": ""
     },
     "notification_only_shown_some_times": {
-        "message": "This additional popup notification will only be shown a small number of times.",
+        "message": "To dodatkowe wyskakujące powiadomienie będzie pokazywane tylko kilka razy.",
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "site_properties_weight_warning": {
@@ -280,7 +280,7 @@
         "description": "Explains that version 2.0 is different."
     },
     "notification_yellow_background": {
-        "message": "The Kee button has a yellow background when a new notification appears.",
+        "message": "Przycisk Kee będzie miał żółte tło, gdy pojawi się nowe powiadomienie.",
         "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "network_auth_http_auth_description": {
@@ -292,7 +292,7 @@
         "description": ""
     },
     "notification_raised_title": {
-        "message": "Kee has a notification to show you",
+        "message": "Kee chce Ci pokazać powiadomienie",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "conn_sl_high": {
@@ -636,7 +636,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "notification_save_password_tip": {
-        "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
+        "message": "Kliknij przycisk Kee (na pasku narzędzi), a następnie \"Zapisz ostatnie hasło\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
     },
     "point_user_to_install_instructions_start": {
