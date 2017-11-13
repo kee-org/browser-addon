@@ -64,13 +64,16 @@ function startup () {
                 if (!m.generatedPassword && m.generatedPassword != "") {
                     myPort.postMessage({ action: "generatePassword" });
                 } else {
-                    copyStringToClipboard(m.generatedPassword);
-
                     if (passwordReceived) {
+                        // Not done on initial load due to https://github.com/kee-org/browser-addon/issues/68
+                        copyStringToClipboard(m.generatedPassword);
                         closePanel();
                     } else {
                         const mainPanel = generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles);
-                        if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
+
+                        // Disabled due to https://github.com/kee-org/browser-addon/issues/68
+                        //if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
+
                         passwordReceived = true;
                     }
                 }

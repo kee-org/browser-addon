@@ -18,7 +18,7 @@ class PanelStubOptions {
         height: 300,
         width: 400,
         name: "generatePassword",
-        autoCloseTime: 5
+        autoCloseTime: 0
     };
 
     public static SavePassword: PanelStubOptions = {
