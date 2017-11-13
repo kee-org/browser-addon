@@ -19,26 +19,19 @@ body {
     margin-bottom: 0px !important;
 }
 #notifications {
-    border-top:black 2px solid;
-    border-bottom:black 2px solid;
-    padding: 0px 10px 10px 10px;
-    margin: 5px 5px 10px 0px;
     position: relative;
 }
 
 #notifications > div {
-    border-top:black 1px solid;
-    margin-top: 10px;
-}
-
-#notifications > div:first-child {
-    border-top: initial;
-    margin-top: 0px;
+    border: 1px solid #ddd;
+    padding: 5px 15px 10px 10px;
+    margin: 0px 0px 10px 0px;
+    background-color: #f5f5f5;
 }
 
 .close-button {
     position: absolute;
-    right: 0px;
-    top: 2px;
+    right: 4px;
+    top: 4px;
     cursor: pointer;
 }
