@@ -21,8 +21,9 @@ body {
 #notifications {
     border-top:black 2px solid;
     border-bottom:black 2px solid;
-    padding: 10px 0px;
+    padding: 0px 10px 10px 10px;
     margin: 5px 5px 10px 0px;
+    position: relative;
 }
 
 #notifications > div {
@@ -33,4 +34,11 @@ body {
 #notifications > div:first-child {
     border-top: initial;
     margin-top: 0px;
+}
+
+.close-button {
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    cursor: pointer;
 }
