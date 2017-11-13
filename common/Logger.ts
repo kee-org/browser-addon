@@ -22,7 +22,7 @@ class KeeLogger {
     {
         this.config = {logLevel: 4, logSensitiveData: false};
         this.info("Logging system initialised at " + Date());
-        //this.config = {logLevel: 2, logSensitiveData: false};
+        this.config = {logLevel: 2, logSensitiveData: false};
         if (this.config.logSensitiveData)
             this.warn("WARNING: Kee Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
     }

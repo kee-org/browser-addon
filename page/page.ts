@@ -13,8 +13,8 @@ let messagingPortConnectionRetryTimer: number;
 let keeDuplicationCount;
 
 if (keeDuplicationCount) {
-    console.error("Duplicate Kee instance detected! Found this many other instances: " + keeDuplicationCount);
-    KeeLog.error("Duplicate Kee instance detected! Found this many other instances: " + keeDuplicationCount);
+    if (KeeLog && KeeLog.error) KeeLog.error("Duplicate Kee instance detected! Found this many other instances: " + keeDuplicationCount);
+    else console.error("Duplicate Kee instance detected! Found this many other instances: " + keeDuplicationCount);
 } else {
     keeDuplicationCount = 0;
 }

@@ -939,7 +939,7 @@ if (!(browser.runtime as any).getBrowserInfo) {
     browser.runtime.onInstalled.addListener((details: browser.runtime.InstalledDetails) => {
         const showErrors = () => {
             if (chrome.runtime.lastError) {
-                if (KeeLog && KeeLog.debug) KeeLog.error(chrome.runtime.lastError);
+                if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError);
                 else console.error(chrome.runtime.lastError);
             }
         };
