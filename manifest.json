@@ -2,10 +2,10 @@
     "manifest_version": 2,
     "name": "Kee",
     "default_locale": "en",
-    "version": "2.0.0.19",
-    "version_name": "2.0.0 Beta 1",
+    "version": "2.0.0.25",
+    "version_name": "2.0.0",
     "author": "Chris Tomlinson",
-    "description": "Simple and secure password management. Login automatically, never forget another password and stay in control.",
+    "description": "Kee adds free, secure and easy password management features to your browser which save time and keep your private data more secure.",
     "background": {
         "scripts": [
             "common/dollar-polyfill.js",
@@ -65,7 +65,9 @@
         "privacy",
         "webRequestBlocking",
         "webRequest",
-        "<all_urls>"
+        "<all_urls>",
+        "notifications",
+        "unlimitedStorage"
     ],
     "web_accessible_resources" : [
 		"panels/*"

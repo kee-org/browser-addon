@@ -64,13 +64,16 @@ function startup () {
                 if (!m.generatedPassword && m.generatedPassword != "") {
                     myPort.postMessage({ action: Action.GeneratePassword });
                 } else {
-                    copyStringToClipboard(m.generatedPassword);
-
                     if (passwordReceived) {
+                        // Not done on initial load due to https://github.com/kee-org/browser-addon/issues/68
+                        copyStringToClipboard(m.generatedPassword);
                         closePanel();
                     } else {
                         const mainPanel = generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles);
-                        if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
+
+                        // Disabled due to https://github.com/kee-org/browser-addon/issues/68
+                        //if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
+
                         passwordReceived = true;
                     }
                 }
@@ -152,7 +155,7 @@ document.location.search.substr(1).split("&").forEach(pair => {
     params[key] = value;
 });
 
-const parentFrameId = params["parentFrameId"];
+const parentFrameId = parseInt(params["parentFrameId"]);
 
 // Load our config and start the panel once done
 configManager.load(startup);

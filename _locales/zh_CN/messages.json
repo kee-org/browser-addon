@@ -75,6 +75,10 @@
         "message": "替换该记录的网址（完全删除旧网址）",
         "description": ""
     },
+    "point_user_to_tutorial_start": {
+        "message": "Please spend a few minutes going through the new",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
+    },
     "pref_listAllOpenDBs_label": {
         "message": "列出已打开的所有 KeePass 数据库的记录",
         "description": ""
@@ -111,6 +115,10 @@
         "message": "您已登录 $1 个密码数据库。“$2”目前活动。",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
+    "point_user_to_kee_news_announcement": {
+        "message": "您可以在下面的文章和链接中找到有关 Kee 2.0 的更多信息：",
+        "description": "Will have a URL suffixed after the colon"
+    },
     "change_field_status": {
         "message": "所选记录将把所有的用户名、密码和其他表单字段替换成您刚刚输入的值。",
         "description": ""
@@ -118,6 +126,14 @@
     "current_website": {
         "message": "当前网站",
         "description": ""
+    },
+    "point_user_to_forum_link_text": {
+        "message": "社区论坛",
+        "description": "Name of the link to the community forum"
+    },
+    "point_user_to_tutorial_start_install": {
+        "message": "Please then spend a few minutes going through the new",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
     },
     "pref_logLevelErrors_label": {
         "message": "错误",
@@ -143,6 +159,10 @@
         "message": "打开或登录 KeePass 时使用此数据库文件",
         "description": ""
     },
+    "kee_install_notes_keepass": {
+        "message": "您需要运行 KeePass 以使 Kee 连接。如果您还没安装 KeePass，请下载并安装。",
+        "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
+    },
     "pref_ConnectionSecurity_explain_change": {
         "message": "有时更改下面的设置将使 Kee 向您询问一个新的随机密码。更改上面的设置不需要输入正确的密码，只需调整然后按上面的按钮。",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
@@ -151,6 +171,10 @@
         "message": "更新现有记录",
         "description": ""
     },
+    "notification_only_shown_some_times": {
+        "message": "This additional popup notification will only be shown a small number of times.",
+        "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
+    },
     "site_properties_weight_warning": {
         "message": "如果您选择使用此高级功能，则需要仔细检查其他配置的权重。",
         "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
@@ -158,6 +182,14 @@
     "further_info_may_follow": {
         "message": "进一步信息参考: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "saveLatestLogin": {
+        "message": "保存最新登录信息",
+        "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
+    },
+    "welcome_to_kee": {
+        "message": "欢迎使用 Kee",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "change_url_option_1": {
         "message": "替换该记录的网址（但如果访问旧网址，仍填写表单）",
@@ -186,6 +218,10 @@
     "search_again": {
         "message": "再次搜索",
         "description": ""
+    },
+    "point_user_to_install_instructions_end": {
+        "message": "。",
+        "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "conn_sl_link": {
         "message": "在手册中了解这些设置和浏览器与 KeePass 之间的通信机制",
@@ -239,6 +275,14 @@
         "message": "您使用相同安全密钥太久了。",
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
+    "version_2_upgrade_intro": {
+        "message": "Version 2.0 brings exciting new features and some enforced changes in order to support Firefox 57 and higher.",
+        "description": "Explains that version 2.0 is different."
+    },
+    "notification_yellow_background": {
+        "message": "The Kee button has a yellow background when a new notification appears.",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
+    },
     "network_auth_http_auth_description": {
         "message": "网站要求您在访问 $1 前验证身份。网站说：$2",
         "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
@@ -246,6 +290,10 @@
     "conn_sl_server_min": {
         "message": "KeePass 最小可接受安全级别",
         "description": ""
+    },
+    "notification_raised_title": {
+        "message": "Kee has a notification to show you",
+        "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "conn_sl_high": {
         "message": "高",
@@ -270,6 +318,14 @@
     "srp_connect": {
         "message": "连接",
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
+    },
+    "kee_install_notes_keepassrpc": {
+        "message": "You'll need to install the KeePassRPC.plgx plugin for KeePass too, if you haven't already. It is as easy as putting a file in the right place on your computer and restarting KeePass.",
+        "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
+    },
+    "point_user_to_tutorial_link_text": {
+        "message": "互动教程",
+        "description": "Name of the link to the interactive tutorial page"
     },
     "pref_FillNote_desc": {
         "message": "您可以在 KeePass 的各项“编辑记录”对话框中覆盖上述的“Kee 选择”行为。",
@@ -347,6 +403,10 @@
         "message": "正在查找记录",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
     },
+    "point_user_to_upgrade_instructions": {
+        "message": "如果您最近没有升级 KeeFox，则需要手动复制一个文件到 KeePass 插件文件夹。操作说明在：",
+        "description": "Will have a URL suffixed after the colon"
+    },
     "conn_setup_invalid_param": {
         "message": "Kee 提供了一个无效的参数。进一步信息可能如下：$1",
         "description": "This probably indicates a bug in Kee - we sent something to KeePassRPC that it wasn't expecting."
@@ -422,6 +482,10 @@
     "pref_DoNothing_desc": {
         "message": "无动作",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
+    },
+    "point_user_to_tutorial_end": {
+        "message": "了解如何使用新版本。",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
     },
     "srp_save_connect": {
         "message": "保存并连接",
@@ -507,6 +571,10 @@
         "message": "“所有网站”的设置将适用于以下每个部分，除非您使用其旁边的复选框来启用设置。",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
+    "the_new_name_for_keefox": {
+        "message": "KeeFox 的新名字",
+        "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
+    },
     "autoclose_countdown": {
         "message": "$1 秒后自动关闭",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -519,6 +587,10 @@
         "message": "搜索...",
         "description": ""
     },
+    "point_user_to_tutorial_end_install": {
+        "message": "了解如何使用 Kee。",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
+    },
     "target": {
         "message": "目标",
         "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
@@ -530,6 +602,10 @@
     "conn_setup_client_sl_low": {
         "message": "Kee 要求的安全级别太低，无法被密码服务器接受。您必须使用更高安全级别来重启授权过程。",
         "description": ""
+    },
+    "kee_install_notes_intro": {
+        "message": "Kee stores your passwords in a secure separate password manager called KeePass Password Safe 2. It's full of great features and Kee keeps your everyday internet login tasks simple and secure.",
+        "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
     },
     "copy_password_label": {
         "message": "复制密码",
@@ -558,6 +634,14 @@
     "pref_FillingEntries_heading": {
         "message": "填写记录",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
+    },
+    "notification_save_password_tip": {
+        "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+    },
+    "point_user_to_install_instructions_start": {
+        "message": "上述步骤的指南在我们的",
+        "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "database_label": {
         "message": "数据库",

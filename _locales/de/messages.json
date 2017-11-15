@@ -4,7 +4,7 @@
         "description": ""
     },
     "pref_when_one_matching_network_login": {
-        "message": "Automatisch anmelden, wenn Kee nur eine passende Netzwerkanmeldung  (z.B. HTTP-Authentifikation)",
+        "message": "Automatisch anmelden, wenn Kee nur eine passende Netzwerkanmeldung  (z.B. HTTP-Authentifikation) findet",
         "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
     },
     "black_list": {
@@ -75,8 +75,12 @@
         "message": "Ersetzt die URL des Eintrages (löscht die alte URL komplett)",
         "description": ""
     },
+    "point_user_to_tutorial_start": {
+        "message": "Bitte nehmen Sie sich einige Minuten für das neue",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
+    },
     "pref_listAllOpenDBs_label": {
-        "message": "Alle Anmeldungen aller geöffneten KeePass-Datenbanken auflisten",
+        "message": "Die Log-in Daten aller geöffneten KeePass-Datenbanken auflisten",
         "description": ""
     },
     "pref_Logging_heading": {
@@ -96,7 +100,7 @@
         "description": ""
     },
     "Menu_Button_fillCurrentDocument_label": {
-        "message": "Passende Logins finden",
+        "message": "Passende Log-in Daten finden",
         "description": ""
     },
     "update": {
@@ -104,12 +108,16 @@
         "description": ""
     },
     "save_login": {
-        "message": "Login speichern",
+        "message": "Log-in Daten speichern",
         "description": "Heading for panel that allows user to create or update a new login entry"
     },
     "loggedInMultiple_tip": {
         "message": "Sie sind an der $1 Passwort-Datenbank angemeldet. '$2' ist Aktiv.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "point_user_to_kee_news_announcement": {
+        "message": "Weitere Informationen zu Kee 2.0 finden Sie im folgenden Artikel und unter den im Artikel enthaltenden Links:",
+        "description": "Will have a URL suffixed after the colon"
     },
     "change_field_status": {
         "message": "Der ausgewählte Eintrag wird alle Nutzernamen, Passwörter und andere Felder mit den von Ihnen eingegeben Werten ersetzen.",
@@ -118,6 +126,14 @@
     "current_website": {
         "message": "Aktuelle Webseite",
         "description": ""
+    },
+    "point_user_to_forum_link_text": {
+        "message": "Community Forum",
+        "description": "Name of the link to the community forum"
+    },
+    "point_user_to_tutorial_start_install": {
+        "message": "Bitte nehmen Sie sich anschließend einige Minuten für das neue",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
     },
     "pref_logLevelErrors_label": {
         "message": "Fehler",
@@ -143,6 +159,10 @@
         "message": "Beim Öffnen oder Anmelden in KeePass, diese Datenbank verwenden",
         "description": ""
     },
+    "kee_install_notes_keepass": {
+        "message": "Sie müssen KeePass starten, damit Kee eine Verbindung herstellen kann. Falls KeePass auf ihrem Computer nicht installiert ist, können Sie es ganz einfach selbst herunterladen und installieren.",
+        "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
+    },
     "pref_ConnectionSecurity_explain_change": {
         "message": "Manchmal wird eine Änderung der unten aufgeführten Einstellungen dazu führen, dass Kee Sie nach einem neuen zufälligen Passwort fragt. Sie müssen das richtige Passwort nicht eingeben, um diese Einstellungen zu ändern, einfach anzupassen und die Taste oben betätigen.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
@@ -151,6 +171,10 @@
         "message": "Existierenden Eintrag aktualisieren",
         "description": ""
     },
+    "notification_only_shown_some_times": {
+        "message": "Diese ergänzende Pop-up Benachrichtigung wird Ihnen nur einige wenige Male angezeigt.",
+        "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
+    },
     "site_properties_weight_warning": {
         "message": "Sie müssen die Wichtung anderer Konfigurationen sorgfältig überprüfen, wenn Sie diese erweiterte Funktion nutzen möchten.",
         "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
@@ -158,6 +182,14 @@
     "further_info_may_follow": {
         "message": "Weitere Informationen werden folgen: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "saveLatestLogin": {
+        "message": "Letzte Log-in Daten speichern",
+        "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
+    },
+    "welcome_to_kee": {
+        "message": "Willkommen bei Kee",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "change_url_option_1": {
         "message": "Ersetzt die URL des Eintrages (füllt aber weiterhin Formulare auf der alten URL aus)",
@@ -187,6 +219,10 @@
         "message": "Suche wiederholen",
         "description": ""
     },
+    "point_user_to_install_instructions_end": {
+        "message": ".",
+        "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
+    },
     "conn_sl_link": {
         "message": "Lernen Sie mehr über diese Einstellungen und die Kommunikation zwischen Ihrem Webbrowser und KeePass in der Anleitung",
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
@@ -212,7 +248,7 @@
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
     },
     "Logins_Context_Edit_Login_label": {
-        "message": "Login bearbeiten",
+        "message": "Log-in Daten bearbeiten",
         "description": ""
     },
     "weight": {
@@ -239,6 +275,14 @@
         "message": "Sie nutzten den gleichen Sicherheitsschlüssel zu lange.",
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
+    "version_2_upgrade_intro": {
+        "message": "Version 2.0 bringt interessante neue Funktionen und enige grundlegende Veränderungen, um Firefox 57 und höher zu unterstützen.",
+        "description": "Explains that version 2.0 is different."
+    },
+    "notification_yellow_background": {
+        "message": "Die Kee Schaltfläche erhält einen gelben Hintergrund, wenn eine neue Benachrichtigung erscheint.",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
+    },
     "network_auth_http_auth_description": {
         "message": "Eine Webseite benötigt Ihre Authentifizierung bevor Sie auf $1 zugreifen können. Die Webseite meldet: $2",
         "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
@@ -246,6 +290,10 @@
     "conn_sl_server_min": {
         "message": "Niedrigstes, akzeptables, KeePass-Sicherheitsniveau",
         "description": ""
+    },
+    "notification_raised_title": {
+        "message": "Kee hat ein Benachrichtigung für Sie",
+        "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "conn_sl_high": {
         "message": "Hoch",
@@ -271,6 +319,14 @@
         "message": "Verbinden",
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
     },
+    "kee_install_notes_keepassrpc": {
+        "message": "Falls Sie dies noch nicht getan haben, müssen Sie das KeePassRPC.plgx Plug-in für KeePass installieren. Die Installation ist ganz einfach: Sie müssen einfach nur eine Datei, an die richtige Stelle auf ihrem Computer packen und KeePass neustarten.",
+        "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
+    },
+    "point_user_to_tutorial_link_text": {
+        "message": "interaktive Tutorial",
+        "description": "Name of the link to the interactive tutorial page"
+    },
     "pref_FillNote_desc": {
         "message": "Sie können das obige \"Kee Auswahl\" Verhalten für individuelle Einträge in den KeePass \"Eintrag hinzufügen\" Dialog anpassen.",
         "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
@@ -288,7 +344,7 @@
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "pref_when_user_chooses_desc": {
-        "message": "Wenn Sie einen gefunden Login wählen, dann soll Kee",
+        "message": "Wenn Sie passende Log-in Daten auswählen, dann soll Kee",
         "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "pref_FillAndSubmitForm_desc": {
@@ -308,7 +364,7 @@
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
-        "message": "Wenn Kee eine passenden Anmeldung für ein Standardformular wählt, dann soll Kee",
+        "message": "Wenn Kee passende Log-in Daten für ein Standardformular wählt, dann soll Kee",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "whichEntry_label": {
@@ -346,6 +402,10 @@
     "pref_FindingEntries_heading": {
         "message": "Einträge finden",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
+    },
+    "point_user_to_upgrade_instructions": {
+        "message": "Falls Sie KeeFox nicht kürzlich aktualisiert haben, müssen Sie von Hand eine Datei in den KeePass Plug-in Ordner kopieren.",
+        "description": "Will have a URL suffixed after the colon"
     },
     "conn_setup_invalid_param": {
         "message": "Kee liefert einen ungültigen Parameter. Weitere Informationen folgen: $1",
@@ -412,7 +472,7 @@
         "description": ""
     },
     "matched_logins_label": {
-        "message": "Passende Anmeldeeinträge",
+        "message": "Passende Log-ins",
         "description": "Header for panels/sections that contain the logins which Kee matched for this page/form"
     },
     "pref_SavingEntries_heading": {
@@ -422,6 +482,10 @@
     "pref_DoNothing_desc": {
         "message": "Nichts machen",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
+    },
+    "point_user_to_tutorial_end": {
+        "message": "um zu lernen, wie Sie die neue Version benutzen können.",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
     },
     "srp_save_connect": {
         "message": "Speichern und Verbinden",
@@ -507,6 +571,10 @@
         "message": "Einstellungen von \"Alle Webseiten\" gelten für jeden unteren Abschnitt, außer Sie aktivieren die Einstellung mit dem Kontrollkästchen daneben.",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
+    "the_new_name_for_keefox": {
+        "message": "Der neue Name für KeeFox",
+        "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
+    },
     "autoclose_countdown": {
         "message": "Automatisch in $1 Sekunden schließen",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -519,6 +587,10 @@
         "message": "Suche...",
         "description": ""
     },
+    "point_user_to_tutorial_end_install": {
+        "message": "um zu lernen, wie Sie Kee benutzen können.",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
+    },
     "target": {
         "message": "Ziel",
         "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
@@ -530,6 +602,10 @@
     "conn_setup_client_sl_low": {
         "message": "Kee bat um ein Sicherheitsniveau, dass für die Akzeptierung durch den Passwort-Server zu niedrig war. Sie müssen zur Verwendung des höheren Sicherheitsniveau den Authentifizierungsprozess neu starten.",
         "description": ""
+    },
+    "kee_install_notes_intro": {
+        "message": "Kee speichert Ihre Passwörter im sicheren und unabhängigen Passwort-Manager KeePass 2. Dieser besitzt viele großartige Funktionen, doch erst mit Kee wird Ihr tägliches Log-in im Internet einfach und sicher.",
+        "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
     },
     "copy_password_label": {
         "message": "Passwort kopieren",
@@ -558,6 +634,14 @@
     "pref_FillingEntries_heading": {
         "message": "Einträge ausfüllen",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
+    },
+    "notification_save_password_tip": {
+        "message": "Klicken SIe auf die Kee Schaltfläche (in Ihrer Symbolleiste) und klicken Sie anschließend auf \"Letzte Log-in Daten speichern\"",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+    },
+    "point_user_to_install_instructions_start": {
+        "message": "Eine Anleitung für die beiden oben genannten Schritte, finden Sie im",
+        "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "database_label": {
         "message": "Datenbank",

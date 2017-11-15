@@ -199,10 +199,6 @@
     "message": "List logins from all open KeePass databases",
     "description": ""
   },
-  "pref_searchNetworkAuth_label": {
-      "message": "Find entries for network authentication requests (e.g. HTTP Auth and proxies)",
-      "description": "Setting to enable network authentication searches"
-  },
   "pref_logLevel_desc": {
     "message": "Choose how verbose you want the log to be. Each higher log level produces more output.",
     "description": ""
@@ -660,5 +656,21 @@
   "version_2_upgrade_intro": {
       "message": "Version 2.0 brings exciting new features and some enforced changes in order to support Firefox 57 and higher.",
       "description": "Explains that version 2.0 is different."
+  },
+  "notification_raised_title": {
+      "message": "Kee has a notification to show you",
+      "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
+  },
+  "notification_yellow_background": {
+      "message": "The Kee button has a yellow background when a new notification appears.",
+      "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
+  },
+  "notification_only_shown_some_times": {
+      "message": "This additional popup notification will only be shown a small number of times.",
+      "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
+  },
+  "notification_save_password_tip": {
+      "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
+      "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
   }
 }

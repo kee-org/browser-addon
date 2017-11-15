@@ -95,4 +95,6 @@ class Config {
     autoSubmitNetworkAuthWithSingleMatch: boolean;
     searchNetworkAuth: boolean;
     portConnectionDelay: number;
+    notificationCountGeneric: number;
+    notificationCountSavePassword: number;
 }

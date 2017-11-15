@@ -398,12 +398,9 @@ class kprpcClient {
         browser.runtime.onMessage.addListener(handleMessage);
 
         const createData = {
-            type: "popup",
-            url: "/dialogs/SRP.html",
-            width: 700,
-            height: 550
+            url: "/dialogs/SRP.html"
         };
-        const creating = (browser as any).windows.create(createData);
+        const creating = (browser as any).tabs.create(createData);
     }
 
     identifyToClient (password, s, B) {

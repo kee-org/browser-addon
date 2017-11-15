@@ -1,5 +1,10 @@
 /// <reference path="../common/Button.ts" />
 
+// These notifications are displayed within the Kee browser action popup.
+// They may persist for significant lengths of time.
+// For transient system notification popups (sometimes known as growls)
+// look at the background/NativeNotification class
+
 class KeeNotification {
 
     constructor (
@@ -17,6 +22,7 @@ class KeeNotification {
         const doc = container.ownerDocument;
         this.renderStandardMessages(container);
         this.renderButtons(container);
+        this.renderCloseButton(container);
         return container;
     }
 
@@ -35,6 +41,20 @@ class KeeNotification {
             buttonContainer.appendChild(button);
         }
         container.appendChild(buttonContainer);
+        return container;
+    }
+
+    renderCloseButton (container: HTMLDivElement) {
+        const button = document.createElement("span");
+
+        button.classList.add("close-button", "glyphicon", "glyphicon-remove");
+        button.setAttribute("title", $STR("close"));
+
+        button.addEventListener("click", () => {
+            this.myPort.postMessage({ removeNotification: this.id } as AddonMessage);
+        });
+
+        container.appendChild(button);
         return container;
     }
 

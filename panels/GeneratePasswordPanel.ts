@@ -3,9 +3,10 @@ class GeneratePasswordPanel {
     public createNearNode (node: HTMLElement, passwordProfiles: any[]) {
         const container = document.createElement("div");
         container.id = "GeneratePasswordContainer";
-        const text = document.createElement("div");
-        text.innerText = $STR("generatePassword_copied") + " " + $STR("PasswordProfilesExplanation_label");
-        container.appendChild(text);
+        // Disabled due to https://github.com/kee-org/browser-addon/issues/68
+        //const text = document.createElement("div");
+        //text.innerText = $STR("generatePassword_copied") + " " + $STR("PasswordProfilesExplanation_label");
+        //container.appendChild(text);
         const list = document.createElement("ul");
         this.setPasswordProfiles(list, passwordProfiles);
         container.appendChild(list);

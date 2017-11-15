@@ -75,6 +75,10 @@
         "message": "Замінити URL-адресу запису (повністю видалити стару адресу)",
         "description": ""
     },
+    "point_user_to_tutorial_start": {
+        "message": "Будь ласка, витратьте кілька хвилин, ознайомившись з новим",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
+    },
     "pref_listAllOpenDBs_label": {
         "message": "Показувати записи з усіх відкритих баз KeePass",
         "description": ""
@@ -111,6 +115,10 @@
         "message": "Ви увійшли в бази паролів $1. Зараз активна '$2'.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
+    "point_user_to_kee_news_announcement": {
+        "message": "Ви можете знайти набагато більше інформації про Kee 2.0 в наступних статтях та посиланнях:",
+        "description": "Will have a URL suffixed after the colon"
+    },
     "change_field_status": {
         "message": "Обраний запис буде мати ім'я користувача, пароль та інші поля форми, які замінені щойно введеними вами значеннями.",
         "description": ""
@@ -118,6 +126,14 @@
     "current_website": {
         "message": "Поточний веб-сайт",
         "description": ""
+    },
+    "point_user_to_forum_link_text": {
+        "message": "форумом спільноти",
+        "description": "Name of the link to the community forum"
+    },
+    "point_user_to_tutorial_start_install": {
+        "message": "Будь ласка, після цього витратьте кілька хвилин, ознайомившись з новим",
+        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
     },
     "pref_logLevelErrors_label": {
         "message": "Помилки",
@@ -143,6 +159,10 @@
         "message": "При відкритті чи вході в KeePass, використовувати цей файл бази даних",
         "description": ""
     },
+    "kee_install_notes_keepass": {
+        "message": "Вам необхідно запустити KeePass, щоб Kee міг зв'язатися з ним. Якщо KeePass не встановлений на вашому комп'ютері, ви можете завантажити і встановити його власноруч.",
+        "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
+    },
     "pref_ConnectionSecurity_explain_change": {
         "message": "Іноді при зміні налаштувань внизу Kee запитає вас про новий випадковий пароль. Щоб змінити ці налаштування, вам не потрібно вводити правильний пароль вгорі. Просто змініть їх і натисніть кнопку вгорі.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
@@ -151,6 +171,10 @@
         "message": "Оновити наявний запис",
         "description": ""
     },
+    "notification_only_shown_some_times": {
+        "message": "Це додаткове сповіщення буде показуватись лише інколи.",
+        "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
+    },
     "site_properties_weight_warning": {
         "message": "Якщо ви будете користуватися цією розширеною можливістю, вам слід ретельно перевіряти вплив інших конфігурацій.",
         "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
@@ -158,6 +182,14 @@
     "further_info_may_follow": {
         "message": "Детальна інформація: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "saveLatestLogin": {
+        "message": "Зберегти останній вхід",
+        "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
+    },
+    "welcome_to_kee": {
+        "message": "Вітаємо в Kee",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "change_url_option_1": {
         "message": "Замінити URL-адресу запису (поля форми все одно будуть заповнюватись при відвідуванні старої адреси)",
@@ -186,6 +218,10 @@
     "search_again": {
         "message": "Шукати знову",
         "description": ""
+    },
+    "point_user_to_install_instructions_end": {
+        "message": ".",
+        "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "conn_sl_link": {
         "message": "Дізнайтеся більше про ці налаштування, а також про зв'язок між вашим браузером та KeePass в інструкції",
@@ -239,6 +275,14 @@
         "message": "Ви використовуєте цей секретний ключ надто довго.",
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
+    "version_2_upgrade_intro": {
+        "message": "Версія 2.0 приносить нові чудові можливості, а також деякі зміни, пов'язані з підтримкою нової версії Firefox 57 та подальших.",
+        "description": "Explains that version 2.0 is different."
+    },
+    "notification_yellow_background": {
+        "message": "При появі нового сповіщення фон піктограми Kee стає жовтим.",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
+    },
     "network_auth_http_auth_description": {
         "message": "Веб-сайт вимагає про авторизацію для доступу до $1. Повідомлення сайту: $2",
         "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
@@ -246,6 +290,10 @@
     "conn_sl_server_min": {
         "message": "Найменший допустимий рівень безпеки KeeFox",
         "description": ""
+    },
+    "notification_raised_title": {
+        "message": "Kee має для вас сповіщення",
+        "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "conn_sl_high": {
         "message": "Високий",
@@ -270,6 +318,14 @@
     "srp_connect": {
         "message": "З'єднатися",
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
+    },
+    "kee_install_notes_keepassrpc": {
+        "message": "Вам необхідно буде також встановити плагін KeePassRPC.plgx для KeePass, якщо ви ще цього не зробили. Для цього потрібно лише покласти файл в правильне місце на вашому комп'ютері та перезапустити KeePass.",
+        "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
+    },
+    "point_user_to_tutorial_link_text": {
+        "message": "інтерактивне знайомство",
+        "description": "Name of the link to the interactive tutorial page"
     },
     "pref_FillNote_desc": {
         "message": "Вгорі ви можете перевизначити поведінку Kee для окремих записів у діалоговому вікні \"Змінити запис\".",
@@ -304,7 +360,7 @@
         "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
     },
     "pref_Advanced_heading": {
-        "message": "Розширені",
+        "message": "Додатково",
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
@@ -346,6 +402,10 @@
     "pref_FindingEntries_heading": {
         "message": "Пошук записів",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
+    },
+    "point_user_to_upgrade_instructions": {
+        "message": "Якщо ви ще не оновили KeeFox, вам потрібно вручну скопіювати файл в теку плагінів KeePass. Інструкції можна знайти на:",
+        "description": "Will have a URL suffixed after the colon"
     },
     "conn_setup_invalid_param": {
         "message": "Kee надав недійсний параметр. Детальна інформація: $1",
@@ -423,6 +483,10 @@
         "message": "Нічого не робити",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
     },
+    "point_user_to_tutorial_end": {
+        "message": "щоб дізнатися, як використовувати нову версію.",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
+    },
     "srp_save_connect": {
         "message": "Зберегти і з'єднатись",
         "description": "Button action to authorise the connection between Kee and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
@@ -456,7 +520,7 @@
         "description": "Logging level for important information about Kee's operation"
     },
     "pref_logLevel_desc": {
-        "message": "Виберіть наскільки детальним повинен бути журнал. Кожен вищий рівень журналу містить більше подробиць.",
+        "message": "Налаштуйте деталізацію журналу. Кожен вищий рівень журналу містить більше подробиць.",
         "description": ""
     },
     "text_field_id": {
@@ -507,6 +571,10 @@
         "message": "Налаштування з \"Всі веб-сайти\" застосовуються до всіх розділів внизу, якщо ви не увімкнете налаштування за допомогою прапорця навпроти нього.",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
+    "the_new_name_for_keefox": {
+        "message": "Нова назва для KeeFox",
+        "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
+    },
     "autoclose_countdown": {
         "message": "Автоматично закривати через $1 секунд",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -519,6 +587,10 @@
         "message": "Пошук...",
         "description": ""
     },
+    "point_user_to_tutorial_end_install": {
+        "message": "щоб дізнатися, як використовувати Kee.",
+        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
+    },
     "target": {
         "message": "Ціль",
         "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
@@ -530,6 +602,10 @@
     "conn_setup_client_sl_low": {
         "message": "Kee запитав надто низький рівень безпеки, щоб бути підтвердженим сервером паролів. Необхідно перезапустити процес авторизації, використавши вищий рівень безпеки.",
         "description": ""
+    },
+    "kee_install_notes_intro": {
+        "message": "Kee зберігає ваші паролі в окремому безпечному менеджері паролів, який називається KeePass Password Safe 2. Він має багато чудових функцій, і разом з Kee робить ваші щоденні задачі по входу на веб-сайти ще простішими.",
+        "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
     },
     "copy_password_label": {
         "message": "Копіювати пароль",
@@ -556,8 +632,16 @@
         "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from KeePass"
     },
     "pref_FillingEntries_heading": {
-        "message": "Заповнити записи",
+        "message": "Заповнення записів",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
+    },
+    "notification_save_password_tip": {
+        "message": "Натисніть на піктограму Kee у вашій панелі, після чого оберіть \"Зберегти останній вхід\"",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+    },
+    "point_user_to_install_instructions_start": {
+        "message": "Інструкції для обох зазначених вгорі кроків можна знайти на нашому",
+        "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "database_label": {
         "message": "База даних",

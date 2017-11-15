@@ -5,8 +5,8 @@
 class Kee {
 
     appState: AppState;
-    tabStates: TabState[];
-    persistentTabStates: PersistentTabState[];
+    tabStates: Map<number, TabState>;
+    persistentTabStates: Map<number, PersistentTabState>;
     utils: Utils;
     search: Search;
     foregroundTabId: number;
@@ -39,8 +39,8 @@ class Kee {
             connected: false
         };
 
-        this.tabStates = [];
-        this.persistentTabStates = [];
+        this.tabStates = new Map<number, TabState>();
+        this.persistentTabStates = new Map<number, PersistentTabState>();
 
         this.foregroundTabId = -1;
 
@@ -55,6 +55,7 @@ class Kee {
 
         this.browserPopupPort = {postMessage: msg => {} };
         this.onPortConnected = function (p: browser.runtime.Port) {
+            if (KeeLog && KeeLog.debug) KeeLog.debug(p.name + " port connected");
             let name = p.name;
             let parentFrameId: number;
             if (name.startsWith("iframe")) {
@@ -69,8 +70,8 @@ class Kee {
                         appState: kee.appState
                     } as AddonMessage;
 
-                    if (kee.persistentTabStates[kee.foregroundTabId]) {
-                        kee.persistentTabStates[kee.foregroundTabId].items.forEach(item => {
+                    if (kee.persistentTabStates.get(kee.foregroundTabId)) {
+                        kee.persistentTabStates.get(kee.foregroundTabId).items.forEach(item => {
                             if (item.itemType === "submittedData") {
                                 connectMessage.submittedData = item.submittedData;
                                 item.accessCount++;
@@ -78,8 +79,8 @@ class Kee {
                         });
                     }
 
-                    if (kee.tabStates[kee.foregroundTabId]
-                        && kee.frameIdWithMatchedLogins(kee.tabStates[kee.foregroundTabId].frames) >= 0) {
+                    if (kee.tabStates.has(kee.foregroundTabId)
+                        && kee.frameIdWithMatchedLogins(kee.tabStates.get(kee.foregroundTabId).frames) >= 0) {
                         connectMessage.loginsFound = true;
                     }
 
@@ -103,15 +104,15 @@ class Kee {
                         isForegroundTab: p.sender.tab.id === kee.foregroundTabId
                     } as AddonMessage;
 
-                    if (!kee.tabStates[p.sender.tab.id]) {
-                        kee.tabStates[p.sender.tab.id] = new TabState();
+                    if (!kee.tabStates.has(p.sender.tab.id)) {
+                        kee.tabStates.set(p.sender.tab.id, new TabState());
                     }
 
                     if (p.sender.frameId === 0) {
-                        kee.tabStates[p.sender.tab.id].url = p.sender.tab.url;
+                        kee.tabStates.get(p.sender.tab.id).url = p.sender.tab.url;
                     }
-                    kee.tabStates[p.sender.tab.id].frames[p.sender.frameId] = new FrameState();
-                    kee.tabStates[p.sender.tab.id].framePorts[p.sender.frameId] = p;
+                    kee.tabStates.get(p.sender.tab.id).frames.set(p.sender.frameId, new FrameState());
+                    kee.tabStates.get(p.sender.tab.id).framePorts.set(p.sender.frameId, p);
 
                     // Give content process a chance to execute through to the attachment of the listener
                     //TODO:c: event loop on content process should mean this is unnecessary but we see
@@ -126,14 +127,14 @@ class Kee {
 
                     const connectMessage = {
                         appState: kee.appState,
-                        frameState: kee.tabStates[p.sender.tab.id].frames[parentFrameId],
+                        frameState: kee.tabStates.get(p.sender.tab.id).frames.get(parentFrameId),
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
                         isForegroundTab: p.sender.tab.id === kee.foregroundTabId
                     } as AddonMessage;
 
-                    if (kee.persistentTabStates[p.sender.tab.id]) {
-                        kee.persistentTabStates[p.sender.tab.id].items.forEach(item => {
+                    if (kee.persistentTabStates.get(p.sender.tab.id)) {
+                        kee.persistentTabStates.get(p.sender.tab.id).items.forEach(item => {
                             if (item.itemType === "submittedData") {
                                 connectMessage.submittedData = item.submittedData;
                             }
@@ -146,7 +147,7 @@ class Kee {
                     // is independent of the normal process event loop.
                     setTimeout(() => p.postMessage(connectMessage), configManager.current.portConnectionDelay);
 
-                    kee.tabStates[p.sender.tab.id].ourIframePorts[p.sender.frameId] = p;
+                    kee.tabStates.get(p.sender.tab.id).ourIframePorts.set(p.sender.frameId, p);
                     break;
                 }
             }
@@ -154,12 +155,12 @@ class Kee {
 
     }
 
-    frameIdWithMatchedLogins (frames: FrameState[]) {
-        for (let i=0; i < frames.length; i++)
-        {
-            if (frames[i] && frames[i].logins && frames[i].logins.length > 0) return i;
-        }
-        return -1;
+    frameIdWithMatchedLogins (frames: Map<number, FrameState>) {
+        let frameId = -1;
+        frames.forEach((frame, i) => {
+            if (frameId == -1 && frame && frame.logins && frame.logins.length > 0) frameId = i;
+        });
+        return frameId;
     }
 
     init () {
@@ -186,13 +187,31 @@ class Kee {
 
     }
 
-    notifyUser (notification: KeeNotification) {
+    notifyUser (notification: KeeNotification, nativeNotification?: NativeNotification) {
         if (!notification.allowMultiple) {
             kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
         }
         kee.appState.notifications.push(notification);
         try { kee.browserPopupPort.postMessage({appState: kee.appState}); } catch (e) {}
         browser.browserAction.setIcon({path: "common/images/highlight-48.png" });
+        if (nativeNotification) {
+            browser.notifications.create({
+                type: "basic",
+                iconUrl: browser.extension.getURL("common/images/128.png"),
+                title: nativeNotification.title,
+                message: nativeNotification.message
+            });
+        } else {
+            if (configManager.current.notificationCountGeneric < 5) {
+                browser.notifications.create({
+                    type: "basic",
+                    iconUrl: browser.extension.getURL("common/images/128.png"),
+                    title: $STR("notification_raised_title"),
+                    message: $STR("notification_yellow_background") + "\n" + $STR("notification_only_shown_some_times")
+                });
+                configManager.setASAP({notificationCountGeneric: configManager.current.notificationCountGeneric+1});
+            }
+        }
     }
 
     removeUserNotifications (unlessTrue: (notification: KeeNotification) => boolean) {
@@ -237,10 +256,9 @@ class Kee {
         this.appState.ActiveKeePassDatabaseIndex = -1;
         this.appState.connected = false;
 
+        try { kee.browserPopupPort.postMessage({appState: this.appState}); } catch (e) {}
         try
         {
-            kee.browserPopupPort.postMessage( { appState: this.appState });
-
             // Poke every port. In future might just limit to active tab?
             kee.tabStates.forEach(ts => {
                 ts.framePorts.forEach(port => {
@@ -300,10 +318,9 @@ class Kee {
                 configManager.save();
         }
 
+        try { kee.browserPopupPort.postMessage({appState: this.appState}); } catch (e) {}
         try
         {
-            kee.browserPopupPort.postMessage( { appState: this.appState });
-
             // Poke every port. In future might just limit to active tab?
             kee.tabStates.forEach(ts => {
                 ts.framePorts.forEach(port => {
@@ -618,6 +635,7 @@ class Kee {
 }
 
 let kee: Kee;
+let updateForegroundTabRetryTimer;
 
 // Make sure user knows we're not ready yet
 browser.browserAction.setBadgeText({ text: "OFF" });
@@ -653,20 +671,20 @@ function browserPopupMessageHandler (msg: AddonMessage) {
     }
     if (msg.action === Action.GeneratePassword) {
         if (kee.appState.connected) {
-            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: Action.GeneratePassword });
+            kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage({ action: Action.GeneratePassword });
         }
     }
     if (msg.action === Action.ShowMatchedLoginsPanel) {
         if (kee.appState.connected) {
-            let frameIdWithMatchedLogins = kee.frameIdWithMatchedLogins(kee.tabStates[kee.foregroundTabId].frames);
+            let frameIdWithMatchedLogins = kee.frameIdWithMatchedLogins(kee.tabStates.get(kee.foregroundTabId).frames);
             if (frameIdWithMatchedLogins == -1) frameIdWithMatchedLogins = 0;
-            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({action: Action.ShowMatchedLoginsPanel, frameId: frameIdWithMatchedLogins });
+            kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage({action: Action.ShowMatchedLoginsPanel, frameId: frameIdWithMatchedLogins });
         }
     }
     if (msg.action === Action.SaveLatestLogin) {
         if (kee.appState.connected) {
-            const persistentItem = kee.persistentTabStates[kee.foregroundTabId].items.find(item => item.itemType == "submittedData");
-            kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage(
+            const persistentItem = kee.persistentTabStates.get(kee.foregroundTabId).items.find(item => item.itemType == "submittedData");
+            kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage(
                 { appState: kee.appState, submittedData: persistentItem.submittedData } as AddonMessage);
             persistentItem.accessCount++;
         }
@@ -687,7 +705,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         try { kee.browserPopupPort.postMessage({ appState: kee.appState, isForegroundTab: this.sender.tab.id === kee.foregroundTabId } as AddonMessage); } catch (e) {}
     }
     if (msg.logins) {
-        kee.tabStates[this.sender.tab.id].frames[this.sender.frameId].logins = msg.logins;
+        kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).logins = msg.logins;
     }
     if (msg.submittedData) {
 
@@ -723,25 +741,35 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
             maxAccessCount: 20
         };
 
-        if (!kee.persistentTabStates[this.sender.tab.id]) {
-            kee.persistentTabStates[this.sender.tab.id] = {items: [] };
+        if (!kee.persistentTabStates.get(this.sender.tab.id)) {
+            kee.persistentTabStates.set(this.sender.tab.id, {items: [] });
         }
 
         // Don't allow more than one login to be tracked for this tab
-        if (kee.persistentTabStates[this.sender.tab.id]) {
-            kee.persistentTabStates[this.sender.tab.id].items =
-                kee.persistentTabStates[this.sender.tab.id].items.filter(item => item.itemType !== "submittedData");
+        if (kee.persistentTabStates.get(this.sender.tab.id)) {
+            kee.persistentTabStates.get(this.sender.tab.id).items =
+                kee.persistentTabStates.get(this.sender.tab.id).items.filter(item => item.itemType !== "submittedData");
         }
 
-        kee.persistentTabStates[this.sender.tab.id].items.push(persistentItem);
+        kee.persistentTabStates.get(this.sender.tab.id).items.push(persistentItem);
+
+        if (configManager.current.notificationCountSavePassword < 10) {
+            browser.notifications.create({
+                type: "basic",
+                iconUrl: browser.extension.getURL("common/images/128.png"),
+                title: $STR("savePasswordText"),
+                message: $STR("notification_save_password_tip") + "\n" + $STR("notification_only_shown_some_times")
+            });
+            configManager.setASAP({notificationCountSavePassword: configManager.current.notificationCountSavePassword+1});
+        }
     }
     if (msg.action === Action.ShowMatchedLoginsPanel) {
-        kee.tabStates[this.sender.tab.id].framePorts[0].postMessage({action: Action.ShowMatchedLoginsPanel, frameId: this.sender.frameId });
+        kee.tabStates.get(this.sender.tab.id).framePorts.get(0).postMessage({action: Action.ShowMatchedLoginsPanel, frameId: this.sender.frameId });
     }
     if (msg.action === Action.RemoveSubmittedData) {
-        if (kee.persistentTabStates[this.sender.tab.id]) {
-            kee.persistentTabStates[this.sender.tab.id].items =
-                kee.persistentTabStates[this.sender.tab.id].items.filter(item => item.itemType !== "submittedData");
+        if (kee.persistentTabStates.get(this.sender.tab.id)) {
+            kee.persistentTabStates.get(this.sender.tab.id).items =
+                kee.persistentTabStates.get(this.sender.tab.id).items.filter(item => item.itemType !== "submittedData");
         }
     }
 }
@@ -754,17 +782,17 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     const port = this;
 
     if (msg.action == Action.ManualFill && msg.selectedLoginIndex != null) {
-        kee.tabStates[tabId].framePorts[msg.frameId || 0].postMessage(msg);
-        kee.tabStates[tabId].framePorts[0].postMessage({ action: Action.CloseAllPanels });
+        kee.tabStates.get(tabId).framePorts.get(msg.frameId || 0).postMessage(msg);
+        kee.tabStates.get(tabId).framePorts.get(0).postMessage({ action: Action.CloseAllPanels });
     }
 
     if (msg.action == Action.CloseAllPanels) {
-        kee.tabStates[tabId].framePorts[0].postMessage(msg);
+        kee.tabStates.get(tabId).framePorts.get(0).postMessage(msg);
     }
 
     if (msg.action == Action.GeneratePassword) {
         kee.getPasswordProfiles(passwordProfiles => {
-            kee.generatePassword(msg.passwordProfile, kee.tabStates[tabId].url, generatedPassword => {
+            kee.generatePassword(msg.passwordProfile, kee.tabStates.get(tabId).url, generatedPassword => {
                 port.postMessage({ passwordProfiles: passwordProfiles, generatedPassword: generatedPassword } as AddonMessage);
             });
         });
@@ -775,7 +803,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     }
 
     if (msg.saveData) {
-        const persistentItem = kee.persistentTabStates[tabId].items.find(item => item.itemType == "submittedData");
+        const persistentItem = kee.persistentTabStates.get(tabId).items.find(item => item.itemType == "submittedData");
 
         fetchFavicon(persistentItem.submittedData.favIconUrl).then(dataUrl => {
 
@@ -796,12 +824,12 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
                 }
             }
 
-            kee.tabStates[tabId].framePorts[0].postMessage({ action: Action.CloseAllPanels });
+            kee.tabStates.get(tabId).framePorts.get(0).postMessage({ action: Action.CloseAllPanels });
         });
     }
 
     if (msg.neverSave) {
-        const persistentItem = kee.persistentTabStates[tabId].items.find(item => item.itemType == "submittedData");
+        const persistentItem = kee.persistentTabStates.get(tabId).items.find(item => item.itemType == "submittedData");
         const url = new URL(persistentItem.submittedData.url);
         const host = url.host;
         const configLookup = configManager.siteConfigLookupFor("Host", "Exact");
@@ -810,7 +838,7 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         }
         configLookup[host].config.preventSaveNotification = true;
         configManager.save();
-        kee.tabStates[tabId].framePorts[0].postMessage({ action: Action.CloseAllPanels });
+        kee.tabStates.get(tabId).framePorts.get(0).postMessage({ action: Action.CloseAllPanels });
     }
 }
 
@@ -857,7 +885,7 @@ function showUpdateSuccessNotification ()
 
 // This allows us to identify when a new page is loading in an existing tab
 function pageNavigationCommitted (details: browser.webNavigation.WebNavigationTransitionCallbackDetails) {
-    if (details.frameId === 0) delete kee.tabStates[details.tabId];
+    if (details.frameId === 0) kee.tabStates.delete(details.tabId);
 }
 
 chrome.windows.onFocusChanged.addListener(windowId => {
@@ -885,18 +913,20 @@ function onTabActivated (tabId) {
     }
 }
 
-function updateForegroundTab (tabId) {
-    if (kee && kee.tabStates[tabId] && kee.tabStates[tabId].framePorts) // May not have set up kee or port yet
+function updateForegroundTab (tabId: number) {
+    if (kee && kee.tabStates.has(tabId) && kee.tabStates.get(tabId).framePorts) // May not have set up kee or port yet
     {
+        // make sure only one tab can be trying to set itself as the foreground tab
+        clearTimeout(updateForegroundTabRetryTimer);
         if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
         kee.foregroundTabId = tabId;
-        kee.tabStates[tabId].framePorts.forEach(port => {
+        kee.tabStates.get(tabId).framePorts.forEach(port => {
             port.postMessage({ appState: kee.appState, isForegroundTab: true, action: Action.DetectForms } as AddonMessage);
         });
         return;
     }
-    setTimeout(id => {
-        updateForegroundTab(tabId);
+    updateForegroundTabRetryTimer = setTimeout(id => {
+        updateForegroundTab(id);
     }, 1000, tabId);
 }
 
@@ -909,7 +939,7 @@ if (!(browser.runtime as any).getBrowserInfo) {
     browser.runtime.onInstalled.addListener((details: browser.runtime.InstalledDetails) => {
         const showErrors = () => {
             if (chrome.runtime.lastError) {
-                if (KeeLog && KeeLog.debug) KeeLog.error(chrome.runtime.lastError);
+                if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError);
                 else console.error(chrome.runtime.lastError);
             }
         };

@@ -5,8 +5,8 @@ class KFCommands {
             switch (command) {
                 case Command.DetectForms:
                     if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
-                        kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
-                                port.postMessage({ action: Action.DetectForms });
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
+                            port.postMessage({ action: Action.DetectForms });
                         }, this);
                     }
                 break;
@@ -14,14 +14,14 @@ class KFCommands {
                     if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
                         kee.loginToKeePass();
                     } else {
-                        kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
-                                port.postMessage({ action: Action.Primary });
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
+                            port.postMessage({ action: Action.Primary });
                         }, this);
                     }
                 break;
                 case Command.GeneratePassword:
                     if (kee.appState.connected) {
-                        kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: Action.GeneratePassword });
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage({ action: Action.GeneratePassword });
                     }
                 break;
             }
@@ -32,8 +32,8 @@ class KFCommands {
             switch (id) {
                 case Command.DetectForms:
                     if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
-                        kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
-                                port.postMessage({ action: Action.DetectForms });
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
+                            port.postMessage({ action: Action.DetectForms });
                         }, this);
                     }
                 break;
@@ -41,19 +41,19 @@ class KFCommands {
                 //     if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
                 //         kee.loginToKeePass();
                 //     } else {
-                //         kee.tabStates[kee.foregroundTabId].framePorts.forEach(port => {
+                //         kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
                 //                 port.postMessage({ action: Action.Primary });
                 //         }, this);
                 //     }
                 // break;
                 case Command.GeneratePassword:
                     if (kee.appState.connected) {
-                        kee.tabStates[kee.foregroundTabId].framePorts[0].postMessage({ action: Action.GeneratePassword });
+                        kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage({ action: Action.GeneratePassword });
                     }
                 break;
             }
             if (id.startsWith("matchedLogin-")) {
-                kee.tabStates[kee.foregroundTabId].framePorts[(info as any).frameId].postMessage({ action: Action.ManualFill, selectedLoginIndex: id.substr(id.indexOf("-")+1) });
+                kee.tabStates.get(kee.foregroundTabId).framePorts.get((info as any).frameId).postMessage({ action: Action.ManualFill, selectedLoginIndex: id.substr(id.indexOf("-")+1) });
             }
         });
     }
@@ -99,10 +99,9 @@ class KFCommands {
             // }
 
             if (kee.foregroundTabId >= 0
-            && kee.tabStates[kee.foregroundTabId]
-            && kee.tabStates[kee.foregroundTabId].frames
-            && kee.tabStates[kee.foregroundTabId].frames.length > 0) {
-                kee.tabStates[kee.foregroundTabId].frames.forEach(frame => {
+            && kee.tabStates.has(kee.foregroundTabId)
+            && kee.tabStates.get(kee.foregroundTabId).frames) {
+                kee.tabStates.get(kee.foregroundTabId).frames.forEach(frame => {
                     for (let j=0; j<frame.logins.length; j++) {
                         const login = frame.logins[j];
                         try {

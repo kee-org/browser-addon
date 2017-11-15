@@ -6,16 +6,17 @@
     <link href="../common/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="SRP.css"/>
     <title>Kee</title>
+    <link rel="icon" href="/common/images/64.png"/>
 </head>
-<body class="container-fluid">
+<body class="container">
     <div id="i18n_root" style="display:none">
-        <form>
-            <div class="panel panel-default" id="panelAuth">
+        <form id="form">
+            <div class="panel panel-primary panel-short" id="panelAuth">
                 <div class="panel-heading">
                     <h3 class="panel-title" data-i18n="conn_setup_enter_password_title"></h3>
                 </div>
                 <div class="panel-body">
-                    <div><span data-i18n="conn_setup_enter_password"></span></div>
+                    <div><span class="span-short" data-i18n="conn_setup_enter_password"></span></div>
                     <div class="form-horizontal">
                         <div class="form-group formSettingGroup">
                             <div class="formSettingLabel"><span data-i18n="password"></span></div>
@@ -28,7 +29,7 @@
                 </div>
             </div>
 
-            <div class="panel panel-default" id="panelSettings">
+            <div class="panel panel-default panel-short" id="panelSettings">
                 <div class="panel-heading">
                     <h3 class="panel-title" data-i18n="pref_ConnectionSecurity_heading"></h3>
                 </div>
@@ -52,10 +53,10 @@
                 </div>
             </div>
 
-    <!-- We might have already connected at a lower security level but changing to a higher level here will cause the SRP negotiation to fail before the end -->
+            <!-- We might have already connected at a lower security level but changing to a higher level here will cause the SRP negotiation to fail before the end -->
 
             <div><a id="conn_sl_link" href="https://github.com/kee-org/KeeFox/wiki/en-%7C-Technical-%7C-KeePassRPC-%7C-Security-levels" target="_blank" data-i18n="conn_sl_link"></a></div>
-        </form>
+    </form>
     </div>
     <script src="../common/browser-polyfill.js"></script>
     <script src="../common/dollar-polyfill.js"></script>

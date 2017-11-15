@@ -18,7 +18,7 @@ class PanelStubOptions {
         height: 300,
         width: 400,
         name: "generatePassword",
-        autoCloseTime: 5
+        autoCloseTime: 0
     };
 
     public static SavePassword: PanelStubOptions = {
@@ -67,6 +67,7 @@ class PanelStub {
         iframe.style.setProperty( "height", "100%", "important" );
         iframe.style.setProperty( "border", "none", "important" );
         iframe.style.setProperty( "visibility", "visible", "important" );
+        iframe.style.setProperty( "display", "block", "important" );
         iframe.style.setProperty( "position", "relative", "important" );
         iframe.setAttribute("scrolling", "no");
 

@@ -14,7 +14,8 @@ class BackgroundUtils {
                 action: "loadUrlHelpSensitiveLogging"
             };
             kee.notifyUser(new KeeNotification(
-                "kee-sensitivelog", [button], utils.newGUID(), [$STR("notifyBarLogSensitiveData_label")], "High", false));
+                "kee-sensitivelog", [button], utils.newGUID(), [$STR("notifyBarLogSensitiveData_label")], "High", false),
+                { title: "Kee", message: $STR("notifyBarLogSensitiveData_label")});
         }
     };
 

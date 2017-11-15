@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="../common/bootstrap.min.css" type="text/css" rel="stylesheet">
         <link href="popup.css" type="text/css" rel="stylesheet">
     </head>
     <body>
-        <div id="main" class="hidden">
-            <div id="connectionStatus"></div>
-            <div id="notifications"></div>
-            <div id="showMatchedLogins"><a href="#" data-i18n="matched_logins_label"></a></div>
-            <div id="saveLatestLogin"><a href="#" data-i18n="saveLatestLogin"></a></div>
-            <div id="generatePasswordLink"><a href="#" data-i18n="Menu_Button_copyNewPasswordToClipboard_label"></a></div>
-            <div id="helpLink"><a href="https://www.kee.pm/help" target="_blank" data-i18n="Help_Centre_Button_label"></a></div>
-            <div id="optionsLink"><a href="#" data-i18n="Menu_Button_options_label"></a></div>
-            <div id="debug"></div>
+        <div id="main" class="hidden panel panel-default">
+            <div class="panel-heading" id="connectionStatus"></div>
+            <div class="panel-body">
+                <div class="hidden" id="notifications"></div>
+                <div class="list-group" id="menu-items">
+                    <a href="#" data-i18n="matched_logins_label" id="showMatchedLogins" class="list-group-item"></a>
+                    <a href="#" data-i18n="saveLatestLogin" id="saveLatestLogin" class="list-group-item"></a>
+                    <a href="#" data-i18n="Menu_Button_copyNewPasswordToClipboard_label" id="generatePasswordLink" class="list-group-item"></a>
+                    <a href="https://www.kee.pm/help" target="_blank" data-i18n="Help_Centre_Button_label" id="helpLink" class="list-group-item"></a>
+                    <a href="#" data-i18n="Menu_Button_options_label" id="optionsLink" class="list-group-item"></a>
+                    <div id="debug" class="list-group-item hidden"></div>
+                </div>
+            </div>
         </div>
-        <div id="loading">Loading...</div>
-
+        <div class="well well-sm" id="loading">Loading...</div>
+        
         <script src="../common/browser-polyfill.js"></script>
         <script src="../common/dollar-polyfill.js"></script>
         <script src="../common/i18n.js"></script>
