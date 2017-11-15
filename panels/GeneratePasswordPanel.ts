@@ -32,7 +32,7 @@ class GeneratePasswordPanel {
                     }
                 }, false);
                 profileItem.addEventListener("keeCommand", function (event) {
-                    myPort.postMessage({ action: "generatePassword", passwordProfile: this.textContent });
+                    myPort.postMessage({ action: Action.GeneratePassword, passwordProfile: this.textContent });
                 }, false);
 
                 list.appendChild(profileItem);

@@ -55,7 +55,7 @@ class KeeFieldIcon {
         const leftLimit = bcrect.left + bcrect.width - 22;
         if (e.clientX > leftLimit) {
             if (frameId !== 0) {
-            myPort.postMessage({action: "showMatchedLoginsPanel"} as AddonMessage);
+            myPort.postMessage({action: Action.ShowMatchedLoginsPanel} as AddonMessage);
             } else
             {
                 formFilling.createMatchedLoginsPanelNearNode(e.target);

@@ -82,9 +82,9 @@ function startup () {
     });
 
     document.getElementById("optionsLink").addEventListener("click", () => chrome.runtime.openOptionsPage() );
-    document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: "generatePassword" }) );
-    document.getElementById("saveLatestLogin").addEventListener("click", () => myPort.postMessage({ action: "saveLatestLogin" }) );
-    document.getElementById("showMatchedLogins").addEventListener("click", () => myPort.postMessage({ action: "showMatchedLoginsPanel" }) );
+    document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: Action.GeneratePassword }) );
+    document.getElementById("saveLatestLogin").addEventListener("click", () => myPort.postMessage({ action: Action.SaveLatestLogin }) );
+    document.getElementById("showMatchedLogins").addEventListener("click", () => myPort.postMessage({ action: Action.ShowMatchedLoginsPanel }) );
 
     KeeLog.info("popup ready");
 }
