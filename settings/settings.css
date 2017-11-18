@@ -11,10 +11,15 @@ body {
     margin: 10px 0px;
 }
 
-#siteAddButton, #siteEditButton {
+#siteActionButtons {
+    display: flex;
+    align-items: center;
     margin-bottom: 10px;
     margin-left: 50px;
     float: left;
+}
+#siteAddButton, #siteEditButton, #siteDeleteButton {
+    margin-left: 5px;
 }
 
 #siteChooserSearch {
@@ -77,11 +82,11 @@ legend.fix-border {
     display: grid;
     grid-gap: 10px;
     align-items: center;
+    grid-template-columns: max-content 1fr;
 }
 
 .grid > label {
     grid-column-start: 1;
-    justify-self: end;
     font-weight: initial;
 }
 

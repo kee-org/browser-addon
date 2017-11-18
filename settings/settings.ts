@@ -88,6 +88,7 @@ function setupInputListeners () {
     document.getElementById("siteSearchClearButton").addEventListener("click", siteChooserClearSearch);
     document.getElementById("siteAddButton").addEventListener("click", showSiteProperties);
     document.getElementById("siteEditButton").addEventListener("click", showSiteProperties);
+    document.getElementById("siteDeleteButton").addEventListener("click", deleteSiteProperties);
     document.getElementById("sitePropertiesValue").addEventListener("change", sitePropertiesValueChanged);
     document.getElementById("sitePropertiesMethodExact").addEventListener("change", sitePropertiesMethodChanged);
     document.getElementById("sitePropertiesMethodPrefix").addEventListener("change", sitePropertiesMethodChanged);
@@ -98,6 +99,18 @@ function setupInputListeners () {
     for (const node of $$(".formFindingControlGroup")) {
         (node as HTMLElement).firstElementChild.firstElementChild.addEventListener("change", formFindingControlGroupChange);
         (node as HTMLElement).firstElementChild.nextElementSibling.addEventListener("change", changeSiteConfigItem);
+    }
+}
+
+function deleteSiteProperties (e: Event) {
+    if (specificSite) {
+        // remove old config entry
+        const siteConfigLookup = configManager.siteConfigLookupFor(specificSite.target, specificSite.method);
+        if (siteConfigLookup) delete siteConfigLookup[specificSite.value];
+
+        configManager.save();
+
+        siteChooserClearSearch(e);
     }
 }
 
@@ -463,6 +476,7 @@ function siteChooserKeyPress (e) {
     document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
+    document.getElementById("siteDeleteButton").style.display = "none";
     document.getElementById("siteChooserSearchResults").textContent = "";
 
     specificSite = null;
@@ -508,6 +522,7 @@ function showSpecificSite () {
     document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "block";
+    document.getElementById("siteDeleteButton").style.display = "block";
     document.getElementById("siteSearchClearButton").style.display = "block";
     (document.getElementById("siteChooserSearch") as HTMLInputElement).value = specificSite.value;
 
@@ -522,6 +537,7 @@ function siteChooserClearSearch (e) {
     document.getElementById("siteSearchClearButton").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
+    document.getElementById("siteDeleteButton").style.display = "none";
     document.getElementById("settings").style.display = "none";
     (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
 }
