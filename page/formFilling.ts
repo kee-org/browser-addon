@@ -313,7 +313,7 @@ class FormFilling {
             {
                 const score = this.calculateFieldMatchScore(
                     formFields[i], dataFields[j], currentPage, overWriteFieldsAutomatically);
-                this.Logger.debug("Suitablility of putting data field "+j+" into form field "+i
+                this.Logger.debug("Suitability of putting data field "+j+" into form field "+i
                     +" (id: "+formFields[i].fieldId + ") is " + score);
                 fields.push({score: score, dataFieldIndex: j, formFieldIndex: i});
             }
@@ -1217,7 +1217,7 @@ class FormFilling {
             {
                 const fmscore = this.calculateFieldMatchScore(
                     otherFields[i], login.otherFields[j], currentPage, true);
-                this.Logger.debug("Suitablility of putting other field "+j+" into form field "+i
+                this.Logger.debug("Suitability of putting other field "+j+" into form field "+i
                     +" (id: "+otherFields[i].fieldId + ") is " + fmscore);
                 if (fmscore > mostRelevantScore)
                 {
@@ -1250,7 +1250,7 @@ class FormFilling {
             {
                 const fmscore = this.calculateFieldMatchScore(
                     passwordFields[i], login.passwords[j], currentPage, true);
-                this.Logger.debug("Suitablility of putting password field "+j+" into form field "+i
+                this.Logger.debug("Suitability of putting password field "+j+" into form field "+i
                     +" (id: "+passwordFields[i].fieldId + ") is " + fmscore);
                 if (fmscore > mostRelevantScore)
                 {
