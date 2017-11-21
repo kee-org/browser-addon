@@ -76,7 +76,7 @@
         "description": ""
     },
     "point_user_to_tutorial_start": {
-        "message": "Please spend a few minutes going through the new",
+        "message": "Käytäthän hetken aikaa käydäksesi läpi seuraavat uudistukset",
         "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
     },
     "pref_listAllOpenDBs_label": {
@@ -116,7 +116,7 @@
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
     "point_user_to_kee_news_announcement": {
-        "message": "You can find much more information about Kee 2.0 in the following news article and the links included within it:",
+        "message": "Löydät paljon lisää tietoa Kee 2.0 seuraavista uutisartikkeleista ja linkeistä: ",
         "description": "Will have a URL suffixed after the colon"
     },
     "change_field_status": {
@@ -128,11 +128,11 @@
         "description": ""
     },
     "point_user_to_forum_link_text": {
-        "message": "community forum",
+        "message": "yhteisöfoorumi",
         "description": "Name of the link to the community forum"
     },
     "point_user_to_tutorial_start_install": {
-        "message": "Please then spend a few minutes going through the new",
+        "message": "Käytäthän hetken aikaa käydäksesi läpi seuraavat uudistukset",
         "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
     },
     "pref_logLevelErrors_label": {
@@ -160,7 +160,7 @@
         "description": ""
     },
     "kee_install_notes_keepass": {
-        "message": "You need to run KeePass so that Kee can connect to it. If KeePass is not installed on your computer, you can easily download and install it yourself.",
+        "message": "KeePass täytyy olla käynnissä, jotta Kee saa siihen yhteyden. Jos tietokoneellasi ei ole KeePassia, voit helposti ladata ja asentaa sen itse.",
         "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
     },
     "pref_ConnectionSecurity_explain_change": {
@@ -172,7 +172,7 @@
         "description": ""
     },
     "notification_only_shown_some_times": {
-        "message": "This additional popup notification will only be shown a small number of times.",
+        "message": "Tämä vaihtoehtoinen ilmoitus näytetään vain muutaman kerran.",
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "site_properties_weight_warning": {
@@ -184,11 +184,11 @@
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
     },
     "saveLatestLogin": {
-        "message": "Save latest login",
+        "message": "Tallenna viimeisin kirjautumistieto",
         "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
     },
     "welcome_to_kee": {
-        "message": "Welcome to Kee",
+        "message": "Tervetuloa käyttämään Kee:ta",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "change_url_option_1": {
@@ -276,11 +276,11 @@
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
     "version_2_upgrade_intro": {
-        "message": "Version 2.0 brings exciting new features and some enforced changes in order to support Firefox 57 and higher.",
+        "message": "Versio 2.0 tuo mukanaan mielenkiintoisia uusia ominaisuuksia ja joitain pakollisia muutoksia, jotta voidaan tukea Firefoxin versiota 57 ja uudempia.",
         "description": "Explains that version 2.0 is different."
     },
     "notification_yellow_background": {
-        "message": "The Kee button has a yellow background when a new notification appears.",
+        "message": "Kee:n painikkeella on keltainen tausta kun uusi ilmoitus on saatavilla",
         "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "network_auth_http_auth_description": {
@@ -292,7 +292,7 @@
         "description": ""
     },
     "notification_raised_title": {
-        "message": "Kee has a notification to show you",
+        "message": "Kee:lla on sinulle ilmoitus",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "conn_sl_high": {
@@ -320,11 +320,11 @@
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
     },
     "kee_install_notes_keepassrpc": {
-        "message": "You'll need to install the KeePassRPC.plgx plugin for KeePass too, if you haven't already. It is as easy as putting a file in the right place on your computer and restarting KeePass.",
+        "message": "Sinun täytyy asentaa KeePassRPC.plgx lisäosa KeePassille, jos sinulla ei vielä ole sitä. Sinun tarvitsee vain siirtää tiedosto oikeaan paikkaan ja käynnistää KeePass uudelleen.",
         "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
     },
     "point_user_to_tutorial_link_text": {
-        "message": "interactive tutorial",
+        "message": "interaktiivinen opastus",
         "description": "Name of the link to the interactive tutorial page"
     },
     "pref_FillNote_desc": {
@@ -404,7 +404,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
     },
     "point_user_to_upgrade_instructions": {
-        "message": "If you have not upgraded KeeFox recently, you will need to manually copy a file into your KeePass plugins folder. Instructions can be found at:",
+        "message": "Jos et ole päivittänyt KeeFoxia hiljattain, on sinun kopioitava tiedosto KeePassin plugins kansioon. Ohjeet löytyvät: ",
         "description": "Will have a URL suffixed after the colon"
     },
     "conn_setup_invalid_param": {
@@ -484,7 +484,7 @@
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
     },
     "point_user_to_tutorial_end": {
-        "message": "to learn how to use the new version.",
+        "message": "oppiaksesi käyttämään uutta versiota.",
         "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
     },
     "srp_save_connect": {
@@ -572,7 +572,7 @@
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
     "the_new_name_for_keefox": {
-        "message": "The new name for KeeFox",
+        "message": "KeeFoxin uusi nimi",
         "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
     },
     "autoclose_countdown": {
@@ -588,7 +588,7 @@
         "description": ""
     },
     "point_user_to_tutorial_end_install": {
-        "message": "to learn how to use Kee.",
+        "message": "oppiaksesi käyttämään Kee:ta.",
         "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
     },
     "target": {
@@ -604,7 +604,7 @@
         "description": ""
     },
     "kee_install_notes_intro": {
-        "message": "Kee stores your passwords in a secure separate password manager called KeePass Password Safe 2. It's full of great features and Kee keeps your everyday internet login tasks simple and secure.",
+        "message": "KeeFox tallentaa salasanasi turvallisesti erilliseen salasananhallintaohjelmaan nimeltä KeePass Password Safe 2. Se sisältää paljon erilaisia toimintoja, mutta Kee:n avulla helposti kirjautumaan käyttämillesi nettisivuille.",
         "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
     },
     "copy_password_label": {
@@ -636,11 +636,11 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "notification_save_password_tip": {
-        "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
+        "message": "Paina Kee:n painiketta (työkalurivillä) ja valitse \"Tallenna viimeisin kirjautumistieto\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
     },
     "point_user_to_install_instructions_start": {
-        "message": "Instructions for both of the above steps can be found on our",
+        "message": "Ohjeet yllä oleviin kohtiin löytyvät ",
         "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
     },
     "database_label": {

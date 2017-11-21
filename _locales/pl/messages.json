@@ -56,7 +56,7 @@
         "description": "Yes"
     },
     "pref_keePassRPCPortWarning_label": {
-        "message": "NB: Zmień ustawienie w pliku KeePass.config albo Kee nie zawsze będzie w stanie komunikować się z KeePassem.",
+        "message": "Uwaga: Zmień ustawienie w pliku KeePass.config albo Kee nie zawsze będzie w stanie komunikować się z KeePassem.",
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
     "notifyBarLogSensitiveData_label": {
@@ -112,7 +112,7 @@
         "description": "Heading for panel that allows user to create or update a new login entry"
     },
     "loggedInMultiple_tip": {
-        "message": "Jesteś zalogowany do bazy haseł $1. Baza '$2' jest aktywna.",
+        "message": "Jesteś zalogowany do $1 baz haseł. Baza '$2' jest aktywna.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
     "point_user_to_kee_news_announcement": {
@@ -148,7 +148,7 @@
         "description": ""
     },
     "pref_FillPrompt_desc": {
-        "message": "Wypełnij okno logowania",
+        "message": "uzupełnić dane logowania",
         "description": ""
     },
     "edit": {
@@ -184,7 +184,7 @@
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
     },
     "saveLatestLogin": {
-        "message": "Zapisz ostatnią nazwę użytkownika",
+        "message": "Zapisz ostatnie hasło",
         "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
     },
     "welcome_to_kee": {
@@ -348,7 +348,7 @@
         "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "pref_FillAndSubmitForm_desc": {
-        "message": "Wypełnij i wyślij formularz",
+        "message": "uzupełnić i zatwierdzić dane logowania",
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
@@ -404,7 +404,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
     },
     "point_user_to_upgrade_instructions": {
-        "message": "Jeśli ostatnio nie aktualizowałeś KeeFoxa, będziesz musiał ręcznie skopiować plik do katalogu z pluginami KeePassa. Instrukcja może być znaleziona pod adresem:",
+        "message": "Jeśli ostatnio nie aktualizowałeś KeeFoxa, będziesz musiał ręcznie skopiować plik do katalogu z pluginami KeePassa. Instrukcję znajdziesz pod adresem:",
         "description": "Will have a URL suffixed after the colon"
     },
     "conn_setup_invalid_param": {
@@ -448,11 +448,11 @@
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "site_options_invisible_tip_desc": {
-        "message": "NB: Nazwy i ID mogą być inne, niże etykiety widoczne na stronie (są one ustawiane w kodzie źródłowym strony)",
+        "message": "Uwaga: Nazwy i ID mogą być inne, niż etykiety widoczne na stronie (są one ustawiane w kodzie źródłowym strony)",
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "pref_FillAndSubmitPrompt_desc": {
-        "message": "Wypełnij i wyślij okno logowania",
+        "message": "uzupełnić i zatwierdzić dane logowania",
         "description": ""
     },
     "save": {
@@ -468,7 +468,7 @@
         "description": ""
     },
     "pref_FillForm_desc": {
-        "message": "Wypełnij formularz",
+        "message": "uzupełnić dane logowania",
         "description": ""
     },
     "matched_logins_label": {
@@ -480,7 +480,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_DoNothing_desc": {
-        "message": "Nic nie rób",
+        "message": "nic nie robić",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
     },
     "point_user_to_tutorial_end": {
