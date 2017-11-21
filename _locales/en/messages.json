@@ -505,6 +505,10 @@
       "message": "Edit",
       "description": "Action button for user to edit an item within a collection. E.g. edit an entry within the list of site-specific settings overrides"
   },
+  "delete": {
+      "message": "Delete",
+      "description": "Action button for user to delete an item within a collection. E.g. delete an entry within the list of site-specific settings overrides"
+  },
   "site_specific_settings_checkbox_explanation": {
       "message": "Settings from \"All Websites\" will apply to each section below unless you enable the setting using the checkbox next to it." ,
       "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
