@@ -187,6 +187,10 @@
     "message": "When opening or logging in to KeePass, use this database file",
     "description": ""
   },
+  "pref_portDelay_label": {
+    "message": "Port connection delay (experimental; may require tab or browser restart to apply)",
+    "description": ""
+  },
   "pref_keePassRPCPort_label": {
     "message": "Communicate with KeePass using this TCP/IP port",
     "description": ""
