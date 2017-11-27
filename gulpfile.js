@@ -4,8 +4,12 @@ var ts = require("gulp-typescript");
 var sourcemaps = require('gulp-sourcemaps');
 var zip = require('gulp-zip');
 var merge = require('merge-stream');
+var sequence = require('run-sequence');
 
-gulp.task("default", [ "build" ]);
+gulp.task('default', function (done) {
+    sequence('build', ['package:beta', 'package'], done);
+});
+
 gulp.task("build", ["ts:background", "ts:popup", "ts:panels", "ts:page", "ts:settings", "ts:dialogs" ]);
 gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:settings", "lint:dialogs" ]);
 
