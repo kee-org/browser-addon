@@ -1,0 +1,48 @@
+language: node_js
+node_js:
+  - "node"
+cache:
+  directories:
+    - "node_modules"
+sudo: false
+  
+# This is needed to avoid building all the tags pushed by travis
+branches:
+  except:
+- /^v?\d+\.\d+\.\d+$/
+
+before_install:
+  # Create a git tag of the new version to use
+  # If package.json major and minor versions match last tag, then increment last tag. Else use package.json major.minor.0.
+- "{ sed -nE 's/^[ \\t]*\"version\": \"([0-9]{1,}\\.[0-9]{1,}\\.)[0-9x]{1,}\",$/\\1/p' package.json; git describe --abbrev=0 | sed -E 's/^v([0-9]{1,}\\.[0-9]{1,}\\.)([0-9]{1,})$/\\1 \\2/g'; } | tr \"\\n\" \" \" | awk '{printf($1==$2?\"v\"$2$3+1:\"v\"$1\"0\")}' | xargs -I {} git tag -a {} -m \"{}\"\n"
+  # Update package.json based on the git tag we just created
+- npm --no-git-tag-version version from-git
+
+before_script:
+  - npm install -g gulp-cli
+script: gulp
+
+# push any source changes for localisation
+after_success:
+  - pip install virtualenv
+  - virtualenv ~/env
+  - source ~/env/bin/activate
+  - pip install transifex-client
+  - echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = '"$TRANSIFEX_USER"$'\ntoken = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc
+  - tx push -s
+	
+# Push the new tag back to GitHub and upload artifacts but only if on the master branch
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: git push --tags
+    on:
+      branch: master
+  - provider: releases
+    api_key:
+	  secure: "f47A9WjtuxoQHXiVS6WQzWnomupPwLxyMdeMfwKkqvI+pT5o+i+aBW2aAjP5oxkM1PDuBEI16TgRAr2PuKaC5DR9aCQEmLHaBGqvIUFq0jAJI3zxDPCvEkG6VN3WZJ5YkBigm8/0xxo4ZnWjZRnDtvaDD95rZmmuIYyHGCq1TCTPOr4U+ZoWuRVpxHgCVnJuMAm+giiqdWS17UfYH4pqN80nRdRemVzzPsnp+TbY3ganTUkMcT3Q5X56XV+gVf/nK5Rw4XkHD+dpzba6HqmcT3mmAIHa+87gkgyCGtpNJIIjpDysECCVfr8mmVT2FSiBdL3VX8YcnHcu8PBbxc27dRln6JipAUMJKe+DqfcTCqoPdHa2ilRGChLV8ze75QVk6RDrCiMGfYoIFvFnfU12geZKPsDbEc4iDBSieklPHmxhyNIRYogUW2sERQae52DzXqxEIRMj8kQENHOAGt/L/FkWcytgz1V02QPFeTDTtb6ur6MuarCauRGQE2OAoulEA0e0YxSxXRCzb08RBoY+Ez9y5vXSaV0xzz/pj5LIqu8/1/hbf1uyY1i79edeN4McKJI23foZSETSnuGWhf1wLEvmoynwAmXjcPC62Xawdwi1RrDi1ubDsaP24qPWNy/OjXieWQpnBZdv/kQWbbpHi6BTHhY49OWbpz+INnKkWoQ="
+    file_glob: true
+    file: dist/*
+    skip_cleanup: true
+    on:
+      branch: master
