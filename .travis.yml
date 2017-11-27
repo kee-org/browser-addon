@@ -9,7 +9,7 @@ sudo: false
 # This is needed to avoid building all the tags pushed by travis
 branches:
   except:
-- /^v?\d+\.\d+\.\d+$/
+    - /^v?\d+\.\d+\.\d+$/
 
 before_install:
   # Create a git tag of the new version to use
@@ -30,7 +30,7 @@ after_success:
   - pip install transifex-client
   - echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = '"$TRANSIFEX_USER"$'\ntoken = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc
   - tx push -s
-	
+  
 # Push the new tag back to GitHub and upload artifacts but only if on the master branch
 deploy:
   - provider: script
