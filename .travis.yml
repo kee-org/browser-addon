@@ -33,7 +33,7 @@ after_success:
   - echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = '"$TRANSIFEX_USER"$'\ntoken = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc
   - tx push -s
   
- before_deploy:
+before_deploy:
   - cat manifest.json
  
 # Push the new tag back to GitHub and upload artifacts but only if on the master branch
