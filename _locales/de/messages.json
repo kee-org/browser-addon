@@ -636,7 +636,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "notification_save_password_tip": {
-        "message": "Klicken SIe auf die Kee Schaltfläche (in Ihrer Symbolleiste) und klicken Sie anschließend auf \"Letzte Log-in Daten speichern\"",
+        "message": "Klicken Sie auf die Kee Schaltfläche (in Ihrer Symbolleiste) und klicken Sie anschließend auf \"Letzte Log-in Daten speichern\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
     },
     "point_user_to_install_instructions_start": {
