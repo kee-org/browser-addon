@@ -16,6 +16,7 @@ before_install:
   # If manifest.json major and minor versions match last tag, then increment last tag. Else use manifest.json major.minor.0.
 - cat manifest.json
 - "sed -nE 's/^.*\"version\": \"([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}\"\\,/\\1/p' manifest.json"
+- chmod ugo+x WFT.sh
 - ./WFT.sh
 - "KEE_VERSION_MANIFEST=`sed -nE 's/^.*\"version\": \"([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}\"\\,/\\1/p' manifest.json`; echo \"$KEE_VERSION_MANIFEST\""
 - "KEE_VERSION_MANIFEST=`sed -nE 's/^.*\"version\": \"([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}\"\\,/\\1/p' manifest.json`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo \"${KEE_VERSION_MANIFEST} ${KEE_VERSION_TAG}\""
