@@ -14,11 +14,15 @@ branches:
 before_install:
   # Create a git tag of the new version to use
   # If manifest.json major and minor versions match last tag, then increment last tag. Else use manifest.json major.minor.0.
-- "{ sed -nE 's/^[ \\t]*\\\"version\\\": \\\"([0-9]{1,}\\.[0-9]{1,}\\.)[0-9x]{1,}\\\",$/\\1/p' manifest.json; git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,}\\.)([0-9]{1,})$/\\1 \\2/g'; } | tr \"\\n\" \" \" | awk '{printf($1==$2?\"\"$2$3+1:\"\"$1\"0\")}' | xargs -I {} git tag -a {} -m \"{}\"\n"
+- "KEE_VERSION_MANIFEST=`sed -nE 's/^.*\"version\": \"([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}\"\\,/\\1/p' manifest.json`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo \"$KEE_VERSION_MANIFEST $KEE_VERSION_TAG\""
+- "KEE_VERSION_MANIFEST=`sed -nE 's/^.*\"version\": \"([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}\"\\,/\\1/p' manifest.json`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo \"$KEE_VERSION_MANIFEST $KEE_VERSION_TAG\" | awk '{printf($1==$2?\"\"$2.$3+1:\"\"$1\".0\")}' | xargs -I {} git tag -a {} -m \"{}\"\n"
   # Update manifest.json based on the git tag we just created
 - NEW_KEE_VERSION=`git describe --abbrev=0 --tags`
-- sed 's/^\(.*version\": \"\)\(.*\)\(\",\)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json
-- sed 's/^\(.*version_name\": \"\)\(.*\)\(\",\)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json
+- cat manifest.json
+- "sed 's/^(\"version\": \")(.*)(\"\\,)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json"
+- cat manifest.json
+- "sed 's/^(\"version_name\": \")(.*)(\"\\,)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json"
+- cat manifest.json
 
 before_script:
   - npm install -g gulp-cli
