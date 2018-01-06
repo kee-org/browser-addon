@@ -676,5 +676,9 @@
   "notification_save_password_tip": {
       "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
       "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+  },
+  "loading": {
+      "message": "Loading...",
+      "description": "Holding message to be displayed when Kee has to display something to the user to indicate that the requested information or interface element will be displayed shortly."
   }
 }
