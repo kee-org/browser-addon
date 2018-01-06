@@ -14,11 +14,11 @@ branches:
 before_install:
   # Create a git tag of the new version to use
   # If manifest.json major and minor versions match last tag, then increment last tag. Else use manifest.json major.minor.0.
-- "{ sed -nE 's/^[ \\t]*\\\"version\\\": \\\"([0-9]{1,}\\.[0-9]{1,}\\.)[0-9x]{1,}\\\",$/\\1/p' manifest.json; git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,}\\.)([0-9]{1,})$/\\1 \\2/g'; } | tr \"\\n\" \" \" | awk '{printf($1==$2?\"\"$2$3+1:\"\"$1\"0\")}' | xargs -I {} git tag -a {} -m \"{}\"\n"
+- "KEE_VERSION_MANIFEST=`sed -nE 's/^.*\"version\": \"([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}\"\\,/\\1/p' manifest.json | tr -d '\\040\\011\\012\\015'`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo \"${KEE_VERSION_MANIFEST} ${KEE_VERSION_TAG}\" | awk '{printf($1==$2?\"\"$2\".\"$3+1:\"\"$1\".0\")}' | xargs -I {} git tag -a {} -m \"{}\"\n"
   # Update manifest.json based on the git tag we just created
 - NEW_KEE_VERSION=`git describe --abbrev=0 --tags`
-- sed 's/^\(.*version\": \"\)\(.*\)\(\",\)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json
-- sed 's/^\(.*version_name\": \"\)\(.*\)\(\",\)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json
+- "sed -E 's/^(\"version\": \")(.*)(\"\\,)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
+- "sed -E 's/^(\"version_name\": \")(.*)(\"\\,)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
 
 before_script:
   - npm install -g gulp-cli
@@ -26,16 +26,16 @@ script: gulp
 
 # push any source changes for localisation
 after_success:
-  - pip install virtualenv
-  - virtualenv ~/env
-  - source ~/env/bin/activate
-  - pip install transifex-client
-  - echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = '"$TRANSIFEX_USER"$'\ntoken = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc
-  - tx push -s
+  - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && virtualenv ~/env && source ~/env/bin/activate && pip install transifex-client && echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = api\ntoken = \npassword = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc && tx -d --traceback push -s
   
 before_deploy:
   - cat manifest.json
- 
+  # Ensure we have suitable authentication for pushing git changes when necessary
+  - git config --global user.email "travis@travis-ci.org"
+  - git config --global user.name "Travis CI"
+  - git config credential.helper "store --file=.git/credentials" 
+  - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+
 # Push the new tag back to GitHub and upload artifacts but only if on the master branch
 deploy:
   - provider: script
@@ -45,7 +45,7 @@ deploy:
       branch: master
   - provider: releases
     api_key:
-      secure: "f47A9WjtuxoQHXiVS6WQzWnomupPwLxyMdeMfwKkqvI+pT5o+i+aBW2aAjP5oxkM1PDuBEI16TgRAr2PuKaC5DR9aCQEmLHaBGqvIUFq0jAJI3zxDPCvEkG6VN3WZJ5YkBigm8/0xxo4ZnWjZRnDtvaDD95rZmmuIYyHGCq1TCTPOr4U+ZoWuRVpxHgCVnJuMAm+giiqdWS17UfYH4pqN80nRdRemVzzPsnp+TbY3ganTUkMcT3Q5X56XV+gVf/nK5Rw4XkHD+dpzba6HqmcT3mmAIHa+87gkgyCGtpNJIIjpDysECCVfr8mmVT2FSiBdL3VX8YcnHcu8PBbxc27dRln6JipAUMJKe+DqfcTCqoPdHa2ilRGChLV8ze75QVk6RDrCiMGfYoIFvFnfU12geZKPsDbEc4iDBSieklPHmxhyNIRYogUW2sERQae52DzXqxEIRMj8kQENHOAGt/L/FkWcytgz1V02QPFeTDTtb6ur6MuarCauRGQE2OAoulEA0e0YxSxXRCzb08RBoY+Ez9y5vXSaV0xzz/pj5LIqu8/1/hbf1uyY1i79edeN4McKJI23foZSETSnuGWhf1wLEvmoynwAmXjcPC62Xawdwi1RrDi1ubDsaP24qPWNy/OjXieWQpnBZdv/kQWbbpHi6BTHhY49OWbpz+INnKkWoQ="
+      secure: "DC8qtOkMdII1bYL8UZdVuEJNFfk7pywLIA93F7O6y8ruWt2N23c1grC0l0kmWjFKAyjv5pILddLm5FPpEaN5tRWd3ROHjmP/kXRaY0vSsrUD6bIFHbIg6rouenfVZo9L5jtyzJQKABZABWmqFcKdE+qmpOlO6aAgwDHdl0Ai+zhBU8mHsVv5y2yqjBGTyXpBNVEtPEMetfJSq0fq6U/LOhyWn/dGCiHdA7pmvznQ6Uiu8ShNAJiRq47tlD0cGLQSpFbKGWoJlxGIecHkDJDfE4V4gmS7rrGp50Y9TbFmxFxGnNxwRCWAL1usp0yDjliIYkzl0bNrw2MRSTz+vgMAYjwwUHb0VgCciRDorJplJGmcN2S7UrpcaffL7b5MDpn9wfKSOvPLsPqhGpRudB9/v6KawhcKZ5dOLQgfup5kjV/WuWG9BgeDFN7S9/Tzw9EUD6tuou+duzlu+QSjNkUrAxuWdnpC7QgVxIVkXdD7qdmDzb34jkJhEF5Gk6XY52Yyiy+GDjkfP03QV5qk7nRXaUu9FI/OWMuSyC6ru6VyCABoKCV0o8kbcPVjIl9yJM8+5t4+RBQj/Saohgm+t2gZhgeFgE9N2Sj3pcp8+iaurlcFJI8DLIBwsNpJXFlLIwZoq0/SOkXIUmilhkEntWy9ctj8LSX47GobAScneRY99+w="
     file_glob: true
     file: dist/*
     skip_cleanup: true
