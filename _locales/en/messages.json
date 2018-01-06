@@ -187,6 +187,10 @@
     "message": "When opening or logging in to KeePass, use this database file",
     "description": ""
   },
+  "pref_portDelay_label": {
+    "message": "Port connection delay (experimental; may require tab or browser restart to apply)",
+    "description": ""
+  },
   "pref_keePassRPCPort_label": {
     "message": "Communicate with KeePass using this TCP/IP port",
     "description": ""
@@ -676,5 +680,9 @@
   "notification_save_password_tip": {
       "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
       "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+  },
+  "loading": {
+      "message": "Loading...",
+      "description": ""
   }
-}
+  }
