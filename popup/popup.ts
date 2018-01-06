@@ -10,13 +10,17 @@ function updateConnectionStatus () {
                 appState.KeePassDatabases[appState.ActiveKeePassDatabaseIndex].name
             ]);
         } else if (appState.KeePassDatabases.length == 1) {
-            $("#connectionStatus").innerText = $STRF("loggedIn_tip", appState.KeePassDatabases[appState.ActiveKeePassDatabaseIndex].name);
+            $("#connectionStatus").innerText = $STRF("loggedIn_tip", getDatabaseName(appState.KeePassDatabases[appState.ActiveKeePassDatabaseIndex]));
         } else {
             $("#connectionStatus").innerText = $STR("notifyBarLaunchKeePass_label") + " " + $STR("notifyBarLoginToKeePassButton_tip");
         }
     } else {
         $("#connectionStatus").innerText = $STR("notifyBarLaunchKeePass_label") + " " + $STR("notifyBarLaunchKeePassButton_tip");
     }
+}
+
+function getDatabaseName (database) {
+    return database.name ? database.name : database.fileName.replace(/^.*[\\\/]/, "");
 }
 
 function updateAppState (newState) {
