@@ -19,8 +19,8 @@ before_install:
 - git describe --abbrev=0 --tags
 - NEW_KEE_VERSION=`git describe --abbrev=0 --tags`
 - echo "$NEW_KEE_VERSION"
-- "sed -E 's/^(\"version\": \")(.*)(\"\\,)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
-- "sed -E 's/^(\"version_name\": \")(.*)(\"\\,)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
+- "sed -E 's/^(.*\"version\": \")(.*)(\"\\,.*)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
+- "sed -E 's/^(.*\"version_name\": \")(.*)(\"\\,.*)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
 - cat manifest.json
 
 before_script:
