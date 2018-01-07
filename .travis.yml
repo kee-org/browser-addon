@@ -16,9 +16,12 @@ before_install:
   # If manifest.json major and minor versions match last tag, then increment last tag. Else use manifest.json major.minor.0.
 - "KEE_VERSION_MANIFEST=`sed -nE 's/^.*\"version\": \"([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}\"\\,/\\1/p' manifest.json | tr -d '\\040\\011\\012\\015'`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo \"${KEE_VERSION_MANIFEST} ${KEE_VERSION_TAG}\" | awk '{printf($1==$2?\"\"$2\".\"$3+1:\"\"$1\".0\")}' | xargs -I {} git tag -a {} -m \"{}\"\n"
   # Update manifest.json based on the git tag we just created
+- git describe --abbrev=0 --tags
 - NEW_KEE_VERSION=`git describe --abbrev=0 --tags`
+- echo "$NEW_KEE_VERSION"
 - "sed -E 's/^(\"version\": \")(.*)(\"\\,)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
 - "sed -E 's/^(\"version_name\": \")(.*)(\"\\,)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
+- cat manifest.json
 
 before_script:
   - npm install -g gulp-cli
@@ -49,5 +52,7 @@ deploy:
     file_glob: true
     file: dist/*
     skip_cleanup: true
+    prerelease: true
+    body: "This is an automatically generated release. Some releases will be thoroughly tested and marked as ready for beta and eventually stable release. This message will be replaced if that happens. You may want to install the files in this release if you wish to test a specific change that is included within this version. More information can be found at https://forum.kee.pm/..."
     on:
       branch: master
