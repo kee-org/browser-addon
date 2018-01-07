@@ -50,6 +50,6 @@ deploy:
     file: dist/*
     skip_cleanup: true
     prerelease: true
-    body: "This is an automatically generated release. Some releases will be thoroughly tested and marked as ready for beta and eventually stable release. This message will be replaced if that happens. You may want to install the files in this release if you wish to test a specific change that is included within this version. More information can be found at https://forum.kee.pm/ (soon)"
+    body: "This is an automatically generated release. Some releases will be thoroughly tested and marked as ready for beta and eventually stable release. This message will be replaced if that happens. You may want to install the files in this release if you wish to test a specific change that is included within this version. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550"
     on:
       branch: master
