@@ -5,10 +5,10 @@
     "gulp": "3.9.1",
     "gulp-tslint": "8.1.2",
     "gulp-typescript": "^3.2.3",
-    "gulp-zip": "^4.0.0",
-    "run-sequence": "^2.2.0",
+    "gulp-zip": "^4.1.0",
+    "run-sequence": "^2.2.1",
     "tslint": "^5.8.0",
-    "typescript": "^2.6.1"
+    "typescript": "^2.6.2"
   },
   "dependencies": {}
 }
