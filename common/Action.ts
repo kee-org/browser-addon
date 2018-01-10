@@ -1,6 +1,7 @@
 const enum Action {
   CloseAllPanels = "closeAllPanels",
   DetectForms = "detectForms",
+  GetPasswordProfiles = "getPasswordProfiles",
   GeneratePassword = "generatePassword",
   ManualFill = "manualFill",
   Primary = "primary",

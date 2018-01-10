@@ -42,7 +42,7 @@ function startup () {
             matchedLoginsPanel = new MatchedLoginsPanel();
             document.getElementById("header").innerText = $STR("matched_logins_label");
             myPort.onMessage.addListener(function (m: AddonMessage) {
-                KeeLog.debug("In iframe script, received message from background script: ");
+                KeeLog.debug("In iframe script, received message from background script");
 
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateFrameState(m.frameState);
@@ -54,36 +54,26 @@ function startup () {
         case "generatePassword":
             generatePasswordPanel = new GeneratePasswordPanel();
             document.getElementById("header").innerText = $STR("Menu_Button_copyNewPasswordToClipboard_label");
-            let passwordReceived = false;
             myPort.onMessage.addListener(function (m: AddonMessage) {
-                KeeLog.debug("In iframe script, received message from background script: ");
+                KeeLog.debug("In iframe script, received message from background script");
 
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateFrameState(m.frameState);
 
-                if (!m.generatedPassword && m.generatedPassword != "") {
-                    myPort.postMessage({ action: Action.GeneratePassword });
+                if (m.passwordProfiles && m.passwordProfiles.length > 0) {
+                    const mainPanel = generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles);
+                } else if (m.generatedPassword) {
+                    copyStringToClipboard(m.generatedPassword);
+                    closePanel();
                 } else {
-                    if (passwordReceived) {
-                        // Not done on initial load due to https://github.com/kee-org/browser-addon/issues/68
-                        copyStringToClipboard(m.generatedPassword);
-                        closePanel();
-                    } else {
-                        const mainPanel = generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles);
-
-                        // Disabled due to https://github.com/kee-org/browser-addon/issues/68
-                        //if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
-
-                        passwordReceived = true;
-                    }
+                    myPort.postMessage({ action: Action.GetPasswordProfiles });
                 }
-
             });
         break;
         case "savePassword":
             document.getElementById("header").innerText = $STR("save_login");
             myPort.onMessage.addListener(function (m: AddonMessage) {
-                KeeLog.debug("In iframe script, received message from background script: ");
+                KeeLog.debug("In iframe script, received message from background script");
 
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateFrameState(m.frameState);

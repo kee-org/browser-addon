@@ -790,11 +790,17 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
         kee.tabStates.get(tabId).framePorts.get(0).postMessage(msg);
     }
 
-    if (msg.action == Action.GeneratePassword) {
+    if (msg.action == Action.GetPasswordProfiles) {
         kee.getPasswordProfiles(passwordProfiles => {
-            kee.generatePassword(msg.passwordProfile, kee.tabStates.get(tabId).url, generatedPassword => {
-                port.postMessage({ passwordProfiles: passwordProfiles, generatedPassword: generatedPassword } as AddonMessage);
-            });
+            if (passwordProfiles.length > 0) {
+                port.postMessage({ passwordProfiles: passwordProfiles } as AddonMessage);
+            }
+        });
+    }
+
+    if (msg.action == Action.GeneratePassword) {
+        kee.generatePassword(msg.passwordProfile, kee.tabStates.get(tabId).url, generatedPassword => {
+            port.postMessage({ generatedPassword: generatedPassword } as AddonMessage);
         });
     }
 
