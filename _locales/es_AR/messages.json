@@ -670,5 +670,9 @@
     "multi_page_update_warning": {
         "message": "Formularios de conexión multipágina pueden también requerir edición manual.",
         "description": ""
+    },
+    "pref_enableBuiltInPasswordSaving_label": {
+        "message": "Also allow your web browser's built-in password manager to save passwords (not recommended)",
+        "description": ""
     }
 }

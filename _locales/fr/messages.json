@@ -670,5 +670,9 @@
     "multi_page_update_warning": {
         "message": "Les formulaires de login multi-pages peuvent aussi requérir une édition manuelle.",
         "description": ""
+    },
+    "pref_enableBuiltInPasswordSaving_label": {
+        "message": "Also allow your web browser's built-in password manager to save passwords (not recommended)",
+        "description": ""
     }
 }

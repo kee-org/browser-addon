@@ -670,5 +670,9 @@
     "multi_page_update_warning": {
         "message": "Багатосторінкові форми входу можуть також потребувати ручного редагування.",
         "description": ""
+    },
+    "pref_enableBuiltInPasswordSaving_label": {
+        "message": "Also allow your web browser's built-in password manager to save passwords (not recommended)",
+        "description": "
     }
 }

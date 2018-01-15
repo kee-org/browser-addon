@@ -680,5 +680,9 @@
   "loading": {
       "message": "Loading...",
       "description": "Holding message to be displayed when Kee has to display something to the user to indicate that the requested information or interface element will be displayed shortly."
+  },
+  "pref_enableBuiltInPasswordSaving_label": {
+      "message": "Also allow your web browser's built-in password manager to save passwords (not recommended)",
+      "description": ""
   }
 }

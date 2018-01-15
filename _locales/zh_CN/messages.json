@@ -670,5 +670,9 @@
     "multi_page_update_warning": {
         "message": "多页面登录表单可能也需要手动编辑。",
         "description": ""
+    },
+    "pref_enableBuiltInPasswordSaving_label": {
+        "message": "Also allow your web browser's built-in password manager to save passwords (not recommended)",
+        "description": "
     }
 }

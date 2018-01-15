@@ -670,5 +670,9 @@
     "multi_page_update_warning": {
         "message": "Vícestránkové přihlašovací formuláře mohou také vyžadovat ruční editaci.",
         "description": ""
+    },
+    "pref_enableBuiltInPasswordSaving_label": {
+        "message": "Also allow your web browser's built-in password manager to save passwords (not recommended)",
+        "description": "
     }
 }

@@ -54,6 +54,12 @@ function loadInitialConfig () {
     (document.getElementById("pref_keePassDBToOpen_label") as HTMLInputElement).value =
         configManager.current.keePassDBToOpen;
 
+    (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).value =
+        configManager.current.enableBuiltInPasswordSaving;
+
+    (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).checked
+        = configManager.current.enableBuiltInPasswordSavingB ? configManager.current.enableBuiltInPasswordSaving : null;
+
     setSiteSpecificConfigValues();
 }
 
@@ -96,6 +102,9 @@ function setupInputListeners () {
     document.getElementById("sitePropertiesCancel").addEventListener("click", closeSiteProperties);
     document.getElementById("sitePropertiesSave").addEventListener("click", saveSiteProperties);
 
+    document.getElementById("pref_enableBuiltInPasswordSaving_label").addEventListener("change", saveEnableBuiltInPasswordSaving);
+
+    document.getElementById("pref_enableBuiltInPasswordSaving_label").addEventListener("change", saveEnableBuiltInPasswordSaving);
     for (const node of $$(".formFindingControlGroup")) {
         (node as HTMLElement).firstElementChild.firstElementChild.addEventListener("change", formFindingControlGroupChange);
         (node as HTMLElement).firstElementChild.nextElementSibling.addEventListener("change", changeSiteConfigItem);
@@ -682,6 +691,16 @@ function savePortDelay (e) {
 function saveKPRPCDBToOpen (e) {
     e.preventDefault();
     configManager.setASAP({ keePassDBToOpen: (document.getElementById("pref_keePassDBToOpen_label") as HTMLInputElement).value });
+}
+
+function saveEnableBuiltInPasswordSaving (e) {
+    e.preventDefault();
+    configManager.setASAP({ enableBuiltInPasswordSaving: (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).value });
+}
+
+function saveEnableBuiltInPasswordSaving (e) {
+    e.preventDefault();
+    configManager.setASAP({ enableBuiltInPasswordSaving: (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).checked });
 }
 
 function logLevelFromString (level) {

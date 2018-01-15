@@ -54,6 +54,7 @@ defaultConfig.searchNetworkAuth = true;
 defaultConfig.portConnectionDelay = 25;
 defaultConfig.notificationCountGeneric = 0;
 defaultConfig.notificationCountSavePassword = 0;
+defaultConfig.enableBuiltInPasswordSaving = false;
 
 class ConfigManager {
     public current: Config;

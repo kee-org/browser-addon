@@ -97,4 +97,5 @@ class Config {
     portConnectionDelay: number;
     notificationCountGeneric: number;
     notificationCountSavePassword: number;
+    enableBuiltInPasswordSaving: boolean;
 }
