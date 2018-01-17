@@ -5,16 +5,74 @@ var sourcemaps = require('gulp-sourcemaps');
 var zip = require('gulp-zip');
 var merge = require('merge-stream');
 var sequence = require('run-sequence');
+var del = require('del');
+var replace = require('gulp-replace');
 
-gulp.task('default', function (done) {
-    sequence('build', ['package:beta', 'package'], done);
+// Some tasks set DEBUG to false so that a production build can be executed.
+// There doesn't appear to be a way to pass this as a local variable so we
+// have to ensure every invocation of gulp only builds in either production
+// or debug mode but not both (tasks run concurrently)
+var DEBUG = true;
+
+const buildDirDebug = "build/debug/all";
+const buildDirProd = "build/prod/all";
+const buildDirDebugFirefox = "build/debug/firefox";
+const buildDirProdFirefox = "build/prod/firefox";
+const buildDirDebugChrome = "build/debug/chrome";
+const buildDirProdChrome = "build/prod/chrome";
+const globStaticManifest = 'manifest.json';
+const globStaticLocales = '_locales/**';
+const globStaticReleaseNotes = 'release-notes/*.{js,css,html,map}';
+const globStaticCommonFonts = 'common/fonts/**';
+const globStaticCommonImages = 'common/images/**';
+const globStaticCommon = 'common/*.{js,css,html,map}';
+const globStaticDialogs = 'dialogs/*.{css,html}';
+const globStaticSettings = 'settings/*.{css,html}';
+const globStaticBackground = 'background/*.{js,css,html}';
+const globStaticPage = 'page/*.{css,html}';
+const globStaticPanels = 'panels/*.{css,html}';
+const globStaticPopup = 'popup/*.{css,html}';
+const globTSCommon = 'common/**/*.ts';
+const globTSCommonOut = 'common/common.js';
+const globTSPopup = 'popup/**/*.ts';
+const globTSPopupOut = 'popup/popup.js';
+const globTSPanels = 'panels/**/*.ts';
+const globTSPanelsOut = 'panels/panels.js';
+const globTSPage = 'page/**/*.ts';
+const globTSPageOut = 'page/page.js';
+const globTSBackground = 'background/**/*.ts';
+const globTSBackgroundOut = 'background/app.js';
+const globTSSettings = 'settings/**/*.ts';
+const globTSSettingsOut = 'settings/settings.js';
+const globTSDialogs = 'dialogs/**/*.ts';
+const globTSDialogsOut = 'dialogs/**/*.js';
+
+
+/********** TOP-LEVEL ORCHESTRATION **********/
+
+gulp.task('default', ['build:debug']);
+gulp.task('build', ['build:debug']);
+
+gulp.task('build:debug', function (done) {
+    sequence(['compilets', 'static'], done);
+});
+gulp.task('build:prod', function (done) {
+    DEBUG = false;
+    sequence(['compilets', 'static'], done);
 });
 
-gulp.task("build", ["ts:background", "ts:popup", "ts:panels", "ts:page", "ts:settings", "ts:dialogs" ]);
+gulp.task("compilets", function (done) {
+    sequence("compilets:common", ["compilets:background", "compilets:popup",
+        "compilets:panels", "compilets:page", "compilets:settings",
+        "compilets:dialogs"], done);
+});
+
+/********** LINTING TYPESCRIPT **********/
+
 gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:settings", "lint:dialogs" ]);
 
 gulp.task("lint:background", function() {
-    return gulp.src(["background/**/*.ts"])
+    return gulp.src([globTSBackground])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -22,7 +80,7 @@ gulp.task("lint:background", function() {
 });
 
 gulp.task("lint:page", function() {
-    return gulp.src(["page/**/*.ts"])
+    return gulp.src([globTSPage])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -30,7 +88,7 @@ gulp.task("lint:page", function() {
 });
 
 gulp.task("lint:popup", function() {
-    return gulp.src(["popup/**/*.ts"])
+    return gulp.src([globTSPopup])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -38,7 +96,7 @@ gulp.task("lint:popup", function() {
 });
 
 gulp.task("lint:panels", function() {
-    return gulp.src(["panels/**/*.ts"])
+    return gulp.src([globTSPanels])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -46,7 +104,7 @@ gulp.task("lint:panels", function() {
 });
 
 gulp.task("lint:settings", function() {
-    return gulp.src(["settings/**/*.ts"])
+    return gulp.src([globTSSettings])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -54,7 +112,7 @@ gulp.task("lint:settings", function() {
 });
 
 gulp.task("lint:dialogs", function() {
-    return gulp.src(["dialogs/**/*.ts"])
+    return gulp.src([globTSDialogs])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -62,170 +120,349 @@ gulp.task("lint:dialogs", function() {
 });
 
 gulp.task("lint:common", function() {
-    return gulp.src(["common/**/*.ts"])
+    return gulp.src([globTSCommon])
         .pipe(tslint({
             formatter: "verbose"
         }))
         .pipe(tslint.report())
 });
 
+/********** COMPILING SHARED TYPESCRIPT LIBRARY **********/
+
 var tsProjectCommon = ts.createProject("common/tsconfig.json", {
-    outFile: "common/common.js",
+    outFile: globTSCommonOut,
     declaration: true
 });
-gulp.task("ts:common", ["lint:common"], function() {
+gulp.task("compilets:common", ["clean:ts:common", "lint:common"], function() {
 
-var tsResult = tsProjectCommon.src()
-    .pipe(sourcemaps.init())
-    .pipe(tsProjectCommon());
-    return merge(
-      tsResult.dts.pipe(gulp.dest('typedefs')),
-      tsResult.js.pipe(sourcemaps.write('.')).pipe(gulp.dest('common'))
-    );
+    if (DEBUG) {
+        var tsResult = tsProjectCommon.src()
+            .pipe(sourcemaps.init())
+            .pipe(tsProjectCommon());
+        return merge(
+        tsResult.dts.pipe(gulp.dest('typedefs')),
+        tsResult.js.pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(buildDirDebug + '/common'))
+        .pipe(gulp.dest(buildDirDebugChrome + '/common'))
+        .pipe(gulp.dest(buildDirDebugFirefox + '/common'))
+        );
+    } else {
+        var tsResult = tsProjectCommon.src()
+                .pipe(tsProjectCommon());
+            return merge(
+            tsResult.dts.pipe(gulp.dest('typedefs')),
+            tsResult.js
+            .pipe(gulp.dest(buildDirProd + '/common'))
+            .pipe(gulp.dest(buildDirProdChrome + '/common'))
+            .pipe(gulp.dest(buildDirProdFirefox + '/common'))
+            );
+    }
 });
+
+/********** COMPILING TYPESCRIPT **********/
+
+var buildTypescript = function (tsProject, destination) {
+    if (DEBUG) {
+        return tsProject.src()
+            .pipe(sourcemaps.init())
+            .pipe(tsProject())
+            .js
+            .pipe(sourcemaps.write('.'))
+            .pipe(gulp.dest(buildDirDebug + '/' + destination))
+            .pipe(gulp.dest(buildDirDebugChrome + '/' + destination))
+            .pipe(gulp.dest(buildDirDebugFirefox + '/' + destination));
+    } else {
+        return tsProject.src()
+            .pipe(tsProject())
+            .js
+            .pipe(gulp.dest(buildDirProd + '/' + destination))
+            .pipe(gulp.dest(buildDirProdChrome + '/' + destination))
+            .pipe(gulp.dest(buildDirProdFirefox + '/' + destination));
+    }
+};
 
 var tsProjectBackground = ts.createProject("background/tsconfig.json", {
-    outFile: "background/app.js"
+    outFile: globTSBackgroundOut
 });
-gulp.task("ts:background", ["lint:background", "ts:common"], function() {
-    return tsProjectBackground.src()
-        .pipe(sourcemaps.init())
-        .pipe(tsProjectBackground())
-        .js
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest("background"));
+gulp.task("compilets:background", ["clean:ts:background", "lint:background"], function() {
+    return buildTypescript(tsProjectBackground, "background");
 });
 
 var tsProjectPopup = ts.createProject("popup/tsconfig.json", {
-    outFile: "popup/popup.js"
+    outFile: globTSPopupOut
 });
-gulp.task("ts:popup", ["lint:popup", "ts:common"], function() {
-    return tsProjectPopup.src()
-        .pipe(sourcemaps.init())
-        .pipe(tsProjectPopup())
-        .js
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest("popup"));
+gulp.task("compilets:popup", ["clean:ts:popup", "lint:popup"], function() {
+    return buildTypescript(tsProjectPopup, "popup");
 });
 
 var tsProjectPanels = ts.createProject("panels/tsconfig.json", {
-    outFile: "panels/panels.js"
+    outFile: globTSPanelsOut
 });
-gulp.task("ts:panels", ["lint:panels", "ts:common"], function() {
-    return tsProjectPanels.src()
-        .pipe(sourcemaps.init())
-        .pipe(tsProjectPanels())
-        .js
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest("panels"));
+gulp.task("compilets:panels", ["clean:ts:panels", "lint:panels"], function() {
+    return buildTypescript(tsProjectPanels, "panels");
 });
 
 var tsProjectPage = ts.createProject("page/tsconfig.json", {
-    outFile: "page/page.js"
+    outFile: globTSPageOut
 });
-gulp.task("ts:page", ["lint:page", "ts:common"], function() {
-    return tsProjectPage.src()
-        .pipe(sourcemaps.init())
-        .pipe(tsProjectPage())
-        .js
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest("page"));
+gulp.task("compilets:page", ["clean:ts:page", "lint:page"], function() {
+    return buildTypescript(tsProjectPage, "page");
 });
 
 var tsProjectSettings = ts.createProject("settings/tsconfig.json", {
-    outFile: "settings/settings.js"
+    outFile: globTSSettingsOut
 });
-gulp.task("ts:settings", ["lint:settings", "ts:common"], function() {
-    return tsProjectSettings.src()
-        .pipe(sourcemaps.init())
-        .pipe(tsProjectSettings())
-        .js
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest("settings"));
+gulp.task("compilets:settings", ["clean:ts:settings", "lint:settings"], function() {
+    return buildTypescript(tsProjectSettings, "settings");
 });
 
-var tsProjectDialogs = ts.createProject("dialogs/tsconfig.json", {
-    //outFile: "dialogs.js"
-});
-gulp.task("ts:dialogs", ["lint:dialogs", "ts:common"], function() {
-    return tsProjectDialogs.src()
-        .pipe(sourcemaps.init())
-        .pipe(tsProjectDialogs())
-        .js
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest("dialogs"));
+var tsProjectDialogs = ts.createProject("dialogs/tsconfig.json", {});
+gulp.task("compilets:dialogs", ["clean:ts:dialogs", "lint:dialogs"], function() {
+    return buildTypescript(tsProjectDialogs, "dialogs");
 });
 
-gulp.task('watch', ['build'], function() {
-    gulp.watch(['common/**/*.ts', 'popup/**/*.ts'], ['ts:popup']);
-    gulp.watch(['common/**/*.ts', 'panels/**/*.ts'], ['ts:panels']);
-    gulp.watch(['common/**/*.ts', 'page/**/*.ts'], ['ts:page']);
-    gulp.watch(['common/**/*.ts', 'background/**/*.ts'], ['ts:background']);
-    gulp.watch(['common/**/*.ts', 'settings/**/*.ts'], ['ts:settings']);
-    gulp.watch(['common/**/*.ts', 'dialogs/**/*.ts'], ['ts:dialogs']);
+/********** STATIC FILE COPYING / MANIPULATION **********/
+
+var copyStatic = function (glob, dir) {
+    return gulp.src(glob)
+    .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir))
+    .pipe(gulp.dest((DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + dir))
+    .pipe(gulp.dest((DEBUG ? buildDirDebugChrome : buildDirProdChrome) + dir))
+}
+
+gulp.task('static:popup', ["clean:static:popup"], function() {
+    return copyStatic(globStaticPopup, '/popup');
+});
+gulp.task('static:panels', ["clean:static:panels"], function() {
+    return copyStatic(globStaticPanels, '/panels');
+});
+gulp.task('static:page', ["clean:static:page"], function() {
+    return copyStatic(globStaticPage, '/page');
+});
+gulp.task('static:background', ["clean:static:background"], function() {
+    return copyStatic(globStaticBackground, '/background');
+});
+gulp.task('static:settings', ["clean:static:settings"], function() {
+    return copyStatic(globStaticSettings, '/settings');
+});
+gulp.task('static:dialogs', ["clean:static:dialogs"], function() {
+    return copyStatic(globStaticDialogs, '/dialogs');
+});
+gulp.task('static:common', ["clean:static:common"], function() {
+    return copyStatic(globStaticCommon, '/common');
+});
+gulp.task('static:commonFonts', ["clean:static:commonFonts"], function() {
+    return copyStatic(globStaticCommonFonts, '/common/fonts');
+});
+gulp.task('static:commonImages', ["clean:static:commonImages"], function() {
+    return copyStatic(globStaticCommonImages, '/common/images');
+});
+gulp.task('static:releasenotes', ["clean:static:releasenotes"], function() {
+    return copyStatic(globStaticReleaseNotes, '/release-notes');
+});
+gulp.task('static:locales', ["clean:static:locales"], function() {
+    return copyStatic(globStaticLocales, '/_locales');
 });
 
-gulp.task('collect', function() {
-    return merge(
-        gulp.src('page/*.{js,css,html,map}')
-            .pipe(gulp.dest('build/page')),
-        gulp.src('popup/popup.{js,css,html,map}')
-            .pipe(gulp.dest('build/popup')),
-        gulp.src('panels/panels.{js,css,html,map}')
-            .pipe(gulp.dest('build/panels')),
-        gulp.src('settings/*.{js,css,html,map}')
-            .pipe(gulp.dest('build/settings')),
-        gulp.src('release-notes/*.{js,css,html,map}')
-            .pipe(gulp.dest('build/release-notes')),
-        gulp.src('common/*.{js,css,html,map}')
-            .pipe(gulp.dest('build/common')),
-        gulp.src('common/images/**')
-            .pipe(gulp.dest('build/common/images')),
-        gulp.src('common/fonts/**')
-            .pipe(gulp.dest('build/common/fonts')),
-        gulp.src('dialogs/*.{js,css,html,map}')
-            .pipe(gulp.dest('build/dialogs')),
-        gulp.src('background/*.{js,css,html,map}')
-            .pipe(gulp.dest('build/background')),
-        gulp.src('_locales/**')
-            .pipe(gulp.dest('build/_locales')),
-        gulp.src('manifest.json')
-            .pipe(gulp.dest('build'))
-    );
+gulp.task('copyStaticManifest', function() {
+    return copyStatic(globStaticManifest, '');
 });
 
-gulp.task('zip', ['collect'], function() {
+gulp.task('modifyBuildFilesForCrossBrowser', function() {
+    if (DEBUG) {
+        return merge (
+            gulp.src([buildDirDebugFirefox + '/manifest.json'])
+            .pipe(replace(/(.*"version": ")(.*)(",.*)/g, '$1$2-beta$3'))
+            .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ''))
+            .pipe(gulp.dest(buildDirDebugFirefox)),
+            gulp.src([buildDirDebugChrome + '/manifest.json'])
+            .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, '$1$2 Beta$3'))
+            .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ''))
+            .pipe(gulp.dest(buildDirDebugChrome))
+        );
+    } else {
+        return merge (
+            gulp.src([buildDirProdFirefox + '/manifest.json'])
+            .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ''))
+            .pipe(gulp.dest(buildDirProdFirefox)),
+            gulp.src([buildDirProdChrome + '/manifest.json'])
+            .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ''))
+            .pipe(gulp.dest(buildDirProdChrome))
+        )
+    }
+});
+
+gulp.task('static:manifest', ["clean:static:manifest"], function(done) {
+
+    sequence("copyStaticManifest", "modifyBuildFilesForCrossBrowser", done);
+});
+
+gulp.task('static', ['static:popup','static:panels','static:page','static:background',
+    'static:settings','static:dialogs','static:common','static:commonFonts',
+    'static:commonImages','static:releasenotes','static:locales',
+    'static:manifest']);
+
+/********** WATCHING FOR CHANGES TO SOURCE FILES **********/
+
+gulp.task('watch', ['compilets', 'static'], function() {
+    gulp.watch([globTSCommon], ['compilets:common']);
+    gulp.watch([globTSPopup], ['compilets:popup']);
+    gulp.watch([globTSPanels], ['compilets:panels']);
+    gulp.watch([globTSPage], ['compilets:page']);
+    gulp.watch([globTSBackground], ['compilets:background']);
+    gulp.watch([globTSSettings], ['compilets:settings']);
+    gulp.watch([globTSDialogs], ['compilets:dialogs']);
+    gulp.watch([globStaticPopup], ['static:popup']);
+    gulp.watch([globStaticPanels], ['static:panels']);
+    gulp.watch([globStaticPage], ['static:page']);
+    gulp.watch([globStaticBackground], ['static:background']);
+    gulp.watch([globStaticSettings], ['static:settings']);
+    gulp.watch([globStaticDialogs], ['static:dialogs']);
+    gulp.watch([globStaticCommon], ['static:common']);
+    gulp.watch([globStaticCommonFonts], ['static:commonFonts']);
+    gulp.watch([globStaticCommonImages], ['static:commonImages']);
+    gulp.watch([globStaticReleaseNotes], ['static:releasenotes']);
+    gulp.watch([globStaticLocales], ['static:locales']);
+    gulp.watch([globStaticManifest], ['static:manifest']);
+});
+
+/********** PACKAGING **********/
+
+gulp.task('zip', function() {
 	var manifest = require('./manifest'),
 		distFileName = manifest.name + '-v' + manifest.version + '.zip';
-	return gulp.src(['build/**','!**/*.map'])
+	return gulp.src([buildDirProdChrome + '/**'])
 		.pipe(zip(distFileName))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('xpi', ['collect'], function() {
+gulp.task('xpi', function() {
 	var manifest = require('./manifest'),
 		distFileName = manifest.name + '-v' + manifest.version + '.xpi';
-	return gulp.src(['build/**','!**/*.map'])
+	return gulp.src([buildDirProdFirefox + '/**'])
 		.pipe(zip(distFileName))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('package', ['xpi','zip']);
-
-gulp.task('zip:beta', ['collect'], function() {
+gulp.task('zip:debug', function() {
 	var manifest = require('./manifest'),
-		distFileName = manifest.name + '-v' + manifest.version + '-beta.zip';
-	return gulp.src(['build/**'])
+		distFileName = manifest.name + '-v' + manifest.version + '-debug.zip';
+	return gulp.src([buildDirDebugChrome + '/**'])
 		.pipe(zip(distFileName))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('xpi:beta', ['collect'], function() {
+gulp.task('xpi:debug', function() {
 	var manifest = require('./manifest'),
-		distFileName = manifest.name + '-v' + manifest.version + '-beta.xpi';
-	return gulp.src(['build/**'])
+		distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
+	return gulp.src([buildDirDebugFirefox + '/**'])
 		.pipe(zip(distFileName))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('package:beta', ['xpi:beta','zip:beta']);
+gulp.task('package:prod', function (done) {
+    DEBUG = false;
+    sequence(['compilets', 'static'], ['xpi','zip'], done);
+});
+
+gulp.task('package:debug', function (done) {
+    sequence(['compilets', 'static'], ['xpi:debug','zip:debug'], done);
+});
+
+/********** CLEANING **********/
+
+// Assumes inclusions and exclusions are the same for all browsers
+var deleteBuildFiles = function (includeGlobs, excludeGlobs) {
+    var globs = [];
+    for (let g of includeGlobs) {
+        if (DEBUG) {
+            globs.push(buildDirDebug + '/' + g);
+            globs.push(buildDirDebugFirefox + '/' + g);
+            globs.push(buildDirDebugChrome + '/' + g);
+        } else {
+            globs.push(buildDirProd + '/' + g);
+            globs.push(buildDirProdFirefox + '/' + g);
+            globs.push(buildDirProdChrome + '/' + g);
+        }
+    }
+    if (excludeGlobs) for (let g of excludeGlobs) {
+        if (DEBUG) {
+            globs.push('!' + buildDirDebug + '/' + g);
+            globs.push('!' + buildDirDebugFirefox + '/' + g);
+            globs.push('!' + buildDirDebugChrome + '/' + g);
+        } else {
+            globs.push('!' + buildDirProd + '/' + g);
+            globs.push('!' + buildDirProdFirefox + '/' + g);
+            globs.push('!' + buildDirProdChrome + '/' + g);
+        }
+    }
+    return del(globs);
+};
+
+gulp.task('clean:ts:dialogs', function () {
+    return deleteBuildFiles([globTSDialogsOut], ['!dialogs']);
+});
+gulp.task('clean:ts:settings', function () {
+    return deleteBuildFiles([globTSSettingsOut]);
+});
+gulp.task('clean:ts:background', function () {
+    return deleteBuildFiles([globTSBackgroundOut]);
+});
+gulp.task('clean:ts:page', function () {
+    return deleteBuildFiles([globTSPageOut]);
+});
+gulp.task('clean:ts:panels', function () {
+    return deleteBuildFiles([globTSPanelsOut]);
+});
+gulp.task('clean:ts:popup', function () {
+    return deleteBuildFiles([globTSPopupOut]);
+});
+gulp.task('clean:ts:common', function () {
+    return deleteBuildFiles([globTSCommonOut]);
+});
+gulp.task('clean:static:popup', function () {
+    return deleteBuildFiles([globStaticPopup]);
+});
+gulp.task('clean:static:panels', function () {
+    return deleteBuildFiles([globStaticPanels]);
+});
+gulp.task('clean:static:page', function () {
+    return deleteBuildFiles([globStaticPage]);
+});
+gulp.task('clean:static:background', function () {
+    return deleteBuildFiles([globStaticBackground], [globTSBackgroundOut]);
+});
+gulp.task('clean:static:settings', function () {
+    return deleteBuildFiles([globStaticSettings]);
+});
+gulp.task('clean:static:dialogs', function () {
+    return deleteBuildFiles([globStaticDialogs]);
+});
+gulp.task('clean:static:common', function () {
+    return deleteBuildFiles([globStaticCommon], [globTSCommonOut]);
+});
+gulp.task('clean:static:commonImages', function () {
+    return deleteBuildFiles([globStaticCommonImages]);
+});
+gulp.task('clean:static:commonFonts', function () {
+    return deleteBuildFiles([globStaticCommonFonts]);
+});
+gulp.task('clean:static:releasenotes', function () {
+    return deleteBuildFiles([globStaticReleaseNotes]);
+});
+gulp.task('clean:static:locales', function () {
+    return deleteBuildFiles([globStaticLocales]);
+});
+gulp.task('clean:static:manifest', function () {
+    return deleteBuildFiles([globStaticManifest]);
+});
+
+gulp.task('clean', [
+    'clean:static:manifest', 'clean:static:locales', 'clean:static:releasenotes',
+    'clean:static:commonFonts', 'clean:static:commonImages',
+    'clean:static:common', 'clean:static:dialogs', 'clean:static:settings',
+    'clean:static:background', 'clean:static:page', 'clean:static:panels',
+    'clean:static:popup', 'clean:ts:common', 'clean:ts:popup', 'clean:ts:panels',
+    'clean:ts:page', 'clean:ts:background', 'clean:ts:settings',
+    'clean:ts:dialogs'
+]);
