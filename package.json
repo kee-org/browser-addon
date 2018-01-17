@@ -2,7 +2,9 @@
   "name": "kee-browser-addon",
   "version": "2.0.0",
   "devDependencies": {
+    "del": "^3.0.0",
     "gulp": "3.9.1",
+    "gulp-replace": "^0.6.1",
     "gulp-tslint": "8.1.2",
     "gulp-typescript": "^3.2.3",
     "gulp-zip": "^4.1.0",
@@ -10,5 +12,13 @@
     "tslint": "^5.8.0",
     "typescript": "^2.6.2"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "scripts": {
+    "package:debug": "gulp package:debug",
+    "build": "gulp build:debug",
+    "watch": "gulp watch",
+    "start": "gulp watch",
+    "package:prod": "gulp package:prod",
+    "package": "gulp package:prod & gulp package:debug"
+  }
 }
