@@ -2,3 +2,12 @@
 * text eol=crlf
 
 *.sh text eol=auto
+
+*.jpg binary
+*.png binary
+*.gif binary
+*.jpeg binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
