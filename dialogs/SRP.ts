@@ -4,8 +4,8 @@ class SrpDialog {
             configManager.current.connSLServerMin.toString();
         (document.getElementById("pref_sl_client_high") as HTMLInputElement).checked =
             configManager.current.connSLClient === 3 ? true : null;
-
-        (document.getElementById("password") as HTMLInputElement).addEventListener("keyup", e => {
+//input listener works even when pasted via right click
+        (document.getElementById("password") as HTMLInputElement).addEventListener("input", e => {
             this.updateButtonState();
         });
         (document.getElementById("pref_sl_server") as HTMLSelectElement).addEventListener("change", e => {

@@ -54,11 +54,10 @@ function loadInitialConfig () {
     (document.getElementById("pref_keePassDBToOpen_label") as HTMLInputElement).value =
         configManager.current.keePassDBToOpen;
 
-    (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).value =
-        configManager.current.enableBuiltInPasswordSaving;
-
-    (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).checked
-        = configManager.current.enableBuiltInPasswordSavingB ? configManager.current.enableBuiltInPasswordSaving : null;
+    browser.privacy.services.passwordSavingEnabled.get({}, function (got) {
+        (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).checked
+            = got.value ? got.value : null;
+    });
 
     setSiteSpecificConfigValues();
 }
@@ -104,7 +103,6 @@ function setupInputListeners () {
 
     document.getElementById("pref_enableBuiltInPasswordSaving_label").addEventListener("change", saveEnableBuiltInPasswordSaving);
 
-    document.getElementById("pref_enableBuiltInPasswordSaving_label").addEventListener("change", saveEnableBuiltInPasswordSaving);
     for (const node of $$(".formFindingControlGroup")) {
         (node as HTMLElement).firstElementChild.firstElementChild.addEventListener("change", formFindingControlGroupChange);
         (node as HTMLElement).firstElementChild.nextElementSibling.addEventListener("change", changeSiteConfigItem);
@@ -695,12 +693,12 @@ function saveKPRPCDBToOpen (e) {
 
 function saveEnableBuiltInPasswordSaving (e) {
     e.preventDefault();
-    configManager.setASAP({ enableBuiltInPasswordSaving: (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).value });
-}
-
-function saveEnableBuiltInPasswordSaving (e) {
-    e.preventDefault();
-    configManager.setASAP({ enableBuiltInPasswordSaving: (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).checked });
+    const val = (document.getElementById("pref_enableBuiltInPasswordSaving_label") as HTMLInputElement).checked;
+    browser.privacy.services.passwordSavingEnabled.set({ value: val }, function () {
+        if (chrome.runtime.lastError != null && !val) {
+            KeeLog.warn("Kee was unable to disable built-in password manager saving - confusion may ensue! " + chrome.runtime.lastError);
+        }
+    });
 }
 
 function logLevelFromString (level) {

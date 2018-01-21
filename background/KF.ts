@@ -179,6 +179,7 @@ class Kee {
 
         this.networkAuth.startListening();
 
+/*
         if (!configManager.current.enableBuiltInPasswordSaving)
         {
           browser.privacy.services.passwordSavingEnabled.set({ value: false }, function () {
@@ -191,6 +192,7 @@ class Kee {
         {
           KeeLog.warn("we didn't try to disable built-in password manager saving");
         }
+*/
 
     }
 
@@ -651,6 +653,15 @@ browser.browserAction.disable();
 
 // Assumes config and logging have been initialised before this is called.
 function startup () {
+    if (configManager.current.firstInstall)
+    {
+        configManager.setASAP({firstInstall: false});
+        browser.privacy.services.passwordSavingEnabled.set({ value: false }, function () {
+            if (chrome.runtime.lastError != null) {
+                KeeLog.warn("Kee was unable to disable built-in password manager saving - confusion may ensue! " + chrome.runtime.lastError);
+            }
+        });
+    }
     KeeLog.attachConfig(configManager.current);
     kee = new Kee();
     kee.init();
