@@ -17,6 +17,7 @@ body {
 }
 #main {
     margin-bottom: 0px !important;
+    border: none;
 }
 #notifications {
     position: relative;
