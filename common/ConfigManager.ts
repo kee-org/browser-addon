@@ -47,11 +47,10 @@ defaultConfig.searchAllOpenDBs = true;
 defaultConfig.config = null;
 defaultConfig.siteConfig = defaultSiteConfig;
 defaultConfig.tutorialProgress = "";
-defaultConfig.version = 2;
+defaultConfig.version = 2; // increment when changes are introduced that require data migration
 defaultConfig.triggerChangeInputEventAfterFill = false;
 defaultConfig.autoSubmitNetworkAuthWithSingleMatch = false;
 defaultConfig.searchNetworkAuth = true;
-defaultConfig.portConnectionDelay = 25;
 defaultConfig.notificationCountGeneric = 0;
 defaultConfig.notificationCountSavePassword = 0;
 

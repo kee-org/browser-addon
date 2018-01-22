@@ -88,7 +88,7 @@ class Kee {
                     //TODO:c: event loop on content process should mean this is unnecessary but we see
                     // weird behaviour in Firefox so lets try this out for a while in case messaging
                     // is independent of the normal process event loop.
-                    setTimeout(() => p.postMessage(connectMessage), configManager.current.portConnectionDelay);
+                    setTimeout(() => p.postMessage(connectMessage), 25);
 
                     kee.browserPopupPort = p;
                     kee.resetBrowserActionColor();
@@ -118,7 +118,7 @@ class Kee {
                     //TODO:c: event loop on content process should mean this is unnecessary but we see
                     // weird behaviour in Firefox so lets try this out for a while in case messaging
                     // is independent of the normal process event loop.
-                    setTimeout(() => p.postMessage(connectMessage), configManager.current.portConnectionDelay);
+                    setTimeout(() => p.postMessage(connectMessage), 25);
 
                     break;
                 }
@@ -145,7 +145,7 @@ class Kee {
                     //TODO:c: event loop on content process should mean this is unnecessary but we see
                     // weird behaviour in Firefox so lets try this out for a while in case messaging
                     // is independent of the normal process event loop.
-                    setTimeout(() => p.postMessage(connectMessage), configManager.current.portConnectionDelay);
+                    setTimeout(() => p.postMessage(connectMessage), 25);
 
                     kee.tabStates.get(p.sender.tab.id).ourIframePorts.set(p.sender.frameId, p);
                     break;

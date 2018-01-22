@@ -90,11 +90,11 @@ class Config {
     siteConfig: SiteConfigIndex;
     config: { url: string, config: {} }[];
     tutorialProgress: string;
-    version: number;
+    version: number; // default is incremented when changes are introduced that require data migration
     triggerChangeInputEventAfterFill: boolean;
     autoSubmitNetworkAuthWithSingleMatch: boolean;
     searchNetworkAuth: boolean;
-    portConnectionDelay: number;
+    portConnectionDelay: number; // deprecated
     notificationCountGeneric: number;
     notificationCountSavePassword: number;
 }
