@@ -25,10 +25,11 @@ const globStaticLocales = '_locales/**';
 const globStaticReleaseNotes = 'release-notes/*.{js,css,html,map}';
 const globStaticCommonFonts = 'common/fonts/**';
 const globStaticCommonImages = 'common/images/**';
-const globStaticCommon = 'common/*.{js,css,html,map}';
+const globStaticCommon = 'common/*.{css,html}';
+const globStaticLib = 'lib/*.*';
 const globStaticDialogs = 'dialogs/*.{css,html}';
 const globStaticSettings = 'settings/*.{css,html}';
-const globStaticBackground = 'background/*.{js,css,html}';
+const globStaticBackground = 'background/*.{css,html}';
 const globStaticPage = 'page/*.{css,html}';
 const globStaticPanels = 'panels/*.{css,html}';
 const globStaticPopup = 'popup/*.{css,html}';
@@ -248,6 +249,9 @@ gulp.task('static:settings', ["clean:static:settings"], function() {
 gulp.task('static:dialogs', ["clean:static:dialogs"], function() {
     return copyStatic(globStaticDialogs, '/dialogs');
 });
+gulp.task('static:lib', ["clean:static:lib"], function() {
+    return copyStatic(globStaticLib, '/lib');
+});
 gulp.task('static:common', ["clean:static:common"], function() {
     return copyStatic(globStaticCommon, '/common');
 });
@@ -300,7 +304,7 @@ gulp.task('static:manifest', ["clean:static:manifest"], function(done) {
 gulp.task('static', ['static:popup','static:panels','static:page','static:background',
     'static:settings','static:dialogs','static:common','static:commonFonts',
     'static:commonImages','static:releasenotes','static:locales',
-    'static:manifest']);
+    'static:manifest', 'static:lib']);
 
 /********** WATCHING FOR CHANGES TO SOURCE FILES **********/
 
@@ -318,6 +322,7 @@ gulp.task('watch', ['compilets', 'static'], function() {
     gulp.watch([globStaticBackground], ['static:background']);
     gulp.watch([globStaticSettings], ['static:settings']);
     gulp.watch([globStaticDialogs], ['static:dialogs']);
+    gulp.watch([globStaticLib], ['static:lib']);
     gulp.watch([globStaticCommon], ['static:common']);
     gulp.watch([globStaticCommonFonts], ['static:commonFonts']);
     gulp.watch([globStaticCommonImages], ['static:commonImages']);
@@ -400,25 +405,25 @@ var deleteBuildFiles = function (includeGlobs, excludeGlobs) {
 };
 
 gulp.task('clean:ts:dialogs', function () {
-    return deleteBuildFiles([globTSDialogsOut], ['!dialogs']);
+    return deleteBuildFiles([globTSDialogsOut, globTSDialogsOut + '.map'], ['dialogs']);
 });
 gulp.task('clean:ts:settings', function () {
-    return deleteBuildFiles([globTSSettingsOut]);
+    return deleteBuildFiles([globTSSettingsOut, globTSSettingsOut + '.map']);
 });
 gulp.task('clean:ts:background', function () {
-    return deleteBuildFiles([globTSBackgroundOut]);
+    return deleteBuildFiles([globTSBackgroundOut, globTSBackgroundOut + '.map']);
 });
 gulp.task('clean:ts:page', function () {
-    return deleteBuildFiles([globTSPageOut]);
+    return deleteBuildFiles([globTSPageOut, globTSPageOut + '.map']);
 });
 gulp.task('clean:ts:panels', function () {
-    return deleteBuildFiles([globTSPanelsOut]);
+    return deleteBuildFiles([globTSPanelsOut, globTSPanelsOut + '.map']);
 });
 gulp.task('clean:ts:popup', function () {
-    return deleteBuildFiles([globTSPopupOut]);
+    return deleteBuildFiles([globTSPopupOut, globTSPopupOut + '.map']);
 });
 gulp.task('clean:ts:common', function () {
-    return deleteBuildFiles([globTSCommonOut]);
+    return deleteBuildFiles([globTSCommonOut, globTSCommonOut + '.map']);
 });
 gulp.task('clean:static:popup', function () {
     return deleteBuildFiles([globStaticPopup]);
@@ -430,7 +435,7 @@ gulp.task('clean:static:page', function () {
     return deleteBuildFiles([globStaticPage]);
 });
 gulp.task('clean:static:background', function () {
-    return deleteBuildFiles([globStaticBackground], [globTSBackgroundOut]);
+    return deleteBuildFiles([globStaticBackground]);
 });
 gulp.task('clean:static:settings', function () {
     return deleteBuildFiles([globStaticSettings]);
@@ -438,8 +443,11 @@ gulp.task('clean:static:settings', function () {
 gulp.task('clean:static:dialogs', function () {
     return deleteBuildFiles([globStaticDialogs]);
 });
+gulp.task('clean:static:lib', function () {
+    return deleteBuildFiles([globStaticLib]);
+});
 gulp.task('clean:static:common', function () {
-    return deleteBuildFiles([globStaticCommon], [globTSCommonOut]);
+    return deleteBuildFiles([globStaticCommon]);
 });
 gulp.task('clean:static:commonImages', function () {
     return deleteBuildFiles([globStaticCommonImages]);

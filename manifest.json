@@ -8,13 +8,13 @@
     "description": "Kee adds free, secure and easy password management features to your browser which save time and keep your private data more secure.",
     "background": {
         "scripts": [
-            "common/dollar-polyfill.js",
-            "common/browser-polyfill.js",
-            "common/punycode.js",
-            "common/pslData.js",
-            "common/publicsuffixlist.js",
+            "lib/dollar-polyfill.js",
+            "lib/browser-polyfill.js",
+            "lib/punycode.js",
+            "lib/pslData.js",
+            "lib/publicsuffixlist.js",
             "common/common.js",
-            "background/biginteger.js",
+            "lib/biginteger.js",
             "background/app.js"
         ],
         "persistent": true
@@ -23,11 +23,11 @@
         "all_frames": true,
         "matches": ["<all_urls>"],
         "js": [
-                "common/dollar-polyfill.js",
-                "common/browser-polyfill.js",
-                "common/punycode.js",
-                "common/pslData.js",
-                "common/publicsuffixlist.js",
+                "lib/dollar-polyfill.js",
+                "lib/browser-polyfill.js",
+                "lib/punycode.js",
+                "lib/pslData.js",
+                "lib/publicsuffixlist.js",
                 "common/common.js",
                 "page/page.js"
         ],
