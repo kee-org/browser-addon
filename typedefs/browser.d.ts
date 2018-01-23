@@ -1292,24 +1292,24 @@ declare namespace browser.events {
     }
 
     /** An object which allows the addition and removal of listeners for a Chrome event. */
-    interface Event {
+    interface Event<T extends Function>  {
         /**
          * Registers an event listener _callback_ to an event.
          * @param callback Called when an event occurs. The parameters of this function depend on the type of event.
          */
-        addListener(callback: () => void): void;
+        addListener(callback: T): void;
 
         /**
          * Deregisters an event listener _callback_ from an event.
          * @param callback Listener that shall be unregistered.
          */
-        removeListener(callback: () => void): void;
+        removeListener(callback: T): void;
 
         /**
          * @param callback Listener whose registration status shall be tested.
          * @returns True if _callback_ is registered to the event.
          */
-        hasListener(callback: () => void): boolean;
+        hasListener(callback: T): boolean;
 
         /** @returns True if any event listeners are registered to the event. */
         hasListeners(): boolean;
@@ -2297,12 +2297,16 @@ declare namespace browser.runtime {
     interface Port {
         name: string;
         disconnect: () => void;
-        onDisconnect: events.Event;
-        onMessage: events.Event;
-        postMessage: () => void;
+        onDisconnect: PortDisconnectEvent;
+        onMessage: PortMessageEvent;
+        postMessage: (message: Object) => void;
         /** This property will **only** be present on ports passed to onConnect/onConnectExternal listeners. */
         sender?: MessageSender;
     }
+
+    interface PortDisconnectEvent extends events.Event<(port: Port) => void> {}
+
+    interface PortMessageEvent extends events.Event<(message: Object, port: Port) => void> {}
 
     /** An object containing information about the script context that sent a message or request. */
     interface MessageSender {
