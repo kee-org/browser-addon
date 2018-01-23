@@ -8,4 +8,5 @@ interface AppState {
     KeePassDatabases: Database[];
     notifications: KeeNotification[];
     connected: boolean;
+    currentSearchTerm: string;
 }

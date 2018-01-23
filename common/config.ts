@@ -97,4 +97,5 @@ class Config {
     portConnectionDelay: number; // deprecated
     notificationCountGeneric: number;
     notificationCountSavePassword: number;
+    currentSearchTermTimeout: number;
 }

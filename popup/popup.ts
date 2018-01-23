@@ -64,12 +64,14 @@ function updateSearchPanel (entryDetails?: keeLoginInfo) {
             searchPanel.createContextActions(entryDetails);
         } else {
             searchPanel = new SearchPanel();
-            searchPanel.init();
 
-            // focus search box if it's not already visible
+            // focus and pre-populate search box if it's not already visible
             if ($("#searchPanel").classList.contains("hidden")) {
+                searchPanel.init(appState.currentSearchTerm);
                 $("#searchPanel").classList.remove("hidden");
                 $("#searchBox").focus();
+            } else {
+                searchPanel.init();
             }
         }
     } else {
@@ -133,6 +135,16 @@ function startup () {
         } else {
             updateSearchPanel();
         }
+
+        // https://bugs.chromium.org/p/chromium/issues/detail?id=31262 prevents us doing something like this:
+        //
+        // window.addEventListener("unload", function () {
+        //     if (searchPanel.currentSearchTerm) {
+        //         myPort.postMessage({currentSearchTerm: searchPanel.currentSearchTerm} as AddonMessage);
+        //     }
+        // });
+        //
+        // So we have to post messages on every keypress :-(
     });
 
     document.getElementById("optionsLink").addEventListener("click", () => browser.runtime.openOptionsPage() );

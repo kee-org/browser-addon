@@ -45,6 +45,8 @@ function loadInitialConfig () {
     (document.getElementById("pref_logLevel_desc") as HTMLSelectElement).value =
         stringFromLogLevel(configManager.current.logLevel);
 
+    (document.getElementById("pref_currentSearchTermTimeout_label") as HTMLInputElement).value =
+        configManager.current.currentSearchTermTimeout ? configManager.current.currentSearchTermTimeout.toString() : "";
     (document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value =
         configManager.current.KeePassRPCWebSocketPort ? configManager.current.KeePassRPCWebSocketPort.toString() : "";
 
@@ -72,6 +74,7 @@ function setupInputListeners () {
     document.getElementById("pref_when_user_chooses_desc").addEventListener("change", saveWhenUserChooses);
     document.getElementById("pref_logLevel_desc").addEventListener("change", saveLogLevel);
 
+    document.getElementById("pref_currentSearchTermTimeout_label").addEventListener("change", saveCurrentSearchTermTimeout);
     document.getElementById("pref_keePassRPCPort_label").addEventListener("change", saveKPRPCPort);
 
     document.getElementById("pref_keePassDBToOpen_label").addEventListener("change", saveKPRPCDBToOpen);
@@ -661,6 +664,11 @@ function saveLogLevel (e) {
     e.preventDefault();
     const selectedValue = (document.getElementById("pref_logLevel_desc") as HTMLSelectElement).value;
     configManager.setASAP({ logLevel: logLevelFromString(selectedValue) });
+}
+
+function saveCurrentSearchTermTimeout (e) {
+    e.preventDefault();
+    configManager.setASAP({ currentSearchTermTimeout: parseInt((document.getElementById("pref_currentSearchTermTimeout_label") as HTMLInputElement).value)});
 }
 
 function saveKPRPCPort (e) {
