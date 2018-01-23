@@ -65,7 +65,12 @@ function updateSearchPanel (entryDetails?: keeLoginInfo) {
         } else {
             searchPanel = new SearchPanel();
             searchPanel.init();
-            $("#searchPanel").classList.remove("hidden");
+
+            // focus search box if it's not already visible
+            if ($("#searchPanel").classList.contains("hidden")) {
+                $("#searchPanel").classList.remove("hidden");
+                $("#searchBox").focus();
+            }
         }
     } else {
         $("#searchPanel").classList.add("hidden");
