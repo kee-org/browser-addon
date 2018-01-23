@@ -14,7 +14,7 @@ interface AddonMessage {
     loadUrlUpgradeKee?: boolean;
     addNotification?: KeeNotification;
     removeNotification?: string;
-    findMatches?: { uri: string };
+    findMatches?: { uri?: string, uuid?: string };
     findMatchesResult?: any;
     logins?: keeLoginInfo[];
     action?: Action;

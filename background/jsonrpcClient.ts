@@ -77,7 +77,7 @@ class jsonrpcClient {
         return;
     }
 
-    findLogins (fullURL: string, formSubmitURL, httpRealm, uniqueID, dbFileName, freeText, username, callback, callbackData)
+    findLogins (fullURL: string, formSubmitURL, httpRealm, uniqueID: string, dbFileName, freeText, username, callback, callbackData)
     {
         // returns ID of async JSON-RPC request so calling functions can track if desired
         let lst = "LSTall";
@@ -95,11 +95,14 @@ class jsonrpcClient {
         }
 
         const urls = [];
-        urls.push(fullURL);
 
-        // Google treat youtube.com and google.com as the same property when authenticating
-        if (fullURL.search(/$https\:\/\/accounts\.youtube\.com\/?/) >= 0)
-            urls.push("https://accounts.google.com");
+        if (fullURL) {
+            urls.push(fullURL);
+
+            // Google treat youtube.com and google.com as the same property when authenticating
+            if (fullURL.search(/$https\:\/\/accounts\.youtube\.com\/?/) >= 0)
+                urls.push("https://accounts.google.com");
+        }
 
         const newId = ++this.kprpcClient.requestId;
         // slight chance IDs may be sent out of order but at least this way
