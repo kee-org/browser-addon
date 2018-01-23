@@ -3,6 +3,12 @@ class SearchPanel {
     private search: Search;
     private loginMenus: LoginMenus;
 
+    private _currentSearchTerm: string;
+
+    public get currentSearchTerm () : string {
+        return this._currentSearchTerm;
+    }
+
     constructor ()
     {
         this.loginMenus = new LoginMenus();
@@ -18,12 +24,16 @@ class SearchPanel {
         searchBox.placeholder = $STR("Search_label");
         searchBox.title = $STR("Search_tip");
         searchBox.addEventListener("input", evt => {
-            this.search.execute(searchBox.value,
+            this._currentSearchTerm = searchBox.value;
+            myPort.postMessage({currentSearchTerm: searchPanel.currentSearchTerm} as AddonMessage);
+            this.search.execute(this._currentSearchTerm,
                 this.onSearchComplete.bind(this), []
             );
         });
         if (searchFor) {
-            this.search.execute(searchBox.value,
+            searchBox.value = searchFor;
+            this._currentSearchTerm = searchFor;
+            this.search.execute(searchFor,
                 this.onSearchComplete.bind(this), []
             );
         }

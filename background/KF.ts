@@ -12,6 +12,7 @@ class Kee {
     foregroundTabId: number;
 
     regularKPRPCListenerQueueHandlerTimer: number;
+    currentSearchTermTimer: number;
 
     // Our link to the JSON-RPC objects required for communication with KeePass
     KeePassRPC: jsonrpcClient;
@@ -36,7 +37,8 @@ class Kee {
             ActiveKeePassDatabaseIndex: -1,
             KeePassDatabases: [],
             notifications: [],
-            connected: false
+            connected: false,
+            currentSearchTerm: null
         };
 
         this.tabStates = new Map<number, TabState>();
@@ -696,6 +698,13 @@ function browserPopupMessageHandler (msg: AddonMessage) {
     }
     if (msg.loginEditor) {
         kee.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
+    }
+    if (msg.currentSearchTerm != null) {
+        kee.appState.currentSearchTerm = msg.currentSearchTerm;
+        clearTimeout(kee.currentSearchTermTimer);
+        kee.currentSearchTermTimer = setTimeout(() => {
+            kee.appState.currentSearchTerm = null;
+        }, configManager.current.currentSearchTermTimeout * 1000);
     }
 }
 

@@ -14,6 +14,9 @@ declare const pslData;
 // Pretend browser (WebExtensions) is chrome (there's a polyfill from Mozilla but it doesn't work well enough yet so this buys us time)
 declare const chrome;
 
+// increment when changes are introduced that require data migration
+const LATEST_VERSION: number = 3;
+
 let defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
 defaultConfig.autoFillForms = true;
@@ -47,12 +50,13 @@ defaultConfig.searchAllOpenDBs = true;
 defaultConfig.config = null;
 defaultConfig.siteConfig = defaultSiteConfig;
 defaultConfig.tutorialProgress = "";
-defaultConfig.version = 2; // increment when changes are introduced that require data migration
+defaultConfig.version = LATEST_VERSION;
 defaultConfig.triggerChangeInputEventAfterFill = false;
 defaultConfig.autoSubmitNetworkAuthWithSingleMatch = false;
 defaultConfig.searchNetworkAuth = true;
 defaultConfig.notificationCountGeneric = 0;
 defaultConfig.notificationCountSavePassword = 0;
+defaultConfig.currentSearchTermTimeout = 30;
 
 class ConfigManager {
     public current: Config;
@@ -156,20 +160,12 @@ class ConfigManager {
     }
 
     // This is typically invalid due to the previous execution of alpha and beta code
-    // on the user's system. Maybe should just bump up config versions every time but
-    // with only a few hours until 2.0 launch, it's not the time to test such a new migration process.
+    // on the user's system but whatever the reason, the items here are especially hard
+    // to fix through the UI and critical to Kee functionality so we take no chances
     private fixInvalidConfigData () {
         let saveNeeded: boolean = false;
         if (this.current.KPRPCStoredKeys == null) {
             this.current.KPRPCStoredKeys = {};
-            saveNeeded = true;
-        }
-        if (this.current.notificationCountGeneric == null) {
-            this.current.notificationCountGeneric = 0;
-            saveNeeded = true;
-        }
-        if (this.current.notificationCountSavePassword == null) {
-            this.current.notificationCountSavePassword = 0;
             saveNeeded = true;
         }
         if (saveNeeded) this.save();
@@ -197,8 +193,22 @@ class ConfigManager {
 
     private migrateToLatestVersion () {
         switch (this.current.version) {
+            case LATEST_VERSION: return;
             case 1: this.migrateToVersion2();
+            case 2: this.migrateToVersion3();
         }
+        this.save();
+    }
+
+    private migrateToVersion3 () {
+        if (this.current.notificationCountGeneric == null) {
+            this.current.notificationCountGeneric = 0;
+        }
+        if (this.current.notificationCountSavePassword == null) {
+            this.current.notificationCountSavePassword = 0;
+        }
+
+        Object.assign(this.current, { currentSearchTermTimeout: 30, version: 3 } as Partial<Config>);
     }
 
     private migrateToVersion2 () {
@@ -254,7 +264,6 @@ class ConfigManager {
         }
 
         Object.assign(this.current, { siteConfig: newSiteConfig, config: null, version: 2 } as Partial<Config>);
-        this.save();
     }
 
     private migrateIndividualSiteConfigSettingsToV2 (oldConfig: any): SiteConfig {
