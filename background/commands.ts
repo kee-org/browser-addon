@@ -65,14 +65,25 @@ class KFCommands {
                     browser.contextMenus.create({
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
-                        contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
+                        contexts: [ browser.contextMenus.ContextType.editable,
+                             browser.contextMenus.ContextType.frame,
+                             browser.contextMenus.ContextType.image,
+                             browser.contextMenus.ContextType.link,
+                             browser.contextMenus.ContextType.page,
+                             browser.contextMenus.ContextType.password,
+                             browser.contextMenus.ContextType.selection ]
                     });
                 } catch (e) {
                     // try again with Chrome-supported contexts
                     browser.contextMenus.create({
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
-                        contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
+                        contexts: [ browser.contextMenus.ContextType.editable,
+                            browser.contextMenus.ContextType.frame,
+                            browser.contextMenus.ContextType.image,
+                            browser.contextMenus.ContextType.link,
+                            browser.contextMenus.ContextType.page,
+                            browser.contextMenus.ContextType.selection ]
                     });
                 }
             }
@@ -82,14 +93,25 @@ class KFCommands {
                     browser.contextMenus.create({
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
-                        contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
+                        contexts: [ browser.contextMenus.ContextType.editable,
+                            browser.contextMenus.ContextType.frame,
+                            browser.contextMenus.ContextType.image,
+                            browser.contextMenus.ContextType.link,
+                            browser.contextMenus.ContextType.page,
+                            browser.contextMenus.ContextType.password,
+                            browser.contextMenus.ContextType.selection ]
                 });
                 } catch (e) {
                     // try again with Chrome-supported contexts
                     browser.contextMenus.create({
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
-                        contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
+                        contexts: [ browser.contextMenus.ContextType.editable,
+                            browser.contextMenus.ContextType.frame,
+                            browser.contextMenus.ContextType.image,
+                            browser.contextMenus.ContextType.link,
+                            browser.contextMenus.ContextType.page,
+                            browser.contextMenus.ContextType.selection ]
                     });
                 }
             }
@@ -108,14 +130,25 @@ class KFCommands {
                             browser.contextMenus.create({
                                 id: "matchedLogin-" + j,
                                 title: login.title,
-                                contexts: [ "editable", "frame", "image", "link", "page", "password", "selection" ]
+                                contexts: [ browser.contextMenus.ContextType.editable,
+                                    browser.contextMenus.ContextType.frame,
+                                    browser.contextMenus.ContextType.image,
+                                    browser.contextMenus.ContextType.link,
+                                    browser.contextMenus.ContextType.page,
+                                    browser.contextMenus.ContextType.password,
+                                    browser.contextMenus.ContextType.selection ]
                         });
                         } catch (e) {
                             // try again with Chrome-supported contexts
                             browser.contextMenus.create({
                                 id: "matchedLogin-" + j,
                                 title: login.title,
-                                contexts: [ "editable", "frame", "image", "link", "page", "selection" ]
+                                contexts: [ browser.contextMenus.ContextType.editable,
+                                    browser.contextMenus.ContextType.frame,
+                                    browser.contextMenus.ContextType.image,
+                                    browser.contextMenus.ContextType.link,
+                                    browser.contextMenus.ContextType.page,
+                                    browser.contextMenus.ContextType.selection ]
                             });
                         }
                     }
