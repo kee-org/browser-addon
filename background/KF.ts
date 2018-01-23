@@ -689,6 +689,14 @@ function browserPopupMessageHandler (msg: AddonMessage) {
             persistentItem.accessCount++;
         }
     }
+    if (msg.findMatches) {
+        kee.findLogins(null, null, null, msg.findMatches.uuid, null, null, null, result => {
+            kee.browserPopupPort.postMessage({ appState: kee.appState, findMatchesResult: result.result } as AddonMessage);
+        });
+    }
+    if (msg.loginEditor) {
+        kee.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
+    }
 }
 
 function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {

@@ -1,6 +1,12 @@
 .hidden {
     display: none;
 }
+.disabled {
+    display: none;
+}
+.enabled {
+    display: block !important;
+}
 
 body {
     width: 400px;
@@ -35,4 +41,90 @@ body {
     right: 4px;
     top: 4px;
     cursor: pointer;
+}
+
+#searchResults {
+    margin: 5px 0px 10px 0px;
+    overflow-y:auto;
+    max-height:300px;
+}
+
+#searchResults-Container {
+    display: block;
+    padding:0px;
+    list-style:none;
+    background:none;
+    margin:0px 5px;
+}
+
+#searchResults-Container li
+{
+    min-height:26px;
+    padding:0px 5px 0px 22px;
+    margin:0px;
+    background-repeat:no-repeat;
+    background-position:2px 4px;
+    cursor:default;
+    line-height:26px;
+    position:relative;
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+}
+
+#searchResults-Container li:active
+{
+    background-color: #E3E3E3;
+    border: 1px solid #C6C6C7;
+    border-radius: 3px;
+}
+
+#searchResults-Container li:hover
+{
+    background-color: #EAEAEA;
+    border: 1px solid #D6D6D6;
+    border-radius: 3px;
+}
+
+/* Shade the item that has keyboard focus */
+#searchResults-Container li:focus
+{
+    background-color: #DDDDDD;
+}
+
+#searchResults-Container li.login-item
+{
+    display:list-item;
+    border-left-width:0px;
+    border-right-width:0px;
+    cursor: default;
+}
+
+#searchResults-Container li.login-item button {
+    font-size: 0.9em;
+    line-height:21px;
+    margin: 0px 2px 2px 2px;
+}
+
+#Kee-optionsMenuTrigger
+{
+    width:21px;
+    min-width:21px;
+    height:21px;
+    min-height:21px;
+    background-color: #F4F4F4;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    position:absolute;
+    right: 10px;
+    bottom:calc(50% - 10px);
+    background-image: url("../common/images/menu.png");
+    padding:3px;
+    background-repeat:no-repeat;
+    background-position:1px 1px;
+    cursor: pointer;
+}
+
+#Kee-optionsMenuTrigger:hover
+{
+    background-color: #fff;
 }

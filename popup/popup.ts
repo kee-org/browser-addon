@@ -1,6 +1,7 @@
 let appState: AppState;
 let keePopupLoadTime = Date.now();
 let myPort: browser.runtime.Port;
+let searchPanel: SearchPanel;
 
 function updateConnectionStatus () {
     if (appState.connected) {
@@ -56,6 +57,44 @@ function updateNotifications () {
     }
 }
 
+function updateSearchPanel (entryDetails?: keeLoginInfo) {
+    if (appState.connected && appState.KeePassDatabases.length > 0)
+    {
+        if (entryDetails) {
+            searchPanel.createContextActions(entryDetails);
+        } else {
+            searchPanel = new SearchPanel();
+            searchPanel.init();
+            $("#searchPanel").classList.remove("hidden");
+        }
+    } else {
+        $("#searchPanel").classList.add("hidden");
+    }
+}
+
+function convertSingleLoginEntryResult (result)
+{
+    let isError = false;
+
+    try {
+        if (result && result.length == 1) {
+                const kfl = new keeLoginInfo();
+                kfl.initFromEntry(result[0]);
+                return kfl;
+        } else {
+            isError = true;
+        }
+    } catch (e) {
+        isError = true;
+    }
+
+    if (isError) {
+        KeeLog.error("Unexpected error handling response for detailed field data");
+    }
+
+    return;
+}
+
 function startup () {
     KeeLog.debug("popup started");
 
@@ -82,6 +121,12 @@ function startup () {
             document.getElementById("showMatchedLogins").style.display = "block";
         } else {
             document.getElementById("showMatchedLogins").style.display = "none";
+        }
+
+        if (appState.connected && m.findMatchesResult) {
+            updateSearchPanel(convertSingleLoginEntryResult(m.findMatchesResult));
+        } else {
+            updateSearchPanel();
         }
     });
 
