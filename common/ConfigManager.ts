@@ -68,7 +68,7 @@ class ConfigManager {
         browser.storage.onChanged.addListener(this.reloadOnStorageChange);
     }
 
-    get psl () {
+    private get psl () {
         if (!publicSuffixList) throw new Error("publicSuffixList library not present");
         if (!this.pslInitialised) {
             publicSuffixList.parse(pslData.text, punycode.toASCII);
