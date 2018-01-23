@@ -88,7 +88,6 @@ class MatchedLoginsPanel {
 
         const editButton = document.createElement("button");
             editButton.textContent = $STR("Logins_Context_Edit_Login_label");
-            editButton.setAttribute("id", "Kee-login-context-edit");
             //"chrome://kee/skin/pencil.png"
             editButton.addEventListener("click", event => {
                 event.stopPropagation();
@@ -107,7 +106,6 @@ class MatchedLoginsPanel {
         {
             const button = document.createElement("button");
             button.textContent = $STR("copy_username_label");
-            button.setAttribute("id", "Kee-login-context-copyuser");
             //"chrome://kee/skin/copy.png",
             button.addEventListener("click", event => {
                 event.stopPropagation();
@@ -121,7 +119,6 @@ class MatchedLoginsPanel {
         if (passwordField != null) {
             const button = document.createElement("button");
             button.textContent = $STR("copy_password_label");
-            button.setAttribute("id", "Kee-login-context-copypass");
             //"chrome://kee/skin/copy.png",
             button.addEventListener("click", event => {
                 event.stopPropagation();
