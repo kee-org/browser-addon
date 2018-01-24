@@ -890,7 +890,7 @@ function showUpdateSuccessNotification ()
 }
 
 // This allows us to identify when a new page is loading in an existing tab
-function pageNavigationCommitted (details: browser.webNavigation.WebNavigationTransitionCallbackDetails) {
+function pageNavigationCommitted (details) {
     if (details.frameId === 0) kee.tabStates.delete(details.tabId);
 }
 
