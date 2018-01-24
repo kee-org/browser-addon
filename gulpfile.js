@@ -276,7 +276,7 @@ gulp.task('modifyBuildFilesForCrossBrowser', function() {
     if (DEBUG) {
         return merge (
             gulp.src([buildDirDebugFirefox + '/manifest.json'])
-            .pipe(replace(/(.*"version": ")(.*)(",.*)/g, '$1$2-beta$3'))
+            .pipe(replace(/(.*"version": ")(.*)(",.*)/g, '$1$2beta$3'))
             .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ''))
             .pipe(gulp.dest(buildDirDebugFirefox)),
             gulp.src([buildDirDebugChrome + '/manifest.json'])
