@@ -855,13 +855,13 @@ function fetchFavicon (url): Promise<string> {
             return;
         }
         const img = new Image();
-        img.onload = function () {
+        img.onload = function (this: HTMLImageElement) {
             const canvas = document.createElement("canvas");
-            canvas.width = (this as any).width;
-            canvas.height = (this as any).height;
+            canvas.width = this.width;
+            canvas.height = this.height;
 
             const ctx = canvas.getContext("2d");
-            ctx.drawImage((this as any), 0, 0);
+            ctx.drawImage(this, 0, 0);
 
             const dataURL = canvas.toDataURL("image/png");
             resolve(dataURL);
@@ -941,7 +941,7 @@ function updateForegroundTab (tabId: number) {
 // instance of this content script running in it, we programatically inject the script.
 // Only Firefox has the getBrowserInfo function and only Firefox injects content scripts to existing tabs
 // on startup (a fragile assumption but the best that the API allow us to do for the time being)
-if (!(browser.runtime as any).getBrowserInfo) {
+if (!browser.runtime.getBrowserInfo) {
     browser.runtime.onInstalled.addListener(details => {
         const showErrors = () => {
             if (chrome.runtime.lastError) {
