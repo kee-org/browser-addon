@@ -163,7 +163,7 @@ class Kee {
         return frameId;
     }
 
-    init () {
+    async init () {
 
         // Create a timer for checking whether user is logging sensitive data
         setTimeout(backgroundUtils.oneOffSensitiveLogCheckHandler, 45000);
@@ -179,11 +179,11 @@ class Kee {
 
         this.networkAuth.startListening();
 
-        browser.privacy.services.passwordSavingEnabled.set({ value: false }, function () {
-            if (chrome.runtime.lastError != null) {
-                KeeLog.warn("KeeFox was unable to disable built-in password manager saving - confusion may ensue! " + chrome.runtime.lastError);
-            }
-        });
+        await browser.privacy.services.passwordSavingEnabled.set({ value: false });
+
+        if (chrome.runtime.lastError != null) {
+            KeeLog.warn("KeeFox was unable to disable built-in password manager saving - confusion may ensue! " + chrome.runtime.lastError);
+        }
 
     }
 
