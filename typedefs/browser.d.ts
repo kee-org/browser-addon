@@ -3327,6 +3327,57 @@ declare namespace browser.webRequest {
         responseHeaders = "responseHeaders"
     }
 
+    interface ResourceRequest {
+        url: string;
+        /** The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request. */
+        requestId: string;
+        /** The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (type is main_frame or sub_frame), frameId indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab. */
+        frameId: number;
+        /** ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists. */
+        parentFrameId: number;
+        /** The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab. */
+        tabId: number;
+        /**
+         * How the requested resource will be used.
+         * One of: "main_frame", "sub_frame", "stylesheet", "script", "image", "object", "xmlhttprequest", or "other"
+         */
+        type: string;
+        /** The time when this signal is triggered, in milliseconds since the epoch. */
+        timeStamp: number;
+    }
+
+    interface WebResponseDetails extends ResourceRequest {
+        /** HTTP status line of the response or the 'HTTP/0.9 200 OK' string for HTTP/0.9 responses (i.e., responses that lack a status line). */
+        statusLine: string;
+        /**
+         * Standard HTTP status code returned by the server.
+         * @since Chrome 43.
+         */
+        statusCode: number;
+    }
+
+    interface WebResponseHeadersDetails extends WebResponseDetails {
+        /** Optional. The HTTP response headers that have been received with this response. */
+        responseHeaders?: HttpHeaders;
+        method: string; /** standard HTTP method i.e. GET, POST, PUT, etc. */
+    }
+
+    interface WebAuthChallenger {
+        host: string;
+        port: number;
+    }
+
+    interface WebAuthenticationChallengeDetails extends WebResponseHeadersDetails {
+        /** The authentication scheme, e.g. Basic or Digest. */
+        scheme: string;
+        /** The authentication realm provided by the server, if there is one. */
+        realm?: string;
+        /** The server requesting authentication. */
+        challenger: WebAuthChallenger;
+        /** True for Proxy-Authenticate, false for WWW-Authenticate. */
+        isProxy: boolean;
+}
+
     /** An object describing filters to apply to webRequest events. */
     interface RequestFilter {
         /** A list of URLs or URL patterns. Requests that cannot match any of the URLs will be filtered out. */
