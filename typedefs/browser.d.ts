@@ -5048,20 +5048,20 @@ declare namespace browser.contextMenus {
      * contexts except for 'tab' and 'tools_menu'.
      */
     enum ContextType {
-        all = "all",
-        page = "page",
-        frame = "frame",
-        selection = "selection",
-        link = "link",
-        editable = "editable",
-        password = "password",
-        image = "image",
-        video = "video",
-        audio = "audio",
-        launcher = "launcher",
-        browser_action = "browser_action",
-        page_action = "page_action",
-        tab = "tab"
+        ALL = "all",
+        PAGE = "page",
+        FRAME = "frame",
+        SELECTION = "selection",
+        LINK = "link",
+        EDITABLE = "editable",
+        PASSWORD = "password",
+        IMAGE = "image",
+        VIDEO = "video",
+        AUDIO = "audio",
+        LAUNCHER = "launcher",
+        BROWSER_ACTION = "browser_action",
+        PAGE_ACTION = "page_action",
+        TAB = "tab"
     }
 
     /** The type of menu item. */
