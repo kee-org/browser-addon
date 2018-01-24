@@ -33,7 +33,7 @@ class SavePasswordPanel {
 
         // Set initial results for current website
         const filter = (document.getElementById("Kee-SaveLogin-searchfilter-current") as HTMLOptionElement);
-        this.search.execute((document.getElementById("Kee-SaveLogin-searchbox") as any).value,
+        this.search.execute((document.getElementById("Kee-SaveLogin-searchbox") as HTMLInputElement).value,
             this.onSearchComplete.bind(this),
             filter.value.split(",")
         );
@@ -92,7 +92,7 @@ class SavePasswordPanel {
         for (const o of dbOptions)
           sel.appendChild(o);
 
-        this.saveData.db = (sel.selectedOptions[0] as any).value;
+        this.saveData.db = sel.selectedOptions[0].value;
 
         return sel;
     }
@@ -211,7 +211,7 @@ class SavePasswordPanel {
         panel.classList.add("enabled", "xulvbox");
 
         const dbSel = this.createDBSelect();
-        dbSel.style.backgroundImage = (dbSel.selectedOptions[0] as any).style.backgroundImage;
+        dbSel.style.backgroundImage = dbSel.selectedOptions[0].style.backgroundImage;
 
         const dbSelContainer = this.doc.createElement("div");
         dbSelContainer.classList.add("xulhbox", "kee-save-password");

@@ -53,7 +53,7 @@ class KFCommands {
                 break;
             }
             if (id.startsWith("matchedLogin-")) {
-                kee.tabStates.get(kee.foregroundTabId).framePorts.get((info as any).frameId).postMessage({ action: Action.ManualFill, selectedLoginIndex: id.substr(id.indexOf("-")+1) });
+                kee.tabStates.get(kee.foregroundTabId).framePorts.get(info.frameId).postMessage({ action: Action.ManualFill, selectedLoginIndex: id.substr(id.indexOf("-")+1) });
             }
         });
     }

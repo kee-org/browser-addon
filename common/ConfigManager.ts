@@ -87,7 +87,7 @@ class ConfigManager {
     }
 
     public setASAP (values: Partial<Config>) {
-        (Object as any).assign(this.current, values);
+        Object.assign(this.current, values);
         this.save();
     }
 

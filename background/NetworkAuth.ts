@@ -124,12 +124,12 @@ class NetworkAuth {
                     chrome.runtime.onMessage.addListener(handleMessage);
 
                     const createData = {
-                        type: "popup",
+                        type: browser.windows.CreateType.POPUP,
                         url: "/dialogs/NetworkAuth.html",
                         width: 600,
                         height: 300
                     };
-                    const creating = (browser as any).windows.create(createData);
+                    browser.windows.create(createData);
                 });
             });
         }

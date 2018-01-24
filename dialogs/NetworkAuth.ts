@@ -6,9 +6,9 @@ class NetworkAuth {
     }
 
     supplyNetworkAuth (loginIndex: number) {
-        (chrome as any).tabs.getCurrent(tab => {
+        chrome.tabs.getCurrent(tab => {
             chrome.runtime.sendMessage({action: "NetworkAuth_ok", selectedLoginIndex: loginIndex });
-            const removing = (chrome as any).tabs.remove(tab.id);
+            const removing = chrome.tabs.remove(tab.id);
         });
     }
 

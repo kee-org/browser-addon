@@ -5105,6 +5105,8 @@ declare namespace browser.contextMenus {
         checked?: boolean;
         /** An array of keyboard modifiers that were held while the menu item was clicked. */
         modifiers: _OnClickDataModifiers[];
+
+        frameId?: number;
     }
 
     enum _OnClickDataModifiers {
@@ -5299,6 +5301,8 @@ declare namespace browser.menus {
         checked?: boolean;
         /** An array of keyboard modifiers that were held while the menu item was clicked. */
         modifiers: _OnClickDataModifiers[];
+
+        frameId?: number;
     }
 
     enum _OnClickDataModifiers {
@@ -5456,6 +5460,8 @@ declare namespace browser.menusInternal {
         wasChecked?: boolean;
         /** A flag indicating the state of a checkbox or radio item after it is clicked. */
         checked?: boolean;
+
+        frameId?: number;
     }
 }
 
@@ -6690,10 +6696,10 @@ declare namespace browser.windows {
      * the '--enable-panels' flag is set.
      */
     enum CreateType {
-        normal = "normal",
-        popup = "popup",
-        panel = "panel",
-        detached_panel = "detached_panel"
+        NORMAL = "normal",
+        POPUP = "popup",
+        PANEL = "panel",
+        DETACHED_PANEL = "detached_panel"
     }
 
     /* windows properties */

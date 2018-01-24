@@ -400,7 +400,7 @@ class kprpcClient {
         const createData = {
             url: "/dialogs/SRP.html"
         };
-        const creating = (browser as any).tabs.create(createData);
+        const creating = browser.tabs.create(createData);
     }
 
     identifyToClient (password, s, B) {
