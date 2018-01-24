@@ -76,7 +76,7 @@
         "description": ""
     },
     "point_user_to_tutorial_start": {
-        "message": "Please spend a few minutes going through the new",
+        "message": "请花几分钟来了解新的",
         "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
     },
     "pref_listAllOpenDBs_label": {
@@ -132,7 +132,7 @@
         "description": "Name of the link to the community forum"
     },
     "point_user_to_tutorial_start_install": {
-        "message": "Please then spend a few minutes going through the new",
+        "message": "请花几分钟来了解新的",
         "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
     },
     "pref_logLevelErrors_label": {
@@ -172,7 +172,7 @@
         "description": ""
     },
     "notification_only_shown_some_times": {
-        "message": "This additional popup notification will only be shown a small number of times.",
+        "message": "这个额外的弹出通知不会经常显示。",
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "site_properties_weight_warning": {
@@ -182,6 +182,10 @@
     "further_info_may_follow": {
         "message": "进一步信息参考: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "delete": {
+        "message": "删除",
+        "description": "Action button for user to delete an item within a collection. E.g. delete an entry within the list of site-specific settings overrides"
     },
     "saveLatestLogin": {
         "message": "保存最新登录信息",
@@ -276,11 +280,11 @@
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
     "version_2_upgrade_intro": {
-        "message": "Version 2.0 brings exciting new features and some enforced changes in order to support Firefox 57 and higher.",
+        "message": "2.0 版本提供了一些新功能以及一些必要的更改，以适配 Firefox 57 及更高版本。",
         "description": "Explains that version 2.0 is different."
     },
     "notification_yellow_background": {
-        "message": "The Kee button has a yellow background when a new notification appears.",
+        "message": "当出现新通知时，Kee 按钮的背景将变为黄色。",
         "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "network_auth_http_auth_description": {
@@ -292,7 +296,7 @@
         "description": ""
     },
     "notification_raised_title": {
-        "message": "Kee has a notification to show you",
+        "message": "Kee 有一则通知给您",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "conn_sl_high": {
@@ -320,7 +324,7 @@
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
     },
     "kee_install_notes_keepassrpc": {
-        "message": "You'll need to install the KeePassRPC.plgx plugin for KeePass too, if you haven't already. It is as easy as putting a file in the right place on your computer and restarting KeePass.",
+        "message": "您还需要安装适用于 KeePass 的 KeePassRPC.plgx 插件。只需将插件文件放在计算机中的正确位置并重启 KeePass 即可完成。",
         "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
     },
     "point_user_to_tutorial_link_text": {
@@ -378,6 +382,10 @@
     "pref_notifyWhenEntryUpdated_label": {
         "message": "显示“密码更新成功”通知",
         "description": "Option to enable or diable the information displayed when a password has been updated"
+    },
+    "list_version_upgrade_2_1": {
+        "message": "Specific site settings can now be deleted; When no database name is set explicitly, the database file name will be displayed instead; Fixed issue that resulted in unused generated passwords being stored in the 'Kee Generated Password Backups' database group",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "conn_sl_desc": {
         "message": "更改下面的设置控制在您的网页浏览器与 KeePass 之间的安全通信链路。您通常不需要调整这些设置，如果您想调整，请确保您已先阅读了相关的手册页。",
@@ -539,6 +547,10 @@
         "message": "$1 - $2",
         "description": "<username> <seperator> <entry title>"
     },
+    "version_upgrade_heading_changes": {
+        "message": "变更于版本",
+        "description": "Heading for the list of changes in a version of Kee. A space and the current version number will be suffixed at the end of this string."
+    },
     "conn_setup_retype_password": {
         "message": "请在弹出的提示中输入新密码。",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
@@ -550,6 +562,10 @@
     "conn_setup_client_features_missing": {
         "message": "Kee 必须升级才能连接您的 KeePass Password Safe。请确保您在运行最新版本的浏览器扩展。",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
+    },
+    "loading": {
+        "message": "正在载入...",
+        "description": "Holding message to be displayed when Kee has to display something to the user to indicate that the requested information or interface element will be displayed shortly."
     },
     "notifyBarLaunchKeePassButton_tip": {
         "message": "启动 KeePass 以启用 Kee",
@@ -604,7 +620,7 @@
         "description": ""
     },
     "kee_install_notes_intro": {
-        "message": "Kee stores your passwords in a secure separate password manager called KeePass Password Safe 2. It's full of great features and Kee keeps your everyday internet login tasks simple and secure.",
+        "message": "Kee 将您的密码存储在名为 KeePass Password Safe 2 的安全、独立的密码管理器中。Kee 有许多强大的功能，助您保持互联网生活中的简单且安全登录。",
         "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
     },
     "copy_password_label": {
@@ -636,7 +652,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "notification_save_password_tip": {
-        "message": "Click on the Kee button (in your toolbar) and then \"Save latest login\"",
+        "message": "点击工具栏中的 Kee 按钮，选择“保存最新的登录”",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
     },
     "point_user_to_install_instructions_start": {

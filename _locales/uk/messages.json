@@ -128,7 +128,7 @@
         "description": ""
     },
     "point_user_to_forum_link_text": {
-        "message": "форумом спільноти",
+        "message": "форумі спільноти",
         "description": "Name of the link to the community forum"
     },
     "point_user_to_tutorial_start_install": {
@@ -182,6 +182,10 @@
     "further_info_may_follow": {
         "message": "Детальна інформація: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
+    },
+    "delete": {
+        "message": "Видалити",
+        "description": "Action button for user to delete an item within a collection. E.g. delete an entry within the list of site-specific settings overrides"
     },
     "saveLatestLogin": {
         "message": "Зберегти останній вхід",
@@ -324,7 +328,7 @@
         "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
     },
     "point_user_to_tutorial_link_text": {
-        "message": "інтерактивне знайомство",
+        "message": "інтерактивним знайомством",
         "description": "Name of the link to the interactive tutorial page"
     },
     "pref_FillNote_desc": {
@@ -378,6 +382,10 @@
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Показувати сповіщення \"Пароль успішно оновлено\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
+    },
+    "list_version_upgrade_2_1": {
+        "message": "Можливість видалення окремих налаштувань сайту; При відсутності назви бази паролів відображується назва файлу; Виправлена проблема, що призводила до зберігання генерованих паролів у групі \"Kee Generated Password Backups\" бази паролів",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "conn_sl_desc": {
         "message": "Зміна цих налаштувань контролює рівень захищеності з'єднання між вашим браузером та KeePass. Зазвичай немає необхідності їх змінювати, але якщо ви все ж захочете зробити це, ознайомтеся спершу з відповідними інструкціями.",
@@ -539,6 +547,10 @@
         "message": "$1 - $2",
         "description": "<username> <seperator> <entry title>"
     },
+    "version_upgrade_heading_changes": {
+        "message": "Зміни у версії",
+        "description": "Heading for the list of changes in a version of Kee. A space and the current version number will be suffixed at the end of this string."
+    },
     "conn_setup_retype_password": {
         "message": "Введіть новий пароль при запиті.",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
@@ -550,6 +562,10 @@
     "conn_setup_client_features_missing": {
         "message": "Kee необхідно оновити для можливості встановлення зв'язку з KeePass Password Safe. Переконайтеся, що ви використовуєте найновішу версію розширення браузера.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
+    },
+    "loading": {
+        "message": "Завантаження...",
+        "description": "Holding message to be displayed when Kee has to display something to the user to indicate that the requested information or interface element will be displayed shortly."
     },
     "notifyBarLaunchKeePassButton_tip": {
         "message": "Запустіть KeePass для активації",

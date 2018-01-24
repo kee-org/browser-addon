@@ -183,6 +183,10 @@
         "message": "Weitere Informationen werden folgen: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
     },
+    "delete": {
+        "message": "Löschen",
+        "description": "Action button for user to delete an item within a collection. E.g. delete an entry within the list of site-specific settings overrides"
+    },
     "saveLatestLogin": {
         "message": "Letzte Log-in Daten speichern",
         "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
@@ -379,6 +383,10 @@
         "message": "Die \"Passwort erfolgreich aktualisiert\" Benachrichtigung anzeigen",
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
+    "list_version_upgrade_2_1": {
+        "message": "Die seitenspezifischen Einstellungen können jetzt gelöscht werden; Falls kein bestimmter Name für die Datenbank festgelegt worden ist, wird stattdessen der Dateiname der Datenbank angezeigt;  Es wurde ein Fehler behoben, der dazu geführt hat, dass nicht verwendete generierte Passwörter in der Datenbankgruppe \"Kee Generated Password Backups\" gespeichert worden sind.",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "conn_sl_desc": {
         "message": "Ändern Sie zur Überwachung der Kommunikationsverbindung zwischen Ihrem Webbrowser und KeePass die unten stehenden Einstellungen. Bevor Sie diese Einstellungen ändern, stellen Sie bitte sicher, dass Sie zuerst die entsprechenden Hilfeseiten gelesen haben.",
         "description": ""
@@ -539,6 +547,10 @@
         "message": "$1 - $2",
         "description": "<username> <seperator> <entry title>"
     },
+    "version_upgrade_heading_changes": {
+        "message": "Neuerungen in Version",
+        "description": "Heading for the list of changes in a version of Kee. A space and the current version number will be suffixed at the end of this string."
+    },
     "conn_setup_retype_password": {
         "message": "Bitte bei Aufforderung ein neues Passwort eingeben.",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
@@ -551,12 +563,16 @@
         "message": "Kee muss für den Zugriff auf Ihren KeePass-Passwort-Safe aktualisiert werden. Stellen Sie sicher, dass Sie die aktuelle Version des Browser-Addons / Erweiterung nutzen.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
+    "loading": {
+        "message": "Lade...",
+        "description": "Holding message to be displayed when Kee has to display something to the user to indicate that the requested information or interface element will be displayed shortly."
+    },
     "notifyBarLaunchKeePassButton_tip": {
         "message": "KeePass starten um Kee zu aktivieren",
         "description": ""
     },
     "pref_searchAllOpenDBs_label": {
-        "message": "Alle offenen KeePass-Datenbanken suchen",
+        "message": "Alle offenen KeePass-Datenbanken durchsuchen",
         "description": ""
     },
     "enter_valid_regex": {

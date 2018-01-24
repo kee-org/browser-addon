@@ -183,6 +183,10 @@
         "message": "Seguono maggiori informazioni: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
     },
+    "delete": {
+        "message": "Elimina",
+        "description": "Action button for user to delete an item within a collection. E.g. delete an entry within the list of site-specific settings overrides"
+    },
     "saveLatestLogin": {
         "message": "Salva l'ultimo accesso",
         "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
@@ -379,6 +383,10 @@
         "message": "Mostra la notifica \"Password aggiornata con successo\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
+    "list_version_upgrade_2_1": {
+        "message": "È ora possibile eliminare le impostazioni specifiche di ogni sito; Quando il nome del database non è impostato verrà mostrato il nome del file; Risolto un problema che causava il salvataggio di password non utilizzate nel gruppo \"KeeFox Generated Password Backups\" del database",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "conn_sl_desc": {
         "message": "Cambia le impostazioni sottostanti per controllare la sicurezza del collegamento fra il tuo browser web e KeePass. Probabilmente non dovrai mai cambiare queste impostazioni, ma se hai intenzione di farlo sei pregato di leggere prima il manuale.",
         "description": ""
@@ -539,6 +547,10 @@
         "message": "$1 - $2",
         "description": "<username> <seperator> <entry title>"
     },
+    "version_upgrade_heading_changes": {
+        "message": "Novità in questa versione",
+        "description": "Heading for the list of changes in a version of Kee. A space and the current version number will be suffixed at the end of this string."
+    },
     "conn_setup_retype_password": {
         "message": "Inserisci la nuova password quando viene richiesto.",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
@@ -550,6 +562,10 @@
     "conn_setup_client_features_missing": {
         "message": "Kee deve essere aggiornato per effettuare la connessione a KeePass Password Safe. Assicurati che stai utilizzando l'ultima versione dell'estensione.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
+    },
+    "loading": {
+        "message": "Caricamento...",
+        "description": "Holding message to be displayed when Kee has to display something to the user to indicate that the requested information or interface element will be displayed shortly."
     },
     "notifyBarLaunchKeePassButton_tip": {
         "message": "Apri KeePass per abilitare Kee",
@@ -636,7 +652,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "notification_save_password_tip": {
-        "message": "Clicca sul pulsante Kee (nella barra degli strumenti) e seleziona \"Salva ultima voce\"",
+        "message": "Clicca sul pulsante Kee (nella barra degli strumenti) e seleziona \"Salva l'ultimo accesso\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
     },
     "point_user_to_install_instructions_start": {
