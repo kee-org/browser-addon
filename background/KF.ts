@@ -942,7 +942,7 @@ function updateForegroundTab (tabId: number) {
 // Only Firefox has the getBrowserInfo function and only Firefox injects content scripts to existing tabs
 // on startup (a fragile assumption but the best that the API allow us to do for the time being)
 if (!(browser.runtime as any).getBrowserInfo) {
-    browser.runtime.onInstalled.addListener((details: browser.runtime.InstalledDetails) => {
+    browser.runtime.onInstalled.addListener(details => {
         const showErrors = () => {
             if (chrome.runtime.lastError) {
                 if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError);
@@ -966,7 +966,7 @@ if (!(browser.runtime as any).getBrowserInfo) {
     });
 }
 
-function handleInstalled (details) {
+browser.runtime.onInstalled.addListener(details => {
     if (details.reason === "update") {
         browser.tabs.create({
             url: "release-notes/update-notes.html"
@@ -976,9 +976,7 @@ function handleInstalled (details) {
             url: "release-notes/install-notes.html"
         });
     }
-}
-
-browser.runtime.onInstalled.addListener(handleInstalled);
+});
 
 // Load our config and start the addon once done
 configManager.load(startup);
