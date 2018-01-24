@@ -1,18 +1,26 @@
-WebExtensions (Mozilla Firefox) / Google Chrome (Chromium) add-on for linking browsers to the KeePassRPC KeePass plugin.
+# Simple and secure password management
+
+## Kee adds free, secure and easy to use password management features to your web browser which save you time and keep your private data more secure.
+
+**Login automatically, never forget another password, stay in control of your passwords and improve their security. Powered by the world-renowned KeePass Password Safe.**
+
+Kee is a Firefox and Chrome add-on for linking browsers to KeePass, using the [KeePassRPC KeePass plugin](https://github.com/kee-org/keepassrpc).
 
 Official website with download instructions: https://www.kee.pm
 
 Support forum: https://forum.kee.pm
 
-# Build instructions
+# Build
 
 ## Requirements
 
 * node
 * npm or yarn
-* the usual hundreds of node modules installed by the above
+* a web browser and KeePass 2.x
 
 It's all set up for Visual Studio Code but it shouldn't be too hard to work out how to develop using other IDEs.
+
+## Instructions
 
 1. clone the repo
 1. `npm install`

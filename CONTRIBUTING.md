@@ -38,9 +38,57 @@ None of this work is currently planned so if this is an area that interests you,
 
 # Development
 
-Working on your first Pull Request? You can learn how from this *free* series, [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github).
+## Rules
 
-More information about developing for Kee is coming soon. In the mean time, the build instructions in the [README](https://github.com/kee-org/browser-addon/blob/master/README.md) will have to suffice.
+To ensure your work can quickly be released to improve Kee for many users, please follow these rules:
+
+* Base your development off the master branch
+* Rebase onto master periodically and especially during the Pull Request review procedure
+* Do not change any localisation files except for the source (English). `_locales/en/messages.json` should be changed as needed, but no other files in the `_locales` folder. Ensure you understand the rules of the [stabilisation period](#stabilisation-period)
+* Follow the style configuration in the `.editorconfig` file. Most modern editors will automatically do this for you. Some, but not all, of this configuration can be enforced by tslint at build time.
+* Read the information about branches below before creating a Pull Request
+* Create separate PRs for unrelated changes
+* Look at the result of the TravisCI build which will run after you create the PR and address any errors that cause the check to fail.
+
+## Branches
+
+### Master branch
+
+* Kee utilises a Continuous Integration process on the `master` branch.
+* This branch is "close" to release-ready but at any given commit, manual testing and translation work has usually not been completed.
+* Features merged into this branch that contain text strings will be made available for immediate translation on Transifex
+* If a `release/n.m` branch exists but no stable n.m release has been pushed to users the master branch is undergoing stabilisation so some [more restrictive rules apply](#stabilisation-period).
+
+### Feature branches
+
+* Development work should be performed on feature branches (often in a forked repo)
+* Create a Pull Request for master when the feature is complete and locally tested
+* Example: `feature/add-fancy-improvement`
+
+### Release branches
+
+* When a set of release notes for the next release is added to master, we create a release branch at the commit that contains those release notes
+* The latest translations are pulled from Transifex and added to the release branch and master
+* In the normal case, a beta release and then a stable release will be distributed to users
+* See the [Release process](https://forum.kee.pm/t/versioning-and-releases/550#heading--release-process) for more information on how these branches are used
+* Example: `release/2.1`
+
+## Stabilisation period
+
+* For around 10-21 days between the addition of a set of release notes for the next release and the stable release to all users, we enter a stabilisation period.
+* This allows for critical bugs found during beta testing to be fixed and time for translators to fully localise the strings that have changed or been added for this version.
+* To avoid pausing integration for this period, we create a release branch as described above and allow continued development on the master branch.
+* **Existing strings MUST NOT be changed or deleted during this period**. This prevents accidental premature release of modified strings. Transifex does not support branching of translation effort so all git (code) branches that may receive translation work must be fully compatible; this rule ensures this is the case.
+    * PRs that need to change existing strings must wait until after the next version of Kee has been released.
+   * Often one can create new strings (and later delete the old ones after the stabilisation period has ended) in order to entirely side-step this limitation.
+
+## Build instructions
+
+See the build instructions in the [README](https://github.com/kee-org/browser-addon/blob/master/README.md).
+
+## New to development?
+
+Working on your first Pull Request? You can learn how from this *free* series, [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github).
 
 # GitHub issues
 
