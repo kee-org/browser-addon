@@ -103,15 +103,15 @@ class NetworkAuth {
                             case "NetworkAuth_ok":
                                 const login = convertedResult[request.selectedLoginIndex];
                                 resolve({ authCredentials: { username: login.otherFields[login.usernameIndex].value, password: login.passwords[0].value } });
-                                chrome.runtime.onMessage.removeListener(handleMessage);
+                                browser.runtime.onMessage.removeListener(handleMessage);
                                 break;
                             case "NetworkAuth_cancel":
                                 resolve({ cancel: false });
-                                chrome.runtime.onMessage.removeListener(handleMessage);
+                                browser.runtime.onMessage.removeListener(handleMessage);
                                 break;
                             case "NetworkAuth_load":
                                 // Can't use sendResponse() because Mozilla chose to not implement it, contrary to the MDN docs
-                                chrome.tabs.sendMessage(sender.tab.id, {
+                                browser.tabs.sendMessage(sender.tab.id, {
                                     action: "NetworkAuth_matchedLogins",
                                     logins: convertedResult,
                                     realm: requestDetails.realm,
@@ -121,7 +121,7 @@ class NetworkAuth {
                         }
                     }
 
-                    chrome.runtime.onMessage.addListener(handleMessage);
+                    browser.runtime.onMessage.addListener(handleMessage);
 
                     const createData = {
                         type: browser.windows.CreateType.POPUP,

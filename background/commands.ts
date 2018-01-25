@@ -58,42 +58,15 @@ class KFCommands {
         });
     }
 
-    public setupContextMenuItems () {
-        chrome.contextMenus.removeAll(() => {
-            if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
-                try {
-                    browser.contextMenus.create({
-                        id: Command.DetectForms,
-                        title: $STR("Menu_Button_fillCurrentDocument_label"),
-                        contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                             browser.contextMenus.ContextType.FRAME,
-                             browser.contextMenus.ContextType.IMAGE,
-                             browser.contextMenus.ContextType.LINK,
-                             browser.contextMenus.ContextType.PAGE,
-                             browser.contextMenus.ContextType.PASSWORD,
-                             browser.contextMenus.ContextType.SELECTION ]
-                    });
-                } catch (e) {
-                    // try again with Chrome-supported contexts
-                    browser.contextMenus.create({
-                        id: Command.DetectForms,
-                        title: $STR("Menu_Button_fillCurrentDocument_label"),
-                        contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                            browser.contextMenus.ContextType.FRAME,
-                            browser.contextMenus.ContextType.IMAGE,
-                            browser.contextMenus.ContextType.LINK,
-                            browser.contextMenus.ContextType.PAGE,
-                            browser.contextMenus.ContextType.SELECTION ]
-                    });
-                }
-            }
+    public async setupContextMenuItems () { // switch to promises?
+        await browser.contextMenus.removeAll();
 
-            if (kee.appState.connected) {
-                try {
-                    browser.contextMenus.create({
-                        id: Command.GeneratePassword,
-                        title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
-                        contexts: [ browser.contextMenus.ContextType.EDITABLE,
+        if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
+            try {
+                browser.contextMenus.create({
+                    id: Command.DetectForms,
+                    title: $STR("Menu_Button_fillCurrentDocument_label"),
+                    contexts: [ browser.contextMenus.ContextType.EDITABLE,
                             browser.contextMenus.ContextType.FRAME,
                             browser.contextMenus.ContextType.IMAGE,
                             browser.contextMenus.ContextType.LINK,
@@ -101,60 +74,87 @@ class KFCommands {
                             browser.contextMenus.ContextType.PASSWORD,
                             browser.contextMenus.ContextType.SELECTION ]
                 });
-                } catch (e) {
-                    // try again with Chrome-supported contexts
-                    browser.contextMenus.create({
-                        id: Command.GeneratePassword,
-                        title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
-                        contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                            browser.contextMenus.ContextType.FRAME,
-                            browser.contextMenus.ContextType.IMAGE,
-                            browser.contextMenus.ContextType.LINK,
-                            browser.contextMenus.ContextType.PAGE,
-                            browser.contextMenus.ContextType.SELECTION ]
-                    });
-                }
-            }
-
-            // if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
-
-            // }
-
-            if (kee.foregroundTabId >= 0
-            && kee.tabStates.has(kee.foregroundTabId)
-            && kee.tabStates.get(kee.foregroundTabId).frames) {
-                kee.tabStates.get(kee.foregroundTabId).frames.forEach(frame => {
-                    for (let j=0; j<frame.logins.length; j++) {
-                        const login = frame.logins[j];
-                        try {
-                            browser.contextMenus.create({
-                                id: "matchedLogin-" + j,
-                                title: login.title,
-                                contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                                    browser.contextMenus.ContextType.FRAME,
-                                    browser.contextMenus.ContextType.IMAGE,
-                                    browser.contextMenus.ContextType.LINK,
-                                    browser.contextMenus.ContextType.PAGE,
-                                    browser.contextMenus.ContextType.PASSWORD,
-                                    browser.contextMenus.ContextType.SELECTION ]
-                        });
-                        } catch (e) {
-                            // try again with Chrome-supported contexts
-                            browser.contextMenus.create({
-                                id: "matchedLogin-" + j,
-                                title: login.title,
-                                contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                                    browser.contextMenus.ContextType.FRAME,
-                                    browser.contextMenus.ContextType.IMAGE,
-                                    browser.contextMenus.ContextType.LINK,
-                                    browser.contextMenus.ContextType.PAGE,
-                                    browser.contextMenus.ContextType.SELECTION ]
-                            });
-                        }
-                    }
+            } catch (e) {
+                // try again with Chrome-supported contexts
+                browser.contextMenus.create({
+                    id: Command.DetectForms,
+                    title: $STR("Menu_Button_fillCurrentDocument_label"),
+                    contexts: [ browser.contextMenus.ContextType.EDITABLE,
+                        browser.contextMenus.ContextType.FRAME,
+                        browser.contextMenus.ContextType.IMAGE,
+                        browser.contextMenus.ContextType.LINK,
+                        browser.contextMenus.ContextType.PAGE,
+                        browser.contextMenus.ContextType.SELECTION ]
                 });
             }
-        });
+        }
+
+        if (kee.appState.connected) {
+            try {
+                browser.contextMenus.create({
+                    id: Command.GeneratePassword,
+                    title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
+                    contexts: [ browser.contextMenus.ContextType.EDITABLE,
+                        browser.contextMenus.ContextType.FRAME,
+                        browser.contextMenus.ContextType.IMAGE,
+                        browser.contextMenus.ContextType.LINK,
+                        browser.contextMenus.ContextType.PAGE,
+                        browser.contextMenus.ContextType.PASSWORD,
+                        browser.contextMenus.ContextType.SELECTION ]
+            });
+            } catch (e) {
+                // try again with Chrome-supported contexts
+                browser.contextMenus.create({
+                    id: Command.GeneratePassword,
+                    title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
+                    contexts: [ browser.contextMenus.ContextType.EDITABLE,
+                        browser.contextMenus.ContextType.FRAME,
+                        browser.contextMenus.ContextType.IMAGE,
+                        browser.contextMenus.ContextType.LINK,
+                        browser.contextMenus.ContextType.PAGE,
+                        browser.contextMenus.ContextType.SELECTION ]
+                });
+            }
+        }
+
+        // if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
+
+        // }
+
+        if (kee.foregroundTabId >= 0
+        && kee.tabStates.has(kee.foregroundTabId)
+        && kee.tabStates.get(kee.foregroundTabId).frames) {
+            kee.tabStates.get(kee.foregroundTabId).frames.forEach(frame => {
+                for (let j=0; j<frame.logins.length; j++) {
+                    const login = frame.logins[j];
+                    try {
+                        browser.contextMenus.create({
+                            id: "matchedLogin-" + j,
+                            title: login.title,
+                            contexts: [ browser.contextMenus.ContextType.EDITABLE,
+                                browser.contextMenus.ContextType.FRAME,
+                                browser.contextMenus.ContextType.IMAGE,
+                                browser.contextMenus.ContextType.LINK,
+                                browser.contextMenus.ContextType.PAGE,
+                                browser.contextMenus.ContextType.PASSWORD,
+                                browser.contextMenus.ContextType.SELECTION ]
+                    });
+                    } catch (e) {
+                        // try again with Chrome-supported contexts
+                        browser.contextMenus.create({
+                            id: "matchedLogin-" + j,
+                            title: login.title,
+                            contexts: [ browser.contextMenus.ContextType.EDITABLE,
+                                browser.contextMenus.ContextType.FRAME,
+                                browser.contextMenus.ContextType.IMAGE,
+                                browser.contextMenus.ContextType.LINK,
+                                browser.contextMenus.ContextType.PAGE,
+                                browser.contextMenus.ContextType.SELECTION ]
+                        });
+                    }
+                }
+            });
+        }
     }
 }
 
