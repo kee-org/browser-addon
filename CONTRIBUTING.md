@@ -118,6 +118,12 @@ You can see what each developer is working on by looking at the issues that are 
 
 Open issues may be "**blocked**" which indicates that we are unable to proceed with the issue. The reason will usually be described in a comment. A common reason would be when we are depenendant upon a change being made to other software (e.g. Firefox).
 
+## All issues
+
+"**OS xxxxxx**" - For example: "OS Windows". This indicates that the issue does not affect all operating systems. More than one OS label may be placed on a given issue to indicate the full set of knowledge we have regarding which operating systems are affected. It is highly likely that issues with these labels are ultimately caused by bugs that are out of our control but there will no doubt be exceptions to this rule.
+
+"**Browser xxxxxx**" - For example: "Browser Firefox". This indicates that the issue does not affect all browsers. More than one Browser label may be placed on a given issue to indicate the full set of knowledge we have regarding which platforms are affected.
+
 ### Milestones
 
 Each open issue may have a milestone attached to it. These give an indication (but by no means a guarantee) of when we expect a particular issue to be finished.
