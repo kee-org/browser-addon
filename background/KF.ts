@@ -181,8 +181,8 @@ class Kee {
 
         await browser.privacy.services.passwordSavingEnabled.set({ value: false });
 
-        if (chrome.runtime.lastError != null) {
-            KeeLog.warn("KeeFox was unable to disable built-in password manager saving - confusion may ensue! " + chrome.runtime.lastError);
+        if (browser.runtime.lastError != null) {
+            KeeLog.warn("KeeFox was unable to disable built-in password manager saving - confusion may ensue! " + browser.runtime.lastError.message);
         }
 
     }
@@ -894,13 +894,12 @@ function pageNavigationCommitted (details) {
     if (details.frameId === 0) kee.tabStates.delete(details.tabId);
 }
 
-chrome.windows.onFocusChanged.addListener(windowId => {
+browser.windows.onFocusChanged.addListener(async windowId => {
     if (KeeLog && KeeLog.debug) KeeLog.debug("Focus changed for id: " + windowId);
-    if (windowId !== chrome.windows.WINDOW_ID_NONE)
+    if (windowId !== browser.windows.WINDOW_ID_NONE)
     {
-        chrome.tabs.query({active: true, windowId: windowId}, function ( tabs ) {
-            if (tabs[0] && tabs[0].id != null) onTabActivated(tabs[0].id);
-        });
+        const tabs = await browser.tabs.query({active: true, windowId: windowId});
+        if (tabs[0] && tabs[0].id != null) onTabActivated(tabs[0].id);
     }
 });
 
@@ -943,6 +942,9 @@ function updateForegroundTab (tabId: number) {
 // on startup (a fragile assumption but the best that the API allow us to do for the time being)
 if (!browser.runtime.getBrowserInfo) {
     browser.runtime.onInstalled.addListener(details => {
+        // There are some weird bugs when converting from chrome to browser namespace
+        // here but since we're in a Chrome-only code path, we can leave them be for
+        // the time being. Will want to delete the chrome namespace soon though.
         const showErrors = () => {
             if (chrome.runtime.lastError) {
                 if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError);

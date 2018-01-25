@@ -85,7 +85,7 @@ function startup () {
         }
     });
 
-    document.getElementById("optionsLink").addEventListener("click", () => chrome.runtime.openOptionsPage() );
+    document.getElementById("optionsLink").addEventListener("click", () => browser.runtime.openOptionsPage() );
     document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: Action.GeneratePassword }) );
     document.getElementById("saveLatestLogin").addEventListener("click", () => myPort.postMessage({ action: Action.SaveLatestLogin }) );
     document.getElementById("showMatchedLogins").addEventListener("click", () => myPort.postMessage({ action: Action.ShowMatchedLoginsPanel }) );

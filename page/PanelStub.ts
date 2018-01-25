@@ -71,7 +71,7 @@ class PanelStub {
         iframe.style.setProperty( "position", "relative", "important" );
         iframe.setAttribute("scrolling", "no");
 
-        iframe.src = chrome.extension.getURL("panels/panels.html") + "?parentFrameId=" + this.parentFrameId + "&autoCloseTime=" + this.options.autoCloseTime + "&panel=" + this.options.name;
+        iframe.src = browser.extension.getURL("panels/panels.html") + "?parentFrameId=" + this.parentFrameId + "&autoCloseTime=" + this.options.autoCloseTime + "&panel=" + this.options.name;
         this.container.appendChild(iframe);
 
         const bodyElements = document.getElementsByTagName("body");
