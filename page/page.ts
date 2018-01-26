@@ -119,7 +119,8 @@ function startup () {
                 for (const node of mutation.addedNodes) {
                     if (rescan) break;
                     for (let i=0; i<interestingNodes.length; i++) {
-                        if ((node as Element).querySelector(interestingNodes[i])) {
+                        const element = (node as Element);
+                        if (element.querySelector && element.querySelector(interestingNodes[i])) {
                             rescan = true;
                             break;
                         }
