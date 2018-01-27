@@ -1117,18 +1117,13 @@ class FormFilling {
         return 0;
     }
 
-    private commonParentDistance (nodeA, nodeB)
+    private commonParentDistance (nodeA: Node, nodeB: Node)
     {
         let distance = 0;
-        while (nodeA = nodeA.parentElement)
-        {
-            if (nodeA.contains(nodeB))
-            {
-                return distance;
-            }
+        while (nodeA = nodeA.parentElement) {
+            if (nodeA.contains(nodeB)) return distance;
             distance++;
         }
-
         return 9007199254740991;
     }
 
