@@ -1092,12 +1092,24 @@ class FormFilling {
         let goodScore = false;
         let badScore = false;
 
-        for (const gw in goodWords)
-            if (semanticValues.findIndex(value => value.indexOf(goodWords[gw]) >= 0) >= 0)
-                goodScore = true;
-        for (const bw in badWords)
-            if (semanticValues.findIndex(value => value.indexOf(badWords[bw]) >= 0) >= 0)
-                badScore = true;
+        for (let i=0; i < semanticValues.length; i++) {
+            if (goodScore) break;
+            for (let j=0; j < goodWords.length; j++) {
+                if (semanticValues[i] == goodWords[j]) {
+                    goodScore = true;
+                    break;
+                }
+            }
+        }
+        for (let i=0; i < semanticValues.length; i++) {
+            if (badScore) break;
+            for (let j=0; j < badWords.length; j++) {
+                if (semanticValues[i] == badWords[j]) {
+                    badScore = true;
+                    break;
+                }
+            }
+        }
 
         if (goodScore && badScore) return 0;
         if (badScore) return -1*factor;
