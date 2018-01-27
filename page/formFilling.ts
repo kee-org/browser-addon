@@ -390,6 +390,7 @@ class FormFilling {
     */
     public findMatchesInThisFrame (behaviour: FindMatchesBehaviour = {})
     {
+        const perfTest = performance.now();
         // Whether or not this was invoked as a result of a DOM mutation, we won't need the timer to fire anymore
         if (this.formFinderTimer !== null) {
             clearTimeout(this.formFinderTimer);
@@ -503,6 +504,8 @@ class FormFilling {
             }
 
         }  // end of form for loop
+
+        console.warn(performance.now() - perfTest);
     }
 
     private scanForOrphanedFields (doc)
@@ -958,6 +961,13 @@ class FormFilling {
 
     private findSubmitButton (form: HTMLFormElement, submitTargetNeighbour: HTMLElement)
     {
+        // this.depth = 0;
+        // this.depthCount = 0;
+        // this.distTotal = 0;
+        // this.performanceAlgorithm1 = { count: 0, total: 0 };
+        // this.performanceAlgorithm2 = { count: 0, total: 0 };
+        // this.performanceAlgorithm3 = { count: 0, total: 0 };
+
         const candidates: SubmitCandidate[] = [];
 
         //TODO: Improve performance by re-ordering adjustment types and bailing out
@@ -1053,11 +1063,19 @@ class FormFilling {
             });
         });
 
+        // this is backwards! Shoudl be:
+        // const submitElements = candidates.sort((a, b) => {
+        //     if (a.distance > b.distance) return -1;
+        //     if (a.distance < b.distance) return 1;
+        //     return 0;
+        // });
         const submitElements = candidates.sort((a, b) => {
             if (a.distance > b.distance) return 1;
             if (a.distance < b.distance) return -1;
             return 0;
         });
+
+        //console.dir(submitElements);
 
         submitElements.forEach((candidate, index, elements) => {
             candidate.score = index/elements.length*100;
@@ -1084,6 +1102,22 @@ class FormFilling {
             if (a.score > b.score) return -1;
             return 0;
         })[0].element;
+
+        // console.log(this.depth/this.depthCount);
+        // console.log(this.distTotal/this.depthCount);
+
+        // KeeLog.warn("Distance algorithm 1: "
+        // + this.performanceAlgorithm1.total/this.performanceAlgorithm1.count
+        // + " (avg); " + this.performanceAlgorithm1.count + " (count)");
+        // KeeLog.warn("Distance algorithm 2: "
+        // + this.performanceAlgorithm2.total/this.performanceAlgorithm2.count
+        // + " (avg); " + this.performanceAlgorithm2.count + " (count)");
+        // KeeLog.warn("Distance algorithm 3: "
+        // + this.performanceAlgorithm3.total/this.performanceAlgorithm3.count
+        // + " (avg); " + this.performanceAlgorithm3.count + " (count)");
+
+        //console.dir(sorted);
+        //return sorted[0].element;
     }
 
     private scoreAdjustmentForMagicWords (semanticValues: string[], factor: number) {
@@ -1117,19 +1151,98 @@ class FormFilling {
         return 0;
     }
 
-    private commonParentDistance (nodeA, nodeB)
+    // private depth = 0;
+    // private depthCount = 0;
+    // private distTotal = 0;
+
+    // private performanceAlgorithm1: { count: number; total: number; };
+    // private performanceAlgorithm2: { count: number; total: number; };
+    // private performanceAlgorithm3: { count: number; total: number; };
+
+    private commonParentDistance (nodeA: Node, nodeB: Node)
     {
-        let distance = 0;
-        while (nodeA = nodeA.parentElement)
+        let distance;
+        // const rand = Math.random();
+        // if (rand < 0.333333) {
+            // const start = performance.now();
+            // distance = this.commonParentDistance1(nodeA, nodeB);
+            // const end = performance.now();
+            // this.performanceAlgorithm1.count++;
+            // this.performanceAlgorithm1.total += end - start;
+        // } else if (rand > 0.666666) {
+        //    const start = performance.now();
+            // distance = this.commonParentDistance2(nodeB, this.elementParents(nodeA));
+            // const end = performance.now();
+            // this.performanceAlgorithm2.count++;
+            // this.performanceAlgorithm2.total += end - start;
+        // } else {
+        //     const start = performance.now();
+              const parents = this.elementParents(nodeA);
+              const depth = parents.length;
+              distance = depth <= 5 ? this.commonParentDistance1(nodeA, nodeB) : this.commonParentDistance2(nodeB, parents);
+        //     const end = performance.now();
+        //     this.performanceAlgorithm3.count++;
+        //     this.performanceAlgorithm3.total += end - start;
+        // }
+        return distance;
+    }
+
+    private elementParents (nodeA) {
+        const parents: Node[] = [nodeA];
+        let node = nodeA.parentElement;
+        while (node = node.parentElement)
         {
-            if (nodeA.contains(nodeB))
-            {
-                return distance;
-            }
+            parents.push(node);
+        }
+        return parents;
+    }
+
+    private commonParentDistance1 (nodeA: Node, nodeB: Node)
+    {
+        //return 1;
+        // let distance = 0;
+        // while (nodeA = nodeA.parentElement)
+        // {
+        //     if (nodeA.contains(nodeB)) return distance;
+        //     //if (!!(nodeA.compareDocumentPosition(nodeB) & 16)) return distance; // slower. abort.
+        //     distance++;
+        // }
+
+        // return 9007199254740991;
+        let distance = 0;
+
+
+        while (nodeA = nodeA.parentElement) {
+            if (nodeA.contains(nodeB)) return distance;
             distance++;
         }
 
         return 9007199254740991;
+    }
+
+    private commonParentDistance2 (nodeB: Node, parents: Node[]) {
+        const distance = this.nodeContains2(parents, nodeB, 0, parents.length-1);
+        if (distance < 0) return 9007199254740991;
+        return distance;
+    }
+
+    private nodeContains2 (array, node, start, end) {
+        if (start === end) {
+            const arr = array.slice(start, end+1);
+            if (arr[0] == node) return start;
+            else return -1;
+        } else {
+            const midpoint = start+Math.floor((end-start)/2);
+            const firstHalf = this.nodeContains2(array, node, start, midpoint);
+            const secondHalf = this.nodeContains2(array, node, midpoint+1, end);
+            if (firstHalf != -1) {
+                return firstHalf;
+            }
+            if (secondHalf != -1) {
+                return secondHalf;
+            }
+            return -1;
+        }
     }
 
     // Submit a form
