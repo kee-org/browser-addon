@@ -1105,20 +1105,6 @@ class FormFilling {
         return 0;
     }
 
-    private bestRoleElementMatch (elements: Element[], targetNode) {
-        let bestRoleElementMatch;
-        let lowestCommonParentDistance = 9007199254740991;
-        for (let i =0; i < elements.length; i++)
-        {
-             const distance = this.commonParentDistance(elements[i], targetNode);
-             if (distance < lowestCommonParentDistance) {
-                 bestRoleElementMatch = elements[i];
-                 lowestCommonParentDistance = distance;
-             }
-        }
-        return bestRoleElementMatch;
-    }
-
     private commonParentDistance (nodeA, nodeB)
     {
         let distance = 0;
