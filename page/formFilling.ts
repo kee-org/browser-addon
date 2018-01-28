@@ -366,6 +366,9 @@ class FormFilling {
 
     }
 
+    private semanticWhitelistCache;
+    private semanticBlacklistCache;
+
     /* Expects this data object:
     {
         autofillOnSuccess: true, // This won't override other configuration options if true but if false it will.
@@ -377,6 +380,9 @@ class FormFilling {
     public findMatchesInThisFrame (behaviour: FindMatchesBehaviour = {})
     {
         const perfTest = performance.now();
+        this.semanticWhitelistCache = {};
+        this.semanticBlacklistCache = {};
+
         // Whether or not this was invoked as a result of a DOM mutation, we won't need the timer to fire anymore
         if (this.formFinderTimer !== null) {
             clearTimeout(this.formFinderTimer);
@@ -1086,18 +1092,30 @@ class FormFilling {
 
         for (let i=0; i < semanticValues.length; i++) {
             if (goodScore) break;
+            if (!semanticValues[i]) continue;
+            if (this.semanticWhitelistCache[semanticValues[i]]) {
+                goodScore = true;
+                break;
+            }
             for (let j=0; j < goodWords.length; j++) {
                 if (semanticValues[i] == goodWords[j]) {
                     goodScore = true;
+                    this.semanticWhitelistCache[semanticValues[i]] = true;
                     break;
                 }
             }
         }
         for (let i=0; i < semanticValues.length; i++) {
             if (badScore) break;
+            if (!semanticValues[i]) continue;
+            if (this.semanticBlacklistCache[semanticValues[i]]) {
+                badScore = true;
+                break;
+            }
             for (let j=0; j < badWords.length; j++) {
                 if (semanticValues[i] == badWords[j]) {
                     badScore = true;
+                    this.semanticBlacklistCache[semanticValues[i]] = true;
                     break;
                 }
             }
