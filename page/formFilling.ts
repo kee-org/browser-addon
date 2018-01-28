@@ -445,6 +445,11 @@ class FormFilling {
             const { actualUsernameIndex: usernameIndex, pwFields: passwordFields, otherFields } =
                 this.formUtils.getFormFields(form, false);
 
+            if (otherFields.length + passwordFields.length > 25) {
+                this.Logger.debug("Lost interest in this form after finding too many fields");
+                continue;
+            }
+
             // We want to fill in this form if we find a password field but first
             // we check whether any whitelist or blacklist entries must override that behaviour
             let interestingForm: boolean = null;
