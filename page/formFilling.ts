@@ -68,6 +68,8 @@ class FormFilling {
     // Should really make this private and call indirectly but I'm wary of all performance overheads wrt DOM mutation observers
     public formFinderTimer: number = null;
 
+    private distanceMap: Map<Node, number>;
+
     private semanticWhitelistCache;
     private semanticBlacklistCache;
 
@@ -975,7 +977,8 @@ class FormFilling {
         const CAT_BUTTONROLEINFORM_SCORE = 20;
         const CAT_BUTTONROLEOUTSIDEFORM_SCORE = 10;
         let minScoreToWin = 0;
-        const distanceCalc = (v, t) => this.commonParentDistance(v, t);
+        const distanceCalc = (v, t) => this.commonAncestorDistance(v, t, distanceMap);
+        const distanceMap = new Map<Node, number>();
 
         function verifyPotentialCandidate (value: HTMLElement, score: number) {
 
@@ -1156,14 +1159,47 @@ class FormFilling {
         return 0;
     }
 
-    private commonParentDistance (nodeA: Node, nodeB: Node)
+    private commonAncestorDistance (nodeA: Node, nodeB: Node, distanceMap: Map<Node, number>)
     {
-        let distance = 0;
+        let distance = 1;
+        let found = false;
+        const pendingMap: Array<Node> = [];
+        let pendingMapStartDistance = 0;
+
         while (nodeA = nodeA.parentElement) {
-            if (nodeA.contains(nodeB)) return distance;
+            const cachedNodeDistance = distanceMap.get(nodeA);
+
+            // If we already know how far the parent is we can return early but we may have learnt about more nodes on our way
+            if (cachedNodeDistance !== undefined) {
+                distance += cachedNodeDistance;
+                pendingMapStartDistance = cachedNodeDistance + 1;
+                found = true;
+                break;
+            }
+
+            // we know we don't know how far this node is so lets implicitly store how far we have got so far
+            pendingMap.push(nodeA);
+
+            if (nodeA.contains(nodeB)) {
+                found = true;
+                break;
+            }
             distance++;
         }
-        return 9007199254740991;
+
+        if (found) {
+            // each node that we came across on our journey can be assigned a value of how far it is from the common parent
+            if (pendingMap.length > 0) {
+                for (let i = pendingMapStartDistance; i < distance && pendingMap.length > 0; i++) {
+                    const node = pendingMap.pop();
+                    distanceMap.set(node, i);
+                }
+            }
+            return distance;
+        } else {
+            // Disconnected node (I guess - probably won't ever happen)
+            return 9007199254740991;
+        }
     }
 
     // Submit a form
