@@ -1122,54 +1122,12 @@ class FormFilling {
 
     private commonParentDistance (nodeA: Node, nodeB: Node)
     {
-        const parents = this.elementParents(nodeA);
-        const depth = parents.length;
-        return depth <= 5 ? this.commonParentDistance1(nodeA, nodeB) : this.commonParentDistance2(nodeB, parents);
-    }
-
-    private elementParents (nodeA) {
-        const parents: Node[] = [nodeA];
-        let node = nodeA.parentElement;
-        while (node = node.parentElement)
-        {
-            parents.push(node);
-        }
-        return parents;
-    }
-
-    private commonParentDistance1 (nodeA: Node, nodeB: Node)
-    {
         let distance = 0;
         while (nodeA = nodeA.parentElement) {
             if (nodeA.contains(nodeB)) return distance;
             distance++;
         }
         return 9007199254740991;
-    }
-
-    private commonParentDistance2 (nodeB: Node, parents: Node[]) {
-        const distance = this.nodeContains2(parents, nodeB, 0, parents.length-1);
-        if (distance < 0) return 9007199254740991;
-        return distance;
-    }
-
-    private nodeContains2 (array, node, start, end) {
-        if (start === end) {
-            const arr = array.slice(start, end+1);
-            if (arr[0] == node) return start;
-            else return -1;
-        } else {
-            const midpoint = start+Math.floor((end-start)/2);
-            const firstHalf = this.nodeContains2(array, node, start, midpoint);
-            const secondHalf = this.nodeContains2(array, node, midpoint+1, end);
-            if (firstHalf != -1) {
-                return firstHalf;
-            }
-            if (secondHalf != -1) {
-                return secondHalf;
-            }
-            return -1;
-        }
     }
 
     // Submit a form
