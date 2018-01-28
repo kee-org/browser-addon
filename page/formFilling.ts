@@ -1008,7 +1008,7 @@ class FormFilling {
                     semanticValues.push(value.value.toLowerCase());
                 }
 
-                let score = this.scoreAdjustmentForMagicWords(semanticValues, 50);
+                let score = this.scoreAdjustmentForMagicWords(semanticValues, 50, this.semanticWhitelistCache, this.semanticBlacklistCache);
                 score += (value.form && value.form == form) ? CAT_BUTTONINFORM_SCORE : CAT_BUTTONOUTSIDEFORM_SCORE;
 
                 verifyPotentialCandidate(value, score);
@@ -1024,14 +1024,14 @@ class FormFilling {
                 {
                     if (value.name !== undefined && value.name !== null)
                     {
-                        semanticScore += this.scoreAdjustmentForMagicWords([value.name.toLowerCase()], 50);
+                        semanticScore += this.scoreAdjustmentForMagicWords([value.name.toLowerCase()], 50, this.semanticWhitelistCache, this.semanticBlacklistCache);
                     }
 
                     // Names are more important but sometimes they don't exist or are random
                     // so check what is actually displayed to the user
                     if (value.value !== undefined && value.value !== null)
                     {
-                        semanticScore += this.scoreAdjustmentForMagicWords([value.value.toLowerCase()], 40);
+                        semanticScore += this.scoreAdjustmentForMagicWords([value.value.toLowerCase()], 40, this.semanticWhitelistCache, this.semanticBlacklistCache);
                     }
                 }
 
@@ -1057,7 +1057,7 @@ class FormFilling {
                 semanticValues.push(value.id.toLowerCase());
             }
 
-            let score = this.scoreAdjustmentForMagicWords(semanticValues, 50);
+            let score = this.scoreAdjustmentForMagicWords(semanticValues, 50, this.semanticWhitelistCache, this.semanticBlacklistCache);
             score += (value.form && value.form == form) ? CAT_BUTTONROLEINFORM_SCORE : CAT_BUTTONROLEOUTSIDEFORM_SCORE;
             verifyPotentialCandidate(value, score);
         });
@@ -1084,7 +1084,7 @@ class FormFilling {
         })[0].element;
     }
 
-    private scoreAdjustmentForMagicWords (semanticValues: string[], factor: number) {
+    private scoreAdjustmentForMagicWords (semanticValues: string[], factor: number, semanticWhitelistCache, semanticBlacklistCache) {
         const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in", "next"]; //TODO:3: other languages
         const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp", "forgot"]; //TODO:3: other languages
         let goodScore = false;
@@ -1093,14 +1093,14 @@ class FormFilling {
         for (let i=0; i < semanticValues.length; i++) {
             if (goodScore) break;
             if (!semanticValues[i]) continue;
-            if (this.semanticWhitelistCache[semanticValues[i]]) {
+            if (semanticWhitelistCache[semanticValues[i]]) {
                 goodScore = true;
                 break;
             }
             for (let j=0; j < goodWords.length; j++) {
                 if (semanticValues[i] == goodWords[j]) {
                     goodScore = true;
-                    this.semanticWhitelistCache[semanticValues[i]] = true;
+                    semanticWhitelistCache[semanticValues[i]] = true;
                     break;
                 }
             }
@@ -1108,14 +1108,14 @@ class FormFilling {
         for (let i=0; i < semanticValues.length; i++) {
             if (badScore) break;
             if (!semanticValues[i]) continue;
-            if (this.semanticBlacklistCache[semanticValues[i]]) {
+            if (semanticBlacklistCache[semanticValues[i]]) {
                 badScore = true;
                 break;
             }
             for (let j=0; j < badWords.length; j++) {
                 if (semanticValues[i] == badWords[j]) {
                     badScore = true;
-                    this.semanticBlacklistCache[semanticValues[i]] = true;
+                    semanticBlacklistCache[semanticValues[i]] = true;
                     break;
                 }
             }
