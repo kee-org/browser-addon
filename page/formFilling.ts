@@ -70,6 +70,9 @@ class FormFilling {
 
     private distanceMap: Map<Node, number>;
 
+    private semanticWhitelistCache;
+    private semanticBlacklistCache;
+
     constructor (formUtils: FormUtils,
         formSaving: FormSaving,
         logger: KeeLogger,
@@ -367,9 +370,6 @@ class FormFilling {
         this.matchResult.requestIds = []; // the JSONRPC request Ids that reference this matchResult object (to allow deletion after async callback processing)
 
     }
-
-    private semanticWhitelistCache;
-    private semanticBlacklistCache;
 
     /* Expects this data object:
     {
