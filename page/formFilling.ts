@@ -43,24 +43,10 @@ class SubmittedField {
     value: string;
 }
 
-enum SubmitCategory {
-    Unknown,
-    ButtonInForm,
-    SubmitInputInForm,
-    ButtonOutsideForm,
-    ImageInputInForm,
-    ButtonInputInForm,
-    ButtonRoleInForm,
-    ButtonRoleOutsideForm
-}
-
 class SubmitCandidate {
     distance: number;
-    category: SubmitCategory;
     element: HTMLElement;
-    semanticScore: number;
     score: number;
-    visible: boolean;
 }
 
 class FormFilling {
@@ -962,9 +948,36 @@ class FormFilling {
     private findSubmitButton (form: HTMLFormElement, submitTargetNeighbour: HTMLElement)
     {
         const candidates: SubmitCandidate[] = [];
+        const DISTANCE_MAX_SCORE = 100;
+        const VISIBLE_SCORE = 60;
+        const CAT_BUTTONINFORM_SCORE = 60;
+        const CAT_SUBMITINPUTINFORM_SCORE = 50;
+        const CAT_BUTTONOUTSIDEFORM_SCORE = 40;
+        const CAT_IMAGEINPUTINFORM_SCORE = 40;
+        const CAT_BUTTONINPUTINFORM_SCORE = 30;
+        const CAT_BUTTONROLEINFORM_SCORE = 20;
+        const CAT_BUTTONROLEOUTSIDEFORM_SCORE = 10;
+        let minScoreToWin = 0;
+        const distanceCalc = (v, t) => this.commonParentDistance(v, t);
 
-        //TODO: Improve performance by re-ordering adjustment types and bailing out
-        // early once we reach a point that we know the element can't "win"
+        function verifyPotentialCandidate (value: HTMLElement, score: number) {
+
+            // abort early if we can't win even with a perfect visibility and distance score
+            if (minScoreToWin > score + VISIBLE_SCORE + DISTANCE_MAX_SCORE) return;
+
+            score += formUtils.isDOMElementVisible(value) ? VISIBLE_SCORE : 0;
+
+            // abort early if we can't win even with a perfect visibility and distance score
+            if (minScoreToWin > score + DISTANCE_MAX_SCORE) return;
+
+            candidates.push({
+                distance: distanceCalc(value, submitTargetNeighbour),
+                element: value,
+                score: score
+            });
+
+            minScoreToWin = score;
+        }
 
         Array.from(form.ownerDocument.getElementsByTagName("button")).forEach( value => {
             if (!value.type || value.type != "reset")
@@ -983,16 +996,10 @@ class FormFilling {
                     semanticValues.push(value.value.toLowerCase());
                 }
 
-                const semanticScore = this.scoreAdjustmentForMagicWords(semanticValues, 50);
+                let score = this.scoreAdjustmentForMagicWords(semanticValues, 50);
+                score += (value.form && value.form == form) ? CAT_BUTTONINFORM_SCORE : CAT_BUTTONOUTSIDEFORM_SCORE;
 
-                candidates.push({
-                    distance: this.commonParentDistance(value, submitTargetNeighbour),
-                    category: (value.form && value.form == form) ? SubmitCategory.ButtonInForm : SubmitCategory.ButtonOutsideForm,
-                    element: value,
-                    score: 0,
-                    semanticScore: semanticScore,
-                    visible: formUtils.isDOMElementVisible(value)
-                });
+                verifyPotentialCandidate(value, score);
             }
         });
 
@@ -1018,17 +1025,11 @@ class FormFilling {
 
                 if (value.type == "submit" || value.type == "button" || value.type == "image")
                 {
-
-                    candidates.push({
-                        distance: this.commonParentDistance(value, submitTargetNeighbour),
-                        category: value.type == "button" ? SubmitCategory.ButtonInputInForm :
-                                    (value.type == "image" ? SubmitCategory.ImageInputInForm :
-                                    SubmitCategory.SubmitInputInForm),
-                        element: value,
-                        score: 0,
-                        semanticScore,
-                        visible: formUtils.isDOMElementVisible(value)
-                    });
+                    let score = semanticScore;
+                    score += value.type == "button" ? CAT_BUTTONINPUTINFORM_SCORE :
+                        (value.type == "image" ? CAT_IMAGEINPUTINFORM_SCORE :
+                        CAT_SUBMITINPUTINFORM_SCORE);
+                    verifyPotentialCandidate(value, score);
                 }
             }
         });
@@ -1044,16 +1045,9 @@ class FormFilling {
                 semanticValues.push(value.id.toLowerCase());
             }
 
-            const semanticScore = this.scoreAdjustmentForMagicWords(semanticValues, 50);
-
-            candidates.push({
-                distance: this.commonParentDistance(value, submitTargetNeighbour),
-                category: (value.form && value.form == form) ? SubmitCategory.ButtonRoleInForm : SubmitCategory.ButtonRoleOutsideForm,
-                element: value,
-                score: 0,
-                semanticScore,
-                visible: formUtils.isDOMElementVisible(value)
-            });
+            let score = this.scoreAdjustmentForMagicWords(semanticValues, 50);
+            score += (value.form && value.form == form) ? CAT_BUTTONROLEINFORM_SCORE : CAT_BUTTONROLEOUTSIDEFORM_SCORE;
+            verifyPotentialCandidate(value, score);
         });
 
         const submitElements = candidates.sort((a, b) => {
@@ -1063,18 +1057,7 @@ class FormFilling {
         });
 
         submitElements.forEach((candidate, index, elements) => {
-            candidate.score = index/elements.length*100;
-            switch (candidate.category) {
-                case SubmitCategory.ButtonInForm: candidate.score += 60; break;
-                case SubmitCategory.SubmitInputInForm: candidate.score += 50; break;
-                case SubmitCategory.ButtonOutsideForm: candidate.score += 40; break;
-                case SubmitCategory.ImageInputInForm: candidate.score += 40; break;
-                case SubmitCategory.ButtonInputInForm: candidate.score += 30; break;
-                case SubmitCategory.ButtonRoleInForm: candidate.score += 20; break;
-                case SubmitCategory.ButtonRoleOutsideForm: candidate.score += 10; break;
-            }
-            candidate.score += candidate.semanticScore;
-            candidate.score += candidate.visible ? 0 : -60;
+            candidate.score += index/elements.length*DISTANCE_MAX_SCORE;
         });
 
         //TODO:3: more accurate searching of submit buttons, etc. to avoid password resets if possible
