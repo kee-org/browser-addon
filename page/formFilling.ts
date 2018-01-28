@@ -68,6 +68,9 @@ class FormFilling {
     // Should really make this private and call indirectly but I'm wary of all performance overheads wrt DOM mutation observers
     public formFinderTimer: number = null;
 
+    private semanticWhitelistCache;
+    private semanticBlacklistCache;
+
     constructor (formUtils: FormUtils,
         formSaving: FormSaving,
         logger: KeeLogger,
@@ -376,6 +379,9 @@ class FormFilling {
     */
     public findMatchesInThisFrame (behaviour: FindMatchesBehaviour = {})
     {
+        this.semanticWhitelistCache = {};
+        this.semanticBlacklistCache = {};
+
         // Whether or not this was invoked as a result of a DOM mutation, we won't need the timer to fire anymore
         if (this.formFinderTimer !== null) {
             clearTimeout(this.formFinderTimer);
@@ -999,7 +1005,7 @@ class FormFilling {
                     semanticValues.push(value.value.toLowerCase());
                 }
 
-                let score = this.scoreAdjustmentForMagicWords(semanticValues, 50);
+                let score = this.scoreAdjustmentForMagicWords(semanticValues, 50, this.semanticWhitelistCache, this.semanticBlacklistCache);
                 score += (value.form && value.form == form) ? CAT_BUTTONINFORM_SCORE : CAT_BUTTONOUTSIDEFORM_SCORE;
 
                 verifyPotentialCandidate(value, score);
@@ -1015,14 +1021,14 @@ class FormFilling {
                 {
                     if (value.name !== undefined && value.name !== null)
                     {
-                        semanticScore += this.scoreAdjustmentForMagicWords([value.name.toLowerCase()], 50);
+                        semanticScore += this.scoreAdjustmentForMagicWords([value.name.toLowerCase()], 50, this.semanticWhitelistCache, this.semanticBlacklistCache);
                     }
 
                     // Names are more important but sometimes they don't exist or are random
                     // so check what is actually displayed to the user
                     if (value.value !== undefined && value.value !== null)
                     {
-                        semanticScore += this.scoreAdjustmentForMagicWords([value.value.toLowerCase()], 40);
+                        semanticScore += this.scoreAdjustmentForMagicWords([value.value.toLowerCase()], 40, this.semanticWhitelistCache, this.semanticBlacklistCache);
                     }
                 }
 
@@ -1048,7 +1054,7 @@ class FormFilling {
                 semanticValues.push(value.id.toLowerCase());
             }
 
-            let score = this.scoreAdjustmentForMagicWords(semanticValues, 50);
+            let score = this.scoreAdjustmentForMagicWords(semanticValues, 50, this.semanticWhitelistCache, this.semanticBlacklistCache);
             score += (value.form && value.form == form) ? CAT_BUTTONROLEINFORM_SCORE : CAT_BUTTONROLEOUTSIDEFORM_SCORE;
             verifyPotentialCandidate(value, score);
         });
@@ -1075,27 +1081,57 @@ class FormFilling {
         })[0].element;
     }
 
-    private scoreAdjustmentForMagicWords (semanticValues: string[], factor: number) {
-        const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in", "next"]; //TODO:3: other languages
-        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp", "forgot", "dismiss"]; //TODO:3: other languages
+    private scoreAdjustmentForMagicWords (
+        semanticValues: string[],
+        factor: number,
+        semanticWhitelistCache,
+        semanticBlacklistCache) {
+
+        //TODO:3: other languages
+        const goodWords = ["submit", "login", "enter", "log in", "signin",
+            "sign in", "next"];
+        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit",
+            "empty", "clear", "captcha", "totp", "forgot", "dismiss"];
         let goodScore = false;
         let badScore = false;
 
         for (let i=0; i < semanticValues.length; i++) {
             if (goodScore) break;
+            if (!semanticValues[i]) continue;
+            if (semanticWhitelistCache[semanticValues[i]] === true) {
+                goodScore = true;
+                break;
+            }
+            if (semanticWhitelistCache[semanticValues[i]] === false) {
+                continue;
+            }
             for (let j=0; j < goodWords.length; j++) {
                 if (semanticValues[i] == goodWords[j]) {
                     goodScore = true;
+                    semanticWhitelistCache[semanticValues[i]] = true;
                     break;
+                } else {
+                    semanticWhitelistCache[semanticValues[i]] = false;
                 }
             }
         }
         for (let i=0; i < semanticValues.length; i++) {
             if (badScore) break;
+            if (!semanticValues[i]) continue;
+            if (semanticBlacklistCache[semanticValues[i]] === true) {
+                badScore = true;
+                break;
+            }
+            if (semanticBlacklistCache[semanticValues[i]] === false) {
+                continue;
+            }
             for (let j=0; j < badWords.length; j++) {
                 if (semanticValues[i] == badWords[j]) {
                     badScore = true;
+                    semanticBlacklistCache[semanticValues[i]] = true;
                     break;
+                } else {
+                    semanticBlacklistCache[semanticValues[i]] = false;
                 }
             }
         }
