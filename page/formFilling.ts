@@ -1098,39 +1098,57 @@ class FormFilling {
         })[0].element;
     }
 
-    private scoreAdjustmentForMagicWords (semanticValues: string[], factor: number, semanticWhitelistCache, semanticBlacklistCache) {
-        const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in", "next"]; //TODO:3: other languages
-        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp", "forgot", "dismiss"]; //TODO:3: other languages
+    private scoreAdjustmentForMagicWords (
+        semanticValues: string[],
+        factor: number,
+        semanticWhitelistCache,
+        semanticBlacklistCache) {
+
+        //TODO:3: other languages
+        const goodWords = ["submit", "login", "enter", "log in", "signin",
+            "sign in", "next"];
+        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit",
+            "empty", "clear", "captcha", "totp", "forgot", "dismiss"];
         let goodScore = false;
         let badScore = false;
 
         for (let i=0; i < semanticValues.length; i++) {
             if (goodScore) break;
             if (!semanticValues[i]) continue;
-            if (semanticWhitelistCache[semanticValues[i]]) {
+            if (semanticWhitelistCache[semanticValues[i]] === true) {
                 goodScore = true;
                 break;
+            }
+            if (semanticWhitelistCache[semanticValues[i]] === false) {
+                continue;
             }
             for (let j=0; j < goodWords.length; j++) {
                 if (semanticValues[i] == goodWords[j]) {
                     goodScore = true;
                     semanticWhitelistCache[semanticValues[i]] = true;
                     break;
+                } else {
+                    semanticWhitelistCache[semanticValues[i]] = false;
                 }
             }
         }
         for (let i=0; i < semanticValues.length; i++) {
             if (badScore) break;
             if (!semanticValues[i]) continue;
-            if (semanticBlacklistCache[semanticValues[i]]) {
+            if (semanticBlacklistCache[semanticValues[i]] === true) {
                 badScore = true;
                 break;
+            }
+            if (semanticBlacklistCache[semanticValues[i]] === false) {
+                continue;
             }
             for (let j=0; j < badWords.length; j++) {
                 if (semanticValues[i] == badWords[j]) {
                     badScore = true;
                     semanticBlacklistCache[semanticValues[i]] = true;
                     break;
+                } else {
+                    semanticBlacklistCache[semanticValues[i]] = false;
                 }
             }
         }
