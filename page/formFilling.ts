@@ -1077,7 +1077,7 @@ class FormFilling {
 
     private scoreAdjustmentForMagicWords (semanticValues: string[], factor: number) {
         const goodWords = ["submit", "login", "enter", "log in", "signin", "sign in", "next"]; //TODO:3: other languages
-        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp", "forgot"]; //TODO:3: other languages
+        const badWords = ["reset", "cancel", "back", "abort", "undo", "exit", "empty", "clear", "captcha", "totp", "forgot", "dismiss"]; //TODO:3: other languages
         let goodScore = false;
         let badScore = false;
 
