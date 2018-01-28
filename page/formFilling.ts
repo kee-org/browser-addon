@@ -975,7 +975,13 @@ class FormFilling {
 
             minScoreToWin = score;
         }
-
+        /*
+            In Firefox Array.from...foreach is about 50% faster than the alternative in this comment below... but 20% slower in Chrome.
+            const buttons = form.ownerDocument.getElementsByTagName("button");
+            for (let i=0; i<buttons.length; i++) {
+                const value = buttons[i];
+                ...
+            */
         Array.from(form.ownerDocument.getElementsByTagName("button")).forEach( value => {
             if (!value.type || value.type != "reset")
             {
@@ -1031,7 +1037,7 @@ class FormFilling {
             }
         });
 
-        Array.from(form.ownerDocument.querySelectorAll("[role=button]")).forEach( (value: any) => {
+        Array.from(form.ownerDocument.querySelectorAll("[role=button]:not(button)")).forEach( (value: any) => {
             const semanticValues: string[] = [];
             if (value.name !== undefined && value.name !== null)
             {
