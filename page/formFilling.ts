@@ -391,6 +391,11 @@ class FormFilling {
             this.formFinderTimer = null;
         }
 
+        if (window.document.forms.length > 50) {
+            this.Logger.debug("Too many forms on this page. Assuming it is not a login page"
+             + " and avoiding looking for login forms in order to avoid performance impact.");
+        }
+
         // Can't append to a HTMLCollection but all we really use it for is iteration
         // and length so converting to an array sometimes will cause no issues
         let forms = new Array<HTMLFormElement>();
