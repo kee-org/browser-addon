@@ -467,13 +467,8 @@ class FormFilling {
                 submitTargetNeighbour = passwordFields[0].DOMInputElement;
             }
 
-            const submitTarget = this.findSubmitButton(form, submitTargetNeighbour);
-            if (!submitTarget) {
-                this.Logger.debug("No submission possibility found in this form");
-            }
-            this.formSaving.addSubmitHandler(submitTarget, form);
+            this.attachSubmitHandlers(form, submitTargetNeighbour, i);
 
-            this.matchResult.submitTargets[i] = submitTarget;
             this.matchResult.usernameIndexArray[i] = usernameIndex;
             this.matchResult.passwordFieldsArray[i] = passwordFields;
             this.matchResult.otherFieldsArray[i] = otherFields;
@@ -498,6 +493,25 @@ class FormFilling {
         }  // end of form for loop
 
         console.warn(performance.now() - perfTest);
+    }
+
+    // It's OK for this to take a few seconds - humans can't type that fast.
+    // By making this async we allow the search for logins to begin earlier
+    // and reduce perceived impact on page load time
+    private async attachSubmitHandlers (form: HTMLFormElement, submitTargetNeighbour: HTMLElement, formNumber: number) {
+        try {
+            await Promise.resolve();
+            const start = performance.now();
+            const submitTarget = this.findSubmitButton(form, submitTargetNeighbour);
+            if (submitTarget) {
+                this.formSaving.addSubmitHandler(submitTarget, form);
+                KeeLog.info("Submit handlers attached asynchronously to form " + formNumber + " in " + (performance.now()-start) + "ms");
+            } else {
+                KeeLog.info("Submit handlers not attached to form " + formNumber + " in " + (performance.now()-start) + "ms");
+            }
+        } catch (e) {
+            KeeLog.warn("Exception while adding submit handler. Message: " + e.Message);
+        }
     }
 
     private scanForOrphanedFields (doc)
