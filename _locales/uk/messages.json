@@ -247,6 +247,10 @@
         "message": "Група",
         "description": ""
     },
+    "pref_currentSearchTermTimeout_label": {
+        "message": "Стерти результати пошуку через (секунд)",
+        "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
+    },
     "network_authentication": {
         "message": "Авторизація мережі",
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."

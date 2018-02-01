@@ -247,6 +247,10 @@
         "message": "Gruppe",
         "description": ""
     },
+    "pref_currentSearchTermTimeout_label": {
+        "message": "Die Suchergebnisse löschen nach (Sekunden)",
+        "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
+    },
     "network_authentication": {
         "message": "Netzwerkanmeldung",
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
@@ -352,7 +356,7 @@
         "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "pref_FillAndSubmitForm_desc": {
-        "message": "Formular ausfüllen und absenden",
+        "message": "das Formular ausfüllen und absenden.",
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
@@ -460,7 +464,7 @@
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "pref_FillAndSubmitPrompt_desc": {
-        "message": "Formular ausfüllen und absenden",
+        "message": "das Formular ausfüllen und absenden",
         "description": ""
     },
     "save": {
@@ -476,7 +480,7 @@
         "description": ""
     },
     "pref_FillForm_desc": {
-        "message": "Formular ausfüllen",
+        "message": "das Formular ausfüllen",
         "description": ""
     },
     "matched_logins_label": {
@@ -488,7 +492,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_DoNothing_desc": {
-        "message": "Nichts machen",
+        "message": "nichts machen",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
     },
     "point_user_to_tutorial_end": {

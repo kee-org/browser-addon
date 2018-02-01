@@ -247,6 +247,10 @@
         "message": "Skupina",
         "description": ""
     },
+    "pref_currentSearchTermTimeout_label": {
+        "message": "Mazat výsledky vyhledávání po (vteřiny)",
+        "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
+    },
     "network_authentication": {
         "message": "Síťové ověření",
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
