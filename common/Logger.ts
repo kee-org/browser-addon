@@ -1,7 +1,6 @@
 /*
   There are four cumulative log levels.
 
-  Off = 0
   Error = 1
   Warn = 2
   Info = 3
