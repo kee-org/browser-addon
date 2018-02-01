@@ -247,6 +247,10 @@
         "message": "组",
         "description": ""
     },
+    "pref_currentSearchTermTimeout_label": {
+        "message": "清除搜索结果在...秒后",
+        "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
+    },
     "network_authentication": {
         "message": "网络身份验证",
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
@@ -384,7 +388,7 @@
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
     "list_version_upgrade_2_1": {
-        "message": "Specific site settings can now be deleted; When no database name is set explicitly, the database file name will be displayed instead; Fixed issue that resulted in unused generated passwords being stored in the 'Kee Generated Password Backups' database group",
+        "message": "特定站点设置现在可删除；如果没有明确设定数据库名称，则将显示数据库的文件名称；修复导致未使用的已生成密码显示在“Kee 已生成密码备份”数据库组的问题",
         "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "conn_sl_desc": {

@@ -247,6 +247,10 @@
         "message": "Группа",
         "description": ""
     },
+    "pref_currentSearchTermTimeout_label": {
+        "message": "Очистить результаты поиска через (секунд)",
+        "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
+    },
     "network_authentication": {
         "message": "Сетевая аутентификация",
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
@@ -384,7 +388,7 @@
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
     "list_version_upgrade_2_1": {
-        "message": "Specific site settings can now be deleted; When no database name is set explicitly, the database file name will be displayed instead; Fixed issue that resulted in unused generated passwords being stored in the 'Kee Generated Password Backups' database group",
+        "message": "Теперь можно удалять настройки для отдельных сайтов; Если имя базы данных не задано явно, то в качестве него будет использоваться имя файла базы; Исправлена ошибка, приводившая к тому, что неиспользованные сгенерированные пароли сохранялись в базе в группе 'Kee Generated Password Backups'",
         "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "conn_sl_desc": {
@@ -548,7 +552,7 @@
         "description": "<username> <seperator> <entry title>"
     },
     "version_upgrade_heading_changes": {
-        "message": "Changes in version",
+        "message": "Изменения в версии",
         "description": "Heading for the list of changes in a version of Kee. A space and the current version number will be suffixed at the end of this string."
     },
     "conn_setup_retype_password": {

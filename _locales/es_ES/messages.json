@@ -247,6 +247,10 @@
         "message": "Grupo",
         "description": ""
     },
+    "pref_currentSearchTermTimeout_label": {
+        "message": "Clear search results after (seconds)",
+        "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
+    },
     "network_authentication": {
         "message": "Autentificación de red",
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
