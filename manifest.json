@@ -100,7 +100,8 @@
         "<all_urls>",
         "notifications",
         "unlimitedStorage",
-        "idle"
+        "idle",
+        "proxy"
     ],
     "web_accessible_resources" : [
 		"panels/*"
