@@ -70,10 +70,16 @@ function startup () {
 
                 if (m.passwordProfiles && m.passwordProfiles.length > 0) {
                     const mainPanel = generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles);
+
+                    // Focus the window (required in Firefox to get focus onto the new iframe)
+                    // and then the first password profile (enables keyboard navigation).
+                    window.focus();
+                    (document.getElementById("GeneratePasswordContainer").firstChild.firstChild as any).focus();
                 } else if (m.generatedPassword) {
                     copyStringToClipboard(m.generatedPassword);
                     closePanel();
                 } else {
+                    window.focus();
                     myPort.postMessage({ action: Action.GetPasswordProfiles });
                 }
             });

@@ -23,7 +23,8 @@ class GeneratePasswordPanel {
 
                 const profileItem = document.createElement("li");
                 profileItem.textContent = displayName;
-                //profileItem.addEventListener("keydown", this.keyboardNavHandler, false);
+                profileItem.tabIndex = i == 0 ? 0 : -1;
+                profileItem.addEventListener("keydown", this.keyboardNavHandler, false);
                 profileItem.addEventListener("mouseup", function (event) {
                     if (event.button == 0 || event.button == 1)
                     {
@@ -37,14 +38,36 @@ class GeneratePasswordPanel {
 
                 list.appendChild(profileItem);
             }
-
-        // Try to focus on the first item in the newly displayed sub section
-        const matches = list.getElementsByTagName("li");
-        if (!matches)
-            return;
-        const firstMatch = matches[0];
-        if (firstMatch)
-            firstMatch.focus();
     }
 
+    private keyboardNavHandler (event: KeyboardEvent) {
+        const target = event.target as HTMLLIElement;
+
+        switch (event.keyCode) {
+            case 13: // enter
+                event.preventDefault();
+                event.stopPropagation();
+                target.dispatchEvent(new Event("keeCommand"));
+                break;
+            case 40: // down
+                event.preventDefault();
+                event.stopPropagation();
+                if (target.nextElementSibling) {
+                    (target.nextElementSibling as HTMLLIElement).focus();
+                }
+                break;
+            case 38: // up
+                event.preventDefault();
+                event.stopPropagation();
+                if (target.previousElementSibling) {
+                    (target.previousElementSibling as HTMLLIElement).focus();
+                }
+                break;
+            case 27: // esc
+                event.preventDefault();
+                event.stopPropagation();
+                closePanel();
+                break;
+        }
+    }
 }

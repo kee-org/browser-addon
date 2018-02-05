@@ -30,12 +30,54 @@ class SearchPanel {
                 this.onSearchComplete.bind(this), []
             );
         });
+        searchBox.addEventListener("keydown", this.searchBoxKeyboardNavHandler);
         if (searchFor) {
             searchBox.value = searchFor;
             this._currentSearchTerm = searchFor;
             this.search.execute(searchFor,
                 this.onSearchComplete.bind(this), []
             );
+        }
+    }
+
+    private searchBoxKeyboardNavHandler (event: KeyboardEvent) {
+        const target = event.target as HTMLLIElement;
+
+        switch (event.keyCode) {
+            case 13: // enter
+            {
+                event.preventDefault();
+                event.stopPropagation();
+                const searchResults = document.getElementById("searchResults-Container");
+                if (searchResults && searchResults.firstElementChild) {
+                    (searchResults.firstElementChild as HTMLLIElement).focus();
+                }
+                break;
+            }
+            case 40: // down
+            {
+                event.preventDefault();
+                event.stopPropagation();
+                const searchResults = document.getElementById("searchResults-Container");
+                if (searchResults && searchResults.firstElementChild) {
+                    (searchResults.firstElementChild as HTMLLIElement).focus();
+                }
+                break;
+            }
+            case 27: // esc
+            {
+                // This does not work in Firefox due to https://bugzilla.mozilla.org/show_bug.cgi?id=1373175
+                event.preventDefault();
+                event.stopPropagation();
+                const searchBox = (document.getElementById("searchBox") as HTMLInputElement);
+                if (searchBox.value) {
+                    searchBox.value = "";
+                    searchBox.dispatchEvent(new Event("input"));
+                } else {
+                    window.close();
+                }
+                break;
+            }
         }
     }
 
@@ -107,11 +149,10 @@ class SearchPanel {
             loginItem.setAttribute("style", "background-image:url(data:image/png;base64," + login.iconImageData + ")");
             loginItem.setAttribute("title", $STRF(
                 "savePasswordLogin_tip", [usernameDisplayValue, login.url]));
-            loginItem.setAttribute("tabindex", "-1");
+            loginItem.setAttribute("tabindex", i == 0 ? "0" : "-1");
 
             loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, login.title]);
-            //TODO:3: Keyboard nav?
-            //loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
+            loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
             loginItem.addEventListener("click", function (event) {
                 event.stopPropagation();
 
@@ -162,6 +203,44 @@ class SearchPanel {
         }
 
         KeeLog.debug(logins.length + " search results set.");
+    }
+
+    private keyboardNavHandler (event: KeyboardEvent) {
+        const target = event.target as HTMLLIElement;
+
+        switch (event.keyCode) {
+            case 13: // enter
+                event.preventDefault();
+                event.stopPropagation();
+                target.dispatchEvent(new CustomEvent("keeCommand", { detail: { button: 0, ctrlKey: event.ctrlKey }}));
+                break;
+            case 40: // down
+                event.preventDefault();
+                event.stopPropagation();
+                if (target.nextElementSibling) {
+                    (target.nextElementSibling as HTMLLIElement).focus();
+                }
+                break;
+            case 38: // up
+                event.preventDefault();
+                event.stopPropagation();
+                if (target.previousElementSibling) {
+                    (target.previousElementSibling as HTMLLIElement).focus();
+                } else {
+                    (document.getElementById("searchBox") as HTMLInputElement).focus();
+                }
+                break;
+            case 27: // esc
+                event.preventDefault();
+                event.stopPropagation();
+                (document.getElementById("searchBox") as HTMLInputElement).focus();
+                break;
+            case 93: // context
+                event.preventDefault();
+                event.stopPropagation();
+                target.dispatchEvent(new Event("contextmenu"));
+                break;
+        }
     }
 
     private getEmptyContainerFor (id)

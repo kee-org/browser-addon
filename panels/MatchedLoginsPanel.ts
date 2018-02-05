@@ -49,15 +49,14 @@ class MatchedLoginsPanel {
             loginItem.dataset.loginIndex = login.loginIndex.toString();
             loginItem.dataset.uuid = login.uniqueID;
             loginItem.title = $STRF("matchedLogin_tip", [login.title, displayGroupPath, usernameDisplayValue]);
-            loginItem.tabIndex = -1;
+            loginItem.tabIndex = i == 0 ? 0 : -1;
 
             loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, login.title]);
 
             const loginContextActions = this.createContextActions(login);
             loginItem.appendChild(loginContextActions);
 
-            //TODO:3: keyboard nav
-            //loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
+            loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
             loginItem.addEventListener("click", function (event) {
                 event.stopPropagation();
                 if (event.button == 0 || event.button == 1)
@@ -74,6 +73,42 @@ class MatchedLoginsPanel {
             loginItem.addEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);
 
             container.appendChild(loginItem);
+        }
+    }
+
+    private keyboardNavHandler (event: KeyboardEvent) {
+        const target = event.target as HTMLLIElement;
+
+        switch (event.keyCode) {
+            case 13: // enter
+                event.preventDefault();
+                event.stopPropagation();
+                target.dispatchEvent(new Event("keeCommand"));
+                break;
+            case 40: // down
+                event.preventDefault();
+                event.stopPropagation();
+                if (target.nextElementSibling) {
+                    (target.nextElementSibling as HTMLLIElement).focus();
+                }
+                break;
+            case 38: // up
+                event.preventDefault();
+                event.stopPropagation();
+                if (target.previousElementSibling) {
+                    (target.previousElementSibling as HTMLLIElement).focus();
+                }
+                break;
+            case 27: // esc
+                event.preventDefault();
+                event.stopPropagation();
+                closePanel();
+                break;
+            case 93: // context
+                event.preventDefault();
+                event.stopPropagation();
+                target.dispatchEvent(new Event("contextmenu"));
+                break;
         }
     }
 
@@ -95,6 +130,9 @@ class MatchedLoginsPanel {
                 myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
                 myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
             }, false);
+            editButton.addEventListener("keydown", event => {
+                if (event.keyCode === 13) editButton.click();
+            });
             loginContextActions.appendChild(editButton);
 
         const otherFieldCount = (kfl.otherFields != null && kfl.otherFields.length > 0) ? kfl.otherFields.length : 0;
@@ -113,6 +151,9 @@ class MatchedLoginsPanel {
                 copyStringToClipboard(usernameField.value);
                 myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
             }, false);
+            button.addEventListener("keydown", event => {
+                if (event.keyCode === 13) button.click();
+            });
             loginContextActions.appendChild(button);
         }
 
@@ -126,6 +167,9 @@ class MatchedLoginsPanel {
                 copyStringToClipboard(passwordField.value);
                 myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
             }, false);
+            button.addEventListener("keydown", event => {
+                if (event.keyCode === 13) button.click();
+            });
             loginContextActions.appendChild(button);
         }
         if (otherFieldCount > 1 || passwordFieldCount > 1) {
@@ -142,6 +186,9 @@ class MatchedLoginsPanel {
                             copyStringToClipboard(o.value);
                             myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
                         }, false);
+                        button.addEventListener("keydown", event => {
+                            if (event.keyCode === 13) button.click();
+                        });
                         loginContextActions.appendChild(button);
                     }
                 });
@@ -158,6 +205,9 @@ class MatchedLoginsPanel {
                             copyStringToClipboard(p.value);
                             myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
                         }, false);
+                        button.addEventListener("keydown", event => {
+                            if (event.keyCode === 13) button.click();
+                        });
                         loginContextActions.appendChild(button);
                     }
                 });

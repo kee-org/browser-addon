@@ -69,6 +69,7 @@ function updateSearchPanel (entryDetails?: keeLoginInfo) {
             if ($("#searchPanel").classList.contains("hidden")) {
                 searchPanel.init(appState.currentSearchTerm);
                 $("#searchPanel").classList.remove("hidden");
+                window.focus();
                 $("#searchBox").focus();
             } else {
                 searchPanel.init();
@@ -147,10 +148,26 @@ function startup () {
         // So we have to post messages on every keypress :-(
     });
 
-    document.getElementById("optionsLink").addEventListener("click", () => browser.runtime.openOptionsPage() );
-    document.getElementById("generatePasswordLink").addEventListener("click", () => myPort.postMessage({ action: Action.GeneratePassword }) );
-    document.getElementById("saveLatestLogin").addEventListener("click", () => myPort.postMessage({ action: Action.SaveLatestLogin }) );
-    document.getElementById("showMatchedLogins").addEventListener("click", () => myPort.postMessage({ action: Action.ShowMatchedLoginsPanel }) );
+    document.getElementById("optionsLink").addEventListener("click", () => {
+        browser.runtime.openOptionsPage();
+        window.close();
+    });
+    document.getElementById("generatePasswordLink").addEventListener("click", () => {
+        myPort.postMessage({ action: Action.GeneratePassword });
+        window.close();
+    });
+    document.getElementById("saveLatestLogin").addEventListener("click", () => {
+        myPort.postMessage({ action: Action.SaveLatestLogin });
+        window.close();
+    });
+    document.getElementById("showMatchedLogins").addEventListener("click", () => {
+        myPort.postMessage({ action: Action.ShowMatchedLoginsPanel });
+        window.close();
+    });
+    document.getElementById("helpLink").addEventListener("click", () => {
+        browser.tabs.create({ url: "https://www.kee.pm/help" });
+        window.close();
+    });
 
     KeeLog.info("popup ready");
 }

@@ -26,6 +26,9 @@ class LoginMenus {
                 event.preventDefault();
                 myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
             }, false);
+            editButton.addEventListener("keyup", event => {
+                if (event.keyCode === 13) editButton.click();
+            });
             loginContextActions.appendChild(editButton);
 
         const otherFieldCount = (kfl.otherFields != null && kfl.otherFields.length > 0) ? kfl.otherFields.length : 0;
@@ -43,6 +46,9 @@ class LoginMenus {
                 event.preventDefault();
                 this.copyStringToClipboard(usernameField.value);
             }, false);
+            button.addEventListener("keydown", event => {
+                if (event.keyCode === 13) button.click();
+            });
             loginContextActions.appendChild(button);
         }
 
@@ -55,6 +61,9 @@ class LoginMenus {
                 event.preventDefault();
                 this.copyStringToClipboard(passwordField.value);
             }, false);
+            button.addEventListener("keydown", event => {
+                if (event.keyCode === 13) button.click();
+            });
             loginContextActions.appendChild(button);
         }
         if (otherFieldCount > 1 || passwordFieldCount > 1) {
@@ -70,6 +79,9 @@ class LoginMenus {
                             event.preventDefault();
                             this.copyStringToClipboard(o.value);
                         }, false);
+                        button.addEventListener("keydown", event => {
+                            if (event.keyCode === 13) button.click();
+                        });
                         loginContextActions.appendChild(button);
                     }
                 });
@@ -85,6 +97,9 @@ class LoginMenus {
                             event.preventDefault();
                             this.copyStringToClipboard(p.value);
                         }, false);
+                        button.addEventListener("keydown", event => {
+                            if (event.keyCode === 13) button.click();
+                        });
                         loginContextActions.appendChild(button);
                     }
                 });
