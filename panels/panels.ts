@@ -48,6 +48,14 @@ function startup () {
                 if (m.frameState) updateFrameState(m.frameState);
 
                 const mainPanel = matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.logins);
+
+                // Focus the window (required in Firefox to get focus onto the new iframe)
+                // and then the first login item (enables keyboard navigation). Combined,
+                // these operations blur focus from the text box, thereby hiding any
+                // autocomplete popup the browser has displayed)
+                window.focus();
+                (document.getElementById("Kee-MatchedLoginsList").firstChild.firstChild as any).focus();
+
                 if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
             });
         break;
