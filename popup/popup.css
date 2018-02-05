@@ -46,7 +46,7 @@ body {
 #searchResults {
     margin: 5px 0px 10px 0px;
     overflow-y:auto;
-    max-height:300px;
+    max-height:280px;
 }
 
 #searchResults-Container {
