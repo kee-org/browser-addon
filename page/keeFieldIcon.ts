@@ -64,6 +64,7 @@ class KeeFieldIcon {
     }
 
     private hoverOverInput (e) {
+        if (e.target.disabled) return;
         const bcrect = e.target.getBoundingClientRect();
         const leftLimit = bcrect.left + bcrect.width - 22;
         if (e.clientX > leftLimit) {
