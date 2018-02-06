@@ -181,7 +181,7 @@ class FormFilling {
         //else do nothing
 
         if (formUtils.isDOMElementVisible(formField.DOMInputElement || formField.DOMSelectElement))
-            score += 25;
+            score += 35;
 
         return score;
     }
@@ -483,6 +483,7 @@ class FormFilling {
             this.matchResult.usernameIndexArray[i] = usernameIndex;
             this.matchResult.passwordFieldsArray[i] = passwordFields;
             this.matchResult.otherFieldsArray[i] = otherFields;
+            this.matchResult.submitTargets[i] = submitTargetNeighbour;
 
             // The logins returned from KeePass for every form will be identical (based on tab/frame URL)
             if (!searchSentToKeePass)
@@ -623,6 +624,9 @@ class FormFilling {
 
             this.Logger.info("match found!");
 
+            const formVisible = formUtils.isDOMElementVisible(matchResult.submitTargets[i]);
+            this.Logger.debug("formVisible: " + formVisible);
+
             // determine the relevance of each login entry to this form
             // we could skip this when autofilling based on uniqueID but we would have to check for
             // matches first or else we risk no match and no alternative matching logins on the mainUI
@@ -631,7 +635,7 @@ class FormFilling {
                 const relScore = this.calculateRelevanceScore(matchResult.logins[i][v],
                         findLoginOp.forms[i], matchResult.usernameIndexArray[i],
                         matchResult.passwordFieldsArray[i], matchResult.currentPage,
-                        matchResult.otherFieldsArray[i]);
+                        matchResult.otherFieldsArray[i], formVisible);
 
                 // choosing best login form should not be affected by lowFieldMatchRatio login score
                 // but when we come to fill the form we can force ourselves into a no-auto-fill behaviour.
@@ -995,7 +999,13 @@ class FormFilling {
             // abort early if we can't win even with a perfect visibility and distance score
             if (minScoreToWin > score + VISIBLE_SCORE + DISTANCE_MAX_SCORE) return;
 
-            score += formUtils.isDOMElementVisible(value) ? VISIBLE_SCORE : 0;
+            const isVisible = formUtils.isDOMElementVisible(value);
+
+            // Some forms are hidden (e.g. Twitter) and simply revealed to the user at a later time
+            // Therefore we should only punish based on visibility if the form submitTargetNeighbour is visible.
+            if (isVisible || !formUtils.isDOMElementVisible(submitTargetNeighbour)) {
+                score += VISIBLE_SCORE;
+            }
 
             // abort early if we can't win even with a perfect visibility and distance score
             if (minScoreToWin > score + DISTANCE_MAX_SCORE) return;
@@ -1092,8 +1102,14 @@ class FormFilling {
             return 0;
         });
 
+        let distanceFactor = 1/submitElements.length;
+        let lastDistance = submitElements[0].distance;
         submitElements.forEach((candidate, index, elements) => {
-            candidate.score += index/elements.length*DISTANCE_MAX_SCORE;
+            if (candidate.distance < lastDistance) {
+                distanceFactor = (index+1)/elements.length;
+                lastDistance = candidate.distance;
+            }
+            candidate.score += distanceFactor*DISTANCE_MAX_SCORE;
         });
 
         //TODO:3: more accurate searching of submit buttons, etc. to avoid password resets if possible
@@ -1252,8 +1268,9 @@ class FormFilling {
         */
     }
 
-    private calculateRelevanceScore (login, form,
-        usernameIndex, passwordFields, currentPage, otherFields) {
+    private calculateRelevanceScore (login: keeLoginInfo, form: HTMLFormElement,
+        usernameIndex: number, passwordFields: keeLoginField[], currentPage: number,
+        otherFields: keeLoginField[], formVisible: boolean) {
 
         let score = 0;
         let lowFieldMatchRatio = false;
@@ -1271,6 +1288,13 @@ class FormFilling {
         // New values will be a little different (e.g. 50 vs 42 for an exact URL
         // match) but that shouldn't be a problem.
         score += login.matchAccuracy;
+
+        // Punish but don't entirely exclude matches against invisible forms
+        // This is in addition to the maximum score of invisible fields being limited
+        // so that forms with some visible fields but invisible username/password
+        // fields (or our best guess at them anyway) are considered a less likely match
+        if (!formVisible)
+            score -= 20;
 
         // This is similar to _fillManyFormFields so might be able to reuse the results in future
         // (but need to watch for changes that invalidate the earlier calculations).
