@@ -1141,40 +1141,46 @@ class FormFilling {
         for (let i=0; i < semanticValues.length; i++) {
             if (goodScore) break;
             if (!semanticValues[i]) continue;
-            if (semanticWhitelistCache[semanticValues[i]] === true) {
+            const semanticValue = semanticValues[i].trim();
+            if (!semanticValue) continue;
+
+            if (semanticWhitelistCache[semanticValue] === true) {
                 goodScore = true;
                 break;
             }
-            if (semanticWhitelistCache[semanticValues[i]] === false) {
+            if (semanticWhitelistCache[semanticValue] === false) {
                 continue;
             }
             for (let j=0; j < goodWords.length; j++) {
-                if (semanticValues[i] == goodWords[j]) {
+                if (semanticValue == goodWords[j]) {
                     goodScore = true;
-                    semanticWhitelistCache[semanticValues[i]] = true;
+                    semanticWhitelistCache[semanticValue] = true;
                     break;
                 } else {
-                    semanticWhitelistCache[semanticValues[i]] = false;
+                    semanticWhitelistCache[semanticValue] = false;
                 }
             }
         }
         for (let i=0; i < semanticValues.length; i++) {
             if (badScore) break;
             if (!semanticValues[i]) continue;
-            if (semanticBlacklistCache[semanticValues[i]] === true) {
+            const semanticValue = semanticValues[i].trim();
+            if (!semanticValue) continue;
+
+            if (semanticBlacklistCache[semanticValue] === true) {
                 badScore = true;
                 break;
             }
-            if (semanticBlacklistCache[semanticValues[i]] === false) {
+            if (semanticBlacklistCache[semanticValue] === false) {
                 continue;
             }
             for (let j=0; j < badWords.length; j++) {
-                if (semanticValues[i] == badWords[j]) {
+                if (semanticValue == badWords[j]) {
                     badScore = true;
-                    semanticBlacklistCache[semanticValues[i]] = true;
+                    semanticBlacklistCache[semanticValue] = true;
                     break;
                 } else {
-                    semanticBlacklistCache[semanticValues[i]] = false;
+                    semanticBlacklistCache[semanticValue] = false;
                 }
             }
         }
