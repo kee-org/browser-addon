@@ -692,5 +692,9 @@
   "pref_currentSearchTermTimeout_label": {
       "message": "Clear search results after (seconds)",
       "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
+  },
+  "list_version_upgrade_2_2": {
+      "message": "Search your KeePass databases from within your browser - quickly find the website you want and load it (optionally in a new tab) to get Kee to autofill and log you in easily; Keyboard navigation for matched logins, search results and password profiles (https://forum.kee.pm/t/keyboard-shortcuts/759); Improved ability to submit forms and detect submitted values; Speed improvements (especially on a few specific websites); More information about the speed and submission improvements can be found at https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;The browser's form auto-fill feature is now hidden when Kee's matched logins dialog is displayed; Workaround for Firefox bug in #71 (Network Authentication popup is blank/empty/white for some users); Reduced quantity of messages displayed in the browser console (affects web developers only)",
+      "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
   }
 }
