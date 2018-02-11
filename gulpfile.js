@@ -1,12 +1,14 @@
 var gulp = require("gulp");
 var tslint = require("gulp-tslint");
 var ts = require("gulp-typescript");
+var fs = require("fs");
 var sourcemaps = require('gulp-sourcemaps');
 var zip = require('gulp-zip');
 var merge = require('merge-stream');
 var sequence = require('run-sequence');
 var del = require('del');
 var replace = require('gulp-replace');
+var signAddon = require('sign-addon').default;
 
 // Some tasks set DEBUG to false so that a production build can be executed.
 // There doesn't appear to be a way to pass this as a local variable so we
@@ -481,3 +483,38 @@ gulp.task('clean', [
     'clean:ts:page', 'clean:ts:background', 'clean:ts:settings',
     'clean:ts:dialogs'
 ]);
+
+gulp.task('sign', function () {
+    const manifest = require('./manifest');
+    const distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
+
+    //TODO: If API output is suitable, derive these file names from that in case Mozilla change file naming conventions one day
+    fs.writeFileSync('.signedKeeXPI', 'kee-' + manifest.version + 'beta-an+fx.xpi');
+    fs.writeFileSync('.downloadLinkKeeXPI', 'https://github.com/kee-org/browser-addon/releases/download/'
+        + manifest.version + '/kee-' + manifest.version + 'beta-an.fx.xpi');
+
+    signAddon({
+        xpiPath: 'dist/' + distFileName,
+        version: manifest.version,
+        apiKey: process.env.AMO_API_KEY,
+        apiSecret: process.env.AMO_API_SECRET,
+        id: 'keefox@chris.tomlinson',
+        downloadDir: 'dist/signed/',
+        channel: 'unlisted'
+      })
+      .then(function(result) {
+        if (result.success) {
+          console.log("The following signed files were downloaded:");
+          console.log(result.downloadedFiles);
+          console.log("Reported file name: ");
+          if (result.downloadedFiles && result.downloadedFiles.length > 0) console.log(result.downloadedFiles[0]);
+        } else {
+          console.error("add-on could not be signed!");
+          console.error("Check the console for details.");
+        }
+        console.log(result.success ? "SUCCESS" : "FAIL");
+      })
+      .catch(function(error) {
+        console.error("Signing error:", error);
+      });
+});
