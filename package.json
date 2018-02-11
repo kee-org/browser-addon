@@ -9,6 +9,7 @@
     "gulp-typescript": "^3.2.4",
     "gulp-zip": "^4.1.0",
     "run-sequence": "^2.2.1",
+    "sign-addon": "^0.2.2",
     "tslint": "^5.9.1",
     "typescript": "^2.7.2"
   },
@@ -19,6 +20,7 @@
     "watch": "gulp watch",
     "start": "gulp watch",
     "package:prod": "gulp package:prod",
-    "package": "gulp package:prod & gulp package:debug"
+    "package": "gulp package:prod & gulp package:debug",
+    "sign": "gulp sign"
   }
 }
