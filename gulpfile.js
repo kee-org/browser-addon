@@ -291,6 +291,7 @@ gulp.task('modifyBuildFilesForCrossBrowser', function() {
         return merge (
             gulp.src([buildDirProdFirefox + '/manifest.json'])
             .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ''))
+            .pipe(replace(/(.*"update_url": ")(.*)(",.*)/g, ''))
             .pipe(gulp.dest(buildDirProdFirefox)),
             gulp.src([buildDirProdChrome + '/manifest.json'])
             .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ''))
