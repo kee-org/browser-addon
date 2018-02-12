@@ -95,6 +95,10 @@
         "message": "Mantieni la vecchia URL di questa voce (ma riempi i moduli se visiti la nuova URL)",
         "description": ""
     },
+    "list_version_upgrade_2_2": {
+        "message": "Cerca nel tuo database KeePass direttamente dal browser - trova velocemente il sito che vuoi e caricalo (anche in una nuova scheda) per fare l'accesso facilmente grazie al riempimento automatico di Kee; Navigazione con tastiera per le voci corrispondenti, risultati di ricerca e profili password (https://forum.kee.pm/t/keyboard-shortcuts/759); Migliorato l'invio dei campi e il riconoscimento dei valori inviati; Velocità migliorata (per alcuni siti in particolare); Più informazioni riguardo i miglioramenti della velocità e dell'invio dei campi sono disponibili a https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; La funzione di riempimento automatico del browser è nascosta quando viene mostrata la finestra delle voci corrispondenti di Kee; Workaround per il bug di Firefox in #71 (Il popup della autenticazione di rete è vuoto/bianco per alcuni utenti); Ridotta la quantità di messaggi mostrati nella console del browser (di interesse solo per gli sviluppatori web)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "website": {
         "message": "Sito web",
         "description": ""

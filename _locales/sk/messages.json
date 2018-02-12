@@ -16,7 +16,7 @@
         "description": ""
     },
     "conn_sl_high_label": {
-        "message": "Po každom spustení webového prehliadača alebo programu KeePass pýtať nové heslo pre pripojenie.",
+        "message": "Po každom spustení webového prehliadača alebo programu KeePass, pýtať nové heslo pre pripojenie.",
         "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
     },
     "conn_sl_medium": {
@@ -95,6 +95,10 @@
         "message": "Uchovať pôvodnú adresu URL záznamu (ale napriek tomu vyplní formuláre, ak navštívite novú adresu URL)",
         "description": ""
     },
+    "list_version_upgrade_2_2": {
+        "message": "Search your KeePass databases from within your browser - quickly find the website you want and load it (optionally in a new tab) to get Kee to autofill and log you in easily; Keyboard navigation for matched logins, search results and password profiles (https://forum.kee.pm/t/keyboard-shortcuts/759); Improved ability to submit forms and detect submitted values; Speed improvements (especially on a few specific websites); More information about the speed and submission improvements can be found at https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;The browser's form auto-fill feature is now hidden when Kee's matched logins dialog is displayed; Workaround for Firefox bug in #71 (Network Authentication popup is blank/empty/white for some users); Reduced quantity of messages displayed in the browser console (affects web developers only)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "website": {
         "message": "Webová stránka",
         "description": ""
@@ -160,11 +164,11 @@
         "description": ""
     },
     "kee_install_notes_keepass": {
-        "message": "Musíte spustiť KeePass, aby sa k nemu mohol pripojiť Kee. Ak nie je KeePass nainštalovaný v počítači, môžete ho ľahko stiahnuť a nainštalovať sami.",
+        "message": "Musíte spustiť KeePass, aby sa k nemu mohol pripojiť Kee. Ak nie je KeePass nainštalovaný v počítači, môžete si ho ľahko stiahnuť a nainštalovať sami.",
         "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
     },
     "pref_ConnectionSecurity_explain_change": {
-        "message": "Niekedy zmena nastavení nižšie spôsobí, že Kee vás požiada o nové náhodné heslo. Pre zmenu týchto nastavení nemusíte zadávať uvedené heslo správe, len upravte nastavenia a stlačte tlačidlo vyššie.",
+        "message": "Niekedy zmena nastavení nižšie spôsobí, že Kee vás požiada o nové náhodné heslo. Pre zmenu týchto nastavení nemusíte zadávať uvedené heslo, len upravte nastavenia a stlačte tlačidlo vyššie.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
     },
     "update_existing_entry": {
@@ -328,7 +332,7 @@
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
     },
     "kee_install_notes_keepassrpc": {
-        "message": "Budete musieť nainštalovať doplnok KeePassRPC.plgx pre KeePass, ak ste to ešte neurobili. Je to rovnako jednoduché ako vloženie súboru na správne miesto v počítači a reštartovanie programu KeePass.",
+        "message": "Budete si musieť nainštalovať doplnok KeePassRPC.plgx pre KeePass, ak ste to ešte neurobili. Je to rovnako jednoduché ako vloženie súboru na správne miesto v počítači a reštartovanie programu KeePass.",
         "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
     },
     "point_user_to_tutorial_link_text": {

@@ -95,6 +95,10 @@
         "message": "エントリーの以前のURLを保持する(新しいURLでも入力することができます)",
         "description": ""
     },
+    "list_version_upgrade_2_2": {
+        "message": "Search your KeePass databases from within your browser - quickly find the website you want and load it (optionally in a new tab) to get Kee to autofill and log you in easily; Keyboard navigation for matched logins, search results and password profiles (https://forum.kee.pm/t/keyboard-shortcuts/759); Improved ability to submit forms and detect submitted values; Speed improvements (especially on a few specific websites); More information about the speed and submission improvements can be found at https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;The browser's form auto-fill feature is now hidden when Kee's matched logins dialog is displayed; Workaround for Firefox bug in #71 (Network Authentication popup is blank/empty/white for some users); Reduced quantity of messages displayed in the browser console (affects web developers only)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "website": {
         "message": "ウェブサイト",
         "description": ""
@@ -200,7 +204,7 @@
         "description": ""
     },
     "pref_rememberMRUDB_label": {
-        "message": "Remember the most recently used KeePass database",
+        "message": "最後に使ったKeePassデータベースを記憶する",
         "description": ""
     },
     "no": {
@@ -340,7 +344,7 @@
         "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
     },
     "pref_keePassRPCPort_label": {
-        "message": "Communicate with KeePass using this TCP/IP port",
+        "message": "KeePass との接続に使用する TCP/IP ポート",
         "description": ""
     },
     "network_auth_choose": {
@@ -568,7 +572,7 @@
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "loading": {
-        "message": "Loading...",
+        "message": "読込中...",
         "description": "Holding message to be displayed when Kee has to display something to the user to indicate that the requested information or interface element will be displayed shortly."
     },
     "notifyBarLaunchKeePassButton_tip": {

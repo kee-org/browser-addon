@@ -32,7 +32,7 @@
         "description": ""
     },
     "loggedIn_tip": {
-        "message": "Você está logado no seu '$1' banco de dados de senhas",
+        "message": "Você está logado no seu banco de dados  de senhas '$1'",
         "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
     },
     "a_specific_website": {
@@ -94,6 +94,10 @@
     "change_url_option_3": {
         "message": "Manter a URL da entrada antiga (mas ainda preencha os formulários se você visitar a novo URL)",
         "description": ""
+    },
+    "list_version_upgrade_2_2": {
+        "message": "Pesquise seus bancos de dados KeePass no seu navegador - encontre rapidamente o site desejado e carregue-o (opcionalmente em uma nova guia) para que o Kee seja preenchido automaticamente e faça o login facilmente; Navegação de teclado para logins correspondentes, resultados de pesquisa e perfis de senha (https://forum.kee.pm/t/keyboard-shortcuts/759); Maior capacidade de enviar formulários e detectar valores apresentados; Melhorias de velocidade (especialmente em alguns sites específicos); Mais informações sobre as melhorias de velocidade e submissão podem ser encontradas em https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;O recurso de preenchimento automático do formulário do navegador está agora oculto quando a caixa de diálogo de logs correspondentes de Kee é exibida; Solução alternativa para bug do Firefox em #71 (O popup de autenticação de rede está em branco / vazio / branco para alguns usuários); Quantidade reduzida de mensagens exibidas no console do navegador (afeta apenas desenvolvedores web)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "website": {
         "message": "Website",
@@ -576,7 +580,7 @@
         "description": ""
     },
     "pref_searchAllOpenDBs_label": {
-        "message": "Pesquise em todos os bancos de dados KeePass abertos",
+        "message": "Pesquisar em todos os bancos de dados do KeePass abertos",
         "description": ""
     },
     "enter_valid_regex": {
