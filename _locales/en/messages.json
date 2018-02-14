@@ -696,5 +696,65 @@
   "list_version_upgrade_2_2": {
       "message": "Search your KeePass databases from within your browser - quickly find the website you want and load it (optionally in a new tab) to get Kee to autofill and log you in easily; Keyboard navigation for matched logins, search results and password profiles (https://forum.kee.pm/t/keyboard-shortcuts/759); Improved ability to submit forms and detect submitted values; Speed improvements (especially on a few specific websites); More information about the speed and submission improvements can be found at https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;The browser's form auto-fill feature is now hidden when Kee's matched logins dialog is displayed; Workaround for Firefox bug in #71 (Network Authentication popup is blank/empty/white for some users); Reduced quantity of messages displayed in the browser console (affects web developers only)",
       "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+  },
+  "betatestingmigration1": {
+    "message": "Attention Kee beta tester!",
+    "description": ""
+  },
+  "betatestingmigration2": {
+    "message": "Thanks for beta testing the latest improvements to Kee. Your support helps deliver a high quality stable add-on to many people.",
+    "description": ""
+  },
+  "betatestingmigration3": {
+    "message": "To continue beta testing, you MUST re-register your support by re-installing the add-on from this new location: ",
+    "description": "new URL will be suffixed to end of this string"
+  },
+  "betatestingmigration4": {
+    "message": "All of your existing settings will be preserved. The only difference will be that future automatic updates will be delivered from github.com rather than mozilla.org.",
+    "description": ""
+  },
+  "betatestingmigration5": {
+    "message": "Hopefully the questions and answers below will provide you with all the information you need but if not, please search or ask further questions on the community forum at ",
+    "description": "https://forum.kee.pm will be suffixed to the end of this string"
+  },
+  "betatestingmigration6": {
+    "message": "Why am I being asked to do this?",
+    "description": ""
+  },
+  "betatestingmigration7": {
+    "message": "Mozilla have just announced another breaking change to the Firefox add-on service which means that if you take no action, you will be removed from the beta testing program. This applies to all Firefox add-ons and is due to take effect in just a few days.",
+    "description": ""
+  },
+  "betatestingmigration8": {
+    "message": "From now on, Mozilla will allow only one version of an add-on to be hosted on the official add-ons site (known as \"AMO\"). This means that any add-on with a beta testing process must now manage and host its own beta testing service.",
+    "description": ""
+  },
+  "betatestingmigration9": {
+    "message": "The new Kee beta testing service is already live and hosted on GitHub but Mozilla do not permit us to automatically migrate your beta \"subscription\" to this new location so you must manually opt-in.",
+    "description": ""
+  },
+  "betatestingmigration10": {
+    "message": "What happens if I do not install the add-on from the new beta channel location?",
+    "description": ""
+  },
+  "betatestingmigration11": {
+    "message": "When the next stable version of Kee with a higher version number is released to AMO, you will be updated to that version and thereafter no longer be a beta tester. We hope you will choose to keep beta testing Kee but if you do not, your security will not be affected.",
+    "description": ""
+  },
+  "betatestingmigration12": {
+    "message": "Why GitHub.com?",
+    "description": ""
+  },
+  "betatestingmigration13": {
+    "message": "All Kee development work depends upon GitHub already. GitHub offers a way for the automatic update feature to be enabled without the need for any additional trusted third parties to be introduced to the development and release process of Kee. It's also the fastest way to deliver this new service at short notice.",
+    "description": ""
+  },
+  "betatestingmigration14": {
+    "message": "Can I trust this information?",
+    "description": ""
+  },
+  "betatestingmigration15": {
+    "message": "This message has been displayed automatically after an update to the latest (and last ever) version on the beta testing channel you subscribed to previously. However, we recommend performing an independent search for information if you have any doubts about the legitimacy of this message.",
+    "description": ""
   }
 }
