@@ -100,6 +100,7 @@
     "applications": {
         "gecko": {
             "id": "keefox@chris.tomlinson",
+            "update_url": "https://raw.githubusercontent.com/kee-org/browser-addon-updates/master/beta/update.json",
             "strict_min_version": "56.0"
         }
     }
