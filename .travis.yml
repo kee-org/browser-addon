@@ -37,6 +37,10 @@ before_deploy:
   - git config --global user.name "Travis CI"
   - git config credential.helper "store --file=.git/credentials" 
   - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+  # Clone our beta update repo
+  - cd ..
+  - git clone https://github.com/kee-org/browser-addon-updates.git
+  - cd -
 
 # Push the new tag back to GitHub and upload artifacts but only if on the master branch
 deploy:
@@ -57,6 +61,26 @@ deploy:
       branch: master
   - provider: script
     skip_cleanup: true
+    script:
+      - echo "test signage"
+      - echo $unprotectedtestvar
+      - gulp sign
+      - ls ../browser-addon-updates
+      - cat ../browser-addon-updates/beta/update.json
+      - faauv --update ../browser-addon-updates/beta/update.json 
+      - cat ../browser-addon-updates/beta/update.json
+      - cd ..
+      - git add .
+      - git commit -m "New version"
+      # - git push
+      - cd -
+      # - ls dist/signed/
+    on:
+      all_branches: true
+      # condition: $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH =~ ^release/
+      condition: $TRAVIS_BRANCH =~ ^spike/
+  - provider: script
+    skip_cleanup: true
     script: git push --tags
     on:
       all_branches: true
@@ -66,6 +90,7 @@ deploy:
       secure: "DC8qtOkMdII1bYL8UZdVuEJNFfk7pywLIA93F7O6y8ruWt2N23c1grC0l0kmWjFKAyjv5pILddLm5FPpEaN5tRWd3ROHjmP/kXRaY0vSsrUD6bIFHbIg6rouenfVZo9L5jtyzJQKABZABWmqFcKdE+qmpOlO6aAgwDHdl0Ai+zhBU8mHsVv5y2yqjBGTyXpBNVEtPEMetfJSq0fq6U/LOhyWn/dGCiHdA7pmvznQ6Uiu8ShNAJiRq47tlD0cGLQSpFbKGWoJlxGIecHkDJDfE4V4gmS7rrGp50Y9TbFmxFxGnNxwRCWAL1usp0yDjliIYkzl0bNrw2MRSTz+vgMAYjwwUHb0VgCciRDorJplJGmcN2S7UrpcaffL7b5MDpn9wfKSOvPLsPqhGpRudB9/v6KawhcKZ5dOLQgfup5kjV/WuWG9BgeDFN7S9/Tzw9EUD6tuou+duzlu+QSjNkUrAxuWdnpC7QgVxIVkXdD7qdmDzb34jkJhEF5Gk6XY52Yyiy+GDjkfP03QV5qk7nRXaUu9FI/OWMuSyC6ru6VyCABoKCV0o8kbcPVjIl9yJM8+5t4+RBQj/Saohgm+t2gZhgeFgE9N2Sj3pcp8+iaurlcFJI8DLIBwsNpJXFlLIwZoq0/SOkXIUmilhkEntWy9ctj8LSX47GobAScneRY99+w="
     file_glob: true
     file: dist/*
+    # file: dist/signed/*
     skip_cleanup: true
     prerelease: true
     body: "This is an automatically generated release. Some releases will be thoroughly tested and marked as ready for beta and eventually stable release. This message will be replaced if that happens. You may want to install the files in this release if you wish to test a specific change that is included within this version. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550"

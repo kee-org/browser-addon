@@ -487,34 +487,38 @@ gulp.task('sign', function () {
     var manifest = require('./manifest'),
         distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
 
-    signAddon({
-        // Required arguments:
+        console.log(distFileName);
+        console.log(process.env.unprotectedtestvar);
+        return;
 
-        xpiPath: 'dist/' + distFileName,
-        version: "2.2.0beta", //manifest.version,
-        apiKey: '',
-        apiSecret: '',
-        id: 'keefox@chris.tomlinson',
+    // signAddon({
+    //     // Required arguments:
 
-        // Optional arguments:
+    //     xpiPath: 'dist/' + distFileName,
+    //     version: "2.2.0beta", //manifest.version,
+    //     apiKey: '',
+    //     apiSecret: '',
+    //     id: 'keefox@chris.tomlinson',
 
-        // Save downloaded files to this directory.
-        // Default: current working directory.
-        downloadDir: 'dist/signed/'
-      })
-      .then(function(result) {
-        if (result.success) {
-          console.log("The following signed files were downloaded:");
-          console.log(result.downloadedFiles);
-          console.log("Your extension ID is:");
-          console.log(result.id);
-        } else {
-          console.error("Your add-on could not be signed!");
-          console.error("Check the console for details.");
-        }
-        console.log(result.success ? "SUCCESS" : "FAIL");
-      })
-      .catch(function(error) {
-        console.error("Signing error:", error);
-      });
+    //     // Optional arguments:
+
+    //     // Save downloaded files to this directory.
+    //     // Default: current working directory.
+    //     downloadDir: 'dist/signed/'
+    //   })
+    //   .then(function(result) {
+    //     if (result.success) {
+    //       console.log("The following signed files were downloaded:");
+    //       console.log(result.downloadedFiles);
+    //       console.log("Your extension ID is:");
+    //       console.log(result.id);
+    //     } else {
+    //       console.error("Your add-on could not be signed!");
+    //       console.error("Check the console for details.");
+    //     }
+    //     console.log(result.success ? "SUCCESS" : "FAIL");
+    //   })
+    //   .catch(function(error) {
+    //     console.error("Signing error:", error);
+    //   });
 });
