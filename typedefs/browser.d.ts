@@ -1907,10 +1907,10 @@ declare namespace browser.management {
 declare namespace browser.notifications {
     /* notifications types */
     enum TemplateType {
-        basic = "basic",
-        image = "image",
-        list = "list",
-        progress = "progress"
+        BASIC = "basic",
+        IMAGE = "image",
+        LIST = "list",
+        PROGRESS = "progress"
     }
 
     enum PermissionLevel {

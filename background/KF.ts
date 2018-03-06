@@ -198,7 +198,7 @@ class Kee {
         browser.browserAction.setIcon({path: "common/images/highlight-48.png" });
         if (nativeNotification) {
             browser.notifications.create({
-                type: browser.notifications.TemplateType.basic,
+                type: browser.notifications.TemplateType.BASIC,
                 iconUrl: browser.extension.getURL("common/images/128.png"),
                 title: nativeNotification.title,
                 message: nativeNotification.message
@@ -206,7 +206,7 @@ class Kee {
         } else {
             if (configManager.current.notificationCountGeneric < 5) {
                 browser.notifications.create({
-                    type: browser.notifications.TemplateType.basic,
+                    type: browser.notifications.TemplateType.BASIC,
                     iconUrl: browser.extension.getURL("common/images/128.png"),
                     title: $STR("notification_raised_title"),
                     message: $STR("notification_yellow_background") + "\n" + $STR("notification_only_shown_some_times")
@@ -772,7 +772,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
         if (configManager.current.notificationCountSavePassword < 10) {
             browser.notifications.create({
-                type: browser.notifications.TemplateType.basic,
+                type: browser.notifications.TemplateType.BASIC,
                 iconUrl: browser.extension.getURL("common/images/128.png"),
                 title: $STR("savePasswordText"),
                 message: $STR("notification_save_password_tip") + "\n" + $STR("notification_only_shown_some_times")
