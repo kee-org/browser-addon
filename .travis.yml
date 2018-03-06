@@ -1,9 +1,11 @@
 language: node_js
 node_js:
   - "node"
+install:
+- npm ci
 cache:
   directories:
-    - "node_modules"
+    - "$HOME/.npm"
 sudo: false
   
 # This is needed to avoid building all the tags pushed by travis
