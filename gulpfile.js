@@ -489,8 +489,10 @@ gulp.task('sign', function () {
         distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
 
         console.log(distFileName);
-        fs.writeFileSync('.signedKeeXPI', 'dist/signed/kee-' + manifest.version + '-an+fx.xpi');
-        fs.writeFileSync('.unsignedKeeXPI', 'dist/' + distFileName);
+        fs.writeFileSync('.signedKeeXPI', 'kee-' + manifest.version + 'beta-an+fx.xpi');
+        fs.writeFileSync('.unsignedKeeXPI', distFileName);
+        fs.writeFileSync('.downloadLinkKeeXPI', 'https://github.com/kee-org/browser-addon/releases/download/'
+            + manifest.version + '/kee-' + manifest.version + 'beta-an.fx.xpi');
         return;
 
     // signAddon({
