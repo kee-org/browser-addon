@@ -39,7 +39,7 @@ before_deploy:
   - git config credential.helper "store --file=.git/credentials" 
   - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
   # Sign the new beta release and prepare the auto-update data if we're on a release branch
-  - test $TRAVIS_BRANCH =~ ^release/ && test $TRAVIS_PULL_REQUEST = "false" && chmod 755 prepareBetaRelease.sh && ./prepareBetaRelease.sh
+  - test `echo $TRAVIS_BRANCH | grep -c ^release/` -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && chmod 755 prepareBetaRelease.sh && ./prepareBetaRelease.sh
 
 # Push the new tag back to GitHub and upload artifacts but only if on the master or a release branch
 deploy:
