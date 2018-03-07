@@ -14,6 +14,13 @@ branches:
     - /^v?\d+\.\d+\.\d+$/
 
 before_install:
+  - test $TRAVIS_PULL_REQUEST = "false" && echo "yes1"
+  - 'test $TRAVIS_PULL_REQUEST = "false" && echo "yes2"'
+  - test $TRAVIS_PULL_REQUEST != "false" && echo "yes3"
+  - 'test $TRAVIS_PULL_REQUEST != "false" && echo "yes4"'
+  - 'test `expr $TRAVIS_BRANCH : "release/.*"` -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes5"'
+  - 'test $(expr "release/test" : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes6"'
+  - 'test $(expr $TRAVIS_BRANCH : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes7"'
   # Travis has an old version of npm and we need the latest to enable dependency locking
 - npm install -g npm@'>=5.7.1'
   # Create a git tag of the new version to use
@@ -40,7 +47,7 @@ before_deploy:
   - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
   # Sign the new beta release and prepare the auto-update data if we're on a release branch
   - 'test $(expr $TRAVIS_BRANCH : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && chmod 755 prepareBetaRelease.sh && ./prepareBetaRelease.sh'
-  
+
 # Push the new tag back to GitHub and upload artifacts but only if on the master or a release branch
 deploy:
   - provider: script
