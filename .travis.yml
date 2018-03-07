@@ -63,7 +63,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - echo "Signing debug build..." && gulp sign && cat .signedKeeXPI && cat .unsignedKeeXPI && unsignedKeeXPI=`cat .unsignedKeeXPI` && cat ../browser-addon-updates/beta/update.json && faauv --update ../browser-addon-updates/beta/update.json $unsignedKeeXPI && cat ../browser-addon-updates/beta/update.json && cd .. && git add . && git commit -m "Automatic release of new beta version" && git status && cd -
+      - chmod 755 sign.sh && ./sign.sh
     on:
       all_branches: true
       # condition: $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH =~ ^release/
