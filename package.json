@@ -4,6 +4,7 @@
   "devDependencies": {
     "del": "^3.0.0",
     "firefox-addons-add-update-version": "^1.0.0",
+    "fs": "0.0.1-security",
     "gulp": "3.9.1",
     "gulp-replace": "^0.6.1",
     "gulp-tslint": "8.1.2",

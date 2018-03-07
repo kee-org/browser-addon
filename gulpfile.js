@@ -1,6 +1,7 @@
 var gulp = require("gulp");
 var tslint = require("gulp-tslint");
 var ts = require("gulp-typescript");
+var fs = require("fs");
 var sourcemaps = require('gulp-sourcemaps');
 var zip = require('gulp-zip');
 var merge = require('merge-stream');
