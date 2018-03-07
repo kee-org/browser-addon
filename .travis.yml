@@ -29,6 +29,7 @@ script: npm run package:prod && npm run package:debug
 # push any source changes for localisation
 after_success:
   - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && virtualenv ~/env && source ~/env/bin/activate && pip install transifex-client && echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = api\ntoken = \npassword = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc && tx -d --traceback push -s
+  - echo "Manifest used for build..."
   - cat manifest.json
   
 before_deploy:
@@ -39,12 +40,8 @@ before_deploy:
   - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
   # Clone our beta update repo
   - cd ..
-  - pwd
   - git clone https://github.com/kee-org/browser-addon-updates.git
-  - ls
-  - pwd
   - cd -
-  - pwd
 
 # Push the new tag back to GitHub and upload artifacts but only if on the master branch
 deploy:
@@ -66,7 +63,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - echo "test signage" && echo $unprotectedtestvar && gulp sign && ls ../browser-addon-updates && cat ../browser-addon-updates/beta/update.json && faauv --update ../browser-addon-updates/beta/update.json && cat ../browser-addon-updates/beta/update.json && cd .. && git add . && git commit -m "New version" && cd -
+      - echo "Signing debug build..." && gulp sign && echo $signedKeeXPI && cat ../browser-addon-updates/beta/update.json && faauv --update ../browser-addon-updates/beta/update.json $unsignedKeeXPI && cat ../browser-addon-updates/beta/update.json && cd .. && git add . && git commit -m "Automatic release of new beta version" && git status && cd -
     on:
       all_branches: true
       # condition: $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH =~ ^release/

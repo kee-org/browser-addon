@@ -488,7 +488,9 @@ gulp.task('sign', function () {
         distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
 
         console.log(distFileName);
-        console.log(process.env.unprotectedtestvar);
+        process.env['signedKeeXPI'] = 'dist/signed/kee-' + manifest.version + '-an+fx.xpi';
+        process.env['unsignedKeeXPI'] = 'dist/' + distFileName;
+        console.log(process.env.signedKeeXPI);
         return;
 
     // signAddon({
@@ -512,6 +514,8 @@ gulp.task('sign', function () {
     //       console.log(result.downloadedFiles);
     //       console.log("Your extension ID is:");
     //       console.log(result.id);
+    //       console.log("Reported file name: ");
+    //       if (result.downloadedFiles && result.downloadedFiles.length > 0) console.log(result.downloadedFiles[0]);
     //     } else {
     //       console.error("Your add-on could not be signed!");
     //       console.error("Check the console for details.");
