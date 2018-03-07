@@ -63,7 +63,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - echo "Signing debug build..." && gulp sign && echo $signedKeeXPI && cat ../browser-addon-updates/beta/update.json && faauv --update ../browser-addon-updates/beta/update.json $unsignedKeeXPI && cat ../browser-addon-updates/beta/update.json && cd .. && git add . && git commit -m "Automatic release of new beta version" && git status && cd -
+      - echo "Signing debug build..." && gulp sign && cat .signedKeeXPI && cat ../browser-addon-updates/beta/update.json && faauv --update ../browser-addon-updates/beta/update.json $(cat .unsignedKeeXPI) && cat ../browser-addon-updates/beta/update.json && cd .. && git add . && git commit -m "Automatic release of new beta version" && git status && cd -
     on:
       all_branches: true
       # condition: $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH =~ ^release/

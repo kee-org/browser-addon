@@ -488,9 +488,8 @@ gulp.task('sign', function () {
         distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
 
         console.log(distFileName);
-        process.env['signedKeeXPI'] = 'dist/signed/kee-' + manifest.version + '-an+fx.xpi';
-        process.env['unsignedKeeXPI'] = 'dist/' + distFileName;
-        console.log(process.env.signedKeeXPI);
+        fs.writeFileSync('.signedKeeXPI', 'dist/signed/kee-' + manifest.version + '-an+fx.xpi');
+        fs.writeFileSync('.unsignedKeeXPI', 'dist/' + distFileName);
         return;
 
     // signAddon({
@@ -498,8 +497,8 @@ gulp.task('sign', function () {
 
     //     xpiPath: 'dist/' + distFileName,
     //     version: "2.2.0beta", //manifest.version,
-    //     apiKey: '',
-    //     apiSecret: '',
+    //     apiKey: process.env.AMO_API_KEY,
+    //     apiSecret: process.env.AMO_API_SECRET,
     //     id: 'keefox@chris.tomlinson',
 
     //     // Optional arguments:
