@@ -4,7 +4,7 @@ cat .signedKeeXPI &&
 cat .unsignedKeeXPI &&
 cat .downloadLinkKeeXPI &&
 cat ../browser-addon-updates/beta/update.json &&
-faauv --update ../browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) $(cat .unsignedKeeXPI) &&
+faauv --update ../browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/$(cat .unsignedKeeXPI) &&
 cat ../browser-addon-updates/beta/update.json &&
 cd ../browser-addon-updates &&
 git add . &&
