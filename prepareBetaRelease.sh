@@ -1,3 +1,6 @@
+#!/bin/bash
+set -ev
+
 echo "Cloning our beta update repo..."
 cd .. &&
 git clone https://github.com/kee-org/browser-addon-updates.git &&
