@@ -14,13 +14,13 @@ branches:
     - /^v?\d+\.\d+\.\d+$/
 
 before_install:
-  - test $TRAVIS_PULL_REQUEST = "false" && echo "yes1"
-  - 'test $TRAVIS_PULL_REQUEST = "false" && echo "yes2"'
-  - test $TRAVIS_PULL_REQUEST != "false" && echo "yes3"
-  - 'test $TRAVIS_PULL_REQUEST != "false" && echo "yes4"'
-  - 'test `expr $TRAVIS_BRANCH : "release/.*"` -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes5"'
-  - 'test $(expr "release/test" : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes6"'
-  - 'test $(expr $TRAVIS_BRANCH : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes7"'
+- test $TRAVIS_PULL_REQUEST = "false" && echo "yes1"
+- 'test $TRAVIS_PULL_REQUEST = "false" && echo "yes2"'
+- test $TRAVIS_PULL_REQUEST != "false" && echo "yes3"
+- 'test $TRAVIS_PULL_REQUEST != "false" && echo "yes4"'
+- 'test `expr $TRAVIS_BRANCH : "release/.*"` -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes5"'
+- 'test $(expr "release/test" : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes6"'
+- 'test $(expr $TRAVIS_BRANCH : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes7"'
   # Travis has an old version of npm and we need the latest to enable dependency locking
 - npm install -g npm@'>=5.7.1'
   # Create a git tag of the new version to use
