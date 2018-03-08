@@ -1,8 +1,6 @@
 language: node_js
 node_js:
   - "node"
-install:
-- npm ci
 cache:
   directories:
     - "$HOME/.npm"
@@ -13,14 +11,18 @@ branches:
   except:
     - /^v?\d+\.\d+\.\d+$/
 
+# Build customisation
+#
+# Some build stages trigger build failure if any script/entry returns a non-zero value, others don't.
+# Notably these do but there may be others:
+# before_install
+# install
+# before_deploy
+# script
+
 before_install:
-- test $TRAVIS_PULL_REQUEST = "false" && echo "yes1"
-- 'test $TRAVIS_PULL_REQUEST = "false" && echo "yes2"'
-- test $TRAVIS_PULL_REQUEST != "false" && echo "yes3"
-- 'test $TRAVIS_PULL_REQUEST != "false" && echo "yes4"'
-- 'test `expr $TRAVIS_BRANCH : "release/.*"` -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes5"'
-- 'test $(expr "release/test" : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes6"'
-- 'test $(expr $TRAVIS_BRANCH : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && echo "yes7"'
+- test $TRAVIS_BRANCH != "master" -o $TRAVIS_PULL_REQUEST != "false" || { echo "test1"; }
+- 'test $(expr $TRAVIS_BRANCH : "release/.*") -eq 0 -o $TRAVIS_PULL_REQUEST != "false" || { echo "test2"; }'
   # Travis has an old version of npm and we need the latest to enable dependency locking
 - npm install -g npm@'>=5.7.1'
   # Create a git tag of the new version to use
@@ -31,11 +33,20 @@ before_install:
 - "sed -E 's/^(.*\"version\": \")(.*)(\"\\,.*)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
 - "sed -E 's/^(.*\"version_name\": \")(.*)(\"\\,.*)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
 
+install:
+- npm ci
+
 script: npm run package:prod && npm run package:debug
 
 # push any source changes for localisation
+#
+# There's some kinda backwards logic here because we need to ensure we only
+# return a non-zero exit code if the push transifex is attempted and fails
+# (technically this section doesn't require the non-zero exit code but other 
+# sections do so this keeps the logic consistent with other similar tests 
+# elsewhere in the build chain)
 after_success:
-  - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && virtualenv ~/env && source ~/env/bin/activate && pip install transifex-client && echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = api\ntoken = \npassword = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc && tx -d --traceback push -s
+  - test $TRAVIS_BRANCH != "master" -o $TRAVIS_PULL_REQUEST != "false" || { virtualenv ~/env && source ~/env/bin/activate && pip install transifex-client && echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = api\ntoken = \npassword = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc && tx -d --traceback push -s; }
   - echo "Manifest used for build..."
   - cat manifest.json
   
@@ -45,8 +56,8 @@ before_deploy:
   - git config --global user.name "Travis CI"
   - git config credential.helper "store --file=.git/credentials" 
   - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
-  # Sign the new beta release and prepare the auto-update data if we're on a release branch
-  - 'test $(expr $TRAVIS_BRANCH : "release/.*") -ne 0 && test $TRAVIS_PULL_REQUEST = "false" && chmod 755 prepareBetaRelease.sh && ./prepareBetaRelease.sh'
+  # Sign the new beta release and prepare the auto-update data if we're on a release branch (weird logic per explanation for after_success)
+  - 'test $(expr $TRAVIS_BRANCH : "release/.*") -eq 0 -o $TRAVIS_PULL_REQUEST != "false" || { chmod 755 prepareBetaRelease.sh && ./prepareBetaRelease.sh; }'
 
 # Push the new tag back to GitHub and upload artifacts but only if on the master or a release branch
 deploy:
@@ -69,7 +80,7 @@ deploy:
     file: dist/*
     skip_cleanup: true
     prerelease: true
-    body: "This is an automatically generated release. Some releases will be thoroughly tested and marked as ready for beta and eventually stable release. This message will be replaced if that happens. You may want to install the files in this release if you wish to test a specific change that is included within this version. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550"
+    body: "This is an automatically generated pre-release. Some releases will be thoroughly tested and their derivatives marked as ready for beta and eventually stable release. If the status of this version changes, this message will be replaced. You may want to install the files in this release if you wish to test a specific change that is included within this version. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550"
     on:
       branch: master
   # Push the signed and unsigned files to a new GitHub release
@@ -81,8 +92,7 @@ deploy:
       - dist/*
       - dist/signed/*
     skip_cleanup: true
-    prerelease: true
-    body: "This is an automatically generated release. Some releases will be thoroughly tested and marked as ready for beta and eventually stable release. This message will be replaced if that happens. You may want to install the files in this release if you wish to test a specific change that is included within this version. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550"
+    body: "This is an automatically generated beta release. The first beta release for this major.minor version has been thoroughly tested; subsequent releases typically contain only new translations and occasional critical fixes with very limited scope. After beta testing this release may be promoted to a stable release. This message will be replaced if that happens. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550"
     on:
       all_branches: true
       condition: $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH =~ ^release/
