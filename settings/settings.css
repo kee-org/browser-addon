@@ -1,6 +1,7 @@
 body {
     min-width: 700px;
     min-height: 550px;
+    max-width: 1100px;
 }
 
 #settings {

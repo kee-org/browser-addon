@@ -52,7 +52,8 @@
         "default_popup": "popup/popup.html"
     },
     "options_ui": {
-        "page": "settings/settings.html"
+        "page": "settings/settings.html",
+        "open_in_tab": true
     },
     "permissions": [
         "tabs",
