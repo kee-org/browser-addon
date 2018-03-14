@@ -58,6 +58,7 @@ before_deploy:
   - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
   # Sign the new beta release and prepare the auto-update data if we're on a release branch (weird logic per explanation for after_success)
   - 'test $(expr $TRAVIS_BRANCH : "release/.*") -eq 0 -o $TRAVIS_PULL_REQUEST != "false" || { chmod 755 prepareBetaRelease.sh && ./prepareBetaRelease.sh; }'
+  - echo "before_deploy complete"
 
 # Push the new tag back to GitHub and upload artifacts but only if on the master or a release branch
 deploy:
@@ -99,7 +100,7 @@ deploy:
   # Then publish the new release to existing users
   - provider: script
     skip_cleanup: true
-    script: cd ../browser-addon-updates && git push && cd -
+    script: echo "Pushing update file" && cd ../browser-addon-updates && git push && cd -
     on:
       all_branches: true
       condition: $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH =~ ^release/
