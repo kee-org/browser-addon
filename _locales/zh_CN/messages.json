@@ -51,17 +51,9 @@
         "message": "选项",
         "description": "Link to the add-on's settings"
     },
-    "betatestingmigration13": {
-        "message": "All Kee development work depends upon GitHub already. GitHub offers a way for the automatic update feature to be enabled without the need for any additional trusted third parties to be introduced to the development and release process of Kee. It's also the fastest way to deliver this new service at short notice.",
-        "description": ""
-    },
     "yes": {
         "message": "是",
         "description": "Yes"
-    },
-    "betatestingmigration15": {
-        "message": "This message has been displayed automatically after an update to the latest (and last ever) version on the beta testing channel you subscribed to previously. However, we recommend performing an independent search for information if you have any doubts about the legitimacy of this message.",
-        "description": ""
     },
     "pref_keePassRPCPortWarning_label": {
         "message": "注意：一同更改 KeePass.config 中的设置，否则 Kee 将不能始终与 KeePass 保持通讯",
@@ -118,6 +110,10 @@
     "update": {
         "message": "更新",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Fixes a bug which caused notifications to not display. In some situations this would have caused the dialog for updating a password to remain on screen after the Update button had been pressed and the password was successfully updated.; Options now open in a new tab (avoids a Chrome 65 scrolling bug)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "保存记录",
@@ -211,16 +207,8 @@
         "message": "替换该记录的网址（但如果访问旧网址，仍填写表单）",
         "description": ""
     },
-    "betatestingmigration9": {
-        "message": "The new Kee beta testing service is already live and hosted on GitHub but Mozilla do not permit us to automatically migrate your beta \"subscription\" to this new location so you must manually opt-in.",
-        "description": ""
-    },
     "pref_rememberMRUDB_label": {
         "message": "记住最近使用的 KeePass 数据库",
-        "description": ""
-    },
-    "betatestingmigration1": {
-        "message": "Attention Kee beta tester!",
         "description": ""
     },
     "no": {
@@ -261,10 +249,6 @@
     },
     "noUsername_partial_tip": {
         "message": "无用户名",
-        "description": ""
-    },
-    "betatestingmigration4": {
-        "message": "All of your existing settings will be preserved. The only difference will be that future automatic updates will be delivered from github.com rather than mozilla.org.",
         "description": ""
     },
     "group_label": {
@@ -326,10 +310,6 @@
     "notification_raised_title": {
         "message": "Kee 有一则通知给您",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
-    },
-    "betatestingmigration2": {
-        "message": "Thanks for beta testing the latest improvements to Kee. Your support helps deliver a high quality stable add-on to many people.",
-        "description": ""
     },
     "conn_sl_high": {
         "message": "高",
@@ -395,10 +375,6 @@
         "message": "Kee 发送了一个无效的命令到您的密码数据库。",
         "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
     },
-    "betatestingmigration3": {
-        "message": "To continue beta testing, you MUST re-register your support by re-installing the add-on from this new location: ",
-        "description": "new URL will be suffixed to end of this string"
-    },
     "pref_Advanced_heading": {
         "message": "高级",
         "description": ""
@@ -406,10 +382,6 @@
     "pref_when_kee_chooses_standard_form_desc": {
         "message": "当 Kee 为一个标准表单选择了一个匹配的登录项时，Kee 应该",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
-    },
-    "betatestingmigration11": {
-        "message": "When the next stable version of Kee with a higher version number is released to AMO, you will be updated to that version and thereafter no longer be a beta tester. We hope you will choose to keep beta testing Kee but if you do not, your security will not be affected.",
-        "description": ""
     },
     "whichEntry_label": {
         "message": "选择一项...",
@@ -423,20 +395,12 @@
         "message": "显示“密码更新成功”通知",
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
-    "list_version_upgrade_2_1": {
-        "message": "特定站点设置现在可删除；如果没有明确设定数据库名称，则将显示数据库的文件名称；修复导致未使用的已生成密码显示在“Kee 已生成密码备份”数据库组的问题",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
-    },
     "conn_sl_desc": {
         "message": "更改下面的设置控制在您的网页浏览器与 KeePass 之间的安全通信链路。您通常不需要调整这些设置，如果您想调整，请确保您已先阅读了相关的手册页。",
         "description": ""
     },
     "savePasswordLogin_tip": {
         "message": "用户名: $1。网址（URL）: $2",
-        "description": ""
-    },
-    "betatestingmigration7": {
-        "message": "Mozilla have just announced another breaking change to the Firefox add-on service which means that if you take no action, you will be removed from the beta testing program. This applies to all Firefox add-ons and is due to take effect in just a few days.",
         "description": ""
     },
     "method": {
@@ -486,10 +450,6 @@
     "conn_setup_missing_param": {
         "message": "Kee 因未提供必要的参数而失败。进一步信息可能如下：$1",
         "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
-    },
-    "betatestingmigration14": {
-        "message": "Can I trust this information?",
-        "description": ""
     },
     "KB_shortcut_simple_2_desc": {
         "message": "登录 KeePass / 选择匹配的记录 / 显示匹配记录的列表",
@@ -571,10 +531,6 @@
         "message": "添加",
         "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
     },
-    "betatestingmigration10": {
-        "message": "What happens if I do not install the add-on from the new beta channel location?",
-        "description": ""
-    },
     "pref_logLevelInformation_label": {
         "message": "信息",
         "description": "Logging level for important information about Kee's operation"
@@ -606,10 +562,6 @@
     "conn_setup_retype_password": {
         "message": "请在弹出的提示中输入新密码。",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
-    },
-    "betatestingmigration6": {
-        "message": "Why am I being asked to do this?",
-        "description": ""
     },
     "dont_show_again": {
         "message": "不再显示",
@@ -647,10 +599,6 @@
         "message": "KeeFox 的新名字",
         "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
     },
-    "betatestingmigration12": {
-        "message": "Why GitHub.com?",
-        "description": ""
-    },
     "autoclose_countdown": {
         "message": "$1 秒后自动关闭",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -658,10 +606,6 @@
     "conn_setup_failed": {
         "message": "Kee 未被准许连接，可能是您输入的连接密码不正确。",
         "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
-    },
-    "betatestingmigration8": {
-        "message": "From now on, Mozilla will allow only one version of an add-on to be hosted on the official add-ons site (known as \"AMO\"). This means that any add-on with a beta testing process must now manage and host its own beta testing service.",
-        "description": ""
     },
     "Search_label": {
         "message": "搜索...",
@@ -718,10 +662,6 @@
     "notification_save_password_tip": {
         "message": "点击工具栏中的 Kee 按钮，选择“保存最新的登录”",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
-    },
-    "betatestingmigration5": {
-        "message": "Hopefully the questions and answers below will provide you with all the information you need but if not, please search or ask further questions on the community forum at ",
-        "description": "https://forum.kee.pm will be suffixed to the end of this string"
     },
     "point_user_to_install_instructions_start": {
         "message": "上述步骤的指南在我们的",

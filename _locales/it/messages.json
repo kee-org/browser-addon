@@ -51,17 +51,9 @@
         "message": "Opzioni",
         "description": "Link to the add-on's settings"
     },
-    "betatestingmigration13": {
-        "message": "Tutto lo sviluppo di Kee già dipende da GitHub. Permette di abilitare la funzionalità di aggiornamento automatico senza involvere terze parti nei processi di sviluppo e rilascio di Kee. È anche il metodo più veloce per distribuire questo nuovo servizio con così poco preavviso.",
-        "description": ""
-    },
     "yes": {
         "message": "Sì",
         "description": "Yes"
-    },
-    "betatestingmigration15": {
-        "message": "Questo messaggio è stato mostrato in modo automatico dopo l'ultima (per sempre) versione sul canale del programma beta a cui ti eri iscritto precedentemente. Ti suggeriamo di fare ricerche indipendenti se hai qualunque dubbio riguardo la legittimità di questo messaggio.",
-        "description": ""
     },
     "pref_keePassRPCPortWarning_label": {
         "message": "NB: cambia questa impostazione in KeePass.config, altrimenti Kee non sarà in grado di comunicare con KeePass",
@@ -118,6 +110,10 @@
     "update": {
         "message": "Aggiorna",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Fixes a bug which caused notifications to not display. In some situations this would have caused the dialog for updating a password to remain on screen after the Update button had been pressed and the password was successfully updated.; Options now open in a new tab (avoids a Chrome 65 scrolling bug)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "Salva voce",
@@ -211,16 +207,8 @@
         "message": "Sostituisci la URL di questa voce (ma riempi i moduli se visiti la vecchia URL)",
         "description": ""
     },
-    "betatestingmigration9": {
-        "message": "Il nuovo servizio per il programma beta di Kee è già attivo ed ospitato su GitHub, ma Mozilla non ci permette di migrare la tua \"sottoscrizione\" beta a questo nuovo percorso, dovrai quindi procedere manualmente.",
-        "description": ""
-    },
     "pref_rememberMRUDB_label": {
         "message": "Ricorda l'ultimo database di KeePass utilizzato",
-        "description": ""
-    },
-    "betatestingmigration1": {
-        "message": "Beta tester di Kee: Attenzione!",
         "description": ""
     },
     "no": {
@@ -261,10 +249,6 @@
     },
     "noUsername_partial_tip": {
         "message": "nessun nome utente",
-        "description": ""
-    },
-    "betatestingmigration4": {
-        "message": "Tutte le tue impostazioni attuali verranno mantenute. L'unica differenza è che gli aggiornamenti automatici verranno distribuiti da github.com invece che da mozilla.org.",
         "description": ""
     },
     "group_label": {
@@ -326,10 +310,6 @@
     "notification_raised_title": {
         "message": "Kee ha una notifica per te",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
-    },
-    "betatestingmigration2": {
-        "message": "Grazie per la partecipazione al programma beta di Kee. Il tuo supporto ci permette di rilasciare al pubblico un componente aggiuntivo stabile e di alta qualità.",
-        "description": ""
     },
     "conn_sl_high": {
         "message": "Alto",
@@ -395,10 +375,6 @@
         "message": "Kee ha inviato un comando non valido al tuo password database.",
         "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
     },
-    "betatestingmigration3": {
-        "message": "Per continuare a far parte del programma beta, DEVI re-installare il componente aggiuntivo da questo nuovo percorso:",
-        "description": "new URL will be suffixed to end of this string"
-    },
     "pref_Advanced_heading": {
         "message": "Avanzate",
         "description": ""
@@ -406,10 +382,6 @@
     "pref_when_kee_chooses_standard_form_desc": {
         "message": "Quando Kee sceglie una voce corrispondente per un campo, deve",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
-    },
-    "betatestingmigration11": {
-        "message": "Quando verrà rilasciata la prossima versione stabile di Kee su AMO, verrai aggiornato a questa versione e non sarai più un beta tester. Speriamo che tu continui a testare Kee nel programma beta, ma se non lo farai la tua sicurezza non ne risentirà.",
-        "description": ""
     },
     "whichEntry_label": {
         "message": "Seleziona una voce...",
@@ -423,20 +395,12 @@
         "message": "Mostra la notifica \"La password è stata aggiornata con successo.\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
-    "list_version_upgrade_2_1": {
-        "message": "È ora possibile eliminare le impostazioni specifiche di ogni sito; Quando il nome del database non è impostato verrà mostrato il nome del file; Risolto un problema che causava il salvataggio di password non utilizzate nel gruppo \"KeeFox Generated Password Backups\" del database",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
-    },
     "conn_sl_desc": {
         "message": "Cambia le impostazioni sottostanti per controllare la sicurezza del collegamento fra il tuo browser web e KeePass. Probabilmente non dovrai mai cambiare queste impostazioni, ma se hai intenzione di farlo sei pregato di leggere prima il manuale.",
         "description": ""
     },
     "savePasswordLogin_tip": {
         "message": "Nome utente: $1. Indirizzo sito (URL): $2",
-        "description": ""
-    },
-    "betatestingmigration7": {
-        "message": "Mozilla ha appena annunciato un nuovo cambiamento di rottura al servizio dei componenti aggiuntivi di Firefox. Ciò significa che se non prenderai nessuna azione verrai rimosso dal programma beta. Questo si applica a tutti i componenti aggiuntivi di Firefox, e avrà effetto fra pochi giorni.",
         "description": ""
     },
     "method": {
@@ -486,10 +450,6 @@
     "conn_setup_missing_param": {
         "message": "Kee non è riuscito a fornire un parametro richiesto. Seguono maggiori  informazioni: $1",
         "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
-    },
-    "betatestingmigration14": {
-        "message": "Posso fidarmi di queste informazioni?",
-        "description": ""
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Accedi a KeePass / Seleziona voce corrispondente / Mostra lista voci corrispondenti",
@@ -571,10 +531,6 @@
         "message": "Aggiungi",
         "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
     },
-    "betatestingmigration10": {
-        "message": "Cosa succede se non installo il componente aggiuntivo dal nuovo canale beta?",
-        "description": ""
-    },
     "pref_logLevelInformation_label": {
         "message": "Informazione",
         "description": "Logging level for important information about Kee's operation"
@@ -606,10 +562,6 @@
     "conn_setup_retype_password": {
         "message": "Inserisci la nuova password quando viene richiesto.",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
-    },
-    "betatestingmigration6": {
-        "message": "Perché me lo state chiedendo?",
-        "description": ""
     },
     "dont_show_again": {
         "message": "Non mostrare più questo messaggio",
@@ -647,10 +599,6 @@
         "message": "Il nuovo nome per KeeFox",
         "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
     },
-    "betatestingmigration12": {
-        "message": "Perché GitHub.com?",
-        "description": ""
-    },
     "autoclose_countdown": {
         "message": "Chiusura automatica fra $1 secondi",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -658,10 +606,6 @@
     "conn_setup_failed": {
         "message": "Kee non è riuscito a connettersi, probabilmente perché hai inserito una password di connessione non corretta.",
         "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
-    },
-    "betatestingmigration8": {
-        "message": "Da ora in poi Mozilla permetterà l'esistenza di una sola versione di un componente aggiuntivo sul sito ufficiale a loro dedicato (conosciuto anche come \"AMO\"). Questo significa che ogni componente aggiuntivo con un programma beta dovrà gestire ed ospitare il servizio per il programma beta in modo indipendente. ",
-        "description": ""
     },
     "Search_label": {
         "message": "Cerca...",
@@ -718,10 +662,6 @@
     "notification_save_password_tip": {
         "message": "Clicca sul pulsante Kee (nella barra degli strumenti) e seleziona \"Salva l'ultimo accesso\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
-    },
-    "betatestingmigration5": {
-        "message": "Speriamo che le domande e risposte qui sotto ti forniscano tutte le informazioni di cui hai bisogno, se non sarà così puoi cercare ulteriori domande o postarne di nuove sul forum della comunità a: ",
-        "description": "https://forum.kee.pm will be suffixed to the end of this string"
     },
     "point_user_to_install_instructions_start": {
         "message": "Puoi trovare le istruzioni per entrambi i passaggi nel nostro",

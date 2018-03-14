@@ -51,17 +51,9 @@
         "message": "Možnosti",
         "description": "Link to the add-on's settings"
     },
-    "betatestingmigration13": {
-        "message": "Všetky vývojové práce na Kee už závisia na GitHube. GitHub ponúka spôsob aktivácie automatickej aktualizácie bez toho, aby boli potrebné ďalšie dôveryhodné tretie strany, ktoré by mali byť zapojené do procesu vývoja a zverejňovania Kee. Je to tiež najrýchlejší spôsob, ako poskytnúť túto novú službu v krátkom čase.",
-        "description": ""
-    },
     "yes": {
         "message": "Áno",
         "description": "Yes"
-    },
-    "betatestingmigration15": {
-        "message": "Táto správa sa automaticky zobrazí po aktualizácii najnovšej (a poslednej) verzie na beta testovacom kanáli, na ktorý ste predtým prihlásili. Odporúčame však vykonať nezávislé vyhľadávanie informácií, ak máte pochybnosti o legitímnosti tejto správy.",
-        "description": ""
     },
     "pref_keePassRPCPortWarning_label": {
         "message": "Poznámka: zmeňte nastavenia v Keepass.config, lebo inak Kee nebude vždy vedieť komunikovať s KeePass-om",
@@ -118,6 +110,10 @@
     "update": {
         "message": "Aktualizovať",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Fixes a bug which caused notifications to not display. In some situations this would have caused the dialog for updating a password to remain on screen after the Update button had been pressed and the password was successfully updated.; Options now open in a new tab (avoids a Chrome 65 scrolling bug)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "Uložiť prihlasovacie údaje",
@@ -211,16 +207,8 @@
         "message": "Nahradiť URL záznamu (ale stále vyplniť formuláre, ak navštívite starú adresu URL)",
         "description": ""
     },
-    "betatestingmigration9": {
-        "message": "Nová služba beta testovania Kee je už aktívna a hosťovaná na GitHub-e, ale Mozilla neumožňuje automatickú migráciu vášho beta \"odberu\"  na toto nové miesto, takže sa musíte manuálne prihlásiť.",
-        "description": ""
-    },
     "pref_rememberMRUDB_label": {
         "message": "Pamätať si naposledy použitú KeePass databázu",
-        "description": ""
-    },
-    "betatestingmigration1": {
-        "message": "Pozor Kee beta tester!",
         "description": ""
     },
     "no": {
@@ -261,10 +249,6 @@
     },
     "noUsername_partial_tip": {
         "message": "žiadne používateľské meno",
-        "description": ""
-    },
-    "betatestingmigration4": {
-        "message": "Všetky vaše existujúce nastavenia sa zachovajú. Jediný rozdiel bude v tom, že budúce automatické aktualizácie budú doručené z github.com a nie z mozilla.org.",
         "description": ""
     },
     "group_label": {
@@ -326,10 +310,6 @@
     "notification_raised_title": {
         "message": "Kee má pre vás oznámenie",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
-    },
-    "betatestingmigration2": {
-        "message": "Ďakujeme za beta testovanie najnovších vylepšení Kee. Vaša podpora pomáha dodávať vysokokvalitný stabilný doplnok mnohým ľuďom.",
-        "description": ""
     },
     "conn_sl_high": {
         "message": "Vysoká",
@@ -395,10 +375,6 @@
         "message": "Kee poslal neplatný príkaz do vašej databázy hesiel.",
         "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
     },
-    "betatestingmigration3": {
-        "message": "Ak chcete pokračovať v testovaní beta, musíte opätovne nainštalovať doplnok z tohto nového umiestnenia:",
-        "description": "new URL will be suffixed to end of this string"
-    },
     "pref_Advanced_heading": {
         "message": "Pokročilé",
         "description": ""
@@ -406,10 +382,6 @@
     "pref_when_kee_chooses_standard_form_desc": {
         "message": "Keď Kee vyberie zodpovedajúci prihlasovací záznam pre štandardný formulár, mal by",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
-    },
-    "betatestingmigration11": {
-        "message": "Keď sa do AMO uvoľní ďalšia stabilná verzia Kee s vyšším číslom verzie, bude doplnok aktualizovaný na túto verziu a potom už nebudete beta testerom. Dúfame, že sa rozhodnete ostať v beta testovaní Kee, ale ak nie, vaša bezpečnosť nebude ovplyvnená.",
-        "description": ""
     },
     "whichEntry_label": {
         "message": "Vybrať záznam...",
@@ -423,20 +395,12 @@
         "message": "Zobraziť oznámenie \"Heslo úspešne aktualizované\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
-    "list_version_upgrade_2_1": {
-        "message": "Konkrétne nastavenia stránok môžu byť teraz vymazané; Ak nie je výslovne nastavený žiadny názov databázy, zobrazí sa namiesto neho názov súboru databázy; Opravený problém, ktorý viedol k tomu, že nevyužité vygenerované heslá boli ukladané v skupine databázových záloh s názvom \"Kee Generated Passwords Backups\"",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
-    },
     "conn_sl_desc": {
         "message": "Zmeňte nižšie uvedené nastavenia, aby ste určili ako silne je zabezpečené komunikačné spojenie medzi webovým prehliadačom a KeePass. Tieto nastavenia pravdepodobne nikdy nebudete musieť upravovať, ale ak áno, uistite sa, že ste najprv prečítali príslušné stránky v príručke.",
         "description": ""
     },
     "savePasswordLogin_tip": {
         "message": "Používateľské meno: $1. Adresa webovej stránky (URL): $2",
-        "description": ""
-    },
-    "betatestingmigration7": {
-        "message": "Mozilla práve oznámila ďalšiu prelomovú zmenu doplnkovej služby pre Firefox, čo znamená, že ak neurobíte žiadny čin, budete z testovacieho beta programu odstránený. Platí to pre všetky Firefox doplnky a má sa prejaviť už niekoľko dní.",
         "description": ""
     },
     "method": {
@@ -486,10 +450,6 @@
     "conn_setup_missing_param": {
         "message": "Kee nedokázal poskytnúť požadovaný parameter. Ďalšie informácie môžu nasledovať: $1",
         "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
-    },
-    "betatestingmigration14": {
-        "message": "Môžem týmto informáciám dôverovať?",
-        "description": ""
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Prihlásenie do služby KeePass / Výber zodpovedajúceho záznamu / Zobrazenie zoznamu priradených záznamov",
@@ -571,10 +531,6 @@
         "message": "Pridať",
         "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
     },
-    "betatestingmigration10": {
-        "message": "Čo sa stane, ak nenainštalujem doplnok z nového umiestnenia beta kanála?",
-        "description": ""
-    },
     "pref_logLevelInformation_label": {
         "message": "Informácie",
         "description": "Logging level for important information about Kee's operation"
@@ -606,10 +562,6 @@
     "conn_setup_retype_password": {
         "message": "Po výzve zadajte nové heslo.",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
-    },
-    "betatestingmigration6": {
-        "message": "Prečo sa to odo mňa vyžaduje?",
-        "description": ""
     },
     "dont_show_again": {
         "message": "Nezobrazovať toto oznámenie znova",
@@ -647,10 +599,6 @@
         "message": "Nový názov pre KeeFox",
         "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
     },
-    "betatestingmigration12": {
-        "message": "Prečo GitHub.com?",
-        "description": ""
-    },
     "autoclose_countdown": {
         "message": "Automaticky zatvoriť za $1 sekúnd",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -658,10 +606,6 @@
     "conn_setup_failed": {
         "message": "Kee sa nemohlo pripojiť pravdepodobne preto, že ste zadali nesprávne heslo.",
         "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
-    },
-    "betatestingmigration8": {
-        "message": "Odteraz Mozilla povolí na oficiálnej stránke doplnkov (známej ako \"AMO\") iba jednu verziu doplnku. To znamená, že akýkoľvek doplnok s procesom beta testovania musí byť teraz spravovaný a umiestnený na vlastnej beta testovacej službe.",
-        "description": ""
     },
     "Search_label": {
         "message": "Hľadať...",
@@ -718,10 +662,6 @@
     "notification_save_password_tip": {
         "message": "Kliknite na tlačidlo Kee (na vašom paneli nástrojov) a potom \"Uložiť posledné prihlásenie\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
-    },
-    "betatestingmigration5": {
-        "message": "Dúfajme, že otázky a odpovede uvedené nižšie vám poskytnú všetky informácie, ktoré potrebujete, ale ak nie, vyhľadajte alebo sa opýtajte ďalšie otázky vo fóre komunity na adrese",
-        "description": "https://forum.kee.pm will be suffixed to the end of this string"
     },
     "point_user_to_install_instructions_start": {
         "message": "Pokyny pre oba vyššie uvedené kroky nájdete na našich stránkach",

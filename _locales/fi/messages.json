@@ -51,17 +51,9 @@
         "message": "Asetukset",
         "description": "Link to the add-on's settings"
     },
-    "betatestingmigration13": {
-        "message": "Keen kehitys pyörii jo nyt lähes kokonaan GitHubissa. GitHub tarjoaa kätevän tavan lisäosan automaattiselle päivitystoiminnolle, ilman tarvetta kolmannen osapuolen virityksille kehitysvaiheessa tai Keen valmiissa versiossa. Se on myös nopein keino toteuttaa tämä uusi palvelu lyhyellä varoitusajalla.",
-        "description": ""
-    },
     "yes": {
         "message": "Kyllä",
         "description": "Yes"
-    },
-    "betatestingmigration15": {
-        "message": "Tämä viesti näytetään automaattisesti kun lisäosa on päivitetty uusimpaan versioon (ja viimeiseen) tällä betatestauskanavalla jossa olen aiemmin ollut mukana. Suosittelemme kuitenkin etsimään asiasta tietoa itsenäisesti, mikäli sinulla on epäilyksiä tämän viestin luotettavuudesta.",
-        "description": ""
     },
     "pref_keePassRPCPortWarning_label": {
         "message": "Huom: Muista vaihtaa portti myös KeePassin lisäosan asetuksista tai muuten Kee ei toimi oikein",
@@ -118,6 +110,10 @@
     "update": {
         "message": "Päivitä",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Fixes a bug which caused notifications to not display. In some situations this would have caused the dialog for updating a password to remain on screen after the Update button had been pressed and the password was successfully updated.; Options now open in a new tab (avoids a Chrome 65 scrolling bug)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "Tallenna kirjautumistieto",
@@ -211,16 +207,8 @@
         "message": "Korvaa URL-osoite (mutta täytä lomakkeet myös kun käytetään aiempaa URL-osoitetta)",
         "description": ""
     },
-    "betatestingmigration9": {
-        "message": "Keen uusi betatestauspalvelu on jo siirretty ja käytössä GitHub alustalla, mutta Mozilla ei salli meidän automaattisesti rekisteröidä \"betatilaustasi\" uudelle alustalle, joten sinun on itse tehtävä se.",
-        "description": ""
-    },
     "pref_rememberMRUDB_label": {
         "message": "Muista viimeksi käytetty KeePass tietokanta",
-        "description": ""
-    },
-    "betatestingmigration1": {
-        "message": "Huomio Kee betatestaaja!",
         "description": ""
     },
     "no": {
@@ -261,10 +249,6 @@
     },
     "noUsername_partial_tip": {
         "message": "ei käyttäjänimeä",
-        "description": ""
-    },
-    "betatestingmigration4": {
-        "message": "Kaikki aiemmat asetuksesi pysyvät tallessa. Ainoa ero on, että jatkossa automaattiset päivitykset toimitetaan osoitteesta github.com (ennen mozilla.org).",
         "description": ""
     },
     "group_label": {
@@ -326,10 +310,6 @@
     "notification_raised_title": {
         "message": "Kee:lla on sinulle ilmoitus",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
-    },
-    "betatestingmigration2": {
-        "message": "Kiitos osallitumisesta Keen viimeisimpien parannuksien testaukseen. Apusi auttaa pitämään lisäosan vakaan version laadun korkeana.",
-        "description": ""
     },
     "conn_sl_high": {
         "message": "Korkea",
@@ -395,10 +375,6 @@
         "message": "Kee lähetti kelpaamattoman komennon tietokantaasi",
         "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
     },
-    "betatestingmigration3": {
-        "message": "Jatkaaksesi betatestausta, sinun TULEE uudelleen rekisteröidä tukesi asentamalla lisäosan uudelleen täältä:",
-        "description": "new URL will be suffixed to end of this string"
-    },
     "pref_Advanced_heading": {
         "message": "Lisäasetukset",
         "description": ""
@@ -406,10 +382,6 @@
     "pref_when_kee_chooses_standard_form_desc": {
         "message": "Kun Kee valitsee sopivan kirjautumistiedon tavalliselle lomakkeelle",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
-    },
-    "betatestingmigration11": {
-        "message": "Kun Keen uusi vakaa versio suuremmalla versionumerolla julkaistaan AMO:n kautta, lisäosasi päivitetään vakaaseen versioon, etkä ole enää betatestaaja. Toivomme kuitenkin, että jatkat betatestausta, mutta jos päätät lopettaa, se ei vaikuta tietoturvaasi.",
-        "description": ""
     },
     "whichEntry_label": {
         "message": "Valitse",
@@ -423,20 +395,12 @@
         "message": "Näytä viesti \"Salasana vaihdettu onnistuneesti\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
-    "list_version_upgrade_2_1": {
-        "message": "Sivukohtaiset asetukset voidaan nyt poistaa; Kun tietokantaa ei ole nimetty, tietokannan tiedostonimi näytetään sen sijaan; Korjattu virhe jonka takia käyttämättömät luodut salasanat tallentuivat \"Kee Generated Password Backups\" ryhmään tietokannassa",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
-    },
     "conn_sl_desc": {
         "message": "Muuttamalla alla olevia asetuksia voit määrittää kuinka turvallinen selaimen ja KeePassin välinen yhteys on. Sinun ei todennäköisesti tarvitse muuttaa näitä säädöksiä koskaan, mutta jos muutat, varmistathan että tiedät mitä teet.",
         "description": ""
     },
     "savePasswordLogin_tip": {
         "message": "Käyttäjätunnus: $1. Nettisivun osoite (URL): $2",
-        "description": ""
-    },
-    "betatestingmigration7": {
-        "message": "Mozilla on hiljattain ilmoittanut uudesta suuresta muutoksesta Firefoxin lisäosapalveluun, joka tarkoittaa muutoksia, tai Kee poistuu betatestausohjelmasta. Tämä koskee kaikkia Firefoxin lisäosia ja määräaika umpeutuu muutaman päivän sisällä.",
         "description": ""
     },
     "method": {
@@ -486,10 +450,6 @@
     "conn_setup_missing_param": {
         "message": "Kee ei kyennyt lähettämään tarvittavia parametrejä. Lisätietoja: : $1",
         "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
-    },
-    "betatestingmigration14": {
-        "message": "Voinko luottaa tähän tietoon?",
-        "description": ""
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Kirjaudu KeePass/Valitse kirjautumistieto/Näytä sopivat kirjautumistiedot",
@@ -571,10 +531,6 @@
         "message": "Lisää",
         "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
     },
-    "betatestingmigration10": {
-        "message": "Mitä tapahtuu jos en asenna lisäosaa uudelta betatestaus alustalta?",
-        "description": ""
-    },
     "pref_logLevelInformation_label": {
         "message": "3-Lisätiedot",
         "description": "Logging level for important information about Kee's operation"
@@ -606,10 +562,6 @@
     "conn_setup_retype_password": {
         "message": "Kirjoita uusi salasana kun pyydetään",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
-    },
-    "betatestingmigration6": {
-        "message": "Miksi minun täytyy tehdä näin?",
-        "description": ""
     },
     "dont_show_again": {
         "message": "Älä näytä ilmoitusta uudelleen",
@@ -647,10 +599,6 @@
         "message": "KeeFoxin uusi nimi",
         "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
     },
-    "betatestingmigration12": {
-        "message": "Miksi GitHub.com?",
-        "description": ""
-    },
     "autoclose_countdown": {
         "message": "Sulje automaattisesti $1 sekunnin jälkeen",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -658,10 +606,6 @@
     "conn_setup_failed": {
         "message": "Kee yhteys estettiin. Luultavasti kirjoitit salasanan väärin.",
         "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
-    },
-    "betatestingmigration8": {
-        "message": "Jatkossa Mozilla sallii jokaisesta lisäosasta vain yhden version olevan jaossa virallisessa lisäosapalvelussa (tunnetaan myös nimellä \"AMO\"). Tämä tarkoittaa sitä, että jokaisen lisäosan kehittäjän on itse hoidettava betatestausprosessi ja jakelualusta.",
-        "description": ""
     },
     "Search_label": {
         "message": "Etsi...",
@@ -718,10 +662,6 @@
     "notification_save_password_tip": {
         "message": "Paina Kee:n painiketta (työkalurivillä) ja valitse \"Tallenna viimeisin kirjautumistieto\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
-    },
-    "betatestingmigration5": {
-        "message": "Toivottavasti alla olevat kysymykset ja vastaukset tarjoavat sinulle lisätietoja, mutta jos et löydä vastauksia alta, voit etsiä tai esittää kysymyksiä yhteisön keskustelualueella.",
-        "description": "https://forum.kee.pm will be suffixed to the end of this string"
     },
     "point_user_to_install_instructions_start": {
         "message": "Ohjeet yllä oleviin kohtiin löytyvät ",

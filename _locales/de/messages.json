@@ -51,17 +51,9 @@
         "message": "Einstellungen",
         "description": "Link to the add-on's settings"
     },
-    "betatestingmigration13": {
-        "message": "Die gesamte Entwicklungsarbeit von Kee basiert bereits auf GitHub. GitHub bietet die Möglichkeit eine automatische Updatefunktion zu aktivieren, ohne dass dabei irgendwelche zusätzlichen vertrauenswürdigen Dritten in die Entwicklung und die Veröffentlichung von Kee mit eingebunden werden müssten. Es ist außerdem der schnellste Weg um diesen neuen Service kurzfristig auszuliefern.",
-        "description": ""
-    },
     "yes": {
         "message": "Ja",
         "description": "Yes"
-    },
-    "betatestingmigration15": {
-        "message": "Diese Nachricht wird automatisch nach dem Update auf die aktuellste (und aller letzte) Version auf dem Beta-Kanal angezeigt, für den Sie sich \"angemeldet\" haben. Wie dem auch sei, wir empfehlen Ihnen eine unabhängige Suche nach Informationen, für den Fall, dass sie irgendwelche Zweifel an der Rechtmäßigkeit dieser Nachricht haben.",
-        "description": ""
     },
     "pref_keePassRPCPortWarning_label": {
         "message": "Info: Ändern Sie diese Einstellung in der KeePass.config oder wo anders, dann wird Kee nicht immer mit KeePass kommunizieren können",
@@ -118,6 +110,10 @@
     "update": {
         "message": "Aktualisieren",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Repariert einen Fehler, bei dem die Benachrichtigungen nicht angezeigt wurden. In einigen Situationen hätte dies dazu geführt, dass der Dialog zum Aktualisieren eines Kennworts auf dem Bildschirm angezeigt wurde, nachdem die Schaltfläche Aktualisieren gedrückt und das Kennwort erfolgreich aktualisiert wurde. Optionen werden jetzt in einem neuen Tab geöffnet (vermeidet einen Chrome 65 Scroll-Bug)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "Log-in Daten speichern",
@@ -211,16 +207,8 @@
         "message": "Ersetzt die URL des Eintrages (füllt aber weiterhin Formulare auf der alten URL aus)",
         "description": ""
     },
-    "betatestingmigration9": {
-        "message": "Der neue Kee Betatest-Service ist bereits aktiv und auf GitHub gehostet, allerdings erlaubt Mozilla keinen automatischen Wechsel Ihres Beta-\"Abonnement\" zu dieser neuen Stelle, daher müssen sie diesem manuell zustimmen.",
-        "description": ""
-    },
     "pref_rememberMRUDB_label": {
         "message": "Zuletzt verwendete KeePass-Datenbanken speichern",
-        "description": ""
-    },
-    "betatestingmigration1": {
-        "message": "Achtung Kee Betatester!",
         "description": ""
     },
     "no": {
@@ -261,10 +249,6 @@
     },
     "noUsername_partial_tip": {
         "message": "Kein Benutzername",
-        "description": ""
-    },
-    "betatestingmigration4": {
-        "message": "Alle Ihre bisherigen Einstellungen bleiben bestehen. Der einzige Unterschied ist, dass zukünftige automatische Updates von github.com und nicht mehr von mozilla.org übermittelt werden.",
         "description": ""
     },
     "group_label": {
@@ -326,10 +310,6 @@
     "notification_raised_title": {
         "message": "Kee hat ein Benachrichtigung für Sie",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
-    },
-    "betatestingmigration2": {
-        "message": "Danke fürs Testen der letzten Verbesserungen in Kee. Ihre Unterstützung hilft dabei, ein Add-on mit hoher Stabilität und Qualität an viele Menschen auszuliefern.",
-        "description": ""
     },
     "conn_sl_high": {
         "message": "Hoch",
@@ -395,10 +375,6 @@
         "message": "Kee sendete einen ungültigen Befehl zu Ihrer Passwort-Datenbank.",
         "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
     },
-    "betatestingmigration3": {
-        "message": "Um mit dem Beta testen fortzufahren, MÜSSEN Sie ihre Unterstützung neu \"anmelden\", in dem sie das Add-on von dieser neuen Stelle herunterladen:",
-        "description": "new URL will be suffixed to end of this string"
-    },
     "pref_Advanced_heading": {
         "message": "Erweitert",
         "description": ""
@@ -406,10 +382,6 @@
     "pref_when_kee_chooses_standard_form_desc": {
         "message": "Wenn Kee passende Log-in Daten für ein Standardformular wählt, dann soll Kee",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
-    },
-    "betatestingmigration11": {
-        "message": "Sobald die neue stabile Version von Kee mit einer höheren Versionsnummer auf AMO veröffentlicht wird, werden Sie automatisch auf diese Version upgedatet und werden danach kein Betatester mehr sein. Wir hoffen, Sie werden sich dafür entscheiden, weiterhin die Betaversion von Kee zu testen, für den Fall, dass nicht, wird Ihre Sicherheit aber nicht beeinträchtigt sein.",
-        "description": ""
     },
     "whichEntry_label": {
         "message": "Einen Eintrag auswählen...",
@@ -423,20 +395,12 @@
         "message": "Die \"Passwort erfolgreich aktualisiert\" Benachrichtigung anzeigen",
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
-    "list_version_upgrade_2_1": {
-        "message": "Die seitenspezifischen Einstellungen können jetzt gelöscht werden; Falls kein bestimmter Name für die Datenbank festgelegt worden ist, wird stattdessen der Dateiname der Datenbank angezeigt;  Es wurde ein Fehler behoben, der dazu geführt hat, dass nicht verwendete generierte Passwörter in der Datenbankgruppe \"Kee Generated Password Backups\" gespeichert worden sind.",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
-    },
     "conn_sl_desc": {
         "message": "Ändern Sie zur Überwachung der Kommunikationsverbindung zwischen Ihrem Webbrowser und KeePass die unten stehenden Einstellungen. Bevor Sie diese Einstellungen ändern, stellen Sie bitte sicher, dass Sie zuerst die entsprechenden Hilfeseiten gelesen haben.",
         "description": ""
     },
     "savePasswordLogin_tip": {
         "message": "Benutzername: $1. Webseiten-Adresse (URL): $2",
-        "description": ""
-    },
-    "betatestingmigration7": {
-        "message": "Mozilla hat kürzlich eine weitere Änderung für den Firefox Add-on-Service angekündigt. Diese haben zur Folge, falls sie nicht unternehmen, werden Sie aus dem Betatest-Programm entfernt. Dies gilt für alle Firefox Add-ons und soll in wenigen Tagen wirksam werden.",
         "description": ""
     },
     "method": {
@@ -486,10 +450,6 @@
     "conn_setup_missing_param": {
         "message": "Kee konnte einen erforderlichen Parameter nicht übertragen. Weitere Informationen folgen: $1",
         "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
-    },
-    "betatestingmigration14": {
-        "message": "Kann ich diesen Informationen vertrauen?",
-        "description": ""
     },
     "KB_shortcut_simple_2_desc": {
         "message": "In KeePass anmelden / Passende Anmeldungen auswählen / Liste der passenden Anmeldungen anzeigen",
@@ -571,10 +531,6 @@
         "message": "Hinzufügen",
         "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
     },
-    "betatestingmigration10": {
-        "message": "Was passiert, falls ich das Add-on nicht von dem neuen Beta-Kanal Ort herunterlade?",
-        "description": ""
-    },
     "pref_logLevelInformation_label": {
         "message": "Information",
         "description": "Logging level for important information about Kee's operation"
@@ -606,10 +562,6 @@
     "conn_setup_retype_password": {
         "message": "Bitte bei Aufforderung ein neues Passwort eingeben.",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
-    },
-    "betatestingmigration6": {
-        "message": "Warum werde ich gebeten dies zu tun?",
-        "description": ""
     },
     "dont_show_again": {
         "message": "Nachricht nicht nochmals anzeigen",
@@ -647,10 +599,6 @@
         "message": "Der neue Name für KeeFox",
         "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
     },
-    "betatestingmigration12": {
-        "message": "Warum GitHub.com?",
-        "description": ""
-    },
     "autoclose_countdown": {
         "message": "Automatisch in $1 Sekunden schließen",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
@@ -658,10 +606,6 @@
     "conn_setup_failed": {
         "message": "Kee wurde die Verbindung nicht erlaubt, wahrscheinlich weil das eingegebene Verbindungspasswort falsch ist.",
         "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
-    },
-    "betatestingmigration8": {
-        "message": "Von nun an erlaubt Mozilla nur das Hosten einer eine Add-on-Version auf der offiziellen Add-On Seite (auch bekannt als \"AMO\"). Dies bedeutet, alle Add-ons mit einem Betatest-Prozess müssen ihren Betatest-Service nun selbst verwalten und hosten.",
-        "description": ""
     },
     "Search_label": {
         "message": "Suche...",
@@ -718,10 +662,6 @@
     "notification_save_password_tip": {
         "message": "Klicken SIe auf die Kee Schaltfläche (in Ihrer Symbolleiste) und klicken Sie anschließend auf \"Letzte Log-in Daten speichern\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
-    },
-    "betatestingmigration5": {
-        "message": "Hoffentlich versorgen Sie die folgenden Fragen und Antworten mit allen nötigen Informationen. Falls jedoch nicht, suchen oder stellen Sie bitte weitere Fragen in unserem Community Forum.",
-        "description": "https://forum.kee.pm will be suffixed to the end of this string"
     },
     "point_user_to_install_instructions_start": {
         "message": "Eine Anleitung für die beiden oben genannten Schritte, finden Sie im",
