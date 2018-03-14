@@ -2,8 +2,8 @@
     "manifest_version": 2,
     "name": "Kee",
     "default_locale": "en",
-    "version": "2.3.0",
-    "version_name": "2.3.0",
+    "version": "2.4.0",
+    "version_name": "2.4.0",
     "author": "Chris Tomlinson",
     "description": "Kee adds free, secure and easy password management features to your browser which save time and keep your private data more secure.",
     "background": {
