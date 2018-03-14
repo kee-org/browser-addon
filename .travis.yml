@@ -50,15 +50,19 @@ after_success:
   - echo "Manifest used for build..."
   - cat manifest.json
   
+# Ensure we have suitable authentication for pushing git changes when necessary
+# Sign the new beta release and prepare the auto-update data if we're on a release branch (weird logic per explanation for after_success)
 before_deploy:
-  # Ensure we have suitable authentication for pushing git changes when necessary
-  - git config --global user.email "travis@travis-ci.org"
-  - git config --global user.name "Travis CI"
-  - git config credential.helper "store --file=.git/credentials" 
-  - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
-  # Sign the new beta release and prepare the auto-update data if we're on a release branch (weird logic per explanation for after_success)
-  - 'test $(expr $TRAVIS_BRANCH : "release/.*") -eq 0 -o $TRAVIS_PULL_REQUEST != "false" || { chmod 755 prepareBetaRelease.sh && ./prepareBetaRelease.sh; }'
-  - echo "before_deploy complete"
+  - >
+    if ! [ "$BEFORE_DEPLOY_HAS_RAN" ]; then
+      export BEFORE_DEPLOY_HAS_RAN=1;
+      git config --global user.email "travis@travis-ci.org"
+      git config --global user.name "Travis CI"
+      git config credential.helper "store --file=.git/credentials"
+      echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+      'test $(expr $TRAVIS_BRANCH : "release/.*") -eq 0 -o $TRAVIS_PULL_REQUEST != "false" || { chmod 755 prepareBetaRelease.sh && ./prepareBetaRelease.sh; }'
+      echo "before_deploy complete"
+    fi
 
 # Push the new tag back to GitHub and upload artifacts but only if on the master or a release branch
 deploy:

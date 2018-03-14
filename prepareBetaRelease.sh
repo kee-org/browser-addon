@@ -8,11 +8,8 @@ cd -
 mkdir dist/signed
 echo "Signing debug build..."
 gulp sign
-echo "link:"
-cat .downloadLinkKeeXPI
-echo "XPI:"
-cat .signedKeeXPI
 faauv --update ../browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)
+echo "New update manifest follows"
 cat ../browser-addon-updates/beta/update.json
 cd ../browser-addon-updates
 git add .
