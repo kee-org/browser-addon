@@ -50,14 +50,22 @@ after_success:
   - echo "Manifest used for build..."
   - cat manifest.json
   
+# Ensure we have suitable authentication for pushing git changes when necessary
+# Sign the new beta release and prepare the auto-update data if we're on a release branch (weird logic per explanation for after_success)
 before_deploy:
-  # Ensure we have suitable authentication for pushing git changes when necessary
-  - git config --global user.email "travis@travis-ci.org"
-  - git config --global user.name "Travis CI"
-  - git config credential.helper "store --file=.git/credentials" 
-  - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
-  # Sign the new beta release and prepare the auto-update data if we're on a release branch (weird logic per explanation for after_success)
-  - 'test $(expr $TRAVIS_BRANCH : "release/.*") -eq 0 -o $TRAVIS_PULL_REQUEST != "false" || { chmod 755 prepareBetaRelease.sh && ./prepareBetaRelease.sh; }'
+  - >
+    if ! [ "$BEFORE_DEPLOY_HAS_RAN" ]; then
+      export BEFORE_DEPLOY_HAS_RAN=1;
+      git config --global user.email "travis@travis-ci.org"
+      git config --global user.name "Travis CI"
+      git config credential.helper "store --file=.git/credentials"
+      echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+      pwd
+      ls prepareBetaRelease.sh
+      ls ./prepareBetaRelease.sh
+      test $(expr $TRAVIS_BRANCH : "release/.*") -eq 0 -o $TRAVIS_PULL_REQUEST != "false" || { chmod 755 ./prepareBetaRelease.sh && ./prepareBetaRelease.sh; }
+      echo "before_deploy complete"
+    fi
 
 # Push the new tag back to GitHub and upload artifacts but only if on the master or a release branch
 deploy:
@@ -88,9 +96,7 @@ deploy:
     api_key:
       secure: "DC8qtOkMdII1bYL8UZdVuEJNFfk7pywLIA93F7O6y8ruWt2N23c1grC0l0kmWjFKAyjv5pILddLm5FPpEaN5tRWd3ROHjmP/kXRaY0vSsrUD6bIFHbIg6rouenfVZo9L5jtyzJQKABZABWmqFcKdE+qmpOlO6aAgwDHdl0Ai+zhBU8mHsVv5y2yqjBGTyXpBNVEtPEMetfJSq0fq6U/LOhyWn/dGCiHdA7pmvznQ6Uiu8ShNAJiRq47tlD0cGLQSpFbKGWoJlxGIecHkDJDfE4V4gmS7rrGp50Y9TbFmxFxGnNxwRCWAL1usp0yDjliIYkzl0bNrw2MRSTz+vgMAYjwwUHb0VgCciRDorJplJGmcN2S7UrpcaffL7b5MDpn9wfKSOvPLsPqhGpRudB9/v6KawhcKZ5dOLQgfup5kjV/WuWG9BgeDFN7S9/Tzw9EUD6tuou+duzlu+QSjNkUrAxuWdnpC7QgVxIVkXdD7qdmDzb34jkJhEF5Gk6XY52Yyiy+GDjkfP03QV5qk7nRXaUu9FI/OWMuSyC6ru6VyCABoKCV0o8kbcPVjIl9yJM8+5t4+RBQj/Saohgm+t2gZhgeFgE9N2Sj3pcp8+iaurlcFJI8DLIBwsNpJXFlLIwZoq0/SOkXIUmilhkEntWy9ctj8LSX47GobAScneRY99+w="
     file_glob: true
-    file:
-      - dist/*
-      - dist/signed/*
+    file: "dist/**/*.{xpi,zip}"
     skip_cleanup: true
     body: "This is an automatically generated beta release. The first beta release for this major.minor version has been thoroughly tested; subsequent releases typically contain only new translations and occasional critical fixes with very limited scope. After beta testing this release may be promoted to a stable release. This message will be replaced if that happens. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550"
     on:
@@ -99,7 +105,7 @@ deploy:
   # Then publish the new release to existing users
   - provider: script
     skip_cleanup: true
-    script: cd ../browser-addon-updates && git push && cd -
+    script: echo "Pushing update file" && cd $TRAVIS_BUILD_DIR/../browser-addon-updates && git push && cd -
     on:
       all_branches: true
       condition: $TRAVIS_PULL_REQUEST = "false" && $TRAVIS_BRANCH =~ ^release/

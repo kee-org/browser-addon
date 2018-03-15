@@ -495,7 +495,7 @@ gulp.task('sign', function () {
 
     signAddon({
         xpiPath: 'dist/' + distFileName,
-        version: manifest.version,
+        version: manifest.version + 'beta',
         apiKey: process.env.AMO_API_KEY,
         apiSecret: process.env.AMO_API_SECRET,
         id: 'keefox@chris.tomlinson',
