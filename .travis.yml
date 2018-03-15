@@ -63,7 +63,7 @@ before_deploy:
       pwd
       ls prepareBetaRelease.sh
       ls ./prepareBetaRelease.sh
-      'test $(expr $TRAVIS_BRANCH : "release/.*") -eq 0 -o $TRAVIS_PULL_REQUEST != "false" || { chmod 755 ./prepareBetaRelease.sh && ./prepareBetaRelease.sh; }'
+      test $(expr $TRAVIS_BRANCH : "release/.*") -eq 0 -o $TRAVIS_PULL_REQUEST != "false" || { chmod 755 ./prepareBetaRelease.sh && ./prepareBetaRelease.sh; }
       echo "before_deploy complete"
     fi
 
