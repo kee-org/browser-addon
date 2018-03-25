@@ -95,6 +95,10 @@
         "message": "Behält die alte URL des Eintrages (füllt aber weiterhin Formulare auf der neuen URL aus)",
         "description": ""
     },
+    "list_version_upgrade_2_2": {
+        "message": "Durchsuchen Sie Ihre KeePass-Datenbank direkt in ihrem Browser ­­­- finden sie schnell die Webseite, die Sie brauchen und laden Sie diese direkt (optional auch in einem neuen Tab), damit Kee die Log-in Daten automatisch ausfüllt und Sie einloggt; Navigation mit der Tastatur für passende Log-ins, Suchergebnisse und Passwort-Profile (https://forum.kee.pm/t/keyboard-shortcuts/759); Verbesserung beim Senden von Formulare und der Erkennung von übermittelten Werten; Verbesserung der Geschwindigkeit (insbesondere auf einigen bestimmten Webseiten); Weitere Informationen zu den Geschwindigkeits- und Übermittlungsverbesserungen finden Sie unter https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;Die browsereigene Funktion zum automatischen Füllen von Formularen wird nun ausgeblendet, sofern der keeeigenen Dialog für passende Log-ins angezeigt wird; Workaround für Fehler #71 im Firefox (die Anzeige für die Netzwerkauthentifizierung ist bei einigen Nutzern unausgefüllt/leer/weiß); Die Anzahl an Nachrichten in der Browserkonsole wurden reduziert (betrifft nur Webentwickler)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "website": {
         "message": "Webseite",
         "description": ""
@@ -106,6 +110,10 @@
     "update": {
         "message": "Aktualisieren",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Repariert einen Fehler, bei dem die Benachrichtigungen nicht angezeigt wurden. In einigen Situationen hätte dies dazu geführt, dass der Dialog zum Aktualisieren eines Kennworts auf dem Bildschirm angezeigt wurde, nachdem die Schaltfläche Aktualisieren gedrückt und das Kennwort erfolgreich aktualisiert wurde. Optionen werden jetzt in einem neuen Tab geöffnet (vermeidet einen Chrome 65 Scroll-Bug)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "Log-in Daten speichern",
@@ -356,7 +364,7 @@
         "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "pref_FillAndSubmitForm_desc": {
-        "message": "das Formular ausfüllen und absenden.",
+        "message": "das Formular ausfüllen und absenden",
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
@@ -386,10 +394,6 @@
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Die \"Passwort erfolgreich aktualisiert\" Benachrichtigung anzeigen",
         "description": "Option to enable or diable the information displayed when a password has been updated"
-    },
-    "list_version_upgrade_2_1": {
-        "message": "Die seitenspezifischen Einstellungen können jetzt gelöscht werden; Falls kein bestimmter Name für die Datenbank festgelegt worden ist, wird stattdessen der Dateiname der Datenbank angezeigt;  Es wurde ein Fehler behoben, der dazu geführt hat, dass nicht verwendete generierte Passwörter in der Datenbankgruppe \"Kee Generated Password Backups\" gespeichert worden sind.",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "conn_sl_desc": {
         "message": "Ändern Sie zur Überwachung der Kommunikationsverbindung zwischen Ihrem Webbrowser und KeePass die unten stehenden Einstellungen. Bevor Sie diese Einstellungen ändern, stellen Sie bitte sicher, dass Sie zuerst die entsprechenden Hilfeseiten gelesen haben.",
@@ -564,7 +568,7 @@
         "description": "Button user can click on to cause a message to hide and not reappear"
     },
     "conn_setup_client_features_missing": {
-        "message": "Kee muss für den Zugriff auf Ihren KeePass-Passwort-Safe aktualisiert werden. Stellen Sie sicher, dass Sie die aktuelle Version des Browser-Addons / Erweiterung nutzen.",
+        "message": "Kee muss für den Zugriff auf Ihren KeePass-Passwort-Safe aktualisiert werden. Stellen Sie sicher, dass Sie die aktuelle Version des Browser-Add-on/der Erweiterung nutzen.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "loading": {

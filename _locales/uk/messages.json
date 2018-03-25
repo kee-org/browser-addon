@@ -95,6 +95,10 @@
         "message": "Зберегти стару адресу URL запису (поля форми все одно будуть заповнюватись при відвідуванні нової адреси)",
         "description": ""
     },
+    "list_version_upgrade_2_2": {
+        "message": "Виконуйте пошук в базі даних KeePass прямо з браузера - швидко знаходьте потрібний веб-сайт і завантажуйте його (в поточній або в новій вкладці) для швидкого і автоматичного входу; Навігація за допомогою клавіатури для відповідних записів, результатів пошуку і профілів паролів (https://forum.kee.pm/t/keyboard-shortcuts/759); Вдосконалена функція заповнення форм та виявлення відправлених значень; Покращення швидкодії (особливо на деяких специфічних веб-сайтах); Більше інформації про вдосконалення швидкодії та заповнення форм можна знайти на https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; Функція автозаповнення форм в браузері тепер прихована, коли показано діалог відповідних записів Kee; Проведена робота з помилкою Firefox #71 (Спливаюче вікно авторизації мережі чисте/порожнє/біле для деяких користувачів); Зменшена кількість повідомлень, що відображаються в консолі браузера (стосується лише веб розробників)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "website": {
         "message": "Веб-сайт",
         "description": ""
@@ -106,6 +110,10 @@
     "update": {
         "message": "Оновити",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Виправлено помилку, що спричиняла неможливість показу сповіщень. В окремих випадках, це могло призвести до зависання діалогового вікна оновлення пароля після того, як було натиснуто кнопку Оновити і пароль було успішно оновлено.; Налаштування тепер відкриваються в новій вкладці (уникнення помилки прокручування Chrome 65)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "Зберегти запис",
@@ -164,7 +172,7 @@
         "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
     },
     "pref_ConnectionSecurity_explain_change": {
-        "message": "Іноді при зміні налаштувань внизу Kee запитає вас про новий випадковий пароль. Щоб змінити ці налаштування, вам не потрібно вводити правильний пароль вгорі. Просто змініть їх і натисніть кнопку вгорі.",
+        "message": "Іноді при зміні налаштувань безпеки з'єднання Kee буде запитувати вас про новий випадковий пароль. Щоб змінити ці налаштування, вам не потрібно вводити правильний пароль вгорі. Просто змініть їх і натисніть кнопку вгорі.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
     },
     "update_existing_entry": {
@@ -372,7 +380,7 @@
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
-        "message": "Коли Kee вибирає відповідний запис для стандартної форми, він повинен",
+        "message": "Коли Kee обирає відповідний запис для стандартної форми, він повинен",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "whichEntry_label": {
@@ -386,10 +394,6 @@
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Показувати сповіщення \"Пароль успішно оновлено\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
-    },
-    "list_version_upgrade_2_1": {
-        "message": "Можливість видалення окремих налаштувань сайту; При відсутності назви бази паролів відображується назва файлу; Виправлена проблема, що призводила до зберігання генерованих паролів у групі \"Kee Generated Password Backups\" бази паролів",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "conn_sl_desc": {
         "message": "Зміна цих налаштувань контролює рівень захищеності з'єднання між вашим браузером та KeePass. Зазвичай немає необхідності їх змінювати, але якщо ви все ж захочете зробити це, ознайомтеся спершу з відповідними інструкціями.",
@@ -632,7 +636,7 @@
         "description": ""
     },
     "conn_setup_enter_password": {
-        "message": "Введіть пароль, який показано у вікні KeePass \"Авторизація нового з'єднання\". Вам не треба пам'ятати цей пароль. У разі помилки, ви зможете відразу ж спробувати знову.",
+        "message": "Введіть пароль, який показано у вікні KeePass \"Авторизація нового з'єднання\". Вам не треба пам'ятати цей пароль. У разі помилки, ви зможете повторити спробу.",
         "description": ""
     },
     "text_field_name": {

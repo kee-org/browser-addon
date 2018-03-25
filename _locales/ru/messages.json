@@ -95,6 +95,10 @@
         "message": "Сохранить URL старой записи (но все равно заполнять формы при посещении нового URL)",
         "description": ""
     },
+    "list_version_upgrade_2_2": {
+        "message": "Теперь вы можете выполнять поиск в своих базах KeePass прямо из браузера: быстро найти веб-сайт, который вам необходим и загрузить его (при желании - в отдельной вкладке), чтобы Kee с легкостью выполнил автозаполнение и залогинился в нем; Управление с клавиатуры в списке подходящих логинов, результатов поиска и профилей паролей (https://forum.kee.pm/t/keyboard-shortcuts/759); Улучшена возможность отправлять форму с введенными данными и определять введенные данные; Увеличение быстродействия (особенно на некоторых особых веб-сайтах); Более подробную информацию об улучшениях в быстродействии и сохранении введенной информации можно найти тут https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;Теперь встроенная функция браузера для автозаполнения   скрывается на время отображения диалога Kee с подходящими логинами; Временное решение для ошибки Firefox в #71 (Network Authentication popup is blank/empty/white for some users); Уменьшено количество сообщений, выводимых в консоль браузера (имеет значение только для веб-разработчиков)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "website": {
         "message": "Веб-сайт",
         "description": ""
@@ -106,6 +110,10 @@
     "update": {
         "message": "Сохранить",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Исправляет ошибку, приводившую к тому, что не отображались уведомления. В некоторых случаях это могло привести к тому, что диалог обновления пароля оставался на экране уже после того, как была нажата кнопка Сохранить и пароль был успешно обновлен. Настройки теперь открываются в новой вкладке (чтобы избежать ошибки скроллинга в Chrome 65).",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "Сохранить логин",
@@ -386,10 +394,6 @@
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Отображать уведомление \"Пароль успешно обновлен\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
-    },
-    "list_version_upgrade_2_1": {
-        "message": "Теперь можно удалять настройки для отдельных сайтов; Если имя базы данных не задано явно, то в качестве него будет использоваться имя файла базы; Исправлена ошибка, приводившая к тому, что неиспользованные сгенерированные пароли сохранялись в базе в группе 'Kee Generated Password Backups'",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "conn_sl_desc": {
         "message": "Вы можете поменять настройки, указанные ниже, чтобы управлять тем, насколько безопасным будет канал соединения между вашим веб-браузером и KeePass. Возможно вам не придется когда-либо менять эти настройки, но если вы это сделаете, пожалуйста, убедитесь, что вы ознакомились с соответствующими страницами руководства.",

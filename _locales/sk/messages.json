@@ -16,7 +16,7 @@
         "description": ""
     },
     "conn_sl_high_label": {
-        "message": "Po každom spustení webového prehliadača alebo programu KeePass pýtať nové heslo pre pripojenie.",
+        "message": "Po každom spustení webového prehliadača alebo programu KeePass, pýtať nové heslo pre pripojenie.",
         "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
     },
     "conn_sl_medium": {
@@ -95,6 +95,10 @@
         "message": "Uchovať pôvodnú adresu URL záznamu (ale napriek tomu vyplní formuláre, ak navštívite novú adresu URL)",
         "description": ""
     },
+    "list_version_upgrade_2_2": {
+        "message": "Prehľadávajte svoje databázy KeePass z vášho prehliadača - rýchlo vyhľadajte požadovanú webovú stránku a načítajte ju (voliteľne na novej karte), aby ste mohli ľahko prihlásiť pomocou Kee; Navigácia pomocou klávesnice pre zodpovedajúce prihlasovacie údaje, výsledky vyhľadávania a profily hesiel (https://forum.kee.pm/t/keyboard-shortcuts/759); Vylepšená schopnosť odosielať formuláre a detegovať odoslané hodnoty. Zlepšenie rýchlosti (najmä na niekoľkých konkrétnych webových stránkach); Viac informácií o zlepšeniach rýchlosti a odosielania nájdete na stránke https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ; Funkcia automatického vyplňovania formulára prehliadača sa teraz skryje, keď sa zobrazí dialógové okno zodpovedajúcich prihlasovacích údajov; Vyriešenie chyby v programe Firefox v # 71 (pre niektorých používateľov sa zobrazovalo prázdne/biele okno); Zmenšené množstvo správ zobrazených v konzole prehliadača (ovplyvňuje iba webových vývojárov)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "website": {
         "message": "Webová stránka",
         "description": ""
@@ -106,6 +110,10 @@
     "update": {
         "message": "Aktualizovať",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Opravuje chybu, ktorá spôsobila, že upozornenia sa nezobrazovali. V niektorých situáciách to spôsobilo, že dialógové okno na aktualizáciu hesla zostalo na obrazovke po stlačení tlačidla Aktualizovať a po úspešnom aktualizovaní hesla.; Možnosti sa teraz otvárajú na novej karte (zabráni sa tak chybám pri rolovaní v prehliadači Chrome 65)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "Uložiť prihlasovacie údaje",
@@ -160,11 +168,11 @@
         "description": ""
     },
     "kee_install_notes_keepass": {
-        "message": "Musíte spustiť KeePass, aby sa k nemu mohol pripojiť Kee. Ak nie je KeePass nainštalovaný v počítači, môžete ho ľahko stiahnuť a nainštalovať sami.",
+        "message": "Musíte spustiť KeePass, aby sa k nemu mohol pripojiť Kee. Ak nie je KeePass nainštalovaný v počítači, môžete si ho ľahko stiahnuť a nainštalovať sami.",
         "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
     },
     "pref_ConnectionSecurity_explain_change": {
-        "message": "Niekedy zmena nastavení nižšie spôsobí, že Kee vás požiada o nové náhodné heslo. Pre zmenu týchto nastavení nemusíte zadávať uvedené heslo správe, len upravte nastavenia a stlačte tlačidlo vyššie.",
+        "message": "Niekedy zmena nastavení nižšie spôsobí, že Kee vás požiada o nové náhodné heslo. Pre zmenu týchto nastavení nemusíte zadávať uvedené heslo, len upravte nastavenia a stlačte tlačidlo vyššie.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
     },
     "update_existing_entry": {
@@ -328,7 +336,7 @@
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
     },
     "kee_install_notes_keepassrpc": {
-        "message": "Budete musieť nainštalovať doplnok KeePassRPC.plgx pre KeePass, ak ste to ešte neurobili. Je to rovnako jednoduché ako vloženie súboru na správne miesto v počítači a reštartovanie programu KeePass.",
+        "message": "Budete si musieť nainštalovať doplnok KeePassRPC.plgx pre KeePass, ak ste to ešte neurobili. Je to rovnako jednoduché ako vloženie súboru na správne miesto v počítači a reštartovanie programu KeePass.",
         "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
     },
     "point_user_to_tutorial_link_text": {
@@ -386,10 +394,6 @@
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Zobraziť oznámenie \"Heslo úspešne aktualizované\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
-    },
-    "list_version_upgrade_2_1": {
-        "message": "Konkrétne nastavenia stránok môžu byť teraz vymazané; Ak nie je výslovne nastavený žiadny názov databázy, zobrazí sa namiesto neho názov súboru databázy; Opravený problém, ktorý viedol k tomu, že nevyužité vygenerované heslá boli ukladané v skupine databázových záloh s názvom \"Kee Generated Passwords Backups\"",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "conn_sl_desc": {
         "message": "Zmeňte nižšie uvedené nastavenia, aby ste určili ako silne je zabezpečené komunikačné spojenie medzi webovým prehliadačom a KeePass. Tieto nastavenia pravdepodobne nikdy nebudete musieť upravovať, ale ak áno, uistite sa, že ste najprv prečítali príslušné stránky v príručke.",

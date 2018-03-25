@@ -95,6 +95,10 @@
         "message": "Zachovat URL staré položky (ale ještě vyplňovat formuláře, pokud navštívíte nové URL)",
         "description": ""
     },
+    "list_version_upgrade_2_2": {
+        "message": "Prohledání vaší KeePass databáze hesel přímo z prohlížeče - rychle najdete web, který chcete načíst (volitelně v novém panelu), automaticky doplnit pomocí Kee a jednoduše se jím nechat přihlásit; Ovládání pomocí klávesnice pro odpovídající přihlášení, výsledky vyhledávání a profily hesel (https://forum.kee.pm/t/keyboard-shortcuts/759); Vylepšená schopnost potvrzování formulářů a detekce odeslaných hodnot; Vylepšení rychlosti (obzvlášť na několika konkrétních webech); Více informací o vylepšení rychlosti a potvrzování lze nalézt na https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;Funkce automatického doplňování v prohlížeči je nyní skryta, pokud jsou zobrazeny odpovídající přihlašovací údaje z Kee; Řešení pro chybu Firefoxu #71 (Vyskakovací okno síťové autentizace je pro některé uživatele prázdné/nevyplněné/bílé); Redukován počet zpráv zobrazovaných v konzoli prohlížeče (týká se jen webových vývojářů)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    },
     "website": {
         "message": "Web",
         "description": ""
@@ -106,6 +110,10 @@
     "update": {
         "message": "Aktualizovat",
         "description": ""
+    },
+    "list_version_upgrade_2_3": {
+        "message": "Fixes a bug which caused notifications to not display. In some situations this would have caused the dialog for updating a password to remain on screen after the Update button had been pressed and the password was successfully updated.; Options now open in a new tab (avoids a Chrome 65 scrolling bug)",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "save_login": {
         "message": "Uložit přihlášení",
@@ -284,7 +292,7 @@
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
     "version_2_upgrade_intro": {
-        "message": "Verze 2.0 přináší nové vzrušující funkce a některé vynucené změny, aby rozšíření Kee bylo možné provozovat s Firefoxem 57 a vyšší.",
+        "message": "Verze 2.0 přináší nové vzrušující funkce a některé vynucené změny, aby bylo možné doplněk Kee provozovat s Firefoxem 57 a vyšší.",
         "description": "Explains that version 2.0 is different."
     },
     "notification_yellow_background": {
@@ -386,10 +394,6 @@
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Zobrazovat notifikaci \"Heslo bylo úspěšně zaktualizováno\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
-    },
-    "list_version_upgrade_2_1": {
-        "message": "Konkrétní nastavení webu může být nyní smazáno; Pokud není nastaveno žádné jméno databáze, bude zobrazováno jméno souboru databáze; Oprava chyby, která vedla k ukládání nepoužitých generovaných hesel do skupiny 'Kee Generated Password Backups'.",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "conn_sl_desc": {
         "message": "Nastavení níže určují, jak bezpečné je spojení mezi webovým prohlížečem a aplikací KeePass. Tato nastavení není obyčejně potřeba měnit. Před jakoukoliv změnou si přečtěte příslušnou část uživatelské příručky.",
@@ -564,7 +568,7 @@
         "description": "Button user can click on to cause a message to hide and not reappear"
     },
     "conn_setup_client_features_missing": {
-        "message": "Aby bylo možné připojit se k aplikaci KeePass Password Safe, musí být Kee upgradován. Zkotrolujte si, že používáte poslední verzi KeeFox rozšíření.",
+        "message": "Aby bylo možné připojit se k aplikaci KeePass Password Safe, musí být doplněk Kee upgradován. Zkontrolujte si, že používáte poslední verzi doplňku.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "loading": {
