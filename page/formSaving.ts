@@ -178,7 +178,7 @@ class FormSaving {
                 url: url.href,
                 usernameIndex,
                 passwordFields: passwordFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
-                title: doc.title,
+                title: doc.title || url.hostname,
                 otherFields: otherFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
                 //currentPage,
                 isPasswordChangeForm,
