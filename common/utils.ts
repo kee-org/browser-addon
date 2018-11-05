@@ -67,7 +67,7 @@ class Utils {
         let inBuffer: any;
 
         if (typeof(data) == "string" )
-            inBuffer = new TextEncoder("utf-8").encode(data);
+            inBuffer = new TextEncoder().encode(data);
         else
             inBuffer = data;
 
@@ -109,7 +109,7 @@ class Utils {
 
     stringToByteArray = function (str)
     {
-        const e = new TextEncoder("utf-8");
+        const e = new TextEncoder();
         return e.encode(str);
     };
 
