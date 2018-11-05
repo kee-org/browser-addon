@@ -694,7 +694,7 @@ class kprpcClient {
         const typescriptHack = wc.importKey(
             "raw",                            // Exported key format
             secretKeyAB,                      // The exported key
-            { name: "AES-CBC", length: 256 }, // Algorithm the key will be used with
+            { name: "AES-CBC", length: 256 } as any, // Algorithm the key will be used with
             true,                             // Can extract key value to binary string
             ["encrypt", "decrypt"]            // Use for these operations
         ) as Promise<CryptoKey>;
@@ -815,7 +815,7 @@ class kprpcClient {
                 const typescriptHack3 = wc.importKey(
                     "raw",                            // Exported key format
                     secretKeyAB,                      // The exported key
-                    { name: "AES-CBC", length: 256 }, // Algorithm the key will be used with
+                    { name: "AES-CBC", length: 256 } as any, // Algorithm the key will be used with
                     true,                             // Can extract key value to binary string
                     ["encrypt", "decrypt"]            // Use for these operations
                 ) as Promise<CryptoKey>;
