@@ -466,13 +466,19 @@ class FormFilling {
                 continue;
             }
 
-            let submitTargetNeighbour: HTMLElement;
-            if (passwordFields == null || passwordFields.length <= 0 || passwordFields[0] == null)
+            const noPasswordField = passwordFields == null || passwordFields.length <= 0 || passwordFields[0] == null;
+            const noOtherField = usernameIndex < 0 || otherFields == null || otherFields.length <= 0 || otherFields[usernameIndex] == null;
+
+            if (noPasswordField && (noOtherField || interestingForm !== true))
             {
-                this.Logger.debug("no password field found in this form");
-                // so we now only want to fill in the form if it has been whitelisted
-                if (interestingForm !== true)
-                    continue;
+                this.Logger.debug("No password field found in this form and either there are no other" +
+                    " fields or no whitelisted text field or form element");
+                continue;
+            }
+
+            let submitTargetNeighbour: HTMLElement;
+            if (noPasswordField)
+            {
                 submitTargetNeighbour = otherFields[usernameIndex].DOMInputElement || otherFields[usernameIndex].DOMSelectElement;
             } else {
                 submitTargetNeighbour = passwordFields[0].DOMInputElement;
