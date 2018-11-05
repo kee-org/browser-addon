@@ -59,7 +59,7 @@ class NetworkAuth {
                 }
 
                 const url = new URL(requestDetails.url);
-                url.hostname = punycode.toUnicode(url.hostname);
+                url.hostname = __punycode.toUnicode(url.hostname);
 
                 kee.findLogins(url.href, null, requestDetails.realm, null, null, null, null, result => {
 

@@ -417,7 +417,7 @@ class FormFilling {
         }
 
         const url = new URL(window.document.URL);
-        url.hostname = punycode.toUnicode(url.hostname);
+        url.hostname = __punycode.toUnicode(url.hostname);
 
         this.Logger.info("Finding matches in a document. readyState: " + window.document.readyState,
             "docURI: " + url.href);

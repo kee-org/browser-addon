@@ -71,7 +71,7 @@ class FormSaving {
 
         const doc = form.ownerDocument;
         const url = new URL(doc.URL);
-        url.hostname = punycode.toUnicode(url.hostname);
+        url.hostname = __punycode.toUnicode(url.hostname);
 
         this.Logger.debug({ m: "", sm: "URL: " + url.href, r: true });
 
