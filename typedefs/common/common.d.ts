@@ -286,9 +286,9 @@ interface AddonMessage {
     currentSearchTerm?: string;
 }
 declare let defaultSiteConfig: SiteConfigIndex;
-declare const publicSuffixList: any;
-declare const punycode: any;
-declare const pslData: any;
+declare const __publicSuffixList: any;
+declare const __punycode: any;
+declare const __pslData: any;
 declare const chrome: any;
 declare const LATEST_VERSION: number;
 declare let defaultConfig: Config;

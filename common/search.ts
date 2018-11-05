@@ -63,12 +63,12 @@ class Search {
     private pslInitialised = false;
 
     get psl () {
-        if (!publicSuffixList) throw new Error("publicSuffixList library not present");
+        if (!__publicSuffixList) throw new Error("publicSuffixList library not present");
         if (!this.pslInitialised) {
-            publicSuffixList.parse(pslData.text, punycode.toASCII);
+            __publicSuffixList.parse(__pslData.text, __punycode.toASCII);
             this.pslInitialised = true;
         }
-        return publicSuffixList;
+        return __publicSuffixList;
     }
 
     public execute (query, onComplete, filterDomains: string[]) {

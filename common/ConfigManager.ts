@@ -7,9 +7,9 @@
 /// <reference path="config.ts" />
 /// <reference path="kfDataModel.ts" />
 
-declare const publicSuffixList;
-declare const punycode;
-declare const pslData;
+declare const __publicSuffixList;
+declare const __punycode;
+declare const __pslData;
 
 // Pretend browser (WebExtensions) is chrome (there's a polyfill from Mozilla but it doesn't work well enough yet so this buys us time)
 declare const chrome;
@@ -69,12 +69,12 @@ class ConfigManager {
     }
 
     private get psl () {
-        if (!publicSuffixList) throw new Error("publicSuffixList library not present");
+        if (!__publicSuffixList) throw new Error("publicSuffixList library not present");
         if (!this.pslInitialised) {
-            publicSuffixList.parse(pslData.text, punycode.toASCII);
+            __publicSuffixList.parse(__pslData.text, __punycode.toASCII);
             this.pslInitialised = true;
         }
-        return publicSuffixList;
+        return __publicSuffixList;
     }
 
     private reloadOnStorageChange (changes: browser.storage.StorageChange, area: string) {
