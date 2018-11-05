@@ -8,11 +8,11 @@ class KeeFieldIcon {
             const element: HTMLElement = field.DOMInputElement;
             element.removeEventListener("click", this.showMatchedLoginsPanel);
             element.removeEventListener("mousemove", this.hoverOverInput);
-            element.style.backgroundImage = "";
-            element.style.backgroundRepeat = "";
-            element.style.backgroundAttachment = "";
-            element.style.backgroundSize = "";
-            element.style.backgroundPosition = "";
+            element.style.setProperty("background-image", "");
+            element.style.setProperty("background-repeat", "");
+            element.style.setProperty("background-attachment", "");
+            element.style.setProperty("background-size", "");
+            element.style.setProperty("background-position", "");
         }
         this.fieldsWithIcons = [];
         this.logins = null;
@@ -34,11 +34,11 @@ class KeeFieldIcon {
                 element.addEventListener("click", this.showMatchedLoginsPanel.bind(this));
                 element.addEventListener("mousemove", this.hoverOverInput);
 
-                element.style.backgroundImage = "url('" + image + "')";
-                element.style.backgroundRepeat = "no-repeat";
-                element.style.backgroundAttachment = "scroll";
-                element.style.backgroundSize = "16px 16px";
-                element.style.backgroundPosition = "calc(100% - 4px) 50%";
+                element.style.setProperty("background-image", "url('" + image + "')", "important");
+                element.style.setProperty("background-repeat", "no-repeat", "important");
+                element.style.setProperty("background-attachment", "scroll", "important");
+                element.style.setProperty("background-size", "16px 16px", "important");
+                element.style.setProperty("background-position", "calc(100% - 4px) 50%", "important");
             }
         }
 
@@ -68,10 +68,10 @@ class KeeFieldIcon {
         const bcrect = e.target.getBoundingClientRect();
         const leftLimit = bcrect.left + bcrect.width - 22;
         if (e.clientX > leftLimit) {
-            e.target.style.cursor = "pointer";
+            e.target.style.setProperty("cursor", "pointer", "important");
             return;
         }
-        e.target.style.cursor = "auto";
+        e.target.style.setProperty("cursor", "auto");
     }
 
     private getLabelledIcon (text: string, callback) {
