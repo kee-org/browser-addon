@@ -58,7 +58,8 @@ class keeLoginInfo {
     // The KeePass entry's uniqueID (if known)
     uniqueID: string;
 
-    // The title of the KeePass entry (auto-generated from the page title by default)
+    // The title of the KeePass entry (auto-generated from the page title by default,
+    // or the page URL's hostname if no title is set)
     title: string;
 
     // array of kfLoginField objects representing all non-passwords
