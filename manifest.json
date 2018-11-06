@@ -15,7 +15,7 @@
             "lib/publicsuffixlist.js",
             "common/common.js",
             "lib/biginteger.js",
-            "/lib/firefoxBug1408996Workaround.js",
+            "lib/firefoxBug1408996Workaround.js",
             "background/app.js"
         ],
         "persistent": true
@@ -30,7 +30,7 @@
                 "lib/pslData.js",
                 "lib/publicsuffixlist.js",
                 "common/common.js",
-                "/lib/firefoxBug1408996Workaround.js",
+                "lib/firefoxBug1408996Workaround.js",
                 "page/page.js"
         ],
         "run_at": "document_end"
