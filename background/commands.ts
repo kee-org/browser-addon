@@ -78,6 +78,7 @@ class KFCommands {
                     browser.contextMenus.create({
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
+                        documentUrlPatterns: ["http://*/*", "https://*/*"],
                         contexts: [ browser.contextMenus.ContextType.EDITABLE,
                                 browser.contextMenus.ContextType.FRAME,
                                 browser.contextMenus.ContextType.IMAGE,
@@ -91,6 +92,7 @@ class KFCommands {
                     browser.contextMenus.create({
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
+                        documentUrlPatterns: ["http://*/*", "https://*/*"],
                         contexts: [ browser.contextMenus.ContextType.EDITABLE,
                             browser.contextMenus.ContextType.FRAME,
                             browser.contextMenus.ContextType.IMAGE,
@@ -106,6 +108,7 @@ class KFCommands {
                     browser.contextMenus.create({
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
+                        documentUrlPatterns: ["http://*/*", "https://*/*"],
                         contexts: [ browser.contextMenus.ContextType.EDITABLE,
                             browser.contextMenus.ContextType.FRAME,
                             browser.contextMenus.ContextType.IMAGE,
@@ -119,6 +122,7 @@ class KFCommands {
                     browser.contextMenus.create({
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
+                        documentUrlPatterns: ["http://*/*", "https://*/*"],
                         contexts: [ browser.contextMenus.ContextType.EDITABLE,
                             browser.contextMenus.ContextType.FRAME,
                             browser.contextMenus.ContextType.IMAGE,
@@ -139,6 +143,7 @@ class KFCommands {
                             browser.contextMenus.create({
                                 id: "matchedLogin-" + j,
                                 title: login.title,
+                                documentUrlPatterns: ["http://*/*", "https://*/*"],
                                 contexts: [ browser.contextMenus.ContextType.EDITABLE,
                                     browser.contextMenus.ContextType.FRAME,
                                     browser.contextMenus.ContextType.IMAGE,
@@ -152,6 +157,7 @@ class KFCommands {
                             browser.contextMenus.create({
                                 id: "matchedLogin-" + j,
                                 title: login.title,
+                                documentUrlPatterns: ["http://*/*", "https://*/*"],
                                 contexts: [ browser.contextMenus.ContextType.EDITABLE,
                                     browser.contextMenus.ContextType.FRAME,
                                     browser.contextMenus.ContextType.IMAGE,
