@@ -16,7 +16,7 @@
         "description": ""
     },
     "conn_setup_enter_password_title": {
-        "message": "Uwierzytelnienie Kee",
+        "message": "Uwierzytelnianie Kee",
         "description": "Heading of the popup that asks the user to authorise the connection to KeePass by typing in a password."
     },
     "conn_setup_enter_password": {
@@ -615,10 +615,6 @@
         "message": "Możesz znaleźć dużo więcej informacji o Kee 2.0 w poniższym artykule i łączach w nim zawartych:",
         "description": "Will have a URL suffixed after the colon"
     },
-    "point_user_to_upgrade_instructions": {
-        "message": "Jeśli ostatnio nie aktualizowałeś KeeFoxa, będziesz musiał ręcznie skopiować plik do katalogu z pluginami KeePassa. Instrukcję znajdziesz pod adresem:",
-        "description": "Will have a URL suffixed after the colon"
-    },
     "point_user_to_install_instructions_start": {
         "message": "Instrukcje do obydwu kroków można znaleźć na naszym",
         "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
@@ -651,10 +647,6 @@
         "message": "forum społeczności",
         "description": "Name of the link to the community forum"
     },
-    "version_2_upgrade_intro": {
-        "message": "Wersja 2.0 przynosi ekscytujące nowe funkcje i kilka wymuszonych zmian, aby wspierać Firefoxa w wersji 57 i nowszych.",
-        "description": "Explains that version 2.0 is different."
-    },
     "notification_raised_title": {
         "message": "Kee chce Ci pokazać powiadomienie",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
@@ -683,12 +675,8 @@
         "message": "Usuń wyniki wyszukiwania po (sekundy)",
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
-    "list_version_upgrade_2_2": {
-        "message": "Search your KeePass databases from within your browser - quickly find the website you want and load it (optionally in a new tab) to get Kee to autofill and log you in easily; Keyboard navigation for matched logins, search results and password profiles (https://forum.kee.pm/t/keyboard-shortcuts/759); Improved ability to submit forms and detect submitted values; Speed improvements (especially on a few specific websites); More information about the speed and submission improvements can be found at https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;The browser's form auto-fill feature is now hidden when Kee's matched logins dialog is displayed; Workaround for Firefox bug in #71 (Network Authentication popup is blank/empty/white for some users); Reduced quantity of messages displayed in the browser console (affects web developers only)",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
-    },
-    "list_version_upgrade_2_3": {
-        "message": "Fixes a bug which caused notifications to not display. In some situations this would have caused the dialog for updating a password to remain on screen after the Update button had been pressed and the password was successfully updated.; Options now open in a new tab (avoids a Chrome 65 scrolling bug)",
+    "list_version_upgrade_2_4": {
+        "message": "Nowo zapisane wpisy mają teraz nazwę hosta jako tytuł wpisu jeśli brak tytułu strony WWW (dzięki @okapep);Obejście błędu w Firefoxie, który sporadycznie mógł powodować problemy jak: nie znajdowanie, niewypełnianie i niezapisywanie formularzy, brak wyników wyszukiwania, niewypełnianie formularzy HTTP Auth. Uważamy, że błąd nie występuje często sądząc po tym od jak dawna istnieje i jak mało zgłoszeń błędów Kee dotyczy tego błędu, jednak Mozilla nie poznała jeszcze istoty problemu, więc nie ma pewności, jak wpłynie to na wcześniejsze wersje Kee; Rozwiązano problem, który czasem powodował, że Kee nie znajdował formularza. Problem dotyczył przypadku, gdy znajdujący się \"powyżej\" formularz był na białej liście, jednak nie zawierał pól tekstowych ani pól hasła;Rozwiązano rzadko występujący na niektórych stronach problem nieprawidłowego pojawiania się ikony Kee w polach formularza;Wyłączono podpowiedzi w polu wyszukiwania przeglądarki;Wyłączono menu kontekstowe Kee  na stronach specjalnych jak \"Nowa karta\" i \"Opcje\" (dzięki @okapep)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "KB_shortcut_simple_2_desc": {

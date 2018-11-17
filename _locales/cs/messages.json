@@ -615,10 +615,6 @@
         "message": "Více informací o Kee můžete nalézt v následujících článcích a odkazech v nich obsažených:",
         "description": "Will have a URL suffixed after the colon"
     },
-    "point_user_to_upgrade_instructions": {
-        "message": "Pokud jste nedávno neupgradovali KeeFox, bude třeba ručně zkopírovat soubor do složky plugins vašeho KeePassu. Postup najdete na:",
-        "description": "Will have a URL suffixed after the colon"
-    },
     "point_user_to_install_instructions_start": {
         "message": "Pokyny pro oba výše zmíněné kroky jsou k dispozici na",
         "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
@@ -651,10 +647,6 @@
         "message": "fórum komunity",
         "description": "Name of the link to the community forum"
     },
-    "version_2_upgrade_intro": {
-        "message": "Verze 2.0 přináší nové vzrušující funkce a některé vynucené změny, aby bylo možné doplněk Kee provozovat s Firefoxem 57 a vyšší.",
-        "description": "Explains that version 2.0 is different."
-    },
     "notification_raised_title": {
         "message": "Kee má pro vás oznámení",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
@@ -683,12 +675,8 @@
         "message": "Mazat výsledky vyhledávání po (vteřiny)",
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
-    "list_version_upgrade_2_2": {
-        "message": "Prohledání vaší KeePass databáze hesel přímo z prohlížeče - rychle najdete web, který chcete načíst (volitelně v novém panelu), automaticky doplnit pomocí Kee a jednoduše se jím nechat přihlásit; Ovládání pomocí klávesnice pro odpovídající přihlášení, výsledky vyhledávání a profily hesel (https://forum.kee.pm/t/keyboard-shortcuts/759); Vylepšená schopnost potvrzování formulářů a detekce odeslaných hodnot; Vylepšení rychlosti (obzvlášť na několika konkrétních webech); Více informací o vylepšení rychlosti a potvrzování lze nalézt na https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ;Funkce automatického doplňování v prohlížeči je nyní skryta, pokud jsou zobrazeny odpovídající přihlašovací údaje z Kee; Řešení pro chybu Firefoxu #71 (Vyskakovací okno síťové autentizace je pro některé uživatele prázdné/nevyplněné/bílé); Redukován počet zpráv zobrazovaných v konzoli prohlížeče (týká se jen webových vývojářů)",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
-    },
-    "list_version_upgrade_2_3": {
-        "message": "Oprava chyby, která způsobovala nezobrazování notifikací. V některých případech zůstávalo okno pro aktualizaci hesla na obrazovce i po stisku tlačítka Aktualizovat i přes to, že heslo již bylo úspěšně zaktualizováno.; Volba nyní otevřít v novém panelu (předchází rolovací chybě Chromu 65)",
+    "list_version_upgrade_2_4": {
+        "message": "New saved entries now use the page's hostname as the entry title if no page title is set (thanks to @kapep);Workaround for a Firefox bug that could occasionally cause many problems such as: not finding, filling and saving forms, search failures, HTTP Auth filling failures. We think it's a rare bug judging by its age and minimal number of directly related Kee bugs but it is not yet understood by Mozilla so we can't be certain how it will be affecting earlier versions of Kee;Fixed an issue where in rare cases a form might not be found by Kee. Specifically this is when another form \"higher up\" the page is whitelisted for detection but does not contain any text or password fields;Fixed a rare issue where some websites could have a configuration that caused the Kee icon to not appear correctly in form fields;Disabled browser autocomplete on the search box;Kee context menu will no longer appear on special pages such as \"New Tab\" and \"Browser preferences\" (thanks to @kapep)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "KB_shortcut_simple_2_desc": {

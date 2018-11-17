@@ -615,10 +615,6 @@
         "message": "Viac informácií o Kee 2.0 nájdete v nasledujúcom článku a v jeho odkazoch: ",
         "description": "Will have a URL suffixed after the colon"
     },
-    "point_user_to_upgrade_instructions": {
-        "message": "Ak ste nedávno aktualizovali produkt KeeFox, budete musieť manuálne skopírovať súbor do vášho priečinka doplnkov KeePass. Pokyny nájdete na:",
-        "description": "Will have a URL suffixed after the colon"
-    },
     "point_user_to_install_instructions_start": {
         "message": "Pokyny pre oba vyššie uvedené kroky nájdete na našich stránkach",
         "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
@@ -651,10 +647,6 @@
         "message": "komunitné fórum",
         "description": "Name of the link to the community forum"
     },
-    "version_2_upgrade_intro": {
-        "message": "Verzia 2.0 prináša nové vzrušujúce funkcie a niektoré nútené zmeny, aby podporovala Firefox 57 a vyššie. ",
-        "description": "Explains that version 2.0 is different."
-    },
     "notification_raised_title": {
         "message": "Kee má pre vás oznámenie",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
@@ -683,12 +675,8 @@
         "message": "Vyčistiť výsledky hľadania po (sekundy)",
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
-    "list_version_upgrade_2_2": {
-        "message": "Prehľadávajte svoje databázy KeePass z vášho prehliadača - rýchlo vyhľadajte požadovanú webovú stránku a načítajte ju (voliteľne na novej karte), aby ste mohli ľahko prihlásiť pomocou Kee; Navigácia pomocou klávesnice pre zodpovedajúce prihlasovacie údaje, výsledky vyhľadávania a profily hesiel (https://forum.kee.pm/t/keyboard-shortcuts/759); Vylepšená schopnosť odosielať formuláre a detegovať odoslané hodnoty. Zlepšenie rýchlosti (najmä na niekoľkých konkrétnych webových stránkach); Viac informácií o zlepšeniach rýchlosti a odosielania nájdete na stránke https://forum.kee.pm/t/performance-improvements-in-kee-2-2/678; ; Funkcia automatického vyplňovania formulára prehliadača sa teraz skryje, keď sa zobrazí dialógové okno zodpovedajúcich prihlasovacích údajov; Vyriešenie chyby v programe Firefox v # 71 (pre niektorých používateľov sa zobrazovalo prázdne/biele okno); Zmenšené množstvo správ zobrazených v konzole prehliadača (ovplyvňuje iba webových vývojárov)",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
-    },
-    "list_version_upgrade_2_3": {
-        "message": "Opravuje chybu, ktorá spôsobila, že upozornenia sa nezobrazovali. V niektorých situáciách to spôsobilo, že dialógové okno na aktualizáciu hesla zostalo na obrazovke po stlačení tlačidla Aktualizovať a po úspešnom aktualizovaní hesla.; Možnosti sa teraz otvárajú na novej karte (zabráni sa tak chybám pri rolovaní v prehliadači Chrome 65)",
+    "list_version_upgrade_2_4": {
+        "message": "Nové uložené položky teraz používajú názov hostiteľskej stránky ako názov položky, ak nie je nastavený žiadny názov stránky (vďaka @kapep);Riešenie pre chybu v programe Firefox, ktorá by mohla príležitostne spôsobiť mnohé problémy, ako napríklad: nezisťovanie, nevyplnenie a neuloženie formulárov, zlyhanie vyhľadávaní, chyby pri vyplnení HTTP overení. Myslíme si, že je to zriedkavá chyba, podľa jej veku a minimálneho počtu priamo súvisiacich chýb Kee, ale Mozilla ju ešte nevyriešila, takže si nemôžeme byť istí, ako to ovplyvní staršie verzie Kee;Opravený problém, kedy zriedkavo Kee nemusí nájsť formulár. Konkrétne je to vtedy, keď je iný formulár \"vyššie\" na stránke aj na bielej listine, ale neobsahuje žiadne textové alebo heslové polia;Opravený zriedkavý problém, pri ktorom by niektoré webové stránky mohli mať konfiguráciu, ktorá spôsobila, že ikona Kee sa nezobrazila správne v poliach formulára;Zakázané automatické dopĺňanie prehliadača vo vyhľadávacom poli;Kontextové menu Kee sa už nebude zobrazovať na špeciálnych stránkach, ako napríklad \"Nová karta\" a \"Predvoľby prehliadača\" (vďaka @kapep)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
     },
     "KB_shortcut_simple_2_desc": {
