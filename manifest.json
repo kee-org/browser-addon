@@ -14,7 +14,7 @@
             "lib/punycode.js",
             "lib/moduleUnhack.js",
             "lib/pslData.js",
-            "lib/publicsuffixlist.js",
+            "lib/publicsuffixlist.min.js",
             "common/common.js",
             "lib/biginteger.js",
             "lib/firefoxBug1408996Workaround.js",
@@ -32,7 +32,7 @@
                 "lib/punycode.js",
                 "lib/moduleUnhack.js",
                 "lib/pslData.js",
-                "lib/publicsuffixlist.js",
+                "lib/publicsuffixlist.min.js",
                 "common/common.js",
                 "lib/firefoxBug1408996Workaround.js",
                 "page/page.js"
