@@ -9,14 +9,14 @@
     "background": {
         "scripts": [
             "lib/dollar-polyfill.js",
-            "lib/browser-polyfill.min.js",
+            "lib/tp/browser-polyfill.min.js",
             "lib/moduleHack.js",
-            "lib/punycode.js",
+            "lib/tp/punycode.js",
             "lib/moduleUnhack.js",
             "lib/pslData.js",
-            "lib/publicsuffixlist.min.js",
+            "lib/tp/publicsuffixlist.min.js",
             "common/common.js",
-            "lib/biginteger.js",
+            "lib/tp/biginteger.js",
             "lib/firefoxBug1408996Workaround.js",
             "background/app.js"
         ],
@@ -27,12 +27,12 @@
         "matches": ["<all_urls>"],
         "js": [
                 "lib/dollar-polyfill.js",
-                "lib/browser-polyfill.min.js",
+                "lib/tp/browser-polyfill.min.js",
                 "lib/moduleHack.js",
-                "lib/punycode.js",
+                "lib/tp/punycode.js",
                 "lib/moduleUnhack.js",
                 "lib/pslData.js",
-                "lib/publicsuffixlist.min.js",
+                "lib/tp/publicsuffixlist.min.js",
                 "common/common.js",
                 "lib/firefoxBug1408996Workaround.js",
                 "page/page.js"
