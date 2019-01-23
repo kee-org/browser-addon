@@ -9,7 +9,7 @@
     "background": {
         "scripts": [
             "lib/dollar-polyfill.js",
-            "lib/browser-polyfill.js",
+            "lib/browser-polyfill.min.js",
             "lib/moduleHack.js",
             "lib/punycode.js",
             "lib/moduleUnhack.js",
@@ -27,7 +27,7 @@
         "matches": ["<all_urls>"],
         "js": [
                 "lib/dollar-polyfill.js",
-                "lib/browser-polyfill.js",
+                "lib/browser-polyfill.min.js",
                 "lib/moduleHack.js",
                 "lib/punycode.js",
                 "lib/moduleUnhack.js",
