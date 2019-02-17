@@ -36,6 +36,7 @@ body {
     position:relative;
     background-color: #FFFFFF;
     border: 1px solid #FFFFFF;
+    background-size: 16px;
 }
 
 #Kee-MatchedLoginsList li:hover,

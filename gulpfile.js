@@ -43,6 +43,8 @@ const globTSPanels = 'panels/**/*.ts';
 const globTSPanelsOut = 'panels.js';
 const globTSPage = 'page/**/*.ts';
 const globTSPageOut = 'page.js';
+const globTSVault = 'vault/**/*.ts';
+const globTSVaultOut = 'vault.js';
 const globTSBackground = 'background/**/*.ts';
 const globTSBackgroundOut = 'app.js';
 const globTSSettings = 'settings/**/*.ts';
@@ -66,13 +68,13 @@ gulp.task('build:prod', function (done) {
 
 gulp.task("compilets", function (done) {
     sequence("compilets:common", ["compilets:background", "compilets:popup",
-        "compilets:panels", "compilets:page", "compilets:settings",
+        "compilets:panels", "compilets:page", "compilets:vault", "compilets:settings",
         "compilets:dialogs"], done);
 });
 
 /********** LINTING TYPESCRIPT **********/
 
-gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:settings", "lint:dialogs" ]);
+gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:vault", "lint:settings", "lint:dialogs" ]);
 
 gulp.task("lint:background", function() {
     return gulp.src([globTSBackground])
@@ -84,6 +86,14 @@ gulp.task("lint:background", function() {
 
 gulp.task("lint:page", function() {
     return gulp.src([globTSPage])
+        .pipe(tslint({
+            formatter: "verbose"
+        }))
+        .pipe(tslint.report())
+});
+
+gulp.task("lint:vault", function() {
+    return gulp.src([globTSVault])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -212,6 +222,13 @@ gulp.task("compilets:page", ["clean:ts:page", "lint:page"], function() {
     return buildTypescript(tsProjectPage, "page");
 });
 
+var tsProjectVault = ts.createProject("vault/tsconfig.json", {
+    outFile: globTSVaultOut
+});
+gulp.task("compilets:vault", ["clean:ts:vault", "lint:vault"], function() {
+    return buildTypescript(tsProjectVault, "vault");
+});
+
 var tsProjectSettings = ts.createProject("settings/tsconfig.json", {
     outFile: globTSSettingsOut
 });
@@ -322,6 +339,7 @@ gulp.task('watch', ['compilets', 'static'], function() {
     gulp.watch([globTSPopup], ['compilets:popup']);
     gulp.watch([globTSPanels], ['compilets:panels']);
     gulp.watch([globTSPage], ['compilets:page']);
+    gulp.watch([globTSVault], ['compilets:vault']);
     gulp.watch([globTSBackground], ['compilets:background']);
     gulp.watch([globTSSettings], ['compilets:settings']);
     gulp.watch([globTSDialogs], ['compilets:dialogs']);
@@ -425,6 +443,9 @@ gulp.task('clean:ts:background', function () {
 gulp.task('clean:ts:page', function () {
     return deleteBuildFiles([globTSPageOut, globTSPageOut + '.map']);
 });
+gulp.task('clean:ts:vault', function () {
+    return deleteBuildFiles([globTSVaultOut, globTSVaultOut + '.map']);
+});
 gulp.task('clean:ts:panels', function () {
     return deleteBuildFiles([globTSPanelsOut, globTSPanelsOut + '.map']);
 });
@@ -480,7 +501,7 @@ gulp.task('clean', [
     'clean:static:common', 'clean:static:dialogs', 'clean:static:settings',
     'clean:static:background', 'clean:static:page', 'clean:static:panels',
     'clean:static:popup', 'clean:ts:common', 'clean:ts:popup', 'clean:ts:panels',
-    'clean:ts:page', 'clean:ts:background', 'clean:ts:settings',
+    'clean:ts:page', 'clean:ts:vault', 'clean:ts:background', 'clean:ts:settings',
     'clean:ts:dialogs'
 ]);
 
@@ -488,7 +509,7 @@ gulp.task('sign', function () {
     const manifest = require('./manifest');
     const distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
 
-    //TODO: If API output is suitable, derive these file names from that in case Mozilla change file naming conventions one day
+    //TODO:4: If API output is suitable, derive these file names from that in case Mozilla change file naming conventions one day
     fs.writeFileSync('.signedKeeXPI', 'kee-' + manifest.version + 'beta-an+fx.xpi');
     fs.writeFileSync('.downloadLinkKeeXPI', 'https://github.com/kee-org/browser-addon/releases/download/'
         + manifest.version + '/kee-' + manifest.version + 'beta-an+fx.xpi');

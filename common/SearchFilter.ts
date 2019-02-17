@@ -64,8 +64,6 @@ class SearchFilter {
 
 
     private updateSearchFilterStart (searchFilter, current, currentURL) {
-        // If we've been given a URI we use only that one, otherwise we ask the content
-        // document to provide a list of all URLs at some future time
         if (currentURL) {
             try {
                 const hostname = new URL(currentURL).hostname;
@@ -75,25 +73,6 @@ class SearchFilter {
             } catch (e) {
                 searchFilter.setAttribute("disabled", "true");
             }
-        } else {
-            //TODO:#7: main panel support?
-            // let callbackName = "kee:";
-            // try {
-            //     let uuidGenerator = Cc["@mozilla.org/uuid-generator;1"]
-            //         .getService(Ci.nsIUUIDGenerator);
-            //     let uuid = uuidGenerator.generateUUID();
-            //     callbackName += uuid.toString();
-            // } catch (e) {
-            //     // Fall back to something a little less unique
-            //     callbackName += Math.random();
-            // }
-            // let messageManager = gBrowser.selectedBrowser.messageManager;
-            // let myCallback = function (message) {
-            //     messageManager.removeMessageListener(callbackName, myCallback);
-            //     this.updateSearchFilterFinish(searchFilter, current, message.data.domains);
-            // }.bind(this);
-            // messageManager.addMessageListener(callbackName, myCallback);
-            // messageManager.sendAsyncMessage("kee:getAllFrameDomains", { callbackName: callbackName });
         }
     }
 

@@ -1,3 +1,49 @@
 body {
     margin: 10px 0px;
 }
+
+div#i18n_root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+div#i18n_root > table {
+    border: 1px solid grey;
+    max-width: 80vw;
+    margin: 15px;
+}
+
+div#i18n_root th, div#i18n_root td {
+    border-left: solid 1px grey;
+    text-align: center;
+    padding: 5px 15px;
+    width: 30%;
+}
+
+div#i18n_root td:first-child, div#i18n_root th:first-child {
+    border-left: none;
+    text-align: right;
+    width: 40%;
+}
+
+div#i18n_root > button {
+    background-color:#1a466b;
+    max-width: 80vw;
+    width: 500px;
+    min-width: 80px;
+    margin: 15px;
+    margin-bottom: 30px;
+    border: 1px solid #1a466b;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.5em;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.75em 1.5em;
+    text-decoration: none;
+    user-select: none;
+    color: #e5e7eb;
+}

@@ -1,12 +1,12 @@
-class SearchResult extends SiteConfigNode {
+class SiteSearchResult extends SiteConfigNode {
     value: string;
     method: SiteConfigMethod;
     target: SiteConfigTarget;
 }
 
 let siteModeAll: boolean = true;
-let specificSite: SearchResult;
-let searchResults: SearchResult[];
+let specificSite: SiteSearchResult;
+let searchResults: SiteSearchResult[];
 
 function setupPage () {
     KeeLog.attachConfig(configManager.current);
@@ -541,7 +541,7 @@ function siteChooserClearSearch (e) {
 }
 
 function findMatchingSiteConfigValues (searchTerm: string) {
-    const results: SearchResult[] = [];
+    const results: SiteSearchResult[] = [];
 
     const lookups: SiteConfigLookup[] = [];
     if (configManager.current.siteConfig.domainExact) {
@@ -577,7 +577,7 @@ function findMatchingSiteConfigValues (searchTerm: string) {
 
 function findSiteConfigValues (
     searchTerm: string,
-    results: SearchResult[],
+    results: SiteSearchResult[],
     lookup: SiteConfigLookup,
     target: "Domain" | "Host" | "Page",
     method: "Exact" | "Prefix" | "Regex"
@@ -674,7 +674,7 @@ function saveCurrentSearchTermTimeout (e) {
 function saveKPRPCPort (e) {
     e.preventDefault();
     configManager.current.KeePassRPCWebSocketPort = parseInt((document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value);
-    configManager.save(() => browser.runtime.sendMessage({action: "KPRPC_Port_Change" }));
+    configManager.save().then(() => browser.runtime.sendMessage({action: "KPRPC_Port_Change" }));
 }
 
 function saveKPRPCDBToOpen (e) {
@@ -702,4 +702,8 @@ function stringFromLogLevel (level) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => configManager.load(setupPage));
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => configManager.load(setupPage));
+} else {
+    configManager.load(setupPage);
+}

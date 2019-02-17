@@ -1,6 +1,6 @@
 {
   "name": "kee-browser-addon",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "devDependencies": {
     "del": "^3.0.0",
     "firefox-addons-add-update-version": "^1.0.0",

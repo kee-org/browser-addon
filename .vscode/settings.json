@@ -17,5 +17,9 @@
     "dialogs/*.js": true,
     "build/**/*": true,
     "dist/**/*": true
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.words": [
+    "syncable"
+  ]
 }

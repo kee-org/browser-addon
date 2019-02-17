@@ -1,9 +1,11 @@
 /// <reference path="commands.ts" />
 /// <reference path="backgroundUtils.ts" />
 /// <reference path="PersistentTabState.ts" />
+/// <reference path="AccountManager.ts" />
+/// <reference path="ConfigSyncManager.ts" />
 
 class Kee {
-
+    accountManager: AccountManager;
     appState: AppState;
     tabStates: Map<number, TabState>;
     persistentTabStates: Map<number, PersistentTabState>;
@@ -16,6 +18,7 @@ class Kee {
 
     // Our link to the JSON-RPC objects required for communication with KeePass
     KeePassRPC: jsonrpcClient;
+    configSyncManager = new ConfigSyncManager();
 
     _installerTabLoaded: boolean;
 
@@ -24,18 +27,21 @@ class Kee {
     urlToOpenOnStartup: string;
 
     browserPopupPort: Partial<browser.runtime.Port>;
+    vaultPort: Partial<browser.runtime.Port>;
     onPortConnected: any;
 
     networkAuth: NetworkAuth;
 
     constructor ()
     {
+        this.accountManager = new AccountManager();
 
         this.appState = {
             latestConnectionError: "",
             lastKeePassRPCRefresh: 0,
             ActiveKeePassDatabaseIndex: -1,
             KeePassDatabases: [],
+            PasswordProfiles: [],
             notifications: [],
             connected: false,
             currentSearchTerm: null
@@ -56,6 +62,7 @@ class Kee {
         this.networkAuth = new NetworkAuth();
 
         this.browserPopupPort = {postMessage: msg => {} };
+        this.vaultPort = {postMessage: msg => {} };
         this.onPortConnected = function (p: browser.runtime.Port) {
             if (KeeLog && KeeLog.debug) KeeLog.debug(p.name + " port connected");
             let name = p.name;
@@ -86,12 +93,7 @@ class Kee {
                         connectMessage.loginsFound = true;
                     }
 
-                    // Give content process a chance to execute through to the attachment of the listener
-                    //TODO:c: event loop on content process should mean this is unnecessary but we see
-                    // weird behaviour in Firefox so lets try this out for a while in case messaging
-                    // is independent of the normal process event loop.
-                    setTimeout(() => p.postMessage(connectMessage), 25);
-
+                    p.postMessage(connectMessage);
                     kee.browserPopupPort = p;
                     kee.resetBrowserActionColor();
                     break;
@@ -106,22 +108,33 @@ class Kee {
                         isForegroundTab: p.sender.tab.id === kee.foregroundTabId
                     } as AddonMessage;
 
-                    if (!kee.tabStates.has(p.sender.tab.id)) {
-                        kee.tabStates.set(p.sender.tab.id, new TabState());
-                    }
+                    kee.createTabStateIfMissing(p.sender.tab.id);
 
                     if (p.sender.frameId === 0) {
                         kee.tabStates.get(p.sender.tab.id).url = p.sender.tab.url;
                     }
                     kee.tabStates.get(p.sender.tab.id).frames.set(p.sender.frameId, new FrameState());
                     kee.tabStates.get(p.sender.tab.id).framePorts.set(p.sender.frameId, p);
+                    p.postMessage(connectMessage);
+                    break;
+                }
+                case "vault": {
+                    p.onMessage.addListener(vaultMessageHandler.bind(p));
+                    /* Potentially could/should call messageCloseSession() when the port is disconnected but
+                     earlier experience suggests disconnection does not occur before a new port is connected in Firefox due to a
+                     bug (works fine in Chrome) so we would risk closing the freshly opened session instead.
+                    p.onDisconnect.addListener(this.messageCloseSession();)
+                    */
 
-                    // Give content process a chance to execute through to the attachment of the listener
-                    //TODO:c: event loop on content process should mean this is unnecessary but we see
-                    // weird behaviour in Firefox so lets try this out for a while in case messaging
-                    // is independent of the normal process event loop.
-                    setTimeout(() => p.postMessage(connectMessage), 25);
+                    const connectMessage = {
+                        appState: kee.appState,
+                        frameId: p.sender.frameId,
+                        tabId: p.sender.tab.id,
+                        isForegroundTab: p.sender.tab.id === kee.foregroundTabId
+                    } as VaultMessage;
 
+                    kee.vaultPort = p;
+                    p.postMessage(connectMessage);
                     break;
                 }
                 case "iframe": {
@@ -143,12 +156,7 @@ class Kee {
                         });
                     }
 
-                    // Give content process a chance to execute through to the attachment of the listener
-                    //TODO:c: event loop on content process should mean this is unnecessary but we see
-                    // weird behaviour in Firefox so lets try this out for a while in case messaging
-                    // is independent of the normal process event loop.
-                    setTimeout(() => p.postMessage(connectMessage), 25);
-
+                    p.postMessage(connectMessage);
                     kee.tabStates.get(p.sender.tab.id).ourIframePorts.set(p.sender.frameId, p);
                     break;
                 }
@@ -175,9 +183,21 @@ class Kee {
 
         this._keeBrowserStartup();
 
-        browser.runtime.onConnect.addListener(this.onPortConnected);
+        // This listener is called when a new account is logged in to within Kee Vault. It
+        // does not require an active KPRPC event session for delivery
+        this.accountManager.addListener(() => {
+            // If there is a vault port available but no active session, we poke the content script to
+            // reinitialise the connection if it now looks likely that it will succeed (as a result of
+            // a new account being logged in to which has the required multi-session feature).
+            // We don't bother with the WebSocket equivalent because that will automatically be tried
+            // regularly anyway.
+            // We also don't worry about kicking people off from active sessions if their license expires.
+            if (this.accountManager.fe_multiSessionTypes && !this.KeePassRPC.eventSessionManagerIsActive) {
+                this.inviteKeeVaultConnection();
+            }
+        });
 
-        browser.webNavigation.onCommitted.addListener(pageNavigationCommitted);
+        browser.runtime.onConnect.addListener(this.onPortConnected);
 
         this.networkAuth.startListening();
 
@@ -198,7 +218,7 @@ class Kee {
         browser.browserAction.setIcon({path: "common/images/highlight-48.png" });
         if (nativeNotification) {
             browser.notifications.create({
-                type: browser.notifications.TemplateType.BASIC,
+                type: "basic",
                 iconUrl: browser.extension.getURL("common/images/128.png"),
                 title: nativeNotification.title,
                 message: nativeNotification.message
@@ -206,7 +226,7 @@ class Kee {
         } else {
             if (configManager.current.notificationCountGeneric < 5) {
                 browser.notifications.create({
-                    type: browser.notifications.TemplateType.BASIC,
+                    type: "basic",
                     iconUrl: browser.extension.getURL("common/images/128.png"),
                     title: $STR("notification_raised_title"),
                     message: $STR("notification_yellow_background") + "\n" + $STR("notification_only_shown_some_times")
@@ -241,13 +261,9 @@ class Kee {
 
     _keeBrowserStartup ()
     {
-        KeeLog.info("Kee initialising");
-
-        //this._keeVariableInit();
+        KeeLog.debug("Kee initialising");
         this.KeePassRPC = new jsonrpcClient();
-        this.KeePassRPC.startup();
-
-        KeeLog.info("Kee initialised OK although the connection to KeePass may not be established just yet...");
+        KeeLog.info("Kee initialised OK although the connection to a KeePassRPC server is probably not established just yet...");
     }
 
     // Temporarilly disable Kee. Used (for e.g.) when KeePass is shut down.
@@ -262,15 +278,25 @@ class Kee {
         try
         {
             // Poke every port. In future might just limit to active tab?
-            kee.tabStates.forEach(ts => {
-                ts.framePorts.forEach(port => {
-                    port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
+            kee.tabStates.forEach((ts, tabId) => {
+                ts.framePorts.forEach((port, key, map) => {
+                    try {
+                        port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
+                    } catch (e) {
+                        if (KeeLog && KeeLog.info) {
+                            KeeLog.info("failed to _pauseKee on tab " + tabId +
+                            ". Assuming port is broken (possible browser bug) and deleting the port. " +
+                            "Kee may no longer work in the affected tab, if indeed the tab even " +
+                            "exists any more. The exception that caused this is: " + e.message + " : " + e.stack);
+                        }
+                        map.delete(key);
+                    }
                 }, this);
             }, this);
         }
         catch (e)
         {
-            KeeLog.warn("Exception posting message: " + e.message + " : " + e.stack);
+            KeeLog.error("Uncaught exception posting message in _pauseKee: " + e.message + " : " + e.stack);
         }
 
         browser.browserAction.setBadgeText({ text: "OFF" });
@@ -287,7 +313,14 @@ class Kee {
         KeeLog.debug("Refresh of Kee's view of the KeePass database initiated.");
     }
 
-    updateKeePassDatabases (newDatabases)
+    inviteKeeVaultConnection ()
+    {
+        if (this.vaultPort) {
+            this.vaultPort.postMessage({protocol: VaultProtocol.Reconnect} as VaultMessage);
+        }
+    }
+
+    updateKeePassDatabases (newDatabases: Database[])
     {
         let newDatabaseActiveIndex = -1;
         for (let i=0; i < newDatabases.length; i++)
@@ -324,15 +357,25 @@ class Kee {
         try
         {
             // Poke every port. In future might just limit to active tab?
-            kee.tabStates.forEach(ts => {
-                ts.framePorts.forEach(port => {
-                    port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
+            kee.tabStates.forEach((ts, tabId) => {
+                ts.framePorts.forEach((port, key, map) => {
+                    try {
+                        port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
+                    } catch (e) {
+                        if (KeeLog && KeeLog.info) {
+                            KeeLog.info("failed to updateKeePassDatabases on tab " + tabId +
+                            ". Assuming port is broken (possible browser bug) and deleting the port. " +
+                            "Kee may no longer work in the affected tab, if indeed the tab even " +
+                            "exists any more. The exception that caused this is: " + e.message + " : " + e.stack);
+                        }
+                        map.delete(key);
+                    }
                 }, this);
             }, this);
         }
         catch (e)
         {
-            KeeLog.warn("Exception posting message: " + e.message + " : " + e.stack);
+            KeeLog.error("Uncaught exception posting message in updateKeePassDatabases: " + e.message + " : " + e.stack);
         }
 
         commandManager.setupContextMenuItems();
@@ -378,35 +421,11 @@ class Kee {
             return null;
     }
 
-    getAllDatabaseFileNames ()
-    {
-        try
-        {
-            return this.KeePassRPC.getMRUdatabases();
-        } catch (e)
-        {
-            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
-            throw e;
-        }
-    }
-
     changeDatabase (fileName, closeCurrent)
     {
         try
         {
             this.KeePassRPC.changeDB(fileName, closeCurrent);
-        } catch (e)
-        {
-            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
-            throw e;
-        }
-    }
-
-    changeLocation (locationId)
-    {
-        try
-        {
-            this.KeePassRPC.changeLocation(locationId);
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
@@ -450,23 +469,11 @@ class Kee {
         }
     }
 
-    getApplicationMetadata ()
+    findLogins (fullURL, formSubmitURL, httpRealm, uniqueID, dbFileName, freeText, username, callback)
     {
         try
         {
-            return this.KeePassRPC.getApplicationMetadata();
-        } catch (e)
-        {
-            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
-            throw e;
-        }
-    }
-
-    findLogins (fullURL, formSubmitURL, httpRealm, uniqueID, dbFileName, freeText, username, callback, callbackData?)
-    {
-        try
-        {
-            return this.KeePassRPC.findLogins(fullURL, formSubmitURL, httpRealm, uniqueID, dbFileName, freeText, username, callback, callbackData);
+            return this.KeePassRPC.findLogins(fullURL, formSubmitURL, httpRealm, uniqueID, dbFileName, freeText, username, callback);
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
@@ -498,7 +505,7 @@ class Kee {
         }
     }
 
-    getPasswordProfiles (callback)
+    getPasswordProfiles (callback: (profiles: PasswordProfile[]) => void)
     {
         try
         {
@@ -534,11 +541,10 @@ class Kee {
         KeeLog.debug("Signal received by KPRPCListener (" + sig + ") @" + sigTime);
 
         let executeNow = false;
-        let pause = false;
         let refresh = false;
 
         switch (sig) {
-            case "0": KeeLog.info("KeePassRPC is requesting authentication [deprecated]."); break;
+            case "0": KeeLog.warn("KeePassRPC is requesting authentication [deprecated]."); break;
             case "3": KeeLog.info("KeePass' currently active DB is about to be opened."); break;
             case "4": KeeLog.info("KeePass' currently active DB has just been opened.");
                 refresh = true;
@@ -556,14 +562,11 @@ class Kee {
             case "11": KeeLog.info("KeePass' active DB has been changed/selected.");
                 refresh = true;
                 break;
-            case "12": KeeLog.info("KeePass is shutting down.");
-                pause = true;
-                break;
+            case "12": KeeLog.info("KeePass is shutting down. [deprecated: Now inferred from connection loss]"); break;
             default: KeeLog.error("Invalid signal received by KPRPCListener (" + sig + ")"); break;
         }
 
-        if (!pause && !refresh)
-            return;
+        if (!refresh) return;
 
         const now = (new Date()).getTime();
 
@@ -576,33 +579,25 @@ class Kee {
         }
         // Otherwise we need to add the action for this callback to a queue and leave it up to the regular callback processor to execute the action
 
-        // if we want to pause Kee then we do it immediately or make sure it's the next (and only) pending task after the current task has finished
-        if (pause)
-        {
-            if (executeNow) kee._pauseKee(); else kee.pendingCallback = "_pauseKee";
-        }
-
         if (refresh)
         {
             if (executeNow) { kee.appState.lastKeePassRPCRefresh = now; kee._refreshKPDB(); } else kee.pendingCallback = "_refreshKPDB";
         }
 
-        KeeLog.info("Signal handled or queued. @" + sigTime);
+        KeeLog.debug("Signal handled or queued. @" + sigTime);
         if (executeNow)
         {
             //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
             try {
-                if (kee.pendingCallback=="_pauseKee")
-                    kee._pauseKee();
-                else if (kee.pendingCallback=="_refreshKPDB")
+                if (kee.pendingCallback=="_refreshKPDB")
                     kee._refreshKPDB();
                 else
-                    KeeLog.info("A pending signal was found and handled.");
+                    KeeLog.debug("A pending signal was found and handled.");
             } finally {
                 kee.pendingCallback = "";
                 kee.processingCallback = false;
             }
-            KeeLog.info("Signal handled. @" + sigTime);
+            KeeLog.debug("Signal handled. @" + sigTime);
         }
     }
 
@@ -615,9 +610,7 @@ class Kee {
         KeeLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
         kee.processingCallback = true;
         try {
-            if (kee.pendingCallback=="_pauseKee")
-                kee._pauseKee();
-            else if (kee.pendingCallback=="_refreshKPDB")
+            if (kee.pendingCallback=="_refreshKPDB")
                 kee._refreshKPDB();
         } finally
         {
@@ -627,13 +620,32 @@ class Kee {
         KeeLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
     }
 
-    onSearchCompleted (results)
-    {
-        // a default search results handler. In practice I expect that each search
-        // execution will want to supply its own callback but this might be useful
-        // if we find it neater to integrate with an Observer pattern, etc.
+    createTabStateIfMissing (tabId: number) {
+        if (!kee.tabStates.has(tabId)) {
+            kee.tabStates.set(tabId, new TabState());
+        }
     }
 
+    deleteTabState (tabId: number) {
+        kee.tabStates.delete(tabId);
+    }
+
+    initiatePasswordGeneration () {
+        if (kee.appState.connected) {
+            const tabState = kee.tabStates.get(kee.foregroundTabId);
+            if (tabState) {
+                const framePort = tabState.framePorts.get(0);
+                if (framePort) {
+                    framePort.postMessage({ action: Action.GeneratePassword });
+                    return;
+                }
+            }
+            // Probably focussed on a Kee Vault tab
+            if (kee.vaultPort) {
+                kee.vaultPort.postMessage({protocol: VaultProtocol.ShowGenerator} as VaultMessage);
+            }
+        }
+    }
 }
 
 let kee: Kee;
@@ -649,6 +661,7 @@ function startup () {
     KeeLog.attachConfig(configManager.current);
     kee = new Kee();
     kee.init();
+    configManager.addChangeListener(() => kee.configSyncManager.updateToRemoteConfig(configManager.current));
     browser.browserAction.enable();
 }
 
@@ -672,9 +685,7 @@ function browserPopupMessageHandler (msg: AddonMessage) {
         });
     }
     if (msg.action === Action.GeneratePassword) {
-        if (kee.appState.connected) {
-            kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage({ action: Action.GeneratePassword });
-        }
+        kee.initiatePasswordGeneration();
     }
     if (msg.action === Action.ShowMatchedLoginsPanel) {
         if (kee.appState.connected) {
@@ -692,7 +703,7 @@ function browserPopupMessageHandler (msg: AddonMessage) {
         }
     }
     if (msg.findMatches) {
-        kee.findLogins(null, null, null, msg.findMatches.uuid, null, null, null, result => {
+        kee.findLogins(null, null, null, msg.findMatches.uuid, msg.findMatches.DBfilename, null, null, result => {
             kee.browserPopupPort.postMessage({ appState: kee.appState, findMatchesResult: result.result } as AddonMessage);
         });
     }
@@ -709,7 +720,7 @@ function browserPopupMessageHandler (msg: AddonMessage) {
 }
 
 function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script: " + msg);
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script", ": " + msg);
 
     if (msg.findMatches) {
         kee.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
@@ -772,7 +783,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
         if (configManager.current.notificationCountSavePassword < 10) {
             browser.notifications.create({
-                type: browser.notifications.TemplateType.BASIC,
+                type: "basic",
                 iconUrl: browser.extension.getURL("common/images/128.png"),
                 title: $STR("savePasswordText"),
                 message: $STR("notification_save_password_tip") + "\n" + $STR("notification_only_shown_some_times")
@@ -788,6 +799,61 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
             kee.persistentTabStates.get(this.sender.tab.id).items =
                 kee.persistentTabStates.get(this.sender.tab.id).items.filter(item => item.itemType !== "submittedData");
         }
+    }
+    if (msg.action === Action.PageHide) {
+        try {
+            kee.tabStates.get(this.sender.frameId).framePorts.forEach((port, key, map) => {
+            try {
+                port.disconnect();
+            } catch (e) {
+                if (KeeLog && KeeLog.debug) {
+                    KeeLog.debug("failed to disconnect a frame port on tab " + key +
+                    ". This is probably not a problem but we may now be reliant on browser " +
+                    "GC to clear down memory. The exception that caused this is: " + e.message + " : " + e.stack);
+                }
+            } finally {
+                map.delete(key);
+            }
+        });
+        } catch (e) {
+            // Happens when an iframe is hidden after the top-level frame. The
+            // only impact is some messaging ports remaining open for longer
+            // than required. Pretty sure the browser has to deal with this
+            // situation already - probably just through standard GC.
+        }
+        if (this.sender.frameId === 0) {
+            kee.deleteTabState(this.sender.tab.id);
+        }
+    }
+    if (msg.action === Action.PageShow) {
+        kee.createTabStateIfMissing(this.sender.tab.id);
+    }
+}
+
+
+function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessage) {
+    let result;
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from vault script: " + JSON.stringify(msg));
+    switch (msg.action) {
+        case VaultAction.Init:
+            result = kee.KeePassRPC.startEventSession(msg.sessionId, msg.features, msgToPage => this.postMessage(msgToPage));
+            if (result) {
+                this.postMessage(result);
+            }
+            return;
+        case VaultAction.MessageToClient:
+            result = kee.KeePassRPC.eventSessionMessageFromPage(msg);
+            if (result) {
+                this.postMessage(result);
+            }
+            return;
+        case VaultAction.FocusRequired:
+            browser.tabs.update(this.sender.tab.id, { active: true });
+            browser.windows.update(this.sender.tab.windowId, { focused: true });
+            return;
+        case VaultAction.AccountChanged:
+            kee.accountManager.processNewTokens(msg.tokens);
+            return;
     }
 }
 
@@ -809,8 +875,9 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
     if (msg.action == Action.GetPasswordProfiles) {
         kee.getPasswordProfiles(passwordProfiles => {
+            kee.appState.PasswordProfiles = passwordProfiles;
             if (passwordProfiles.length > 0) {
-                port.postMessage({ passwordProfiles: passwordProfiles } as AddonMessage);
+                port.postMessage({ passwordProfiles } as AddonMessage);
             }
         });
     }
@@ -835,8 +902,8 @@ function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
             }
 
             if (msg.saveData.update) {
-                const result = kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.urlMergeMode, msg.saveData.db);
-                showUpdateSuccessNotification();
+                kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.urlMergeMode, msg.saveData.db);
+                showUpdateSuccessNotification(msg.saveData.oldLoginUUID, msg.saveData.db);
             }
             else {
                 const result = kee.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
@@ -887,28 +954,28 @@ function fetchFavicon (url): Promise<string> {
     });
 }
 
-function showUpdateSuccessNotification ()
+function showUpdateSuccessNotification (uniqueID: string, fileName: string)
 {
     if (configManager.current.notifyWhenEntryUpdated)
     {
-        const button: Button = {
+        const button1: Button = {
             label: $STR("dont_show_again"),
             action: "disableNotifyWhenEntryUpdated"
         };
+        const button2: Button = {
+            label: $STR("showEntry"),
+            action: "launchLoginEditorFromNotification",
+            values: { uniqueID, fileName}
+        };
         const messages = [$STR("password_successfully_updated"),
-            $STR("keepass_history_pointer"),
+            $STR("entry_history_pointer"),
             $STR("change_field_status"),
             $STR("change_field_explanation"),
             $STR("multi_page_update_warning")];
         const notification = new KeeNotification(
-            "password-updated", [button], utils.newGUID(), messages, "Medium", false);
+            "password-updated", [button1, button2], utils.newGUID(), messages, "Medium", false);
         kee.notifyUser(notification);
     }
-}
-
-// This allows us to identify when a new page is loading in an existing tab
-function pageNavigationCommitted (details) {
-    if (details.frameId === 0) kee.tabStates.delete(details.tabId);
 }
 
 browser.windows.onFocusChanged.addListener(async windowId => {
@@ -936,64 +1003,73 @@ function onTabActivated (tabId) {
 }
 
 function updateForegroundTab (tabId: number) {
-    if (kee && kee.tabStates.has(tabId) && kee.tabStates.get(tabId).framePorts) // May not have set up kee or port yet
-    {
-        // make sure only one tab can be trying to set itself as the foreground tab
-        clearTimeout(updateForegroundTabRetryTimer);
-        if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
+    if (kee && kee.foregroundTabId !== tabId) { // May not have set up kee yet
         kee.foregroundTabId = tabId;
-        kee.tabStates.get(tabId).framePorts.forEach(port => {
-            port.postMessage({ appState: kee.appState, isForegroundTab: true, action: Action.DetectForms } as AddonMessage);
-        });
-        return;
+        if (kee.tabStates.has(tabId) && kee.tabStates.get(tabId).framePorts) // May not have set up port yet
+        {
+            if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
+            kee.tabStates.get(tabId).framePorts.forEach(port => {
+                port.postMessage({ appState: kee.appState, isForegroundTab: true, action: Action.DetectForms } as AddonMessage);
+            });
+        }
     }
-    updateForegroundTabRetryTimer = setTimeout(id => {
-        updateForegroundTab(id);
-    }, 1000, tabId);
 }
 
 // Some browsers (e.g. Firefox) automatically inject content scripts on install/update
 // but others don't (e.g. Chrome). To ensure every existing tab has exactly one
 // instance of this content script running in it, we programatically inject the script.
-// Only Firefox has the getBrowserInfo function and only Firefox injects content scripts to existing tabs
-// on startup (a fragile assumption but the best that the API allow us to do for the time being)
-if (!browser.runtime.getBrowserInfo) {
+if (!__KeeIsRunningInAWebExtensionsBrowser) {
     browser.runtime.onInstalled.addListener(details => {
-        // There are some weird bugs when converting from chrome to browser namespace
-        // here but since we're in a Chrome-only code path, we can leave them be for
-        // the time being. Will want to delete the chrome namespace soon though.
         const showErrors = () => {
-            if (chrome.runtime.lastError) {
-                if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError);
-                else console.error(chrome.runtime.lastError);
+            if (browser.runtime.lastError) {
+                if (KeeLog && KeeLog.error) KeeLog.error(browser.runtime.lastError.message);
+                else console.error(browser.runtime.lastError);
             }
         };
         browser.runtime.getManifest().content_scripts.forEach(script => {
             const allFrames = script.all_frames;
             const url = script.matches;
+
+            // We have to define the list of expected Vault URLs here as well as in
+            // the manifest because there is no API available to automatically handle
+            // the manifest globs and it's not worth bundling a generic parser for
+            // just this one use case.
+            const vaultURLs = ["https://app-dev.kee.pm:8087/", "https://app-beta.kee.pm/", "https://app.kee.pm/", "https://keevault.pm/"];
+
             const loadContentScripts = (tab: browser.tabs.Tab) => {
                 if (tab.url && tab.url.startsWith("chrome://")) return;
+                if (script.exclude_globs && script.exclude_globs.length > 0) {
+                    if (vaultURLs.some(excludedURL => tab.url.startsWith(excludedURL))) return;
+                }
+                if (script.include_globs && script.include_globs.length > 0) {
+                    if (!vaultURLs.some(includedURL => tab.url.startsWith(includedURL))) return;
+                }
                 (script.js || []).forEach(file => {
-                    chrome.tabs.executeScript(tab.id, { allFrames, file }, showErrors);
+                    browser.tabs.executeScript(tab.id, { allFrames, file }).then(showErrors);
                 });
                 (script.css || []).forEach(file => {
-                    chrome.tabs.insertCSS(tab.id, { allFrames, file }, showErrors);
+                    browser.tabs.insertCSS(tab.id, { allFrames, file }).then(showErrors);
                 });
             };
-            chrome.tabs.query({ url }, tabs => tabs.forEach(loadContentScripts));
+            browser.tabs.query({ url }).then(tabs => tabs.forEach(loadContentScripts));
         });
     });
 }
 
-browser.runtime.onInstalled.addListener(details => {
+browser.runtime.onInstalled.addListener(async details => {
     if (details.reason === "update") {
         browser.tabs.create({
             url: "release-notes/update-notes.html"
         });
     } else if (details.reason === "install") {
-        browser.tabs.create({
-            url: "release-notes/install-notes.html"
-        });
+        const vaultTabs = await browser.tabs.query({url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]});
+        if (vaultTabs && vaultTabs[0]) {
+            browser.tabs.update(vaultTabs[0].id, { active: true });
+        } else {
+            browser.tabs.create({
+                url: "release-notes/install-notes.html"
+            });
+        }
     }
 });
 

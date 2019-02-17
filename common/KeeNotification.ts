@@ -78,27 +78,27 @@ class KeeNotification {
 
         let callback: {(): void};
         //if (typeof buttonDefinition.action == "string") {
-            callback = this.dispatchActionResponse.bind(this, buttonDefinition.action);
+            callback = this.dispatchActionResponse.bind(this, buttonDefinition.action, buttonDefinition.values);
         //} else {
         //    callback = buttonDefinition.action;
         //}
 
-        button.addEventListener("click", callback, false); //TODO:3:keyboard nav support
+        button.addEventListener("click", callback, false); //TODO:4: keyboard nav support
         if (buttonDefinition.id != null)
             button.setAttribute("id", buttonDefinition.id);
         // if (buttonDefinition.values != null)
         // {
-        //     for(var pi=0; pi < buttonDefinition.values.length; pi++)
+        //     for (let pi=0; pi < buttonDefinition.values.length; pi++)
         //     {
-        //         var key = buttonDefinition.values[pi].key;
-        //         var val = buttonDefinition.values[pi].value;
-        //         button.setUserData(key, val, null);
+        //         const key = buttonDefinition.values[pi].key;
+        //         const val = buttonDefinition.values[pi].value;
+        //         button.dataset[key] = val;
         //     }
         // }
         return button;
     }
 
-    dispatchActionResponse (action: ButtonAction) {
+    dispatchActionResponse (action: ButtonAction, data: { [id: string] : string; }) {
         switch (action) {
             case "enableHighSecurityKPRPCConnection":
                 configManager.current.connSLClient = 3;
@@ -113,6 +113,9 @@ class KeeNotification {
             case "disableNotifyWhenEntryUpdated":
                 configManager.current.notifyWhenEntryUpdated = false;
                 configManager.save();
+                break;
+            case "launchLoginEditorFromNotification":
+                this.myPort.postMessage({loginEditor: { uniqueID: data.uniqueID, DBfilename: data.fileName}} as AddonMessage);
                 break;
         }
         this.myPort.postMessage({ removeNotification: this.id } as AddonMessage);

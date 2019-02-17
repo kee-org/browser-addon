@@ -1,10 +1,10 @@
 # Simple and secure password management
 
-## Kee adds free, secure and easy to use password management features to your web browser which save you time and keep your private data more secure.
+## Kee adds free, secure and easy-to-use password management features to your web browser which save you time and keep your private data more secure.
 
-**Login automatically, never forget another password, stay in control of your passwords and improve their security. Powered by the world-renowned KeePass Password Safe.**
+**Login automatically, never forget another password, stay in control of your passwords and improve their security. Compatible with the world-renowned KeePass Password Safe.**
 
-Kee is a Firefox and Chrome add-on for linking browsers to KeePass, using the [KeePassRPC KeePass plugin](https://github.com/kee-org/keepassrpc).
+Kee is a Firefox and Chrome add-on for linking browsers to Kee Vault or KeePass (latter requires using the [KeePassRPC KeePass plugin](https://github.com/kee-org/keepassrpc)).
 
 Official website with download instructions: https://www.kee.pm
 
@@ -53,7 +53,7 @@ Exactly reproducing the files delivered from the Firefox add-on website or Chrom
 
 1. Line endings - some parts of the tool chain may treat line endings differently so that the end result could differ between operating systems.
 2. Version number - the CI build system holds credentials that allow it to manipulate git tags on the GitHub repository and in doing so allows for automatic incrementing of build numbers, which in turn will result in a unique version number being calculated. This can only be reproduced if you download the git repo to your local system (including all tags) and develop a custom build script or modify the source files as needed - it's most likely not worth the effort but can be done if it is important to you.
-3. File dates - the build output is essentially a zip file so when the newly dowloaded and built files on your system are added to the zip file, they will have different dates than those that were built on the CI platform and automatically added to a GitHub Release. For this reason, even if you were to end up with the same line endings and version number, it is not possible to compare a digest (hash) of your built file and expect it to match the file built by anyone else (unless you build it at exactly the same time!)
+3. File dates - the build output is essentially a zip file so when the newly downloaded and built files on your system are added to the zip file, they will have different dates than those that were built on the CI platform and automatically added to a GitHub Release. For this reason, even if you were to end up with the same line endings and version number, it is not possible to compare a digest (hash) of your built file and expect it to match the file built by anyone else (unless you build it at exactly the same time!)
 
 Reproducible builds rely upon npm version 5.7 or higher (released end of Feb 2018) so ensure you have the latest update first.
 

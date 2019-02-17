@@ -103,7 +103,7 @@ class SearchPanel {
         }
     }
 
-    private onSearchComplete (logins)
+    private onSearchComplete (logins: SearchResult[])
     {
         logins = logins.sort(function (a, b) {
             if (a.relevanceScore > b.relevanceScore)
@@ -116,7 +116,7 @@ class SearchPanel {
     }
 
     // Calling this function with null or empty logins array will clear all existing search results
-    private showSearchResults (logins)
+    private showSearchResults (logins: SearchResult[])
     {
         KeeLog.debug("BrowserPopup showSearchResults started");
 
@@ -141,7 +141,7 @@ class SearchPanel {
 
             const loginItem = document.createElement("li");
             loginItem.setAttribute("class", "login-item");
-            loginItem.setAttribute("data-fileName", login.dbFileName);
+            loginItem.setAttribute("data-filename", login.dbFileName);
             loginItem.setAttribute("data-usernameName", usernameName);
             loginItem.setAttribute("data-usernameValue", usernameValue);
             loginItem.setAttribute("data-url", login.url);
@@ -195,7 +195,7 @@ class SearchPanel {
             loginItem.addEventListener("contextmenu", event => {
                 event.stopPropagation();
                 event.preventDefault();
-                this.loginMenus.showContextActions(login.uniqueID);
+                this.loginMenus.showContextActions(login.uniqueID, login.dbFileName);
             }, false);
             loginItem.addEventListener("mouseenter", event => this.loginMenus.onMouseEnterLogin(event), false);
 

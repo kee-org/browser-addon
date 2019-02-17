@@ -140,8 +140,8 @@ public getFormFields (form, isSubmission, currentPage?)
     // Work out which DOM form element is most likely to be the username field.
     // This information is only used to display the username to the user so an inaccurate
     // choice won't impact the form detection or filling behaviour.
-    //TODO:3: Extend this to inspect more than just the name of the field. E.g. max length?
-    //TODO:3: For form filling (not submitting) we might want to select based upon found data in KeePass?
+    //TODO:4: Extend this to inspect more than just the name of the field. E.g. max length?
+    //TODO:4: For form filling (not submitting) we might want to select based upon found data in KeePass?
     if (firstPossibleUsernameIndex != -1)
         usernameIndex = firstPossibleUsernameIndex;
     else if (firstPasswordIndex > 0)
@@ -151,7 +151,7 @@ public getFormFields (form, isSubmission, currentPage?)
     let otherCount = 0;
     let actualUsernameIndex = 0;
 
-    // seperate the field data into appropriate variables
+    // separate the field data into appropriate variables
     for (let i = 0; i < allFields.length; i++)
     {
         if (allFields[i].type == "password")

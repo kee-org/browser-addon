@@ -10,8 +10,8 @@ class LoginMenus {
         body.removeChild(copyFrom);
     }
 
-    public showContextActions (uuid: string) {
-        myPort.postMessage({findMatches: { uuid: uuid}} as AddonMessage);
+    public showContextActions (uuid: string, dbFileName: string) {
+        myPort.postMessage({findMatches: { uuid: uuid, DBfilename: dbFileName}} as AddonMessage);
     }
 
     public createContextActions (kfl: keeLoginInfo) {
@@ -122,7 +122,8 @@ class LoginMenus {
         optionsMenuTrigger.addEventListener("click", evt => {
             evt.preventDefault();
             evt.stopPropagation();
-            this.showContextActions((evt.target as any).parentElement.dataset.uuid);
+            const dataset = (evt.target as any).parentElement.dataset;
+            this.showContextActions(dataset.uuid, dataset.filename);
         }, false);
         optionsMenuTrigger.setAttribute("id", "Kee-optionsMenuTrigger");
         event.target.appendChild(optionsMenuTrigger);
@@ -136,9 +137,4 @@ class LoginMenus {
         event.target.removeEventListener("mouseleave", this.onMouseLeaveLogin, false);
         event.target.addEventListener("mouseenter", this.onMouseEnterLogin, false);
     }
-
-    //TODO:3: Try to find out why we have to duplicate code - this.hideContextMenuButton is undefined.
-    // public onMouseLeaveLogin (event) {
-    //     this.hideContextMenuButton(event.target);
-    // }
 }

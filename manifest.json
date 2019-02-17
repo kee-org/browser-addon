@@ -2,13 +2,14 @@
     "manifest_version": 2,
     "name": "Kee",
     "default_locale": "en",
-    "version": "2.6.0",
-    "version_name": "2.6.0",
-    "author": "Chris Tomlinson",
-    "description": "Kee adds free, secure and easy password management features to your browser which save time and keep your private data more secure.",
+    "version": "3.0.0",
+    "version_name": "3.0.0",
+    "author": "Kee Vault Ltd",
+    "description": "Kee adds private, secure and easy password management features to your browser which save time and keep your private data more secure.",
     "background": {
         "scripts": [
             "lib/dollar-polyfill.js",
+            "lib/detectWebExtensions.js",
             "lib/tp/browser-polyfill.min.js",
             "lib/moduleHack.js",
             "lib/tp/punycode.js",
@@ -25,8 +26,10 @@
     "content_scripts": [{
         "all_frames": true,
         "matches": ["<all_urls>"],
+        "exclude_globs": ["https://app-dev.kee.pm:8087/*", "https://app-beta.kee.pm/*", "https://app.kee.pm/*", "https://keevault.pm/*"],
         "js": [
                 "lib/dollar-polyfill.js",
+                "lib/detectWebExtensions.js",
                 "lib/tp/browser-polyfill.min.js",
                 "lib/moduleHack.js",
                 "lib/tp/punycode.js",
@@ -36,6 +39,24 @@
                 "common/common.js",
                 "lib/firefoxBug1408996Workaround.js",
                 "page/page.js"
+        ],
+        "run_at": "document_end"
+    },{
+        "all_frames": false,
+        "matches": ["<all_urls>"],
+        "include_globs": ["https://app-dev.kee.pm:8087/*", "https://app-beta.kee.pm/*", "https://app.kee.pm/*", "https://keevault.pm/*"],
+        "js": [
+                "lib/dollar-polyfill.js",
+                "lib/detectWebExtensions.js",
+                "lib/tp/browser-polyfill.min.js",
+                "lib/moduleHack.js",
+                "lib/tp/punycode.js",
+                "lib/moduleUnhack.js",
+                "lib/pslData.js",
+                "lib/tp/publicsuffixlist.min.js",
+                "common/common.js",
+                "lib/firefoxBug1408996Workaround.js",
+                "vault/vault.js"
         ],
         "run_at": "document_end"
     }],
@@ -108,7 +129,7 @@
         "gecko": {
             "id": "keefox@chris.tomlinson",
             "update_url": "https://raw.githubusercontent.com/kee-org/browser-addon-updates/master/beta/update.json",
-            "strict_min_version": "56.0"
+            "strict_min_version": "60.0"
         }
     }
 }

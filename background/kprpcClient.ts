@@ -1,77 +1,144 @@
 /*
 kprpcClient.js provides functionality for
-communication using the KeePassRPC protocol >= version 1.3.
+communication using the KeePassRPC protocol >= version 1.7
 */
 
-/// <reference path="session.ts" />
+/// <reference path="WebsocketSession.ts" />
+/// <reference path="EventSession.ts" />
+
+interface ResultWrapper { result: any; error: any; }
+
+class SessionResponse {
+    sessionType: SessionType;
+    resultWrapper: Partial<ResultWrapper>;
+}
+
+// Only supports one response per session type
+class SessionResponseManager {
+    private responses: SessionResponse[] = [];
+    constructor (private responsesRequired: number, private onComplete: (sessionResponses: SessionResponse[]) => void) {
+    }
+    public onResponse (sessionType: SessionType, resultWrapper: Partial<ResultWrapper>) {
+        this.responses.push({ sessionType, resultWrapper });
+        if (this.responses.length === this.responsesRequired && this.onComplete)
+            this.onComplete(this.responses);
+    }
+}
 
 class kprpcClient {
+
     public requestId: number;
-    private callbacks: {};
-    private callbacksData: {};
     private clientVersion: number[];
     private srpClientInternals: SRPc;
     private secretKey;
     private securityLevel: number;
     private securityLevelServerMinimum: number;
-    private authenticated: boolean;
-    private session: Session;
+    private websocketSessionManager: WebsocketSessionManager;
+    private eventSessionManager: EventSessionManager;
     private keyChallengeParams: { sc: string, cc: string };
 
     public constructor () {
         this.requestId = 1;
-        this.callbacks = {};
-        this.callbacksData = {};
         this.clientVersion = [2, 0, 0];
         this.srpClientInternals = null;
         this.secretKey = null;
         this.securityLevel = 3;
         this.securityLevelServerMinimum = 3;
-        this.authenticated = false;
-        this.session = new Session(
-            () => this.setup(),
-            obj => this.receive(obj)
+        this.eventSessionManager = new EventSessionManager(
+            features => this.setupEventSession(features),
+            () => this.onEventSessionClosed(),
+            obj => this.receive(obj, this.eventSessionManager)
+        );
+        this.websocketSessionManager = new WebsocketSessionManager(
+            () => kee.accountManager.fe_multiSessionTypes || !this.eventSessionManager.isActive(),
+            () => this.setupWebsocketSession(),
+            () => this.onWebsocketSessionClosed(),
+            obj => this.receive(obj, this.websocketSessionManager),
+            () => !!this.secretKey
         );
     }
 
-    startup () {
-        this.session.startup();
+    startWebsocketSessionManager () {
+        this.websocketSessionManager.startup();
+    }
+    startEventSession (sessionId: string, features: string[], messageToWebPage) {
+        return this.eventSessionManager.startSession(sessionId, features, messageToWebPage);
+    }
+    eventSessionMessageFromPage (data: VaultMessage) {
+        return this.eventSessionManager.messageReciever(data);
+    }
+
+    getSessionManagerByType (sessionType: SessionType) {
+        return sessionType === SessionType.Event ? this.eventSessionManager : this.websocketSessionManager;
+    }
+
+    getPrimarySessionManager () {
+        if (this.eventSessionManager.isActive())
+            return this.eventSessionManager;
+        else if (this.websocketSessionManager.isActive())
+            return this.websocketSessionManager;
+        else
+            return null;
+    }
+
+    getManagersForActiveSessions () {
+        const activeSessions: (WebsocketSessionManager | EventSessionManager)[] = [];
+        if (this.eventSessionManager.isActive()) activeSessions.push(this.eventSessionManager);
+        if (this.websocketSessionManager.isActive()) activeSessions.push(this.websocketSessionManager);
+        return activeSessions;
     }
 
     // send a request to the current RPC server.
     // calling functions MUST manage the requestID to limit thread concurrency errors
-    request (session, method, params, callback, requestId, callbackData = null) {
+    //TODO:v: is above still necessary after e10s refactoring and new WebExtensions arch?
+    // Each type of request may or may not invoke a callback.
+    // Each request (uniquely identified by the requestId) may be distributed to one or more servers.
+    request (
+        sessionManagers: (WebsocketSessionManager | EventSessionManager)[],
+        method: string,
+        params: any[],
+        onComplete: (sessionResponses: SessionResponse[]) => void,
+        requestId: number) {
+
         if (requestId == undefined || requestId == null || requestId < 0)
-            throw new Error("JSON-RPC communciation requested with no requestID provided.");
+            throw new Error("JSON-RPC communication requested with no requestID provided");
 
-        this.callbacks[requestId] = callback;
-        if (callbackData != null)
-            this.callbacksData[requestId] = callbackData;
-
-        const data = JSON.stringify({ params: params, method: method, id: requestId });
+        const data = JSON.stringify({ jsonrpc: "2.0", params: params, method: method, id: requestId });
         KeeLog.debug("Sending a JSON-RPC request", ": "  + data);
 
-        try {
-            this.sendJSONRPC(data);
-        } catch (ex) {
-            KeeLog.warn("JSON-RPC request could not be sent. Expect an async error soon.");
-            setTimeout(function () {
-                this.processJSONRPCresponse({
-                    id: requestId,
-                    error: {
-                        message: "Send failure. Maybe the server went away?"
-                    },
-                    message: "error"
-                });
-            }.bind(this), 50);
+        // May want to generalise to more than these two servers one day but this does the job for now
+        const responseManager = new SessionResponseManager(sessionManagers.length, onComplete);
+        for (const sessionManager of sessionManagers) {
+            try {
+                if (sessionManager instanceof EventSessionManager) {
+                    this.eventSessionManager.registerCallback(requestId, resultWrapper => responseManager.onResponse(SessionType.Event, resultWrapper));
+                    this.sendJSONRPCUnencrypted(data);
+                } else {
+                    // async webcrypto:
+                    if (typeof crypto !== "undefined" && typeof crypto.subtle !== "undefined") {
+                        this.websocketSessionManager.registerCallback(requestId, resultWrapper => responseManager.onResponse(SessionType.Websocket, resultWrapper));
+                        this.encrypt(data, this.sendJSONRPCEncrypted);
+                    }
+                }
+            } catch (ex) {
+                KeeLog.warn("JSON-RPC request could not be sent. Expect an async error soon. Exception: " + ex.message + ":" + ex.stack);
+                setTimeout(function () {
+                    this.processJSONRPCresponse({
+                        id: requestId,
+                        error: {
+                            message: "Send failure. Maybe the server went away?"
+                        },
+                        message: "error"
+                    }, sessionManager);
+                }.bind(this), 50);
+            }
         }
     }
-
 
     // interpret the message from the RPC server
     evalJson (method, params) {
         let data = JSON.stringify(params);
-        KeeLog.debug("Evaluating a JSON-RPC object we just recieved", ": " + data);
+        KeeLog.debug("Evaluating a JSON-RPC object we just received", ": " + data);
 
         if (data) {
             data = data.match(/\s*\[(.*)\]\s*/)[1];
@@ -92,55 +159,58 @@ class kprpcClient {
     }
 
 
-    // No need to return anything from this function so sync or async implementation is fine
-    sendJSONRPC (data) {
-        // async webcrypto:
-        if (typeof crypto !== "undefined" && typeof crypto.subtle !== "undefined") {
-            this.encrypt(data, this.sendJSONRPCDecrypted);
-            return;
-        }
-    }
-
-    sendJSONRPCDecrypted (encryptedContainer) {
-
+    sendJSONRPCEncrypted (encryptedContainer) {
         const data2server =
             {
-                protocol: "jsonrpc",
+                protocol: VaultProtocol.Jsonrpc,
                 srp: null,
                 key: null,
                 error: null,
                 jsonrpc: encryptedContainer,
                 version: utils.versionAsInt(this.clientVersion)
             };
-
-        this.send(JSON.stringify(data2server));
+        this.websocketSessionManager.sendMessage(JSON.stringify(data2server));
     }
 
-    send (data) {
-        try {
-            this.session.webSocket.send(data);
-        } catch (ex) {
-            KeeLog.error("Failed to send a websocket message. Exception details: " + ex + ", stack: " + ex.stack);
-        }
+    sendJSONRPCUnencrypted (json) {
+        const data2server =
+            {
+                protocol: VaultProtocol.Jsonrpc,
+                srp: null,
+                key: null,
+                error: null,
+                jsonrpc: json,
+                encryptionNotRequired: true,
+                version: utils.versionAsInt(this.clientVersion)
+            };
+        this.eventSessionManager.sendMessage(data2server);
     }
 
-
-    // Close the current connection and reset those variables that are shared at the moment (e.g. secret key + authenticated status)
-    // NB: Legacy support complicates the situation at the moment but in a future Kee release we'll
-    // probably create a more concrete representation for an existing connection so it's clearer
-    // what we have to reset and what is just boilerplate around every connection
-    resetConnection () {
-        this.authenticated = false;
+    // After the current connection has been closed we reset those variables
+    // that are shared at the moment (e.g. secret key + authenticated status)
+    // and notify Kee Vault that it can try to connect now (if applicable)
+    onWebsocketSessionClosed () {
         this.srpClientInternals = null;
         this.secretKey = null;
 
-        // Close the websocket connection if there is one (if it's already closed, nothing will happen)
-        if (this.session.webSocket)
-            this.session.webSocket.close();
+        if (!this.eventSessionManager.isActive()) {
+            kee._pauseKee();
+            kee.inviteKeeVaultConnection();
+        } else {
+            kee._refreshKPDB();
+        }
+    }
+
+    onEventSessionClosed () {
+        if (!this.websocketSessionManager.isActive()) {
+            kee._pauseKee();
+        } else {
+            kee._refreshKPDB();
+        }
     }
 
     // data = JSON (underlying network/transport layer must have already formed incoming message(s) into JSON objects)
-    receive (data) {
+    receive (data, sessionManager: EventSessionManager | WebsocketSessionManager) {
         if (data === undefined || data === null)
             return;
         if (data.protocol === undefined || data.protocol === null)
@@ -182,27 +252,16 @@ class kprpcClient {
                             + $STRF("further_info_may_follow", ["See Kee log"]));
                     }
                 }
-                this.resetConnection();
+                sessionManager.closeSession();
                 break;
             default: return;
         }
-
     }
 
     receiveSetup (data) {
         // double check
         if (data.protocol != "setup")
             return;
-
-        if (this.authenticated) {
-            KeeLog.warn($STR("conn_setup_restart"));
-            this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
-            kee.appState.latestConnectionError = "ALREADY_AUTHENTICATED";
-            this.showConnectionMessage($STR("conn_setup_restart")
-                + " " + $STR("conn_setup_retype_password"));
-            this.resetConnection();
-            return; // already authenticated so something went wrong. Do the full Auth process again to be safe.
-        }
 
         if (data.error) {
             const extra = [];
@@ -251,16 +310,13 @@ class kprpcClient {
                         + $STRF("further_info_may_follow", ["See Kee log"]));
                     break;
             }
-            this.resetConnection();
+            this.websocketSessionManager.closeSession();
             return;
         }
 
-        // Versions of KeePassRPC <= 1.6.x will reject connections (send an "error" property) from
-        // Kee clients that are too new (like this one). For >= 1.7 it will only do so if it also
-        // decides that this client does not support features essential for it to function.
-        // Therefore if we've reached this far, we can check the server's list of features that get
-        // sent back on the server's first handshake response and reject if the server is missing features we need.
-        if (data.features && !FeatureFlags.required.every(function (feature) { return data.features.indexOf(feature) !== -1; }))
+        if (((data.srp && data.srp.stage === "identifyToClient") ||
+            (data.key && data.key.sc))
+            && !this.serverHasRequiredFeatures(data.features))
         {
             KeeLog.error($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]));
             kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
@@ -269,7 +325,7 @@ class kprpcClient {
                 action: "loadUrlUpgradeKee"
             };
             this.showConnectionMessage($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]), [button]);
-            this.resetConnection();
+            this.websocketSessionManager.closeSession();
             return;
         }
 
@@ -288,7 +344,7 @@ class kprpcClient {
             } else {
                 KeeLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
                 kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
-                this.sendError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
+                this.sendWebsocketsError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
                 this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
         }
@@ -304,13 +360,13 @@ class kprpcClient {
             } else {
                 KeeLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
                 kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
-                this.sendError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
+                this.sendWebsocketsError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
                 this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
         }
     }
 
-    sendError (errCode, errParams) {
+    sendWebsocketsError (errCode, errParams) {
         const data2server =
             {
                 protocol: "setup",
@@ -323,7 +379,20 @@ class kprpcClient {
                 version: utils.versionAsInt(this.clientVersion)
             };
 
-        this.send(JSON.stringify(data2server));
+        this.websocketSessionManager.sendMessage(JSON.stringify(data2server));
+    }
+
+    serverHasRequiredFeatures (features) {
+        // Versions of KeePassRPC <= 1.6.x will reject connections (send an "error" property) from
+        // Kee clients that are too new (like this one). For >= 1.7 it will only do so if it also
+        // decides that this client does not support features essential for it to function.
+        // Therefore if we've reached this far, we can check the server's list of features that get
+        // sent back on the server's first handshake response and reject if the server is missing features we need.
+        if (!features || !FeatureFlags.required.every(function (feature) { return features.indexOf(feature) !== -1; }))
+        {
+            return false;
+        }
+        return true;
     }
 
     checkServerSecurityLevel (serverSecurityLevel) {
@@ -354,7 +423,7 @@ class kprpcClient {
                     version: utils.versionAsInt(this.clientVersion)
                 };
 
-            this.send(JSON.stringify(data2server));
+            this.websocketSessionManager.sendMessage(JSON.stringify(data2server));
         });
     }
 
@@ -368,7 +437,7 @@ class kprpcClient {
                 this.showConnectionMessage($STR("conn_setup_failed")
                     + " " + $STR("conn_setup_retype_password"));
                 this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
-                this.resetConnection();
+                this.websocketSessionManager.closeSession();
                 return;
             }
             else {
@@ -381,13 +450,15 @@ class kprpcClient {
         });
     }
 
-    getSideChannelPassword (data) {
+    async getSideChannelPassword (data) {
 
         // get the user to type in the one-time password
 
         const s = data.srp.s;
         const B = data.srp.B;
         const _this = this;
+
+        const vaultTabs = await browser.tabs.query({url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]});
 
         function handleMessage (request, sender, sendResponse) {
             if (request.action !== "SRP_ok") return;
@@ -398,7 +469,8 @@ class kprpcClient {
         browser.runtime.onMessage.addListener(handleMessage);
 
         const createData = {
-            url: "/dialogs/SRP.html"
+            url: "/dialogs/SRP.html",
+            active: !(vaultTabs && vaultTabs[0] && vaultTabs[0].active)
         };
         const creating = browser.tabs.create(createData);
     }
@@ -419,7 +491,7 @@ class kprpcClient {
                     version: utils.versionAsInt(this.clientVersion)
                 };
 
-            this.send(JSON.stringify(data2server));
+            this.websocketSessionManager.sendMessage(JSON.stringify(data2server));
         });
     }
 
@@ -432,7 +504,7 @@ class kprpcClient {
             this.showConnectionMessage($STR("conn_setup_failed")
                 + " " + $STR("conn_setup_retype_password"));
             this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
-            this.resetConnection();
+            this.websocketSessionManager.closeSession();
             return;
         }
         else {
@@ -447,76 +519,83 @@ class kprpcClient {
                 this.setStoredKey(this.srpClientInternals.I, this.getSecurityLevel(), key);
 
                 // 0.025 second delay before we try to do the Kee connection startup stuff
-                setTimeout(this.onConnectStartup, 50, "SRP", this.onConnectStartup);
+                setTimeout(this.onConnectStartup, 50, "SRP");
             });
         }
 
     }
 
-    onConnectStartup (type, thisFunction, timeout) {
-
+    onConnectStartup (type) {
         // if any errors were shown, they are now resolved
         kee.removeUserNotifications((notification: KeeNotification) => notification.name != "kee-connection-message");
         kee.appState.latestConnectionError = "";
 
-        //TODO:#9:tutorial, etc.
-        //kee._keeExtension.prefs.setValue("lastConnectedToKeePass", ISO8601DateUtils.create(new Date()));
         kee._refreshKPDB();
-        kee.getApplicationMetadata();
     }
 
     // No need to return anything from this function so sync or async implementation is fine
     receiveJSONRPC (data) {
-        // async webcrypto:
-        if (typeof crypto !== "undefined" && typeof crypto.subtle !== "undefined") {
-            this.decrypt(data.jsonrpc, this.receiveJSONRPCDecrypted);
-            return;
+        if (data.encryptionNotRequired) {
+            this.receiveJSONRPCUnencrypted(data.jsonrpc);
+        } else {
+            // async webcrypto:
+            if (typeof crypto !== "undefined" && typeof crypto.subtle !== "undefined") {
+                this.decrypt(data.jsonrpc, this.receiveJSONRPCDecrypted);
+                return;
+            }
+            throw new Error("Webcrypto required but disabled or broken");
         }
-        throw new Error("Webcrypto required but disabled or broken");
     }
 
-    receiveJSONRPCDecrypted (data) {
-
-        if (data === null)
-            return; // decryption failed; connection has been reset and user will re-enter password for fresh authentication credentials
-
+    receiveJSONRPCUnencrypted (data) {
+        if (data === null) return; // duff data sent by server
         const obj = JSON.parse(data);
 
         // if we failed to parse an object from the JSON
-        if (!obj)
-            return;
+        if (!obj) return;
 
-        this.processJSONRPCresponse(obj);
+        this.processJSONRPCresponse(obj, this.eventSessionManager);
     }
 
-    processJSONRPCresponse (obj) {
+    receiveJSONRPCDecrypted (data) {
+        if (data === null) {
+            return; // decryption failed; connection has been reset and user will re-enter password for fresh authentication credentials
+        }
+        const obj = JSON.parse(data);
 
+        // if we failed to parse an object from the JSON
+        if (!obj) return;
+
+        this.processJSONRPCresponse(obj, this.websocketSessionManager);
+    }
+
+    processJSONRPCresponse (obj, sessionManager: EventSessionManager | WebsocketSessionManager) {
+        const sessionType = sessionManager instanceof EventSessionManager ? SessionType.Event : SessionType.Websocket;
         if ("result" in obj && obj.result !== false) {
-            // quick hack test
-            if (obj.result == null)
-                return;
+            // A null result indicates something went wrong with the request to KPRPC but it could
+            // be as simple as the user not being logged in to any databases. To ensure that all
+            // expected responses from different servers are seen and that all callbacks get unregistered,
+            // we no longer abort early. When we're confident that no scenarios cause issues for
+            // callbacks that might assume null results are already filtered out, we can remove
+            // this whole comment block.
+            // if (obj.result == null)
+            //     return;
 
             try {
-                if (this.callbacks[obj.id] != null)
-                    this.callbacks[obj.id](obj, this.callbacksData[obj.id]);
-                delete this.callbacks[obj.id];
-                delete this.callbacksData[obj.id];
+                sessionManager.invokeCallback(obj.id, obj);
+                sessionManager.unregisterCallback(obj.id);
             } catch (e) {
-                delete this.callbacks[obj.id];
-                delete this.callbacksData[obj.id];
-                KeeLog.warn("An error occurred when processing the result callback for JSON-RPC object id " + obj.id + ": " + e);
+                sessionManager.unregisterCallback(obj.id);
+                KeeLog.warn("[" + sessionType + "] An error occurred when processing the result callback for JSON-RPC object id " + obj.id + ": " + e);
             }
         } else if ("error" in obj) {
             try {
-                KeeLog.error("An error occurred in KeePassRPC object id: " + obj.id + " with this message: " + obj.message + " and this error: " + obj.error + " and this error message: " + obj.error.message);
-                if (this.callbacks[obj.id] != null)
-                    this.callbacks[obj.id](obj, this.callbacksData[obj.id]);
-                delete this.callbacks[obj.id];
-                delete this.callbacksData[obj.id];
+                KeeLog.error("[" + sessionType + "] An error occurred in KeePassRPC object id: " + obj.id + " with this message: " + obj.message + " and this error: " + obj.error + " and this error message: " + obj.error.message);
+                sessionManager.invokeCallback(obj.id, obj);
+                sessionManager.unregisterCallback(obj.id);
             } catch (e) {
-                delete this.callbacks[obj.id];
-                delete this.callbacksData[obj.id];
-                KeeLog.warn("An error occurred when processing the error callback for JSON-RPC object id " + obj.id + ": " + e);
+                sessionManager.unregisterCallback(obj.id);
+                KeeLog.warn("[" + sessionType + "] An error occurred when processing the error callback for JSON-RPC object id " + obj.id + ": " + e);
             }
         } else if ("method" in obj) {
             const result: any = { id: obj.id };
@@ -527,40 +606,65 @@ class kprpcClient {
                     result.result = null;
             } catch (e) {
                 result.error = e;
-                KeeLog.error("An error occurred when processing a JSON-RPC request: " + e);
+                KeeLog.error("[" + sessionType + "] An error occurred when processing a JSON-RPC request: " + e);
             }
-            // json rpc not specific about notifications, other than the fact
-            // they do not have the id in the request.  do not respond to
-            // notifications
-
-            // not serving anything interesting from Firefox...
-            //if ("id" in obj)
-            //    session.writeData(JSON.stringify(result));
-        } else {
-            KeeLog.error("Unexpected error processing receiveJSONRPC");
+        } else if (!("id" in obj)) {
+            // This probably means the server sent a response that breaks JSON-RPC-2 spec
+            KeeLog.error("[" + sessionType + "] Unexpected error processing receiveJSONRPC");
         }
     }
 
+    setupEventSession (features: string[]) {
 
-    setup () {
+        if (!kee.accountManager.fe_multiSessionTypes && this.websocketSessionManager.isActive()) {
+            KeeLog.debug("Session activation aborted: Existing session already active and account does not have the multiple sessions feature.");
+            this.eventSessionManager.closeSession();
+            return;
+        }
+
+        // We don't expect this to happen because we can control the features offered
+        // by the server before we make them required by a new version of the browser-addon.
+        // An edge case may be if we remove a feature from the server and ancient versions
+        // of the browser addon still require it but since we intend to describe such removals
+        // via new feature flags anyway, we will be fine for the reasonably foreseeable future.
+        // Therefore the messages displayed to the user may not make complete sense - which
+        // is better than requiring translation of text that should not be rendered
+        if (!this.serverHasRequiredFeatures(features))
+        {
+            KeeLog.error("eventSession: " + $STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]));
+            kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
+            const button: Button = {
+                label: $STR("upgrade_kee"),
+                action: "loadUrlUpgradeKee"
+            };
+            this.showConnectionMessage($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]), [button]);
+            this.eventSessionManager.closeSession();
+            return;
+        }
+
+        this.onConnectStartup("vault");
+    }
+
+    setupWebsocketSession () {
+
+        if (!kee.accountManager.fe_multiSessionTypes && this.eventSessionManager.isActive()) {
+            KeeLog.debug("Session activation aborted: Existing session already active and account does not have the multiple sessions feature.");
+            this.websocketSessionManager.closeSession();
+            return;
+        }
+
         // Sometimes things go wrong (e.g. user cancels master password
         // dialog box; maybe startup windows disappear)
         try {
             let setupKey = null;
             let setupSRP = null;
-
-
-            //this.getSecurityLevelServerMinimum();
-
-            //this.securityLevel = 3;
-            //this.securityLevelServerMinimum = 3;
             const securityLevel = this.getSecurityLevel();
-
             const username = this.getUsername(securityLevel);
 
-            // If we find a secure key already, lets send the unique username for this client instead of the srp object. Server will then enter challenge-response handshake phase
+            // If we find a secure key already, lets send the unique username for this
+            // client instead of the srp object. Server will then enter
+            // challenge-response handshake phase
             const storedKey = this.getStoredKey(username, securityLevel);
-
 
             if (storedKey) {
                 // send a setup message asking to mutally authenticate using the shared key
@@ -597,7 +701,7 @@ class kprpcClient {
                     clientDisplayDescription: $STR("conn_display_description")
                 };
 
-            this.send(JSON.stringify(data2server));
+            this.websocketSessionManager.sendMessage(JSON.stringify(data2server));
         } catch (ex) {
             // Need to make sure that the underlying web socket connection has been
             // closed so we are able to retry the connection a bit later but we'll
@@ -605,10 +709,10 @@ class kprpcClient {
             // that the application startup is progressing very slowly for some other reason
             KeeLog.warn("An attempt to setup the KPRPC secure channel has failed. It will not be retried for at least 10 seconds." +
                 " If you see this message regularly and are not sure why, please ask on the help forum. Technical detail about the problem follows: " + ex);
-            this.session.connectionProhibitedUntil = new Date();
-            this.session.connectionProhibitedUntil.setTime(
-                this.session.connectionProhibitedUntil.getTime() + 10000);
-            this.resetConnection();
+            this.websocketSessionManager.connectionProhibitedUntil = new Date();
+            this.websocketSessionManager.connectionProhibitedUntil.setTime(
+                this.websocketSessionManager.connectionProhibitedUntil.getTime() + 10000);
+            this.websocketSessionManager.closeSession();
             KeeLog.debug("Connection state reset ready for next attempt in at least 10 seconds");
         }
 
@@ -691,6 +795,9 @@ class kprpcClient {
         // get our secret key
         const secretKeyAB = utils.hexStringToByteArray(secretKey);
 
+        // "as any" is needed due to typescript browser API type definition bug introduced in TS 2.9
+        // The extra typescriptHack const is needed so we can cast to Promise rather than
+        // PromiseLike which is some bullshit buggy type definition
         const typescriptHack = wc.importKey(
             "raw",                            // Exported key format
             secretKeyAB,                      // The exported key
@@ -812,6 +919,9 @@ class kprpcClient {
             t = tn;
 
             if (ourHMAC == hmac) {
+                // "as any" is needed due to typescript browser API type definition bug introduced in TS 2.9
+                // The extra typescriptHack3 const is needed so we can cast to Promise rather than
+                // PromiseLike which is some bullshit buggy type definition
                 const typescriptHack3 = wc.importKey(
                     "raw",                            // Exported key format
                     secretKeyAB,                      // The exported key
@@ -851,7 +961,7 @@ class kprpcClient {
                         KPRPC.showConnectionMessage($STR("conn_setup_restart")
                             + " " + $STR("conn_setup_retype_password"));
                         KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
-                        KPRPC.resetConnection();
+                        KPRPC.websocketSessionManager.closeSession();
                         callback(null);
                     });
             }
@@ -864,7 +974,7 @@ class kprpcClient {
                 this.showConnectionMessage($STR("conn_setup_restart")
                     + " " + $STR("conn_setup_retype_password"));
                 KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
-                KPRPC.resetConnection();
+                KPRPC.websocketSessionManager.closeSession();
                 callback(null);
             });
     }

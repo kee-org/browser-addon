@@ -43,7 +43,7 @@ class MatchedLoginsPanel {
             const loginItem = document.createElement("li");
             loginItem.className = "";
             loginItem.style.backgroundImage = "url(data:image/png;base64," + login.iconImageData + ")";
-            loginItem.dataset.fileName = login.database.fileName;
+            loginItem.dataset.filename = login.database.fileName;
             loginItem.dataset.frameKey = login.frameKey;
             loginItem.dataset.formIndex = login.formIndex.toString();
             loginItem.dataset.loginIndex = login.loginIndex.toString();
@@ -221,7 +221,6 @@ class MatchedLoginsPanel {
         optionsMenuTrigger.addEventListener("click", function (evt) {
             evt.preventDefault();
             evt.stopPropagation();
-            KeeLog.debug("click: " + this.parentElement.dataset.uuid + ":" + this.parentElement.dataset.fileName);
             matchedLoginsPanel.showContextActions(this.parentElement.getElementsByTagName("div")[0]);
         }, false);
         optionsMenuTrigger.setAttribute("id", "Kee-optionsMenuTrigger");

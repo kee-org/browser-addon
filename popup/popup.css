@@ -64,6 +64,7 @@ body {
     margin:0px;
     background-repeat:no-repeat;
     background-position:2px 4px;
+    background-size: 16px;
     cursor:default;
     line-height:26px;
     position:relative;

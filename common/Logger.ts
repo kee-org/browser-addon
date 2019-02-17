@@ -20,7 +20,7 @@ class KeeLogger {
     constructor ()
     {
         this.config = {logLevel: 4, logSensitiveData: false};
-        this.info("Logging system initialised at " + Date());
+        this.debug("Logging system initialised at " + Date());
         this.config = {logLevel: 2, logSensitiveData: false};
         if (this.config.logSensitiveData)
             this.warn("WARNING: Kee Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
@@ -30,7 +30,7 @@ class KeeLogger {
 
 
     attachConfig (config: {logLevel: number, logSensitiveData: boolean}) {
-        this.info("Logging system config updated at " + Date());
+        this.debug("Logging system config updated at " + Date());
         this.config = config;
         if (config.logSensitiveData)
             this.warn("WARNING: Kee Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
@@ -115,6 +115,12 @@ class KeeLogger {
             const message = this.getMessage(data);
             if (message.length > 0) console.error(message);
         }
+    }
+
+    stackTrace () {
+        console.groupCollapsed("%c Stack Trace", "color:cream; font-style: normal;");
+        console.debug(new Error().stack);
+        console.groupEnd();
     }
 
 }

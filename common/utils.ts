@@ -227,6 +227,27 @@ class Utils {
         lut[d1&0xff]+lut[d1>>8&0xff]+"-"+lut[d1>>16&0x0f|0x40]+lut[d1>>24&0xff]+"-"+
         lut[d2&0x3f|0x80]+lut[d2>>8&0xff]+"-"+lut[d2>>16&0xff]+lut[d2>>24&0xff]+    lut[d3&0xff]+lut[d3>>8&0xff]+lut[d3>>16&0xff]+lut[d3>>24&0xff];
     };
+
+
+    base64urlDecode = function (input: string) {
+        // I don't see why we do any replacements here. Seems a pointless waste of cycles. Needs testing and removal if I'm right.
+        return atob(input.replace(/\-/g, "+").replace(/\_/g, "/"));
+    };
+
+    binaryToByteArray = function (binary: string): Uint8Array {
+        const len = binary.length;
+        const buffer = new ArrayBuffer(len);
+        const view = new Uint8Array(buffer);
+        for (let i = 0; i < len; i++) {
+            view[i] = binary.charCodeAt(i);
+        }
+        return view;
+    };
+
+    base64urltoByteArray = function (input: string) {
+        const binary = this.base64urlDecode(input);
+        return this.binaryToByteArray(binary);
+    };
 }
 
 let utils = new Utils();
