@@ -41,7 +41,7 @@ class PanelStub {
     constructor (options: PanelStubOptions, target: HTMLElement, specificFrameId?: number) {
         this.target = target;
         this.options = options;
-        this.parentFrameId = specificFrameId || frameId;
+        this.parentFrameId = specificFrameId >= 0 ? specificFrameId : frameId;
     }
 
     public createPanel () {

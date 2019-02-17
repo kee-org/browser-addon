@@ -315,7 +315,7 @@ class FormFilling {
 
     private initMatchResult (behaviour: FindMatchesBehaviour)
     {
-        //TODO:#6: create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
+        //TODO:4: #6 create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
         // matchResult = new MatchResult();
         this.matchResult.UUID = "";
         this.matchResult.logins = [];
@@ -424,10 +424,6 @@ class FormFilling {
 
         this.initMatchResult(behaviour);
         this.matchResult.forms = forms;
-
-        //TODO:3: Some of the init has been moved below the no forms return statement.
-        // should be safe but possible cause of bugs if I have recalled some early
-        // algorithm details incorrectly. Remove comment in >= 2.0
 
         const conf = configManager.siteConfigFor(url.href);
 
@@ -555,7 +551,7 @@ class FormFilling {
                 querySelectorAll: function () { return []; }, // Only use is for listing button elements
                 submit: function () { return; }, // Not possible to submit a pseudo form unless a button with custom JS has already been found
                 offsetParent: true, // This tricks element visibility checks into treating this as visible to the user
-                addEventListener: function (name: string, handler) { return; }, //TODO:3: hook up to the submit function to simulate real form submission
+                addEventListener: function (name: string, handler) { return; }, //TODO:4: hook up to the submit function to simulate real form submission
                 removeEventListener: function (name: string, handler) { return; }
             };
         }
@@ -622,7 +618,7 @@ class FormFilling {
             // form and login combination. We could be more efficient for the common case of 1 form
             // by avoiding the clone then but keeping the same behaviour gives us a higher chance
             // of noticing bugs.
-            matchResult.logins[i] = JSON.parse(crString); //TODO:3: faster clone? https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
+            matchResult.logins[i] = JSON.parse(crString); //TODO:4: faster clone? https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
 
             // Nothing to do if we have no matching logins available.
             if (matchResult.logins[i].length == 0)
@@ -831,7 +827,7 @@ class FormFilling {
 
             if (matchingLogin != null)
             {
-                //TODO:#6 multi-page
+                //TODO:4: #6 multi-page
                 // // record / update the info attached to this tab regarding
                 // // the number of pages of forms we want to fill in
                 // // NB: we do this even if we know this is a single form
@@ -852,7 +848,7 @@ class FormFilling {
                 // }
 
                 // If the user manually requested this to be filled in or the current page is unknown
-                if (!automated)//TODO:#6 multi-page || tabState.currentPage <= 0)
+                if (!automated)//TODO:4: #6 multi-page || tabState.currentPage <= 0)
                 {
                     let maximumPageCount = 1;
                     for (let i = 0; i < matchingLogin.passwords.length; i++)
@@ -867,7 +863,7 @@ class FormFilling {
                         if (otherField.formFieldPage > maximumPageCount)
                             maximumPageCount = otherField.formFieldPage;
                     }
-                    //TODO:#6: multi-page
+                    //TODO:4: #6: multi-page
                     // // always assume page 1 (very rare cases will go wrong - see github KeeFox #411 for relevant enhancement request)
                     // // Possible regression since v1.4: We used to ignore currentPage entirely for the first
                     // // page of a submission, now we might try to give preference to page 1 fields (though total
@@ -930,7 +926,7 @@ class FormFilling {
 
         // If this form fill is the non-final page of a multi-page login process we record the
         // UUID and dbFilename. We also enable auto-submit in some circumstances
-        //TODO:#6: multi-page
+        //TODO:4: #6: multi-page
         // if (matchResult.UUID != undefined && matchResult.UUID != null && matchResult.UUID != "")
         // {
         //     if (tabState.currentPage > 0 && tabState.currentPage < tabState.maximumPage)
@@ -988,6 +984,7 @@ class FormFilling {
     {
         const candidates: SubmitCandidate[] = [];
         const DISTANCE_MAX_SCORE = 100;
+        const DISTANCE_DIFFERENCE_FACTOR = 20;
         const VISIBLE_SCORE = 60;
         const CAT_BUTTONINFORM_SCORE = 60;
         const CAT_SUBMITINPUTINFORM_SCORE = 50;
@@ -1032,21 +1029,13 @@ class FormFilling {
                 ...
             */
         Array.from(form.ownerDocument.getElementsByTagName("button")).forEach( value => {
+            if (!value.isConnected) return;
             if (!value.type || value.type != "reset")
             {
                 const semanticValues: string[] = [];
-                if (value.name !== undefined && value.name !== null)
-                {
-                    semanticValues.push(value.name.toLowerCase());
-                }
-                if (value.textContent !== undefined && value.textContent !== null)
-                {
-                    semanticValues.push(value.textContent.toLowerCase());
-                }
-                if (value.value !== undefined && value.value !== null)
-                {
-                    semanticValues.push(value.value.toLowerCase());
-                }
+                if (value.name) semanticValues.push(value.name.toLowerCase());
+                if (value.textContent) semanticValues.push(value.textContent.toLowerCase());
+                if (value.value) semanticValues.push(value.value.toLowerCase());
 
                 let score = this.scoreAdjustmentForMagicWords(semanticValues, 50, this.semanticWhitelistCache, this.semanticBlacklistCache);
                 score += (value.form && value.form == form) ? CAT_BUTTONINFORM_SCORE : CAT_BUTTONOUTSIDEFORM_SCORE;
@@ -1056,20 +1045,21 @@ class FormFilling {
         });
 
         Array.from(form.getElementsByTagName("input")).forEach( value => {
+            if (!value.isConnected) return;
             if (value.type != null)
             {
                 let semanticScore = 0;
 
                 if (value.type == "submit" || value.type == "button")
                 {
-                    if (value.name !== undefined && value.name !== null)
+                    if (value.name)
                     {
                         semanticScore += this.scoreAdjustmentForMagicWords([value.name.toLowerCase()], 50, this.semanticWhitelistCache, this.semanticBlacklistCache);
                     }
 
                     // Names are more important but sometimes they don't exist or are random
                     // so check what is actually displayed to the user
-                    if (value.value !== undefined && value.value !== null)
+                    if (value.value)
                     {
                         semanticScore += this.scoreAdjustmentForMagicWords([value.value.toLowerCase()], 40, this.semanticWhitelistCache, this.semanticBlacklistCache);
                     }
@@ -1087,15 +1077,20 @@ class FormFilling {
         });
 
         Array.from(form.ownerDocument.querySelectorAll("[role=button]:not(button)")).forEach( (value: any) => {
+            if (!value.isConnected) return;
             const semanticValues: string[] = [];
-            if (value.name !== undefined && value.name !== null)
-            {
-                semanticValues.push(value.name.toLowerCase());
+
+            // technical
+            if (value.name) semanticValues.push(value.name.toLowerCase());
+            if (value.id) semanticValues.push(value.id.toLowerCase());
+
+            // user visible
+            if (value.title) semanticValues.push(value.title.toLowerCase());
+            if (value.innerText) semanticValues.push(value.innerText.toLowerCase());
+            if (value.dataSet && value.dataSet.length > 0) {
+                if (value.dataSet.tooltip) semanticValues.push(value.dataSet.tooltip.toLowerCase());
             }
-            if (value.id !== undefined && value.id !== null)
-            {
-                semanticValues.push(value.id.toLowerCase());
-            }
+            if (value.hasAttribute("aria-label")) semanticValues.push(value.getAttribute("aria-label").toLowerCase());
 
             let score = this.scoreAdjustmentForMagicWords(semanticValues, 50, this.semanticWhitelistCache, this.semanticBlacklistCache);
             score += (value.form && value.form == form) ? CAT_BUTTONROLEINFORM_SCORE : CAT_BUTTONROLEOUTSIDEFORM_SCORE;
@@ -1108,6 +1103,8 @@ class FormFilling {
             return 0;
         });
 
+        const maxDistanceDifference = submitElements[0].distance - submitElements[submitElements.length-1].distance;
+        const distanceScore = Math.min(DISTANCE_MAX_SCORE, DISTANCE_DIFFERENCE_FACTOR * maxDistanceDifference);
         let distanceFactor = 1/submitElements.length;
         let lastDistance = submitElements[0].distance;
         submitElements.forEach((candidate, index, elements) => {
@@ -1115,19 +1112,24 @@ class FormFilling {
                 distanceFactor = (index+1)/elements.length;
                 lastDistance = candidate.distance;
             }
-            candidate.score += distanceFactor*DISTANCE_MAX_SCORE;
+            candidate.score += distanceFactor*distanceScore;
         });
 
-        //TODO:3: more accurate searching of submit buttons, etc. to avoid password resets if possible
+        //TODO:4: more accurate searching of submit buttons, etc. to avoid password resets if possible
         // maybe special cases for common HTML output patterns (e.g. javascript-only ASP.NET forms)
 
         if (submitElements.length <= 0) return null;
+        if (submitElements.length === 1) return submitElements[0].element;
 
-        return submitElements.sort((a, b) => {
-            if (a.score < b.score) return 1;
-            if (a.score > b.score) return -1;
-            return 0;
-        })[0].element;
+        let maxScore = submitElements[0].score;
+        let maxScoreElement = submitElements[0].element;
+        for (let i=1; i<submitElements.length; i++) {
+            if (submitElements[i].score > maxScore) {
+                maxScore = submitElements[i].score;
+                maxScoreElement = submitElements[i].element;
+            }
+        }
+        return maxScoreElement;
     }
 
     private scoreAdjustmentForMagicWords (
@@ -1136,11 +1138,12 @@ class FormFilling {
         semanticWhitelistCache,
         semanticBlacklistCache) {
 
-        //TODO:3: other languages
+        //TODO:4: other languages
         const goodWords = ["submit", "login", "enter", "log in", "signin",
-            "sign in", "next"];
+            "sign in", "next", "continue"];
         const badWords = ["reset", "cancel", "back", "abort", "undo", "exit",
-            "empty", "clear", "captcha", "totp", "forgot", "dismiss"];
+            "empty", "clear", "captcha", "totp", "forgot", "dismiss", "delete",
+            "show", "reveal"];
         let goodScore = false;
         let badScore = false;
 
@@ -1158,7 +1161,7 @@ class FormFilling {
                 continue;
             }
             for (let j=0; j < goodWords.length; j++) {
-                if (semanticValue == goodWords[j]) {
+                if (semanticValue.indexOf(goodWords[j]) >= 0) {
                     goodScore = true;
                     semanticWhitelistCache[semanticValue] = true;
                     break;
@@ -1181,7 +1184,7 @@ class FormFilling {
                 continue;
             }
             for (let j=0; j < badWords.length; j++) {
-                if (semanticValue == badWords[j]) {
+                if (semanticValue.indexOf(badWords[j]) >= 0) {
                     badScore = true;
                     semanticBlacklistCache[semanticValue] = true;
                     break;
@@ -1260,7 +1263,7 @@ class FormFilling {
             form.submit();
         }
 
-        //TODO:3: maybe something like this might be useful? Dunno why a click()
+        //TODO:4: maybe something like this might be useful? Dunno why a click()
         // above wouldn't be sufficient but maybe some custom event raising might be handy...
         /*
         function simulateClick() {

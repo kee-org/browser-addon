@@ -11,11 +11,12 @@ declare const __publicSuffixList;
 declare const __punycode;
 declare const __pslData;
 
-// Pretend browser (WebExtensions) is chrome (there's a polyfill from Mozilla but it doesn't work well enough yet so this buys us time)
+// Pretend browser (WebExtensions) is chrome (we include a
+// polyfill from Mozilla but it doesn't work in some cases)
 declare const chrome;
 
 // increment when changes are introduced that require data migration
-const LATEST_VERSION: number = 4;
+const LATEST_VERSION: number = 5;
 
 let defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
@@ -57,15 +58,17 @@ defaultConfig.searchNetworkAuth = true;
 defaultConfig.notificationCountGeneric = 0;
 defaultConfig.notificationCountSavePassword = 0;
 defaultConfig.currentSearchTermTimeout = 30;
+defaultConfig.notifyPasswordAvailableForPaste = true;
 
 class ConfigManager {
     public current: Config;
     private readonly maxCharsPerPage: number = 10000;
     private pslInitialised = false;
+    private _listeners = [];
 
     public constructor () {
         this.current = defaultConfig;
-        browser.storage.onChanged.addListener(this.reloadOnStorageChange);
+        browser.storage.onChanged.addListener((a, b) => this.reloadOnStorageChange(a, b));
     }
 
     private get psl () {
@@ -75,6 +78,13 @@ class ConfigManager {
             this.pslInitialised = true;
         }
         return __publicSuffixList;
+    }
+
+    // Some processes may want to take action when settings are changed (e.g. the background
+    // process to notify the KPRPC server). Using this rather than browser.storage.onChanged.addListener
+    // ensures that our configManager data is consistent with the underlying storage
+    public addChangeListener (listener) {
+        this._listeners.push(listener);
     }
 
     private reloadOnStorageChange (changes: browser.storage.StorageChange, area: string) {
@@ -87,7 +97,9 @@ class ConfigManager {
         // reloading during an async save operation and not for a moment longer. That's just
         // not worth the risk of missing a change from another process.
 
-        configManager.reload();
+        configManager.reload(() =>
+            this._listeners.forEach(listener => listener(changes, area))
+        );
     }
 
     public setASAP (values: Partial<Config>) {
@@ -105,23 +117,27 @@ class ConfigManager {
         return pages;
     }
 
-    public save (callback?) {
+    public async save () {
         const configString = JSON.stringify(this.current);
         const pages = this.splitStringToPages(configString);
         const configValues: any = {};
 
-        //TODO:3: Need to be able to save some config details locally and others synced
         configValues.keeConfigPageCount = pages.length;
 
         for (let i=0; i < pages.length; i++)
         {
             configValues["keeConfigPage" + i] = pages[i];
         }
-        if (callback) chrome.storage.local.set(configValues, callback);
-        else chrome.storage.local.set(configValues);
+        await browser.storage.local.set(configValues);
     }
 
     public load (onLoaded) {
+        // We completely replace current config with what we load because we
+        // don't know that applying onto the defaults will result in a safe
+        // migration from any old version that we load. It would probably be
+        // fine but might require version comparisons... in which case we might
+        // as well just increment the version number and run a migration once
+        // rather than incur increased ongoing load costs.
         browser.storage.local.get().then(config => {
             const pageCount = config["keeConfigPageCount"];
 
@@ -150,7 +166,7 @@ class ConfigManager {
                     }
                     if (configString)
                         this.current = JSON.parse(configString);
-                    //TODO:3: Delete the old keefox prefixed data to save space
+                    //TODO:4: Delete the old keefox prefixed data to save space
                 }
             }
             this.fixInvalidConfigData();
@@ -178,6 +194,7 @@ class ConfigManager {
             case 1: migrations.migrateToVersion2(this.current);
             case 2: migrations.migrateToVersion3(this.current);
             case 3: migrations.migrateToVersion4(this.current);
+            case 4: migrations.migrateToVersion5(this.current);
         }
         this.save();
     }

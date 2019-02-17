@@ -6,9 +6,9 @@ class NetworkAuth {
     }
 
     supplyNetworkAuth (loginIndex: number) {
-        chrome.tabs.getCurrent(tab => {
-            chrome.runtime.sendMessage({action: "NetworkAuth_ok", selectedLoginIndex: loginIndex });
-            const removing = chrome.tabs.remove(tab.id);
+        browser.tabs.getCurrent().then(tab => {
+            browser.runtime.sendMessage({action: "NetworkAuth_ok", selectedLoginIndex: loginIndex });
+            const removing = browser.tabs.remove(tab.id);
         });
     }
 
@@ -52,7 +52,7 @@ class NetworkAuth {
             const loginItem = document.createElement("li");
             loginItem.className = "";
             loginItem.style.backgroundImage = "url(data:image/png;base64," + login.iconImageData + ")";
-            loginItem.dataset.fileName = login.database.fileName;
+            loginItem.dataset.filename = login.database.fileName;
             loginItem.dataset.frameKey = login.frameKey;
             loginItem.dataset.formIndex = login.formIndex != null ? login.formIndex.toString() : "";
             loginItem.dataset.loginIndex = i.toString();
@@ -62,7 +62,7 @@ class NetworkAuth {
 
             loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, login.title]);
 
-            //TODO:3: keyboard nav
+            //TODO:4: keyboard nav
             //loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
             loginItem.addEventListener("click", function (event) {
                 event.stopPropagation();
@@ -81,15 +81,19 @@ class NetworkAuth {
 let networkAuth: NetworkAuth;
 
 function setupNetworkAuthDialog () {
-    window.addEventListener("beforeunload", e => chrome.runtime.sendMessage({ action: "NetworkAuth_cancel" }));
+    window.addEventListener("beforeunload", e => browser.runtime.sendMessage({ action: "NetworkAuth_cancel" }));
     KeeLog.attachConfig(configManager.current);
     networkAuth = new NetworkAuth();
-    chrome.runtime.onMessage.addListener(message => {
+    browser.runtime.onMessage.addListener(message => {
         if (message && message.action && message.action === "NetworkAuth_matchedLogins")
             networkAuth.setupPage(message.logins, message.realm, message.url, message.isProxy);
     });
-    chrome.runtime.sendMessage({action: "NetworkAuth_load" });
+    browser.runtime.sendMessage({action: "NetworkAuth_load" });
     document.getElementById("i18n_root").style.display = "block";
 }
 
-document.addEventListener("DOMContentLoaded", () => configManager.load(setupNetworkAuthDialog));
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => configManager.load(setupNetworkAuthDialog));
+} else {
+    configManager.load(setupNetworkAuthDialog);
+}

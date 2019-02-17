@@ -23,11 +23,23 @@ let keeFormFieldType =
         checkbox: "FFTcheckbox"
     };
 
+enum SessionType {
+    Event = "event",
+    Websocket = "websocket"
+}
+
+class PasswordProfile {
+    name: string;
+    sessionType: SessionType;
+}
+
 class Database {
     name: string;
     fileName: string;
     iconImageData: string;
     root: any;
+    active: boolean;
+    sessionType: SessionType;
 }
 
 class keeLoginInfo {

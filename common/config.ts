@@ -1,16 +1,3 @@
-
-//TODO:3: These might not be useful afterall
-// class QuerySelectorTemplates {
-//     public static FormName: { toQS: "form[name=%s]", fromQS: "^form\[name=([^\]]+\]$" };
-//     public static FormId: { toQS: "form#%s", fromQS: "^form#(.+)$" };
-// }
-// // It's much more effecient to batch query selectors into just white or black list queries
-// // but maybe we'll add support for custom weighting in future like this
-// class WeightedQuerySelector {
-//     querySelector: string;
-//     weight: number;
-// }
-
 type SiteConfigMethod = "Exact" | "Prefix" | "Regex";
 type SiteConfigTarget = "Domain" | "Host" | "Page";
 type SiteConfigNodeType = "Migration" | "User" | "Default";
@@ -28,7 +15,6 @@ class FormMatchConfig {
 }
 
 class SiteConfig {
-    //weightedQuerySelectors?: WeightedQuerySelector[];
     whiteList?: FormMatchConfig;
     blackList?: FormMatchConfig;
     preventSaveNotification?: boolean;
@@ -98,4 +84,5 @@ class Config {
     notificationCountGeneric: number;
     notificationCountSavePassword: number;
     currentSearchTermTimeout: number;
+    notifyPasswordAvailableForPaste: boolean;
 }

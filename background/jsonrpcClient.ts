@@ -10,76 +10,77 @@ class jsonrpcClient {
 
     constructor () {
         this.kprpcClient = new kprpcClient();
+        this.kprpcClient.startWebsocketSessionManager();
     }
 
-    startup () {
-        this.kprpcClient.startup();
+    startEventSession (sessionId: string, features: string[], messageToWebPage) {
+        return this.kprpcClient.startEventSession(sessionId, features, messageToWebPage);
     }
+
+    eventSessionMessageFromPage (data: VaultMessage) {
+        return this.kprpcClient.eventSessionMessageFromPage(data);
+    }
+
+    sessionManagerForFilename (dbFileName: string) {
+        const sessionType = kee.appState.KeePassDatabases.find(db => db.fileName === dbFileName).sessionType;
+        return this.kprpcClient.getSessionManagerByType(sessionType);
+    }
+
+    sessionManagerForPasswordProfile (profile: string) {
+        const sessionType = kee.appState.PasswordProfiles.find(p => p.name === profile).sessionType;
+        return this.kprpcClient.getSessionManagerByType(sessionType);
+    }
+
+    public get eventSessionManagerIsActive () : boolean {
+        return this.kprpcClient.getSessionManagerByType(SessionType.Event).isActive();
+    }
+
 
     //***************************************
-    // Functions below can be thought of as proxies to the RPC
-    // methods exposed in the KeePassRPC server.
-    // See KeePassRPCService.cs for more detail
+    // Functions below orchestrate requests to one or more KPRPC servers,
+    // targeting methods exposed in the KeePassRPC server.
+    // See KeePassRPCService.cs for more detail on what each method does.
     //***************************************
 
     launchGroupEditor (uniqueID, dbFileName)
     {
-        // fire and forget
-        this.kprpcClient.request(this, "LaunchGroupEditor", [uniqueID, dbFileName], null, ++this.kprpcClient.requestId);
-        return;
+        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "LaunchGroupEditor", [uniqueID, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
     launchLoginEditor (uniqueID, dbFileName)
     {
-        // fire and forget
-        this.kprpcClient.request(this, "LaunchLoginEditor", [uniqueID, dbFileName], null, ++this.kprpcClient.requestId);
-        return;
+        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "LaunchLoginEditor", [uniqueID, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
     changeDB (fileName, closeCurrent)
     {
-        // fire and forget
-        this.kprpcClient.request(this, "ChangeDatabase", [fileName, closeCurrent], null, ++this.kprpcClient.requestId);
-        return;
-    }
+        // We only use this for opening a database when no DB is opened in any session.
+        // We may have just opened the vault, or we may have an existing session open to
+        // one or more Event and/or Websocket servers.
+        // There's no logical way to decide which session to target this request at so we just go
+        // for whatever is active, preferring an Event source if multiple sessions are open
+        const sessionManager = this.kprpcClient.getPrimarySessionManager();
+        if (!sessionManager) {
+            KeeLog.error("No active session found");
+            return;
+        }
 
-    changeLocation (locationId)
-    {
-        // fire and forget
-        this.kprpcClient.request(this, "ChangeLocation", [locationId], null, ++this.kprpcClient.requestId);
-        return;
-    }
-
-    getMRUdatabases ()
-    {
-        this.kprpcClient.request(this, "GetCurrentKFConfig", null, function rpc_callback (resultWrapper) {
-            if ("result" in resultWrapper && resultWrapper.result !== false)
-            {
-                // if (resultWrapper.result !== null)
-                //     kee_win.mainUI.setMRUdatabasesCallback(resultWrapper.result);
-
-            }
-        }, ++this.kprpcClient.requestId);
+        this.kprpcClient.request([sessionManager], "ChangeDatabase", [fileName, closeCurrent], null, ++this.kprpcClient.requestId);
     }
 
     addLogin (login, parentUUID, dbFileName)
     {
         const jslogin = login.asEntry();
-        // fire and forget
-        this.kprpcClient.request(this, "AddLogin", [jslogin, parentUUID, dbFileName], null, ++this.kprpcClient.requestId);
-        return;
+        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "AddLogin", [jslogin, parentUUID, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
     updateLogin (login, oldLoginUUID, urlMergeMode, dbFileName) {
         const jslogin = login.asEntry();
-        // fire and forget
-        this.kprpcClient.request(this, "UpdateLogin", [jslogin, oldLoginUUID, urlMergeMode, dbFileName], null, ++this.kprpcClient.requestId);
-        return;
+        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "UpdateLogin", [jslogin, oldLoginUUID, urlMergeMode, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
-    findLogins (fullURL: string, formSubmitURL, httpRealm, uniqueID: string, dbFileName, freeText, username, callback, callbackData)
+    findLogins (fullURL: string, formSubmitURL, httpRealm, uniqueID: string, dbFileName, freeText, username, callback: (resultWrapper: Partial<ResultWrapper>) => void)
     {
-        // returns ID of async JSON-RPC request so calling functions can track if desired
         let lst = "LSTall";
         if (httpRealm == undefined || httpRealm == null || httpRealm == "")
             lst = "LSTnoRealms";
@@ -94,72 +95,106 @@ class jsonrpcClient {
                 dbFileName = "";
         }
 
+        // If we have been asked to search in a specific DB filename (possibly implicitly by
+        // user settings) we can search in just that session, otherwise we search them all
+        const sessionManagers = [];
+        if (dbFileName)
+            sessionManagers.push(this.sessionManagerForFilename(dbFileName));
+        else {
+            sessionManagers.push(...this.kprpcClient.getManagersForActiveSessions());
+        }
+
         const urls = [];
 
         if (fullURL) {
             urls.push(fullURL);
 
             // Google treat youtube.com and google.com as the same property when authenticating
+            //TODO:v: extend to wider concept of equivelent domains (beware ownership changes)
             if (fullURL.search(/$https\:\/\/accounts\.youtube\.com\/?/) >= 0)
                 urls.push("https://accounts.google.com");
         }
 
-        const newId = ++this.kprpcClient.requestId;
-        // slight chance IDs may be sent out of order but at least this way
-        // they are consistent for any given request/response cycle
-        this.kprpcClient.request(this, "FindLogins", [urls, formSubmitURL, httpRealm, lst, false, uniqueID, dbFileName, freeText, username], callback, newId, callbackData);
-        return newId;
+        this.kprpcClient.request(sessionManagers, "FindLogins", [urls, formSubmitURL, httpRealm, lst, false, uniqueID, dbFileName, freeText, username], sessionResponses => {
+            const results: any[] = [];
+            for (const sessionResponse of sessionResponses) {
+                if (sessionResponse.resultWrapper.result != null) {
+                    results.push(...sessionResponse.resultWrapper.result);
+                }
+            }
+            callback({ result: results });
+            //TODO:4: Refactor so we return entries instead of the raw wrappers (not a keeLoginInfo though cos that is not JSONifiable)
+        }, ++this.kprpcClient.requestId);
     }
 
     getAllDatabases ()
     {
-        const result = this.kprpcClient.request(this, "GetAllDatabases", null, function rpc_callback (resultWrapper) {
-            if ("result" in resultWrapper && resultWrapper.result !== false)
-            {
-                if (resultWrapper.result !== null)
-                    kee.updateKeePassDatabases(resultWrapper.result);
-            }
-        }, ++this.kprpcClient.requestId);
-        return;
-    }
+        const activeSessions = this.kprpcClient.getManagersForActiveSessions();
 
-    getApplicationMetadata ()
-    {
-        const result = this.kprpcClient.request(this, "GetApplicationMetadata", null, function rpc_callback (resultWrapper) {
-            if ("result" in resultWrapper && resultWrapper.result !== false)
-            {
-                if (resultWrapper.result !== null)
-                {
-                    let netRuntimeVersion = "";
-                    if (resultWrapper.result.isMono)
-                        netRuntimeVersion = "Mono " + resultWrapper.result.monoVersion;
-                    else
-                        netRuntimeVersion = ".NET " + resultWrapper.result.nETversion;
+        const result = this.kprpcClient.request(activeSessions, "GetAllDatabases", null, sessionResponses => {
+            const dbs: Database[] = [];
+            sessionResponses.sort(s => s.sessionType === SessionType.Event ? -1 : 1);
+            for (const sessionResponse of sessionResponses) {
+                if (sessionResponse.resultWrapper.result !== null) {
+                    const recievedDBs = sessionResponse.sessionType === SessionType.Event
+                        ? sessionResponse.resultWrapper.result.dbs : sessionResponse.resultWrapper.result;
+                    for (const db of recievedDBs as Array<Database>) {
+                        if (!dbs.find(d => d.fileName === db.fileName)) {
+                            db.sessionType = sessionResponse.sessionType;
+                            dbs.push(db);
+                        } else
+                        {
+                            KeeLog.debug("Database with duplicate file name found. Ignoring.", db.fileName);
+                        }
+                    }
+                    if (sessionResponse.sessionType === SessionType.Event) {
+                        kee.configSyncManager.updateFromRemoteConfig(sessionResponse.resultWrapper.result.config);
+                    }
                 }
-
             }
+            kee.updateKeePassDatabases(dbs);
         }, ++this.kprpcClient.requestId);
-
-        return;
     }
 
-    getPasswordProfiles (callback) {
-        const result = this.kprpcClient.request(this, "GetPasswordProfiles", null, function rpc_callback (resultWrapper) {
-            if ("result" in resultWrapper && resultWrapper.result !== false) {
-                if (resultWrapper.result !== null)
-                    callback(resultWrapper.result);
-            }
-        }, ++this.kprpcClient.requestId);
+    updateAddonSettings (settings: Partial<Config>, version: number)
+    {
+        const sessionManager = this.kprpcClient.getSessionManagerByType(SessionType.Event);
+        if (!sessionManager) {
+            return;
+        }
 
-        return;
+        this.kprpcClient.request([sessionManager], "UpdateAddonSettings", [settings, version], null, ++this.kprpcClient.requestId);
+    }
+
+    getPasswordProfiles (callback: (profiles: PasswordProfile[]) => void) {
+        const activeSessions = this.kprpcClient.getManagersForActiveSessions();
+
+        const result = this.kprpcClient.request(activeSessions, "GetPasswordProfiles", null, sessionResponses => {
+            const profiles: PasswordProfile[] = [];
+            sessionResponses.sort(s => s.sessionType === SessionType.Event ? -1 : 1);
+            for (const sessionResponse of sessionResponses) {
+                if (sessionResponse.resultWrapper.result !== null) {
+                    for (const profileName of sessionResponse.resultWrapper.result as Array<string>) {
+                        if (!profiles.find(p => p.name === profileName)) {
+                            profiles.push({name: profileName, sessionType: sessionResponse.sessionType});
+                        } else
+                        {
+                            KeeLog.debug("Password profile with duplicate name found. Ignoring.", profileName);
+                        }
+                    }
+                }
+            }
+            callback(profiles);
+        }, ++this.kprpcClient.requestId);
     }
 
     generatePassword (profileName, url, callback)
     {
-        this.kprpcClient.request(this, "GeneratePassword", [profileName, url], function rpc_callback (resultWrapper) {
-            if ("result" in resultWrapper && resultWrapper.result !== false) {
-                if (resultWrapper.result !== null)
-                    callback(resultWrapper.result);
+        const session = this.sessionManagerForPasswordProfile(profileName);
+        this.kprpcClient.request([session], "GeneratePassword", [profileName, url], sessionResponses => {
+            const sessionResponse = sessionResponses[0];
+            if (sessionResponse.resultWrapper.result !== null) {
+                callback(sessionResponse.resultWrapper.result);
             }
         }, ++this.kprpcClient.requestId);
     }

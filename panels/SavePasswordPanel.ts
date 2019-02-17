@@ -429,6 +429,10 @@ class SavePasswordPanel {
         panel3.classList.remove("enabled");
         this.saveData.update = false;
 
+        const select = (this.doc.getElementById("kee-save-password-db-select") as HTMLSelectElement);
+        const opt = select.selectedOptions[0] as HTMLOptionElement;
+        this.saveData.db = opt.value;
+
         this.setTypeChooserButtonState("kee-save-password-new-button", "kee-save-password-update-button");
     }
 
@@ -517,7 +521,7 @@ class SavePasswordPanel {
 
             const loginItem = ps.doc.createElement("li");
             loginItem.setAttribute("class", "login-item");
-            loginItem.setAttribute("data-fileName", login.dbFileName);
+            loginItem.setAttribute("data-filename", login.dbFileName);
             loginItem.setAttribute("data-usernameName", usernameName);
             loginItem.setAttribute("data-usernameValue", usernameValue);
             loginItem.setAttribute("data-url", login.url);
@@ -528,7 +532,7 @@ class SavePasswordPanel {
             loginItem.setAttribute("tabindex", "-1");
 
             loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, login.title]);
-            //TODO:3: Keyboard nav?
+            //TODO:4: Keyboard nav?
             //loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
             loginItem.addEventListener("mouseup", function (event) {
                 // Make sure no parent groups override the actions of this handler
@@ -541,7 +545,7 @@ class SavePasswordPanel {
             }, false);
             loginItem.addEventListener("keeCommand", function (event) {
                 ps.saveData.oldLoginUUID = this.getAttribute("data-uuid");
-                ps.saveData.db = this.getAttribute("data-fileName");
+                ps.saveData.db = this.getAttribute("data-filename");
 
                 const item = ps.doc.createElement("li");
                 item.setAttribute("class", "login-item");

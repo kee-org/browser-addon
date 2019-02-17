@@ -12,7 +12,7 @@ class FormSaving {
     private SubmitHandlerAttachments: SubmitHandlerAttachment[] = [];
     private savePasswordPanelStub: PanelStub;
     private savePasswordPanelStubRaf: number;
-    private matchResult: MatchResult; //TODO:3: May be overkill to have all this data available for saving
+    private matchResult: MatchResult; //TODO:4: May be overkill to have all this data available for saving
 
     constructor (logger: KeeLogger, formUtils: FormUtils, config: Config) {
         this.Logger = logger;
@@ -60,7 +60,7 @@ class FormSaving {
     // This won't always be called before all event handlers on the web page so on
     // some sites we will store invalid data (in cases where the login scripts
     // mangle the contents of the fields before submitting them).
-    //TODO:3: Possibly could slightly reduce incidence of this problem by listening
+    //TODO:4: Possibly could slightly reduce incidence of this problem by listening
     // to every click on the document body or tracking all input events but performance?
     private submitHandler (e: Event, form: HTMLFormElement) {
         this.Logger.debug("submitHandler called");
@@ -102,7 +102,7 @@ class FormSaving {
                 for (let i=0; i < passwords.length; i++)
                     passwordFields.push(passwords[i]);
 
-                //TODO:3: try to distingish between multi-password login/signup and typo. maybe: if username exists and matches existing password it is a typo, else multi-password
+                //TODO:4: try to distinguish between multi-password login/signup and typo. maybe: if username exists and matches existing password it is a typo, else multi-password
                 //return;
             } else // it's probably a password change form, but may be a sign-up form
             {
@@ -117,9 +117,9 @@ class FormSaving {
                 if (passwords.length == 2)
                 {
                     passwordFields.push(passwords[0]);
-                    //TODO:3: it is also reasonably likely that this indicates a
+                    //TODO:4: it is also reasonably likely that this indicates a
                     // sign-up form rather than a password change form. decide
-                    // which here and flag which one it is for now, we just assume
+                    // which here and flag which one it is. for now, we just assume
                     // it's a sign-up form becuase that is more useful for the user in many cases
                     isPasswordChangeForm = false;
                     isRegistrationForm = true;

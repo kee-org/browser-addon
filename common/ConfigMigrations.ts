@@ -1,5 +1,9 @@
 class ConfigMigrations {
 
+    public migrateToVersion5 (current: Config) {
+        Object.assign(current, { notifyPasswordAvailableForPaste: true, version: 5 } as Partial<Config>);
+    }
+
     public migrateToVersion4 (current: Config) {
         let newLogLevel = 2;
         if (current.logLevel === 1) {

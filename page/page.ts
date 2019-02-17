@@ -1,3 +1,17 @@
+/* This orchestrates the main functions of the add-on
+on all website pages except those containing a KPRPC server */
+
+// tslint:disable-next-line:no-var-keyword
+var keeDuplicationCount;
+
+if (keeDuplicationCount) {
+    if (KeeLog && KeeLog.error) KeeLog.error("Duplicate Kee content script instance detected! Found this many other instances: " + keeDuplicationCount);
+    else console.error("Duplicate Kee content script instance detected! Found this many other instances: " + keeDuplicationCount);
+} else {
+    keeDuplicationCount = 0;
+}
+keeDuplicationCount += 1;
+
 let appState: AppState;
 const keePopupLoadTime = Date.now();
 let formUtils: FormUtils;
@@ -9,16 +23,6 @@ let frameId: number;
 let myPort: browser.runtime.Port;
 let inputsObserver: MutationObserver;
 let messagingPortConnectionRetryTimer: number;
-
-let keeDuplicationCount;
-
-if (keeDuplicationCount) {
-    if (KeeLog && KeeLog.error) KeeLog.error("Duplicate Kee instance detected! Found this many other instances: " + keeDuplicationCount);
-    else console.error("Duplicate Kee instance detected! Found this many other instances: " + keeDuplicationCount);
-} else {
-    keeDuplicationCount = 0;
-}
-keeDuplicationCount += 1;
 
 const sameMembers = (arr1, arr2) =>
     arr1.every(item => arr2.includes(item)) && arr2.every(item => arr1.includes(item));
@@ -36,7 +40,7 @@ function shouldSearchForMatches (oldState: AppState, newState: AppState) {
                 return true;
             }
             if (sameMembers(oldState.KeePassDatabases, newState.KeePassDatabases)) {
-                return true; //TODO:c: Check that sameMembers does the comparison we want. Might need to go a level deeper and look at something unique like fileName
+                return true; //TODO:4: Check that sameMembers does the comparison we want. Might need to go a level deeper and look at something unique like fileName
             }
         }
     }
@@ -74,7 +78,8 @@ function tutorialIntegration () {
         transferElement.setAttribute("state", JSON.stringify({
             connected: appState.connected,
             version: browser.runtime.getManifest().version,
-            dbLoaded: appState.KeePassDatabases && appState.KeePassDatabases.length > 0
+            dbLoaded: appState.KeePassDatabases && appState.KeePassDatabases.length > 0,
+            sessionNames: appState.KeePassDatabases.map(db => db.sessionType.toString()).filter((v, i, a) => a.indexOf(v) === i)
         }));
         document.documentElement.appendChild(transferElement);
 
@@ -100,38 +105,38 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
     tutorialIntegration();
 }
 
-function startup () {
-    KeeLog.debug("content page starting");
+inputsObserver = new MutationObserver(mutations => {
 
-    inputsObserver = new MutationObserver(mutations => {
+    // If we have already scheduled a rescan recently, no further action required
+    if (formFilling.formFinderTimer !== null) return;
 
-        // If we have already scheduled a rescan recently, no further action required
-        if (formFilling.formFinderTimer !== null) return;
+    // Only proceed if we have a DB to search
+    if (!appState.connected || appState.ActiveKeePassDatabaseIndex < 0) return;
 
-        // Only proceed if we have a DB to search
-        if (!appState.connected || appState.ActiveKeePassDatabaseIndex < 0) return;
-
-        let rescan = false;
-        const interestingNodes = ["form", "input", "select"];
-        mutations.forEach(mutation => {
-            if (rescan) return;
-            if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-                for (const node of mutation.addedNodes) {
-                    if (rescan) break;
-                    for (let i=0; i<interestingNodes.length; i++) {
-                        const element = (node as Element);
-                        if (element.querySelector && element.querySelector(interestingNodes[i])) {
-                            rescan = true;
-                            break;
-                        }
+    let rescan = false;
+    const interestingNodes = ["form", "input", "select"];
+    mutations.forEach(mutation => {
+        if (rescan) return;
+        if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+            for (const node of mutation.addedNodes) {
+                if (rescan) break;
+                for (let i=0; i<interestingNodes.length; i++) {
+                    const element = (node as Element);
+                    if (element.querySelector && element.querySelector(interestingNodes[i])) {
+                        rescan = true;
+                        break;
                     }
                 }
             }
-        });
-
-        // Schedule a rescan soon. Not immediately, in case a batch of mutations are about to be triggered.
-        if (rescan) formFilling.formFinderTimer = setTimeout(formFilling.findMatchesInThisFrame.bind(formFilling), 500);
+        }
     });
+
+    // Schedule a rescan soon. Not immediately, in case a batch of mutations are about to be triggered.
+    if (rescan) formFilling.formFinderTimer = setTimeout(formFilling.findMatchesInThisFrame.bind(formFilling), 500);
+});
+
+function startup () {
+    KeeLog.debug("content page starting");
 
     try {
         connectToMessagingPort();
@@ -158,7 +163,7 @@ function startup () {
         }
     }, 5000);
 
-    KeeLog.info("content page ready");
+    KeeLog.debug("content page ready");
 }
 
 function connectToMessagingPort () {
@@ -166,13 +171,13 @@ function connectToMessagingPort () {
     if (myPort) {
         KeeLog.warn("port already set to: " + myPort.name);
     }
-    myPort = chrome.runtime.connect({ name: "page" });
+    myPort = browser.runtime.connect({ name: "page" });
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
         KeeLog.debug("In browser content page script, received message from background script");
 
         if (!appState) {
-            if (m.appState) {
+            if (m.appState && m.frameId >= 0) {
                 onFirstConnect(m.appState, m.isForegroundTab, m.tabId, m.frameId);
             } else {
                 KeeLog.warn("browser content page script received message before initialisation complete");
@@ -225,5 +230,49 @@ function connectToMessagingPort () {
     });
 }
 
-// Load our config and start the page script once done
-configManager.load(startup);
+window.addEventListener("pageshow", ev => {
+    if (myPort) {
+        // I don't think this branch is ever hit but cross-browser behaviour might
+        // vary so this just ensures everything remains consistent
+        myPort.postMessage({ action: Action.PageShow });
+        if (appState && appState.connected && appState.KeePassDatabases.length > 0) {
+            formFilling.findMatchesInThisFrame();
+        }
+    } else {
+        pageShowFired = true;
+        clearTimeout(missingPageShowTimer);
+        if (configReady) {
+            startup();
+        }
+    }
+});
+window.addEventListener("pagehide", ev => {
+    inputsObserver.disconnect();
+    if (myPort) myPort.postMessage({ action: Action.PageHide });
+    formFilling.removeKeeIconFromAllFields();
+    myPort = null;
+    appState = undefined;
+    tabId = undefined;
+    frameId = undefined;
+    formUtils = undefined;
+    formSaving = undefined;
+    formFilling = undefined;
+    passwordGenerator = undefined;
+});
+
+// Load our config
+let pageShowFired = false;
+let configReady = false;
+let missingPageShowTimer: number;
+configManager.load(() => {
+    configReady = true;
+    if (pageShowFired) {
+        startup();
+    } else {
+        // Page show does not always fire (e.g. on first install of the extension)
+        // so we won't wait around forever, at the cost of occasional duplicate
+        // startup code - broadly limited to discovering that the message port
+        // is already established.
+        missingPageShowTimer = setTimeout(startup, 1500);
+    }
+});

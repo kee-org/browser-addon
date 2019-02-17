@@ -22,9 +22,7 @@ class KFCommands {
                     }
                 break;
                 case Command.GeneratePassword:
-                    if (kee.appState.connected) {
-                        kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage({ action: Action.GeneratePassword });
-                    }
+                    kee.initiatePasswordGeneration();
                 break;
             }
         });
@@ -49,9 +47,7 @@ class KFCommands {
                 //     }
                 // break;
                 case Command.GeneratePassword:
-                    if (kee.appState.connected) {
-                        kee.tabStates.get(kee.foregroundTabId).framePorts.get(0).postMessage({ action: Action.GeneratePassword });
-                    }
+                    kee.initiatePasswordGeneration();
                 break;
             }
             if (id.startsWith("matchedLogin-")) {
@@ -79,13 +75,13 @@ class KFCommands {
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
-                        contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                                browser.contextMenus.ContextType.FRAME,
-                                browser.contextMenus.ContextType.IMAGE,
-                                browser.contextMenus.ContextType.LINK,
-                                browser.contextMenus.ContextType.PAGE,
-                                browser.contextMenus.ContextType.PASSWORD,
-                                browser.contextMenus.ContextType.SELECTION ]
+                        contexts: [ "editable",
+                                "frame",
+                                "image",
+                                "link",
+                                "page",
+                                "password",
+                                "selection" ]
                     });
                 } catch (e) {
                     // try again with Chrome-supported contexts
@@ -93,12 +89,12 @@ class KFCommands {
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
-                        contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                            browser.contextMenus.ContextType.FRAME,
-                            browser.contextMenus.ContextType.IMAGE,
-                            browser.contextMenus.ContextType.LINK,
-                            browser.contextMenus.ContextType.PAGE,
-                            browser.contextMenus.ContextType.SELECTION ]
+                        contexts: [ "editable",
+                            "frame",
+                            "image",
+                            "link",
+                            "page",
+                            "selection" ]
                     });
                 }
             }
@@ -109,13 +105,13 @@ class KFCommands {
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
-                        contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                            browser.contextMenus.ContextType.FRAME,
-                            browser.contextMenus.ContextType.IMAGE,
-                            browser.contextMenus.ContextType.LINK,
-                            browser.contextMenus.ContextType.PAGE,
-                            browser.contextMenus.ContextType.PASSWORD,
-                            browser.contextMenus.ContextType.SELECTION ]
+                        contexts: [ "editable",
+                            "frame",
+                            "image",
+                            "link",
+                            "page",
+                            "password",
+                            "selection" ]
                 });
                 } catch (e) {
                     // try again with Chrome-supported contexts
@@ -123,12 +119,12 @@ class KFCommands {
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
-                        contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                            browser.contextMenus.ContextType.FRAME,
-                            browser.contextMenus.ContextType.IMAGE,
-                            browser.contextMenus.ContextType.LINK,
-                            browser.contextMenus.ContextType.PAGE,
-                            browser.contextMenus.ContextType.SELECTION ]
+                        contexts: [ "editable",
+                            "frame",
+                            "image",
+                            "link",
+                            "page",
+                            "selection" ]
                     });
                 }
             }
@@ -144,13 +140,13 @@ class KFCommands {
                                 id: "matchedLogin-" + j,
                                 title: login.title,
                                 documentUrlPatterns: ["http://*/*", "https://*/*"],
-                                contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                                    browser.contextMenus.ContextType.FRAME,
-                                    browser.contextMenus.ContextType.IMAGE,
-                                    browser.contextMenus.ContextType.LINK,
-                                    browser.contextMenus.ContextType.PAGE,
-                                    browser.contextMenus.ContextType.PASSWORD,
-                                    browser.contextMenus.ContextType.SELECTION ]
+                                contexts: [ "editable",
+                                    "frame",
+                                    "image",
+                                    "link",
+                                    "page",
+                                    "password",
+                                    "selection" ]
                         });
                         } catch (e) {
                             // try again with Chrome-supported contexts
@@ -158,12 +154,12 @@ class KFCommands {
                                 id: "matchedLogin-" + j,
                                 title: login.title,
                                 documentUrlPatterns: ["http://*/*", "https://*/*"],
-                                contexts: [ browser.contextMenus.ContextType.EDITABLE,
-                                    browser.contextMenus.ContextType.FRAME,
-                                    browser.contextMenus.ContextType.IMAGE,
-                                    browser.contextMenus.ContextType.LINK,
-                                    browser.contextMenus.ContextType.PAGE,
-                                    browser.contextMenus.ContextType.SELECTION ]
+                                contexts: [ "editable",
+                                    "frame",
+                                    "image",
+                                    "link",
+                                    "page",
+                                    "selection" ]
                             });
                         }
                     }

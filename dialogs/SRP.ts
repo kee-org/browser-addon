@@ -21,7 +21,7 @@ class SrpDialog {
             this.primaryButtonClicked();
         }).bind(this));
 
-        window.addEventListener("beforeunload", e => chrome.runtime.sendMessage({action: "SRP_ok", password: "" }));
+        window.addEventListener("beforeunload", e => browser.runtime.sendMessage({action: "SRP_ok", password: "" }));
     }
 
     updateButtonState () {
@@ -49,7 +49,7 @@ class SrpDialog {
             const serverSL = document.getElementById("pref_sl_server") as HTMLSelectElement;
             configManager.current.connSLClient = clientHigh.checked ? 3 : 2;
             configManager.current.connSLServerMin = parseInt(serverSL.value);
-            configManager.save(this.continueSRP.bind(this, password.value));
+            configManager.save().then(this.continueSRP.bind(this, password.value));
         } else {
             this.continueSRP(password.value);
         }
@@ -63,9 +63,9 @@ class SrpDialog {
     }
 
     continueSRP (password: string) {
-        chrome.tabs.getCurrent(tab => {
-            chrome.runtime.sendMessage({action: "SRP_ok", password: password });
-            const removing = chrome.tabs.remove(tab.id);
+        browser.tabs.getCurrent().then(tab => {
+            browser.runtime.sendMessage({action: "SRP_ok", password: password });
+            const removing = browser.tabs.remove(tab.id);
         });
     }
 }
@@ -79,4 +79,8 @@ function setupPage () {
     document.getElementById("i18n_root").style.display = "block";
 }
 
-document.addEventListener("DOMContentLoaded", () => configManager.load(setupPage));
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => configManager.load(setupPage));
+} else {
+    configManager.load(setupPage);
+}

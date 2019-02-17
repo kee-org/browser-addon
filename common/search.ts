@@ -2,6 +2,20 @@
   Includes contributions from https://github.com/haoshu
 */
 
+
+class SearchResult {
+    iconImageData: string;
+    usernameValue: string;
+    usernameName: string;
+    path: string;
+    title: string;
+    uRLs: string[];
+    url: string;
+    uniqueID: string;
+    dbFileName: string;
+    relevanceScore: number;
+}
+
 class SearchConfig {
     // Kee will check the supplied version number and behave consistently
     // for each version, regardless of the current Kee addon version.
@@ -172,7 +186,6 @@ class Search {
         if (onComplete) {
             // Create a timer to make the search run async
             this.makeAsyncTimer = setTimeout(actualSearch.bind(this), 1);
-            //TODO:3: use a background worker instead?
             return;
         } else {
             actualSearch.call(this);
@@ -301,12 +314,12 @@ class Search {
             // must be a group.
             // If we know that a parent group has already matched, no point in searching further
             if (isInMatchingGroup)
-                return true;
+                return 1;
             for (const keyword of keywords) {
                 if (item.title.toLowerCase().indexOf(keyword) >= 0)
-                    return true;
+                    return 1;
             }
-            return false;
+            return 0;
         }
 
         let matchScore = 0.0;
@@ -332,7 +345,7 @@ class Search {
     }
 
     private convertItem (path, node, dbFileName) {
-        const item: any = new Object();
+        const item: SearchResult = new SearchResult();
         item.iconImageData = node.iconImageData;
         item.usernameValue = node.usernameValue;
         item.usernameName = node.usernameName;
@@ -345,7 +358,7 @@ class Search {
         return item;
     }
 
-    private treeTraversal (branch, path, isInMatchingGroup, keywords, addResult, currentResultCount, dbFileName, filter) {
+    private treeTraversal (branch, path, isInMatchingGroup, keywords, addResult: (item: SearchResult) => boolean, currentResultCount, dbFileName, filter) {
         let totalResultCount = currentResultCount;
         for (const leaf of branch.childLightEntries) {
             const item = this.convertItem(path, leaf, dbFileName);

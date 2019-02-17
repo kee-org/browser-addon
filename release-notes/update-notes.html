@@ -5,36 +5,60 @@
     <meta charset="utf-8">
     <link href="../lib/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="release-notes.css"/>
-    <title>Kee 2.5</title>
+    <title>Kee 3.0</title>
     <link rel="icon" href="/common/images/64.png"/>
 </head>
 
-<body class="container" style="text-align: center;">
-    <div id="i18n_root">
+<body class="container" style="max-width: 900px;">
+    <div id="i18n_root" style="align-items: stretch;">
 
-<h1 style="font-size: 42px;"><img src="/common/images/64.png" style="margin-bottom: 4px; margin-right: 10px;" /><span data-i18n="welcome_to_kee"></span> 2.5</h1>
+<h1 style="font-size: 42px; text-align: center;"><img src="/common/images/64.png" style="margin-bottom: 4px; margin-right: 10px;" /><span data-i18n="welcome_to_kee"></span> 3.0</h1>
 
-<!-- TODO: It's been about a year now so we can remove this subheading in 2019H1 -->
-<h2 data-i18n="the_new_name_for_keefox" style="margin-bottom: 20px;"></h2>
+<h2 style="font-size: 30px;">Kee Vault</h2>
 
-<div style="text-align: left; background-color: #eee; border: 1px solid #999">
-    <h3 style="margin-left:15px"><span data-i18n="version_upgrade_heading_changes"></span> 2.5</h3>
+<p data-i18n="kee_vault_announcement_1"></p>
+<p data-i18n="kee_vault_announcement_2"></p>
+<p data-i18n="kee_vault_announcement_3"></p>
+<p data-i18n="kee_vault_announcement_4"></p>
 
-    <!-- <p data-i18n="list_version_upgrade_2_4"></p> -->
-    <p>There are no significant changes.</p>
+<button data-i18n="kee_vault_announcement_5" style="align-self: center" id="keeVaultCTA"></button>
 
-    <p>Mozilla (Firefox) required me to release this new version for administrative reasons. Unfortunately, no time was permitted for beta testing or translation from English.</p>
+<h2 style="font-size: 30px;" data-i18n="new_icon"></h2>
 
-    <p>For technical users, additional "source map" warnings may appear in the browser console, which, as with all similar warnings, can safely be ignored.</p>
+<p data-i18n="new_icon_text"></p>
 
-    <p>There's <a href="https://forum.kee.pm/t/security-risk-reliability-and-performance-problems-for-new-users/1939">more information on the forum announcement</a>.</p>
-</div>
+<h2 style="font-size: 30px;" data-i18n="google_chrome_release"></h2>
+
+<p data-i18n="google_chrome_release_text"></p>
+
+<h2 style="font-size: 30px;" data-i18n="reliability_improvements"></h2>
+
+<p data-i18n="reliability_improvements_text1"></p>
+<p data-i18n="reliability_improvements_text2"></p>
+
+<h2 style="font-size: 30px;" data-i18n="new_license"></h2>
+
+<p data-i18n="new_license_text"></p>
+
+<h2 style="font-size: 30px;" data-i18n="other_technical_improvements"></h2>
+
+<!-- Since this very technical, it's not worth translating because those likely to understand the contents will understand the relevant English technical terms -->
+<ul>
+    <li>Improve WebSocket.readystate conditional checks</li>
+    <li>Remove tabStates and framePorts when posting to them throws exceptions</li>
+    <li>Change log init message from info to debug</li>
+    <li>Change content script startup to work around browser differences/bugs</li>
+    <li>Upgrade to latest webext polyfill and remove more chrome references</li>
+    <li>Defence against potential DOM ready timing edge cases</li>
+</ul>
 
     </div>
+    <script src="../lib/detectWebExtensions.js"></script>
     <script src="../lib/tp/browser-polyfill.min.js"></script>
     <script src="../lib/dollar-polyfill.js"></script>
     <script src="../lib/tp/linkify.min.js"></script>
     <script src="../lib/tp/linkify-element.min.js"></script>
     <script src="../lib/i18n.js"></script>
+    <script src="update-cta.js"></script>
 </body>
 </html>

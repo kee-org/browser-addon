@@ -108,7 +108,7 @@ function startup () {
 
     KeeLog.attachConfig(configManager.current);
 
-    myPort = chrome.runtime.connect({ name: "browserPopup" });
+    myPort = browser.runtime.connect({ name: "browserPopup" });
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
         KeeLog.debug("In browser popup script, received message from background script: ");

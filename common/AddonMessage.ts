@@ -14,12 +14,12 @@ interface AddonMessage {
     loadUrlUpgradeKee?: boolean;
     addNotification?: KeeNotification;
     removeNotification?: string;
-    findMatches?: { uri?: string, uuid?: string };
+    findMatches?: { uri?: string, uuid?: string, DBfilename?: string };
     findMatchesResult?: any;
     logins?: keeLoginInfo[];
     action?: Action;
     selectedLoginIndex?: number;
-    passwordProfiles?: any[];
+    passwordProfiles?: PasswordProfile[];
     generatedPassword?: string;
     passwordProfile?: string;
     submittedData?: SubmittedData;

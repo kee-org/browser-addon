@@ -12,7 +12,7 @@ function updateFrameState (newState: FrameState) {
 }
 
 function closePanel () {
-    //TODO:3: Might want more fine-grained closing in future
+    //TODO:4: Might want more fine-grained closing in future
     myPort.postMessage( { action: Action.CloseAllPanels } );
 }
 
@@ -32,7 +32,7 @@ function startup () {
 
     KeeLog.attachConfig(configManager.current);
 
-    myPort = chrome.runtime.connect({ name: "iframe_" + parentFrameId });
+    myPort = browser.runtime.connect({ name: "iframe_" + parentFrameId });
 
     let cancelAutoClose: () => void;
 
@@ -69,15 +69,41 @@ function startup () {
                 if (m.frameState) updateFrameState(m.frameState);
 
                 if (m.passwordProfiles && m.passwordProfiles.length > 0) {
-                    const mainPanel = generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles);
+                    const mainPanel = generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles.map(p => p.name));
 
                     // Focus the window (required in Firefox to get focus onto the new iframe)
                     // and then the first password profile (enables keyboard navigation).
                     window.focus();
-                    (document.getElementById("GeneratePasswordContainer").firstChild.firstChild as any).focus();
+                    (document.getElementById("GeneratePasswordContainer").querySelector(".passwordProfileList").firstChild as any).focus();
                 } else if (m.generatedPassword) {
                     copyStringToClipboard(m.generatedPassword);
-                    closePanel();
+
+                    if (configManager.current.notifyPasswordAvailableForPaste) {
+                        const container = document.getElementById("GeneratePasswordContainer");
+
+                        while (container.hasChildNodes()) {
+                            container.removeChild(container.lastChild);
+                        }
+
+                        const text1 = document.createElement("div");
+                        text1.innerText = $STR("generatePassword_done_1");
+                        container.appendChild(text1);
+                        const text2 = document.createElement("div");
+                        text2.innerText = $STR("generatePassword_done_2");
+                        container.appendChild(text2);
+
+                        const buttonNever = document.createElement("button");
+                        buttonNever.style.marginTop = "20px";
+                        buttonNever.innerText = $STR("dont_show_again");
+                        buttonNever.addEventListener("click", () => {
+                            configManager.setASAP({notifyPasswordAvailableForPaste: false});
+                            closePanel();
+                        });
+                        container.appendChild(buttonNever);
+                    } else {
+                        closePanel();
+                    }
+
                 } else {
                     window.focus();
                     myPort.postMessage({ action: Action.GetPasswordProfiles });
