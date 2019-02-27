@@ -41,6 +41,7 @@ class KeeFieldIcon {
                 element.style.setProperty("background-attachment", "scroll", "important");
                 element.style.setProperty("background-size", "16px 16px", "important");
                 element.style.setProperty("background-position", "calc(100% - 4px) 50%", "important");
+                this.overrideBoxShadows(element);
             }
         }
 
@@ -50,6 +51,21 @@ class KeeFieldIcon {
             afterImageLoaded.call(this, this.KEEFOX_ICON_16);
         }
 
+    }
+
+    private overrideBoxShadows (element: HTMLElement) {
+        const currentStyle = window.getComputedStyle(element);
+        if (currentStyle) {
+            const shadows = [];
+            shadows.push(currentStyle.getPropertyValue("box-shadow"));
+            shadows.push(currentStyle.getPropertyValue("-webkit-box-shadow"));
+            shadows.push(currentStyle.getPropertyValue("-moz-box-shadow"));
+            if (shadows.some(s => s.indexOf("inset"))) {
+                element.style.setProperty("box-shadow", "initial", "important");
+                element.style.setProperty("-webkit-box-shadow", "initial", "important");
+                element.style.setProperty("-moz-box-shadow", "initial", "important");
+            }
+        }
     }
 
     private showMatchedLoginsPanel (e) {
