@@ -52,11 +52,11 @@
         "description": ""
     },
     "conn_setup_client_features_missing": {
-        "message": "Kee musi zostać zaktualizowany, by połączyć się z KeePassem. Upewnij się, że zainstalowana jest najnowsza wersja rozszerzenia.",
+        "message": "Kee musi zostać zaktualizowany, aby podłączyć się do Twojego managera haseł. Upewnij się, że posiadasz najnowszą wersję dodatku/rozszerzenia do przeglądarki.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "conn_setup_server_features_missing": {
-        "message": " Wtyczka KeePassRPC  dla KeePass Password Safe musi zostać zaktualizowana, aby Kee mógł się z nią połączyć. Upewnij się, że używasz najnowszej wersji wtyczki KeePassRPC stosując się do instrukcji zawartej na stronie$1",
+        "message": "Twój manager haseł musi zostać zaktualizowany, aby zezwolić Kee na podłączenie. Załaduj ponownie stronę Sejf Kee i/lub upewnij się, że posiadasz najnowszą wersję wtyczki KeePassRPC postępując zgodnie z szybką i prosta instrukcją pod adresem $1",
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "conn_sl_high_label": {
@@ -92,7 +92,7 @@
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_unknown_error": {
-        "message": "Podczas próby połączenia z Twoją bazą haseł wystąpił nieoczekiwany błąd.",
+        "message": "Wystąpił nieoczekiwany błąd podczas próby podłączenia do managera haseł.",
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "conn_unknown_protocol": {
@@ -156,8 +156,8 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "pref_FillNote_desc": {
-        "message": "Możesz zmienić zachowania \"Kee wybiera\" dla konkretnych loginów/haseł w oknie \"Edycja wpisu\" KeePassa.",
-        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
+        "message": "Możesz zmienić zachowania \"Kee wybiera\" dla pojedynczych wpisów w managerze haseł.",
+        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_FillPrompt_desc": {
         "message": "uzupełnić dane logowania",
@@ -192,7 +192,7 @@
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
     "pref_listAllOpenDBs_label": {
-        "message": "Wyświetl listę loginów z wszystkich baz haseł KeePassa",
+        "message": "Wyświetl listę loginów ze wszystkich otwartych Sejfów Kee i baz KeePass",
         "description": ""
     },
     "pref_logLevel_desc": {
@@ -224,7 +224,7 @@
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
     "pref_rememberMRUDB_label": {
-        "message": "Zapamiętuj ostatnio używaną bazę haseł KeePassa",
+        "message": "Zapamiętaj ostatnio używany Sejf Kee albo bazę KeePass",
         "description": ""
     },
     "pref_rememberMRUGroup_label": {
@@ -236,7 +236,7 @@
         "description": "Whether or not Kee will save the website's icon when a new entry is saved"
     },
     "pref_searchAllOpenDBs_label": {
-        "message": "Przeszukuj wszystkie otwarte bazy haseł KeePassa",
+        "message": "Przeszukaj wszystkie otwarte Sejfy Kee i bazy KeePass",
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
@@ -257,10 +257,10 @@
     },
     "pref_Finding_forms_heading": {
         "message": "Wyszukiwanie formularzy",
-        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from KeePass"
+        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from the password manager"
     },
     "site_options_valid_form_intro_desc": {
-        "message": "Kee będzie próbował wstawić pasujące wpisy z KeePassa we wszystkich formularzach zawierających pole hasła. Możesz dostosować to zachowanie poniżej.",
+        "message": "Kee będzie próbować wypełnić pasujące wpisy Sejfu Kee i KeePass we wszystkich formularzach, które zawierają pole hasła. Możesz dostosować to zachowanie poniżej.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "text_field_id": {
@@ -308,7 +308,7 @@
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
-        "message": "Możesz też wygenerować nowe wybierając jeden z profili hasła poniżej. Użyj KeePassa, aby dodać nowe profile.",
+        "message": "Możesz też wygenerować inne, wybierając jeden z poniższych profili haseł. Stwórz nowe profile w Sejfie Kee albo KeePass.",
         "description": ""
     },
     "change_field_explanation": {
@@ -357,11 +357,11 @@
     },
     "create_new_entry": {
         "message": "Stwórz nowy wpis",
-        "description": ""
+        "description": "Create new entry"
     },
     "showing_options_for": {
         "message": "Pokazuje opcje dla",
-        "description": ""
+        "description": "label for a group of radio buttons that allows the user to change the scope of the settings they are changing - e.g. all websites or just one specific website"
     },
     "all_websites": {
         "message": "Wszystkie witryny",
@@ -387,17 +387,29 @@
         "message": "Nowe hasło zostało skopiowane do schowka.",
         "description": ""
     },
+    "generatePassword_instructions": {
+        "message": "Wybierz rodzaj hasła do wygenerowania:",
+        "description": ""
+    },
+    "generatePassword_done_1": {
+        "message": "Wygenerowano hasło.",
+        "description": ""
+    },
+    "generatePassword_done_2": {
+        "message": "Wklej je do pola \"nowe hasło\" albo gdziekolwiek chcesz.",
+        "description": ""
+    },
     "group_label": {
         "message": "Grupa",
         "description": ""
     },
-    "keepass_history_pointer": {
-        "message": "KeePass posiada funkcję \"Cofnij\", której możesz użyć otwierając okno \"Edytuj wpis\". Wybierz zakładkę \"Historia\" i użyj przycisku \"Przywróć\", aby cofnąć wpis do starszej wersji.",
+    "entry_history_pointer": {
+        "message": "Twój manager haseł ma funkcję \"cofnij\". Znajdź wpis i wtedy możesz zobaczyć historię wpisu i użyć przycisku \"Przywróć\", aby cofnąć do starszej wersji, jeśli zaszła taka potrzeba.",
         "description": ""
     },
     "loggedIn_tip": {
         "message": "Jesteś zalogowany do bazy haseł '$1'.",
-        "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
+        "description": "Tells the user they are logged into a Kee Vault or KeePass database (and gives its name, if any)"
     },
     "loggedInMultiple_tip": {
         "message": "Jesteś zalogowany do $1 baz haseł. Baza '$2' jest aktywna.",
@@ -424,11 +436,11 @@
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
-        "message": "Nie jesteś zalogowany do bazy haseł.",
+        "message": "Nie jesteś zalogowany do managera haseł.",
         "description": ""
     },
     "notifyBarLaunchKeePassButton_tip": {
-        "message": "Uruchom KeePass, aby aktywować Kee",
+        "message": "Otwórz Sejf Kee albo KeePass, aby aktywować Kee",
         "description": ""
     },
     "notifyBarLogSensitiveData_label": {
@@ -436,7 +448,7 @@
         "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
     },
     "notifyBarLoginToKeePassButton_tip": {
-        "message": "Zaloguj się do KeePassa, aby włączyć Kee",
+        "message": "Odblokuj swój manager haseł, aby aktywować Kee",
         "description": ""
     },
     "notifyBarNeverForSiteButton_label": {
@@ -595,49 +607,73 @@
         "message": "Witaj w Kee",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
-    "the_new_name_for_keefox": {
-        "message": "Nowa nazwa dla KeeFoxa",
-        "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
+    "introduction_to_kee": {
+        "message": "Kee automatycznie wypełnia formularze logowania, aby oszczędzić Tobie czasu i zabezpieczyć Cię przed ryzykiem bezpieczeństwa.",
+        "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
-    "kee_install_notes_intro": {
-        "message": "Kee przechowuje Twoje hasła w bezpiecznym dedykowanym managerze haseł KeePass Password Safe 2. Jest on pełen świetnych możliwości i Kee zapewnia by Twoje codzienne logowania w Internecie, były proste i bezpieczne.",
-        "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
+    "kee_works_with_a_password_manager": {
+        "message": "Dane logowanie, które wprowadza Kee są przechowane bezpiecznie w managerze haseł za jednym \"hasłem głównym\".",
+        "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
-    "kee_install_notes_keepass": {
-        "message": "Musisz uruchomić KeePassa, aby Kee mógł się do niego podłączyć. Jeżeli KeePass nie jest zainstalowany na Twoim komputerze, możesz łatwo go pobrać i zainstalować samodzielnie.",
-        "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
+    "recommend_start_with_kee_vault": {
+        "message": "Polecamy wypróbować 14 dniową wersję próbną managera haseł Sejf Kee. Po tym czasie, kosztuje tylko £2 miesięcznie. Nie wymaga podawania danych płatności podczas rejestracji, więc jest wolne od ryzyka.",
+        "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
     },
-    "kee_install_notes_keepassrpc": {
-        "message": "Musisz zainstalować plugin KeePassRPC.plgx dla KeePassa, jeśli jeszcze tego nie zrobiłeś. To proste jak skopiowanie pliku do odpowiedniego katalogu na Twoim komputerze i uruchomienie KeePassa ponownie.",
-        "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
+    "load_kee_vault_now": {
+        "message": "Wczytaj Sejf Kee",
+        "description": "Call To Action button text. On click, the Kee Vault app will load and focus in a new tab."
     },
-    "point_user_to_kee_news_announcement": {
-        "message": "Możesz znaleźć dużo więcej informacji o Kee 2.0 w poniższym artykule i łączach w nim zawartych:",
-        "description": "Will have a URL suffixed after the colon"
+    "you_can_use_KeePass_instead": {
+        "message": "Zamiennie, możesz wybrać opcję konfiguracji KeePass Password Safe 2.",
+        "description": "Explains that Kee also works with KeePass so they can choose to configure that if they prefer to avoid all financial expenditure."
     },
-    "point_user_to_install_instructions_start": {
-        "message": "Instrukcje do obydwu kroków można znaleźć na naszym",
-        "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
+    "table_summarises_differences": {
+        "message": "Tabela poniżej pokazuje podstawowe różnice.",
+        "description": "Introduces the summary table that will help users choose a password manager to start with."
     },
-    "point_user_to_install_instructions_end": {
+    "installation_required": {
+        "message": "Wymagana instalacja",
+        "description": "States that the user will need to install components on their computer"
+    },
+    "access_from_multiple_devices": {
+        "message": "Dostęp z wielu urządzeń (desktop i komórka)",
+        "description": "Covers web browsers and mobiles, laptops, tablets, etc."
+    },
+    "shared_preferences": {
+        "message": "Współdzielone ustawienia",
+        "description": "Labels the process of synchronising browser extension and password manager configuration options/preferences across multiple locations."
+    },
+    "yes_configure_once": {
+        "message": "Tak, skonfiguruj jednorazowo",
+        "description": "Supports synchronising browser extension and password manager configuration options/preferences"
+    },
+    "no_configure_multiple": {
+        "message": "Nie, skonfiguruj na każdej przeglądarce lub urządzeniu, które używasz",
+        "description": "Does not support synchronising browser extension and password manager configuration options/preferences"
+    },
+    "difficulty": {
+        "message": "Trudność",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+    },
+    "difficulty_kee_vault": {
+        "message": "Łatwa",
+        "description": "Indicates that it is easy to get started with Kee Vault"
+    },
+    "difficulty_keepass": {
+        "message": "Średnia (Trudna na komputerach Mac)",
+        "description": "Indicates that more work is required to get started with KeePass"
+    },
+    "keepass_sync_config_explanation": {
+        "message": "For KeePass, a partial solution for multi-device access can be manually configured using 3rd party services, some of which charge a fee. Each device must be prepared and configured in advance.",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+    },
+    "point_user_to_keepass_install_instructions_start": {
+        "message": "Instructions for installing and configuring KeePass and the required KeePassRPC.plgx plugin can be found on our",
+        "description": "Left part of a sentence that contains a link to the community forum in the middle. For new installations"
+    },
+    "point_user_to_keepass_install_instructions_end": {
         "message": ".",
-        "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
-    },
-    "point_user_to_tutorial_start": {
-        "message": "Proszę poświęć kilka minut przechodząc przez nowy",
-        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
-    },
-    "point_user_to_tutorial_end": {
-        "message": "aby nauczyć się jak korzystać z nowej wersji.",
-        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
-    },
-    "point_user_to_tutorial_start_install": {
-        "message": "Proszę poświęć kilka minut przechodząc przez nowy",
-        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
-    },
-    "point_user_to_tutorial_end_install": {
-        "message": "aby nauczyć się jak korzystać z Kee.",
-        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
+        "description": "Right part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_tutorial_link_text": {
         "message": "Interaktywny samouczek",
@@ -672,15 +708,75 @@
         "description": "Heading for the list of changes in a version of Kee. A space and the current version number will be suffixed at the end of this string."
     },
     "pref_currentSearchTermTimeout_label": {
-        "message": "Usuń wyniki wyszukiwania po (sekundy)",
+        "message": "Usuń wyniki wyszukiwania po (sekund)",
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
-    "list_version_upgrade_2_4": {
-        "message": "Nowo zapisane wpisy mają teraz nazwę hosta jako tytuł wpisu jeśli brak tytułu strony WWW (dzięki @okapep);Obejście błędu w Firefoxie, który sporadycznie mógł powodować problemy jak: nie znajdowanie, niewypełnianie i niezapisywanie formularzy, brak wyników wyszukiwania, niewypełnianie formularzy HTTP Auth. Uważamy, że błąd nie występuje często sądząc po tym od jak dawna istnieje i jak mało zgłoszeń błędów Kee dotyczy tego błędu, jednak Mozilla nie poznała jeszcze istoty problemu, więc nie ma pewności, jak wpłynie to na wcześniejsze wersje Kee; Rozwiązano problem, który czasem powodował, że Kee nie znajdował formularza. Problem dotyczył przypadku, gdy znajdujący się \"powyżej\" formularz był na białej liście, jednak nie zawierał pól tekstowych ani pól hasła;Rozwiązano rzadko występujący na niektórych stronach problem nieprawidłowego pojawiania się ikony Kee w polach formularza;Wyłączono podpowiedzi w polu wyszukiwania przeglądarki;Wyłączono menu kontekstowe Kee  na stronach specjalnych jak \"Nowa karta\" i \"Opcje\" (dzięki @okapep)",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    "other_technical_improvements": {
+        "message": "Inne techniczne usprawnienia",
+        "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
+    },
+    "new_license": {
+        "message": "Nowa licencja",
+        "description": "Heading for text that explains we have a new source code license"
+    },
+    "reliability_improvements": {
+        "message": "Usprawiono niezawodność",
+        "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
+    },
+    "google_chrome_release": {
+        "message": "Wydanie dla Google Chrome",
+        "description": "Heading for text that explains we are about to release a stable version for the Google Chrome browser"
+    },
+    "new_icon": {
+        "message": "Nowa ikona",
+        "description": "Heading for text that explains we have a new icon / branding"
+    },
+    "new_license_text": {
+        "message": "Version 3 of the Kee extension is released with a newer type of Open Source license - AGPLv3 - which brings it into line with all the software we release. While not typically affecting your rights to use the free software on a day to day basis, the change (from GPLv2) may have legal implications in some situations so we must therefore recommend that you review the new license. If you determine that you do not accept the new license, you can continue using the older versions of the software under the old license in perpetuity.",
+        "description": "Explains we have a new source code license"
+    },
+    "reliability_improvements_text1": {
+        "message": "We've improved the link between the web browser and each individual page you load, resulting in more reliable features like form filling.",
+        "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
+    },
+    "reliability_improvements_text2": {
+        "message": "We've improved the detection of form submit buttons. This means more successful form submission on some websites such as the Google sign-in page.",
+        "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
+    },
+    "google_chrome_release_text": {
+        "message": "When the stable version of Kee v3.0 is released soon, we will promote the Google Chrome version of the extension out of the Beta testing period it has been in for just over a year.",
+        "description": "Explains we are about to release a stable version for the Google Chrome browser"
+    },
+    "new_icon_text": {
+        "message": "We have a shiny new modern icon which we hope you like. This is also discussed in the Kee Vault forum post linked to above.",
+        "description": "Explains we have a new icon / branding"
+    },
+    "kee_vault_announcement_1": {
+        "message": "Kee Vault is a new open source password manager. It runs in your web browser so no installation is necessary.",
+        "description": "Introduction to what Kee Vault is"
+    },
+    "kee_vault_announcement_2": {
+        "message": "It works on any modern device or web browser, even when offline. After importing your existing KeePass database you can access your Kee Vault from everywhere, with your changes and configuration preferences automatically sent to each of your devices and browsers.",
+        "description": "Outlines a few benefits of Kee Vault compared to KeePass"
+    },
+    "kee_vault_announcement_3": {
+        "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
+        "description": "Explains that Kee v3 works with Kee Vault"
+    },
+    "kee_vault_announcement_4": {
+        "message": "Kee Vault jest prawie gotowy do startu jako publiczna beta. Jest mi niezmiernie miło zaoferować wszystkim obecnym użytkownikom Kee możliwość wcześniejszego dostępu zanim to nastąpi!",
+        "description": "Announces the pre-release availability of Kee Vault"
+    },
+    "kee_vault_announcement_5": {
+        "message": "Czytaj więcej i zarejestruj się dla wcześniejszego dostępu",
+        "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
+    },
+    "showEntry": {
+        "message": "Pokaż wpis",
+        "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
     "KB_shortcut_simple_2_desc": {
-        "message": "Zaloguj się do KeePassa / Wybierz pasujący login / Pokaż listę pasujących loginów",
+        "message": "Zaloguj się do managera haseł / Wybierz pasujący login / Pokaż listę pasujących loginów",
         "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
     }
 }

@@ -52,11 +52,11 @@
         "description": ""
     },
     "conn_setup_client_features_missing": {
-        "message": "Kee необхідно оновити для можливості встановлення зв'язку з KeePass Password Safe. Переконайтеся, що ви використовуєте найновішу версію розширення браузера.",
+        "message": "Необхідно оновити Kee для зв'язку з вашим менеджером паролів. Переконайтеся, що ви використовуєте найновішу версію розширення для браузера.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "conn_setup_server_features_missing": {
-        "message": "Плагін KeePassRPC для KeePass Password Safe необхідно оновити, щоб дозволити з'єднання з Kee. Переконайтеся, що ви використовуєте найновішу версію плагіна KeePassRPC, користуючись простою інструкцією $1",
+        "message": "Необхідно оновити ваш менеджер паролів для зв'язку з Kee. Перезавантажте веб-сайт Kee Vault та/або переконайтеся, що ви використовуєте найновішу версію плагіна KeePassRPC, скориставшись простою інструкцією $1",
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "conn_sl_high_label": {
@@ -92,7 +92,7 @@
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_unknown_error": {
-        "message": "Сталася неочікувана помилка під час спроби з'єднання з вашою базою паролів.",
+        "message": "Сталася неочікувана помилка при встановленні зв'язку з вашим менеджером паролів.",
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "conn_unknown_protocol": {
@@ -156,8 +156,8 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "pref_FillNote_desc": {
-        "message": "Вгорі ви можете перевизначити поведінку Kee для окремих записів у діалоговому вікні \"Змінити запис\".",
-        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
+        "message": "Вгорі ви можете перевизначити поведінку Kee для окремих записів вашого менеджера паролів.",
+        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_FillPrompt_desc": {
         "message": "Заповнити запит",
@@ -192,7 +192,7 @@
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
     "pref_listAllOpenDBs_label": {
-        "message": "Показувати записи з усіх відкритих баз KeePass",
+        "message": "Показувати записи з усіх відкритих баз даних Kee Vault і KeePass",
         "description": ""
     },
     "pref_logLevel_desc": {
@@ -224,7 +224,7 @@
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
     "pref_rememberMRUDB_label": {
-        "message": "Пам'ятати останню використану базу даних KeePass",
+        "message": "Пам'ятати останню використану базу даних Kee Vault або KeePass",
         "description": ""
     },
     "pref_rememberMRUGroup_label": {
@@ -236,7 +236,7 @@
         "description": "Whether or not Kee will save the website's icon when a new entry is saved"
     },
     "pref_searchAllOpenDBs_label": {
-        "message": "Пошук у всіх відкритих базах KeePass",
+        "message": "Пошук у всіх відкритих базах Kee Vault і KeePass",
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
@@ -257,10 +257,10 @@
     },
     "pref_Finding_forms_heading": {
         "message": "Пошук форм",
-        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from KeePass"
+        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from the password manager"
     },
     "site_options_valid_form_intro_desc": {
-        "message": "Kee намагатиметься заповнити відповідними записами KeePass всі форми, які містять поле вводу пароля. Ви можете змінити цю дію внизу.",
+        "message": "Kee намагатиметься заповнити відповідними записами Kee Vault і KeePass всі форми, які містять поле вводу пароля. Ви можете змінити цю дію внизу.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "text_field_id": {
@@ -308,7 +308,7 @@
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
-        "message": "Ви можете за бажанням створити інший, обравши профіль пароля внизу. Використовуйте KeePass, щоб зберігати нові профілі.",
+        "message": "Ви можете за бажанням створити інший, обравши профіль пароля внизу. Використовуйте Kee Vault або KeePass для створення нових профілів.",
         "description": ""
     },
     "change_field_explanation": {
@@ -357,11 +357,11 @@
     },
     "create_new_entry": {
         "message": "Створити новий запис",
-        "description": ""
+        "description": "Create new entry"
     },
     "showing_options_for": {
         "message": "Показ налаштувань для",
-        "description": ""
+        "description": "label for a group of radio buttons that allows the user to change the scope of the settings they are changing - e.g. all websites or just one specific website"
     },
     "all_websites": {
         "message": "Всі веб-сайти",
@@ -387,17 +387,29 @@
         "message": "Новий пароль був скопійований до буферу.",
         "description": ""
     },
+    "generatePassword_instructions": {
+        "message": "Оберіть, який пароль створювати:",
+        "description": ""
+    },
+    "generatePassword_done_1": {
+        "message": "Пароль згенеровано.",
+        "description": ""
+    },
+    "generatePassword_done_2": {
+        "message": "Вставте його в поле нового пароля чи інше необхідне місце.",
+        "description": ""
+    },
     "group_label": {
         "message": "Група",
         "description": ""
     },
-    "keepass_history_pointer": {
-        "message": "KeePass має функцію \"повернути\", до якої ви можете отримати доступ з діалогового вікна \"змінити запис\". Натисніть на вкладку \"Історія\" і потім використайте кнопку \"Відновити\" для повернення до старішої версії.",
+    "entry_history_pointer": {
+        "message": "Ваш менеджер паролів має функцію відновлення. Знайдіть запис, після чого ви зможете переглянути історію змін і відновити попередню версію, якщо це необхідно.",
         "description": ""
     },
     "loggedIn_tip": {
         "message": "Ви увійшли в свою базу паролів '$1'",
-        "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
+        "description": "Tells the user they are logged into a Kee Vault or KeePass database (and gives its name, if any)"
     },
     "loggedInMultiple_tip": {
         "message": "Ви увійшли в бази паролів $1. Зараз активна '$2'.",
@@ -428,7 +440,7 @@
         "description": ""
     },
     "notifyBarLaunchKeePassButton_tip": {
-        "message": "Запустіть KeePass для активації",
+        "message": "Для активації Kee, відкрийте Kee Vault або KeePass",
         "description": ""
     },
     "notifyBarLogSensitiveData_label": {
@@ -436,7 +448,7 @@
         "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
     },
     "notifyBarLoginToKeePassButton_tip": {
-        "message": "Увійдіть у свою базу паролів Kee для активації KeeFox",
+        "message": "Розблокуйте свою базу паролів для активації Kee",
         "description": ""
     },
     "notifyBarNeverForSiteButton_label": {
@@ -595,52 +607,76 @@
         "message": "Вітаємо в Kee",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
-    "the_new_name_for_keefox": {
-        "message": "Нова назва для KeeFox",
-        "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
+    "introduction_to_kee": {
+        "message": "Kee automatically fills login forms to save you time and protect you from security risks.",
+        "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
-    "kee_install_notes_intro": {
-        "message": "Kee зберігає ваші паролі в окремому безпечному менеджері паролів, який називається KeePass Password Safe 2. Він має багато чудових функцій, і разом з Kee робить ваші щоденні задачі по входу на веб-сайти ще простішими.",
-        "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
+    "kee_works_with_a_password_manager": {
+        "message": "The credentials Kee enters for you are stored securely in a password manager behind a single \"master password\".",
+        "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
-    "kee_install_notes_keepass": {
-        "message": "Вам необхідно запустити KeePass, щоб Kee міг зв'язатися з ним. Якщо KeePass не встановлений на вашому комп'ютері, ви можете завантажити і встановити його власноруч.",
-        "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
+    "recommend_start_with_kee_vault": {
+        "message": "We recommend trying out the Kee Vault password manager 14 day free trial. It's only £2 per month after the trial and does not require payment details when you sign up so is risk free.",
+        "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
     },
-    "kee_install_notes_keepassrpc": {
-        "message": "Вам необхідно буде також встановити плагін KeePassRPC.plgx для KeePass, якщо ви ще цього не зробили. Для цього потрібно лише покласти файл в правильне місце на вашому комп'ютері та перезапустити KeePass.",
-        "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
+    "load_kee_vault_now": {
+        "message": "Load Kee Vault now",
+        "description": "Call To Action button text. On click, the Kee Vault app will load and focus in a new tab."
     },
-    "point_user_to_kee_news_announcement": {
-        "message": "Ви можете знайти набагато більше інформації про Kee 2.0 в наступних статтях та посиланнях:",
-        "description": "Will have a URL suffixed after the colon"
+    "you_can_use_KeePass_instead": {
+        "message": "Alternatively, you can choose to configure KeePass Password Safe 2 instead.",
+        "description": "Explains that Kee also works with KeePass so they can choose to configure that if they prefer to avoid all financial expenditure."
     },
-    "point_user_to_install_instructions_start": {
-        "message": "Інструкції для обох зазначених вгорі кроків можна знайти на нашому",
-        "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
+    "table_summarises_differences": {
+        "message": "The table below summarises the main differences.",
+        "description": "Introduces the summary table that will help users choose a password manager to start with."
     },
-    "point_user_to_install_instructions_end": {
+    "installation_required": {
+        "message": "Installation required",
+        "description": "States that the user will need to install components on their computer"
+    },
+    "access_from_multiple_devices": {
+        "message": "Access from multiple desktop and mobile devices",
+        "description": "Covers web browsers and mobiles, laptops, tablets, etc."
+    },
+    "shared_preferences": {
+        "message": "Shared preferences",
+        "description": "Labels the process of synchronising browser extension and password manager configuration options/preferences across multiple locations."
+    },
+    "yes_configure_once": {
+        "message": "Yes, configure once",
+        "description": "Supports synchronising browser extension and password manager configuration options/preferences"
+    },
+    "no_configure_multiple": {
+        "message": "No, configure on every web browser or device you use",
+        "description": "Does not support synchronising browser extension and password manager configuration options/preferences"
+    },
+    "difficulty": {
+        "message": "Difficulty",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+    },
+    "difficulty_kee_vault": {
+        "message": "Easy",
+        "description": "Indicates that it is easy to get started with Kee Vault"
+    },
+    "difficulty_keepass": {
+        "message": "Medium (Hard on Mac computers)",
+        "description": "Indicates that more work is required to get started with KeePass"
+    },
+    "keepass_sync_config_explanation": {
+        "message": "For KeePass, a partial solution for multi-device access can be manually configured using 3rd party services, some of which charge a fee. Each device must be prepared and configured in advance.",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+    },
+    "point_user_to_keepass_install_instructions_start": {
+        "message": "Instructions for installing and configuring KeePass and the required KeePassRPC.plgx plugin can be found on our",
+        "description": "Left part of a sentence that contains a link to the community forum in the middle. For new installations"
+    },
+    "point_user_to_keepass_install_instructions_end": {
         "message": ".",
-        "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
-    },
-    "point_user_to_tutorial_start": {
-        "message": "Будь ласка, витратьте кілька хвилин, ознайомившись з новим",
-        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
-    },
-    "point_user_to_tutorial_end": {
-        "message": "щоб дізнатися, як використовувати нову версію.",
-        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
-    },
-    "point_user_to_tutorial_start_install": {
-        "message": "Будь ласка, після цього витратьте кілька хвилин, ознайомившись з новим",
-        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
-    },
-    "point_user_to_tutorial_end_install": {
-        "message": "щоб дізнатися, як використовувати Kee.",
-        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
+        "description": "Right part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_tutorial_link_text": {
-        "message": "інтерактивним знайомством",
+        "message": "інтерактивного знайомства",
         "description": "Name of the link to the interactive tutorial page"
     },
     "point_user_to_forum_link_text": {
@@ -675,12 +711,72 @@
         "message": "Стерти результати пошуку через (секунд)",
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
-    "list_version_upgrade_2_4": {
-        "message": "Нові збережені записи тепер використовують назву адреси сторінки в якості заголовка запису, якщо сторінка не має встановленого заголовка (подяка @kapep);Обхідний шлях для помилки Firefox, що може випадково спричинити багато проблем, наприклад: неможливість знайти, ввести і зберегти дані форм, помилки пошуку, помилки заповнення HTTP Auth. Ми вважаємо, що це рідкісна помилка, що має тривалий час і мінімальну кількість безпосередньо пов'язаних з Kee помилок, але це досі не розуміють в Mozilla, отже ми не можемо бути впевненими, як це впливає на попередні версії Kee;Виправлена помилка, при якій в окремих випадках неможливо знайти форму в Kee. Особливо, коли інша форма вище на сторінці включена в білий список для виявлення, але не містить будь-яких полів тексту чи пароля;Виправлено помилку при якій конфігурація деяких веб-сайтів не дозволяє піктограмі Kee відображатися належним чином в полях форм;Вимкнено автозавершення браузером в полі пошуку;Контекстне меню Kee більше не з'являється на окремих сторінках, таких як \"Нова вкладка\" та \"Налаштування браузера\" (подяка @kapep)",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    "other_technical_improvements": {
+        "message": "Other technical improvements",
+        "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
+    },
+    "new_license": {
+        "message": "New License",
+        "description": "Heading for text that explains we have a new source code license"
+    },
+    "reliability_improvements": {
+        "message": "Reliability improvements",
+        "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
+    },
+    "google_chrome_release": {
+        "message": "Google Chrome release",
+        "description": "Heading for text that explains we are about to release a stable version for the Google Chrome browser"
+    },
+    "new_icon": {
+        "message": "New icon",
+        "description": "Heading for text that explains we have a new icon / branding"
+    },
+    "new_license_text": {
+        "message": "Version 3 of the Kee extension is released with a newer type of Open Source license - AGPLv3 - which brings it into line with all the software we release. While not typically affecting your rights to use the free software on a day to day basis, the change (from GPLv2) may have legal implications in some situations so we must therefore recommend that you review the new license. If you determine that you do not accept the new license, you can continue using the older versions of the software under the old license in perpetuity.",
+        "description": "Explains we have a new source code license"
+    },
+    "reliability_improvements_text1": {
+        "message": "We've improved the link between the web browser and each individual page you load, resulting in more reliable features like form filling.",
+        "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
+    },
+    "reliability_improvements_text2": {
+        "message": "We've improved the detection of form submit buttons. This means more successful form submission on some websites such as the Google sign-in page.",
+        "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
+    },
+    "google_chrome_release_text": {
+        "message": "When the stable version of Kee v3.0 is released soon, we will promote the Google Chrome version of the extension out of the Beta testing period it has been in for just over a year.",
+        "description": "Explains we are about to release a stable version for the Google Chrome browser"
+    },
+    "new_icon_text": {
+        "message": "We have a shiny new modern icon which we hope you like. This is also discussed in the Kee Vault forum post linked to above.",
+        "description": "Explains we have a new icon / branding"
+    },
+    "kee_vault_announcement_1": {
+        "message": "Kee Vault is a new open source password manager. It runs in your web browser so no installation is necessary.",
+        "description": "Introduction to what Kee Vault is"
+    },
+    "kee_vault_announcement_2": {
+        "message": "It works on any modern device or web browser, even when offline. After importing your existing KeePass database you can access your Kee Vault from everywhere, with your changes and configuration preferences automatically sent to each of your devices and browsers.",
+        "description": "Outlines a few benefits of Kee Vault compared to KeePass"
+    },
+    "kee_vault_announcement_3": {
+        "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
+        "description": "Explains that Kee v3 works with Kee Vault"
+    },
+    "kee_vault_announcement_4": {
+        "message": "Kee Vault is almost ready to launch as a public beta and I'm delighted to offer all existing Kee users an opportunity to get early access before this happens!",
+        "description": "Announces the pre-release availability of Kee Vault"
+    },
+    "kee_vault_announcement_5": {
+        "message": "Read more and register for early access",
+        "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
+    },
+    "showEntry": {
+        "message": "Show Entry",
+        "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
     "KB_shortcut_simple_2_desc": {
-        "message": "Увійти в KeePass / Вибрати відповідний запис / Показати список відповідних записів",
+        "message": "Увійти в менеджер паролів / Обрати відповідний запис / Показати список відповідних логінів",
         "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
     }
 }
