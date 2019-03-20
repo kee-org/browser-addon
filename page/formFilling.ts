@@ -1063,6 +1063,11 @@ class FormFilling {
                     {
                         semanticScore += this.scoreAdjustmentForMagicWords([value.value.toLowerCase()], 40, this.semanticWhitelistCache, this.semanticBlacklistCache);
                     }
+
+                    if (value.id)
+                    {
+                        semanticScore += this.scoreAdjustmentForMagicWords([value.id.toLowerCase()], 20, this.semanticWhitelistCache, this.semanticBlacklistCache);
+                    }
                 }
 
                 if (value.type == "submit" || value.type == "button" || value.type == "image")
