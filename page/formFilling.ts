@@ -49,6 +49,11 @@ class SubmitCandidate {
     score: number;
 }
 
+class FieldMatchScoreConfig {
+    overWriteFieldsAutomatically: boolean;
+    punishWrongIDAndName: boolean;
+}
+
 class FormFilling {
 
     private Logger: KeeLogger;
@@ -124,7 +129,7 @@ class FormFilling {
         formFilling.matchedLoginsPanelStubRaf = requestAnimationFrame(formFilling.updateMatchedLoginsPanelPosition);
     }
 
-    private calculateFieldMatchScore (formField: keeLoginField, dataField, currentPage, overWriteFieldsAutomatically)
+    private calculateFieldMatchScore (formField: keeLoginField, dataField, currentPage, config: FieldMatchScoreConfig)
     {
         // Default score is 1 so that bad matches which are at least the correct type
         // have a chance of being selected if no good matches are found
@@ -132,7 +137,7 @@ class FormFilling {
 
         // If field is already filled in and can't be overwritten we make the score 0
         if ((this.formUtils.isATextFormFieldType(formField.type) || formField.type == "password") &&
-            (formField.value.length > 0 && !overWriteFieldsAutomatically)
+            (formField.value.length > 0 && !config.overWriteFieldsAutomatically)
         )
             return 0;
 
@@ -148,8 +153,11 @@ class FormFilling {
         // If field IDs match +++++
         if (formField.fieldId != null && formField.fieldId != undefined
             && formField.fieldId != "" && formField.fieldId == dataField.fieldId
-            )
+            ) {
             score += 50;
+        } else if (config.punishWrongIDAndName && dataField.fieldId) {
+            score -= 5;
+        }
 
         // If field names match ++++
         // (We do not treat ID and NAME as mutually exclusive because some badly written
@@ -157,8 +165,11 @@ class FormFilling {
         // might allow them to work correctly)
         if (formField.name != null && formField.name != undefined
                 && formField.name != "" && formField.name == dataField.name
-            )
+            ) {
             score += 40;
+        } else if (config.punishWrongIDAndName && dataField.name) {
+            score -= 5;
+        }
 
         // Radio buttons have their values set by the website and hence can provide
         // a useful cue when both id and name matching fails
@@ -275,7 +286,7 @@ class FormFilling {
         domElement.dispatchEvent(new UIEvent("change", {view: window, bubbles: true, cancelable: true}));
     }
 
-    private fillManyFormFields (formFields, dataFields, currentPage, overWriteFieldsAutomatically)
+    private fillManyFormFields (formFields, dataFields, currentPage, scoreConfig: FieldMatchScoreConfig)
     {
         this.Logger.debug("_fillManyFormFields started");
 
@@ -286,7 +297,7 @@ class FormFilling {
 
         this.Logger.info("Filling form fields for page "+currentPage);
 
-        if (overWriteFieldsAutomatically)
+        if (scoreConfig.overWriteFieldsAutomatically)
             this.Logger.info("Auto-overwriting fields");
         else
             this.Logger.info("Not auto-overwriting fields");
@@ -303,7 +314,7 @@ class FormFilling {
             for (let j = 0; j < dataFields.length; j++)
             {
                 const score = this.calculateFieldMatchScore(
-                    formFields[i], dataFields[j], currentPage, overWriteFieldsAutomatically);
+                    formFields[i], dataFields[j], currentPage, scoreConfig);
                 this.Logger.debug("Suitability of putting data field "+j+" into form field "+i
                     +" (id: "+formFields[i].fieldId + ") is " + score);
                 fields.push({score: score, dataFieldIndex: j, formFieldIndex: i});
@@ -634,10 +645,15 @@ class FormFilling {
             // matches first or else we risk no match and no alternative matching logins on the mainUI
             for (let v = 0; v < matchResult.logins[i].length; v++)
             {
+                const features = matchResult.logins[i][v].database.sessionFeatures;
+                const fieldMatchScoreConfig: FieldMatchScoreConfig = {
+                    overWriteFieldsAutomatically: true,
+                    punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
+                };
                 const relScore = this.calculateRelevanceScore(matchResult.logins[i][v],
                         findLoginOp.forms[i], matchResult.usernameIndexArray[i],
                         matchResult.passwordFieldsArray[i], matchResult.currentPage,
-                        matchResult.otherFieldsArray[i], formVisible);
+                        matchResult.otherFieldsArray[i], formVisible, fieldMatchScoreConfig);
 
                 // choosing best login form should not be affected by lowFieldMatchRatio login score
                 // but when we come to fill the form we can force ourselves into a no-auto-fill behaviour.
@@ -895,10 +911,16 @@ class FormFilling {
                 if (matchResult.wantToAutoFillForm || matchResult.mustAutoFillForm)
                 {
                     this.Logger.debug("Going to auto-fill a form");
+
+                    const features = matchingLogin.database.sessionFeatures;
+                    const scoreConfig: FieldMatchScoreConfig = {
+                        overWriteFieldsAutomatically: matchResult.overWriteFieldsAutomatically || !automated,
+                        punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
+                    };
                     const lastFilledPasswords = this.fillManyFormFields(passwordFields, matchingLogin.passwords,
-                        -1, matchResult.overWriteFieldsAutomatically || !automated);
+                        -1, scoreConfig);
                     const lastFilledOther = this.fillManyFormFields(otherFields, matchingLogin.otherFields,
-                        -1, matchResult.overWriteFieldsAutomatically || !automated);
+                        -1, scoreConfig);
                     matchResult.formReadyForSubmit = true;
                     matchResult.lastFilledPasswords = lastFilledPasswords;
                     matchResult.lastFilledOther = lastFilledOther;
@@ -1290,7 +1312,7 @@ class FormFilling {
 
     private calculateRelevanceScore (login: keeLoginInfo, form: HTMLFormElement,
         usernameIndex: number, passwordFields: keeLoginField[], currentPage: number,
-        otherFields: keeLoginField[], formVisible: boolean) {
+        otherFields: keeLoginField[], formVisible: boolean, scoreConfig: FieldMatchScoreConfig) {
 
         let score = 0;
         let lowFieldMatchRatio = false;
@@ -1305,8 +1327,6 @@ class FormFilling {
         // login entries of interest are already pre-matched by KeePass, this should have been
         // adding negligable accuracy to the form matching.
 
-        // New values will be a little different (e.g. 50 vs 42 for an exact URL
-        // match) but that shouldn't be a problem.
         score += login.matchAccuracy;
 
         // Punish but don't entirely exclude matches against invisible forms
@@ -1338,7 +1358,7 @@ class FormFilling {
             for (let j = 0; j < login.otherFields.length; j++)
             {
                 const fmscore = this.calculateFieldMatchScore(
-                    otherFields[i], login.otherFields[j], currentPage, true);
+                    otherFields[i], login.otherFields[j], currentPage, scoreConfig);
                 this.Logger.debug("Suitability of putting other field "+j+" into form field "+i
                     +" (id: "+otherFields[i].fieldId + ") is " + fmscore);
                 if (fmscore > mostRelevantScore)
@@ -1371,7 +1391,7 @@ class FormFilling {
             for (let j = 0; j < login.passwords.length; j++)
             {
                 const fmscore = this.calculateFieldMatchScore(
-                    passwordFields[i], login.passwords[j], currentPage, true);
+                    passwordFields[i], login.passwords[j], currentPage, scoreConfig);
                 this.Logger.debug("Suitability of putting password field "+j+" into form field "+i
                     +" (id: "+passwordFields[i].fieldId + ") is " + fmscore);
                 if (fmscore > mostRelevantScore)
