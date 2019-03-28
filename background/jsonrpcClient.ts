@@ -119,7 +119,11 @@ class jsonrpcClient {
             const results: any[] = [];
             for (const sessionResponse of sessionResponses) {
                 if (sessionResponse.resultWrapper.result != null) {
-                    results.push(...sessionResponse.resultWrapper.result);
+                    results.push(...sessionResponse.resultWrapper.result.map(res => {
+                        res.db.sessionType = sessionResponse.sessionType;
+                        res.db.sessionFeatures = sessionResponse.features;
+                        return res;
+                    }));
                 }
             }
             callback({ result: results });
@@ -141,6 +145,7 @@ class jsonrpcClient {
                     for (const db of recievedDBs as Array<Database>) {
                         if (!dbs.find(d => d.fileName === db.fileName)) {
                             db.sessionType = sessionResponse.sessionType;
+                            db.sessionFeatures = sessionResponse.features;
                             dbs.push(db);
                         } else
                         {

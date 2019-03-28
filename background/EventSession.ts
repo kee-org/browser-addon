@@ -22,9 +22,14 @@ class EventSessionManager {
     private eventActivityTimeout = 30000;
     private latestSession: EventSession;
     private callbacks: {};
+    private _features: string[] = [];
 
     public isActive () {
         return !!this.latestSession;
+    }
+
+    public features () {
+        return !!this.latestSession ? this._features : [];
     }
 
     public registerCallback (requestId: number, callback: (resultWrapper: Partial<ResultWrapper>) => void) {
@@ -77,6 +82,8 @@ class EventSessionManager {
         this.onOpen(features);
 
         if (this.isActive()) {
+
+            this._features = features;
 
             clearTimeout(this.eventActivityTimer);
             this.eventActivityTimer = setTimeout(() => {
@@ -173,6 +180,7 @@ class EventSessionManager {
         KeeLog.debug("Closing event session");
         clearTimeout(this.eventActivityTimer);
         this.latestSession = null;
+        this._features = [];
         this.callbacks = {};
         kee.configSyncManager.reset();
         this.onClose();
