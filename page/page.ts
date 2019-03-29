@@ -78,7 +78,7 @@ function tutorialIntegration () {
         transferElement.setAttribute("state", JSON.stringify({
             connected: appState.connected,
             version: browser.runtime.getManifest().version,
-            dbLoaded: appState.KeePassDatabases && appState.KeePassDatabases.length > 0,
+            dbLoaded: appState.KeePassDatabases.length > 0,
             sessionNames: appState.KeePassDatabases.map(db => db.sessionType.toString()).filter((v, i, a) => a.indexOf(v) === i)
         }));
         document.documentElement.appendChild(transferElement);
