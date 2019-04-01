@@ -84,6 +84,11 @@ function setupInputListeners () {
 
     document.getElementById("siteChooserSearch").addEventListener("input", siteChooserKeyPress);
     document.getElementById("siteSearchClearButton").addEventListener("click", siteChooserClearSearch);
+    document.getElementById("siteChooserForm").addEventListener("submit", e => {
+        e.preventDefault();
+        e.stopPropagation();
+        if ((document.getElementById("siteChooserSearch") as HTMLInputElement).value.length >= 2) showSiteProperties(e);
+    });
     document.getElementById("siteAddButton").addEventListener("click", showSiteProperties);
     document.getElementById("siteEditButton").addEventListener("click", showSiteProperties);
     document.getElementById("siteDeleteButton").addEventListener("click", deleteSiteProperties);
