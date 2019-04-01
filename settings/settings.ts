@@ -472,7 +472,7 @@ function switchToSpecificSitesMode (e) {
         [].forEach.call($$(".siteSpecificToggle"), node => (node as HTMLElement).style.display = null);
         [].forEach.call($$(".nonSiteSpecificField"), node => (node as HTMLElement).style.display = "none");
 
-        showSiteList();
+        showSiteList("");
 
         (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
     }
@@ -483,24 +483,21 @@ function siteChooserKeyPress (e) {
 
     document.getElementById("settings").style.display = "none";
 
-    document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteList").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
     document.getElementById("siteDeleteButton").style.display = "none";
-    document.getElementById("siteChooserSearchResults").textContent = "";
 
     specificSite = null;
 
-    if (searchTerm.length < 2) {
+    if (searchTerm.length < 1) {
         document.getElementById("siteSearchClearButton").style.display = "none";
-        showSiteList();
         return;
     } else {
         document.getElementById("siteSearchClearButton").style.display = "block";
     }
 
-    searchResults = findMatchingSiteConfigValues(searchTerm);
+    showSiteList(searchTerm);
 
     if (searchResults.length == 0) {
         document.getElementById("siteAddButton").style.display = "block";
@@ -509,19 +506,6 @@ function siteChooserKeyPress (e) {
         selectSite(0);
         return;
     }
-
-    for (const resultIndex in searchResults) {
-        const a = document.createElement("a");
-        a.href = "#";
-        a.innerText = searchResults[resultIndex].value;
-        const li = document.createElement("li");
-        li.addEventListener("click", selectSite.bind(this, resultIndex));
-
-        li.appendChild(a);
-        document.getElementById("siteChooserSearchResults").appendChild(li);
-
-    }
-    document.getElementById("siteChooserSearchResults").style.display = "block";
 }
 
 function selectSite (searchResultIndex) {
@@ -530,35 +514,30 @@ function selectSite (searchResultIndex) {
 }
 
 function showSpecificSite () {
-
-    document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteList").style.display = "none";
     document.getElementById("siteEditButton").style.display = "block";
     document.getElementById("siteDeleteButton").style.display = "block";
     document.getElementById("siteSearchClearButton").style.display = "block";
     (document.getElementById("siteChooserSearch") as HTMLInputElement).value = specificSite.value;
-
     document.getElementById("settings").style.display = "block";
-
     setSiteSpecificConfigValues();
 }
 
 function siteChooserClearSearch (e) {
     (document.getElementById("siteChooserSearch") as HTMLInputElement).value = "";
-    document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteSearchClearButton").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
     document.getElementById("siteDeleteButton").style.display = "none";
     document.getElementById("settings").style.display = "none";
     (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
-    showSiteList();
+    showSiteList("");
 }
 
-function showSiteList () {
+function showSiteList (filterTerm) {
 
-    searchResults = findMatchingSiteConfigValues("");
+    searchResults = findMatchingSiteConfigValues(filterTerm);
     document.querySelector("#siteListResults > tbody").textContent = "";
 
     for (const resultIndex in searchResults) {
@@ -583,6 +562,7 @@ function showSiteList () {
         document.querySelector("#siteListResults > tbody").appendChild(tr);
     }
     document.getElementById("siteList").style.display = "block";
+    return searchResults;
 }
 
 function findMatchingSiteConfigValues (searchTerm: string) {

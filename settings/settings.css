@@ -27,10 +27,6 @@ body {
     margin-bottom: 10px;
 }
 
-#siteChooserSearchResults {
-    margin-top: -10px;
-}
-
 #siteChooser .dropdown {
     float: left;
 }
