@@ -91,6 +91,7 @@ function setupInputListeners () {
     document.getElementById("sitePropertiesMethodExact").addEventListener("change", sitePropertiesMethodChanged);
     document.getElementById("sitePropertiesMethodPrefix").addEventListener("change", sitePropertiesMethodChanged);
     document.getElementById("sitePropertiesMethodRegex").addEventListener("change", sitePropertiesMethodChanged);
+    document.querySelector("#sitePropertiesModal .modal-header button.close").addEventListener("click", closeSiteProperties);
     document.getElementById("sitePropertiesCancel").addEventListener("click", closeSiteProperties);
     document.getElementById("sitePropertiesSave").addEventListener("click", saveSiteProperties);
 
