@@ -119,8 +119,8 @@ function deleteSiteProperties (e: Event) {
 }
 
 function showSiteProperties (e: Event) {
-    const value = (document.getElementById("sitePropertiesValue") as HTMLInputElement);
-    value.value = (document.getElementById("siteChooserSearch") as HTMLInputElement).value;
+    const valueElem = (document.getElementById("sitePropertiesValue") as HTMLInputElement);
+    valueElem.value = (document.getElementById("siteChooserSearch") as HTMLInputElement).value;
 
     validateSitePropertiesValue();
 
@@ -432,7 +432,11 @@ function switchToAllSitesMode (e) {
         siteModeAll = true;
         specificSite = null;
         document.getElementById("siteChooser").style.display = "none";
-
+        document.getElementById("siteList").style.display = "none";
+        document.getElementById("siteAddButton").style.display = "none";
+        document.getElementById("siteEditButton").style.display = "none";
+        document.getElementById("siteDeleteButton").style.display = "none";
+        document.getElementById("siteSearchClearButton").style.display = "none";
         document.getElementById("settings").style.display = "block";
 
         document.getElementById("panelFindingEntries").style.display = "block";
@@ -468,6 +472,8 @@ function switchToSpecificSitesMode (e) {
         [].forEach.call($$(".siteSpecificToggle"), node => (node as HTMLElement).style.display = null);
         [].forEach.call($$(".nonSiteSpecificField"), node => (node as HTMLElement).style.display = "none");
 
+        showSiteList();
+
         (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
     }
 }
@@ -478,6 +484,7 @@ function siteChooserKeyPress (e) {
     document.getElementById("settings").style.display = "none";
 
     document.getElementById("siteChooserSearchResults").style.display = "none";
+    document.getElementById("siteList").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
     document.getElementById("siteDeleteButton").style.display = "none";
@@ -487,6 +494,7 @@ function siteChooserKeyPress (e) {
 
     if (searchTerm.length < 2) {
         document.getElementById("siteSearchClearButton").style.display = "none";
+        showSiteList();
         return;
     } else {
         document.getElementById("siteSearchClearButton").style.display = "block";
@@ -525,6 +533,7 @@ function showSpecificSite () {
 
     document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
+    document.getElementById("siteList").style.display = "none";
     document.getElementById("siteEditButton").style.display = "block";
     document.getElementById("siteDeleteButton").style.display = "block";
     document.getElementById("siteSearchClearButton").style.display = "block";
@@ -544,6 +553,36 @@ function siteChooserClearSearch (e) {
     document.getElementById("siteDeleteButton").style.display = "none";
     document.getElementById("settings").style.display = "none";
     (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
+    showSiteList();
+}
+
+function showSiteList () {
+
+    searchResults = findMatchingSiteConfigValues("");
+    document.querySelector("#siteListResults > tbody").textContent = "";
+
+    for (const resultIndex in searchResults) {
+        const tr = document.createElement("tr");
+        const a = document.createElement("a");
+        a.href = "#";
+        a.innerText = searchResults[resultIndex].value;
+        const td = document.createElement("td");
+        td.addEventListener("click", selectSite.bind(this, resultIndex));
+
+        td.appendChild(a);
+        tr.appendChild(td);
+        const td2 = document.createElement("td");
+        td2.innerText = searchResults[resultIndex].target;
+        tr.appendChild(td2);
+        const td3 = document.createElement("td");
+        td3.innerText = searchResults[resultIndex].method;
+        tr.appendChild(td3);
+        const td4 = document.createElement("td");
+        td4.innerText = searchResults[resultIndex].matchWeight.toString();
+        tr.appendChild(td4);
+        document.querySelector("#siteListResults > tbody").appendChild(tr);
+    }
+    document.getElementById("siteList").style.display = "block";
 }
 
 function findMatchingSiteConfigValues (searchTerm: string) {
@@ -590,7 +629,7 @@ function findSiteConfigValues (
     ) {
 
     for (const siteConfigNodeIndex in lookup) {
-        if (siteConfigNodeIndex.startsWith(searchTerm)) {
+        if (siteConfigNodeIndex !== "^.*$" && siteConfigNodeIndex.startsWith(searchTerm)) {
             results.push(Object.assign(
                 { value: siteConfigNodeIndex, target: target, method: method },
                 lookup[siteConfigNodeIndex]));
