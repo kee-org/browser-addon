@@ -383,6 +383,14 @@
     "message": "Website",
     "description": ""
   },
+  "website_options_search_placeholder": {
+    "message": "e.g. www.google.com",
+    "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
+  },
+  "website_options_search_tooltip": {
+    "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+    "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
+  },
   "database_label": {
     "message": "Database",
     "description": ""
