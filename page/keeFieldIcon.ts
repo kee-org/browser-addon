@@ -77,7 +77,7 @@ class KeeFieldIcon {
     private showMatchedLoginsPanel (e) {
         const bcrect = e.target.getBoundingClientRect();
         const leftLimit = bcrect.left + bcrect.width - 22;
-        if (e.clientX > leftLimit) {
+        if (e.clientX > leftLimit && bcrect.top <= e.clientY && e.clientY <= bcrect.bottom) {
             if (frameId !== 0) {
                 myPort.postMessage({action: Action.ShowMatchedLoginsPanel} as AddonMessage);
             } else
