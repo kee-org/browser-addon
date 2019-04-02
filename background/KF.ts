@@ -640,9 +640,11 @@ class Kee {
                     return;
                 }
             }
-            // Probably focussed on a Kee Vault tab
+            // Focussed on a Kee Vault tab or other tab we are not allowed to inject content scripts into
             if (kee.vaultPort) {
                 kee.vaultPort.postMessage({protocol: VaultProtocol.ShowGenerator} as VaultMessage);
+                browser.tabs.update(kee.vaultPort.sender.tab.id, { active: true });
+                browser.windows.update(kee.vaultPort.sender.tab.windowId, { focused: true });
             }
         }
     }
