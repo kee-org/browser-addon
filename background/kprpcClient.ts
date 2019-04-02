@@ -11,6 +11,7 @@ interface ResultWrapper { result: any; error: any; }
 class SessionResponse {
     sessionType: SessionType;
     resultWrapper: Partial<ResultWrapper>;
+    features: string[];
 }
 
 // Only supports one response per session type
@@ -18,8 +19,8 @@ class SessionResponseManager {
     private responses: SessionResponse[] = [];
     constructor (private responsesRequired: number, private onComplete: (sessionResponses: SessionResponse[]) => void) {
     }
-    public onResponse (sessionType: SessionType, resultWrapper: Partial<ResultWrapper>) {
-        this.responses.push({ sessionType, resultWrapper });
+    public onResponse (sessionType: SessionType, resultWrapper: Partial<ResultWrapper>, features: string[]) {
+        this.responses.push({ sessionType, resultWrapper, features });
         if (this.responses.length === this.responsesRequired && this.onComplete)
             this.onComplete(this.responses);
     }
@@ -111,12 +112,12 @@ class kprpcClient {
         for (const sessionManager of sessionManagers) {
             try {
                 if (sessionManager instanceof EventSessionManager) {
-                    this.eventSessionManager.registerCallback(requestId, resultWrapper => responseManager.onResponse(SessionType.Event, resultWrapper));
+                    this.eventSessionManager.registerCallback(requestId, resultWrapper => responseManager.onResponse(SessionType.Event, resultWrapper, sessionManager.features()));
                     this.sendJSONRPCUnencrypted(data);
                 } else {
                     // async webcrypto:
                     if (typeof crypto !== "undefined" && typeof crypto.subtle !== "undefined") {
-                        this.websocketSessionManager.registerCallback(requestId, resultWrapper => responseManager.onResponse(SessionType.Websocket, resultWrapper));
+                        this.websocketSessionManager.registerCallback(requestId, resultWrapper => responseManager.onResponse(SessionType.Websocket, resultWrapper, sessionManager.features()));
                         this.encrypt(data, this.sendJSONRPCEncrypted);
                     }
                 }
@@ -314,22 +315,21 @@ class kprpcClient {
             return;
         }
 
-        if (((data.srp && data.srp.stage === "identifyToClient") ||
-            (data.key && data.key.sc))
-            && !this.serverHasRequiredFeatures(data.features))
-        {
-            KeeLog.error($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]));
-            kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
-            const button: Button = {
-                label: $STR("upgrade_kee"),
-                action: "loadUrlUpgradeKee"
-            };
-            this.showConnectionMessage($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]), [button]);
-            this.websocketSessionManager.closeSession();
-            return;
+        if ((data.srp && data.srp.stage === "identifyToClient") ||
+            (data.key && data.key.sc)) {
+            if (!this.serverHasRequiredFeatures(data.features)) {
+                KeeLog.error($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]));
+                kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
+                const button: Button = {
+                    label: $STR("upgrade_kee"),
+                    action: "loadUrlUpgradeKee"
+                };
+                this.showConnectionMessage($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]), [button]);
+                this.websocketSessionManager.closeSession();
+                return;
+            }
+            this.websocketSessionManager.setClaimedFeatures(data.features);
         }
-
-        FeatureFlags.received = data.features;
 
         // We use key authentication when we have a pre-agreed secret key
         if (data.key !== undefined && data.key !== null) {

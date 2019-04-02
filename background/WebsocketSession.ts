@@ -34,11 +34,20 @@ class WebsocketSessionManager {
     private onMessage;
     private isKPRPCAuthorised: () => boolean;
     private pendingPortChange;
+    private _features: string[] = [];
 
     private callbacks: {};
 
     public isActive () {
         return this.webSocket !== undefined && this.webSocket !== null && this.webSocket.readyState == WebSocket.OPEN && this.isKPRPCAuthorised();
+    }
+
+    public features () {
+        return this.isActive() ? this._features : [];
+    }
+
+    public setClaimedFeatures (features) {
+        this._features = features;
     }
 
     public registerCallback (requestId: number, callback: (resultWrapper: Partial<ResultWrapper>) => void) {

@@ -52,11 +52,11 @@
         "description": ""
     },
     "conn_setup_client_features_missing": {
-        "message": "Kee on päivitettävä jotta se voi yhdistää KeePass tietokantaan. Varmista, että käytössäsi on viimeisin versio Kee selainlisäosasta.",
+        "message": "Kee täytyy päivittää, jotta se saa yhteyden salasananhallintasovellukseen. Varmista, että käytössäsi on uusin versio selaimen lisäosasta/laajennuksesta.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "conn_setup_server_features_missing": {
-        "message": "KeePassRPC KeePass Password Safe lisäosa on päivitettävä, jotta Kee voi muodostaa yhteyden. Varmista, että käytössäsi on viimeisin KeePassRPC lisäosan versio. Tarkemmat ohjeet $1",
+        "message": "Salasananhallintasovelluksesi on päivitettävä, jotta Kee pystyy yhdistämään siihen. Lataa Kee Vault verkkosivu uudelleen ja/tai varmista, että käytössäsi on uusin KeePassRPC lisäosan versio. Seuraa nopeita ja helppoja ohjeita kohdassa $1",
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "conn_sl_high_label": {
@@ -92,7 +92,7 @@
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_unknown_error": {
-        "message": "Tuntematon virhe esti yhdistämästä salasanatietokantaasi",
+        "message": "Tapahtui odottamaton virhe, kun yritettiin muodostaa yhteyttä salasananhallintasovellukseen.",
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "conn_unknown_protocol": {
@@ -156,8 +156,8 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "pref_FillNote_desc": {
-        "message": "Voit muuttaa Kee:n toimintaa yksittäisille kohteille KeePassissa \"Muokkaa tietuetta\" toiminnolla.",
-        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via KeePass."
+        "message": "Voi ohittaa yllä olevat \"Kee valitsee\" käytännöt yksittäisille salasanahallintasovelluksesta löytyville kirjautumistiedoille",
+        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_FillPrompt_desc": {
         "message": "Täytä kirjautumiskehote",
@@ -192,7 +192,7 @@
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
     "pref_listAllOpenDBs_label": {
-        "message": "Listaa kirjautumistiedot kaikista avoinna olevista KeePass tietokannoista",
+        "message": "Näytä kirjautumistiedot kaikista avoinna olevista Kee Vault ja KeePass tietokannoista",
         "description": ""
     },
     "pref_logLevel_desc": {
@@ -224,7 +224,7 @@
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
     "pref_rememberMRUDB_label": {
-        "message": "Muista viimeksi käytetty KeePass tietokanta",
+        "message": "Muista viimeisin Kee Vault tai KeePass tietokanta",
         "description": ""
     },
     "pref_rememberMRUGroup_label": {
@@ -236,7 +236,7 @@
         "description": "Whether or not Kee will save the website's icon when a new entry is saved"
     },
     "pref_searchAllOpenDBs_label": {
-        "message": "Etsi kaikista avoinna olevista KeePass tietokannoista",
+        "message": "Etsi kaikista avoinna olevista Kee Vault ja KeePass tietokannoista",
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
@@ -257,10 +257,10 @@
     },
     "pref_Finding_forms_heading": {
         "message": "Automaattinen täyttö",
-        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from KeePass"
+        "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from the password manager"
     },
     "site_options_valid_form_intro_desc": {
-        "message": "Kee yrittää täyttää lomakkeet, jotka sisältävät salasanakentän. Voit muuttaa toimintaa alla olevilla valinnoilla.",
+        "message": "Kee yrittää täyttää sopivat Kee Vault ja KeePass kirjautumistiedot kaikille lomakkeille joissa on salasanakenttä. Voit muuttaa toimintaa alla.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "text_field_id": {
@@ -308,7 +308,7 @@
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
-        "message": "Voit luoda uuden salasanan valitsemalla alta salasanaprofiilin. Tallenna uusia salasanaprofiileja KeePassissa.",
+        "message": "Voit vaihtoehtoisesti luoda erilaisen valitsemalla salasanaprofiilin alta. Luo uusi profiili Kee Vault tai Keepass sovelluksessa.",
         "description": ""
     },
     "change_field_explanation": {
@@ -357,11 +357,11 @@
     },
     "create_new_entry": {
         "message": "Luo uusi",
-        "description": ""
+        "description": "Create new entry"
     },
     "showing_options_for": {
         "message": "Näytetään asetukset kohteelle ",
-        "description": ""
+        "description": "label for a group of radio buttons that allows the user to change the scope of the settings they are changing - e.g. all websites or just one specific website"
     },
     "all_websites": {
         "message": "Kaikki nettisivut",
@@ -387,17 +387,29 @@
         "message": "Uusi salasana on kopioitu leikepöydälle.",
         "description": ""
     },
+    "generatePassword_instructions": {
+        "message": "Valitse minkälaisia salasanoja haluat luoda:",
+        "description": ""
+    },
+    "generatePassword_done_1": {
+        "message": "Salasana luotu",
+        "description": ""
+    },
+    "generatePassword_done_2": {
+        "message": "Voit liittää sen \"uusi salasana\" kenttään tai muualle mihin haluat.",
+        "description": ""
+    },
     "group_label": {
         "message": "Ryhmä",
         "description": ""
     },
-    "keepass_history_pointer": {
-        "message": "KeePass sisältää \"kumoa\" toiminnon jota voit käyttää KeePassin \"Tietueen muokkaus\" ikkunassa. Valitse \"Historia\" välilehti ja sen jälkeen \"Palauta\" painiketta palauttaakesi vanhat tiedot.",
+    "entry_history_pointer": {
+        "message": "Salasanahallintasovelluksessasi on \"kumoa\" toiminto. Etsi kirjautumistieto jonka toimintahistoriaa haluat selata ja valitse \"Palauta\" palauttaaksesi aikaisemman version kirjautumistiedoista (jos tarpeen).",
         "description": ""
     },
     "loggedIn_tip": {
         "message": "Olet yhteydessä tietokantaan '$1'",
-        "description": "Tells the user they are logged into a KeePass database (and gives its name, if any)"
+        "description": "Tells the user they are logged into a Kee Vault or KeePass database (and gives its name, if any)"
     },
     "loggedInMultiple_tip": {
         "message": "Sinulla on auki $1 salasanatietokantaa. '$2' on käytössä.",
@@ -424,11 +436,11 @@
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
-        "message": "Et ole kirjautuneena tietokantaan",
+        "message": "Et ole kirjautuneena salasananhallintasovellukseesi",
         "description": ""
     },
     "notifyBarLaunchKeePassButton_tip": {
-        "message": "Avaa KeePass käyttääksesi Kee:ta",
+        "message": "Avaa Kee Vault tai KeePass käyttääksesi Kee:ta",
         "description": ""
     },
     "notifyBarLogSensitiveData_label": {
@@ -436,7 +448,7 @@
         "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
     },
     "notifyBarLoginToKeePassButton_tip": {
-        "message": "Kirjaudu KeePass tietokantaan käyttääksesi Kee:ta.",
+        "message": "Avaa salasanahallintasovelluksesi lukitus käyttääksesi Kee:ta",
         "description": ""
     },
     "notifyBarNeverForSiteButton_label": {
@@ -595,49 +607,73 @@
         "message": "Tervetuloa käyttämään Kee:ta",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
-    "the_new_name_for_keefox": {
-        "message": "KeeFoxin uusi nimi",
-        "description": "Subheader for release notes page to give context for users upgrading from KeeFox"
+    "introduction_to_kee": {
+        "message": "Kee täyttää automaattisesti lomakkeiden kirjautumiskentät säästääkseen aikaasi ja suojellakseen sinua tietoturvariskeiltä.",
+        "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
-    "kee_install_notes_intro": {
-        "message": "KeeFox tallentaa salasanasi turvallisesti erilliseen salasananhallintaohjelmaan nimeltä KeePass Password Safe 2. Se sisältää paljon erilaisia toimintoja, mutta Kee:n avulla helposti kirjautumaan käyttämillesi nettisivuille.",
-        "description": "Text to introduce Kee to new users and encourage following the next steps to get it set up to work with KeePass"
+    "kee_works_with_a_password_manager": {
+        "message": "Kee:n käyttämiä kirjautumistietoja säilytetään turvallisesti salasananhallintasovelluksessasi, pääsalasanan takana.",
+        "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
-    "kee_install_notes_keepass": {
-        "message": "KeePass täytyy olla käynnissä, jotta Kee saa siihen yhteyden. Jos tietokoneellasi ei ole KeePassia, voit helposti ladata ja asentaa sen itse.",
-        "description": "Text to introduce KeePass to new users and encourage following the necessary steps to get Kee to work"
+    "recommend_start_with_kee_vault": {
+        "message": "Suosittelemme kokeilemaan Kee Vault salasananhallintasovelluksen 14 päivän kokeilujaksoa. Tämän jälkeen kuukausimaksu on vain 2£/kk. Rekisteröitymisen yhteydessä ei kysytä maksutietoja, joten kokeileminen kannattaa.",
+        "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
     },
-    "kee_install_notes_keepassrpc": {
-        "message": "Sinun täytyy asentaa KeePassRPC.plgx lisäosa KeePassille, jos sinulla ei vielä ole sitä. Sinun tarvitsee vain siirtää tiedosto oikeaan paikkaan ja käynnistää KeePass uudelleen.",
-        "description": "Text to introduce KeePassRPC.plgx to new users and encourage following the necessary steps to get Kee to work"
+    "load_kee_vault_now": {
+        "message": "Lataa Kee Vault nyt",
+        "description": "Call To Action button text. On click, the Kee Vault app will load and focus in a new tab."
     },
-    "point_user_to_kee_news_announcement": {
-        "message": "Löydät paljon lisää tietoa Kee 2.0 seuraavista uutisartikkeleista ja linkeistä: ",
-        "description": "Will have a URL suffixed after the colon"
+    "you_can_use_KeePass_instead": {
+        "message": "Vaihtoehtoisesti voit myös käyttää KeePass Password Safe 2.",
+        "description": "Explains that Kee also works with KeePass so they can choose to configure that if they prefer to avoid all financial expenditure."
     },
-    "point_user_to_install_instructions_start": {
-        "message": "Ohjeet yllä oleviin kohtiin löytyvät ",
-        "description": "Left part of a sentance that contains a link to the community forum in the middle. For new installations"
+    "table_summarises_differences": {
+        "message": "Alla olevassa taulukossa yhteenveto eroista",
+        "description": "Introduces the summary table that will help users choose a password manager to start with."
     },
-    "point_user_to_install_instructions_end": {
+    "installation_required": {
+        "message": "Asennus vaaditaan",
+        "description": "States that the user will need to install components on their computer"
+    },
+    "access_from_multiple_devices": {
+        "message": "Mahdollista käyttää useilla laitteilla, myös mobiililaitteilla",
+        "description": "Covers web browsers and mobiles, laptops, tablets, etc."
+    },
+    "shared_preferences": {
+        "message": "Jaetut asetukset",
+        "description": "Labels the process of synchronising browser extension and password manager configuration options/preferences across multiple locations."
+    },
+    "yes_configure_once": {
+        "message": "Kyllä, määritä asetukset vain kerran",
+        "description": "Supports synchronising browser extension and password manager configuration options/preferences"
+    },
+    "no_configure_multiple": {
+        "message": "Ei, määritä asetukset jokaiselle selaimelle ja laitteelle erikseen",
+        "description": "Does not support synchronising browser extension and password manager configuration options/preferences"
+    },
+    "difficulty": {
+        "message": "Vaikeustaso",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+    },
+    "difficulty_kee_vault": {
+        "message": "Helppo",
+        "description": "Indicates that it is easy to get started with Kee Vault"
+    },
+    "difficulty_keepass": {
+        "message": "Keskitaso (Vaikea Mac tietokoneilla)",
+        "description": "Indicates that more work is required to get started with KeePass"
+    },
+    "keepass_sync_config_explanation": {
+        "message": "KeePass kirjautumistietoja on mahdollista käyttää useilla laitteilla samanaikaisesti käyttämällä 3. osapuolen palveluita, joista osa on maksullisia. Jokainen laite täytyy erikseen valmistella etukäteen.",
+        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+    },
+    "point_user_to_keepass_install_instructions_start": {
+        "message": "Ohjeet KeePass asennusta ja määrityksiä sekä KeePassRPC.plgx lisäosaa varten löytyvät",
+        "description": "Left part of a sentence that contains a link to the community forum in the middle. For new installations"
+    },
+    "point_user_to_keepass_install_instructions_end": {
         "message": ".",
-        "description": "Right part of a sentance that contains a link to the community forum in the middle. For new installations"
-    },
-    "point_user_to_tutorial_start": {
-        "message": "Käytäthän hetken aikaa käydäksesi läpi seuraavat uudistukset",
-        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
-    },
-    "point_user_to_tutorial_end": {
-        "message": "oppiaksesi käyttämään uutta versiota.",
-        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For upgrade installations"
-    },
-    "point_user_to_tutorial_start_install": {
-        "message": "Käytäthän hetken aikaa käydäksesi läpi seuraavat uudistukset",
-        "description": "Left part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
-    },
-    "point_user_to_tutorial_end_install": {
-        "message": "oppiaksesi käyttämään Kee:ta.",
-        "description": "Right part of a sentance that contains a link to the interactive tutorial page in the middle. For new installations"
+        "description": "Right part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_tutorial_link_text": {
         "message": "interaktiivinen opastus",
@@ -656,7 +692,7 @@
         "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "notification_only_shown_some_times": {
-        "message": "Tämä vaihtoehtoinen ilmoitus näytetään vain muutaman kerran.",
+        "message": "Tämä ilmoitus näytetään vain muutaman kerran.",
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "notification_save_password_tip": {
@@ -675,12 +711,72 @@
         "message": "Tyhjennä hakutulokset X sekunnin jälkeen",
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
-    "list_version_upgrade_2_4": {
-        "message": "New saved entries now use the page's hostname as the entry title if no page title is set (thanks to @kapep);Workaround for a Firefox bug that could occasionally cause many problems such as: not finding, filling and saving forms, search failures, HTTP Auth filling failures. We think it's a rare bug judging by its age and minimal number of directly related Kee bugs but it is not yet understood by Mozilla so we can't be certain how it will be affecting earlier versions of Kee;Fixed an issue where in rare cases a form might not be found by Kee. Specifically this is when another form \"higher up\" the page is whitelisted for detection but does not contain any text or password fields;Fixed a rare issue where some websites could have a configuration that caused the Kee icon to not appear correctly in form fields;Disabled browser autocomplete on the search box;Kee context menu will no longer appear on special pages such as \"New Tab\" and \"Browser preferences\" (thanks to @kapep)",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be seperated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) seperator."
+    "other_technical_improvements": {
+        "message": "Muita teknisiä parannuksia",
+        "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
+    },
+    "new_license": {
+        "message": "Uusi lisenssi",
+        "description": "Heading for text that explains we have a new source code license"
+    },
+    "reliability_improvements": {
+        "message": "Toimintavarmuuden parannuksia",
+        "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
+    },
+    "google_chrome_release": {
+        "message": "Google Chrome laajennus",
+        "description": "Heading for text that explains we are about to release a stable version for the Google Chrome browser"
+    },
+    "new_icon": {
+        "message": "Uusi kuvake",
+        "description": "Heading for text that explains we have a new icon / branding"
+    },
+    "new_license_text": {
+        "message": "Kee laajennuksen versio 3 on julkaistu uudemman Open Source license - AGPLv3 lisenssin alla, jota myös muut julkaisemamme ohjelmat käyttävät. Muutos ei varsinaisesti vaikuta oikeuteesi käyttää ilmaista ohjelmaa päivittäisessä käytössä. Muutoksia kuitenkin aiempaan GPLv2 lisenssiin verrattuna löytyy, joten suosittelemme sinua lukemaan läpi uuden lisenssin. Jos päätät olla hyväksymättä uutta lisenssiä, voit jatkaa ohjelman vanhan version käyttämistä vanhan lisenssin suomin oikeuksin.",
+        "description": "Explains we have a new source code license"
+    },
+    "reliability_improvements_text1": {
+        "message": "Olemme parantaneet linkkiä internetselaimen ja yksittäisen lataamasi sivun välillä, jonka ansiosta esim. kirjautumistietojen täyttö on luotettavampaa",
+        "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
+    },
+    "reliability_improvements_text2": {
+        "message": "Olemme parantaneet kirjautumisikkunoiden havaitsemista. Tämä tarkoittaa enemmän onnistuneita kirjautumisia, mm. Googlen kirjautumissivuilla",
+        "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
+    },
+    "google_chrome_release_text": {
+        "message": "Kun vakaa Kee 3.0 versio on julkaistu, Google Chrome laajennuksesta poistetaan samalla Beta merkintä, joka sillä on ollut yli vuoden.",
+        "description": "Explains we are about to release a stable version for the Google Chrome browser"
+    },
+    "new_icon_text": {
+        "message": "Olemme uudistaneet kuvakkeen modernimpaan suuntaan. Toivottavasti pidät siitä. Tästä on myös keskusteltu Kee Vault keskustelualueella (linkki yläpuolella).",
+        "description": "Explains we have a new icon / branding"
+    },
+    "kee_vault_announcement_1": {
+        "message": "Kee Vault on uusi avoimen lähdekoodin salasananhallintasovellus. Se pyörii internetselaimessa, joten asennusta ei tarvita.",
+        "description": "Introduction to what Kee Vault is"
+    },
+    "kee_vault_announcement_2": {
+        "message": "Se toimii millä tahansa nykyaikaisella laitteella tai internetselaimella, jopa offline-tilassa. Kun olet tuonut KeePass tietokantasi, voit käyttää sitä missä tahansa Kee Vaultin kautta. Muutokset ja asetukset jaetaan kaikkien laitteidesi ja internetselaimiesi kesken.",
+        "description": "Outlines a few benefits of Kee Vault compared to KeePass"
+    },
+    "kee_vault_announcement_3": {
+        "message": "Kee versio 3.0 mahdollistaa KeePass salasananhallintasovelluksen korvaamisen Kee Vault sovelluksella, säilyttäen kaikki tärkeät toiminnot, kuten kirjautumistietojen automaattinen täyttö, etsi ja salasanojen luonti.",
+        "description": "Explains that Kee v3 works with Kee Vault"
+    },
+    "kee_vault_announcement_4": {
+        "message": "Kee Vault on melkein valmis julkaistavaksi julkisena betana. OIen iloinen voidessasi tarjota Kee:n nykyisille käyttäjille mahdollisuuden päästä kokeilemaan sovellusta ennakkoon ennen julkaisua.",
+        "description": "Announces the pre-release availability of Kee Vault"
+    },
+    "kee_vault_announcement_5": {
+        "message": "Lue lisää ja rekisteröidy saadaksesi ennakkopääsyn",
+        "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
+    },
+    "showEntry": {
+        "message": "Näytä kirjautumistieto",
+        "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
     "KB_shortcut_simple_2_desc": {
-        "message": "Kirjaudu KeePass/Valitse kirjautumistieto/Näytä sopivat kirjautumistiedot",
+        "message": "Kirjaudu salasananhallintaan/Valitse sopiva kirjautumistieto/Näytä sopivat kirjautumistiedot",
         "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
     }
 }

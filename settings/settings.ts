@@ -84,6 +84,11 @@ function setupInputListeners () {
 
     document.getElementById("siteChooserSearch").addEventListener("input", siteChooserKeyPress);
     document.getElementById("siteSearchClearButton").addEventListener("click", siteChooserClearSearch);
+    document.getElementById("siteChooserForm").addEventListener("submit", e => {
+        e.preventDefault();
+        e.stopPropagation();
+        if ((document.getElementById("siteChooserSearch") as HTMLInputElement).value.length >= 2) showSiteProperties(e);
+    });
     document.getElementById("siteAddButton").addEventListener("click", showSiteProperties);
     document.getElementById("siteEditButton").addEventListener("click", showSiteProperties);
     document.getElementById("siteDeleteButton").addEventListener("click", deleteSiteProperties);
@@ -91,6 +96,7 @@ function setupInputListeners () {
     document.getElementById("sitePropertiesMethodExact").addEventListener("change", sitePropertiesMethodChanged);
     document.getElementById("sitePropertiesMethodPrefix").addEventListener("change", sitePropertiesMethodChanged);
     document.getElementById("sitePropertiesMethodRegex").addEventListener("change", sitePropertiesMethodChanged);
+    document.querySelector("#sitePropertiesModal .modal-header button.close").addEventListener("click", closeSiteProperties);
     document.getElementById("sitePropertiesCancel").addEventListener("click", closeSiteProperties);
     document.getElementById("sitePropertiesSave").addEventListener("click", saveSiteProperties);
 
@@ -113,8 +119,8 @@ function deleteSiteProperties (e: Event) {
 }
 
 function showSiteProperties (e: Event) {
-    const value = (document.getElementById("sitePropertiesValue") as HTMLInputElement);
-    value.value = (document.getElementById("siteChooserSearch") as HTMLInputElement).value;
+    const valueElem = (document.getElementById("sitePropertiesValue") as HTMLInputElement);
+    valueElem.value = (document.getElementById("siteChooserSearch") as HTMLInputElement).value;
 
     validateSitePropertiesValue();
 
@@ -426,7 +432,11 @@ function switchToAllSitesMode (e) {
         siteModeAll = true;
         specificSite = null;
         document.getElementById("siteChooser").style.display = "none";
-
+        document.getElementById("siteList").style.display = "none";
+        document.getElementById("siteAddButton").style.display = "none";
+        document.getElementById("siteEditButton").style.display = "none";
+        document.getElementById("siteDeleteButton").style.display = "none";
+        document.getElementById("siteSearchClearButton").style.display = "none";
         document.getElementById("settings").style.display = "block";
 
         document.getElementById("panelFindingEntries").style.display = "block";
@@ -462,6 +472,8 @@ function switchToSpecificSitesMode (e) {
         [].forEach.call($$(".siteSpecificToggle"), node => (node as HTMLElement).style.display = null);
         [].forEach.call($$(".nonSiteSpecificField"), node => (node as HTMLElement).style.display = "none");
 
+        showSiteList("");
+
         (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
     }
 }
@@ -471,22 +483,21 @@ function siteChooserKeyPress (e) {
 
     document.getElementById("settings").style.display = "none";
 
-    document.getElementById("siteChooserSearchResults").style.display = "none";
+    document.getElementById("siteList").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
     document.getElementById("siteDeleteButton").style.display = "none";
-    document.getElementById("siteChooserSearchResults").textContent = "";
 
     specificSite = null;
 
-    if (searchTerm.length < 2) {
+    if (searchTerm.length < 1) {
         document.getElementById("siteSearchClearButton").style.display = "none";
         return;
     } else {
         document.getElementById("siteSearchClearButton").style.display = "block";
     }
 
-    searchResults = findMatchingSiteConfigValues(searchTerm);
+    showSiteList(searchTerm);
 
     if (searchResults.length == 0) {
         document.getElementById("siteAddButton").style.display = "block";
@@ -495,19 +506,6 @@ function siteChooserKeyPress (e) {
         selectSite(0);
         return;
     }
-
-    for (const resultIndex in searchResults) {
-        const a = document.createElement("a");
-        a.href = "#";
-        a.innerText = searchResults[resultIndex].value;
-        const li = document.createElement("li");
-        li.addEventListener("click", selectSite.bind(this, resultIndex));
-
-        li.appendChild(a);
-        document.getElementById("siteChooserSearchResults").appendChild(li);
-
-    }
-    document.getElementById("siteChooserSearchResults").style.display = "block";
 }
 
 function selectSite (searchResultIndex) {
@@ -516,28 +514,55 @@ function selectSite (searchResultIndex) {
 }
 
 function showSpecificSite () {
-
-    document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
+    document.getElementById("siteList").style.display = "none";
     document.getElementById("siteEditButton").style.display = "block";
     document.getElementById("siteDeleteButton").style.display = "block";
     document.getElementById("siteSearchClearButton").style.display = "block";
     (document.getElementById("siteChooserSearch") as HTMLInputElement).value = specificSite.value;
-
     document.getElementById("settings").style.display = "block";
-
     setSiteSpecificConfigValues();
 }
 
 function siteChooserClearSearch (e) {
     (document.getElementById("siteChooserSearch") as HTMLInputElement).value = "";
-    document.getElementById("siteChooserSearchResults").style.display = "none";
     document.getElementById("siteSearchClearButton").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
     document.getElementById("siteDeleteButton").style.display = "none";
     document.getElementById("settings").style.display = "none";
     (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
+    showSiteList("");
+}
+
+function showSiteList (filterTerm) {
+
+    searchResults = findMatchingSiteConfigValues(filterTerm);
+    document.querySelector("#siteListResults > tbody").textContent = "";
+
+    for (const resultIndex in searchResults) {
+        const tr = document.createElement("tr");
+        const a = document.createElement("a");
+        a.href = "#";
+        a.innerText = searchResults[resultIndex].value;
+        const td = document.createElement("td");
+        td.addEventListener("click", selectSite.bind(this, resultIndex));
+
+        td.appendChild(a);
+        tr.appendChild(td);
+        const td2 = document.createElement("td");
+        td2.innerText = searchResults[resultIndex].target;
+        tr.appendChild(td2);
+        const td3 = document.createElement("td");
+        td3.innerText = searchResults[resultIndex].method;
+        tr.appendChild(td3);
+        const td4 = document.createElement("td");
+        td4.innerText = searchResults[resultIndex].matchWeight.toString();
+        tr.appendChild(td4);
+        document.querySelector("#siteListResults > tbody").appendChild(tr);
+    }
+    document.getElementById("siteList").style.display = "block";
+    return searchResults;
 }
 
 function findMatchingSiteConfigValues (searchTerm: string) {
@@ -584,7 +609,7 @@ function findSiteConfigValues (
     ) {
 
     for (const siteConfigNodeIndex in lookup) {
-        if (siteConfigNodeIndex.startsWith(searchTerm)) {
+        if (siteConfigNodeIndex !== "^.*$" && siteConfigNodeIndex.startsWith(searchTerm)) {
             results.push(Object.assign(
                 { value: siteConfigNodeIndex, target: target, method: method },
                 lookup[siteConfigNodeIndex]));

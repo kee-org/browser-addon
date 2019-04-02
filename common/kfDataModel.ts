@@ -40,6 +40,7 @@ class Database {
     root: any;
     active: boolean;
     sessionType: SessionType;
+    sessionFeatures: string[];
 }
 
 class keeLoginInfo {

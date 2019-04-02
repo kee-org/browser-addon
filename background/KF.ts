@@ -270,7 +270,7 @@ class Kee {
     _pauseKee ()
     {
         KeeLog.debug("Pausing Kee.");
-        this.appState.KeePassDatabases = null;
+        this.appState.KeePassDatabases = [];
         this.appState.ActiveKeePassDatabaseIndex = -1;
         this.appState.connected = false;
 
@@ -401,7 +401,7 @@ class Kee {
     {
         if (index == undefined)
             index = this.appState.ActiveKeePassDatabaseIndex;
-        if (this.appState.KeePassDatabases != null && this.appState.KeePassDatabases.length > 0
+        if (this.appState.KeePassDatabases.length > 0
             && this.appState.KeePassDatabases[index] != null
             && this.appState.KeePassDatabases[index].root != null)
             return this.appState.KeePassDatabases[index].name;
@@ -413,7 +413,7 @@ class Kee {
     {
         if (index == undefined)
             index = this.appState.ActiveKeePassDatabaseIndex;
-        if (this.appState.KeePassDatabases != null && this.appState.KeePassDatabases.length > 0
+        if (this.appState.KeePassDatabases.length > 0
             && this.appState.KeePassDatabases[index] != null
             && this.appState.KeePassDatabases[index].root != null)
             return this.appState.KeePassDatabases[index].fileName;
@@ -640,9 +640,11 @@ class Kee {
                     return;
                 }
             }
-            // Probably focussed on a Kee Vault tab
+            // Focussed on a Kee Vault tab or other tab we are not allowed to inject content scripts into
             if (kee.vaultPort) {
                 kee.vaultPort.postMessage({protocol: VaultProtocol.ShowGenerator} as VaultMessage);
+                browser.tabs.update(kee.vaultPort.sender.tab.id, { active: true });
+                browser.windows.update(kee.vaultPort.sender.tab.windowId, { focused: true });
             }
         }
     }

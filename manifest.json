@@ -1,11 +1,11 @@
 {
     "manifest_version": 2,
-    "name": "Kee",
+    "name": "Kee - Password Manager",
     "default_locale": "en",
     "version": "3.1.0",
     "version_name": "3.1.0",
     "author": "Kee Vault Ltd",
-    "description": "Kee adds private, secure and easy password management features to your browser which save time and keep your private data more secure.",
+    "description": "Kee adds private, secure and easy password management features which save time and keep your private data more secure.",
     "background": {
         "scripts": [
             "lib/dollar-polyfill.js",

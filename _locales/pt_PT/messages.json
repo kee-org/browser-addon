@@ -1,54 +1,54 @@
 {
     "black_list": {
-        "message": "Blacklist",
+        "message": "Lista negra",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
-        "message": "Un componente aggiuntivo per il tuo browser che permette l'accesso automatico ai tuoi siti web in tutta sicurezza. Precedentemente chiamato KeeFox.",
+        "message": "Uma extensão do navegador de internet que permite a autenticação (login) automática na maioria dos sites. Anteriormente conhecido como KeeFox.",
         "description": "A brief description of Kee that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
     },
     "conn_invalid_message": {
-        "message": "Kee ha inviato un comando non valido al tuo password database.",
+        "message": "O Kee enviou um comando inválido para a base de dados de palavras-passe.",
         "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
     },
     "conn_setup_client_sl_low": {
-        "message": "Kee ha richiesto un livello di sicurezza che è troppo basso per essere accettato dal server delle password. Devi riavviare il processo di autenticazione usando un livello di sicurezza più alto.",
+        "message": "O Kee pediu um nível de segurança muito baixo para ser aceite pelo servidor de palavras-passe. Deve reiniciar o processo de autenticação usando uma segurança maior.",
         "description": ""
     },
     "conn_setup_enter_password_title": {
-        "message": "Autorizzazione di Kee",
+        "message": "Autorização do Kee",
         "description": "Heading of the popup that asks the user to authorise the connection to KeePass by typing in a password."
     },
     "conn_setup_enter_password": {
-        "message": "Inserisci la password mostrata da KeePass nella finestra \"Autorizza una nuova connessione\". Non dovrai ricordare questa password. Se fai un errore potrai riprovare dopo pochi secondi.",
+        "message": "Por favor introduza a palavra-passe mostrada na janela do KeePass \"Autorizar uma nova conexão\". Não tem de se lembrar desta palavra-passe. Se se enganar, poderá tentar novamente em breve.",
         "description": ""
     },
     "conn_setup_expired": {
-        "message": "Hai utilizzato la stessa chiave segreta per troppo tempo.",
+        "message": "Tem utilizado a mesma chave secreta por demasiado tempo.",
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
     "conn_setup_failed": {
-        "message": "Kee non è riuscito a connettersi, probabilmente perché hai inserito una password di connessione non corretta.",
+        "message": "O Kee não tem permissão para se conectar, provavelmente porque inseriu a palavra-passe de conexão incorretamente.",
         "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
     },
     "conn_setup_invalid_param": {
-        "message": "Kee ha fornito un parametro non valido. Seguono maggiori informazioni: $1",
+        "message": "O Kee forneceu um parâmetro inválido. Mais informações: $1",
         "description": "This probably indicates a bug in Kee - we sent something to KeePassRPC that it wasn't expecting."
     },
     "conn_setup_missing_param": {
-        "message": "Kee non è riuscito a fornire un parametro richiesto. Seguono maggiori  informazioni: $1",
+        "message": "O Kee falhou no fornecimento do parâmetro necessário. Mais informações: $1",
         "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
     },
     "conn_setup_restart": {
-        "message": "Kee deve riavviare il processo di autorizzazione.",
+        "message": "O Kee tem de reiniciar o processo de autorização.",
         "description": "A technical error occurred during the attempt to authorise the link between Kee and KeePassRPC so we need to notify the user that they will need to re-authenticate"
     },
     "conn_setup_retype_password": {
-        "message": "Inserisci la nuova password quando viene richiesto.",
+        "message": "Introduza a nova palavra-passe quando for solicitado.",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
     },
     "conn_setup_server_sl_low": {
-        "message": "Kee ha rifiutato la connessione al server delle password perché il livello di sicurezza presentato è troppo basso. Devi riavviare il processo di autenticazione usando un livello di sicurezza più alto.",
+        "message": "O Kee rejeitou a conexão com o servidor de palavras-passe porque o seu nível de segurança é muito baixo. Tem de reiniciar o processo de autenticação usando uma segurança maior.",
         "description": ""
     },
     "conn_setup_client_features_missing": {
@@ -60,7 +60,7 @@
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "conn_sl_high_label": {
-        "message": "Richiedi una nuova password per l'autenticazione ogni volta che apri il browser web o KeePass.",
+        "message": "Perguntar por uma nova conexão de palavra-passe de cada vez que iniciar o meu navegador ou o KeePass.",
         "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
     },
     "conn_sl_high": {
@@ -68,27 +68,27 @@
         "description": ""
     },
     "conn_sl_low": {
-        "message": "Basso",
+        "message": "Baixo",
         "description": ""
     },
     "conn_sl_medium": {
-        "message": "Medio",
+        "message": "Médio",
         "description": ""
     },
     "conn_sl_server_min_desc": {
-        "message": "Questa impostazione previene che Kee si connetta a KeePass se il livello di sicurezza è troppo basso. Controlla le impostazioni in KeePass per impostare qui il livello utilizzato da quest'ultimo.",
+        "message": "Isto permite evitar que o Kee se conecte ao KeePass se o seu nível de segurança estiver muito baixo. Veja as opções dentro do KeePass para definir o nível de segurança atual usado pelo KeePass.",
         "description": ""
     },
     "conn_sl_server_min": {
-        "message": "Livello minimo accettabile di sicurezza di KeePass",
+        "message": "Nível de segurança mínimo aceitável para o KeePass",
         "description": ""
     },
     "conn_sl_desc": {
-        "message": "Cambia le impostazioni sottostanti per controllare la sicurezza del collegamento fra il tuo browser web e KeePass. Probabilmente non dovrai mai cambiare queste impostazioni, ma se hai intenzione di farlo sei pregato di leggere prima il manuale.",
+        "message": "Altere as configurações abaixo para controlar o quão seguro é a comunicação entre o seu navegador de Internet e o KeePass. Provavelmente não precisa de ajustar estas configurações, mas se as ajustar, certifique-se primeiro que leu as páginas relevantes do manual.",
         "description": ""
     },
     "conn_sl_link": {
-        "message": "Consulta il manuale per saperne di più su queste impostazioni e la comunicazione fra il tuo browser web e KeePass",
+        "message": "Aprender mais sobre essas configurações e a comunicação entre o seu navegador e o KeePass no manual",
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_unknown_error": {
@@ -96,63 +96,63 @@
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "conn_unknown_protocol": {
-        "message": "Kee ha fornito un protocollo non valido.",
+        "message": "O Kee forneceu um protocolo inválido.",
         "description": "Technical error in the communication between Kee and KeePassRPC. Not clear how user could resolve this or if they'll ever see it but it might happen."
     },
     "form_id": {
-        "message": "ID campo",
+        "message": "Identificador do formulário",
         "description": ""
     },
     "form_name": {
-        "message": "Nome campo",
+        "message": "Nome do formulário",
         "description": ""
     },
     "further_info_may_follow": {
-        "message": "Seguono maggiori informazioni: $1",
+        "message": "Mais informações: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
     },
     "matched_logins_label": {
-        "message": "Voci corrispondenti",
+        "message": "Entradas de autenticação coincidentes",
         "description": "Header for panels/sections that contain the logins which Kee matched for this page/form"
     },
     "pref_Advanced_heading": {
-        "message": "Avanzate",
+        "message": "Avançado",
         "description": ""
     },
     "pref_ConnectionSecurity_heading": {
-        "message": "Sicurezza della connessione",
+        "message": "Segurança da conexão",
         "description": "Heading for panel that contains settings for the security of the connection between Kee and KeePass."
     },
     "pref_ConnectionSecurity_explain_change": {
-        "message": "Effettuare un cambiamento alle impostazioni sottostanti potrebbe attivare una richiesta da Kee per una nuova password casuale. Non devi inserire la password corretta per cambiare queste impostazioni, correggile a piacimento e premi il pulsante sovrastante.",
+        "message": "Por vezes, fazer uma alteração nas configurações abaixo fará com que o Kee lhe pergunte por uma nova palavra-passe aleatória. Não tem de inserir a palavra-passe correta acima para alterar essas configurações, basta ajustá-las e pressionar o botão acima.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
     },
     "srp_connect": {
-        "message": "Connetti",
+        "message": "Conectar",
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
     },
     "srp_save_connect": {
-        "message": "Salva e connetti",
+        "message": "Guardar e conectar",
         "description": "Button action to authorise the connection between Kee and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
     },
     "pref_DoNothing_desc": {
-        "message": "fare nessuna azione",
+        "message": "Não fazer nada",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
     },
     "pref_FillAndSubmitForm_desc": {
-        "message": "riempire il campo ed inviare",
+        "message": "Preencher e enviar o formulário",
         "description": ""
     },
     "pref_FillAndSubmitPrompt_desc": {
-        "message": "Riempi ed invia la finestra di accesso",
+        "message": "Preencher e enviar a autenticação",
         "description": ""
     },
     "pref_FillForm_desc": {
-        "message": "riempire il campo",
+        "message": "Preencher o formulário",
         "description": ""
     },
     "pref_FillingEntries_heading": {
-        "message": "Riempimento voci",
+        "message": "Preencher entradas",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "pref_FillNote_desc": {
@@ -160,35 +160,35 @@
         "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_FillPrompt_desc": {
-        "message": "Riempi la finestra di accesso",
+        "message": "Preencher os campos de autenticação",
         "description": ""
     },
     "pref_FindingEntries_heading": {
-        "message": "Ricerca voci",
+        "message": "Procurando entradas",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
     },
     "pref_Logging_heading": {
-        "message": "Registro eventi",
+        "message": "A autenticar",
         "description": "The output of text information that reports on the inner-workings of Kee."
     },
     "pref_SavingEntries_heading": {
-        "message": "Salvataggio voci",
+        "message": "Guardando entradas",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Moduli con corrispondenze multiple devono essere automaticamente riempiti ed inviati",
+        "message": "Os formulários com múltiplas correspondências devem ser automaticamente preenchidos e enviados",
         "description": ""
     },
     "pref_keePassDBToOpen_label": {
-        "message": "Quando apri o accedi a KeePass, usa questo database",
+        "message": "Ao abrir ou autenticar no KeePass, use este ficheiro de base de dados",
         "description": ""
     },
     "pref_keePassRPCPort_label": {
-        "message": "Comunica con KeePass utilizzando questa porta TCP/IP",
+        "message": "Comunicar com o KeePass usando esta porta TCP/IP",
         "description": ""
     },
     "pref_keePassRPCPortWarning_label": {
-        "message": "NB: cambia questa impostazione in KeePass.config, altrimenti Kee non sarà in grado di comunicare con KeePass",
+        "message": "NB: altere a configuração no KeePass.config caso contrário o Kee nem sempre poderá comunicar com o KeePass",
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
     "pref_listAllOpenDBs_label": {
@@ -196,31 +196,31 @@
         "description": ""
     },
     "pref_logLevel_desc": {
-        "message": "Seleziona il livello di dettaglio che il registro eventi deve fornire. Ogni livello superiore fornisce più informazioni.",
+        "message": "Escolha o quão detalhado deseja que o registo seja. Quanto mais alto o nível, mais informações regista.",
         "description": ""
     },
     "pref_logLevelDebugging_label": {
-        "message": "Debugging",
+        "message": "Depuração de erros",
         "description": "Logging level for the most verbose information about Kee's operation"
     },
     "pref_logLevelInformation_label": {
-        "message": "Informazione",
+        "message": "Informação",
         "description": "Logging level for important information about Kee's operation"
     },
     "pref_logLevelWarnings_label": {
-        "message": "Avvisi",
+        "message": "Alertas",
         "description": "Logging level for potential problems"
     },
     "pref_logLevelErrors_label": {
-        "message": "Errori",
+        "message": "Erros",
         "description": "Logging level for problems"
     },
     "pref_notifyBarRequestPasswordSave_label": {
-        "message": "Chiedi di salvare le password",
+        "message": "Perguntar se quero guardar as palavras-passe",
         "description": ""
     },
     "pref_notifyWhenEntryUpdated_label": {
-        "message": "Mostra la notifica \"La password è stata aggiornata con successo.\"",
+        "message": "Mostrar notificação de \"Palavra-passe atualizada com sucesso\"",
         "description": "Option to enable or diable the information displayed when a password has been updated"
     },
     "pref_rememberMRUDB_label": {
@@ -228,11 +228,11 @@
         "description": ""
     },
     "pref_rememberMRUGroup_label": {
-        "message": "Ricorda il gruppo dove salvi le voci più spesso",
+        "message": "Memorizar o grupo mais recente em que guardei",
         "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
     },
     "pref_saveFavicons_label": {
-        "message": "Salva l'icona del sito web (favicon)",
+        "message": "Guardar o logotipo/ícone do site (favicon)",
         "description": "Whether or not Kee will save the website's icon when a new entry is saved"
     },
     "pref_searchAllOpenDBs_label": {
@@ -240,23 +240,23 @@
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
-        "message": "Quando Kee sceglie una voce corrispondente per un campo, deve",
+        "message": "Quando o Kee escolhe uma autenticação correspondente para um formulário padrão, o Kee deve",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "pref_when_user_chooses_desc": {
-        "message": "Quando scegli una voce corrispondente, Kee deve",
+        "message": "Quando você escolher uma autenticação correspondente, o Kee deve",
         "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "site_options_invisible_tip_desc": {
-        "message": "NB: I nomi e gli ID potrebbero non essere gli stessi visibili nella pagina (sono definiti nel codice sorgente della pagina)",
+        "message": "NB: os nomes e identificadores (IDs) podem não ser iguais aos rótulos visíveis na página (eles são definidos no código-fonte da página)",
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "site_options_list_explain_desc": {
-        "message": "Se un campo è incluso in nella whitelist sottostante, Kee cercherà sempre di riempirlo. Se un campo non è incluso nella blacklist sottostante, Kee non eseguirà il riempimento. Se un campo è stato inserito in entrambe le liste, Kee non eseguirà il riempimento.",
+        "message": "Se um campo coincidir com uma das listas brancas abaixo, o Kee irá tentar preenchê-lo sempre. Se o campo corresponde a uma das listas negras abaixo, o Kee nunca tentará preenchê-lo. Se corresponder às duas listas, o Kee não tentará preenchê-la.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
-        "message": "Ricerca campi",
+        "message": "Procurando formulários",
         "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from the password manager"
     },
     "site_options_valid_form_intro_desc": {
@@ -264,47 +264,47 @@
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "text_field_id": {
-        "message": "ID del campo di testo",
+        "message": "Identificador do campo de texto",
         "description": ""
     },
     "text_field_name": {
-        "message": "Nome del campo di testo",
+        "message": "Nome do campo de texto",
         "description": ""
     },
     "white_list": {
-        "message": "Whitelist",
+        "message": "Lista branca",
         "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
     },
     "Help_Centre_Button_label": {
-        "message": "Centro assistenza",
+        "message": "Central de ajuda",
         "description": ""
     },
     "cancel": {
-        "message": "Annulla",
+        "message": "Cancelar",
         "description": ""
     },
     "Logins_Context_Edit_Login_label": {
-        "message": "Modifica voce",
+        "message": "Editar autenticação",
         "description": ""
     },
     "Menu_Button_copyNewPasswordToClipboard_label": {
-        "message": "Genera nuova password",
+        "message": "Gerar nova palavra-passe",
         "description": ""
     },
     "Menu_Button_fillCurrentDocument_label": {
-        "message": "Trova voci corrispondenti",
+        "message": "Procurar autenticações correspondentes",
         "description": ""
     },
     "Menu_Button_options_label": {
-        "message": "Opzioni",
+        "message": "Opções",
         "description": "Link to the add-on's settings"
     },
     "Search_label": {
-        "message": "Cerca...",
+        "message": "Pesquisar...",
         "description": ""
     },
     "Search_tip": {
-        "message": "Scrivi qualcosa per mostrare le voci corrispondenti",
+        "message": "Comece a digitar para mostrar as suas entradas de autenticações correspondentes",
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
@@ -312,79 +312,79 @@
         "description": ""
     },
     "change_field_explanation": {
-        "message": "Kee aggiornerà anche l'icona del sito web (favicon) e tutte le informazioni Auth Realm HTTP. Puoi fare operazioni più complesse modificando la voce.",
+        "message": "O Kee também atualizará o ícone do site (favicon) e qualquer informação HTTP Auth Realm. As alterações mais complexas necessitam que edite manualmente a entrada.",
         "description": ""
     },
     "change_field_status": {
-        "message": "La voce selezionata avrà nome utente, password e altri campi sostituiti con i valori che hai appena inserito.",
+        "message": "A entrada selecionada terá todos os campos de nome de utilizador, palavra-passe e outros campos substituídos pelos valores que acabou de introduzir.",
         "description": ""
     },
     "change_url_status": {
-        "message": "La pagina web (URL) di questa voce verrà aggiornata con l'ultima URL.",
+        "message": "O endereço da página da web da entrada (URL) será atualizado com o URL mais recente.",
         "description": ""
     },
     "change_url_option_1": {
-        "message": "Sostituisci la URL di questa voce (ma riempi i moduli se visiti la vecchia URL)",
+        "message": "Substituir o URL da entrada (mas ainda preenche os formulários se visitar o URL anterior)",
         "description": ""
     },
     "change_url_option_2": {
-        "message": "Sostituisci la URL di questa voce (elimina completamente la vecchia URL)",
+        "message": "Substituir o URL da entrada (eliminar completamente o URL anterior)",
         "description": ""
     },
     "change_url_option_3": {
-        "message": "Mantieni la vecchia URL di questa voce (ma riempi i moduli se visiti la nuova URL)",
+        "message": "Manter o URL anterior (mas ainda preenche os formulários se visitar o novo URL)",
         "description": ""
     },
     "change_url_option_4": {
-        "message": "Mantieni la vecchia URL di questa voce (non aggiungere la nuova URL alla voce)",
+        "message": "Manter o URL anterior (não adicionar o novo URL)",
         "description": ""
     },
     "copy_password_label": {
-        "message": "Copia password",
+        "message": "Copiar palavra-passe",
         "description": ""
     },
     "copy_username_label": {
-        "message": "Copia nome utente",
+        "message": "Copiar nome de utilizador",
         "description": ""
     },
     "copy": {
-        "message": "Copia",
+        "message": "Copiar",
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
     "create": {
-        "message": "Crea",
+        "message": "Criar",
         "description": ""
     },
     "create_new_entry": {
-        "message": "Crea una nuova voce",
+        "message": "Criar nova entrada",
         "description": "Create new entry"
     },
     "showing_options_for": {
-        "message": "Mostra opzioni per",
+        "message": "A mostrar opções para",
         "description": "label for a group of radio buttons that allows the user to change the scope of the settings they are changing - e.g. all websites or just one specific website"
     },
     "all_websites": {
-        "message": "Tutti i siti web",
+        "message": "Todos os sites",
         "description": ""
     },
     "a_specific_website": {
-        "message": "Un sito web specifico",
+        "message": "Um site específico",
         "description": ""
     },
     "current_website": {
-        "message": "Sito web attuale",
+        "message": "Site atual",
         "description": ""
     },
     "website": {
-        "message": "Sito web",
+        "message": "Website",
         "description": ""
     },
     "database_label": {
-        "message": "Database",
+        "message": "Base de dados",
         "description": ""
     },
     "generatePassword_copied": {
-        "message": "Una nuova password è stata copiata negli appunti.",
+        "message": "Foi copiada uma nova palavra-passe para a área de transferência.",
         "description": ""
     },
     "generatePassword_instructions": {
@@ -400,7 +400,7 @@
         "description": ""
     },
     "group_label": {
-        "message": "Gruppo",
+        "message": "Grupo",
         "description": ""
     },
     "entry_history_pointer": {
@@ -408,11 +408,11 @@
         "description": ""
     },
     "loggedIn_tip": {
-        "message": "Hai effettuato l'accesso al tuo '$1'  password database",
+        "message": "Você está autenticado na sua base de dados de palavras-passe '$1'",
         "description": "Tells the user they are logged into a Kee Vault or KeePass database (and gives its name, if any)"
     },
     "loggedInMultiple_tip": {
-        "message": "Hai effettuato l'accesso a $1 password database. È attivo '$2' .",
+        "message": "Está autenticado em $1 base de dados de palavras-passe. '$2' está ativa.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
     "matchedLogin_label": {
@@ -420,19 +420,19 @@
         "description": "<username> <seperator> <entry title>"
     },
     "matchedLogin_tip": {
-        "message": "$1nel gruppo $2 ($3)",
+        "message": "$1 no $2 grupo ($3)",
         "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
     },
     "more_options": {
-        "message": "Altre opzioni",
+        "message": "Mais opções",
         "description": ""
     },
     "multi_page_update_warning": {
-        "message": "L'accesso a siti web in più pagine potrebbe richiedere modifiche per funzionare correttamente.",
+        "message": "Os formulários de autenticação multi-páginas também podem exigir a edição manual.",
         "description": ""
     },
     "noUsername_partial_tip": {
-        "message": "nessun nome utente",
+        "message": "sem nome de utilizador",
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
@@ -444,7 +444,7 @@
         "description": ""
     },
     "notifyBarLogSensitiveData_label": {
-        "message": "ATTENZIONE: Kee sta registrando le tue password! Se non hai attivato questa funzione devi disabilitarla immediatamente",
+        "message": "AVISO: o Kee está a registar as suas palavras-passe! Se não ativou intencionalmente esta configuração, deve desativá-la imediatamente",
         "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
     },
     "notifyBarLoginToKeePassButton_tip": {
@@ -452,159 +452,159 @@
         "description": ""
     },
     "notifyBarNeverForSiteButton_label": {
-        "message": "Mai per questo sito",
+        "message": "Nunca para este site",
         "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
     },
     "save": {
-        "message": "Salva",
+        "message": "Guardar",
         "description": ""
     },
     "password_successfully_updated": {
-        "message": "La password è stata aggiornata con successo.",
+        "message": "Palavra-passe atualizada com sucesso.",
         "description": ""
     },
     "saveMultiPagePasswordText": {
-        "message": "Vuoi che Kee salvi la password di queste pagine?",
+        "message": "Quer que o Kee guarde esta palavra-passe multi-página?",
         "description": ""
     },
     "savePasswordLogin_tip": {
-        "message": "Nome utente: $1. Indirizzo sito (URL): $2",
+        "message": "Nome de utilizador: $1. Endereço do site (URL): $2",
         "description": ""
     },
     "savePasswordText": {
-        "message": "Vuoi che Kee salvi questa password?",
+        "message": "Quer que o Kee guarde esta palavra-passe?",
         "description": ""
     },
     "search_again": {
-        "message": "Cerca di nuovo",
+        "message": "Pesquisar novamente",
         "description": ""
     },
     "update": {
-        "message": "Aggiorna",
+        "message": "Atualizar",
         "description": ""
     },
     "update_existing_entry": {
-        "message": "Aggiorna voce esistente",
+        "message": "Atualizar entrada existente",
         "description": ""
     },
     "whichEntry_label": {
-        "message": "Seleziona una voce...",
+        "message": "Escolher uma entrada...",
         "description": ""
     },
     "close": {
-        "message": "Chiudi",
+        "message": "Fechar",
         "description": "Action user can click on to close/dismiss a panel or other user interface element"
     },
     "autoclose_countdown": {
-        "message": "Chiusura automatica fra $1 secondi",
+        "message": "Fechar automaticamente em $1 segundos",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
     },
     "autoclose_cancelled": {
-        "message": "Chiusura automatica annullata",
+        "message": "Fechar automaticamente cancelado",
         "description": "Tells the user that the panel auto-close functionality has been disabled for this panel."
     },
     "add": {
-        "message": "Aggiungi",
+        "message": "Adicionar",
         "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
     },
     "edit": {
-        "message": "Modifica",
+        "message": "Editar",
         "description": "Action button for user to edit an item within a collection. E.g. edit an entry within the list of site-specific settings overrides"
     },
     "delete": {
-        "message": "Elimina",
+        "message": "Eliminar",
         "description": "Action button for user to delete an item within a collection. E.g. delete an entry within the list of site-specific settings overrides"
     },
     "site_specific_settings_checkbox_explanation": {
-        "message": "Le impostazioni da \"Tutti i siti web\" verranno applicate ad ogni sezione sottostante, salvo che tu abbia abilitato l'impostazione utilizzando la casella di controllo a fianco.",
+        "message": "As configurações de \"Todos os sites\" serão aplicadas a cada seção abaixo, a não ser que ative a configuração usando a caixa de seleção ao lado.",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
     "site_properties": {
-        "message": "Proprietà del Sito",
+        "message": "Propriedades do site",
         "description": "Site properties"
     },
     "enter_valid_regex": {
-        "message": "Inserisci un valore Regex corretto o seleziona un formato diverso",
+        "message": "Digite uma expressão regular válida ou selecione um tipo diferente",
         "description": "Validation error message displayed to user when they have configured the properties of a site specific configuration to be a regular expression (Regex) but supplied a website value that is not a valid regex"
     },
     "site_properties_weight_warning": {
-        "message": "Devi controllare la voce Importanza data alle altre configurazioni se scegli di utilizzare questa funzione avanzata.",
+        "message": "Vai precisar de verificar cuidadosamente os pesos de outras configurações se optar por usar esse recurso avançado.",
         "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
     },
     "target": {
-        "message": "Destinazione",
+        "message": "Alvo",
         "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
     },
     "method": {
-        "message": "Metodo",
+        "message": "Método",
         "description": "For differentiating how a text string will be matched - e.g exact, prefix or regex"
     },
     "weight": {
-        "message": "Importanza",
+        "message": "Peso ponderado",
         "description": "A number that can be compared to others in order to decide which associated configuration takes precendence."
     },
     "yes": {
-        "message": "Sì",
+        "message": "Sim",
         "description": "Yes"
     },
     "no": {
-        "message": "No",
+        "message": "Não",
         "description": "No"
     },
     "site_specific_settings_inherit": {
-        "message": "Utilizza le stesse impostazioni per tutti i siti web",
+        "message": "Usar a mesma configuração que todos os sites",
         "description": "Option for user to say that they want to use whatever the setting is for the top-level settings for all websites, rather than overriding it with a setting for this specific site."
     },
     "password": {
-        "message": "Password",
+        "message": "Palavra-passe",
         "description": "Amazingly, didn't have a need for this translation until v2.0 ;-)"
     },
     "conn_setup_client_sl_low_resolution": {
-        "message": "Connetti utilizzando alta sicurezza",
+        "message": "Conectar utilizando segurança alta",
         "description": "Button that will change the security level Kee attempts to use when connecting to the KeePassRPC server."
     },
     "learn_more": {
-        "message": "Per saperne di più",
+        "message": "Saber mais",
         "description": "Action/button/link to send the user to somewhere that they can read more about a topic/concept"
     },
     "dont_show_again": {
-        "message": "Non mostrare più questo messaggio",
+        "message": "Não mostrar esta mensagem novamente",
         "description": "Button user can click on to cause a message to hide and not reappear"
     },
     "upgrade_kee": {
-        "message": "Aggiorna Kee",
+        "message": "Atualizar o Kee",
         "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
     },
     "pref_when_one_matching_network_login": {
-        "message": "Quando Kee trova solo una voce per l'accesso ad una rete (es. autenticazione HTTP), fai l'accesso automaticamente",
+        "message": "Quando Kee encontrar só uma autenticação correspondente (por exemplo HTTP Auth), fazer a autenticação automaticamente",
         "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
     },
     "network_authentication": {
-        "message": "Autenticazione di rete",
+        "message": "Autenticação de rede",
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
     },
     "network_auth_proxy_description": {
-        "message": "Un proxy richiede autenticazione prima dell'accesso a $1",
+        "message": "Um proxy necessita que se autentique com ele antes de poder aceder a $1",
         "description": "Instructions for popup dialog displayed when a proxy requires authentication."
     },
     "network_auth_http_auth_description": {
-        "message": "Un sito web richiede l'autenticazione prima che tu possa accedere a $1. Il sito web dice: $2",
+        "message": "Um site requer que se autentique com isto antes que possa aceder a $1. O site diz: $2",
         "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
     },
     "network_auth_choose": {
-        "message": "Scegli una voce dalla lista sottostante o chiudi questa finestra per inserire manualmente le informazioni richieste per l'accesso.",
+        "message": "Escolha uma autenticação da lista abaixo ou feche esta janela para inserir manualmente as informações de autenticação necessárias.",
         "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
     },
     "save_login": {
-        "message": "Salva voce",
+        "message": "Guardar autenticação",
         "description": "Heading for panel that allows user to create or update a new login entry"
     },
     "saveLatestLogin": {
-        "message": "Salva l'ultimo accesso",
+        "message": "Guardar a última autenticação",
         "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
     },
     "welcome_to_kee": {
-        "message": "Benvenuto a Kee",
+        "message": "Bem-vindo ao Kee",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "introduction_to_kee": {
@@ -676,39 +676,39 @@
         "description": "Right part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_tutorial_link_text": {
-        "message": "tutorial interattivo",
+        "message": "tutorial interativo",
         "description": "Name of the link to the interactive tutorial page"
     },
     "point_user_to_forum_link_text": {
-        "message": "forum della comunità",
+        "message": "fórum da comunidade",
         "description": "Name of the link to the community forum"
     },
     "notification_raised_title": {
-        "message": "Kee ha una notifica per te",
+        "message": "O Kee tem uma notificação para lhe mostrar",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "notification_yellow_background": {
-        "message": "Il pulsante di Kee assume uno sfondo giallo quando arriva una nuova notifica.",
+        "message": "O botão Kee tem um fundo amarelo quando aparece uma nova notificação.",
         "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "notification_only_shown_some_times": {
-        "message": "Questa notifica aggiuntiva verrà mostrata solo saltuariamente.",
+        "message": "Esta notificação adicional só será mostrada algumas vezes.",
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "notification_save_password_tip": {
-        "message": "Clicca sul pulsante Kee (nella barra degli strumenti) e seleziona \"Salva l'ultimo accesso\"",
+        "message": "Clique no botão Kee (na barra de ferramentas) e em \"Guardar a última autenticação\"",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
     },
     "loading": {
-        "message": "Caricamento...",
+        "message": "A carregar...",
         "description": "Holding message to be displayed when Kee has to display something to the user to indicate that the requested information or interface element will be displayed shortly."
     },
     "version_upgrade_heading_changes": {
-        "message": "Novità nella versione",
+        "message": "Alterações na versão",
         "description": "Heading for the list of changes in a version of Kee. A space and the current version number will be suffixed at the end of this string."
     },
     "pref_currentSearchTermTimeout_label": {
-        "message": "Pulisci i risultati di ricerca dopo (secondi)",
+        "message": "Limpar resultados de pesquisa após (segundos)",
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
     "other_technical_improvements": {

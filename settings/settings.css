@@ -27,10 +27,6 @@ body {
     margin-bottom: 10px;
 }
 
-#siteChooserSearchResults {
-    margin-top: -10px;
-}
-
 #siteChooser .dropdown {
     float: left;
 }
@@ -147,4 +143,20 @@ legend.fix-border {
     grid-column-start: 1;
     grid-column-end: 3;
     justify-self: start;
+}
+
+#siteList {
+    clear: both;
+    padding-top: 5px;
+}
+
+#siteListResults {
+    width: 100%;
+    max-width: 1000px;
+}
+
+#siteListResults th,
+#siteListResults td {
+    padding: 5px 0px;
+    border-bottom: solid 1px #eaeaea;
 }

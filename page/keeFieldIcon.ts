@@ -41,6 +41,12 @@ class KeeFieldIcon {
                 element.style.setProperty("background-attachment", "scroll", "important");
                 element.style.setProperty("background-size", "16px 16px", "important");
                 element.style.setProperty("background-position", "calc(100% - 4px) 50%", "important");
+
+                const transitionConfig = window.getComputedStyle(field.DOMInputElement).getPropertyValue("transition-property");
+                if (["all", "background-position"].some(val => transitionConfig.includes(val))) {
+                    field.DOMInputElement.style.setProperty("transition", "none", "important");
+                }
+
                 this.overrideBoxShadows(element);
             }
         }
