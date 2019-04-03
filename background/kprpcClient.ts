@@ -32,8 +32,6 @@ class kprpcClient {
     private clientVersion: number[];
     private srpClientInternals: SRPc;
     private secretKey;
-    private securityLevel: number;
-    private securityLevelServerMinimum: number;
     private websocketSessionManager: WebsocketSessionManager;
     private eventSessionManager: EventSessionManager;
     private keyChallengeParams: { sc: string, cc: string };
@@ -43,8 +41,6 @@ class kprpcClient {
         this.clientVersion = [2, 0, 0];
         this.srpClientInternals = null;
         this.secretKey = null;
-        this.securityLevel = 3;
-        this.securityLevelServerMinimum = 3;
         this.eventSessionManager = new EventSessionManager(
             features => this.setupEventSession(features),
             () => this.onEventSessionClosed(),
