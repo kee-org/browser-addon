@@ -303,6 +303,14 @@
     "message": "Options",
     "description": "Link to the add-on's settings"
   },
+  "Menu_Button_open_keepass_label": {
+    "message": "Open KeePass",
+    "description": "Action button to launch, unlock and/or focus KeePass"
+  },
+  "Menu_Button_open_kee_vault_label": {
+    "message": "Open Kee Vault",
+    "description": "Action button to launch, unlock and/or focus Kee Vault"
+  },
   "Search_label": {
     "message": "Search...",
     "description": ""

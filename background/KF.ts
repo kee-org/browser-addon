@@ -44,6 +44,7 @@ class Kee {
             PasswordProfiles: [],
             notifications: [],
             connected: false,
+            connectedWebsocket: false,
             currentSearchTerm: null
         };
 
@@ -266,13 +267,14 @@ class Kee {
         KeeLog.info("Kee initialised OK although the connection to a KeePassRPC server is probably not established just yet...");
     }
 
-    // Temporarilly disable Kee. Used (for e.g.) when KeePass is shut down.
+    // Temporarily disable Kee. Used (for e.g.) when KeePass is shut down.
     _pauseKee ()
     {
         KeeLog.debug("Pausing Kee.");
         this.appState.KeePassDatabases = [];
         this.appState.ActiveKeePassDatabaseIndex = -1;
         this.appState.connected = false;
+        this.appState.connectedWebsocket = false;
 
         try { kee.browserPopupPort.postMessage({appState: this.appState}); } catch (e) {}
         try
@@ -332,6 +334,7 @@ class Kee {
             }
         }
         this.appState.connected = true;
+        this.appState.connectedWebsocket = this.KeePassRPC.websocketSessionManagerIsActive;
         this.appState.KeePassDatabases = newDatabases;
         this.appState.ActiveKeePassDatabaseIndex = newDatabaseActiveIndex;
 
@@ -381,15 +384,35 @@ class Kee {
         commandManager.setupContextMenuItems();
     }
 
-    // if the MRU database is known, open that but otherwise send empty string which will cause user
+// if the MRU database is known, open that but otherwise send empty string which will cause user
     // to be prompted to choose a DB to open
-    loginToKeePass ()
+    getFileNameToOpen ()
     {
         let databaseFileName = configManager.current.keePassDBToOpen;
         if (databaseFileName == "")
             databaseFileName = configManager.current.keePassMRUDB;
+        return databaseFileName;
+    }
 
-        this.changeDatabase(databaseFileName, true);
+    openKeePass ()
+    {
+        const hasWebsocketDBs = this.appState.KeePassDatabases.some(db => db.sessionType === SessionType.Websocket);
+        const supportsWebsocketFocus = this.appState.KeePassDatabases.some(db => {
+                    return db.sessionType === SessionType.Websocket &&
+                        db.sessionFeatures.indexOf("KPRPC_OPEN_AND_FOCUS_DATABASE") >= 0;
+                });
+
+        if (hasWebsocketDBs && !supportsWebsocketFocus) {
+            KeeLog.warn("Can't open KeePass because KeePassRPC version does not support KPRPC_OPEN_AND_FOCUS_DATABASE");
+            return;
+        }
+
+        this.selectDatabase(this.getFileNameToOpen(), !hasWebsocketDBs, SessionType.Websocket);
+    }
+
+    loginToPasswordManager ()
+    {
+        this.selectDatabase(this.getFileNameToOpen(), true);
     }
 
     /*******************************************
@@ -421,11 +444,11 @@ class Kee {
             return null;
     }
 
-    changeDatabase (fileName, closeCurrent)
+    selectDatabase (fileName, requestReturnFocus, sessionType?: SessionType)
     {
         try
         {
-            this.KeePassRPC.changeDB(fileName, closeCurrent);
+            this.KeePassRPC.selectDB(fileName, requestReturnFocus, sessionType);
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
@@ -703,6 +726,9 @@ function browserPopupMessageHandler (msg: AddonMessage) {
                 { appState: kee.appState, submittedData: persistentItem.submittedData } as AddonMessage);
             persistentItem.accessCount++;
         }
+    }
+    if (msg.action === Action.OpenKeePass) {
+        kee.openKeePass();
     }
     if (msg.findMatches) {
         kee.findLogins(null, null, null, msg.findMatches.uuid, msg.findMatches.DBfilename, null, null, result => {

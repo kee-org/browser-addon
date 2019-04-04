@@ -18,6 +18,20 @@ function updateConnectionStatus () {
     } else {
         $("#connectionStatus").innerText = $STR("notifyBarLaunchKeePass_label") + " " + $STR("notifyBarLaunchKeePassButton_tip");
     }
+    if (appState.connectedWebsocket) {
+        const hasWebsocketDBs = appState.KeePassDatabases.some(db => db.sessionType === SessionType.Websocket);
+        const supportsWebsocketFocus = appState.KeePassDatabases.some(db => {
+            return db.sessionType === SessionType.Websocket &&
+                db.sessionFeatures.indexOf("KPRPC_OPEN_AND_FOCUS_DATABASE") >= 0;
+        });
+        if (!hasWebsocketDBs || supportsWebsocketFocus) {
+            $("#password-open-keepass").classList.remove("hide");
+        } else {
+            $("#password-open-keepass").classList.add("hide");
+        }
+    } else {
+        $("#password-open-keepass").classList.add("hide");
+    }
 }
 
 function getDatabaseName (database) {
@@ -166,6 +180,29 @@ function startup () {
     });
     document.getElementById("helpLink").addEventListener("click", () => {
         browser.tabs.create({ url: "https://www.kee.pm/help" });
+        window.close();
+    });
+
+    document.getElementById("password-open-kee-vault").addEventListener("click", async () => {
+        KeeLog.debug("open Kee Vault requested");
+        const vaultTabs = await browser.tabs.query({url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]});
+        if (vaultTabs && vaultTabs[0]) {
+            browser.tabs.update(vaultTabs[0].id, { active: true });
+        } else {
+            browser.tabs.create({
+                url: "https://keevault.pm/",
+                active: true
+            });
+        }
+        window.close();
+    });
+    document.getElementById("password-open-keepass").addEventListener("click", () => {
+        KeeLog.debug("open KeePass requested");
+        if (appState.connectedWebsocket) {
+            myPort.postMessage({ action: Action.OpenKeePass });
+        } else {
+            KeeLog.info("KeePass no longer connected so taking no action");
+        }
         window.close();
     });
 

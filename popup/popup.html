@@ -5,7 +5,7 @@
         <link href="popup.css" type="text/css" rel="stylesheet">
     </head>
     <body>
-        <div id="main" class="hidden panel panel-default">
+        <div id="main" class="hidden">
             <div class="panel-body">
                 <div class="hidden" id="notifications"></div>
                 <div class="hidden" id="searchPanel">
@@ -22,6 +22,10 @@
                 </div>
             </div>
             <div class="panel-heading" id="connectionStatus"></div>
+            <div id="passwordOpenButtons">
+                <a href="#" class="password-open-item" id="password-open-kee-vault" data-i18n="Menu_Button_open_kee_vault_label"></a>
+                <a href="#" class="password-open-item" id="password-open-keepass" data-i18n="Menu_Button_open_keepass_label"></a>
+            </div>
         </div>
         <div class="well well-sm" id="loading" data-i18n="loading"></div>
 

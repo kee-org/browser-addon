@@ -35,6 +35,10 @@ class jsonrpcClient {
         return this.kprpcClient.getSessionManagerByType(SessionType.Event).isActive();
     }
 
+    public get websocketSessionManagerIsActive () : boolean {
+        return this.kprpcClient.getSessionManagerByType(SessionType.Websocket).isActive();
+    }
+
 
     //***************************************
     // Functions below orchestrate requests to one or more KPRPC servers,
@@ -52,20 +56,34 @@ class jsonrpcClient {
         this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "LaunchLoginEditor", [uniqueID, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
-    changeDB (fileName, closeCurrent)
+    selectDB (fileName: string, requestFocusReturn: boolean, sessionType?: SessionType)
     {
-        // We only use this for opening a database when no DB is opened in any session.
-        // We may have just opened the vault, or we may have an existing session open to
-        // one or more Event and/or Websocket servers.
-        // There's no logical way to decide which session to target this request at so we just go
-        // for whatever is active, preferring an Event source if multiple sessions are open
-        const sessionManager = this.kprpcClient.getPrimarySessionManager();
+        let sessionManager = sessionType ? this.kprpcClient.getSessionManagerByType(sessionType) : null;
         if (!sessionManager) {
-            KeeLog.error("No active session found");
-            return;
+            // We should only use this branch for opening a database when no DB is opened in any session.
+            // We may have just opened the vault, or we may have an existing session open to
+            // one or more Event and/or Websocket servers.
+            // There's no logical way to decide which session to target this request at so we just go
+            // for whatever is active, preferring an Event source if multiple sessions are open
+            sessionManager = this.kprpcClient.getPrimarySessionManager();
+            if (!sessionManager) {
+                KeeLog.error("No active session found");
+                return;
+            }
         }
 
-        this.kprpcClient.request([sessionManager], "ChangeDatabase", [fileName, closeCurrent], null, ++this.kprpcClient.requestId);
+        // Requesting return focus is default behaviour for ChangeDatabase so we know if we want to
+        // suppress that behaviour we must use the OpenAndFocusDatabase feature.
+        if (!requestFocusReturn) {
+            // Sanity check
+            if (sessionManager instanceof EventSessionManager) {
+                KeeLog.error("Kee Vault does not support OpenAndFocusDatabase feature");
+                return;
+            }
+            this.kprpcClient.request([sessionManager], "OpenAndFocusDatabase", [fileName, requestFocusReturn], null, ++this.kprpcClient.requestId);
+        } else {
+            this.kprpcClient.request([sessionManager], "ChangeDatabase", [fileName, false], null, ++this.kprpcClient.requestId);
+        }
     }
 
     addLogin (login, parentUUID, dbFileName)

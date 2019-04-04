@@ -14,7 +14,7 @@ class KFCommands {
                 break;
                 case Command.PrimaryAction:
                     if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
-                        kee.loginToKeePass();
+                        kee.loginToPasswordManager();
                     } else {
                         kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
                             port.postMessage({ action: Action.Primary });
@@ -39,7 +39,7 @@ class KFCommands {
                 break;
                 // case Command.PrimaryAction:
                 //     if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
-                //         kee.loginToKeePass();
+                //         kee.loginToPasswordManager();
                 //     } else {
                 //         kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
                 //                 port.postMessage({ action: Action.Primary });

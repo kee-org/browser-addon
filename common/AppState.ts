@@ -9,5 +9,6 @@ interface AppState {
     PasswordProfiles: PasswordProfile[];
     notifications: KeeNotification[];
     connected: boolean;
+    connectedWebsocket: boolean;
     currentSearchTerm: string;
 }

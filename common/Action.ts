@@ -9,5 +9,6 @@ const enum Action {
     ShowMatchedLoginsPanel = "showMatchedLoginsPanel",
     SaveLatestLogin = "saveLatestLogin",
     PageHide = "pageHide",
-    PageShow = "pageShow"
+    PageShow = "pageShow",
+    OpenKeePass = "openkeepass"
 }
