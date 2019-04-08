@@ -299,6 +299,14 @@
         "message": "Options",
         "description": "Link to the add-on's settings"
     },
+    "Menu_Button_open_keepass_label": {
+        "message": "Open KeePass",
+        "description": "Action button to launch, unlock and/or focus KeePass"
+    },
+    "Menu_Button_open_kee_vault_label": {
+        "message": "Open Kee Vault",
+        "description": "Action button to launch, unlock and/or focus Kee Vault"
+    },
     "Search_label": {
         "message": "Rechercher...",
         "description": ""
@@ -378,6 +386,14 @@
     "website": {
         "message": "Site web",
         "description": ""
+    },
+    "website_options_search_placeholder": {
+        "message": "e.g. www.google.com",
+        "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
+    },
+    "website_options_search_tooltip": {
+        "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+        "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "database_label": {
         "message": "Base de données",

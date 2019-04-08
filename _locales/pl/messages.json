@@ -52,11 +52,11 @@
         "description": ""
     },
     "conn_setup_client_features_missing": {
-        "message": "Kee musi zostać zaktualizowany, aby podłączyć się do Twojego managera haseł. Upewnij się, że posiadasz najnowszą wersję dodatku/rozszerzenia do przeglądarki.",
+        "message": "Kee musi zostać zaktualizowany, aby podłączyć się do Twojego menedżera haseł. Upewnij się, że posiadasz najnowszą wersję dodatku/rozszerzenia do przeglądarki.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "conn_setup_server_features_missing": {
-        "message": "Twój manager haseł musi zostać zaktualizowany, aby zezwolić Kee na podłączenie. Załaduj ponownie stronę Sejf Kee i/lub upewnij się, że posiadasz najnowszą wersję wtyczki KeePassRPC postępując zgodnie z szybką i prosta instrukcją pod adresem $1",
+        "message": "Twój menedżer haseł musi zostać zaktualizowany, aby zezwolić Kee na podłączenie. Załaduj ponownie stronę Sejf Kee i/lub upewnij się, że posiadasz najnowszą wersję wtyczki KeePassRPC postępując zgodnie z szybką i prostą instrukcją pod adresem $1",
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "conn_sl_high_label": {
@@ -92,7 +92,7 @@
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_unknown_error": {
-        "message": "Wystąpił nieoczekiwany błąd podczas próby podłączenia do managera haseł.",
+        "message": "Wystąpił nieoczekiwany błąd podczas próby połączenia z menedżerem haseł.",
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "conn_unknown_protocol": {
@@ -156,7 +156,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "pref_FillNote_desc": {
-        "message": "Możesz zmienić zachowania \"Kee wybiera\" dla pojedynczych wpisów w managerze haseł.",
+        "message": "Możesz zmienić zachowania \"Kee wybiera\" dla pojedynczych wpisów w menedżerze haseł.",
         "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_FillPrompt_desc": {
@@ -299,6 +299,14 @@
         "message": "Opcje",
         "description": "Link to the add-on's settings"
     },
+    "Menu_Button_open_keepass_label": {
+        "message": "Open KeePass",
+        "description": "Action button to launch, unlock and/or focus KeePass"
+    },
+    "Menu_Button_open_kee_vault_label": {
+        "message": "Open Kee Vault",
+        "description": "Action button to launch, unlock and/or focus Kee Vault"
+    },
     "Search_label": {
         "message": "Szukaj...",
         "description": ""
@@ -379,6 +387,14 @@
         "message": "Witryna",
         "description": ""
     },
+    "website_options_search_placeholder": {
+        "message": "e.g. www.google.com",
+        "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
+    },
+    "website_options_search_tooltip": {
+        "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+        "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
+    },
     "database_label": {
         "message": "Baza danych",
         "description": ""
@@ -404,7 +420,7 @@
         "description": ""
     },
     "entry_history_pointer": {
-        "message": "Twój manager haseł ma funkcję \"cofnij\". Znajdź wpis i wtedy możesz zobaczyć historię wpisu i użyć przycisku \"Przywróć\", aby cofnąć do starszej wersji, jeśli zaszła taka potrzeba.",
+        "message": "Twój menedżer haseł ma funkcję \"cofnij\". Po odszukaniu wpisu możesz zobaczyć jego historię i użyć przycisku \"Przywróć\", aby cofnąć do starszej wersji, jeśli zajdzie taka potrzeba.",
         "description": ""
     },
     "loggedIn_tip": {
@@ -436,7 +452,7 @@
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
-        "message": "Nie jesteś zalogowany do managera haseł.",
+        "message": "Nie jesteś zalogowany do menedżera haseł.",
         "description": ""
     },
     "notifyBarLaunchKeePassButton_tip": {
@@ -448,7 +464,7 @@
         "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
     },
     "notifyBarLoginToKeePassButton_tip": {
-        "message": "Odblokuj swój manager haseł, aby aktywować Kee",
+        "message": "Odblokuj swój menedżer haseł, aby aktywować Kee",
         "description": ""
     },
     "notifyBarNeverForSiteButton_label": {
@@ -612,11 +628,11 @@
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
     "kee_works_with_a_password_manager": {
-        "message": "Dane logowanie, które wprowadza Kee są przechowane bezpiecznie w managerze haseł za jednym \"hasłem głównym\".",
+        "message": "Dane logowania, które wprowadza Kee są przechowane bezpiecznie w menedżerze haseł, chronione jednym \"hasłem głównym\".",
         "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
     "recommend_start_with_kee_vault": {
-        "message": "Polecamy wypróbować 14 dniową wersję próbną managera haseł Sejf Kee. Po tym czasie, kosztuje tylko £2 miesięcznie. Nie wymaga podawania danych płatności podczas rejestracji, więc jest wolne od ryzyka.",
+        "message": "Polecamy wypróbować 14 dniową wersję próbną menedżera haseł Sejf Kee. Po tym czasie, kosztuje tylko £2 miesięcznie. Nie wymaga podawania danych płatności podczas rejestracji, więc jest wolne od ryzyka.",
         "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
     },
     "load_kee_vault_now": {
@@ -664,11 +680,11 @@
         "description": "Indicates that more work is required to get started with KeePass"
     },
     "keepass_sync_config_explanation": {
-        "message": "For KeePass, a partial solution for multi-device access can be manually configured using 3rd party services, some of which charge a fee. Each device must be prepared and configured in advance.",
+        "message": "Dla KeePassa istnieje częściowe rozwiązanie dla dostępu z wielu urządzeń, które wymaga ręcznej konfiguracji usług firm trzecich, niektóre z nich są płatne. Każde urządzenie musi być wcześniej przygotowane i skonfigurowane.",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "point_user_to_keepass_install_instructions_start": {
-        "message": "Instructions for installing and configuring KeePass and the required KeePassRPC.plgx plugin can be found on our",
+        "message": "Instrukcja instalacji i konfiguracji KeePassa i wymaganego przez niego pluginu KeePassRPC.plgx znajduje się na naszej",
         "description": "Left part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_keepass_install_instructions_end": {
@@ -732,35 +748,35 @@
         "description": "Heading for text that explains we have a new icon / branding"
     },
     "new_license_text": {
-        "message": "Version 3 of the Kee extension is released with a newer type of Open Source license - AGPLv3 - which brings it into line with all the software we release. While not typically affecting your rights to use the free software on a day to day basis, the change (from GPLv2) may have legal implications in some situations so we must therefore recommend that you review the new license. If you determine that you do not accept the new license, you can continue using the older versions of the software under the old license in perpetuity.",
+        "message": "Wersja 3 rozszerzenia Kee wydawana jest na nowszej licencji otwartoźródłowej - AGPLv3 - co zrównuje go z pozostałym oprogramowaniem, które tworzymy. Choć w codziennym użytkowaniu nie wpływa to na Twoje prawa do użytkowania darmowego oprogramowania, to zmiana licencji (z AGPLv2) może mieć w pewnych przypadkach konsekwencje prawne, zalecamy więc przeczytanie nowej licencji. Jeśli okaże się, że nie akceptujesz nowej licencji, możesz nadal używać starszej wersji oprogramowania pod stara licencją na zawsze.",
         "description": "Explains we have a new source code license"
     },
     "reliability_improvements_text1": {
-        "message": "We've improved the link between the web browser and each individual page you load, resulting in more reliable features like form filling.",
+        "message": "Poprawiliśmy połączenie pomiędzy przeglądarką a każdą załadowaną stroną, co zapewniło lepsze działanie funkcji takich jak wypełnianie formularzy. ",
         "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
     },
     "reliability_improvements_text2": {
-        "message": "We've improved the detection of form submit buttons. This means more successful form submission on some websites such as the Google sign-in page.",
+        "message": "Poprawiliśmy wykrywanie przycisków wysyłania formularzu. To oznacza, że poprawnie wysyłane są formularze z większej ilości stron takich jak formularz logowania Google.",
         "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
     },
     "google_chrome_release_text": {
-        "message": "When the stable version of Kee v3.0 is released soon, we will promote the Google Chrome version of the extension out of the Beta testing period it has been in for just over a year.",
+        "message": "Gdy wkrótce wydamy wersję stabilną Kee v3.0, będziemy promować wersję rozszerzenia dla Google Chrome poza kanałem Beta (testowym), w którym było dostępne przez ponad rok.",
         "description": "Explains we are about to release a stable version for the Google Chrome browser"
     },
     "new_icon_text": {
-        "message": "We have a shiny new modern icon which we hope you like. This is also discussed in the Kee Vault forum post linked to above.",
+        "message": "Mamy teraz nowoczesną błyszczącą ikonę, która, mamy nadzieję, podoba się Wam. Jest to wciąż dyskutowane na forum Kee Vault linkowanym powyżej.",
         "description": "Explains we have a new icon / branding"
     },
     "kee_vault_announcement_1": {
-        "message": "Kee Vault is a new open source password manager. It runs in your web browser so no installation is necessary.",
+        "message": "Kee Vault jest nowym otwarto-źródłowym menedżerem haseł. Działa w Twojej przeglądarce, więc nie trzeba go instalować.",
         "description": "Introduction to what Kee Vault is"
     },
     "kee_vault_announcement_2": {
-        "message": "It works on any modern device or web browser, even when offline. After importing your existing KeePass database you can access your Kee Vault from everywhere, with your changes and configuration preferences automatically sent to each of your devices and browsers.",
+        "message": "Działa w każdym nowoczesnym urządzeniu lub przeglądarce, nawet w trybie offline. Po zaimportowaniu gotowej bazy KeePass możesz mieć dostęp do swojego Kee Vault z każdego miejsca wraz z konfiguracją, która zostanie automatycznie przesłana do Twoich urządzeń i przeglądarek.",
         "description": "Outlines a few benefits of Kee Vault compared to KeePass"
     },
     "kee_vault_announcement_3": {
-        "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
+        "message": "Kee w wersji 3.0 pozwala Ci na używanie Kee Vault zamiast komputerowej aplikacji KeePass, wspiera wszystkie wcześniejsze funkcje jak wypełnianie formularzy, zapisywanie, wyszukiwanie i generowanie haseł.  ",
         "description": "Explains that Kee v3 works with Kee Vault"
     },
     "kee_vault_announcement_4": {
@@ -776,7 +792,7 @@
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
     "KB_shortcut_simple_2_desc": {
-        "message": "Zaloguj się do managera haseł / Wybierz pasujący login / Pokaż listę pasujących loginów",
+        "message": "Zaloguj się do menedżera haseł / Wybierz pasujący login / Pokaż listę pasujących loginów",
         "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
     }
 }
