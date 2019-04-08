@@ -505,6 +505,9 @@ class keeLoginField {
 
     formFieldPage: number;
 
+    // Best score for any potential entry that is being considered for selection - transient (not sent to KeePass)
+    highestScore: number;
+
     // on which page of a login procedure this field can be found
     constructor () {
         this.formFieldPage = -1;

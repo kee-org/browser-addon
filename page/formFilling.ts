@@ -643,6 +643,8 @@ class FormFilling {
             // determine the relevance of each login entry to this form
             // we could skip this when autofilling based on uniqueID but we would have to check for
             // matches first or else we risk no match and no alternative matching logins on the mainUI
+            // and we also now consider the totality of possible matches against a field in order
+            // to limit which fields we shove a Kee icon into.
             for (let v = 0; v < matchResult.logins[i].length; v++)
             {
                 const features = matchResult.logins[i][v].database.sessionFeatures;
@@ -1366,6 +1368,10 @@ class FormFilling {
                     mostRelevantScore = fmscore;
                     mostRelevantIndex = j;
                 }
+                if (fmscore > otherFields[i].highestScore)
+                {
+                    otherFields[i].highestScore = fmscore;
+                }
             }
 
             if (mostRelevantScore >= minFieldRelevance)
@@ -1398,6 +1404,10 @@ class FormFilling {
                 {
                     mostRelevantScore = fmscore;
                     mostRelevantIndex = j;
+                }
+                if (fmscore > passwordFields[i].highestScore)
+                {
+                    passwordFields[i].highestScore = fmscore;
                 }
             }
             if (mostRelevantScore >= minFieldRelevance)
