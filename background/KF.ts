@@ -31,6 +31,7 @@ class Kee {
     onPortConnected: any;
 
     networkAuth: NetworkAuth;
+    animateIcon: AnimateIcon;
 
     constructor ()
     {
@@ -61,6 +62,7 @@ class Kee {
         });
 
         this.networkAuth = new NetworkAuth();
+        this.animateIcon = new AnimateIcon();
 
         this.browserPopupPort = {postMessage: msg => {} };
         this.vaultPort = {postMessage: msg => {} };
@@ -240,6 +242,17 @@ class Kee {
     removeUserNotifications (unlessTrue: (notification: KeeNotification) => boolean) {
         kee.appState.notifications = kee.appState.notifications.filter(unlessTrue);
         try { kee.browserPopupPort.postMessage({appState: kee.appState}); } catch (e) {}
+    }
+
+    animateBrowserActionIcon (duration: number = 1200) {
+        // Firefox claims that a janky icon animation is less intrusive for users
+        // than a smoothly animated one and therefore will not develop the smooth
+        // animation support available in other browsers. Our user testing confirms
+        // this is not the case so where we are able to (i.e. not Firefox) we
+        // enable a nice smooth animation to subtly hint that they might want to
+        // click on the icon. We have to make the animation in Firefox much less subtle :-(
+        // https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1309347
+        this.animateIcon.start(duration, !__KeeIsRunningInAWebExtensionsBrowser);
     }
 
     resetBrowserActionColor () {

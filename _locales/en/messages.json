@@ -225,7 +225,11 @@
   },
   "pref_notifyWhenEntryUpdated_label": {
     "message": "Display the \"Password successfully updated\" notification",
-    "description": "Option to enable or diable the information displayed when a password has been updated"
+    "description": "Option to enable or disable the information displayed when a password has been updated"
+  },
+  "pref_animateWhenOfferingSave_label": {
+      "message": "Animate the Kee icon when offering to save",
+      "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
   },
   "pref_rememberMRUDB_label": {
     "message": "Remember the most recently used Kee Vault or KeePass database",
