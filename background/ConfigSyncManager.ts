@@ -1,5 +1,5 @@
 class ConfigSyncManager {
-    private lastKnownSerialised: string = "";
+    private lastKnownSynced: {settings: Partial<Config>, version: number};
     private enabled: boolean = false;
 
     public updateFromRemoteConfig (config: {settings: Partial<Config>, version: number}) {
@@ -18,7 +18,8 @@ class ConfigSyncManager {
         // hear that our connected session supports that feature
         this.enabled = true;
 
-        this.lastKnownSerialised = JSON.stringify(config);
+        // Clone so changes via references later can't affect later comparison
+        this.lastKnownSynced = JSON.parse(JSON.stringify(config));
 
         configManager.setASAP(config.settings);
     }
@@ -53,20 +54,16 @@ class ConfigSyncManager {
         };
         const syncableConfig = {settings: syncableSettings, version: settings.version};
 
-        // TODO:v: Somehow, this stringify puts the mruGroup property in different places, at least
-        // in early 2019 Firefox Nightly builds. Seems to be created at the same time every time
-        // per above code so not sure why it isn't following the stringify spec... but in any
-        // case, it is probably a good idea to use something that's deterministic from just
-        // property names rather than creation time.
-        const latestSerialised = JSON.stringify(syncableConfig);
-        if (latestSerialised === this.lastKnownSerialised) return;
+        if (window["fast-equals"].deepEqual(syncableConfig, this.lastKnownSynced)) return;
 
-        KeeLog.debug(`Config different. latestSerialised: ${latestSerialised} this.lastKnownSerialised: ${this.lastKnownSerialised}`);
+        const serialisedLatest = JSON.stringify(syncableConfig);
+        KeeLog.debug(`Config different. latest: ${serialisedLatest} this.lastKnownSynced: ${JSON.stringify(this.lastKnownSynced)}`);
 
         try
         {
             kee.KeePassRPC.updateAddonSettings(syncableSettings, settings.version);
-            this.lastKnownSerialised = latestSerialised;
+            // Clone so changes via references later can't affect later comparison
+            this.lastKnownSynced = JSON.parse(JSON.stringify(syncableConfig));
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
@@ -76,6 +73,6 @@ class ConfigSyncManager {
 
     public reset () {
         this.enabled = false;
-        this.lastKnownSerialised = "";
+        this.lastKnownSynced = null;
     }
 }

@@ -16,6 +16,7 @@
             "lib/moduleUnhack.js",
             "lib/pslData.js",
             "lib/tp/publicsuffixlist.min.js",
+            "lib/tp/fast-equals.min.js",
             "common/common.js",
             "lib/tp/biginteger.js",
             "lib/firefoxBug1408996Workaround.js",
