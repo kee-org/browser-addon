@@ -85,4 +85,5 @@ class Config {
     notificationCountSavePassword: number;
     currentSearchTermTimeout: number;
     notifyPasswordAvailableForPaste: boolean;
+    animateWhenOfferingSave: boolean;
 }

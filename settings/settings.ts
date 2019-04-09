@@ -34,6 +34,8 @@ function loadInitialConfig () {
         = configManager.current.rememberMRUGroup ? configManager.current.rememberMRUGroup : null;
     (document.getElementById("pref_notifyWhenEntryUpdated_label") as HTMLInputElement).checked
         = configManager.current.notifyWhenEntryUpdated ? configManager.current.notifyWhenEntryUpdated : null;
+    (document.getElementById("pref_animateWhenOfferingSave_label") as HTMLInputElement).checked
+        = configManager.current.animateWhenOfferingSave ? configManager.current.animateWhenOfferingSave : null;
 
     (document.getElementById("pref_rememberMRUDB_label") as HTMLInputElement).checked
         = configManager.current.rememberMRUDB ? configManager.current.rememberMRUDB : null;
@@ -68,6 +70,7 @@ function setupInputListeners () {
     document.getElementById("pref_saveFavicons_label").addEventListener("change", saveSaveFavicons);
     document.getElementById("pref_rememberMRUGroup_label").addEventListener("change", saveRememberMRUGroup);
     document.getElementById("pref_notifyWhenEntryUpdated_label").addEventListener("change", saveNotifyWhenEntryUpdated);
+    document.getElementById("pref_animateWhenOfferingSave_label").addEventListener("change", saveAnimateWhenOfferingSaveUpdated);
     document.getElementById("pref_rememberMRUDB_label").addEventListener("change", saveRememberMRUDB);
 
     document.getElementById("pref_when_kee_chooses_standard_form_desc").addEventListener("change", saveWhenKeefoxChoosesStandardForm);
@@ -665,6 +668,11 @@ function saveRememberMRUGroup (e) {
 function saveNotifyWhenEntryUpdated (e) {
     e.preventDefault();
     configManager.setASAP({ notifyWhenEntryUpdated: (document.getElementById("pref_notifyWhenEntryUpdated_label") as HTMLInputElement).checked });
+}
+
+function saveAnimateWhenOfferingSaveUpdated (e) {
+    e.preventDefault();
+    configManager.setASAP({ animateWhenOfferingSave: (document.getElementById("pref_animateWhenOfferingSave_label") as HTMLInputElement).checked });
 }
 
 function saveRememberMRUDB (e) {

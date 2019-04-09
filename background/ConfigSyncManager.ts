@@ -6,9 +6,12 @@ class ConfigSyncManager {
 
         // Will be falsy if a user is not logged in to a DB in Kee Vault
         // or an add-on or page update is required
-        if (!config || !config.settings || !config.version
-            || config.version !== configManager.current.version) {
+        if (!config || !config.settings || !config.version) {
             return;
+        }
+
+        if (config.version !== configManager.current.version) {
+            configManager.migrateFromRemoteToLatestVersion();
         }
 
         // No point processing potential config changes if we have yet to
@@ -45,7 +48,8 @@ class ConfigSyncManager {
             autoSubmitNetworkAuthWithSingleMatch: settings.autoSubmitNetworkAuthWithSingleMatch,
             notificationCountGeneric: settings.notificationCountGeneric,
             notificationCountSavePassword: settings.notificationCountSavePassword,
-            currentSearchTermTimeout: settings.currentSearchTermTimeout
+            currentSearchTermTimeout: settings.currentSearchTermTimeout,
+            animateWhenOfferingSave: settings.animateWhenOfferingSave
         };
         const syncableConfig = {settings: syncableSettings, version: settings.version};
 

@@ -16,7 +16,7 @@ declare const __pslData;
 declare const chrome;
 
 // increment when changes are introduced that require data migration
-const LATEST_VERSION: number = 5;
+const LATEST_VERSION: number = 6;
 
 let defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
@@ -59,6 +59,7 @@ defaultConfig.notificationCountGeneric = 0;
 defaultConfig.notificationCountSavePassword = 0;
 defaultConfig.currentSearchTermTimeout = 30;
 defaultConfig.notifyPasswordAvailableForPaste = true;
+defaultConfig.animateWhenOfferingSave = true;
 
 class ConfigManager {
     public current: Config;
@@ -195,6 +196,16 @@ class ConfigManager {
             case 2: migrations.migrateToVersion3(this.current);
             case 3: migrations.migrateToVersion4(this.current);
             case 4: migrations.migrateToVersion5(this.current);
+            case 5: migrations.migrateToVersion6(this.current);
+        }
+        this.save();
+    }
+
+    public migrateFromRemoteToLatestVersion () {
+        if (this.current.version >= LATEST_VERSION) return;
+        const migrations = new ConfigMigrations();
+        switch (this.current.version) {
+            case 5: migrations.migrateToVersion6(this.current);
         }
         this.save();
     }

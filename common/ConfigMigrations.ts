@@ -1,5 +1,9 @@
 class ConfigMigrations {
 
+    public migrateToVersion6 (current: Config) {
+        Object.assign(current, { animateWhenOfferingSave: true, version: 6 } as Partial<Config>);
+    }
+
     public migrateToVersion5 (current: Config) {
         Object.assign(current, { notifyPasswordAvailableForPaste: true, version: 5 } as Partial<Config>);
     }
