@@ -831,6 +831,9 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
             });
             configManager.setASAP({notificationCountSavePassword: configManager.current.notificationCountSavePassword+1});
         }
+        if (configManager.current.animateWhenOfferingSave) {
+            kee.animateBrowserActionIcon();
+        }
     }
     if (msg.action === Action.ShowMatchedLoginsPanel) {
         kee.tabStates.get(this.sender.tab.id).framePorts.get(0).postMessage({action: Action.ShowMatchedLoginsPanel, frameId: this.sender.frameId });
