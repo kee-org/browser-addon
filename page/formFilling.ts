@@ -526,14 +526,10 @@ class FormFilling {
             await Promise.resolve();
             const start = performance.now();
             const submitTarget = this.findSubmitButton(form, submitTargetNeighbour);
-            if (submitTarget) {
-                this.formSaving.addSubmitHandler(submitTarget, form);
-                KeeLog.info("Submit handlers attached asynchronously to form " + formNumber + " in " + (performance.now()-start) + "ms");
-            } else {
-                KeeLog.info("Submit handlers not attached to form " + formNumber + " in " + (performance.now()-start) + "ms");
-            }
+            this.formSaving.addSubmitHandler(submitTarget, form);
+            KeeLog.info("Submit handlers attached asynchronously to form " + formNumber + " in " + (performance.now()-start) + "ms");
         } catch (e) {
-            KeeLog.warn("Exception while adding submit handler. Message: " + e.Message);
+            KeeLog.warn("Exception while adding submit handler. Message: " + e.message);
         }
     }
 
@@ -1126,6 +1122,9 @@ class FormFilling {
             verifyPotentialCandidate(value, score);
         });
 
+        if (candidates.length <= 0) return null;
+        if (candidates.length === 1) return candidates[0].element;
+
         const submitElements = candidates.sort((a, b) => {
             if (a.distance > b.distance) return -1;
             if (a.distance < b.distance) return 1;
@@ -1147,8 +1146,6 @@ class FormFilling {
         //TODO:4: more accurate searching of submit buttons, etc. to avoid password resets if possible
         // maybe special cases for common HTML output patterns (e.g. javascript-only ASP.NET forms)
 
-        if (submitElements.length <= 0) return null;
-        if (submitElements.length === 1) return submitElements[0].element;
 
         let maxScore = submitElements[0].score;
         let maxScoreElement = submitElements[0].element;
