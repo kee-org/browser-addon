@@ -456,7 +456,7 @@ class FormFilling {
             const { actualUsernameIndex: usernameIndex, pwFields: passwordFields, otherFields } =
                 this.formUtils.getFormFields(form, false);
 
-            if (otherFields.length + passwordFields.length > 25) {
+            if (otherFields.length + passwordFields.length > 50) {
                 this.Logger.debug("Lost interest in this form after finding too many fields");
                 continue;
             }
