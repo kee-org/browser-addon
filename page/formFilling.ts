@@ -1338,22 +1338,32 @@ class FormFilling {
         // This is similar to _fillManyFormFields so might be able to reuse the results in future
         // (but need to watch for changes that invalidate the earlier calculations).
         let totalRelevanceScore = 0;
-
-        let formMatchedFieldCount = 0;
-        let radioCount = 0;
-        const minFieldRelevance = 1;
+        const minFieldRelevance = 37; // more than just the same type of field and visible on the page
 
         // Require at least a type match for 2-field forms (e.g. user/pass); 1 missing
         // match for 3 or 4 field forms; etc.
         const minMatchedFieldCountRatio = 0.501;
 
-        let entryFieldIsMatched = [];
+        const otherFieldMatchSuccesses = [];
+
+        // Must be careful to not let radio fields cause false negatives
+        // Other fields which can't ever be matched to minimum relevance
+        // are discounted later so we don't consider them here
+        //TODO: Why? Shouldn't we discount all radio types from total
+        //counts below as for empty fields?
+        // I think this is rubbish now and no longer needed but don't fully
+        // understand why there was an exception in the first place so
+        // leaving here for a version or two in case bugs relating to
+        // radio buttons crop up
+        // for (let i = 0; i < login.otherFields.length; i++)
+        // {
+        //     if (login.otherFields[i].type == "radio")
+        //         otherFieldMatchSuccesses[i] = true;
+        // }
 
         for (let i = 0; i < otherFields.length; i++)
         {
             let mostRelevantScore = 0;
-            let mostRelevantIndex = -1;
-
             for (let j = 0; j < login.otherFields.length; j++)
             {
                 const fmscore = this.calculateFieldMatchScore(
@@ -1363,34 +1373,24 @@ class FormFilling {
                 if (fmscore > mostRelevantScore)
                 {
                     mostRelevantScore = fmscore;
-                    mostRelevantIndex = j;
                 }
-                if (fmscore > otherFields[i].highestScore)
+                if (fmscore >= minFieldRelevance && !otherFieldMatchSuccesses[j])
+                {
+                    otherFieldMatchSuccesses[j] = true;
+                }
+                if (!otherFields[i].highestScore || fmscore > otherFields[i].highestScore)
                 {
                     otherFields[i].highestScore = fmscore;
                 }
             }
-
-            if (mostRelevantScore >= minFieldRelevance)
-            {
-                if (!entryFieldIsMatched[mostRelevantIndex])
-                    formMatchedFieldCount++;
-                entryFieldIsMatched[mostRelevantIndex] = true;
-            }
-
-            // Must be careful to not let radio fields cause false negatives
-            if (otherFields[i].type == "radio")
-                radioCount++;
-
             totalRelevanceScore += mostRelevantScore;
         }
 
-        entryFieldIsMatched = [];
+        const passwordFieldMatchSuccesses = [];
+
         for (let i = 0; i < passwordFields.length; i++)
         {
             let mostRelevantScore = 0;
-            let mostRelevantIndex = -1;
-
             for (let j = 0; j < login.passwords.length; j++)
             {
                 const fmscore = this.calculateFieldMatchScore(
@@ -1400,26 +1400,33 @@ class FormFilling {
                 if (fmscore > mostRelevantScore)
                 {
                     mostRelevantScore = fmscore;
-                    mostRelevantIndex = j;
                 }
-                if (fmscore > passwordFields[i].highestScore)
+                if (fmscore >= minFieldRelevance && !passwordFieldMatchSuccesses[j])
+                {
+                    passwordFieldMatchSuccesses[j] = true;
+                }
+                if (!passwordFields[i].highestScore || fmscore > passwordFields[i].highestScore)
                 {
                     passwordFields[i].highestScore = fmscore;
                 }
             }
-            if (mostRelevantScore >= minFieldRelevance)
-            {
-                if (!entryFieldIsMatched[mostRelevantIndex])
-                    formMatchedFieldCount++;
-                entryFieldIsMatched[mostRelevantIndex] = true;
-            }
-
             totalRelevanceScore += mostRelevantScore;
         }
 
-        const formFieldCount = passwordFields.length + otherFields.length;
-        const loginFieldCount = login.passwords.length + login.otherFields.length;
-        const fieldMatchRatio = formMatchedFieldCount / (Math.max(1, formFieldCount - radioCount));
+        // Only consider fields that can ever match above the minimum (essentially
+        // ignore empty form or entry fields). Will underestimate number of form
+        // fields, resulting in increased match ratio and less accurate relevancy
+        // scores for forms that contain a username/password field with no name
+        // or id attributes. No idea if this will cause a problem.
+        const formFieldCount = passwordFields.concat(otherFields)
+        .filter(f => f.fieldId || f.name || f.value).length;
+        const loginFieldCount = login.passwords.concat(login.otherFields)
+            .filter(f => f.fieldId || f.name || f.value).length;
+
+        const formMatchedFieldCount = otherFieldMatchSuccesses.filter(s => s === true).length
+            + passwordFieldMatchSuccesses.filter(s => s === true).length;
+
+        const fieldMatchRatio = formMatchedFieldCount / (Math.max(1, formFieldCount));
 
         this.Logger.debug("formFieldCount: " + formFieldCount + ", loginFieldCount: " + loginFieldCount
             + ", formMatchedFieldCount: " + formMatchedFieldCount + ", fieldMatchRatio: " + fieldMatchRatio);
