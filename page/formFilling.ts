@@ -660,14 +660,14 @@ class FormFilling {
                     overWriteFieldsAutomatically: true,
                     punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
                 };
-                const relScore = this.calculateRelevanceScore(matchResult.logins[i][v],
+                const {score, lowFieldMatchRatio} = this.calculateRelevanceScore(matchResult.logins[i][v],
                         matchResult.passwordFieldsArray[i], matchResult.otherFieldsArray[i],
                         matchResult.currentPage, formVisible, fieldMatchScoreConfig, visibleFieldCache);
 
                 // choosing best login form should not be affected by lowFieldMatchRatio login score
                 // but when we come to fill the form we can force ourselves into a no-auto-fill behaviour.
-                matchResult.logins[i][v].relevanceScore = relScore.score;
-                matchResult.logins[i][v].lowFieldMatchRatio = relScore.lowFieldMatchRatio;
+                matchResult.logins[i][v].relevanceScore = score;
+                matchResult.logins[i][v].lowFieldMatchRatio = lowFieldMatchRatio;
 
                 // also set the form ID and login ID on the internal login object so
                 // it will persist when later passed to the UI and we can ultimately
