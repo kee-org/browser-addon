@@ -1348,14 +1348,11 @@ class FormFilling {
 
         // This is similar to _fillManyFormFields so might be able to reuse the results in future
         // (but need to watch for changes that invalidate the earlier calculations).
-        let totalRelevanceScore = 0;
-        const minFieldRelevance = 37; // more than just the same type of field and visible on the page
 
         // Require at least a type match for 2-field forms (e.g. user/pass); 1 missing
         // match for 3 or 4 field forms; etc.
         const minMatchedFieldCountRatio = 0.501;
 
-        const otherFieldMatchSuccesses = [];
 
         // Must be careful to not let radio fields cause false negatives
         // Other fields which can't ever be matched to minimum relevance
@@ -1372,57 +1369,12 @@ class FormFilling {
         //         otherFieldMatchSuccesses[i] = true;
         // }
 
-        for (let i = 0; i < otherFields.length; i++)
-        {
-            let mostRelevantScore = 0;
-            for (let j = 0; j < login.otherFields.length; j++)
-            {
-                const fmscore = this.calculateFieldMatchScore(
-                    otherFields[i], login.otherFields[j], currentPage, scoreConfig, visibleFieldCache.other[j]);
-                this.Logger.debug("Suitability of putting other field "+j+" into form field "+i
-                    +" (id: "+otherFields[i].fieldId + ") is " + fmscore);
-                if (fmscore > mostRelevantScore)
-                {
-                    mostRelevantScore = fmscore;
-                }
-                if (fmscore >= minFieldRelevance && !otherFieldMatchSuccesses[j])
-                {
-                    otherFieldMatchSuccesses[j] = true;
-                }
-                if (!otherFields[i].highestScore || fmscore > otherFields[i].highestScore)
-                {
-                    otherFields[i].highestScore = fmscore;
-                }
-            }
-            totalRelevanceScore += mostRelevantScore;
-        }
+        const [ otherRelevanceScore, otherFieldMatchSuccesses ] = this.determineRelevanceScores(
+            "other", otherFields, login.otherFields, currentPage, scoreConfig, visibleFieldCache.other);
+        const [ passwordRelevanceScore, passwordFieldMatchSuccesses ] = this.determineRelevanceScores(
+            "password", passwordFields, login.passwords, currentPage, scoreConfig, visibleFieldCache.password);
 
-        const passwordFieldMatchSuccesses = [];
-
-        for (let i = 0; i < passwordFields.length; i++)
-        {
-            let mostRelevantScore = 0;
-            for (let j = 0; j < login.passwords.length; j++)
-            {
-                const fmscore = this.calculateFieldMatchScore(
-                    passwordFields[i], login.passwords[j], currentPage, scoreConfig, visibleFieldCache.password[j]);
-                this.Logger.debug("Suitability of putting password field "+j+" into form field "+i
-                    +" (id: "+passwordFields[i].fieldId + ") is " + fmscore);
-                if (fmscore > mostRelevantScore)
-                {
-                    mostRelevantScore = fmscore;
-                }
-                if (fmscore >= minFieldRelevance && !passwordFieldMatchSuccesses[j])
-                {
-                    passwordFieldMatchSuccesses[j] = true;
-                }
-                if (!passwordFields[i].highestScore || fmscore > passwordFields[i].highestScore)
-                {
-                    passwordFields[i].highestScore = fmscore;
-                }
-            }
-            totalRelevanceScore += mostRelevantScore;
-        }
+        const totalRelevanceScore = otherRelevanceScore + passwordRelevanceScore;
 
         // Only consider fields that can ever match above the minimum (essentially
         // ignore empty form or entry fields). Will underestimate number of form
@@ -1455,6 +1407,35 @@ class FormFilling {
 
         this.Logger.info("Relevance for " + login.uniqueID + " is: " + score);
         return {score: score, lowFieldMatchRatio: lowFieldMatchRatio};
+    }
+
+    private determineRelevanceScores (debugName: string, formFields: keeLoginField[], loginFields: keeLoginField[],
+        currentPage: number, scoreConfig: FieldMatchScoreConfig, visibleFieldMap: boolean[]): [ number, boolean[] ] {
+
+        let totalRelevanceScore = 0;
+        const minFieldRelevance = 1;
+        const fieldMatchSuccesses: boolean[] = [];
+
+        for (let i = 0; i < formFields.length; i++) {
+            let mostRelevantScore = 0;
+            for (let j = 0; j < loginFields.length; j++) {
+                const fmscore = this.calculateFieldMatchScore(formFields[i], loginFields[j], currentPage, scoreConfig, visibleFieldMap[j]);
+                this.Logger.debug("Suitability of putting " + debugName + " field " + j + " into form field " + i
+                    + " (id: " + formFields[i].fieldId + ") is " + fmscore);
+                if (fmscore > mostRelevantScore) {
+                    mostRelevantScore = fmscore;
+                }
+                const fmscoreForRatio = fmscore - (visibleFieldMap[j] ? 35 : 0);
+                if (fmscoreForRatio >= minFieldRelevance && !fieldMatchSuccesses[j]) {
+                    fieldMatchSuccesses[j] = true;
+                }
+                if (!formFields[i].highestScore || fmscore > formFields[i].highestScore) {
+                    formFields[i].highestScore = fmscore;
+                }
+            }
+            totalRelevanceScore += mostRelevantScore;
+        }
+        return [ totalRelevanceScore, fieldMatchSuccesses ];
     }
 
     public removeKeeIconFromAllFields () {
