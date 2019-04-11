@@ -55,7 +55,7 @@ class KeeFieldIcon {
         element.style.setProperty("background-position", "calc(100% - 4px) 50%", "important");
 
         const transitionConfig = window.getComputedStyle(field.DOMInputElement).getPropertyValue("transition-property");
-        if (["all", "background-position"].some(val => transitionConfig.includes(val))) {
+        if (["all", "background"].some(val => transitionConfig.includes(val))) {
             field.DOMInputElement.style.setProperty("transition", "none", "important");
         }
 
