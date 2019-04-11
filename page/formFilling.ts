@@ -54,6 +54,11 @@ class FieldMatchScoreConfig {
     punishWrongIDAndName: boolean;
 }
 
+class VisibleFieldCache {
+    password: boolean[];
+    other: boolean[];
+}
+
 class FormFilling {
 
     private Logger: KeeLogger;
@@ -129,7 +134,7 @@ class FormFilling {
         formFilling.matchedLoginsPanelStubRaf = requestAnimationFrame(formFilling.updateMatchedLoginsPanelPosition);
     }
 
-    private calculateFieldMatchScore (formField: keeLoginField, dataField, currentPage, config: FieldMatchScoreConfig)
+    private calculateFieldMatchScore (formField: keeLoginField, dataField, currentPage, config: FieldMatchScoreConfig, isVisible?: boolean)
     {
         // Default score is 1 so that bad matches which are at least the correct type
         // have a chance of being selected if no good matches are found
@@ -191,8 +196,10 @@ class FormFilling {
         // If page # is unestablished (<=0)
         //else do nothing
 
-        if (formUtils.isDOMElementVisible(formField.DOMInputElement || formField.DOMSelectElement))
-            score += 35;
+        if (isVisible === undefined && formUtils.isDOMElementVisible(formField.DOMInputElement || formField.DOMSelectElement))
+            isVisible = true;
+
+        score += isVisible ? 35 : 0;
 
         return score;
     }
@@ -636,6 +643,11 @@ class FormFilling {
             const formVisible = formUtils.isDOMElementVisible(matchResult.submitTargets[i]);
             this.Logger.debug("formVisible: " + formVisible);
 
+            const visibleFieldCache = {
+                other: matchResult.otherFieldsArray[i].map(f => formUtils.isDOMElementVisible(f.DOMInputElement || f.DOMSelectElement)),
+                password: matchResult.passwordFieldsArray[i].map(f => formUtils.isDOMElementVisible(f.DOMInputElement || f.DOMSelectElement))
+            };
+
             // determine the relevance of each login entry to this form
             // we could skip this when autofilling based on uniqueID but we would have to check for
             // matches first or else we risk no match and no alternative matching logins on the mainUI
@@ -649,9 +661,8 @@ class FormFilling {
                     punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
                 };
                 const relScore = this.calculateRelevanceScore(matchResult.logins[i][v],
-                        findLoginOp.forms[i], matchResult.usernameIndexArray[i],
-                        matchResult.passwordFieldsArray[i], matchResult.currentPage,
-                        matchResult.otherFieldsArray[i], formVisible, fieldMatchScoreConfig);
+                        matchResult.passwordFieldsArray[i], matchResult.otherFieldsArray[i],
+                        matchResult.currentPage, formVisible, fieldMatchScoreConfig, visibleFieldCache);
 
                 // choosing best login form should not be affected by lowFieldMatchRatio login score
                 // but when we come to fill the form we can force ourselves into a no-auto-fill behaviour.
@@ -1309,9 +1320,9 @@ class FormFilling {
         */
     }
 
-    private calculateRelevanceScore (login: keeLoginInfo, form: HTMLFormElement,
-        usernameIndex: number, passwordFields: keeLoginField[], currentPage: number,
-        otherFields: keeLoginField[], formVisible: boolean, scoreConfig: FieldMatchScoreConfig) {
+    private calculateRelevanceScore (login: keeLoginInfo, passwordFields: keeLoginField[],
+        otherFields: keeLoginField[], currentPage: number, formVisible: boolean,
+        scoreConfig: FieldMatchScoreConfig, visibleFieldCache: VisibleFieldCache) {
 
         let score = 0;
         let lowFieldMatchRatio = false;
@@ -1367,7 +1378,7 @@ class FormFilling {
             for (let j = 0; j < login.otherFields.length; j++)
             {
                 const fmscore = this.calculateFieldMatchScore(
-                    otherFields[i], login.otherFields[j], currentPage, scoreConfig);
+                    otherFields[i], login.otherFields[j], currentPage, scoreConfig, visibleFieldCache.other[j]);
                 this.Logger.debug("Suitability of putting other field "+j+" into form field "+i
                     +" (id: "+otherFields[i].fieldId + ") is " + fmscore);
                 if (fmscore > mostRelevantScore)
@@ -1394,7 +1405,7 @@ class FormFilling {
             for (let j = 0; j < login.passwords.length; j++)
             {
                 const fmscore = this.calculateFieldMatchScore(
-                    passwordFields[i], login.passwords[j], currentPage, scoreConfig);
+                    passwordFields[i], login.passwords[j], currentPage, scoreConfig, visibleFieldCache.password[j]);
                 this.Logger.debug("Suitability of putting password field "+j+" into form field "+i
                     +" (id: "+passwordFields[i].fieldId + ") is " + fmscore);
                 if (fmscore > mostRelevantScore)
