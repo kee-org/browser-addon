@@ -82,7 +82,7 @@ class FormSaving {
         let isRegistrationForm = false;
 
         // Get the appropriate fields from the form.
-        const passwordFields = [];
+        const passwordFields: keeLoginField[] = [];
         const { actualUsernameIndex: usernameIndex, pwFields: passwords, otherFields } =
             this.formUtils.getFormFields(form, true);
 
@@ -145,41 +145,25 @@ class FormSaving {
         // we have also determined whether this form fill is likely to
         // be a new registration form or password change form
 
+        const nonEmptyPasswordFields = this.removeEmptyFields(passwordFields);
+        const nonEmptyOtherFields = this.removeEmptyFields(otherFields);
 
         // Find the first filled password that is not being submitted or has a changed value
         const differentPassword = !this.matchResult || !this.matchResult.lastFilledPasswords ||
-            this.matchResult.lastFilledPasswords.find(filledField => {
-            const submittedField = passwordFields.find(f => filledField.DOMelement == f.DOMInputElement || filledField.DOMelement == f.DOMSelectElement);
-
-            // If we haven't submitted the same DOM element we filled in
-            if (!submittedField) return true;
-
-            if (submittedField.value != filledField.value) return true;
-
-            return false;
-        });
+            this.hasFieldBeenModified(nonEmptyPasswordFields, this.matchResult.lastFilledPasswords);
 
         // Find the first filled other field that is not being submitted or has a changed value
         const differentOther = !this.matchResult || !this.matchResult.lastFilledOther ||
-            this.matchResult.lastFilledOther.find(filledField => {
-            const submittedField = otherFields.find(f => filledField.DOMelement == f.DOMInputElement || filledField.DOMelement == f.DOMSelectElement);
-
-            // If we haven't submitted the same DOM element we filled in
-            if (!submittedField) return true;
-
-            if (submittedField.value != filledField.value) return true;
-
-            return false;
-        });
+            this.hasFieldBeenModified(nonEmptyOtherFields, this.matchResult.lastFilledOther);
 
         if (differentPassword || differentOther) {
 
             const submittedData = {
                 url: url.href,
                 usernameIndex,
-                passwordFields: passwordFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
+                passwordFields: this.prepareFormFieldsForSaving(nonEmptyPasswordFields),
                 title: doc.title || url.hostname,
-                otherFields: otherFields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; }),
+                otherFields: this.prepareFormFieldsForSaving(nonEmptyOtherFields),
                 //currentPage,
                 isPasswordChangeForm,
                 isRegistrationForm
@@ -188,5 +172,27 @@ class FormSaving {
 
             myPort.postMessage({submittedData} as AddonMessage);
         }
+    }
+
+    private removeEmptyFields (fields: keeLoginField[]) {
+        return fields.filter(f => f.value || f.type === "checkbox");
+    }
+
+    private hasFieldBeenModified (newlySubmittedFields, previouslyFilledFields: SubmittedField[]) {
+        return !!previouslyFilledFields.find(filledField => {
+            const submittedField = newlySubmittedFields.find(
+                f => filledField.DOMelement == f.DOMInputElement || filledField.DOMelement == f.DOMSelectElement);
+
+            // If we haven't submitted the same DOM element we filled in
+            if (!submittedField) return true;
+
+            if (submittedField.value != filledField.value) return true;
+
+            return false;
+        });
+    }
+
+    private prepareFormFieldsForSaving (fields) {
+        return fields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; });
     }
 }
