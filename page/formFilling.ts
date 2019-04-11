@@ -204,13 +204,13 @@ class FormFilling {
         return score;
     }
 
-    private fillMatchedFields (fields, dataFields, formFields)
+    private fillMatchedFields (fieldScoreMatrix, dataFields, formFields)
     {
         // We want to make sure each data field is matched to only one form field but we
         // don't know which field will be the best match and we don't want to ignore
-        // less accurate matches just becuase they happen to appear later.
+        // less accurate matches just because they happen to appear later.
 
-        // We have a list of objects representing each possible combination of data field
+        // We have a matrix of objects representing each possible combination of data field
         // and form field and the score for that match.
         // We choose what to fill by sorting that list by score.
         // After filling a field we remove all objects from the list which are for the
@@ -223,9 +223,9 @@ class FormFilling {
         // a "change password" form if we ever manage to make that automated
 
         // (score is reduced by one for each position we find in the form - this gives
-        // a slight priority to fields at the top of a form which can be useful occassionaly)
+        // a slight priority to fields at the top of a form which can be useful occasionally)
 
-        fields.sort(function (a, b) {
+        fieldScoreMatrix.sort(function (a, b) {
             return b.score - a.score;
         });
 
@@ -233,14 +233,14 @@ class FormFilling {
         // the form is submitted later. We resist the urge the index by element ID or
         // the DOMelement itself because some websites do not specify an ID and some
         // may remove the DOMelement before we submit the form (sometimes under user
-        // direction but ocasionally automaticaly too)
+        // direction but occasionally automatically too)
         const submittedFields: SubmittedField[] = [];
 
         // Keep filling in fields until we find no more with a positive score
-        while (fields.length > 0 && fields[0].score > 0)
+        while (fieldScoreMatrix.length > 0 && fieldScoreMatrix[0].score > 0)
         {
-            const ffi = fields[0].formFieldIndex;
-            const dfi = fields[0].dataFieldIndex;
+            const ffi = fieldScoreMatrix[0].formFieldIndex;
+            const dfi = fieldScoreMatrix[0].dataFieldIndex;
             let DOMelement;
 
             if (formFields[ffi].type == "select-one")
@@ -259,11 +259,11 @@ class FormFilling {
                 value: dataFields[dfi].value
             });
 
-            fields = fields.filter(function (element, index, array) {
+            fieldScoreMatrix = fieldScoreMatrix.filter(function (element, index, array) {
                 return (element.dataFieldIndex != dfi && element.formFieldIndex != ffi);
             });
 
-            fields.sort(function (a, b) {
+            fieldScoreMatrix.sort(function (a, b) {
                 return b.score - a.score;
             });
         }
@@ -314,7 +314,7 @@ class FormFilling {
         // we are flexible RE text and username fields because that's an artificial difference
         // for the sake of the Kee password management software. However, usernames will be chosen above
         // text fields if all else is equal
-        const fields = [];
+        const fieldScoreMatrix = [];
 
         for (let i = 0; i < formFields.length; i++)
         {
@@ -324,11 +324,11 @@ class FormFilling {
                     formFields[i], dataFields[j], currentPage, scoreConfig);
                 this.Logger.debug("Suitability of putting data field "+j+" into form field "+i
                     +" (id: "+formFields[i].fieldId + ") is " + score);
-                fields.push({score: score, dataFieldIndex: j, formFieldIndex: i});
+                fieldScoreMatrix.push({score: score, dataFieldIndex: j, formFieldIndex: i});
             }
         }
 
-        return this.fillMatchedFields (fields, dataFields, formFields);
+        return this.fillMatchedFields (fieldScoreMatrix, dataFields, formFields);
     }
 
     private initMatchResult (behaviour: FindMatchesBehaviour)
