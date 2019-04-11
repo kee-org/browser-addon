@@ -1380,7 +1380,9 @@ class FormFilling {
         // ignore empty form or entry fields). Will underestimate number of form
         // fields, resulting in increased match ratio and less accurate relevancy
         // scores for forms that contain a username/password field with no name
-        // or id attributes. No idea if this will cause a problem.
+        // or id attributes. No idea if this will cause a problem. Seems to.
+        // Mitigating by adjusting min relevancy values, etc. so can remove
+        // this comment in a few versions if all is good.
         const formFieldCount = passwordFields.concat(otherFields)
         .filter(f => f.fieldId || f.name || f.value).length;
         const loginFieldCount = login.passwords.concat(login.otherFields)
@@ -1419,17 +1421,19 @@ class FormFilling {
         for (let i = 0; i < formFields.length; i++) {
             let mostRelevantScore = 0;
             for (let j = 0; j < loginFields.length; j++) {
-                const fmscore = this.calculateFieldMatchScore(formFields[i], loginFields[j], currentPage, scoreConfig, visibleFieldMap[j]);
+                const fmscore = this.calculateFieldMatchScore(formFields[i], loginFields[j], currentPage, scoreConfig, visibleFieldMap[i]);
                 this.Logger.debug("Suitability of putting " + debugName + " field " + j + " into form field " + i
                     + " (id: " + formFields[i].fieldId + ") is " + fmscore);
                 if (fmscore > mostRelevantScore) {
                     mostRelevantScore = fmscore;
                 }
-                const fmscoreForRatio = fmscore - (visibleFieldMap[j] ? 35 : 0);
-                if (fmscoreForRatio >= minFieldRelevance && !fieldMatchSuccesses[j]) {
-                    fieldMatchSuccesses[j] = true;
+                const fmscoreForRatio = fmscore - (visibleFieldMap[i] ? 35 : 0);
+                if (fmscoreForRatio >= minFieldRelevance
+                    && loginFields[j].value
+                    && !fieldMatchSuccesses[i]) {
+                    fieldMatchSuccesses[i] = true;
                 }
-                if (!formFields[i].highestScore || fmscore > formFields[i].highestScore) {
+                if (formFields[i].highestScore == null || fmscore > formFields[i].highestScore) {
                     formFields[i].highestScore = fmscore;
                 }
             }
