@@ -27,13 +27,11 @@ div#i18n_root td:first-child, div#i18n_root th:first-child {
     width: 40%;
 }
 
-div#i18n_root > button {
+div#i18n_root > button,
+div#keeVaultContainer > button {
     background-color:#1a466b;
     max-width: 80vw;
-    width: 500px;
     min-width: 80px;
-    margin: 15px;
-    margin-bottom: 30px;
     border: 1px solid #1a466b;
     border-radius: 5px;
     outline: none;
@@ -46,4 +44,62 @@ div#i18n_root > button {
     text-decoration: none;
     user-select: none;
     color: #e5e7eb;
+}
+
+div#i18n_root > button {
+    width: 500px;
+    margin: 15px;
+    margin-bottom: 30px;
+}
+
+div#keeVaultContainer > button {
+    margin: 10px 0px 20px 0px;
+}
+
+div#i18n_root > button:hover,
+div#keeVaultContainer > button:hover {
+    background-color:#3a668b;
+    max-width: 80vw;
+    min-width: 80px;
+    border: 1px solid #1a466b;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.5em;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.75em 1.5em;
+    text-decoration: none;
+    user-select: none;
+    color: #e5e7eb;
+}
+
+#mainContent {
+    display: flex;
+    flex-direction: row;
+}
+
+#keeVaultContainer {
+    width: 400px;
+    background: #e5e7eb;
+    padding: 5px 20px;
+}
+
+#updateNotesContent {
+    width: 500px;
+    padding: 0px 20px 10px 5px;
+}
+
+#updateNotesContent li {
+    padding: 5px 0px;
+}
+
+.vaultLogoContainer {
+    padding: 10px;
+    text-align: center;
+}
+
+.vaultLogoContainer > svg {
+    max-width: 200px;
 }

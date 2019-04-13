@@ -1,3 +1,3 @@
 document.getElementById("keeVaultCTA").addEventListener("click", () => {
-    window.open("https://forum.kee.pm/t/kee-vault-and-kee-version-3-0/2025");
+    window.open("https://forum.kee.pm/kee-vault-launch");
 });
