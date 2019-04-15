@@ -221,7 +221,11 @@
     },
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Näytä viesti \"Salasana vaihdettu onnistuneesti\"",
-        "description": "Option to enable or diable the information displayed when a password has been updated"
+        "description": "Option to enable or disable the information displayed when a password has been updated"
+    },
+    "pref_animateWhenOfferingSave_label": {
+        "message": "Animate the Kee icon when offering to save",
+        "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
         "message": "Muista viimeisin Kee Vault tai KeePass tietokanta",
@@ -731,25 +735,13 @@
         "message": "Muita teknisiä parannuksia",
         "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
     },
-    "new_license": {
-        "message": "Uusi lisenssi",
-        "description": "Heading for text that explains we have a new source code license"
-    },
     "reliability_improvements": {
         "message": "Toimintavarmuuden parannuksia",
         "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
     },
-    "google_chrome_release": {
-        "message": "Google Chrome laajennus",
-        "description": "Heading for text that explains we are about to release a stable version for the Google Chrome browser"
-    },
     "new_icon": {
         "message": "Uusi kuvake",
         "description": "Heading for text that explains we have a new icon / branding"
-    },
-    "new_license_text": {
-        "message": "Kee laajennuksen versio 3 on julkaistu uudemman Open Source license - AGPLv3 lisenssin alla, jota myös muut julkaisemamme ohjelmat käyttävät. Muutos ei varsinaisesti vaikuta oikeuteesi käyttää ilmaista ohjelmaa päivittäisessä käytössä. Muutoksia kuitenkin aiempaan GPLv2 lisenssiin verrattuna löytyy, joten suosittelemme sinua lukemaan läpi uuden lisenssin. Jos päätät olla hyväksymättä uutta lisenssiä, voit jatkaa ohjelman vanhan version käyttämistä vanhan lisenssin suomin oikeuksin.",
-        "description": "Explains we have a new source code license"
     },
     "reliability_improvements_text1": {
         "message": "Olemme parantaneet linkkiä internetselaimen ja yksittäisen lataamasi sivun välillä, jonka ansiosta esim. kirjautumistietojen täyttö on luotettavampaa",
@@ -758,14 +750,6 @@
     "reliability_improvements_text2": {
         "message": "Olemme parantaneet kirjautumisikkunoiden havaitsemista. Tämä tarkoittaa enemmän onnistuneita kirjautumisia, mm. Googlen kirjautumissivuilla",
         "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-    },
-    "google_chrome_release_text": {
-        "message": "Kun vakaa Kee 3.0 versio on julkaistu, Google Chrome laajennuksesta poistetaan samalla Beta merkintä, joka sillä on ollut yli vuoden.",
-        "description": "Explains we are about to release a stable version for the Google Chrome browser"
-    },
-    "new_icon_text": {
-        "message": "Olemme uudistaneet kuvakkeen modernimpaan suuntaan. Toivottavasti pidät siitä. Tästä on myös keskusteltu Kee Vault keskustelualueella (linkki yläpuolella).",
-        "description": "Explains we have a new icon / branding"
     },
     "kee_vault_announcement_1": {
         "message": "Kee Vault on uusi avoimen lähdekoodin salasananhallintasovellus. Se pyörii internetselaimessa, joten asennusta ei tarvita.",
@@ -790,6 +774,10 @@
     "showEntry": {
         "message": "Näytä kirjautumistieto",
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
+    },
+    "list_version_upgrade_3_1": {
+        "message": "Various improvements to form detection, entry matching and auto-filling entries;Limited the number of fields that the Kee icon gets added into;Fixed several issues that prevented the Kee icon in a field from being seen correctly;The Kee icon in the toolbar is now briefly animated when entries are available for saving;Improved per-site configuration feature;Added buttons for opening your password manager to the main panel;We no longer save empty fields to your password manager;Workaround a Firefox bug that causes the main panel to appear empty sometimes",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Kirjaudu salasananhallintaan/Valitse sopiva kirjautumistieto/Näytä sopivat kirjautumistiedot",

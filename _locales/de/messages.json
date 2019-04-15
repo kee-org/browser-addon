@@ -221,7 +221,11 @@
     },
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Die Benachrichtigung \"Passwort erfolgreich aktualisiert\" anzeigen",
-        "description": "Option to enable or diable the information displayed when a password has been updated"
+        "description": "Option to enable or disable the information displayed when a password has been updated"
+    },
+    "pref_animateWhenOfferingSave_label": {
+        "message": "Bei Speichermöglichkeit eines Eintrags das Kee-Icon animieren",
+        "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
         "message": "Zuletzt verwendete Kee Vault- oder KeePass-Datenbanken speichern",
@@ -300,11 +304,11 @@
         "description": "Link to the add-on's settings"
     },
     "Menu_Button_open_keepass_label": {
-        "message": "Open KeePass",
+        "message": "KeePass öffnen",
         "description": "Action button to launch, unlock and/or focus KeePass"
     },
     "Menu_Button_open_kee_vault_label": {
-        "message": "Open Kee Vault",
+        "message": "Kee Vault öffnen",
         "description": "Action button to launch, unlock and/or focus Kee Vault"
     },
     "Search_label": {
@@ -731,25 +735,13 @@
         "message": "Andere technische Verbesserungen",
         "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
     },
-    "new_license": {
-        "message": "Neue Lizenz",
-        "description": "Heading for text that explains we have a new source code license"
-    },
     "reliability_improvements": {
         "message": "Verbesserung der Zuverlässigkeit",
         "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
     },
-    "google_chrome_release": {
-        "message": "Google Chrome-Version",
-        "description": "Heading for text that explains we are about to release a stable version for the Google Chrome browser"
-    },
     "new_icon": {
         "message": "Neues Icon",
         "description": "Heading for text that explains we have a new icon / branding"
-    },
-    "new_license_text": {
-        "message": "Version 3 der Kee-Erweiterung wird mit einer neueren Art der Open Source-Lizenz - AGPLv3 - veröffentlicht, wodurch diese mit der gesamten von uns veröffentlichten Software in Einklang gebracht wird. Obwohl Ihre Rechte normalerweise auf die Nutzung der kostenlosen Software im Normalfall nicht beeinträchtigt wird, kann die Änderung (von GPLv2) in einigen Situationen rechtliche Auswirkungen haben. Daher müssen Sie die neue Lizenz überprüfen. Wenn Sie feststellen, dass Sie die neue Lizenz nicht akzeptieren, können Sie die älteren Versionen der Software unter der alten Lizenz dauerhaft verwenden.",
-        "description": "Explains we have a new source code license"
     },
     "reliability_improvements_text1": {
         "message": "Wir haben die Verbindung zwischen dem Webbrowser und jeder einzelnen Seite, die Sie laden, verbessert. Das führt zu zuverlässigeren Funktionen wie dem Ausfüllen von Formularen.",
@@ -758,14 +750,6 @@
     "reliability_improvements_text2": {
         "message": "Wir haben die Erkennung von Formular-Sendebuttons verbessert. Dies bedeutet eine erfolgreichere Formularübermittlung auf einigen Webseiten wie der Google-Anmeldeseite.",
         "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-    },
-    "google_chrome_release_text": {
-        "message": "Wenn die stabile Version 3.0 von Kee in Kürze verfügbar ist, werden wir die Google Chrome-Version der Erweiterung fördern, die sich seit etwas mehr als einem Jahr im Betatest befindet.",
-        "description": "Explains we are about to release a stable version for the Google Chrome browser"
-    },
-    "new_icon_text": {
-        "message": "Wir haben ein schönes neues Icon, die Ihnen hoffentlich gefällt. Dies wird auch in einem Kee Vault-Forumsbeitrag diskutiert, der oben verlinkt ist.",
-        "description": "Explains we have a new icon / branding"
     },
     "kee_vault_announcement_1": {
         "message": "Kee Vault ist ein neuer Open Source-Passwortmanager. Er wird in Ihrem Webbrowser ausgeführt, sodass keine Installation erforderlich ist.",
@@ -790,6 +774,10 @@
     "showEntry": {
         "message": "Eintrag anzeigen",
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
+    },
+    "list_version_upgrade_3_1": {
+        "message": "Verschiedene Verbesserungen bei der Formularerkennung, dem Erkennen von Einträgen und dem automatischen Ausfüllen von Einträgen; Die Anzahl der Felder, zu denen das Kee-Symbol hinzugefügt wird, wurde reduziert; Es wurden mehrere Probleme behoben, durch die das Kee-Symbol in einem Feld nicht richtig angezeigt wurde; Das Kee-Symbol in der Symbolleiste ist jetzt kurz animiert, wenn Einträge zum Speichern zur Verfügung stehen; Verbesserte Konfigurationsfunktion für jede Seite; Hinzugefügte Schaltflächen zum Öffnen Ihres Kennwortmanagers im Hauptfenster; Leere Felder werden nicht mehr in Ihrem Kennwortmanager gespeichert; Problemumgehung eines Firefox-Fehlers, durch das das Hauptfenster manchmal leer eingeblendet wird",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "In KeePass anmelden / Passende Anmeldungen auswählen / Liste der passenden Anmeldungen anzeigen",

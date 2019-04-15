@@ -221,7 +221,11 @@
     },
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Wyświetlaj powiadomienie \"Hasło poprawnie zaktualizowane\"",
-        "description": "Option to enable or diable the information displayed when a password has been updated"
+        "description": "Option to enable or disable the information displayed when a password has been updated"
+    },
+    "pref_animateWhenOfferingSave_label": {
+        "message": "Animate the Kee icon when offering to save",
+        "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
         "message": "Zapamiętaj ostatnio używany Sejf Kee albo bazę KeePass",
@@ -731,25 +735,13 @@
         "message": "Inne techniczne usprawnienia",
         "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
     },
-    "new_license": {
-        "message": "Nowa licencja",
-        "description": "Heading for text that explains we have a new source code license"
-    },
     "reliability_improvements": {
         "message": "Usprawiono niezawodność",
         "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
     },
-    "google_chrome_release": {
-        "message": "Wydanie dla Google Chrome",
-        "description": "Heading for text that explains we are about to release a stable version for the Google Chrome browser"
-    },
     "new_icon": {
         "message": "Nowa ikona",
         "description": "Heading for text that explains we have a new icon / branding"
-    },
-    "new_license_text": {
-        "message": "Wersja 3 rozszerzenia Kee wydawana jest na nowszej licencji otwartoźródłowej - AGPLv3 - co zrównuje go z pozostałym oprogramowaniem, które tworzymy. Choć w codziennym użytkowaniu nie wpływa to na Twoje prawa do użytkowania darmowego oprogramowania, to zmiana licencji (z AGPLv2) może mieć w pewnych przypadkach konsekwencje prawne, zalecamy więc przeczytanie nowej licencji. Jeśli okaże się, że nie akceptujesz nowej licencji, możesz nadal używać starszej wersji oprogramowania pod stara licencją na zawsze.",
-        "description": "Explains we have a new source code license"
     },
     "reliability_improvements_text1": {
         "message": "Poprawiliśmy połączenie pomiędzy przeglądarką a każdą załadowaną stroną, co zapewniło lepsze działanie funkcji takich jak wypełnianie formularzy. ",
@@ -758,14 +750,6 @@
     "reliability_improvements_text2": {
         "message": "Poprawiliśmy wykrywanie przycisków wysyłania formularzu. To oznacza, że poprawnie wysyłane są formularze z większej ilości stron takich jak formularz logowania Google.",
         "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-    },
-    "google_chrome_release_text": {
-        "message": "Gdy wkrótce wydamy wersję stabilną Kee v3.0, będziemy promować wersję rozszerzenia dla Google Chrome poza kanałem Beta (testowym), w którym było dostępne przez ponad rok.",
-        "description": "Explains we are about to release a stable version for the Google Chrome browser"
-    },
-    "new_icon_text": {
-        "message": "Mamy teraz nowoczesną błyszczącą ikonę, która, mamy nadzieję, podoba się Wam. Jest to wciąż dyskutowane na forum Kee Vault linkowanym powyżej.",
-        "description": "Explains we have a new icon / branding"
     },
     "kee_vault_announcement_1": {
         "message": "Kee Vault jest nowym otwarto-źródłowym menedżerem haseł. Działa w Twojej przeglądarce, więc nie trzeba go instalować.",
@@ -790,6 +774,10 @@
     "showEntry": {
         "message": "Pokaż wpis",
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
+    },
+    "list_version_upgrade_3_1": {
+        "message": "Various improvements to form detection, entry matching and auto-filling entries;Limited the number of fields that the Kee icon gets added into;Fixed several issues that prevented the Kee icon in a field from being seen correctly;The Kee icon in the toolbar is now briefly animated when entries are available for saving;Improved per-site configuration feature;Added buttons for opening your password manager to the main panel;We no longer save empty fields to your password manager;Workaround a Firefox bug that causes the main panel to appear empty sometimes",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Zaloguj się do menedżera haseł / Wybierz pasujący login / Pokaż listę pasujących loginów",

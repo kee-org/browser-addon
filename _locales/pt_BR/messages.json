@@ -221,7 +221,11 @@
     },
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Exibir notificação de \"Senha atualizada com sucesso\"",
-        "description": "Option to enable or diable the information displayed when a password has been updated"
+        "description": "Option to enable or disable the information displayed when a password has been updated"
+    },
+    "pref_animateWhenOfferingSave_label": {
+        "message": "Animar o ícone do Kee ao se oferecer para salvar",
+        "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
         "message": "Lembre-se do banco de dados Kee Vault ou KeePass usado mais recentemente",
@@ -300,11 +304,11 @@
         "description": "Link to the add-on's settings"
     },
     "Menu_Button_open_keepass_label": {
-        "message": "Open KeePass",
+        "message": "Abrir KeePass",
         "description": "Action button to launch, unlock and/or focus KeePass"
     },
     "Menu_Button_open_kee_vault_label": {
-        "message": "Open Kee Vault",
+        "message": "Abrir Kee Vault",
         "description": "Action button to launch, unlock and/or focus Kee Vault"
     },
     "Search_label": {
@@ -388,11 +392,11 @@
         "description": ""
     },
     "website_options_search_placeholder": {
-        "message": "e.g. www.google.com",
+        "message": "exemplo: www.google.com",
         "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "website_options_search_tooltip": {
-        "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+        "message": "exemplo: www.google.com (NÃO inclua https:// ou outros protocolos)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "database_label": {
@@ -731,25 +735,13 @@
         "message": "Outras melhorias técnicas",
         "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
     },
-    "new_license": {
-        "message": "Nova licença",
-        "description": "Heading for text that explains we have a new source code license"
-    },
     "reliability_improvements": {
         "message": "Melhorias na confiabilidade",
         "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
     },
-    "google_chrome_release": {
-        "message": "Versão do Google Chrome",
-        "description": "Heading for text that explains we are about to release a stable version for the Google Chrome browser"
-    },
     "new_icon": {
         "message": "Novo ícone",
         "description": "Heading for text that explains we have a new icon / branding"
-    },
-    "new_license_text": {
-        "message": "A versão 3 da extensão Kee é lançada com um novo tipo de licença Open Source - AGPLv3 - que a alinha com todos os softwares que lançamos. Embora normalmente não afete os seus direitos de usar o software gratuito diariamente, a alteração (da GPLv2) pode ter implicações legais em algumas situações, por isso, recomendamos que você revise a nova licença. Se você determinar que não aceita a nova licença, poderá continuar usando as versões mais antigas do software sob a licença antiga em perpetuidade.",
-        "description": "Explains we have a new source code license"
     },
     "reliability_improvements_text1": {
         "message": "Melhoramos o link entre o navegador da Web e cada página individual que você carrega, resultando em recursos mais confiáveis, como o preenchimento de formulários.",
@@ -758,14 +750,6 @@
     "reliability_improvements_text2": {
         "message": "Melhoramos a detecção de botões de envio de formulário. Isso significa um envio de formulário mais bem-sucedido em alguns sites, como a página de login do Google.",
         "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-    },
-    "google_chrome_release_text": {
-        "message": "Quando a versão estável do Kee v3.0 for lançada em breve, promoveremos a versão do Google Chrome da extensão fora do período de testes Beta em que ela está há pouco mais de um ano.",
-        "description": "Explains we are about to release a stable version for the Google Chrome browser"
-    },
-    "new_icon_text": {
-        "message": "Temos um novo ícone moderno que esperamos que você goste. Isso também é discutido na postagem no fórum do Kee Vault, com links acima.",
-        "description": "Explains we have a new icon / branding"
     },
     "kee_vault_announcement_1": {
         "message": "O Kee Vault é um novo gerenciador de senhas de código aberto. Ele é executado no seu navegador da Web, portanto, nenhuma instalação é necessária.",
@@ -790,6 +774,10 @@
     "showEntry": {
         "message": "Mostrar Entrada",
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
+    },
+    "list_version_upgrade_3_1": {
+        "message": "Várias melhorias para a detecção de formulários, entrada de correspondência e entradas de preenchimento automático;Limitou o número de campos que o ícone do Kee é adicionado;Corrigidos vários problemas que impediam o ícone do Kee em um campo de ser visto corretamente;O ícone do Kee na barra de ferramentas agora é brevemente animado quando as entradas estão disponíveis para salvar;Melhoria do recurso de configuração por site;Adicionado botão para abrir seu gerenciador de senhas no painel principal;Nós não salvamos mais campos vazios no seu gerenciador de senhas;Solucionado um bug do Firefox que fazia com que o painel principal aparecesse vazio às vezes",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Entrar no gerenciador de senhas / Selecionar login correspondente / Mostrar lista de logins correspondentes",

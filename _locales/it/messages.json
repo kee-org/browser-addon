@@ -221,7 +221,11 @@
     },
     "pref_notifyWhenEntryUpdated_label": {
         "message": "Mostra la notifica \"La password è stata aggiornata con successo.\"",
-        "description": "Option to enable or diable the information displayed when a password has been updated"
+        "description": "Option to enable or disable the information displayed when a password has been updated"
+    },
+    "pref_animateWhenOfferingSave_label": {
+        "message": "Animate the Kee icon when offering to save",
+        "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
         "message": "Ricorda l'ultimo database utilizzato di Kee Vault o KeePass",
@@ -731,25 +735,13 @@
         "message": "Altri miglioramenti tecnici",
         "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
     },
-    "new_license": {
-        "message": "Nuova Licenza",
-        "description": "Heading for text that explains we have a new source code license"
-    },
     "reliability_improvements": {
         "message": "Affidabilità migliorata",
         "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
     },
-    "google_chrome_release": {
-        "message": "Rilascio per Google Chrome",
-        "description": "Heading for text that explains we are about to release a stable version for the Google Chrome browser"
-    },
     "new_icon": {
         "message": "Nuova Icona",
         "description": "Heading for text that explains we have a new icon / branding"
-    },
-    "new_license_text": {
-        "message": "La versione 3 dell'estensione Kee viene rilasciata con una nuova licenza Open Source - AGPLv3 - che lo allinea con tutto il software che rilasciamo. Nonostante ciò non influenzi il tuo diritto per utilizzare questo software gratuitamente ogni giorno, questo cambiamento (da GPLv2) potrebbe avere delle implicazioni legali in alcune situazioni e quindi ti suggeriamo di analizzare la nuova licenza. Se determini che non pui accettarla, puoi continuare ad utilizzare precedenti versioni del software che impiegano la precedente licenza.",
-        "description": "Explains we have a new source code license"
     },
     "reliability_improvements_text1": {
         "message": "Abbiamo migliorato il collegamento tra il web browser e ogni pagina che navighi, rendendo più affidabili alcune funzionalità come il riempimento dei campi.",
@@ -758,14 +750,6 @@
     "reliability_improvements_text2": {
         "message": "Abbiamo migliorato il rilevamento dei pulsanti che inviano i campi. Significa che ci saranno più accessi che verranno riempiti ed inviati, come le pagine di accesso a Google.",
         "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-    },
-    "google_chrome_release_text": {
-        "message": "Quando la versione stabile di Kee v3.0 verrà rilasciata presto, la versione di Google Chrome uscirà dal beta testing che è durato poco più di un anno.",
-        "description": "Explains we are about to release a stable version for the Google Chrome browser"
-    },
-    "new_icon_text": {
-        "message": "Abbiamo una nuova scintillante icona che speriamo ti piacerà. È stata discussa nel post riguardo Kee Vault nel forum che trovi linkato qui sopra.",
-        "description": "Explains we have a new icon / branding"
     },
     "kee_vault_announcement_1": {
         "message": "Kee Vault è un nuovo password manager open source. Risidede nel tuo browser quindi non è necessario installare nulla.",
@@ -790,6 +774,10 @@
     "showEntry": {
         "message": "Mostra voce",
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
+    },
+    "list_version_upgrade_3_1": {
+        "message": "Various improvements to form detection, entry matching and auto-filling entries;Limited the number of fields that the Kee icon gets added into;Fixed several issues that prevented the Kee icon in a field from being seen correctly;The Kee icon in the toolbar is now briefly animated when entries are available for saving;Improved per-site configuration feature;Added buttons for opening your password manager to the main panel;We no longer save empty fields to your password manager;Workaround a Firefox bug that causes the main panel to appear empty sometimes",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Accedi al password manager / Seleziona voce corrispondente / Mostra lista voci corrispondenti",
