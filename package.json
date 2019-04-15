@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "devDependencies": {
     "del": "^3.0.0",
-    "firefox-addons-add-update-version": "^1.0.0",
+    "firefox-addons-add-update-version": "github:kee-org/firefox-addons-add-update-version#7901bf69b4ed122a20cd5e10ed7f8dae9b00dde7",
     "gulp": "3.9.1",
     "gulp-replace": "^1.0.0",
     "gulp-sourcemaps": "^2.6.4",
