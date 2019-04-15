@@ -510,9 +510,9 @@ gulp.task('sign', function () {
     const distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
 
     //TODO:4: If API output is suitable, derive these file names from that in case Mozilla change file naming conventions one day
-    fs.writeFileSync('.signedKeeXPI', 'kee-' + manifest.version + 'beta-an+fx.xpi');
+    fs.writeFileSync('.signedKeeXPI', 'kee_password_manager-' + manifest.version + 'beta-an+fx.xpi');
     fs.writeFileSync('.downloadLinkKeeXPI', 'https://github.com/kee-org/browser-addon/releases/download/'
-        + manifest.version + '/kee-' + manifest.version + 'beta-an+fx.xpi');
+        + manifest.version + '/kee_password_manager-' + manifest.version + 'beta-an+fx.xpi');
 
     signAddon({
         xpiPath: 'dist/' + distFileName,
