@@ -12,8 +12,6 @@ cat ../browser-addon-updates/beta/update.json
 cat .downloadLinkKeeXPI
 cat .signedKeeXPI
 ls -l dist/signed/
-echo "about to run..."
-echo "faauv --update ../browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)"
 faauv --update ../browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)
 echo "New update manifest follows"
 cat ../browser-addon-updates/beta/update.json
