@@ -224,7 +224,7 @@
         "description": "Option to enable or disable the information displayed when a password has been updated"
     },
     "pref_animateWhenOfferingSave_label": {
-        "message": "Animate the Kee icon when offering to save",
+        "message": "Animovat Kee ikonu pokud nabízí uložení",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
@@ -304,11 +304,11 @@
         "description": "Link to the add-on's settings"
     },
     "Menu_Button_open_keepass_label": {
-        "message": "Open KeePass",
+        "message": "Otevřít KeePass",
         "description": "Action button to launch, unlock and/or focus KeePass"
     },
     "Menu_Button_open_kee_vault_label": {
-        "message": "Open Kee Vault",
+        "message": "Otevřít Kee Vault",
         "description": "Action button to launch, unlock and/or focus Kee Vault"
     },
     "Search_label": {
@@ -392,11 +392,11 @@
         "description": ""
     },
     "website_options_search_placeholder": {
-        "message": "e.g. www.google.com",
+        "message": "např. www.google.com",
         "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "website_options_search_tooltip": {
-        "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+        "message": "např. www.google.com (NEVKLÁDEJTE https:// nebo jiné protokoly)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "database_label": {
@@ -776,7 +776,7 @@
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
     "list_version_upgrade_3_1": {
-        "message": "Various improvements to form detection, entry matching and auto-filling entries;Limited the number of fields that the Kee icon gets added into;Fixed several issues that prevented the Kee icon in a field from being seen correctly;The Kee icon in the toolbar is now briefly animated when entries are available for saving;Improved per-site configuration feature;Added buttons for opening your password manager to the main panel;We no longer save empty fields to your password manager;Workaround a Firefox bug that causes the main panel to appear empty sometimes",
+        "message": "Různá vylepšení detekce formulářů, párování vstupů a automatické doplňování položek; Omezený počet polí, do kterých se přidá ikona Kee; Oprava několika chyb, které bránily tomu, aby se ikona Kee v poli zobrazovala správně; Ikona Kee v nástrojové liště nyní krátce animuje, když je možné položky uložit; Vylepšená funkce konfigurace pro konkrétní web; Přidána tlačítka pro otevření vašeho správce hesel do hlavního panelu; Prázdná pole již neukládáme do vašeho správce hesel; Řešení chyby Firefoxu, která způsobí, že se hlavní panel někdy zobrazí prázdný",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "KB_shortcut_simple_2_desc": {

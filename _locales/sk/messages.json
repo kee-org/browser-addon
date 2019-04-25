@@ -52,11 +52,11 @@
         "description": ""
     },
     "conn_setup_client_features_missing": {
-        "message": "Kee must be upgraded to connect to your password manager. Ensure you are running the latest version of the browser add-on / extension.",
+        "message": "Kee musí byť aktualizované, aby sa mohlo pripojiť k správcovi hesiel. Uistite sa, že používate najnovšiu verziu doplnku/rozšírenia prehliadača.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "conn_setup_server_features_missing": {
-        "message": "Your password manager must be upgraded to allow Kee to connect to it. Reload the Kee Vault website and/or ensure you are running the latest version of the KeePassRPC plugin by following the quick and easy instructions at $1",
+        "message": "Váš správca hesiel musí byť aktualizovaný, aby sa k nemu Kee mohlo pripojiť. Znova načítajte webovú lokalitu Kee Vault a/alebo sa uistite, že používate najnovšiu verziu doplnku KeePassRPC podľa rýchlych a jednoduchých pokynov na stránke $1",
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "conn_sl_high_label": {
@@ -92,7 +92,7 @@
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_unknown_error": {
-        "message": "An unexpected error occurred when trying to connect to your password manager.",
+        "message": "Pri pokuse o pripojenie k správcovi hesiel sa vyskytla neočakávaná chyba.",
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "conn_unknown_protocol": {
@@ -156,7 +156,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "pref_FillNote_desc": {
-        "message": "You can override the \"Kee chooses\" behaviours above for individual entries in your password manager.",
+        "message": "Vyššie uvedené \"Vypĺňanie polí\" môžete pre jednotlivé položky prestaviť vo vašom správcovi hesiel.",
         "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_FillPrompt_desc": {
@@ -192,7 +192,7 @@
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
     "pref_listAllOpenDBs_label": {
-        "message": "List logins from all open Kee Vaults and KeePass databases",
+        "message": "Zoznam prihlásení zo všetkých otvorených databáz Kee Vault a KeePass",
         "description": ""
     },
     "pref_logLevel_desc": {
@@ -224,11 +224,11 @@
         "description": "Option to enable or disable the information displayed when a password has been updated"
     },
     "pref_animateWhenOfferingSave_label": {
-        "message": "Animate the Kee icon when offering to save",
+        "message": "Animovať ikonu Kee, keď sa ponúka uloženie hesla",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
-        "message": "Remember the most recently used Kee Vault or KeePass database",
+        "message": "Pamätať si naposledy používanú databázu Kee Vault alebo KeePass",
         "description": ""
     },
     "pref_rememberMRUGroup_label": {
@@ -240,7 +240,7 @@
         "description": "Whether or not Kee will save the website's icon when a new entry is saved"
     },
     "pref_searchAllOpenDBs_label": {
-        "message": "Search all open Kee Vaults and KeePass databases",
+        "message": "Hľadať vo všetkých otvorených databázach Kee Vaults a KeePass",
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
@@ -264,7 +264,7 @@
         "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from the password manager"
     },
     "site_options_valid_form_intro_desc": {
-        "message": "Kee will try to fill matching Kee Vault and KeePass entries for all forms that have a password field (box). You can adjust this behaviour below.",
+        "message": "Kee sa pokúsi vyplniť zodpovedajúce položky Kee Vault a KeePass pre všetky formuláre, ktoré majú pole pre heslo. Toto správanie môžete upraviť nižšie.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "text_field_id": {
@@ -304,11 +304,11 @@
         "description": "Link to the add-on's settings"
     },
     "Menu_Button_open_keepass_label": {
-        "message": "Open KeePass",
+        "message": "Otvoriť KeePass",
         "description": "Action button to launch, unlock and/or focus KeePass"
     },
     "Menu_Button_open_kee_vault_label": {
-        "message": "Open Kee Vault",
+        "message": "Otvoriť Kee Vault",
         "description": "Action button to launch, unlock and/or focus Kee Vault"
     },
     "Search_label": {
@@ -320,7 +320,7 @@
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
-        "message": "You can optionally create a different one by selecting a password profile below. Create new profiles in Kee Vault or KeePass.",
+        "message": "Voliteľne môžete vytvoriť inú voľbu tak, že vyberiete profil hesla uvedený nižšie. Vytvorte si nové profily v Kee Vault alebo KeePass.",
         "description": ""
     },
     "change_field_explanation": {
@@ -392,11 +392,11 @@
         "description": ""
     },
     "website_options_search_placeholder": {
-        "message": "e.g. www.google.com",
+        "message": "napr. www.google.com",
         "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "website_options_search_tooltip": {
-        "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+        "message": "napr. www.google.com (Nezahŕňa https:// alebo iný protokol)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "database_label": {
@@ -408,15 +408,15 @@
         "description": ""
     },
     "generatePassword_instructions": {
-        "message": "Choose which type of password to create:",
+        "message": "Vyberte si typ hesla chcete vytvoriť:",
         "description": ""
     },
     "generatePassword_done_1": {
-        "message": "Password generated.",
+        "message": "Heslo vytvorené.",
         "description": ""
     },
     "generatePassword_done_2": {
-        "message": "Paste it into a \"new password\" field or wherever else you want.",
+        "message": "Vložte ho do pola \"nové heslo\" alebo kdekoľvek chcete.",
         "description": ""
     },
     "group_label": {
@@ -424,7 +424,7 @@
         "description": ""
     },
     "entry_history_pointer": {
-        "message": "Your password manager has an \"undo\" feature. Find the entry and then you can view the entry history and use the \"Restore\" button to revert to an older version if necessary.",
+        "message": "Váš správca hesiel má funkciu „vrátiť späť“. Nájdite záznam a potom si môžete prezrieť históriu vstupov a použiť tlačidlo \"Obnoviť\" pre návrat k staršej verzii v prípade potreby.",
         "description": ""
     },
     "loggedIn_tip": {
@@ -456,11 +456,11 @@
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
-        "message": "You are not logged in to your password manager.",
+        "message": "Nie ste prihlásený do správcu hesiel.",
         "description": ""
     },
     "notifyBarLaunchKeePassButton_tip": {
-        "message": "Open Kee Vault or KeePass to enable Kee",
+        "message": "Ak chcete povoliť Kee, otvorte Kee Vault alebo Keepass",
         "description": ""
     },
     "notifyBarLogSensitiveData_label": {
@@ -468,7 +468,7 @@
         "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
     },
     "notifyBarLoginToKeePassButton_tip": {
-        "message": "Unlock your password manager to enable Kee",
+        "message": "Odomknite správcu hesiel, aby ste povolili Kee",
         "description": ""
     },
     "notifyBarNeverForSiteButton_label": {
@@ -628,67 +628,67 @@
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "introduction_to_kee": {
-        "message": "Kee automatically fills login forms to save you time and protect you from security risks.",
+        "message": "Kee automaticky vyplní prihlasovacie formuláre, čím vám ušetrí čas a ochráni vás pred bezpečnostnými rizikami.",
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
     "kee_works_with_a_password_manager": {
-        "message": "The credentials Kee enters for you are stored securely in a password manager behind a single \"master password\".",
+        "message": "Poverenia Kee pre vás sú bezpečne uložené v správcovi hesiel pod jedným \"hlavným heslom\".",
         "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
     "recommend_start_with_kee_vault": {
-        "message": "We recommend trying out the Kee Vault password manager 14 day free trial. It's only £2 per month after the trial and does not require payment details when you sign up so is risk free.",
+        "message": "Odporúčame vyskúšať si správcu hesiel Kee Vault na 14 dní zadarmo. Je to len 2 libry mesačne po skúške a pri registrácii sa nevyžadujú informácie o platbe, takže je to bez rizika.",
         "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
     },
     "load_kee_vault_now": {
-        "message": "Load Kee Vault now",
+        "message": "Načítať Kee Vault teraz",
         "description": "Call To Action button text. On click, the Kee Vault app will load and focus in a new tab."
     },
     "you_can_use_KeePass_instead": {
-        "message": "Alternatively, you can choose to configure KeePass Password Safe 2 instead.",
+        "message": "Alternatívne môžete namiesto toho nastaviť konfiguráciu KeePass Password Safe 2.",
         "description": "Explains that Kee also works with KeePass so they can choose to configure that if they prefer to avoid all financial expenditure."
     },
     "table_summarises_differences": {
-        "message": "The table below summarises the main differences.",
+        "message": "Nižšie uvedená tabuľka sumarizuje hlavné rozdiely.",
         "description": "Introduces the summary table that will help users choose a password manager to start with."
     },
     "installation_required": {
-        "message": "Installation required",
+        "message": "Vyžaduje sa inštalácia",
         "description": "States that the user will need to install components on their computer"
     },
     "access_from_multiple_devices": {
-        "message": "Access from multiple desktop and mobile devices",
+        "message": "Prístup z viacerých stolových a mobilných zariadení",
         "description": "Covers web browsers and mobiles, laptops, tablets, etc."
     },
     "shared_preferences": {
-        "message": "Shared preferences",
+        "message": "Zdieľané nastavenia",
         "description": "Labels the process of synchronising browser extension and password manager configuration options/preferences across multiple locations."
     },
     "yes_configure_once": {
-        "message": "Yes, configure once",
+        "message": "Áno, nakonfigurovať raz",
         "description": "Supports synchronising browser extension and password manager configuration options/preferences"
     },
     "no_configure_multiple": {
-        "message": "No, configure on every web browser or device you use",
+        "message": "Nie, konfigurovať v každom webovom prehliadači alebo zariadení, ktoré používate",
         "description": "Does not support synchronising browser extension and password manager configuration options/preferences"
     },
     "difficulty": {
-        "message": "Difficulty",
+        "message": "Obtiažnosť",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "difficulty_kee_vault": {
-        "message": "Easy",
+        "message": "Ľahká",
         "description": "Indicates that it is easy to get started with Kee Vault"
     },
     "difficulty_keepass": {
-        "message": "Medium (Hard on Mac computers)",
+        "message": "Stredná (Ťažká na počítačoch Mac)",
         "description": "Indicates that more work is required to get started with KeePass"
     },
     "keepass_sync_config_explanation": {
-        "message": "For KeePass, a partial solution for multi-device access can be manually configured using 3rd party services, some of which charge a fee. Each device must be prepared and configured in advance.",
+        "message": "Pre KeePass, čiastočné riešenie pre prístup viacerých zariadení je možné manuálne konfigurovať pomocou služieb tretích strán, z ktorých niektoré účtujú poplatok. Každé zariadenie musí byť pripravené a nakonfigurované vopred.",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "point_user_to_keepass_install_instructions_start": {
-        "message": "Instructions for installing and configuring KeePass and the required KeePassRPC.plgx plugin can be found on our",
+        "message": "Návod na inštaláciu a konfiguráciu KeePass a požadovaný plugin KeePassRPC.plgx nájdete na našich stránkach",
         "description": "Left part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_keepass_install_instructions_end": {
@@ -732,55 +732,55 @@
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
     "other_technical_improvements": {
-        "message": "Other technical improvements",
+        "message": "Ďalšie technické vylepšenia",
         "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
     },
     "reliability_improvements": {
-        "message": "Reliability improvements",
+        "message": "Zlepšenia spoľahlivosti",
         "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
     },
     "new_icon": {
-        "message": "New icon",
+        "message": "Nová ikona",
         "description": "Heading for text that explains we have a new icon / branding"
     },
     "reliability_improvements_text1": {
-        "message": "We've improved the link between the web browser and each individual page you load, resulting in more reliable features like form filling.",
+        "message": "Zlepšili sme prepojenie medzi webovým prehliadačom a každou jednotlivou stránkou, ktorú načítate, čo má za následok spoľahlivejšie funkcie, napríklad vyplňovanie formulárov.",
         "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
     },
     "reliability_improvements_text2": {
-        "message": "We've improved the detection of form submit buttons. This means more successful form submission on some websites such as the Google sign-in page.",
+        "message": "Zlepšili sme detekciu tlačidiel odoslania formulárov. To znamená, že na niektorých webových lokalitách, ako je napríklad prihlasovacia stránka Google, je úspešnejšie odosielanie formulárov.",
         "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
     },
     "kee_vault_announcement_1": {
-        "message": "Kee Vault is a new open source password manager. It runs in your web browser so no installation is necessary.",
+        "message": "Kee Vault je nový open source správca hesiel. Beží vo webovom prehliadači, takže nie je potrebná žiadna inštalácia.",
         "description": "Introduction to what Kee Vault is"
     },
     "kee_vault_announcement_2": {
-        "message": "It works on any modern device or web browser, even when offline. After importing your existing KeePass database you can access your Kee Vault from everywhere, with your changes and configuration preferences automatically sent to each of your devices and browsers.",
+        "message": "Pracuje na akomkoľvek modernom zariadení alebo webovom prehliadači, dokonca aj keď je offline. Po importovaní vašej existujúcej databázy KeePass môžete pristupovať k svojmu úložisku Kee Vault odkiaľkoľvek, pričom vaše zmeny a predvoľby konfigurácie sa automaticky odosielajú do každého z vašich zariadení a prehliadačov.",
         "description": "Outlines a few benefits of Kee Vault compared to KeePass"
     },
     "kee_vault_announcement_3": {
-        "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
+        "message": "Verzia Kee 3.0 vám umožňuje používať Kee Vault namiesto aplikácie KeePass pre stolné počítače, s podporou všetkých existujúcich funkcií Kee, ako je vyplňovanie formulárov a ukladanie, vyhľadávanie a vytváranie hesiel.",
         "description": "Explains that Kee v3 works with Kee Vault"
     },
     "kee_vault_announcement_4": {
-        "message": "Kee Vault is almost ready to launch as a public beta and I'm delighted to offer all existing Kee users an opportunity to get early access before this happens!",
+        "message": "Kee Vault je takmer pripravený na spustenie ako verejná beta verzia a som rád, že všetkým existujúcim používateľom Kee môžem ponúknuť možnosť získať skorý prístup predtým, ako sa to stane!",
         "description": "Announces the pre-release availability of Kee Vault"
     },
     "kee_vault_announcement_5": {
-        "message": "Read more and register for early access",
+        "message": "Prečítajte si viac a zaregistrujte sa pre skorý prístup",
         "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
     },
     "showEntry": {
-        "message": "Show Entry",
+        "message": "Zobraziť záznam",
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
     "list_version_upgrade_3_1": {
-        "message": "Various improvements to form detection, entry matching and auto-filling entries;Limited the number of fields that the Kee icon gets added into;Fixed several issues that prevented the Kee icon in a field from being seen correctly;The Kee icon in the toolbar is now briefly animated when entries are available for saving;Improved per-site configuration feature;Added buttons for opening your password manager to the main panel;We no longer save empty fields to your password manager;Workaround a Firefox bug that causes the main panel to appear empty sometimes",
+        "message": "Rôzne vylepšenia pri zisťovaní formulárov, priraďovaní položiek a pri automatickom dopĺňaní položiek; Obmedzený počet polí, do ktorých sa ikona Kee pridáva; Opravených niekoľko problémov, ktoré zabránili správnemu zobrazeniu ikony Kee v poli; Ikona Kee na paneli s nástrojmi je teraz krátko animované, keď sú k dispozícii položky na uloženie; Vylepšená funkcia konfigurácie pre jednotlivé stránky; Pridané tlačidlá na otvorenie správcu hesiel na hlavnom paneli; Už sa neukladajú prázdne polia do správcu hesiel; Riešenie chyby programu Firefox, ktorá spôsobovala, že hlavný panel sa objaví niekedy prázdny",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "KB_shortcut_simple_2_desc": {
-        "message": "Sign in to password manager / Select matched login / Show matched logins list",
+        "message": "Prihlásenie do správcu hesiel / Vybrať zodpovedajúci prihlasovací údaj / Zobraziť zoznam nájdených prihlasovacích údajov",
         "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
     }
 }
