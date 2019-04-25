@@ -224,7 +224,7 @@
         "description": "Option to enable or disable the information displayed when a password has been updated"
     },
     "pref_animateWhenOfferingSave_label": {
-        "message": "Animate the Kee icon when offering to save",
+        "message": "Anima l'icona di Kee quando c'è una voce da salvare",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
@@ -304,11 +304,11 @@
         "description": "Link to the add-on's settings"
     },
     "Menu_Button_open_keepass_label": {
-        "message": "Open KeePass",
+        "message": "Apri KeePass",
         "description": "Action button to launch, unlock and/or focus KeePass"
     },
     "Menu_Button_open_kee_vault_label": {
-        "message": "Open Kee Vault",
+        "message": "Apri Kee Vault",
         "description": "Action button to launch, unlock and/or focus Kee Vault"
     },
     "Search_label": {
