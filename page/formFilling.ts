@@ -19,7 +19,6 @@ class MatchResult {
     mustAutoSubmitForm: boolean;
     cannotAutoSubmitForm: boolean;
     wantToAutoFillFormWithMultipleMatches: boolean;
-    overWriteFieldsAutomatically: boolean;
     dbFileName: string;
     doc: Document;
     forms: HTMLFormElement[];
@@ -50,7 +49,6 @@ class SubmitCandidate {
 }
 
 class FieldMatchScoreConfig {
-    overWriteFieldsAutomatically: boolean;
     punishWrongIDAndName: boolean;
 }
 
@@ -139,12 +137,6 @@ class FormFilling {
         // Default score is 1 so that bad matches which are at least the correct type
         // have a chance of being selected if no good matches are found
         let score = 1;
-
-        // If field is already filled in and can't be overwritten we make the score 0
-        if ((this.formUtils.isATextFormFieldType(formField.type) || formField.type == "password") &&
-            (formField.value.length > 0 && !config.overWriteFieldsAutomatically)
-        )
-            return 0;
 
         // Do not allow any match if field types are significantly mismatched (e.g. checkbox vs text field)
         if ( !( this.formUtils.isATextFormFieldType(formField.type) && (dataField.type == "username" || dataField.type == "text") )
@@ -304,11 +296,6 @@ class FormFilling {
 
         this.Logger.info("Filling form fields for page "+currentPage);
 
-        if (scoreConfig.overWriteFieldsAutomatically)
-            this.Logger.info("Auto-overwriting fields");
-        else
-            this.Logger.info("Not auto-overwriting fields");
-
         // we try to fill every form field. We try to match by id first and then name before just guessing.
         // Generally we'll only fill if the matched field is of the same type as the form field but
         // we are flexible RE text and username fields because that's an artificial difference
@@ -352,9 +339,6 @@ class FormFilling {
         // Allow user to override automatic behaviour if multiple logins match this URL
         this.matchResult.wantToAutoFillFormWithMultipleMatches = this.config.autoFillFormsWithMultipleMatches;
 
-        // overwrite existing username by default unless a preference or tab variable tells us otherwise
-        this.matchResult.overWriteFieldsAutomatically = this.config.overWriteFieldsAutomatically;
-
         if (behaviour.UUID != undefined && behaviour.UUID != null && behaviour.UUID != "")
         {
             // Keep a record of the specific entry we are going to search for (we delete
@@ -364,7 +348,6 @@ class FormFilling {
 
             // we want to fill the form with this data
             this.matchResult.mustAutoFillForm = true;
-            this.matchResult.overWriteFieldsAutomatically = true;
 
             if (behaviour.mustAutoSubmitForm)
                 this.matchResult.mustAutoSubmitForm = true;
@@ -656,7 +639,6 @@ class FormFilling {
             {
                 const features = matchResult.logins[i][v].database.sessionFeatures;
                 const fieldMatchScoreConfig: FieldMatchScoreConfig = {
-                    overWriteFieldsAutomatically: true,
                     punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
                 };
                 const {score, lowFieldMatchRatio} = this.calculateRelevanceScore(matchResult.logins[i][v],
@@ -922,7 +904,6 @@ class FormFilling {
 
                     const features = matchingLogin.database.sessionFeatures;
                     const scoreConfig: FieldMatchScoreConfig = {
-                        overWriteFieldsAutomatically: matchResult.overWriteFieldsAutomatically || !automated,
                         punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
                     };
                     const lastFilledPasswords = this.fillManyFormFields(passwordFields, matchingLogin.passwords,
