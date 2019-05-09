@@ -10,7 +10,6 @@ interface AddonMessage {
     isForegroundTab?: boolean;
     tabId?: number;
     frameId?: number;
-    loadUrlHelpSensitiveLogging?: boolean;
     loadUrlUpgradeKee?: boolean;
     addNotification?: KeeNotification;
     removeNotification?: string;

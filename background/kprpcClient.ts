@@ -101,7 +101,7 @@ class kprpcClient {
             throw new Error("JSON-RPC communication requested with no requestID provided");
 
         const data = JSON.stringify({ jsonrpc: "2.0", params: params, method: method, id: requestId });
-        KeeLog.debug("Sending a JSON-RPC request", ": "  + data);
+        KeeLog.debug("Sending a JSON-RPC request");
 
         // May want to generalise to more than these two servers one day but this does the job for now
         const responseManager = new SessionResponseManager(sessionManagers.length, onComplete);
@@ -135,7 +135,7 @@ class kprpcClient {
     // interpret the message from the RPC server
     evalJson (method, params) {
         let data = JSON.stringify(params);
-        KeeLog.debug("Evaluating a JSON-RPC object we just received", ": " + data);
+        KeeLog.debug("Evaluating a JSON-RPC object we just received");
 
         if (data) {
             data = data.match(/\s*\[(.*)\]\s*/)[1];

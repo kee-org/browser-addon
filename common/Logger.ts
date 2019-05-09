@@ -9,110 +9,61 @@
   The default level (Warn) will be set as part of the installation process.
 */
 
-interface LogMessage {
-    m: string;
-    sm: string;
-    r: boolean;
-}
-
 // constructor
 class KeeLogger {
-    constructor ()
-    {
-        this.config = {logLevel: 4, logSensitiveData: false};
-        this.debug("Logging system initialised at " + Date());
-        this.config = {logLevel: 2, logSensitiveData: false};
-        if (this.config.logSensitiveData)
-            this.warn("WARNING: Kee Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
-    }
+    private outputStarted = false;
+    private config = {logLevel: 2};
 
-    config: {logLevel: number, logSensitiveData: boolean};
-
-
-    attachConfig (config: {logLevel: number, logSensitiveData: boolean}) {
+    attachConfig (config: {logLevel: number}) {
         this.debug("Logging system config updated at " + Date());
         this.config = config;
-        if (config.logSensitiveData)
-            this.warn("WARNING: Kee Sensitive logging ENABLED. See: https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive");
     }
 
-    private getMessage (data)
+    private formatMessage (message)
     {
-        if (!data)
+        if (!message)
             return "";
 
-        if (typeof data == "string")
-        {
-            return data;
+        if (!this.outputStarted) {
+            message = "* " + message;
+            this.outputStarted = true;
         }
-        else
-        {
-            const message = data.m;
-            const sensitiveMessage = data.sm;
-            const replace = data.r;
 
-            if (!message)
-                return data;
-
-            if (!this.config.logSensitiveData && message.length <= 0)
-                return "";
-            if (this.config.logSensitiveData)
-            {
-                if (replace)
-                    return "!! " + sensitiveMessage;
-                else
-                    return "!! " + message + sensitiveMessage;
-            } else
-            {
-                return message;
-            }
-        }
+        return message;
     }
 
-    debug (data: LogMessage | string, sensitiveMessage = "", replace = false)
+    debug (message: string)
     {
-        if (typeof data == "string")
-            data = { m: data, sm: sensitiveMessage, r: replace };
-
         if (this.config.logLevel >= 4)
         {
-            const message = this.getMessage(data);
+            message = this.formatMessage(message);
             if (message.length > 0) console.debug(message);
         }
     }
 
-    info (data: LogMessage | string, sensitiveMessage = "", replace = false)
+    info (message: string)
     {
-        if (typeof data == "string")
-            data = { m: data, sm: sensitiveMessage, r: replace };
-
         if (this.config.logLevel >= 3)
         {
-            const message = this.getMessage(data);
+            message = this.formatMessage(message);
             if (message.length > 0) console.info(message);
         }
     }
 
-    warn (data: LogMessage | string, sensitiveMessage = "", replace = false)
+    warn (message: string)
     {
-        if (typeof data == "string")
-            data = { m: data, sm: sensitiveMessage, r: replace };
-
         if (this.config.logLevel >= 2)
         {
-            const message = this.getMessage(data);
+            message = this.formatMessage(message);
             if (message.length > 0) console.warn(message);
         }
     }
 
-    error (data: LogMessage | string, sensitiveMessage = "", replace = false)
+    error (message: string)
     {
-        if (typeof data == "string")
-            data = { m: data, sm: sensitiveMessage, r: replace };
-
         if (this.config.logLevel >= 1)
         {
-            const message = this.getMessage(data);
+            message = this.formatMessage(message);
             if (message.length > 0) console.error(message);
         }
     }

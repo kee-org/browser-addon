@@ -1,5 +1,5 @@
 type ButtonAction = "enableHighSecurityKPRPCConnection" |
-    "loadUrlHelpSensitiveLogging" | "disableNotifyWhenEntryUpdated" |
+    "disableNotifyWhenEntryUpdated" |
     "loadUrlUpgradeKee" | "launchLoginEditorFromNotification";
 
 interface Button {

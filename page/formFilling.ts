@@ -248,7 +248,7 @@ class FormFilling {
             else
                 DOMelement = formFields[ffi].DOMInputElement;
 
-            this.Logger.info("We will populate field " + ffi + " (id:" + formFields[ffi].fieldId + ")", " with: " + dataFields[dfi].value);
+            this.Logger.info("We will populate field " + ffi + " (id:" + formFields[ffi].fieldId + ")");
 
             this.fillASingleField(DOMelement, formFields[ffi].type, dataFields[dfi].value);
 
@@ -437,15 +437,14 @@ class FormFilling {
         const url = new URL(window.document.URL);
         url.hostname = __punycode.toUnicode(url.hostname);
 
-        this.Logger.info("Finding matches in a document. readyState: " + window.document.readyState,
-            "docURI: " + url.href);
+        this.Logger.info("Finding matches in a document. readyState: " + window.document.readyState);
 
         this.initMatchResult(behaviour);
         this.matchResult.forms = forms;
 
         const conf = configManager.siteConfigFor(url.href);
 
-        this.Logger.debug("findMatches processing " + forms.length + " forms", " on " + url.href);
+        this.Logger.debug("findMatches processing " + forms.length + " forms");
 
         let searchSentToKeePass = false;
 

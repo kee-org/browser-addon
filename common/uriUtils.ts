@@ -29,7 +29,7 @@ let getURIExcludingQS = function (uriString) {
         const QSbreak = uri.path.indexOf("?");
         realm += uri.path.substring(1, QSbreak > 1 ? QSbreak : uri.path.length);
     } catch (e) {
-        KeeLog.warn("Couldn't parse origin", " for " + uriString);
+        KeeLog.warn("Couldn't parse origin");
         realm = null;
     }
     return realm;
@@ -66,7 +66,7 @@ let getURIHostAndPort = function (uriString) {
             }
         }
     } catch (e) {
-        KeeLog.warn("Couldn't parse origin", " for " + uriString);
+        KeeLog.warn("Couldn't parse origin");
         realm = null;
     }
     return realm;
@@ -99,10 +99,9 @@ let getURISchemeHostAndPort = function (uriString) {
         }
 
     } catch (e) {
-        KeeLog.warn("Couldn't parse origin", " for " + uriString);
+        KeeLog.warn("Couldn't parse origin");
         realm = null;
     }
-    KeeLog.debug("", "getURISchemeHostAndPort:" + realm);
     return realm;
 };
 
@@ -116,7 +115,7 @@ let getURIScheme = function (uriString) {
         const uri = this._ioService.newURI(uriString, null, null);
         return uri.scheme;
     } catch (e) {
-        KeeLog.warn("Couldn't parse scheme", " for " + uriString);
+        KeeLog.warn("Couldn't parse scheme");
         return "unknown";
     }
 };

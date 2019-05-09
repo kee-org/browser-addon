@@ -104,9 +104,6 @@ class KeeNotification {
                 configManager.current.connSLClient = 3;
                 configManager.save();
                 break;
-            case "loadUrlHelpSensitiveLogging":
-                this.myPort.postMessage({ loadUrlHelpSensitiveLogging: true });
-                break;
             case "loadUrlUpgradeKee":
                 this.myPort.postMessage({ loadUrlUpgradeKee: true });
                 break;

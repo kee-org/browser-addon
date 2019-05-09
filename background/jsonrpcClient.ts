@@ -167,7 +167,7 @@ class jsonrpcClient {
                             dbs.push(db);
                         } else
                         {
-                            KeeLog.debug("Database with duplicate file name found. Ignoring.", db.fileName);
+                            KeeLog.debug("Database with duplicate file name found. Ignoring.");
                         }
                     }
                     if (sessionResponse.sessionType === SessionType.Event) {
@@ -202,7 +202,7 @@ class jsonrpcClient {
                             profiles.push({name: profileName, sessionType: sessionResponse.sessionType});
                         } else
                         {
-                            KeeLog.debug("Password profile with duplicate name found. Ignoring.", profileName);
+                            KeeLog.debug("Password profile with duplicate name found. Ignoring.");
                         }
                     }
                 }

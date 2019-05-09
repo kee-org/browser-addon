@@ -467,10 +467,6 @@
     "message": "Open Kee Vault or KeePass to enable Kee",
     "description": ""
   },
-  "notifyBarLogSensitiveData_label": {
-    "message": "WARNING: Kee is logging your passwords! If you have not intentionally enabled this setting you should disable it immediately",
-    "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
-  },
   "notifyBarLoginToKeePassButton_tip": {
     "message": "Unlock your password manager to enable Kee",
     "description": ""

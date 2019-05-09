@@ -178,9 +178,6 @@ class Kee {
 
     async init () {
 
-        // Create a timer for checking whether user is logging sensitive data
-        setTimeout(backgroundUtils.oneOffSensitiveLogCheckHandler, 45000);
-
         // Create a timer for KPRPC connection establishment
         this.regularKPRPCListenerQueueHandlerTimer = setInterval(this.RegularKPRPCListenerQueueHandler, 5000);
 
@@ -706,16 +703,11 @@ function startup () {
 // callbacks for messaging / ports
 
 function browserPopupMessageHandler (msg: AddonMessage) {
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from browser popup script: " + msg);
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from browser popup script");
 
     if (msg.removeNotification) {
         kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
         try { kee.browserPopupPort.postMessage({ appState: kee.appState } as AddonMessage); } catch (e) {}
-    }
-    if (msg.loadUrlHelpSensitiveLogging) {
-        browser.tabs.create({
-            url: "https://github.com/luckyrat/KeeFox/wiki/en-|-Options-|-Logging-|-Sensitive"
-        });
     }
     if (msg.loadUrlUpgradeKee) {
         browser.tabs.create({
@@ -761,7 +753,7 @@ function browserPopupMessageHandler (msg: AddonMessage) {
 }
 
 function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script", ": " + msg);
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script");
 
     if (msg.findMatches) {
         kee.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
@@ -877,7 +869,7 @@ function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
 
 function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessage) {
     let result;
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from vault script: " + JSON.stringify(msg));
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from vault script");
     switch (msg.action) {
         case VaultAction.Init:
             result = kee.KeePassRPC.startEventSession(msg.sessionId, msg.features, msgToPage => this.postMessage(msgToPage));
@@ -902,7 +894,7 @@ function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessage) {
 }
 
 function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from iframe script: " + msg);
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from iframe script");
 
     const tabId = this.sender.tab.id;
     const frameId = this.sender.frameId;

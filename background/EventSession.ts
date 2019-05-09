@@ -102,7 +102,7 @@ class EventSessionManager {
     // we forward the message to the same message handler that is used for the KeePass plugin.
     public messageReciever (data: VaultMessage)
     {
-        KeeLog.debug("message recieved", ": " + JSON.stringify(data));
+        KeeLog.debug("message received");
 
         if (!data.sessionId) {
             this.sendErrorMessage({

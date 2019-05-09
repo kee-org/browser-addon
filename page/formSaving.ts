@@ -73,8 +73,6 @@ class FormSaving {
         const url = new URL(doc.URL);
         url.hostname = __punycode.toUnicode(url.hostname);
 
-        this.Logger.debug({ m: "", sm: "URL: " + url.href, r: true });
-
         const conf = configManager.siteConfigFor(url.href);
         if (conf.preventSaveNotification) return;
 
