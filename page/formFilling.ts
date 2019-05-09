@@ -196,7 +196,7 @@ class FormFilling {
         return score;
     }
 
-    private fillMatchedFields (fieldScoreMatrix, dataFields, formFields)
+    private fillMatchedFields (fieldScoreMatrix, dataFields, formFields, automated: boolean)
     {
         // We want to make sure each data field is matched to only one form field but we
         // don't know which field will be the best match and we don't want to ignore
@@ -235,14 +235,19 @@ class FormFilling {
             const dfi = fieldScoreMatrix[0].dataFieldIndex;
             let DOMelement;
 
-            if (formFields[ffi].type == "select-one")
+            if (formFields[ffi].type === "select-one")
                 DOMelement = formFields[ffi].DOMSelectElement;
             else
                 DOMelement = formFields[ffi].DOMInputElement;
 
-            this.Logger.info("We will populate field " + ffi + " (id:" + formFields[ffi].fieldId + ")");
+            const currentValue = this.getFormFieldCurrentValue(DOMelement, formFields[ffi].type);
 
-            this.fillASingleField(DOMelement, formFields[ffi].type, dataFields[dfi].value);
+            if (automated && currentValue && currentValue !== DOMelement.keeInitialDetectedValue) {
+                this.Logger.info("Not filling field because it's not empty and was edited by user since last load/fill");
+            } else {
+                this.Logger.info("We will populate field " + ffi + " (id:" + formFields[ffi].fieldId + ")");
+                this.fillASingleField(DOMelement, formFields[ffi].type, dataFields[dfi].value);
+            }
 
             submittedFields.push({
                 id: formFields[ffi].fieldId,
@@ -260,6 +265,18 @@ class FormFilling {
             });
         }
         return submittedFields;
+    }
+
+    private getFormFieldCurrentValue (DOMelement: any, fieldType: string) {
+        let currentValue = DOMelement.value;
+        if (fieldType === "checkbox") {
+            if (DOMelement.checked) {
+                currentValue = "KEEFOX_CHECKED_FLAG_TRUE";
+            } else {
+                currentValue = "KEEFOX_CHECKED_FLAG_FALSE";
+            }
+        }
+        return currentValue;
     }
 
     private fillASingleField (domElement, fieldType, value)
@@ -281,11 +298,13 @@ class FormFilling {
             domElement.value = value;
         }
 
+        domElement.keeInitialDetectedValue = value;
+
         domElement.dispatchEvent(new UIEvent("input", {view: window, bubbles: true, cancelable: true}));
         domElement.dispatchEvent(new UIEvent("change", {view: window, bubbles: true, cancelable: true}));
     }
 
-    private fillManyFormFields (formFields, dataFields, currentPage, scoreConfig: FieldMatchScoreConfig)
+    private fillManyFormFields (formFields, dataFields, currentPage, scoreConfig: FieldMatchScoreConfig, automated: boolean)
     {
         this.Logger.debug("_fillManyFormFields started");
 
@@ -315,7 +334,7 @@ class FormFilling {
             }
         }
 
-        return this.fillMatchedFields (fieldScoreMatrix, dataFields, formFields);
+        return this.fillMatchedFields(fieldScoreMatrix, dataFields, formFields, automated);
     }
 
     private initMatchResult (behaviour: FindMatchesBehaviour)
@@ -907,9 +926,9 @@ class FormFilling {
                         punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
                     };
                     const lastFilledPasswords = this.fillManyFormFields(passwordFields, matchingLogin.passwords,
-                        -1, scoreConfig);
+                        -1, scoreConfig, automated);
                     const lastFilledOther = this.fillManyFormFields(otherFields, matchingLogin.otherFields,
-                        -1, scoreConfig);
+                        -1, scoreConfig, automated);
                     matchResult.formReadyForSubmit = true;
                     matchResult.lastFilledPasswords = lastFilledPasswords;
                     matchResult.lastFilledOther = lastFilledOther;

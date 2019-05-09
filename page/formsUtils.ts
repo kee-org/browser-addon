@@ -73,15 +73,12 @@ private isAKnownUsernameString (fieldNameIn) {
 */
 public getFormFields (form, isSubmission, currentPage?)
 {
-    const DOMusernameField = null;
     const pwFields: keeLoginField[] = [];
     const otherFields: keeLoginField[] = [];
     const allFields: { index: number; element: keeLoginField; type: string; }[] = [];
     let firstPasswordIndex = -1;
     let firstPossibleUsernameIndex = -1;
     let usernameIndex = -1;
-    const usernameField = null;
-    const kfLoginField = new keeLoginField();
 
     // search the DOM for any form fields we might be interested in
     for (let i = 0; i < form.elements.length; i++)
@@ -95,8 +92,6 @@ public getFormFields (form, isSubmission, currentPage?)
 
         const DOMtype: string = form.elements[i].type.toLowerCase();
 
-        this.Logger.debug("domtype: "+ DOMtype );
-
         if (DOMtype == "fieldset")
             continue; // not interested in fieldsets
 
@@ -108,7 +103,7 @@ public getFormFields (form, isSubmission, currentPage?)
         if (DOMtype == "password" && isSubmission && !form.elements[i].value) continue;
         if (DOMtype == "select-one" && isSubmission && !form.elements[i].value) continue;
 
-        this.Logger.debug("proccessing...");
+        this.Logger.debug(`processing field with domtype ${DOMtype}...`);
         allFields[allFields.length] =
         {
             index   : i,
@@ -135,6 +130,10 @@ public getFormFields (form, isSubmission, currentPage?)
         if (this.isATextFormFieldType(DOMtype) && firstPossibleUsernameIndex == -1
             && this.isAKnownUsernameString(form.elements[i].name))
             firstPossibleUsernameIndex = allFields.length-1;
+
+        if (form.elements[i].keeInitialDetectedValue == null) {
+            form.elements[i].keeInitialDetectedValue = fieldValue;
+        }
     }
 
     // Work out which DOM form element is most likely to be the username field.
