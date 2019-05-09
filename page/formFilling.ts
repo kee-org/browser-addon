@@ -31,11 +31,11 @@ class MatchResult {
     responseCount: number;
     requestIds: any[];
     mostRelevantFormIndex?: number;
-    lastFilledOther: SubmittedField[];
-    lastFilledPasswords: SubmittedField[];
+    lastFilledOther: FilledField[];
+    lastFilledPasswords: FilledField[];
 }
 
-class SubmittedField {
+class FilledField {
     id: string;
     DOMelement: HTMLInputElement | HTMLSelectElement;
     name: string;
@@ -226,7 +226,7 @@ class FormFilling {
         // the DOMelement itself because some websites do not specify an ID and some
         // may remove the DOMelement before we submit the form (sometimes under user
         // direction but occasionally automatically too)
-        const submittedFields: SubmittedField[] = [];
+        const filledFields: FilledField[] = [];
 
         // Keep filling in fields until we find no more with a positive score
         while (fieldScoreMatrix.length > 0 && fieldScoreMatrix[0].score > 0)
@@ -249,7 +249,7 @@ class FormFilling {
                 this.fillASingleField(DOMelement, formFields[ffi].type, dataFields[dfi].value);
             }
 
-            submittedFields.push({
+            filledFields.push({
                 id: formFields[ffi].fieldId,
                 DOMelement: DOMelement,
                 name: formFields[ffi].name,
@@ -264,7 +264,7 @@ class FormFilling {
                 return b.score - a.score;
             });
         }
-        return submittedFields;
+        return filledFields;
     }
 
     private getFormFieldCurrentValue (DOMelement: any, fieldType: string) {

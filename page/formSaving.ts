@@ -176,7 +176,7 @@ class FormSaving {
         return fields.filter(f => f.value || f.type === "checkbox");
     }
 
-    private hasFieldBeenModified (newlySubmittedFields, previouslyFilledFields: SubmittedField[]) {
+    private hasFieldBeenModified (newlySubmittedFields, previouslyFilledFields: FilledField[]) {
         return !!previouslyFilledFields.find(filledField => {
             const submittedField = newlySubmittedFields.find(
                 f => filledField.DOMelement == f.DOMInputElement || filledField.DOMelement == f.DOMSelectElement);
