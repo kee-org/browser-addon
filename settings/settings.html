@@ -73,36 +73,40 @@
                     </div>
 
                     <div class="panel-body">
-                        <div class="form-horizontal">
-                            <div class="form-group formSettingGroup">
-                                <div class="formSettingLabel"><span data-i18n="pref_when_kee_chooses_standard_form_desc"></span></div>
-                                <div class="formSettingDropdown">
-                                    <select class="form-control" id="pref_when_kee_chooses_standard_form_desc">
-                                        <option value="DoNothing" data-i18n="pref_DoNothing_desc"></option>
-                                        <option value="Fill" data-i18n="pref_FillForm_desc"></option>
-                                        <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
-                                    </select>
+                        <fieldset class="fix-border">
+                            <legend class="fix-border" data-i18n="pref_automatic"></legend>
+                            <div class="form-horizontal">
+                                <div class="form-group formSettingGroup">
+                                    <div class="formSettingLabel"><span data-i18n="pref_when_kee_chooses_standard_form_desc"></span></div>
+                                    <div class="formSettingDropdown">
+                                        <select class="form-control" id="pref_when_kee_chooses_standard_form_desc">
+                                            <option value="DoNothing" data-i18n="pref_DoNothing_desc"></option>
+                                            <option value="Fill" data-i18n="pref_FillForm_desc"></option>
+                                            <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-horizontal">
-                            <div class="form-group formSettingGroup">
-                                <div class="formSettingLabel"><span data-i18n="pref_when_user_chooses_desc"></span></div>
-                                <div class="formSettingDropdown">
-                                    <select class="form-control" id="pref_when_user_chooses_desc">
-                                        <option value="Fill" data-i18n="pref_FillForm_desc"></option>
-                                        <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
-                                    </select>
+                            <div class="checkbox">
+                                <label><input type="checkbox" id="pref_autoFillFormsWithMultipleMatches_label" /><span data-i18n="pref_autoFillFormsWithMultipleMatches_label"></span></label>
+                            </div>
+                            <div><span data-i18n="pref_fill_override_hint"></span></div>
+                        </fieldset>
+                        <fieldset class="fix-border">
+                            <legend class="fix-border" data-i18n="pref_manual"></legend>
+                            <div class="form-horizontal">
+                                <div class="form-group formSettingGroup">
+                                    <div class="formSettingLabel"><span data-i18n="pref_when_user_chooses_desc"></span></div>
+                                    <div class="formSettingDropdown">
+                                        <select class="form-control" id="pref_when_user_chooses_desc">
+                                            <option value="Fill" data-i18n="pref_FillForm_desc"></option>
+                                            <option value="FillAndSubmit" data-i18n="pref_FillAndSubmitForm_desc"></option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div><span data-i18n="pref_FillNote_desc"></span></div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" id="pref_autoFillFormsWithMultipleMatches_label" /><span data-i18n="pref_autoFillFormsWithMultipleMatches_label"></span></label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" id="pref_when_one_matching_network_login" /><span data-i18n="pref_when_one_matching_network_login"></span></label>
-                        </div>
+
+                        </fieldset>
                     </div>
                 </div>
 
@@ -137,6 +141,17 @@
                         </div>
                         <div class="checkbox nonSiteSpecificField">
                             <label><input type="checkbox" id="pref_animateWhenOfferingSave_label" /><span data-i18n="pref_animateWhenOfferingSave_label"></span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default" id="panelNetworkAuthentication">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-i18n="network_authentication"></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="pref_when_one_matching_network_login" /><span data-i18n="pref_when_one_matching_network_login"></span></label>
                         </div>
                     </div>
                 </div>

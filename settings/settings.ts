@@ -444,6 +444,7 @@ function switchToAllSitesMode (e) {
 
         document.getElementById("panelFindingEntries").style.display = "block";
         document.getElementById("panelFillingEntries").style.display = "block";
+        document.getElementById("panelNetworkAuthentication").style.display = "block";
         document.getElementById("panelLogging").style.display = "block";
         document.getElementById("panelAdvanced").style.display = "block";
 
@@ -469,6 +470,7 @@ function switchToSpecificSitesMode (e) {
 
         document.getElementById("panelFindingEntries").style.display = "none";
         document.getElementById("panelFillingEntries").style.display = "none";
+        document.getElementById("panelNetworkAuthentication").style.display = "none";
         document.getElementById("panelLogging").style.display = "none";
         document.getElementById("panelAdvanced").style.display = "none";
 

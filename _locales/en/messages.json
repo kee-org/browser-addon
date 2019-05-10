@@ -159,10 +159,6 @@
     "message": "Filling entries",
     "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
   },
-  "pref_FillNote_desc": {
-    "message": "You can override the \"Kee chooses\" behaviours above for individual entries in your password manager.",
-    "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via Kee Vault or KeePass."
-  },
   "pref_FillPrompt_desc": {
     "message": "Fill in the login prompt",
     "description": ""
@@ -180,8 +176,8 @@
     "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
   },
   "pref_autoFillFormsWithMultipleMatches_label": {
-    "message": "Forms with multiple matches should be automatically filled and submitted",
-    "description": ""
+    "message": "Take this automatic action even when multiple matching entries are found",
+    "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
   },
   "pref_keePassDBToOpen_label": {
     "message": "When opening or logging in to KeePass, use this database file",
@@ -796,5 +792,17 @@
   "kee_vault_launch_cta": {
       "message": "Visit us on Product Hunt",
       "description": "Button Call To Action text for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period. Ideally, please start or end the statement with 'Product Hunt' since this will appear neater, but don't worry if that just doesn't make sense in your language."
+  },
+  "pref_automatic": {
+      "message": "Automatic",
+      "description": "Group of settings that relate to the actions that Kee can take automatically when filling entries"
+  },
+  "pref_manual": {
+      "message": "Manual",
+      "description": "Group of settings that relate to the actions that Kee takes when the user explicitly asks Kee to fill an entry"
+  },
+  "pref_fill_override_hint": {
+      "message": "Edit individual entries in your password manager to override this behaviour.",
+      "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
   }
 }
