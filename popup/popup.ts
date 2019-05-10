@@ -151,6 +151,10 @@ function startup () {
             updateSearchPanel();
         }
 
+        // Some Firefox bug causes the scroll position to go wrong sometimes
+        // so this forces the correct position
+        window.scrollTo(0, 0);
+
         // https://bugs.chromium.org/p/chromium/issues/detail?id=31262 prevents us doing something like this:
         //
         // window.addEventListener("unload", function () {
@@ -206,7 +210,30 @@ function startup () {
         window.close();
     });
 
+    setupKeeVaultLaunchMessage();
+
     KeeLog.info("popup ready");
+}
+
+function setupKeeVaultLaunchMessage () {
+    if (configManager.current.keeVaultLaunchMessageDismissed) return;
+    if (configManager.current.keeVaultLaunchStart === undefined || configManager.current.keeVaultLaunchEnd === undefined) return;
+    const now = Date.now();
+    if (configManager.current.keeVaultLaunchStart > now || configManager.current.keeVaultLaunchEnd < now) return;
+
+    document.querySelector(".keevault-launch-message-cta").addEventListener("click", () => {
+        // 404 until we have a finalised URL on Product Hunt
+        browser.tabs.create({ url: "https://www.kee.pm/launch-button-redirect-to-ph" });
+        window.close();
+    });
+    document.getElementById("keevault-launch-message-hide").addEventListener("click", ev => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        configManager.setASAP({keeVaultLaunchMessageDismissed: true});
+        document.getElementById("keevault-launch-message-hide").classList.add("hide");
+        document.getElementById("keevault-launch-message-hide-confirmed").classList.remove("hide");
+    });
+    document.querySelector(".keevault-launch-message").classList.remove("hide");
 }
 
 // Hack around Firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=1516132

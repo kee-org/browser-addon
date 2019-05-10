@@ -60,6 +60,9 @@ defaultConfig.notificationCountSavePassword = 0;
 defaultConfig.currentSearchTermTimeout = 30;
 defaultConfig.notifyPasswordAvailableForPaste = true;
 defaultConfig.animateWhenOfferingSave = true;
+defaultConfig.keeVaultLaunchMessageDismissed = false;
+defaultConfig.keeVaultLaunchStart = 8640000000000000;
+defaultConfig.keeVaultLaunchEnd = 8640000000000000;
 
 class ConfigManager {
     public current: Config;

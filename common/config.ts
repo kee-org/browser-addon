@@ -86,4 +86,7 @@ class Config {
     currentSearchTermTimeout: number;
     notifyPasswordAvailableForPaste: boolean;
     animateWhenOfferingSave: boolean;
+    keeVaultLaunchMessageDismissed: boolean;
+    keeVaultLaunchStart: number;
+    keeVaultLaunchEnd: number;
 }

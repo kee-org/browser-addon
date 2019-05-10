@@ -685,6 +685,7 @@ class Kee {
 
 let kee: Kee;
 let updateForegroundTabRetryTimer;
+let keeVaultLaunchChecker: KeeVaultLaunchChecker;
 
 // Make sure user knows we're not ready yet
 browser.browserAction.setBadgeText({ text: "OFF" });
@@ -698,6 +699,7 @@ function startup () {
     kee.init();
     configManager.addChangeListener(() => kee.configSyncManager.updateToRemoteConfig(configManager.current));
     browser.browserAction.enable();
+    keeVaultLaunchChecker = new KeeVaultLaunchChecker();
 }
 
 // callbacks for messaging / ports
