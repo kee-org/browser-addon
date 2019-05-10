@@ -50,7 +50,8 @@ class ConfigSyncManager {
             notificationCountGeneric: settings.notificationCountGeneric,
             notificationCountSavePassword: settings.notificationCountSavePassword,
             currentSearchTermTimeout: settings.currentSearchTermTimeout,
-            animateWhenOfferingSave: settings.animateWhenOfferingSave
+            animateWhenOfferingSave: settings.animateWhenOfferingSave,
+            manualSubmitOverrideProhibited: !!settings.manualSubmitOverrideProhibited
         };
         const syncableConfig = {settings: syncableSettings, version: settings.version};
 

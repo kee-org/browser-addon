@@ -89,4 +89,5 @@ class Config {
     keeVaultLaunchMessageDismissed: boolean;
     keeVaultLaunchStart: number;
     keeVaultLaunchEnd: number;
+    manualSubmitOverrideProhibited: boolean;
 }

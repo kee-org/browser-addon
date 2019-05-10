@@ -63,6 +63,7 @@ defaultConfig.animateWhenOfferingSave = true;
 defaultConfig.keeVaultLaunchMessageDismissed = false;
 defaultConfig.keeVaultLaunchStart = 8640000000000000;
 defaultConfig.keeVaultLaunchEnd = 8640000000000000;
+defaultConfig.manualSubmitOverrideProhibited = false;
 
 class ConfigManager {
     public current: Config;

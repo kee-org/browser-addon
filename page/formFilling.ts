@@ -12,13 +12,10 @@ class MatchResult {
     allMatchingLogins: any[];
     formRelevanceScores: number[];
     UUID: string;
-    wantToAutoFillForm: boolean;
     mustAutoFillForm: boolean;
     cannotAutoFillForm: boolean;
-    wantToAutoSubmitForm: boolean;
     mustAutoSubmitForm: boolean;
     cannotAutoSubmitForm: boolean;
-    wantToAutoFillFormWithMultipleMatches: boolean;
     dbFileName: string;
     doc: Document;
     forms: HTMLFormElement[];
@@ -34,6 +31,8 @@ class MatchResult {
     lastFilledOther: FilledField[];
     lastFilledPasswords: FilledField[];
 }
+
+class FillAndSubmitAction { fill: boolean; submit: boolean; }
 
 class FilledField {
     id: string;
@@ -345,18 +344,10 @@ class FormFilling {
         this.matchResult.logins = [];
         this.matchResult.mostRelevantFormIndex = null;
 
-        // auto fill the form by default unless a preference or tab variable tells us otherwise
-        this.matchResult.wantToAutoFillForm = this.config.autoFillForms;
         this.matchResult.mustAutoFillForm = false;
         this.matchResult.cannotAutoFillForm = false;
-
-        // do not auto submit the form by default unless a preference or tab variable tells us otherwise
-        this.matchResult.wantToAutoSubmitForm = this.config.autoSubmitForms;
         this.matchResult.mustAutoSubmitForm = false;
         this.matchResult.cannotAutoSubmitForm = false;
-
-        // Allow user to override automatic behaviour if multiple logins match this URL
-        this.matchResult.wantToAutoFillFormWithMultipleMatches = this.config.autoFillFormsWithMultipleMatches;
 
         if (behaviour.UUID != undefined && behaviour.UUID != null && behaviour.UUID != "")
         {
@@ -773,6 +764,8 @@ class FormFilling {
 
         // this records the login that we eventually choose as the one to fill the chosen form with
         let matchingLogin = null;
+        let action: FillAndSubmitAction = { fill: false, submit: false };
+        let multipleMatches = false;
 
         // If we started this fill/submit attempt from certain contexts, we will have
         // been told to ensure we do not perform auto-fill or submit and we'll instead
@@ -829,10 +822,7 @@ class FormFilling {
 
                 this.Logger.debug("We think login " + mostRelevantLoginIndex + " is most relevant.");
                 matchingLogin = matchResult.logins[matchResult.mostRelevantFormIndex][mostRelevantLoginIndex];
-
-                // If user has specified, prevent automatic fill due to multiple matches
-                if (automated && !matchResult.wantToAutoFillFormWithMultipleMatches)
-                    matchResult.wantToAutoFillForm = false; //false by default
+                multipleMatches = true;
 
                 checkMatchingLoginRelevanceThreshold = true;
             }
@@ -899,25 +889,31 @@ class FormFilling {
                     // this.Logger.debug("maximumPage is: " + tabState.maximumPage);
                 }
 
-                // update fill and submit preferences from per-entry configuration options
-                if (matchingLogin.alwaysAutoFill)
-                    matchResult.wantToAutoFillForm = true;
-                if (matchingLogin.neverAutoFill)
-                    matchResult.wantToAutoFillForm = false;
-                if (matchingLogin.alwaysAutoSubmit)
-                    matchResult.wantToAutoSubmitForm = true;
-                if (matchingLogin.neverAutoSubmit)
-                    matchResult.wantToAutoSubmitForm = false;
+                // Default auto-fill behaviour depends upon whether this is automatic or
+                // manual, the corresponding user "automatic" option, if there are one or many matches
+                // and the user option to prevent automatic fill due to multiple matches
+                const autoFillEnabled = isMatchedLoginRequest || ( (automated && multipleMatches && !this.config.autoFillFormsWithMultipleMatches)
+                    ? false : this.config.autoFillForms);
 
-                // If this is a matched login request from the user, we ignore the per-entry
-                // configuration options...
-                if (isMatchedLoginRequest)
-                {
-                    matchResult.wantToAutoFillForm = true;
-                    matchResult.wantToAutoSubmitForm = this.config.autoSubmitMatchedForms;
+                // Default auto-submit behaviour depends upon whether this is automatic or manual and the corresponding user option
+                const autoSubmitEnabled = isMatchedLoginRequest ? this.config.autoSubmitMatchedForms : this.config.autoSubmitForms;
+
+                action = { fill: autoFillEnabled, submit: autoSubmitEnabled };
+
+                // Override fill preferences from per-entry configuration options
+                // unless user explicity selected the matched login
+                if (!isMatchedLoginRequest) {
+                    if (matchingLogin.alwaysAutoFill) action.fill = true;
+                    if (matchingLogin.neverAutoFill) action.fill = false;
                 }
 
-                if (matchResult.wantToAutoFillForm || matchResult.mustAutoFillForm)
+                // Override submit preferences from per-entry configuration options
+                if (!isMatchedLoginRequest || !this.config.manualSubmitOverrideProhibited) {
+                    if (matchingLogin.alwaysAutoSubmit) action.submit = true;
+                    if (matchingLogin.neverAutoSubmit) action.submit = false;
+                }
+
+                if (action.fill || matchResult.mustAutoFillForm)
                 {
                     this.Logger.debug("Going to auto-fill a form");
 
@@ -983,7 +979,7 @@ class FormFilling {
         //     }
         // }
 
-        if (!matchResult.cannotAutoSubmitForm && (matchResult.wantToAutoSubmitForm || matchResult.mustAutoSubmitForm)
+        if (!matchResult.cannotAutoSubmitForm && (action.submit || matchResult.mustAutoSubmitForm)
             && matchResult.formReadyForSubmit)
         {
             this.Logger.info("Auto-submitting form...");
