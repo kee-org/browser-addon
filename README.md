@@ -1,12 +1,10 @@
 # Simple and secure password management
 
-## Kee adds free, secure and easy-to-use password management features to your web browser which save you time and keep your private data more secure.
+## Kee automatically fills login forms to save you time and protect you from security risks.
 
-**Login automatically, never forget another password, stay in control of your passwords and improve their security. Compatible with the world-renowned KeePass Password Safe.**
+Kee is a free Firefox and Chrome add-on for linking browsers to [Kee Vault](https://keevault.pm) or KeePass (latter requires using the [KeePassRPC KeePass plugin](https://github.com/kee-org/keepassrpc)).
 
-Kee is a Firefox and Chrome add-on for linking browsers to Kee Vault or KeePass (latter requires using the [KeePassRPC KeePass plugin](https://github.com/kee-org/keepassrpc)).
-
-Official website with download instructions: https://www.kee.pm
+Official website with sign-up and download links: https://www.kee.pm
 
 Support forum: https://forum.kee.pm
 
@@ -16,7 +14,8 @@ Support forum: https://forum.kee.pm
 
 * node
 * npm or yarn
-* a web browser and KeePass 2.x
+* a web browser
+* a Supporter's subscription to [Kee Vault](https://keevault.pm) OR KeePass 2.x (+ .NET/Mono)
 
 It's all set up for Visual Studio Code but it shouldn't be too hard to work out how to develop using other IDEs.
 
