@@ -5,12 +5,25 @@ class KeeVaultLaunchChecker {
 
     private timer;
 
+    // Only every 4 hours after browser is running
+    // Unless end date has already passed in which case we will do once per
+    // day, just in case we have to reschedule at the last minute
+    private checkEvery = 14400000;
+
     constructor () {
-        if (Date.now() > 1564652440000) {
+        const now = Date.now();
+
+        if (now > 1564652440000) {
             // Do nothing after August - definitely will either have
             // launched by then or can update this cut off point
             return;
         }
+        if (configManager.current.keeVaultLaunchMessageDismissed) return;
+
+        if (configManager.current.keeVaultLaunchEnd != null && configManager.current.keeVaultLaunchEnd < now) {
+            this.checkEvery = 86400000;
+        }
+
         // Initial check shortly after browser has started up
         this.timer = setTimeout(() => this.checkForConfig(), 30000);
     }
@@ -31,7 +44,7 @@ class KeeVaultLaunchChecker {
             KeeLog.debug("Config check attempt failed. Maybe user is offline?");
         }
 
-        // Only once an hour after browser is running
-        this.timer = setTimeout(() => this.checkForConfig(), 3600000);
+
+        this.timer = setTimeout(() => this.checkForConfig(), this.checkEvery);
     }
 }
