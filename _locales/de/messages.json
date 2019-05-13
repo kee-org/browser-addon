@@ -155,10 +155,6 @@
         "message": "Einträge ausfüllen",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
-    "pref_FillNote_desc": {
-        "message": "Sie können das obige Kee-Auswahlverhalten für individuelle Einträge im KeePass-Dialog \"Eintrag hinzufügen\" anpassen.",
-        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via Kee Vault or KeePass."
-    },
     "pref_FillPrompt_desc": {
         "message": "Anmeldeformular ausfüllen",
         "description": ""
@@ -176,8 +172,8 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Formulare mit mehreren Treffern sollen automatisch ausgefüllt und abgesendet werden",
-        "description": ""
+        "message": "Führen Sie diese automatische Aktion auch dann durch, wenn mehrere passende Einträge gefunden werden.",
+        "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_keePassDBToOpen_label": {
         "message": "Beim Öffnen oder Anmelden in KeePass diese Datenbank verwenden",
@@ -462,10 +458,6 @@
     "notifyBarLaunchKeePassButton_tip": {
         "message": "Bitte Kee Vault oder KeePass starten, um Kee zu aktivieren.",
         "description": ""
-    },
-    "notifyBarLogSensitiveData_label": {
-        "message": "Warnung: Kee speichert Ihre Passwörter! Wenn Sie diese Einstellung nicht explizit aktiviert haben, sollten Sie dies sofort deaktivieren.",
-        "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
     },
     "notifyBarLoginToKeePassButton_tip": {
         "message": "Melden Sie sich an Ihrer KeePass-Datenbank an, um Kee zu aktivieren.",
@@ -760,7 +752,7 @@
         "description": "Outlines a few benefits of Kee Vault compared to KeePass"
     },
     "kee_vault_announcement_3": {
-        "message": "Mit Kee Version 3.0 können Sie Kee Vault anstelle der Desktop-KeePass-Anwendung verwenden. Dabei werden alle vorhandenen Kee-Funktionen wie das Ausfüllen und Speichern von Formularen, das Suchen und das Generieren von Kennwörtern unterstützt.",
+        "message": "Seit Kee Version 3.0 können Sie Kee Vault anstelle der Desktopanwendung KeePass verwenden. Dabei werden alle vorhandenen Kee-Funktionen wie das Ausfüllen und Speichern von Formularen sowie das Suchen und Generieren von Kennwörtern unterstützt.",
         "description": "Explains that Kee v3 works with Kee Vault"
     },
     "kee_vault_announcement_4": {
@@ -775,9 +767,41 @@
         "message": "Eintrag anzeigen",
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
-    "list_version_upgrade_3_1": {
-        "message": "Verschiedene Verbesserungen bei der Formularerkennung, dem Erkennen von Einträgen und dem automatischen Ausfüllen von Einträgen; Die Anzahl der Felder, zu denen das Kee-Symbol hinzugefügt wird, wurde reduziert; Es wurden mehrere Probleme behoben, durch die das Kee-Symbol in einem Feld nicht richtig angezeigt wurde; Das Kee-Symbol in der Symbolleiste ist jetzt kurz animiert, wenn Einträge zum Speichern zur Verfügung stehen; Verbesserte Konfigurationsfunktion für jede Seite; Hinzugefügte Schaltflächen zum Öffnen Ihres Kennwortmanagers im Hauptfenster; Leere Felder werden nicht mehr in Ihrem Kennwortmanager gespeichert; Problemumgehung eines Firefox-Fehlers, durch das das Hauptfenster manchmal leer eingeblendet wird",
+    "list_version_upgrade_3_2": {
+        "message": "Der Vorrang der automatischen Übermittlung eines Eintrags in Kee Vault oder KeePass wirkt sich nun auch auf das Verhalten von Kee aus, wenn Sie Kee manuell bitten, einen Eintrag zu füllen.;Der Abschnitt \"Einträge ausfüllen\" in den Kee-Optionen wurde neu angeordnet, um zu verdeutlichen, welche Einstellungen das automatische und manuelle Füllen von Einträgen beeinflussen.;Automatische Füllvorgänge überspringen nun das Füllen, wenn bereits vorhandener Text im Feld gefunden wird.;Eine ablehnbare Nachricht, die den Start von Kee Vault ankündigt, kann am unteren Rand des Kee-Panels hinzugefügt werden, wenn wir zum Starten bereit sind.;Alte Protokollierungsfunktionen wurden entfernt (Benachrichtigung beim erstmaligen Laden und vertrauliche Protokollierungsoption für das Debuggen).",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
+    },
+    "kee_vault_launch_hidden_confirmation": {
+        "message": "Wir werden Ihnen das nicht noch einmal zeigen. Wenn Sie Kee später unterstützen möchten, besuchen Sie www.kee.pm. Danke!",
+        "description": "Shown to user after they permanently dismiss the Kee Vault Launch message at the bottom of the main Kee popup."
+    },
+    "kee_vault_launch_now": {
+        "message": "Kee Vault startet jetzt auf Product Hunt!",
+        "description": "Main Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
+    },
+    "kee_vault_launch_support_us": {
+        "message": "Bitte unterstützen Sie uns und schauen Sie sich unser zeitlich begrenztes Einführungsangebot an.",
+        "description": "Secondary Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
+    },
+    "kee_vault_launch_cta": {
+        "message": "Besuchen Sie uns auf Product Hunt",
+        "description": "Button Call To Action text for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period. Ideally, please start or end the statement with 'Product Hunt' since this will appear neater, but don't worry if that just doesn't make sense in your language."
+    },
+    "pref_automatic": {
+        "message": "Automatisch",
+        "description": "Group of settings that relate to the actions that Kee can take automatically when filling entries"
+    },
+    "pref_manual": {
+        "message": "Manuell",
+        "description": "Group of settings that relate to the actions that Kee takes when the user explicitly asks Kee to fill an entry"
+    },
+    "pref_fill_override_hint": {
+        "message": "Bearbeiten Sie einzelne Einträge in Ihrem Passwortmanager, um dieses Verhalten zu umgehen.",
+        "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
+    },
+    "pref_fill_override_option": {
+        "message": "Das Bearbeiten eines automatisch gesendeten Eintrags umgeht auch dieses Verhalten.",
+        "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "In KeePass anmelden / Passende Anmeldungen auswählen / Liste der passenden Anmeldungen anzeigen",

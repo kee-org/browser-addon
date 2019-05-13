@@ -155,10 +155,6 @@
         "message": "Preenchendo entradas",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
-    "pref_FillNote_desc": {
-        "message": "Você pode substituir os comportamentos \"Kee escolhe\" acima para entradas individuais em seu gerenciador de senhas.",
-        "description": "Tells user that the settings nearby are global/default and they are able to override on a per-entry basis via Kee Vault or KeePass."
-    },
     "pref_FillPrompt_desc": {
         "message": "Preencher o campo de login",
         "description": ""
@@ -176,8 +172,8 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Formulários com múltiplas correspondências devem ser automaticamente preenchidos e enviados",
-        "description": ""
+        "message": "Execute esta ação automática mesmo quando várias entradas correspondentes forem encontradas",
+        "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_keePassDBToOpen_label": {
         "message": "Ao abrir ou fazer login no KeePass, use este arquivo de banco de dados",
@@ -462,10 +458,6 @@
     "notifyBarLaunchKeePassButton_tip": {
         "message": "Abra o Kee Vault ou o KeePass para hablitar o Kee",
         "description": ""
-    },
-    "notifyBarLogSensitiveData_label": {
-        "message": "AVISO: Kee está registrando suas senhas! Se você não ativou intencionalmente esta configuração, você deve desativá-la imediatamente",
-        "description": "Displayed only when an advanced setting is potentially mistakenly or maliciously reconfigured"
     },
     "notifyBarLoginToKeePassButton_tip": {
         "message": "Desbloqueie seu gerenciador de senhas para habilitar o Kee",
@@ -775,9 +767,41 @@
         "message": "Mostrar Entrada",
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
-    "list_version_upgrade_3_1": {
-        "message": "Várias melhorias para a detecção de formulários, entrada de correspondência e entradas de preenchimento automático;Limitou o número de campos que o ícone do Kee é adicionado;Corrigidos vários problemas que impediam o ícone do Kee em um campo de ser visto corretamente;O ícone do Kee na barra de ferramentas agora é brevemente animado quando as entradas estão disponíveis para salvar;Melhoria do recurso de configuração por site;Adicionado botão para abrir seu gerenciador de senhas no painel principal;Nós não salvamos mais campos vazios no seu gerenciador de senhas;Solucionado um bug do Firefox que fazia com que o painel principal aparecesse vazio às vezes",
+    "list_version_upgrade_3_2": {
+        "message": "Ignorar o comportamento de envio automático de uma entrada no Kee Vault ou KeePass agora também afeta o comportamento do Kee quando você solicita manualmente ao Kee para preencher uma entrada.; Reorganizou a seção \"Entradas de preenchimento\" nas Opções do Kee para esclarecer quais configurações afetam e o comportamento de preenchimento de entrada manual. As operações de preenchimento automático agora ignoram o preenchimento se for encontrado texto preexistente no campo. Uma mensagem descartável anunciando o lançamento do Kee Vault pode ser adicionada à parte inferior do painel do Kee quando estivermos prontos para iniciar.;Removido antigos recursos de registro (notificação de carregamento inicial e opção de registro sensível para depuração).",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
+    },
+    "kee_vault_launch_hidden_confirmation": {
+        "message": "Nós não vamos mostrar isso de novo. Se você quiser apoiar o Kee mais tarde, visite www.kee.pm. Obrigado!",
+        "description": "Shown to user after they permanently dismiss the Kee Vault Launch message at the bottom of the main Kee popup."
+    },
+    "kee_vault_launch_now": {
+        "message": "O Kee Vault está sendo lançado agora no Product Hunt!",
+        "description": "Main Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
+    },
+    "kee_vault_launch_support_us": {
+        "message": "Por favor, apoie-nos e confira nossa oferta de lançamento por tempo limitado.",
+        "description": "Secondary Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
+    },
+    "kee_vault_launch_cta": {
+        "message": "Visite-nos no Product Hunt",
+        "description": "Button Call To Action text for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period. Ideally, please start or end the statement with 'Product Hunt' since this will appear neater, but don't worry if that just doesn't make sense in your language."
+    },
+    "pref_automatic": {
+        "message": "Automático",
+        "description": "Group of settings that relate to the actions that Kee can take automatically when filling entries"
+    },
+    "pref_manual": {
+        "message": "Manual",
+        "description": "Group of settings that relate to the actions that Kee takes when the user explicitly asks Kee to fill an entry"
+    },
+    "pref_fill_override_hint": {
+        "message": "Edite entradas individuais no seu gerenciador de senhas para substituir esse comportamento.",
+        "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
+    },
+    "pref_fill_override_option": {
+        "message": "Editar o comportamento de envio automático de uma entrada também substitui esse comportamento",
+        "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Entrar no gerenciador de senhas / Selecionar login correspondente / Mostrar lista de logins correspondentes",
