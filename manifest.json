@@ -2,8 +2,8 @@
     "manifest_version": 2,
     "name": "Kee - Password Manager",
     "default_locale": "en",
-    "version": "3.2.0",
-    "version_name": "3.2.0",
+    "version": "3.3.0",
+    "version_name": "3.3.0",
     "author": "Kee Vault Ltd",
     "description": "Kee adds private, secure and easy password management features which save time and keep your private data more secure.",
     "background": {
