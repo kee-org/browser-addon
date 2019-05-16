@@ -188,7 +188,7 @@
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
     "pref_listAllOpenDBs_label": {
-        "message": "Die Log-in-Daten aller geöffneten Kee Vault- und KeePass-Datenbanken auflisten",
+        "message": "Log-in-Daten aller geöffneten Kee Vault- und KeePass-Datenbanken auflisten",
         "description": ""
     },
     "pref_logLevel_desc": {
@@ -216,7 +216,7 @@
         "description": ""
     },
     "pref_notifyWhenEntryUpdated_label": {
-        "message": "Die Benachrichtigung \"Passwort erfolgreich aktualisiert\" anzeigen",
+        "message": "Benachrichtigung \"Passwort erfolgreich aktualisiert\" anzeigen",
         "description": "Option to enable or disable the information displayed when a password has been updated"
     },
     "pref_animateWhenOfferingSave_label": {
@@ -260,7 +260,7 @@
         "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from the password manager"
     },
     "site_options_valid_form_intro_desc": {
-        "message": "Kee versucht, alle Passwort-Formularfelder (Boxen) mit den passenden Kee Vault- und KeePass-Einträgen zu füllen. Sie können dieses Verhalten unten einstellen.",
+        "message": "Kee wird versuchen, übereinstimmende Kee Vault- und KeePass-Einträge für alle Formulare zu füllen, die ein Passwortfeld (Box) haben. Sie können dieses Verhalten unten anpassen.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "text_field_id": {
@@ -404,7 +404,7 @@
         "description": ""
     },
     "generatePassword_instructions": {
-        "message": "Den zu erstellenden Kennworttyp wählen:",
+        "message": "Den zu erstellenden Passworttyp wählen:",
         "description": ""
     },
     "generatePassword_done_1": {
@@ -752,7 +752,7 @@
         "description": "Outlines a few benefits of Kee Vault compared to KeePass"
     },
     "kee_vault_announcement_3": {
-        "message": "Seit Kee Version 3.0 können Sie Kee Vault anstelle der Desktopanwendung KeePass verwenden. Dabei werden alle vorhandenen Kee-Funktionen wie das Ausfüllen und Speichern von Formularen sowie das Suchen und Generieren von Kennwörtern unterstützt.",
+        "message": "Seit Kee Version 3.0 können Sie Kee Vault anstelle der Desktopanwendung KeePass verwenden. Dabei werden alle vorhandenen Kee-Funktionen wie das Ausfüllen und Speichern von Formularen sowie das Suchen und Generieren von Passwörtern unterstützt.",
         "description": "Explains that Kee v3 works with Kee Vault"
     },
     "kee_vault_announcement_4": {
@@ -800,7 +800,7 @@
         "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_fill_override_option": {
-        "message": "Das Bearbeiten eines automatisch gesendeten Eintrags umgeht auch dieses Verhalten.",
+        "message": "Das Bearbeiten des Verhaltens zum automatischen Senden eines Eintrags überschreibt auch dieses Verhalten.",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "KB_shortcut_simple_2_desc": {
