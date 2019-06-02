@@ -1,4 +1,6 @@
-class SearchPanel {
+import { LoginMenus } from "./LoginMenus";
+
+export class SearchPanel {
 
     private search: Search;
     private loginMenus: LoginMenus;
@@ -9,9 +11,10 @@ class SearchPanel {
         return this._currentSearchTerm;
     }
 
-    constructor ()
+    constructor (private appState: AppState,
+        private myPort: browser.runtime.Port)
     {
-        this.loginMenus = new LoginMenus();
+        this.loginMenus = new LoginMenus(myPort);
         this.search = new Search(appState, {
             version: 1,
             searchAllDatabases: configManager.current.searchAllOpenDBs,
@@ -25,7 +28,7 @@ class SearchPanel {
         searchBox.title = $STR("Search_tip");
         searchBox.addEventListener("input", evt => {
             this._currentSearchTerm = searchBox.value;
-            myPort.postMessage({currentSearchTerm: searchPanel.currentSearchTerm} as AddonMessage);
+            this.myPort.postMessage({currentSearchTerm: this.currentSearchTerm} as AddonMessage);
             this.search.execute(this._currentSearchTerm,
                 this.onSearchComplete.bind(this), []
             );
@@ -197,7 +200,8 @@ class SearchPanel {
                 event.preventDefault();
                 this.loginMenus.showContextActions(login.uniqueID, login.dbFileName);
             }, false);
-            loginItem.addEventListener("mouseenter", event => this.loginMenus.onMouseEnterLogin(event), false);
+            loginItem.addEventListener("mouseenter", e => this.loginMenus.onMouseEnterLogin(e), false);
+            loginItem.addEventListener("mouseleave", e => this.loginMenus.onMouseLeaveLogin(e), false);
 
             container.appendChild(loginItem);
         }

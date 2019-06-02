@@ -9,6 +9,10 @@ var sequence = require('run-sequence');
 var del = require('del');
 var replace = require('gulp-replace');
 var signAddon = require('sign-addon').default;
+var rollup = require('rollup');
+var resolve = require('rollup-plugin-node-resolve');
+var typescript = require('rollup-plugin-typescript2');
+var terser = require('rollup-plugin-terser');
 
 // Some tasks set DEBUG to false so that a production build can be executed.
 // There doesn't appear to be a way to pass this as a local variable so we
@@ -194,6 +198,41 @@ var buildTypescript = function (tsProject, destination) {
     }
 };
 
+var buildAndBundleTypescript = function (name, fileNames) {
+    if (!fileNames || !fileNames.length) {
+        fileNames = [name];
+    }
+    bundleOps = [];
+    for (const fileName of fileNames) {
+        const pathName = name + '/' + fileName;
+        bundleOps.push(rollup.rollup({
+            input: './' + pathName + '.ts',
+            plugins: [
+                resolve(),
+                typescript({
+                    tsconfig: name + '/tsconfig.json',
+                    typescript: require('typescript'),
+                })
+            ]
+        }).then(bundle => {
+            return Promise.all([bundle.write({
+                file: (DEBUG ? buildDirDebug : buildDirProd) + '/' + pathName + '.js',
+                format: 'iife',
+                sourcemap: !!DEBUG
+            }), bundle.write({
+                file: (DEBUG ? buildDirDebugChrome : buildDirProdChrome) + '/' + pathName + '.js',
+                format: 'iife',
+                sourcemap: !!DEBUG
+            }), bundle.write({
+                file: (DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + '/' + pathName + '.js',
+                format: 'iife',
+                sourcemap: !!DEBUG
+            })]);
+        }));
+    }
+    return Promise.all(bundleOps);
+};
+
 var tsProjectBackground = ts.createProject("background/tsconfig.json", {
     outFile: globTSBackgroundOut
 });
@@ -201,44 +240,23 @@ gulp.task("compilets:background", ["clean:ts:background", "lint:background"], fu
     return buildTypescript(tsProjectBackground, "background");
 });
 
-var tsProjectPopup = ts.createProject("popup/tsconfig.json", {
-    outFile: globTSPopupOut
-});
 gulp.task("compilets:popup", ["clean:ts:popup", "lint:popup"], function() {
-    return buildTypescript(tsProjectPopup, "popup");
-});
-
-var tsProjectPanels = ts.createProject("panels/tsconfig.json", {
-    outFile: globTSPanelsOut
+    return buildAndBundleTypescript("popup");
 });
 gulp.task("compilets:panels", ["clean:ts:panels", "lint:panels"], function() {
-    return buildTypescript(tsProjectPanels, "panels");
-});
-
-var tsProjectPage = ts.createProject("page/tsconfig.json", {
-    outFile: globTSPageOut
+    return buildAndBundleTypescript("panels");
 });
 gulp.task("compilets:page", ["clean:ts:page", "lint:page"], function() {
-    return buildTypescript(tsProjectPage, "page");
-});
-
-var tsProjectVault = ts.createProject("vault/tsconfig.json", {
-    outFile: globTSVaultOut
+    return buildAndBundleTypescript("page");
 });
 gulp.task("compilets:vault", ["clean:ts:vault", "lint:vault"], function() {
-    return buildTypescript(tsProjectVault, "vault");
-});
-
-var tsProjectSettings = ts.createProject("settings/tsconfig.json", {
-    outFile: globTSSettingsOut
+    return buildAndBundleTypescript("vault");
 });
 gulp.task("compilets:settings", ["clean:ts:settings", "lint:settings"], function() {
-    return buildTypescript(tsProjectSettings, "settings");
+    return buildAndBundleTypescript("settings");
 });
-
-var tsProjectDialogs = ts.createProject("dialogs/tsconfig.json", {});
 gulp.task("compilets:dialogs", ["clean:ts:dialogs", "lint:dialogs"], function() {
-    return buildTypescript(tsProjectDialogs, "dialogs");
+    return buildAndBundleTypescript("dialogs", ["SRP", "NetworkAuth"]);
 });
 
 /********** STATIC FILE COPYING / MANIPULATION **********/

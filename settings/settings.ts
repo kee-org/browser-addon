@@ -1,3 +1,5 @@
+import theAnswer from "the-answer";
+
 class SiteSearchResult extends SiteConfigNode {
     value: string;
     method: SiteConfigMethod;
@@ -14,6 +16,7 @@ function setupPage () {
     [].forEach.call($$(".siteSpecificToggle"), node => (node as HTMLElement).style.display = "none");
     setupInputListeners();
     document.getElementById("i18n_root").style.display = "block";
+    console.error("answer:" + theAnswer);
 }
 
 function loadInitialConfig () {

@@ -1,45 +1,12 @@
-/// <reference path="keeFieldIcon.ts" />
-/// <reference path="PanelStub.ts" />
-/// <reference path="formSaving.ts" />
-
-class MatchResult {
-    logins: keeLoginInfo[][];
-    submitTargets: HTMLElement[];
-    usernameIndexArray: number[];
-    passwordFieldsArray: keeLoginField[][];
-    otherFieldsArray: keeLoginField[][];
-    currentPage: number;
-    allMatchingLogins: any[];
-    formRelevanceScores: number[];
-    UUID: string;
-    mustAutoFillForm: boolean;
-    cannotAutoFillForm: boolean;
-    mustAutoSubmitForm: boolean;
-    cannotAutoSubmitForm: boolean;
-    dbFileName: string;
-    doc: Document;
-    forms: HTMLFormElement[];
-    formReadyForSubmit: boolean;
-    autofillOnSuccess: boolean;
-    autosubmitOnSuccess: boolean;
-    notifyUserOnSuccess: boolean;
-    wrappers: any[];
-    requestCount: number;
-    responseCount: number;
-    requestIds: any[];
-    mostRelevantFormIndex?: number;
-    lastFilledOther: FilledField[];
-    lastFilledPasswords: FilledField[];
-}
+import { FilledField } from "./FilledField";
+import { PanelStub, PanelStubOptions } from "./PanelStub";
+import { FormUtils } from "./formsUtils";
+import { FormSaving } from "./formSaving";
+import { KeeFieldIcon } from "./keeFieldIcon";
+import { MatchResult } from "./MatchResult";
+import { FindMatchesBehaviour } from "./findMatchesBehaviour";
 
 class FillAndSubmitAction { fill: boolean; submit: boolean; }
-
-class FilledField {
-    id: string;
-    DOMelement: HTMLInputElement | HTMLSelectElement;
-    name: string;
-    value: string;
-}
 
 class SubmitCandidate {
     distance: number;
@@ -56,17 +23,10 @@ class VisibleFieldCache {
     other: boolean[];
 }
 
-class FormFilling {
+export class FormFilling {
 
-    private Logger: KeeLogger;
-    private config: Config;
     private findLoginOp: any = {};
     private matchResult: MatchResult = new MatchResult();
-
-    private matchFinder: {(uri: string): void};
-    private formUtils: FormUtils;
-    private formSaving: FormSaving;
-
     private keeFieldIcon: KeeFieldIcon;
 
     public matchedLoginsPanelStub: PanelStub;
@@ -80,18 +40,15 @@ class FormFilling {
     private semanticWhitelistCache;
     private semanticBlacklistCache;
 
-    constructor (formUtils: FormUtils,
-        formSaving: FormSaving,
-        logger: KeeLogger,
-        config: Config,
-        matchFinder: {(uri: string): void}) {
+    constructor (private myPort: browser.runtime.Port,
+        private parentFrameId: number,
+        private formUtils: FormUtils,
+        private formSaving: FormSaving,
+        private Logger: KeeLogger,
+        private config: Config,
+        private matchFinder: {(uri: string): void}) {
 
-        this.formUtils = formUtils;
-        this.formSaving = formSaving;
-        this.Logger = logger;
-        this.config = config;
-        this.matchFinder = matchFinder;
-        this.keeFieldIcon = new KeeFieldIcon();
+        this.keeFieldIcon = new KeeFieldIcon(myPort, parentFrameId, formUtils, this.createMatchedLoginsPanelNearNode.bind(this));
     }
 
     public executePrimaryAction () {
@@ -101,7 +58,7 @@ class FormFilling {
                 this.closeMatchedLoginsPanel();
             } else if (this.matchResult.logins[this.matchResult.mostRelevantFormIndex].length > 1) {
                 this.closeMatchedLoginsPanel();
-                this.matchedLoginsPanelStub = new PanelStub(PanelStubOptions.MatchedLogins, null);
+                this.matchedLoginsPanelStub = new PanelStub(PanelStubOptions.MatchedLogins, null, this.parentFrameId);
                 this.matchedLoginsPanelStub.createPanel();
             }
         }
@@ -115,9 +72,9 @@ class FormFilling {
 
     public createMatchedLoginsPanelNearNode (target: HTMLElement) {
         this.closeMatchedLoginsPanel();
-        this.matchedLoginsPanelStub = new PanelStub(PanelStubOptions.MatchedLogins, target);
+        this.matchedLoginsPanelStub = new PanelStub(PanelStubOptions.MatchedLogins, target, this.parentFrameId);
         this.matchedLoginsPanelStub.createPanel();
-        this.matchedLoginsPanelStubRaf = requestAnimationFrame(formFilling.updateMatchedLoginsPanelPosition);
+        this.matchedLoginsPanelStubRaf = requestAnimationFrame(() => this.updateMatchedLoginsPanelPosition());
     }
 
     public closeMatchedLoginsPanel () {
@@ -127,8 +84,8 @@ class FormFilling {
     }
 
     public updateMatchedLoginsPanelPosition () {
-        formFilling.matchedLoginsPanelStub.updateBoundingClientRect();
-        formFilling.matchedLoginsPanelStubRaf = requestAnimationFrame(formFilling.updateMatchedLoginsPanelPosition);
+        this.matchedLoginsPanelStub.updateBoundingClientRect();
+        this.matchedLoginsPanelStubRaf = requestAnimationFrame(() => this.updateMatchedLoginsPanelPosition());
     }
 
     private calculateFieldMatchScore (formField: keeLoginField, dataField, currentPage, config: FieldMatchScoreConfig, isVisible?: boolean)
@@ -187,7 +144,7 @@ class FormFilling {
         // If page # is unestablished (<=0)
         //else do nothing
 
-        if (isVisible === undefined && formUtils.isDOMElementVisible(formField.DOMInputElement || formField.DOMSelectElement))
+        if (isVisible === undefined && this.formUtils.isDOMElementVisible(formField.DOMInputElement || formField.DOMSelectElement))
             isVisible = true;
 
         score += isVisible ? 35 : 0;
@@ -632,12 +589,12 @@ class FormFilling {
 
             this.Logger.info("match found!");
 
-            const formVisible = formUtils.isDOMElementVisible(matchResult.submitTargets[i]);
+            const formVisible = this.formUtils.isDOMElementVisible(matchResult.submitTargets[i]);
             this.Logger.debug("formVisible: " + formVisible);
 
             const visibleFieldCache = {
-                other: matchResult.otherFieldsArray[i].map(f => formUtils.isDOMElementVisible(f.DOMInputElement || f.DOMSelectElement)),
-                password: matchResult.passwordFieldsArray[i].map(f => formUtils.isDOMElementVisible(f.DOMInputElement || f.DOMSelectElement))
+                other: matchResult.otherFieldsArray[i].map(f => this.formUtils.isDOMElementVisible(f.DOMInputElement || f.DOMSelectElement)),
+                password: matchResult.passwordFieldsArray[i].map(f => this.formUtils.isDOMElementVisible(f.DOMInputElement || f.DOMSelectElement))
             };
 
             // determine the relevance of each login entry to this form
@@ -756,7 +713,7 @@ class FormFilling {
         const otherFields = matchResult.otherFieldsArray[matchResult.mostRelevantFormIndex];
 
         if (!isMatchedLoginRequest && matchResult.logins[matchResult.mostRelevantFormIndex].length > 0) {
-            myPort.postMessage({ logins: matchResult.logins[matchResult.mostRelevantFormIndex] });
+            this.myPort.postMessage({ logins: matchResult.logins[matchResult.mostRelevantFormIndex] });
 
             // Give the user a way to choose a login interactively
             this.keeFieldIcon.addKeeIconToFields(passwordFields, otherFields, matchResult.logins[matchResult.mostRelevantFormIndex]);
@@ -1022,17 +979,18 @@ class FormFilling {
         let minScoreToWin = 0;
         const distanceCalc = (v, t) => this.commonAncestorDistance(v, t, distanceMap);
         const distanceMap = new Map<Node, number>();
+        const fUtils = this.formUtils;
 
         function verifyPotentialCandidate (value: HTMLElement, score: number) {
 
             // abort early if we can't win even with a perfect visibility and distance score
             if (minScoreToWin > score + VISIBLE_SCORE + DISTANCE_MAX_SCORE) return;
 
-            const isVisible = formUtils.isDOMElementVisible(value);
+            const isVisible = fUtils.isDOMElementVisible(value);
 
             // Some forms are hidden (e.g. Twitter) and simply revealed to the user at a later time
             // Therefore we should only punish based on visibility if the form submitTargetNeighbour is visible.
-            if (isVisible || !formUtils.isDOMElementVisible(submitTargetNeighbour)) {
+            if (isVisible || !fUtils.isDOMElementVisible(submitTargetNeighbour)) {
                 score += VISIBLE_SCORE;
             }
 
@@ -1281,7 +1239,7 @@ class FormFilling {
         const submitElement = this.findSubmitButton(form, submitTargetNeighbour);
 
         // Avoid searching for matching passwords upon auto-submission
-        formSaving.removeAllSubmitHandlers();
+        this.formSaving.removeAllSubmitHandlers();
 
         // If we've found a button to click, use that; if not, just submit the form.
         if (submitElement != null)

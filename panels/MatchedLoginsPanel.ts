@@ -1,4 +1,10 @@
-class MatchedLoginsPanel {
+import { copyStringToClipboard } from "./copyStringToClipboard";
+
+export class MatchedLoginsPanel {
+
+    constructor (private myPort: browser.runtime.Port,
+        private closePanel: () => void,
+        private parentFrameId: number) {}
 
     public createNearNode (node: HTMLElement, logins) {
         const container = document.createElement("div");
@@ -56,21 +62,25 @@ class MatchedLoginsPanel {
             const loginContextActions = this.createContextActions(login);
             loginItem.appendChild(loginContextActions);
 
-            loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
+            loginItem.addEventListener("keydown", e => this.keyboardNavHandler(e), false);
             loginItem.addEventListener("click", function (event) {
                 event.stopPropagation();
                 if (event.button == 0 || event.button == 1)
                     this.dispatchEvent(new Event("keeCommand"));
             }, false);
-            loginItem.addEventListener("contextmenu", function (event) {
+            loginItem.addEventListener("contextmenu", event => {
                 event.stopPropagation();
                 event.preventDefault();
-                matchedLoginsPanel.showContextActions(loginContextActions);
+                this.showContextActions(loginContextActions);
             }, false);
-            loginItem.addEventListener("keeCommand", function (event) {
-                myPort.postMessage({ action: Action.ManualFill, selectedLoginIndex: this.dataset.loginIndex, frameId: parentFrameId });
+            loginItem.addEventListener("keeCommand", event => {
+                this.myPort.postMessage({
+                    action: Action.ManualFill,
+                    selectedLoginIndex: (event.currentTarget as any).dataset.loginIndex,
+                    frameId: this.parentFrameId });
             }, false);
-            loginItem.addEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);
+            loginItem.addEventListener("mouseenter", e => this.onMouseEnterLogin(e), false);
+            loginItem.addEventListener("mouseleave", e => this.onMouseLeaveLogin(e), false);
 
             container.appendChild(loginItem);
         }
@@ -102,7 +112,7 @@ class MatchedLoginsPanel {
             case 27: // esc
                 event.preventDefault();
                 event.stopPropagation();
-                closePanel();
+                this.closePanel();
                 break;
             case 93: // context
                 event.preventDefault();
@@ -127,8 +137,8 @@ class MatchedLoginsPanel {
             editButton.addEventListener("click", event => {
                 event.stopPropagation();
                 event.preventDefault();
-                myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
-                myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
+                this.myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
+                this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
             }, false);
             editButton.addEventListener("keydown", event => {
                 if (event.keyCode === 13) editButton.click();
@@ -149,7 +159,7 @@ class MatchedLoginsPanel {
                 event.stopPropagation();
                 event.preventDefault();
                 copyStringToClipboard(usernameField.value);
-                myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
+                this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
             }, false);
             button.addEventListener("keydown", event => {
                 if (event.keyCode === 13) button.click();
@@ -165,7 +175,7 @@ class MatchedLoginsPanel {
                 event.stopPropagation();
                 event.preventDefault();
                 copyStringToClipboard(passwordField.value);
-                myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
+                this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
             }, false);
             button.addEventListener("keydown", event => {
                 if (event.keyCode === 13) button.click();
@@ -184,14 +194,14 @@ class MatchedLoginsPanel {
                             event.stopPropagation();
                             event.preventDefault();
                             copyStringToClipboard(o.value);
-                            myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
+                            this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
                         }, false);
                         button.addEventListener("keydown", event => {
                             if (event.keyCode === 13) button.click();
                         });
                         loginContextActions.appendChild(button);
                     }
-                });
+                }, this);
             }
             if (passwordFieldCount > 1) {
                 kfl.passwords.forEach(function (p, i) {
@@ -203,14 +213,14 @@ class MatchedLoginsPanel {
                             event.stopPropagation();
                             event.preventDefault();
                             copyStringToClipboard(p.value);
-                            myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
+                            this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
                         }, false);
                         button.addEventListener("keydown", event => {
                             if (event.keyCode === 13) button.click();
                         });
                         loginContextActions.appendChild(button);
                     }
-                });
+                }, this);
             }
         }
         return loginContextActions;
@@ -218,21 +228,17 @@ class MatchedLoginsPanel {
 
     public onMouseEnterLogin (event) {
         const optionsMenuTrigger = document.createElement("div");
-        optionsMenuTrigger.addEventListener("click", function (evt) {
+        optionsMenuTrigger.addEventListener("click", evt => {
             evt.preventDefault();
             evt.stopPropagation();
-            matchedLoginsPanel.showContextActions(this.parentElement.getElementsByTagName("div")[0]);
+            this.showContextActions((evt.currentTarget as any).parentElement.getElementsByTagName("div")[0]);
         }, false);
         optionsMenuTrigger.setAttribute("id", "Kee-optionsMenuTrigger");
         event.target.appendChild(optionsMenuTrigger);
-        event.target.removeEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);
-        event.target.addEventListener("mouseleave", matchedLoginsPanel.onMouseLeaveLogin, false);
     }
 
     public onMouseLeaveLogin (event) {
         const optionsMenuTrigger = document.getElementById("Kee-optionsMenuTrigger");
         event.target.removeChild(optionsMenuTrigger);
-        event.target.removeEventListener("mouseleave", matchedLoginsPanel.onMouseLeaveLogin, false);
-        event.target.addEventListener("mouseenter", matchedLoginsPanel.onMouseEnterLogin, false);
     }
 }

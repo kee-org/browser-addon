@@ -1,4 +1,6 @@
-class GeneratePasswordPanel {
+export class GeneratePasswordPanel {
+    constructor (private myPort: browser.runtime.Port,
+        private closePanel: () => void) {}
 
     public createNearNode (node: HTMLElement, passwordProfiles: string[]) {
         const container = document.createElement("div");
@@ -29,7 +31,7 @@ class GeneratePasswordPanel {
                 const profileItem = document.createElement("li");
                 profileItem.textContent = displayName;
                 profileItem.tabIndex = i == 0 ? 0 : -1;
-                profileItem.addEventListener("keydown", this.keyboardNavHandler, false);
+                profileItem.addEventListener("keydown", e => this.keyboardNavHandler(e), false);
                 profileItem.addEventListener("mouseup", function (event) {
                     if (event.button == 0 || event.button == 1)
                     {
@@ -37,8 +39,8 @@ class GeneratePasswordPanel {
                         this.dispatchEvent(new Event("keeCommand"));
                     }
                 }, false);
-                profileItem.addEventListener("keeCommand", function (event) {
-                    myPort.postMessage({ action: Action.GeneratePassword, passwordProfile: this.textContent });
+                profileItem.addEventListener("keeCommand", event => {
+                    this.myPort.postMessage({ action: Action.GeneratePassword, passwordProfile: (event.currentTarget as any).textContent });
                 }, false);
 
                 list.appendChild(profileItem);
@@ -71,7 +73,7 @@ class GeneratePasswordPanel {
             case 27: // esc
                 event.preventDefault();
                 event.stopPropagation();
-                closePanel();
+                this.closePanel();
                 break;
         }
     }

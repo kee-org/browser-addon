@@ -1,3 +1,5 @@
+import { waitForElementById } from "./waitForElementById";
+
 /*
   This links Kee to an instance of Kee Vault via the KPRPC protocol.
   It is injected to the top level frame of tabs with suitable URLs.
@@ -93,30 +95,6 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
     KeeLog.attachConfig(configManager.current);
     updateAppState(currentAppState, isForegroundTab);
     Page.connect();
-}
-
-function waitForElementById (id) {
-    return new Promise(function (resolve, reject) {
-        let element = document.getElementById(id);
-
-        if (element) {
-            resolve(element);
-            return;
-        }
-
-        const observer = new MutationObserver(function () {
-            // ignore the actual mutations - scanning the whole DOM
-            // should be much faster and is definitely much simpler
-            element = document.getElementById(id);
-            if (element) {
-                observer.disconnect();
-                resolve(element);
-                return;
-            }
-        });
-
-        observer.observe(document.documentElement, { childList: true, subtree: true });
-    });
 }
 
 // Orchestrate the link between this content script and the web page
