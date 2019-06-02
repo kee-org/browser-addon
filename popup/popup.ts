@@ -1,5 +1,6 @@
+import {SearchPanel} from "./SearchPanel";
+
 let appState: AppState;
-let keePopupLoadTime = Date.now();
 let myPort: browser.runtime.Port;
 let searchPanel: SearchPanel;
 
@@ -77,7 +78,7 @@ function updateSearchPanel (entryDetails?: keeLoginInfo) {
         if (entryDetails) {
             searchPanel.createContextActions(entryDetails);
         } else {
-            searchPanel = new SearchPanel();
+            searchPanel = new SearchPanel(appState, myPort);
 
             // focus and pre-populate search box if it's not already visible
             if ($("#searchPanel").classList.contains("hidden")) {

@@ -1,3 +1,8 @@
+import { FormFilling } from "./formFilling";
+import { FormUtils } from "./formsUtils";
+import { FormSaving } from "./formSaving";
+import { PasswordGenerator } from "./PasswordGenerator";
+
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
 
@@ -94,9 +99,9 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
 
     KeeLog.attachConfig(configManager.current);
     formUtils = new FormUtils(KeeLog);
-    formSaving = new FormSaving(KeeLog, formUtils, configManager.current);
-    formFilling = new FormFilling(formUtils, formSaving, KeeLog, configManager.current, matchFinder);
-    passwordGenerator = new PasswordGenerator();
+    formSaving = new FormSaving(myPort, frameId, KeeLog, formUtils, configManager.current);
+    formFilling = new FormFilling(myPort, frameId, formUtils, formSaving, KeeLog, configManager.current, matchFinder);
+    passwordGenerator = new PasswordGenerator(frameId);
 
     inputsObserver.observe(document.body, { childList: true, subtree: true });
 

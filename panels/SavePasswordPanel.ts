@@ -3,16 +3,19 @@ interface SaveData {
     group: string;
     oldLoginUUID: string;
     update: boolean;
+    urlMergeMode: number;
 }
 
-class SavePasswordPanel {
+export class SavePasswordPanel {
 
     private doc: HTMLDocument;
     private saveData: SaveData;
     private search: Search;
     private submittedData: SubmittedData;
 
-    constructor (submittedData: SubmittedData)
+    constructor (private myPort: browser.runtime.Port,
+        private appState: AppState,
+        submittedData: SubmittedData)
     {
         this.doc = window.document;
         this.submittedData = submittedData;
@@ -51,7 +54,7 @@ class SavePasswordPanel {
         neverButton.id = "neverForThisSiteButton";
         neverButton.textContent = $STR("notifyBarNeverForSiteButton_label");
         neverButton.addEventListener("click", e => {
-            myPort.postMessage({ neverSave: true } as AddonMessage);
+            this.myPort.postMessage({ neverSave: true } as AddonMessage);
         });
         container.appendChild(neverButton);
         return container;
@@ -61,7 +64,7 @@ class SavePasswordPanel {
         const select = (event.target as HTMLSelectElement);
         const opt = select.selectedOptions[0] as HTMLOptionElement;
         select.style.backgroundImage = opt.style.backgroundImage;
-        this.updateGroups(appState.KeePassDatabases.find(db => db.fileName === select.value),
+        this.updateGroups(this.appState.KeePassDatabases.find(db => db.fileName === select.value),
             this.doc.getElementById("kee-save-password-group-select"));
         this.saveData.db = opt.value;
     }
@@ -70,16 +73,16 @@ class SavePasswordPanel {
 
         const dbOptions = [];
 
-        for (let dbi = 0; dbi < appState.KeePassDatabases.length; dbi++)
+        for (let dbi = 0; dbi < this.appState.KeePassDatabases.length; dbi++)
         {
-            const db = appState.KeePassDatabases[dbi];
+            const db = this.appState.KeePassDatabases[dbi];
             const opt: HTMLOptionElement = this.doc.createElement("option") as HTMLOptionElement;
             opt.setAttribute("value", db.fileName);
             if (db.name)
                 opt.textContent = db.name;
             else
                 opt.textContent = db.fileName;
-            if (dbi == appState.ActiveKeePassDatabaseIndex)
+            if (dbi == this.appState.ActiveKeePassDatabaseIndex)
                 opt.selected = true;
             opt.style.backgroundImage = "url(data:image/png;base64," + db.iconImageData + ")";
             dbOptions.push(opt);
@@ -253,10 +256,10 @@ class SavePasswordPanel {
         searchBox.setAttribute("id", "Kee-SaveLogin-searchbox");
         searchBox.setAttribute("title", $STR("Search_tip"));
         searchBox.classList.add("Kee-Search");
-        searchBox.addEventListener("input", function (e){
-            this.search.execute(e.target.value, this.onSearchComplete.bind(this),
-                e.target.ownerDocument.getElementById("Kee-SaveLogin-searchfilter").selectedOptions[0].value.split(","));
-        }.bind(this), false);
+        searchBox.addEventListener("input", e => {
+            this.search.execute((e.target as any).value, this.onSearchComplete.bind(this),
+            (e.target as any).ownerDocument.getElementById("Kee-SaveLogin-searchfilter").selectedOptions[0].value.split(","));
+        }, false);
 
         const searchFields = (new SearchFilter()).attachFilterToSearchBox(searchBox, this, [this.submittedData.url], this.search);
 
@@ -384,7 +387,7 @@ class SavePasswordPanel {
     {
         const groupSel = this.createGroupSelect();
         this.updateGroups(
-           appState.KeePassDatabases[appState.ActiveKeePassDatabaseIndex], groupSel);
+           this.appState.KeePassDatabases[this.appState.ActiveKeePassDatabaseIndex], groupSel);
 
         const groupSelContainer = this.doc.createElement("div");
         groupSelContainer.classList.add("kee-save-password", "xulhbox");
@@ -584,6 +587,6 @@ class SavePasswordPanel {
 
     private saveButtonCallback () {
         this.saveData.urlMergeMode = parseInt(this.getCurrentUrlMergeMode());
-        myPort.postMessage({ saveData: this.saveData } as AddonMessage);
+        this.myPort.postMessage({ saveData: this.saveData } as AddonMessage);
     }
 }

@@ -1,4 +1,4 @@
-class PanelStubOptions {
+export class PanelStubOptions {
     id: string;
     height: number;
     width: number;
@@ -30,7 +30,7 @@ class PanelStubOptions {
     };
 }
 
-class PanelStub {
+export class PanelStub {
 
     private target: HTMLElement;
     private container: HTMLElement;
@@ -38,10 +38,10 @@ class PanelStub {
     private options: PanelStubOptions;
     private parentFrameId: number;
 
-    constructor (options: PanelStubOptions, target: HTMLElement, specificFrameId?: number) {
+    constructor (options: PanelStubOptions, target: HTMLElement, parentFrameId: number) {
         this.target = target;
         this.options = options;
-        this.parentFrameId = specificFrameId >= 0 ? specificFrameId : frameId;
+        this.parentFrameId = parentFrameId;
     }
 
     public createPanel () {

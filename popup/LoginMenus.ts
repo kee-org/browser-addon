@@ -1,4 +1,6 @@
-class LoginMenus {
+export class LoginMenus {
+
+    constructor (private myPort: browser.runtime.Port) {}
 
     private copyStringToClipboard (value) {
         const copyFrom = document.createElement("textarea");
@@ -11,7 +13,7 @@ class LoginMenus {
     }
 
     public showContextActions (uuid: string, dbFileName: string) {
-        myPort.postMessage({findMatches: { uuid: uuid, DBfilename: dbFileName}} as AddonMessage);
+        this.myPort.postMessage({findMatches: { uuid: uuid, DBfilename: dbFileName}} as AddonMessage);
     }
 
     public createContextActions (kfl: keeLoginInfo) {
@@ -24,7 +26,7 @@ class LoginMenus {
             editButton.addEventListener("click", event => {
                 event.stopPropagation();
                 event.preventDefault();
-                myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
+                this.myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
             }, false);
             editButton.addEventListener("keyup", event => {
                 if (event.keyCode === 13) editButton.click();
@@ -110,8 +112,6 @@ class LoginMenus {
     public hideContextMenuButton (node) {
         const optionsMenuTrigger = document.getElementById("Kee-optionsMenuTrigger");
         node.removeChild(optionsMenuTrigger);
-        node.removeEventListener("mouseleave", this.onMouseLeaveLogin, false);
-        node.addEventListener("mouseenter", this.onMouseEnterLogin, false);
     }
 
     public onMouseEnterLogin (event) {
@@ -127,14 +127,10 @@ class LoginMenus {
         }, false);
         optionsMenuTrigger.setAttribute("id", "Kee-optionsMenuTrigger");
         event.target.appendChild(optionsMenuTrigger);
-        event.target.removeEventListener("mouseenter", this.onMouseEnterLogin, false);
-        event.target.addEventListener("mouseleave", this.onMouseLeaveLogin, false);
     }
 
     public onMouseLeaveLogin (event) {
         const optionsMenuTrigger = document.getElementById("Kee-optionsMenuTrigger");
         event.target.removeChild(optionsMenuTrigger);
-        event.target.removeEventListener("mouseleave", this.onMouseLeaveLogin, false);
-        event.target.addEventListener("mouseenter", this.onMouseEnterLogin, false);
     }
 }

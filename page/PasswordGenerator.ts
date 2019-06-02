@@ -1,24 +1,24 @@
-/// <reference path="PanelStub.ts" />
+import { PanelStub, PanelStubOptions } from "./PanelStub";
 
-class PasswordGenerator {
+export class PasswordGenerator {
 
     public generatePasswordPanelStub: PanelStub;
     private generatePasswordPanelStubRaf: number;
 
-    constructor () {
+    constructor (private parentFrameId: number) {
     }
 
     public createGeneratePasswordPanel () {
         this.closeGeneratePasswordPanel();
-        this.generatePasswordPanelStub = new PanelStub(PanelStubOptions.GeneratePassword, null);
+        this.generatePasswordPanelStub = new PanelStub(PanelStubOptions.GeneratePassword, null, this.parentFrameId);
         this.generatePasswordPanelStub.createPanel();
     }
 
     public createGeneratePasswordPanelNearNode (target: HTMLElement) {
         this.closeGeneratePasswordPanel();
-        this.generatePasswordPanelStub = new PanelStub(PanelStubOptions.GeneratePassword, target);
+        this.generatePasswordPanelStub = new PanelStub(PanelStubOptions.GeneratePassword, target, this.parentFrameId);
         this.generatePasswordPanelStub.createPanel();
-        this.generatePasswordPanelStubRaf = requestAnimationFrame(passwordGenerator.updateGeneratePasswordPanelPosition);
+        this.generatePasswordPanelStubRaf = requestAnimationFrame(() => this.updateGeneratePasswordPanelPosition());
     }
 
     public closeGeneratePasswordPanel () {
@@ -28,7 +28,7 @@ class PasswordGenerator {
     }
 
     public updateGeneratePasswordPanelPosition () {
-        passwordGenerator.generatePasswordPanelStub.updateBoundingClientRect();
-        passwordGenerator.generatePasswordPanelStubRaf = requestAnimationFrame(passwordGenerator.updateGeneratePasswordPanelPosition);
+        this.generatePasswordPanelStub.updateBoundingClientRect();
+        this.generatePasswordPanelStubRaf = requestAnimationFrame(() => this.updateGeneratePasswordPanelPosition());
     }
 }

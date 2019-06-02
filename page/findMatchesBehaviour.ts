@@ -1,4 +1,4 @@
-interface FindMatchesBehaviour {
+export interface FindMatchesBehaviour {
     autofillOnSuccess?: boolean;
     autosubmitOnSuccess?: boolean;
     notifyUserOnSuccess?: boolean;

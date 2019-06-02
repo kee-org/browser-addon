@@ -2,7 +2,7 @@
   This contains code related to the management and manipulation of forms and form fields.
 */
 
-class FormUtils {
+export class FormUtils {
 
 findLoginOps = [];
 matchResults = [];

@@ -1,3 +1,8 @@
+import { copyStringToClipboard } from "./copyStringToClipboard";
+import { MatchedLoginsPanel } from "./MatchedLoginsPanel";
+import { GeneratePasswordPanel } from "./GeneratePasswordPanel";
+import { SavePasswordPanel } from "./SavePasswordPanel";
+
 let appState: AppState;
 let frameState: FrameState;
 
@@ -16,17 +21,6 @@ function closePanel () {
     myPort.postMessage( { action: Action.CloseAllPanels } );
 }
 
-
-function copyStringToClipboard (value) {
-    const copyFrom = document.createElement("textarea");
-    copyFrom.textContent = value;
-    const body = document.getElementsByTagName("body")[0];
-    body.appendChild(copyFrom);
-    copyFrom.select();
-    document.execCommand("copy");
-    body.removeChild(copyFrom);
-}
-
 function startup () {
     KeeLog.debug("iframe page starting");
 
@@ -39,7 +33,7 @@ function startup () {
     switch (params["panel"])
     {
         case "matchedLogins":
-            matchedLoginsPanel = new MatchedLoginsPanel();
+            matchedLoginsPanel = new MatchedLoginsPanel(myPort, closePanel, parentFrameId);
             document.getElementById("header").innerText = $STR("matched_logins_label");
             myPort.onMessage.addListener(function (m: AddonMessage) {
                 KeeLog.debug("In iframe script, received message from background script");
@@ -60,7 +54,7 @@ function startup () {
             });
         break;
         case "generatePassword":
-            generatePasswordPanel = new GeneratePasswordPanel();
+            generatePasswordPanel = new GeneratePasswordPanel(myPort, closePanel);
             document.getElementById("header").innerText = $STR("Menu_Button_copyNewPasswordToClipboard_label");
             myPort.onMessage.addListener(function (m: AddonMessage) {
                 KeeLog.debug("In iframe script, received message from background script");
@@ -118,7 +112,7 @@ function startup () {
                 if (m.appState) updateAppState(m.appState);
                 if (m.frameState) updateFrameState(m.frameState);
 
-                savePasswordPanel = new SavePasswordPanel(m.submittedData);
+                savePasswordPanel = new SavePasswordPanel(myPort, appState, m.submittedData);
 
                 const mainPanel = savePasswordPanel.createNearNode(document.getElementById("header"));
                 if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
@@ -178,7 +172,7 @@ let matchedLoginsPanel: MatchedLoginsPanel;
 let generatePasswordPanel: GeneratePasswordPanel;
 let savePasswordPanel: SavePasswordPanel;
 let myPort: browser.runtime.Port;
-let params = {};
+const params = {};
 
 document.location.search.substr(1).split("&").forEach(pair => {
     const [key, value] = pair.split("=");

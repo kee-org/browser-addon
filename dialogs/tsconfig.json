@@ -12,7 +12,8 @@
             "../typedefs/biginteger",
             "../typedefs/dollar-polyfill",
             "../typedefs/common"
-        ]
+        ],
+        "moduleResolution": "node"
     },
     "include": [
         "**/*"

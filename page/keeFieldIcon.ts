@@ -1,4 +1,11 @@
-class KeeFieldIcon {
+import { FormUtils } from "./formsUtils";
+
+export class KeeFieldIcon {
+
+    constructor (private myPort: browser.runtime.Port,
+        private parentFrameId: number,
+        private formUtils: FormUtils,
+        private createMatchedLoginsPanelNearNode: (e: HTMLElement) => void) {}
 
     private fieldsWithIcons: keeLoginField[] = [];
     private passwordFields: keeLoginField[];
@@ -34,7 +41,7 @@ class KeeFieldIcon {
     }
 
     private skipField (field: keeLoginField) {
-        if (!formUtils.isATextFormFieldType(field.type) && field.type != "password") return true;
+        if (!this.formUtils.isATextFormFieldType(field.type) && field.type != "password") return true;
         if (!field.DOMInputElement || !field.DOMInputElement.isConnected) return true;
         if (field.DOMInputElement.maxLength > 0 && field.DOMInputElement.maxLength <= 3) return true;
         if (field.DOMInputElement.offsetWidth < 50) return true;
@@ -45,8 +52,8 @@ class KeeFieldIcon {
         this.fieldsWithIcons.push(field);
 
         const element: HTMLElement = field.DOMInputElement;
-        element.addEventListener("click", this.showMatchedLoginsPanel);
-        element.addEventListener("mousemove", this.hoverOverInput);
+        element.addEventListener("click", e => this.showMatchedLoginsPanel(e));
+        element.addEventListener("mousemove", e => this.hoverOverInput(e));
 
         element.style.setProperty("background-image", "url('" + image + "')", "important");
         element.style.setProperty("background-repeat", "no-repeat", "important");
@@ -98,11 +105,11 @@ class KeeFieldIcon {
         const bcrect = e.target.getBoundingClientRect();
         const leftLimit = bcrect.left + bcrect.width - 22;
         if (e.clientX > leftLimit && bcrect.top <= e.clientY && e.clientY <= bcrect.bottom) {
-            if (frameId !== 0) {
-                myPort.postMessage({action: Action.ShowMatchedLoginsPanel} as AddonMessage);
+            if (this.parentFrameId !== 0) {
+                this.myPort.postMessage({action: Action.ShowMatchedLoginsPanel} as AddonMessage);
             } else
             {
-                formFilling.createMatchedLoginsPanelNearNode(e.target);
+                this.createMatchedLoginsPanelNearNode(e.target);
             }
         }
     }

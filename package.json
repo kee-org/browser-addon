@@ -11,12 +11,18 @@
     "gulp-typescript": "^4.0.0",
     "gulp-zip": "^4.2.0",
     "merge-stream": "^1.0.1",
+    "rollup": "^1.13.1",
+    "rollup-plugin-node-resolve": "^5.0.1",
+    "rollup-plugin-terser": "^5.0.0",
+    "rollup-plugin-typescript2": "^0.21.1",
     "run-sequence": "^2.2.1",
     "sign-addon": "^0.3.1",
     "tslint": "^5.11.0",
     "typescript": "^2.9.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "the-answer": "^1.0.0"
+  },
   "scripts": {
     "package:debug": "gulp package:debug",
     "build": "gulp build:debug",

@@ -20,3 +20,4 @@
 #/common/common.js
 #/dialogs/NetworkAuth.js
 #/dialogs/SRP.js
+.rpt2_cache/**/*

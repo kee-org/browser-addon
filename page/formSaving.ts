@@ -1,10 +1,15 @@
+import { PanelStub, PanelStubOptions } from "./PanelStub";
+import { FormUtils } from "./formsUtils";
+import { MatchResult } from "./MatchResult";
+import { FilledField } from "./FilledField";
+
 interface SubmitHandlerAttachment {
     target: HTMLElement;
     handler: (e: Event) => void;
     form: HTMLFormElement;
 }
 
-class FormSaving {
+export class FormSaving {
 
     private Logger: KeeLogger;
     private formUtils: FormUtils;
@@ -14,7 +19,12 @@ class FormSaving {
     private savePasswordPanelStubRaf: number;
     private matchResult: MatchResult; //TODO:4: May be overkill to have all this data available for saving
 
-    constructor (logger: KeeLogger, formUtils: FormUtils, config: Config) {
+    constructor (private myPort: browser.runtime.Port,
+        private parentFrameId: number,
+        logger: KeeLogger,
+        formUtils: FormUtils,
+        config: Config) {
+
         this.Logger = logger;
         this.formUtils = formUtils;
         this.config = config;
@@ -38,7 +48,7 @@ class FormSaving {
 
     public createSavePasswordPanel () {
         this.closeSavePasswordPanel();
-        this.savePasswordPanelStub = new PanelStub(PanelStubOptions.SavePassword, null);
+        this.savePasswordPanelStub = new PanelStub(PanelStubOptions.SavePassword, null, this.parentFrameId);
         this.savePasswordPanelStub.createPanel();
     }
 
@@ -49,8 +59,8 @@ class FormSaving {
     }
 
     public updateSavePasswordPanelPosition () {
-        formSaving.savePasswordPanelStub.updateBoundingClientRect();
-        formSaving.savePasswordPanelStubRaf = requestAnimationFrame(formSaving.updateSavePasswordPanelPosition);
+        this.savePasswordPanelStub.updateBoundingClientRect();
+        this.savePasswordPanelStubRaf = requestAnimationFrame(() => this.updateSavePasswordPanelPosition());
     }
 
     public updateMatchResult (matchResult: MatchResult) {
@@ -67,7 +77,7 @@ class FormSaving {
 
         // Until the next time we have searched for forms in this page,
         // don't respond to any form submission related events
-        formSaving.removeAllSubmitHandlers();
+        this.removeAllSubmitHandlers();
 
         const doc = form.ownerDocument;
         const url = new URL(doc.URL);
@@ -168,7 +178,7 @@ class FormSaving {
                 //,savePageCountToTab
             };
 
-            myPort.postMessage({submittedData} as AddonMessage);
+            this.myPort.postMessage({submittedData} as AddonMessage);
         }
     }
 
