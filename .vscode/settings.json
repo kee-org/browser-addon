@@ -8,13 +8,6 @@
     "**/.DS_Store": true,
     "out/**/*": true,
     "**/*.js.map": true,
-    "background/app.js": true,
-    "page/page.js": true,
-    "panels/panels.js": true,
-    "popup/popup.js": true,
-    "settings/settings.js": true,
-    "common/common.js": true,
-    "dialogs/*.js": true,
     "build/**/*": true,
     "dist/**/*": true
   },

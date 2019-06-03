@@ -3,7 +3,7 @@
 // For notifications displayed within the Kee browser action popup
 // look at the common/KeeNotification class
 
-class NativeNotification {
+export class NativeNotification {
     constructor (
         public title: string,
         public message: string

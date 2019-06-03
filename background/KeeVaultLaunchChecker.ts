@@ -1,4 +1,4 @@
-class KeeVaultLaunchChecker {
+export class KeeVaultLaunchChecker {
 
     // 404 until we have fixed a time
     private checkDataURL = "https://www.kee.pm/kee-vault-launch-config.json";

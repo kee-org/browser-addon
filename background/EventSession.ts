@@ -1,3 +1,5 @@
+import { ResultWrapper } from "./kprpcClient";
+
 /*
 EventSession.js manages the low-level transport connection between this
 client and an KeePassRPC server via DOM events.
@@ -13,11 +15,11 @@ so the current Kee concepts of closed app vs closed db still apply.
 
 */
 
-class EventSession {
+export class EventSession {
     constructor (public readonly sessionId: string, public readonly messageToWebPage) {}
 }
 
-class EventSessionManager {
+export class EventSessionManager {
     private eventActivityTimer: number; // we only support one session
     private eventActivityTimeout = 30000;
     private latestSession: EventSession;
@@ -182,7 +184,7 @@ class EventSessionManager {
         this.latestSession = null;
         this._features = [];
         this.callbacks = {};
-        kee.configSyncManager.reset();
+        window.kee.configSyncManager.reset();
         this.onClose();
     }
 }

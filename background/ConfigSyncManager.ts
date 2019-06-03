@@ -1,4 +1,4 @@
-class ConfigSyncManager {
+export class ConfigSyncManager {
     private lastKnownSynced: {settings: Partial<Config>, version: number};
     private enabled: boolean = false;
 
@@ -62,7 +62,7 @@ class ConfigSyncManager {
 
         try
         {
-            kee.KeePassRPC.updateAddonSettings(syncableSettings, settings.version);
+            window.kee.KeePassRPC.updateAddonSettings(syncableSettings, settings.version);
             // Clone so changes via references later can't affect later comparison
             this.lastKnownSynced = JSON.parse(JSON.stringify(syncableConfig));
         } catch (e)

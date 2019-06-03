@@ -19,4 +19,4 @@ class BackgroundUtils {
 
 }
 
-let backgroundUtils = new BackgroundUtils();
+export let backgroundUtils = new BackgroundUtils();

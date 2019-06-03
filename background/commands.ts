@@ -1,4 +1,6 @@
-class KFCommands {
+import { Command } from "./Command";
+
+export class KFCommands {
     private contextMenuUpdateLock = false;
 
     public init ()
@@ -6,23 +8,23 @@ class KFCommands {
         browser.commands.onCommand.addListener(command => {
             switch (command) {
                 case Command.DetectForms:
-                    if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
-                        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
+                    if (window.kee.appState.connected && window.kee.appState.ActiveKeePassDatabaseIndex >= 0) {
+                        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
                             port.postMessage({ action: Action.DetectForms });
                         }, this);
                     }
                 break;
                 case Command.PrimaryAction:
-                    if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
-                        kee.loginToPasswordManager();
+                    if (window.kee.appState.ActiveKeePassDatabaseIndex < 0) {
+                        window.kee.loginToPasswordManager();
                     } else {
-                        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
+                        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
                             port.postMessage({ action: Action.Primary });
                         }, this);
                     }
                 break;
                 case Command.GeneratePassword:
-                    kee.initiatePasswordGeneration();
+                    window.kee.initiatePasswordGeneration();
                 break;
             }
         });
@@ -31,27 +33,27 @@ class KFCommands {
             const id = (info.menuItemId as string);
             switch (id) {
                 case Command.DetectForms:
-                    if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
-                        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
+                    if (window.kee.appState.connected && window.kee.appState.ActiveKeePassDatabaseIndex >= 0) {
+                        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
                             port.postMessage({ action: Action.DetectForms });
                         }, this);
                     }
                 break;
                 // case Command.PrimaryAction:
-                //     if (kee.appState.ActiveKeePassDatabaseIndex < 0) {
-                //         kee.loginToPasswordManager();
+                //     if (window.kee.appState.ActiveKeePassDatabaseIndex < 0) {
+                //         window.kee.loginToPasswordManager();
                 //     } else {
-                //         kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
+                //         window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
                 //                 port.postMessage({ action: Action.Primary });
                 //         }, this);
                 //     }
                 // break;
                 case Command.GeneratePassword:
-                    kee.initiatePasswordGeneration();
+                    window.kee.initiatePasswordGeneration();
                 break;
             }
             if (id.startsWith("matchedLogin-")) {
-                kee.tabStates.get(kee.foregroundTabId).framePorts.get(info.frameId).postMessage({ action: Action.ManualFill, selectedLoginIndex: id.substr(id.indexOf("-")+1) });
+                window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(info.frameId).postMessage({ action: Action.ManualFill, selectedLoginIndex: id.substr(id.indexOf("-")+1) });
             }
         });
     }
@@ -69,7 +71,7 @@ class KFCommands {
         try {
             await browser.contextMenus.removeAll();
 
-            if (kee.appState.connected && kee.appState.ActiveKeePassDatabaseIndex >= 0) {
+            if (window.kee.appState.connected && window.kee.appState.ActiveKeePassDatabaseIndex >= 0) {
                 try {
                     browser.contextMenus.create({
                         id: Command.DetectForms,
@@ -99,7 +101,7 @@ class KFCommands {
                 }
             }
 
-            if (kee.appState.connected) {
+            if (window.kee.appState.connected) {
                 try {
                     browser.contextMenus.create({
                         id: Command.GeneratePassword,
@@ -129,10 +131,10 @@ class KFCommands {
                 }
             }
 
-            if (kee.foregroundTabId >= 0
-            && kee.tabStates.has(kee.foregroundTabId)
-            && kee.tabStates.get(kee.foregroundTabId).frames) {
-                kee.tabStates.get(kee.foregroundTabId).frames.forEach(frame => {
+            if (window.kee.foregroundTabId >= 0
+            && window.kee.tabStates.has(window.kee.foregroundTabId)
+            && window.kee.tabStates.get(window.kee.foregroundTabId).frames) {
+                window.kee.tabStates.get(window.kee.foregroundTabId).frames.forEach(frame => {
                     for (let j=0; j<frame.logins.length; j++) {
                         const login = frame.logins[j];
                         try {
@@ -172,5 +174,5 @@ class KFCommands {
 }
 
 // initialise the command system
-let commandManager = new KFCommands();
+export let commandManager = new KFCommands();
 commandManager.init();

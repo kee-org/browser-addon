@@ -1,4 +1,4 @@
-class AnimateIcon {
+export class AnimateIcon {
 
     private timer: number = null;
     private timeStarted: number;

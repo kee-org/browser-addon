@@ -20,7 +20,7 @@
             "common/common.js",
             "lib/tp/biginteger.js",
             "lib/firefoxBug1408996Workaround.js",
-            "background/app.js"
+            "background/background.js"
         ],
         "persistent": true
     },

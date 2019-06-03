@@ -50,7 +50,7 @@ const globTSPageOut = 'page.js';
 const globTSVault = 'vault/**/*.ts';
 const globTSVaultOut = 'vault.js';
 const globTSBackground = 'background/**/*.ts';
-const globTSBackgroundOut = 'app.js';
+const globTSBackgroundOut = 'background.js';
 const globTSSettings = 'settings/**/*.ts';
 const globTSSettingsOut = 'settings.js';
 const globTSDialogs = 'dialogs/**/*.ts';
@@ -236,11 +236,8 @@ var buildAndBundleTypescript = function (name, fileNames) {
     return Promise.all(bundleOps);
 };
 
-var tsProjectBackground = ts.createProject("background/tsconfig.json", {
-    outFile: globTSBackgroundOut
-});
 gulp.task("compilets:background", ["clean:ts:background", "lint:background"], function() {
-    return buildTypescript(tsProjectBackground, "background");
+    return buildAndBundleTypescript("background");
 });
 
 gulp.task("compilets:popup", ["clean:ts:popup", "lint:popup"], function() {

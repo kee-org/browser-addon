@@ -1,5 +1,5 @@
-/// <reference path="PersistentDataItem.ts" />
+import { PersistentDataItem } from "./PersistentDataItem";
 
-class PersistentTabState {
+export class PersistentTabState {
     items: PersistentDataItem[];
 }
