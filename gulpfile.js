@@ -12,7 +12,7 @@ var signAddon = require('sign-addon').default;
 var rollup = require('rollup');
 var resolve = require('rollup-plugin-node-resolve');
 var typescript = require('rollup-plugin-typescript2');
-var terser = require('rollup-plugin-terser');
+var terser = require('rollup-plugin-terser').terser;
 
 // Some tasks set DEBUG to false so that a production build can be executed.
 // There doesn't appear to be a way to pass this as a local variable so we
@@ -203,17 +203,20 @@ var buildAndBundleTypescript = function (name, fileNames) {
         fileNames = [name];
     }
     bundleOps = [];
+    const plugins = [
+        resolve(),
+        typescript({
+            tsconfig: name + '/tsconfig.json',
+            typescript: require('typescript'),
+        })
+    ];
+    if (!DEBUG) plugins.push(terser());
+
     for (const fileName of fileNames) {
         const pathName = name + '/' + fileName;
         bundleOps.push(rollup.rollup({
             input: './' + pathName + '.ts',
-            plugins: [
-                resolve(),
-                typescript({
-                    tsconfig: name + '/tsconfig.json',
-                    typescript: require('typescript'),
-                })
-            ]
+            plugins
         }).then(bundle => {
             return Promise.all([bundle.write({
                 file: (DEBUG ? buildDirDebug : buildDirProd) + '/' + pathName + '.js',
