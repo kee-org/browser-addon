@@ -1,6 +1,6 @@
-/// <reference path="Claim.ts" />
+import { Claim } from "./Claim";
 
-class JWT {
+export class JWT {
 
     public static async verify (sig: string): Promise<{audience: string, claim?: Claim}> {
 
@@ -10,7 +10,7 @@ class JWT {
             throw new Error("Invalid JWT");
         }
 
-        const claimJSON = kee.utils.base64urlDecode(sigParts[1]);
+        const claimJSON = window.kee.utils.base64urlDecode(sigParts[1]);
         let claim: Claim;
 
         try {
@@ -71,7 +71,7 @@ class JWT {
                 hash: {name: "SHA-256"} //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
             },
             key, //from generateKey or importKey above
-            kee.utils.base64urltoByteArray(sigParts[2]), //ArrayBuffer of the signature
+            window.kee.utils.base64urltoByteArray(sigParts[2]), //ArrayBuffer of the signature
             data //ArrayBuffer of the data
         );
 

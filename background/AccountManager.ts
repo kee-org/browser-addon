@@ -1,6 +1,6 @@
-/// <reference path="JWT.ts" />
+import { JWT } from "./JWT";
 
-class KeeAccount {
+export class KeeAccount {
     private _features: string[] = [];
     public get features (): string[] {
         return this._features;
@@ -39,7 +39,7 @@ class KeeAccount {
     }
 }
 
-class AccountManager {
+export class AccountManager {
     private account: KeeAccount;
     private listeners: (() => void)[];
 

@@ -5,7 +5,7 @@ Inspiration and some code comes from
 http://code.google.com/p/srp-js/ used under a BSD license.
 */
 
-class SRPc {
+export class SRPc {
     public Astr: string;
     private A;
     private a;

@@ -1,12 +1,13 @@
+import { EventSessionManager } from "./EventSession";
+import { SRPc } from "./SRP";
+import { WebsocketSessionManager } from "./WebsocketSession";
+
 /*
 kprpcClient.js provides functionality for
 communication using the KeePassRPC protocol >= version 1.7
 */
 
-/// <reference path="WebsocketSession.ts" />
-/// <reference path="EventSession.ts" />
-
-interface ResultWrapper { result: any; error: any; }
+export interface ResultWrapper { result: any; error: any; }
 
 class SessionResponse {
     sessionType: SessionType;
@@ -26,7 +27,7 @@ class SessionResponseManager {
     }
 }
 
-class kprpcClient {
+export class kprpcClient {
 
     public requestId: number;
     private clientVersion: number[];
@@ -47,7 +48,7 @@ class kprpcClient {
             obj => this.receive(obj, this.eventSessionManager)
         );
         this.websocketSessionManager = new WebsocketSessionManager(
-            () => kee.accountManager.fe_multiSessionTypes || !this.eventSessionManager.isActive(),
+            () => window.kee.accountManager.fe_multiSessionTypes || !this.eventSessionManager.isActive(),
             () => this.setupWebsocketSession(),
             () => this.onWebsocketSessionClosed(),
             obj => this.receive(obj, this.websocketSessionManager),
@@ -151,7 +152,7 @@ class kprpcClient {
     KPRPCListener (signal) {
         // call this async so that json reader can get back to listening ASAP and prevent deadlocks
         setTimeout(function () {
-            kee.KPRPCListener(signal);
+            window.kee.KPRPCListener(signal);
         }, 5);
     }
 
@@ -191,18 +192,18 @@ class kprpcClient {
         this.secretKey = null;
 
         if (!this.eventSessionManager.isActive()) {
-            kee._pauseKee();
-            kee.inviteKeeVaultConnection();
+            window.kee._pauseKee();
+            window.kee.inviteKeeVaultConnection();
         } else {
-            kee._refreshKPDB();
+            window.kee._refreshKPDB();
         }
     }
 
     onEventSessionClosed () {
         if (!this.websocketSessionManager.isActive()) {
-            kee._pauseKee();
+            window.kee._pauseKee();
         } else {
-            kee._refreshKPDB();
+            window.kee._refreshKPDB();
         }
     }
 
@@ -224,27 +225,27 @@ class kprpcClient {
                     if (data.error.code == "VERSION_CLIENT_TOO_LOW") {
                         // This means that the server requires us to support a feature that we don't have
                         KeeLog.error($STR("conn_setup_client_features_missing") + " Extra info: " + extra);
-                        kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_LOW";
+                        window.kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_LOW";
                         this.showConnectionMessage($STR("conn_setup_client_features_missing"));
                     } else if (data.error.code == "UNRECOGNISED_PROTOCOL") {
                         KeeLog.error($STR("conn_unknown_protocol") + " "
                             + $STRF("further_info_may_follow", extra));
-                        kee.appState.latestConnectionError = "UNRECOGNISED_PROTOCOL";
+                        window.kee.appState.latestConnectionError = "UNRECOGNISED_PROTOCOL";
                     } else if (data.error.code == "INVALID_MESSAGE") {
                         KeeLog.error($STR("conn_invalid_message") + " "
                             + $STRF("further_info_may_follow", extra));
-                        kee.appState.latestConnectionError = "INVALID_MESSAGE";
+                        window.kee.appState.latestConnectionError = "INVALID_MESSAGE";
                     } else if (data.error.code == "AUTH_RESTART") {
                         KeeLog.error($STR("conn_setup_restart") + " "
                             + $STRF("further_info_may_follow", extra));
-                        kee.appState.latestConnectionError = "AUTH_RESTART";
+                        window.kee.appState.latestConnectionError = "AUTH_RESTART";
                         this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                         this.showConnectionMessage($STR("conn_setup_restart") + " "
                             + $STR("conn_setup_retype_password"));
                     } else {
                         KeeLog.error($STR("conn_unknown_error") + " "
                             + $STRF("further_info_may_follow", extra));
-                        kee.appState.latestConnectionError = "UNKNOWN_JSONRPC";
+                        window.kee.appState.latestConnectionError = "UNKNOWN_JSONRPC";
                         this.showConnectionMessage($STR("conn_unknown_error") + " "
                             + $STRF("further_info_may_follow", ["See Kee log"]));
                     }
@@ -266,7 +267,7 @@ class kprpcClient {
                 extra[0] = data.error.messageParams[0];
             switch (data.error.code) {
                 case "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW": KeeLog.warn($STR("conn_setup_client_sl_low"));
-                    kee.appState.latestConnectionError = "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW";
+                    window.kee.appState.latestConnectionError = "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW";
                     const button: Button = {
                         label: $STR("conn_setup_client_sl_low_resolution"),
                         action: "enableHighSecurityKPRPCConnection"
@@ -275,7 +276,7 @@ class kprpcClient {
                     break;
                 case "AUTH_FAILED": KeeLog.warn($STR("conn_setup_failed") + " "
                     + $STRF("further_info_may_follow", extra));
-                    kee.appState.latestConnectionError = "AUTH_FAILED";
+                    window.kee.appState.latestConnectionError = "AUTH_FAILED";
                     this.showConnectionMessage($STR("conn_setup_failed")
                         + " " + $STR("conn_setup_retype_password"));
                     // There may be a stored key that has become corrupt through a change of security level, etc.
@@ -283,26 +284,26 @@ class kprpcClient {
                     break;
                 case "AUTH_RESTART": KeeLog.warn($STR("conn_setup_restart") + " "
                     + $STRF("further_info_may_follow", extra));
-                    kee.appState.latestConnectionError = "AUTH_RESTART";
+                    window.kee.appState.latestConnectionError = "AUTH_RESTART";
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     this.showConnectionMessage($STR("conn_setup_restart")
                         + " " + $STR("conn_setup_retype_password"));
                     break;
                 case "AUTH_EXPIRED": KeeLog.warn($STRF("conn_setup_expired", extra));
-                    kee.appState.latestConnectionError = "AUTH_EXPIRED";
+                    window.kee.appState.latestConnectionError = "AUTH_EXPIRED";
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     this.showConnectionMessage($STR("conn_setup_expired")
                         + " " + $STR("conn_setup_retype_password"));
                     break;
                 case "AUTH_INVALID_PARAM": KeeLog.error($STRF("conn_setup_invalid_param", extra));
-                    kee.appState.latestConnectionError = "AUTH_INVALID_PARAM";
+                    window.kee.appState.latestConnectionError = "AUTH_INVALID_PARAM";
                     break;
                 case "AUTH_MISSING_PARAM": KeeLog.error($STRF("conn_setup_missing_param", extra));
-                    kee.appState.latestConnectionError = "AUTH_MISSING_PARAM";
+                    window.kee.appState.latestConnectionError = "AUTH_MISSING_PARAM";
                     break;
                 default: KeeLog.error($STR("conn_unknown_error") + " "
                     + $STRF("further_info_may_follow", extra));
-                    kee.appState.latestConnectionError = "UNKNOWN_SETUP";
+                    window.kee.appState.latestConnectionError = "UNKNOWN_SETUP";
                     this.showConnectionMessage($STR("conn_unknown_error") + " "
                         + $STRF("further_info_may_follow", ["See Kee log"]));
                     break;
@@ -315,7 +316,7 @@ class kprpcClient {
             (data.key && data.key.sc)) {
             if (!this.serverHasRequiredFeatures(data.features)) {
                 KeeLog.error($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]));
-                kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
+                window.kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
                 const button: Button = {
                     label: $STR("upgrade_kee"),
                     action: "loadUrlUpgradeKee"
@@ -339,7 +340,7 @@ class kprpcClient {
                 }
             } else {
                 KeeLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
-                kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
+                window.kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
                 this.sendWebsocketsError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
                 this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
@@ -355,7 +356,7 @@ class kprpcClient {
                 }
             } else {
                 KeeLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
-                kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
+                window.kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
                 this.sendWebsocketsError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
                 this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
@@ -429,7 +430,7 @@ class kprpcClient {
 
             if (sr != data.key.sr) {
                 KeeLog.warn($STR("conn_setup_failed"));
-                kee.appState.latestConnectionError = "CHALLENGE_RESPONSE_MISMATCH";
+                window.kee.appState.latestConnectionError = "CHALLENGE_RESPONSE_MISMATCH";
                 this.showConnectionMessage($STR("conn_setup_failed")
                     + " " + $STR("conn_setup_retype_password"));
                 this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
@@ -496,7 +497,7 @@ class kprpcClient {
 
         if (!this.srpClientInternals.authenticated) {
             KeeLog.warn($STR("conn_setup_failed"));
-            kee.appState.latestConnectionError = "SRP_AUTH_FAILURE";
+            window.kee.appState.latestConnectionError = "SRP_AUTH_FAILURE";
             this.showConnectionMessage($STR("conn_setup_failed")
                 + " " + $STR("conn_setup_retype_password"));
             this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
@@ -523,10 +524,10 @@ class kprpcClient {
 
     onConnectStartup (type) {
         // if any errors were shown, they are now resolved
-        kee.removeUserNotifications((notification: KeeNotification) => notification.name != "kee-connection-message");
-        kee.appState.latestConnectionError = "";
+        window.kee.removeUserNotifications((notification: KeeNotification) => notification.name != "kee-connection-message");
+        window.kee.appState.latestConnectionError = "";
 
-        kee._refreshKPDB();
+        window.kee._refreshKPDB();
     }
 
     // No need to return anything from this function so sync or async implementation is fine
@@ -612,7 +613,7 @@ class kprpcClient {
 
     setupEventSession (features: string[]) {
 
-        if (!kee.accountManager.fe_multiSessionTypes && this.websocketSessionManager.isActive()) {
+        if (!window.kee.accountManager.fe_multiSessionTypes && this.websocketSessionManager.isActive()) {
             KeeLog.debug("Session activation aborted: Existing session already active and account does not have the multiple sessions feature.");
             this.eventSessionManager.closeSession();
             return;
@@ -628,7 +629,7 @@ class kprpcClient {
         if (!this.serverHasRequiredFeatures(features))
         {
             KeeLog.error("eventSession: " + $STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]));
-            kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
+            window.kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
             const button: Button = {
                 label: $STR("upgrade_kee"),
                 action: "loadUrlUpgradeKee"
@@ -643,7 +644,7 @@ class kprpcClient {
 
     setupWebsocketSession () {
 
-        if (!kee.accountManager.fe_multiSessionTypes && this.eventSessionManager.isActive()) {
+        if (!window.kee.accountManager.fe_multiSessionTypes && this.eventSessionManager.isActive()) {
             KeeLog.debug("Session activation aborted: Existing session already active and account does not have the multiple sessions feature.");
             this.websocketSessionManager.closeSession();
             return;
@@ -953,7 +954,7 @@ class kprpcClient {
                         KeeLog.error("Failed to decrypt. Exception: " + e);
 
                         KeeLog.warn($STR("conn_setup_restart"));
-                        kee.appState.latestConnectionError = "DECRYPTION_FAILED";
+                        window.kee.appState.latestConnectionError = "DECRYPTION_FAILED";
                         KPRPC.showConnectionMessage($STR("conn_setup_restart")
                             + " " + $STR("conn_setup_retype_password"));
                         KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
@@ -966,7 +967,7 @@ class kprpcClient {
                 KeeLog.error("Failed to hash secret key. Exception: " + e);
 
                 KeeLog.warn($STR("conn_setup_restart"));
-                kee.appState.latestConnectionError = "SECRET_KEY_HASH_FAILED";
+                window.kee.appState.latestConnectionError = "SECRET_KEY_HASH_FAILED";
                 this.showConnectionMessage($STR("conn_setup_restart")
                     + " " + $STR("conn_setup_retype_password"));
                 KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
@@ -976,7 +977,7 @@ class kprpcClient {
     }
 
     showConnectionMessage (msg: string, buttons?: Button[]) {
-        kee.notifyUser(new KeeNotification(
+        window.kee.notifyUser(new KeeNotification(
             "kee-connection-message", buttons ? buttons : [], utils.newGUID(), [msg], "Medium", false));
     }
 

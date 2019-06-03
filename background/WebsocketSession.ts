@@ -1,9 +1,11 @@
+import { ResultWrapper } from "./kprpcClient";
+
 /*
 WebsocketSessionManager.js manages the low-level websocket connection between this
 client and an KeePassRPC server.
 */
 
-class WebsocketSessionManager {
+export class WebsocketSessionManager {
     private reconnectionAttemptFrequency: number;
     private connectionTimeout: number;
     private activityTimeout: number;

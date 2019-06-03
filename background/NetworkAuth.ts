@@ -1,4 +1,4 @@
-class NetworkAuth {
+export class NetworkAuth {
     pendingRequests = [];
 
     public completed (requestDetails) {
@@ -34,7 +34,7 @@ class NetworkAuth {
 
         return new Promise<browser.webRequest.BlockingResponse>((resolve, reject) => {
 
-            if (!kee.appState.connected || kee.appState.ActiveKeePassDatabaseIndex < 0) {
+            if (!window.kee.appState.connected || window.kee.appState.ActiveKeePassDatabaseIndex < 0) {
                 resolve({ cancel: false });
                 return;
             }
@@ -42,7 +42,7 @@ class NetworkAuth {
             const url = new URL(requestDetails.url);
             url.hostname = __punycode.toUnicode(url.hostname);
 
-            kee.findLogins(url.href, null, requestDetails.realm, null, null, null, null, result => {
+            window.kee.findLogins(url.href, null, requestDetails.realm, null, null, null, null, result => {
 
                 let foundLogins = null;
                 const convertedResult: keeLoginInfo[] = [];

@@ -1,4 +1,4 @@
-class PersistentDataItem {
+export class PersistentDataItem {
     itemType: "submittedData";
     submittedData?: SubmittedData;
     submittedLogin?: keeLoginInfo;

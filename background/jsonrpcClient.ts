@@ -1,11 +1,13 @@
+import { kprpcClient, ResultWrapper } from "./kprpcClient";
+import { EventSessionManager } from "./EventSession";
+
 /*
 jsonrpcClient provides a JSON-RPC client and method proxies for
 communication between Kee and a KeePassRPC server.
 */
 
-/// <reference path="kprpcClient.ts" />
 
-class jsonrpcClient {
+export class jsonrpcClient {
     private kprpcClient: kprpcClient;
 
     constructor () {
@@ -22,12 +24,12 @@ class jsonrpcClient {
     }
 
     sessionManagerForFilename (dbFileName: string) {
-        const sessionType = kee.appState.KeePassDatabases.find(db => db.fileName === dbFileName).sessionType;
+        const sessionType = window.kee.appState.KeePassDatabases.find(db => db.fileName === dbFileName).sessionType;
         return this.kprpcClient.getSessionManagerByType(sessionType);
     }
 
     sessionManagerForPasswordProfile (profile: string) {
-        const sessionType = kee.appState.PasswordProfiles.find(p => p.name === profile).sessionType;
+        const sessionType = window.kee.appState.PasswordProfiles.find(p => p.name === profile).sessionType;
         return this.kprpcClient.getSessionManagerByType(sessionType);
     }
 
@@ -108,7 +110,7 @@ class jsonrpcClient {
         if (dbFileName == undefined || dbFileName == null || dbFileName == "")
         {
             if (!configManager.current.searchAllOpenDBs)
-                dbFileName = kee.appState.KeePassDatabases[kee.appState.ActiveKeePassDatabaseIndex].fileName;
+                dbFileName = window.kee.appState.KeePassDatabases[window.kee.appState.ActiveKeePassDatabaseIndex].fileName;
             else
                 dbFileName = "";
         }
@@ -171,11 +173,11 @@ class jsonrpcClient {
                         }
                     }
                     if (sessionResponse.sessionType === SessionType.Event) {
-                        kee.configSyncManager.updateFromRemoteConfig(sessionResponse.resultWrapper.result.config);
+                        window.kee.configSyncManager.updateFromRemoteConfig(sessionResponse.resultWrapper.result.config);
                     }
                 }
             }
-            kee.updateKeePassDatabases(dbs);
+            window.kee.updateKeePassDatabases(dbs);
         }, ++this.kprpcClient.requestId);
     }
 

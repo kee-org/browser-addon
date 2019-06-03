@@ -7,17 +7,8 @@
 /temp
 /local
 .vs
-#/background/app.js
-#/popup/popup.js
-#/page/page.js
-#/panels/panels.js
-#/settings/settings.js
-#/dialogs/dialogs.js
 /dist
 /build
 /typedefs/common.d.ts
 *.map
-#/common/common.js
-#/dialogs/NetworkAuth.js
-#/dialogs/SRP.js
 .rpt2_cache/**/*

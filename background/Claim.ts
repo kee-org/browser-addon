@@ -1,4 +1,4 @@
-class Claim {
+export class Claim {
     sub: string;
     iss: string;
     aud: string;
