@@ -65,3 +65,19 @@ You can then:
    1. XPIs and ZIPs of each version are put into the `dist` folder
    1. NB: source maps are included only in the debug package
 
+
+## Vue devtools
+
+### One time:
+````
+npm install -g @vue/devtools
+npm install -g https-proxy-cli
+````
+
+### Each time:
+
+`https-proxy -t http://localhost:8098 -p 8099`
+
+### First time:
+
+Manually load https://localhost:8099 in the browser and add self-signed cert to whitelist.

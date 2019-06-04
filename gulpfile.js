@@ -13,6 +13,9 @@ var rollup = require('rollup');
 var resolve = require('rollup-plugin-node-resolve');
 var typescript = require('rollup-plugin-typescript2');
 var terser = require('rollup-plugin-terser').terser;
+var vue = require('rollup-plugin-vue');
+var commonjs = require('rollup-plugin-commonjs');
+var rollupReplace = require('rollup-plugin-replace');
 
 // Some tasks set DEBUG to false so that a production build can be executed.
 // There doesn't appear to be a way to pass this as a local variable so we
@@ -41,7 +44,8 @@ const globStaticPanels = 'panels/*.{css,html}';
 const globStaticPopup = 'popup/*.{css,html}';
 const globTSCommon = 'common/**/*.ts';
 const globTSCommonOut = 'common.js';
-const globTSPopup = 'popup/**/*.ts';
+const globTSPopup = 'popup/**/*.{ts,vue}';
+const globTSPopupLint = 'popup/**/*.ts';
 const globTSPopupOut = 'popup.js';
 const globTSPanels = 'panels/**/*.ts';
 const globTSPanelsOut = 'panels.js';
@@ -105,7 +109,7 @@ gulp.task("lint:vault", function() {
 });
 
 gulp.task("lint:popup", function() {
-    return gulp.src([globTSPopup])
+    return gulp.src([globTSPopupLint])
         .pipe(tslint({
             formatter: "verbose"
         }))
@@ -178,26 +182,6 @@ gulp.task("compilets:common", ["clean:ts:common", "lint:common"], function() {
 
 /********** COMPILING TYPESCRIPT **********/
 
-var buildTypescript = function (tsProject, destination) {
-    if (DEBUG) {
-        return tsProject.src()
-            .pipe(sourcemaps.init())
-            .pipe(tsProject())
-            .js
-            .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest(buildDirDebug + '/' + destination))
-            .pipe(gulp.dest(buildDirDebugChrome + '/' + destination))
-            .pipe(gulp.dest(buildDirDebugFirefox + '/' + destination));
-    } else {
-        return tsProject.src()
-            .pipe(tsProject())
-            .js
-            .pipe(gulp.dest(buildDirProd + '/' + destination))
-            .pipe(gulp.dest(buildDirProdChrome + '/' + destination))
-            .pipe(gulp.dest(buildDirProdFirefox + '/' + destination));
-    }
-};
-
 var buildAndBundleTypescript = function (name, fileNames) {
     if (!fileNames || !fileNames.length) {
         fileNames = [name];
@@ -205,9 +189,17 @@ var buildAndBundleTypescript = function (name, fileNames) {
     bundleOps = [];
     const plugins = [
         resolve(),
+        commonjs(),
         typescript({
+            clean: true,
             tsconfig: name + '/tsconfig.json',
             typescript: require('typescript'),
+        }),
+        rollupReplace({
+            'process.env.NODE_ENV': JSON.stringify( DEBUG ? 'development' : 'production' )
+          }),
+        vue({
+            needMap: false // buggy so must be disabled to get sourcemaps to work at all
         })
     ];
     if (!DEBUG) plugins.push(terser());
@@ -215,6 +207,7 @@ var buildAndBundleTypescript = function (name, fileNames) {
     for (const fileName of fileNames) {
         const pathName = name + '/' + fileName;
         bundleOps.push(rollup.rollup({
+            //external: ['vue'],
             input: './' + pathName + '.ts',
             plugins
         }).then(bundle => {
@@ -263,6 +256,7 @@ gulp.task("compilets:dialogs", ["clean:ts:dialogs", "lint:dialogs"], function() 
 
 var copyStatic = function (glob, dir) {
     return gulp.src(glob)
+    .pipe(replace("<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->", DEBUG ? "<script src='https://localhost:8099'></script>" : ""))
     .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir))
     .pipe(gulp.dest((DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + dir))
     .pipe(gulp.dest((DEBUG ? buildDirDebugChrome : buildDirProdChrome) + dir))
@@ -327,10 +321,12 @@ gulp.task('modifyBuildFilesForCrossBrowser', function() {
     } else {
         return merge (
             gulp.src([buildDirProdFirefox + '/manifest.json'])
+            .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
             .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ''))
             .pipe(replace(/(.*"update_url": ")(.*)(",.*)/g, ''))
             .pipe(gulp.dest(buildDirProdFirefox)),
             gulp.src([buildDirProdChrome + '/manifest.json'])
+            .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
             .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ''))
             // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
             .pipe(replace(/(.*"clipboardWrite",)(.*)/g, ''))

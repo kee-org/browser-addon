@@ -1,4 +1,17 @@
 import {SearchPanel} from "./SearchPanel";
+import Vue from "vue";
+import App from "./App.vue";
+import store from "./store";
+
+Vue.prototype.$browser = browser;
+
+/* eslint-disable no-new */
+// tslint:disable-next-line:no-unused-expression
+new Vue({
+  el: "#app",
+  store,
+  render: h => h(App)
+});
 
 let appState: AppState;
 let myPort: browser.runtime.Port;
