@@ -6,6 +6,7 @@
     "version_name": "3.3.0",
     "author": "Kee Vault Ltd",
     "description": "Kee adds private, secure and easy password management features which save time and keep your private data more secure.",
+    "content_security_policy": "script-src 'self' https://localhost:8099; object-src 'self';",
     "background": {
         "scripts": [
             "lib/dollar-polyfill.js",

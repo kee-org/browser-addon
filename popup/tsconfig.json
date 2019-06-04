@@ -13,7 +13,8 @@
             "../typedefs/dollar-polyfill",
             "../typedefs/common"
         ],
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "noImplicitThis": true
     },
     "include": [
         "**/*"
