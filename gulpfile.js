@@ -1,9 +1,8 @@
 var gulp = require("gulp");
 var tslint = require("gulp-tslint");
 var fs = require("fs");
-var zip = require('gulp-zip');
+var gulpZip = require('gulp-zip');
 var merge = require('merge-stream');
-var sequence = require('run-sequence');
 var del = require('del');
 var replace = require('gulp-replace');
 var signAddon = require('sign-addon').default;
@@ -44,46 +43,148 @@ const globStaticPanels = 'panels/*.{css,html}';
 const globStaticPopup = 'popup/*.{css,html}';
 
 
-/********** TOP-LEVEL ORCHESTRATION **********/
+/********** CLEANING **********/
 
-gulp.task('default', ['build:debug']);
-gulp.task('build', ['build:debug']);
+// Assumes inclusions and exclusions are the same for all browsers
+var deleteBuildFiles = function (includeGlobs, excludeGlobs) {
+    var globs = [];
+    for (let g of includeGlobs) {
+        if (DEBUG) {
+            globs.push(buildDirDebug + '/' + g);
+            globs.push(buildDirDebugFirefox + '/' + g);
+            globs.push(buildDirDebugChrome + '/' + g);
+        } else {
+            globs.push(buildDirProd + '/' + g);
+            globs.push(buildDirProdFirefox + '/' + g);
+            globs.push(buildDirProdChrome + '/' + g);
+        }
+    }
+    if (excludeGlobs) for (let g of excludeGlobs) {
+        if (DEBUG) {
+            globs.push('!' + buildDirDebug + '/' + g);
+            globs.push('!' + buildDirDebugFirefox + '/' + g);
+            globs.push('!' + buildDirDebugChrome + '/' + g);
+        } else {
+            globs.push('!' + buildDirProd + '/' + g);
+            globs.push('!' + buildDirProdFirefox + '/' + g);
+            globs.push('!' + buildDirProdChrome + '/' + g);
+        }
+    }
+    return del(globs);
+};
 
-gulp.task('build:debug', function (done) {
-    WATCH = false;
-    sequence(['compilets', 'static'], done);
-});
-gulp.task('build:prod', function (done) {
-    DEBUG = false;
-    WATCH = false;
-    sequence(['compilets', 'static'], done);
+gulp.task('clean:ts', function cleanTS() {
+    return deleteBuildFiles([], ['lib']);
 });
 
-gulp.task("compilets", function (done) {
-    sequence("compilets:all", done);
+gulp.task('clean:static:popup', function cleanStaticPopup() {
+    return deleteBuildFiles([globStaticPopup]);
 });
+gulp.task('clean:static:panels', function cleanStaticPanels() {
+    return deleteBuildFiles([globStaticPanels]);
+});
+gulp.task('clean:static:page', function cleanStaticPage() {
+    return deleteBuildFiles([globStaticPage]);
+});
+gulp.task('clean:static:background', function cleanStaticBackground() {
+    return deleteBuildFiles([globStaticBackground]);
+});
+gulp.task('clean:static:settings', function cleanStaticSettings() {
+    return deleteBuildFiles([globStaticSettings]);
+});
+gulp.task('clean:static:dialogs', function cleanStaticDialogs() {
+    return deleteBuildFiles([globStaticDialogs]);
+});
+gulp.task('clean:static:lib', function cleanStaticLib() {
+    return deleteBuildFiles([globStaticLib]);
+});
+gulp.task('clean:static:common', function cleanStaticCommon() {
+    return deleteBuildFiles([globStaticCommon]);
+});
+gulp.task('clean:static:commonImages', function cleanStaticCommonImages() {
+    return deleteBuildFiles([globStaticCommonImages]);
+});
+gulp.task('clean:static:commonFonts', function cleanStaticCommonFonts() {
+    return deleteBuildFiles([globStaticCommonFonts]);
+});
+gulp.task('clean:static:releasenotes', function cleanStaticReleaseNotes() {
+    return deleteBuildFiles([globStaticReleaseNotes]);
+});
+gulp.task('clean:static:locales', function cleanStaticLocales() {
+    return deleteBuildFiles([globStaticLocales]);
+});
+gulp.task('clean:static:manifest', function cleanStaticManifest() {
+    return deleteBuildFiles([globStaticManifest]);
+});
+
+gulp.task('clean', gulp.parallel(
+    'clean:static:manifest', 'clean:static:locales', 'clean:static:releasenotes',
+    'clean:static:commonFonts', 'clean:static:commonImages',
+    'clean:static:common', 'clean:static:dialogs', 'clean:static:settings',
+    'clean:static:background', 'clean:static:page', 'clean:static:panels',
+    'clean:static:popup', 'clean:ts'
+));
+
+gulp.task('sign', function sign(done) {
+    const manifest = require('./manifest');
+    const distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
+
+    //TODO:4: If API output is suitable, derive these file names from that in case Mozilla change file naming conventions one day
+    fs.writeFileSync('.signedKeeXPI', 'kee_password_manager-' + manifest.version + 'beta-an+fx.xpi');
+    fs.writeFileSync('.downloadLinkKeeXPI', 'https://github.com/kee-org/browser-addon/releases/download/'
+        + manifest.version + '/kee_password_manager-' + manifest.version + 'beta-an+fx.xpi');
+
+    signAddon({
+        xpiPath: 'dist/' + distFileName,
+        version: manifest.version + 'beta',
+        apiKey: process.env.AMO_API_KEY,
+        apiSecret: process.env.AMO_API_SECRET,
+        id: 'keefox@chris.tomlinson',
+        downloadDir: 'dist/signed/',
+        channel: 'unlisted'
+      })
+      .then(function(result) {
+        if (result.success) {
+          console.log("The following signed files were downloaded:");
+          console.log(result.downloadedFiles);
+          console.log("Reported file name: ");
+          if (result.downloadedFiles && result.downloadedFiles.length > 0) console.log(result.downloadedFiles[0]);
+        } else {
+          console.error("add-on could not be signed!");
+          console.error("Check the console for details.");
+        }
+        console.log(result.success ? "SUCCESS" : "FAIL");
+      })
+      .catch(function(error) {
+        console.error("Signing error:", error);
+      });
+
+    done();
+});
+
+
 
 /********** LINTING TYPESCRIPT **********/
 
 gulp.task("lint:ts",
 // ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:vault", "lint:settings", "lint:dialogs" ],
-function() {
+gulp.series(function lintTs() {
     return gulp.src(["**/*.ts", "!node_modules/**/*.ts", "!typedefs/**/*.ts"])
         .pipe(tslint({
             formatter: "verbose"
         }))
         .pipe(tslint.report())
-});
+}));
 
 /********** COMPILING TYPESCRIPT **********/
 
-gulp.task("watchts", ["clean:ts", "lint:ts"], function() {
+gulp.task("watchts", gulp.series(gulp.parallel("clean:ts", "lint:ts"), function watchTs() {
     return executeRollup();
-});
+}));
 
-gulp.task("compilets:all", ["clean:ts", "lint:ts"], function() {
+gulp.task("compilets:all", gulp.series(gulp.parallel("clean:ts", "lint:ts"), function compileTsAll() {
     return executeRollup();
-});
+}));
 
 var executeRollup = function () {
 
@@ -171,48 +272,48 @@ var copyStatic = function (glob, dir) {
     }
 }
 
-gulp.task('static:popup', ["clean:static:popup"], function() {
+gulp.task('static:popup', gulp.series("clean:static:popup", function staticPopup() {
     return copyStatic(globStaticPopup, '/popup');
-});
-gulp.task('static:panels', ["clean:static:panels"], function() {
+}));
+gulp.task('static:panels', gulp.series("clean:static:panels", function staticPanels() {
     return copyStatic(globStaticPanels, '/panels');
-});
-gulp.task('static:page', ["clean:static:page"], function() {
+}));
+gulp.task('static:page', gulp.series("clean:static:page", function staticPage() {
     return copyStatic(globStaticPage, '/page');
-});
-gulp.task('static:background', ["clean:static:background"], function() {
+}));
+gulp.task('static:background', gulp.series("clean:static:background", function staticBackground() {
     return copyStatic(globStaticBackground, '/background');
-});
-gulp.task('static:settings', ["clean:static:settings"], function() {
+}));
+gulp.task('static:settings', gulp.series("clean:static:settings", function staticSettings() {
     return copyStatic(globStaticSettings, '/settings');
-});
-gulp.task('static:dialogs', ["clean:static:dialogs"], function() {
+}));
+gulp.task('static:dialogs', gulp.series("clean:static:dialogs", function staticDialogs() {
     return copyStatic(globStaticDialogs, '/dialogs');
-});
-gulp.task('static:lib', ["clean:static:lib"], function() {
+}));
+gulp.task('static:lib', gulp.series("clean:static:lib", function staticLib() {
     return copyStatic(globStaticLib, '/lib');
-});
-gulp.task('static:common', ["clean:static:common"], function() {
+}));
+gulp.task('static:common', gulp.series("clean:static:common", function staticCommon() {
     return copyStatic(globStaticCommon, '/common');
-});
-gulp.task('static:commonFonts', ["clean:static:commonFonts"], function() {
+}));
+gulp.task('static:commonFonts', gulp.series("clean:static:commonFonts", function staticCommonFonts() {
     return copyStatic(globStaticCommonFonts, '/common/fonts');
-});
-gulp.task('static:commonImages', ["clean:static:commonImages"], function() {
+}));
+gulp.task('static:commonImages', gulp.series("clean:static:commonImages", function staticCommonImages() {
     return copyStatic(globStaticCommonImages, '/common/images');
-});
-gulp.task('static:releasenotes', ["clean:static:releasenotes"], function() {
+}));
+gulp.task('static:releasenotes', gulp.series("clean:static:releasenotes", function staticReleaseNotes() {
     return copyStatic(globStaticReleaseNotes, '/release-notes');
-});
-gulp.task('static:locales', ["clean:static:locales"], function() {
+}));
+gulp.task('static:locales', gulp.series("clean:static:locales", function staticLocales() {
     return copyStatic(globStaticLocales, '/_locales');
-});
+}));
 
-gulp.task('copyStaticManifest', function() {
+gulp.task('copyStaticManifest', gulp.series(function copyStaticManifest() {
     return copyStatic(globStaticManifest, '');
-});
+}));
 
-gulp.task('modifyBuildFilesForCrossBrowser', function() {
+gulp.task('modifyBuildFilesForCrossBrowser', gulp.series(function modifyBuildFilesForCrossBrowser() {
     if (DEBUG) {
         return merge (
             gulp.src([buildDirDebugFirefox + '/manifest.json'])
@@ -245,21 +346,21 @@ gulp.task('modifyBuildFilesForCrossBrowser', function() {
             .pipe(gulp.dest(buildDirProdChrome))
         )
     }
-});
+}));
 
-gulp.task('static:manifest', ["clean:static:manifest"], function(done) {
-    if (WATCH) return sequence("copyStaticManifest", done);
-    else return sequence("copyStaticManifest", "modifyBuildFilesForCrossBrowser", done);
-});
+gulp.task('static:manifest', gulp.series("clean:static:manifest", (function staticManifest() {
+    if (WATCH) return gulp.series("copyStaticManifest");
+    else return gulp.series("copyStaticManifest", "modifyBuildFilesForCrossBrowser");
+})()));
 
-gulp.task('static', ['static:popup','static:panels','static:page','static:background',
+gulp.task('static', gulp.parallel('static:popup','static:panels','static:page','static:background',
     'static:settings','static:dialogs','static:common','static:commonFonts',
     'static:commonImages','static:releasenotes','static:locales',
-    'static:manifest', 'static:lib']);
+    'static:manifest', 'static:lib'));
 
 /********** WATCHING FOR CHANGES TO SOURCE FILES **********/
 
-gulp.task('watch', ['watchts', 'static'], function() {
+function watch () {
     gulp.watch([globStaticPopup], ['static:popup']);
     gulp.watch([globStaticPanels], ['static:panels']);
     gulp.watch([globStaticPage], ['static:page']);
@@ -273,166 +374,78 @@ gulp.task('watch', ['watchts', 'static'], function() {
     gulp.watch([globStaticReleaseNotes], ['static:releasenotes']);
     gulp.watch([globStaticLocales], ['static:locales']);
     gulp.watch([globStaticManifest], ['static:manifest']);
-});
+}
+
+gulp.task('watch', gulp.series(gulp.parallel('watchts', 'static'), watch));
 
 /********** PACKAGING **********/
 
-gulp.task('zip', function() {
+gulp.task('zip', function zip() {
 	var manifest = require('./manifest'),
-		distFileName = manifest.name + '-v' + manifest.version + '.zip';
-	return gulp.src([buildDirProdChrome + '/**'])
-		.pipe(zip(distFileName))
+        distFileName = manifest.name + '-v' + manifest.version + '.zip';
+        console.log(buildDirProdChrome);
+        console.log("ok");
+	return gulp.src(buildDirProdChrome + '/**')
+		.pipe(gulpZip(distFileName))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('xpi', function() {
+gulp.task('xpi', function xpi() {
 	var manifest = require('./manifest'),
 		distFileName = manifest.name + '-v' + manifest.version + '.xpi';
-	return gulp.src([buildDirProdFirefox + '/**'])
-		.pipe(zip(distFileName))
+	return gulp.src(buildDirProdFirefox + '/**')
+		.pipe(gulpZip(distFileName))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('zip:debug', function() {
+gulp.task('zip:debug', function zipDebug() {
 	var manifest = require('./manifest'),
 		distFileName = manifest.name + '-v' + manifest.version + '-debug.zip';
-	return gulp.src([buildDirDebugChrome + '/**'])
-		.pipe(zip(distFileName))
+	return gulp.src(buildDirDebugChrome + '/**')
+		.pipe(gulpZip(distFileName))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('xpi:debug', function() {
+gulp.task('xpi:debug', function xpiDebug() {
 	var manifest = require('./manifest'),
 		distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
-	return gulp.src([buildDirDebugFirefox + '/**'])
-		.pipe(zip(distFileName))
+	return gulp.src(buildDirDebugFirefox + '/**')
+		.pipe(gulpZip(distFileName))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('package:prod', function (done) {
+
+/********** TOP-LEVEL ORCHESTRATION **********/
+
+
+gulp.task("compilets", gulp.series("compilets:all"));
+
+gulp.task('build:debug', gulp.series(function buildDebug(done) {
+    WATCH = false;
+    done();
+}, 'compilets', 'static'));
+gulp.task('build:prod', gulp.series(function buildProd(done) {
     DEBUG = false;
     WATCH = false;
-    sequence(['compilets', 'static'], ['xpi','zip'], done);
-});
+    done();
+}, 'compilets', 'static'));
 
-gulp.task('package:debug', function (done) {
+gulp.task('package:prod', gulp.series(function packageProd(done) {
+    DEBUG = false;
     WATCH = false;
-    sequence(['compilets', 'static'], ['xpi:debug','zip:debug'], done);
-});
+    done();
+},
+    gulp.parallel('compilets', 'static'),
+    gulp.parallel('xpi','zip')
+));
 
-/********** CLEANING **********/
+gulp.task('package:debug', gulp.series(function packageDebug(done) {
+    WATCH = false;
+    done();
+},
+    gulp.parallel('compilets', 'static'),
+    gulp.parallel('xpi:debug','zip:debug')
+));
 
-// Assumes inclusions and exclusions are the same for all browsers
-var deleteBuildFiles = function (includeGlobs, excludeGlobs) {
-    var globs = [];
-    for (let g of includeGlobs) {
-        if (DEBUG) {
-            globs.push(buildDirDebug + '/' + g);
-            globs.push(buildDirDebugFirefox + '/' + g);
-            globs.push(buildDirDebugChrome + '/' + g);
-        } else {
-            globs.push(buildDirProd + '/' + g);
-            globs.push(buildDirProdFirefox + '/' + g);
-            globs.push(buildDirProdChrome + '/' + g);
-        }
-    }
-    if (excludeGlobs) for (let g of excludeGlobs) {
-        if (DEBUG) {
-            globs.push('!' + buildDirDebug + '/' + g);
-            globs.push('!' + buildDirDebugFirefox + '/' + g);
-            globs.push('!' + buildDirDebugChrome + '/' + g);
-        } else {
-            globs.push('!' + buildDirProd + '/' + g);
-            globs.push('!' + buildDirProdFirefox + '/' + g);
-            globs.push('!' + buildDirProdChrome + '/' + g);
-        }
-    }
-    return del(globs);
-};
-
-gulp.task('clean:ts', function () {
-    return deleteBuildFiles([], ['lib']);
-});
-
-gulp.task('clean:static:popup', function () {
-    return deleteBuildFiles([globStaticPopup]);
-});
-gulp.task('clean:static:panels', function () {
-    return deleteBuildFiles([globStaticPanels]);
-});
-gulp.task('clean:static:page', function () {
-    return deleteBuildFiles([globStaticPage]);
-});
-gulp.task('clean:static:background', function () {
-    return deleteBuildFiles([globStaticBackground]);
-});
-gulp.task('clean:static:settings', function () {
-    return deleteBuildFiles([globStaticSettings]);
-});
-gulp.task('clean:static:dialogs', function () {
-    return deleteBuildFiles([globStaticDialogs]);
-});
-gulp.task('clean:static:lib', function () {
-    return deleteBuildFiles([globStaticLib]);
-});
-gulp.task('clean:static:common', function () {
-    return deleteBuildFiles([globStaticCommon]);
-});
-gulp.task('clean:static:commonImages', function () {
-    return deleteBuildFiles([globStaticCommonImages]);
-});
-gulp.task('clean:static:commonFonts', function () {
-    return deleteBuildFiles([globStaticCommonFonts]);
-});
-gulp.task('clean:static:releasenotes', function () {
-    return deleteBuildFiles([globStaticReleaseNotes]);
-});
-gulp.task('clean:static:locales', function () {
-    return deleteBuildFiles([globStaticLocales]);
-});
-gulp.task('clean:static:manifest', function () {
-    return deleteBuildFiles([globStaticManifest]);
-});
-
-gulp.task('clean', [
-    'clean:static:manifest', 'clean:static:locales', 'clean:static:releasenotes',
-    'clean:static:commonFonts', 'clean:static:commonImages',
-    'clean:static:common', 'clean:static:dialogs', 'clean:static:settings',
-    'clean:static:background', 'clean:static:page', 'clean:static:panels',
-    'clean:static:popup', 'clean:ts:all'
-]);
-
-gulp.task('sign', function () {
-    const manifest = require('./manifest');
-    const distFileName = manifest.name + '-v' + manifest.version + '-debug.xpi';
-
-    //TODO:4: If API output is suitable, derive these file names from that in case Mozilla change file naming conventions one day
-    fs.writeFileSync('.signedKeeXPI', 'kee_password_manager-' + manifest.version + 'beta-an+fx.xpi');
-    fs.writeFileSync('.downloadLinkKeeXPI', 'https://github.com/kee-org/browser-addon/releases/download/'
-        + manifest.version + '/kee_password_manager-' + manifest.version + 'beta-an+fx.xpi');
-
-    signAddon({
-        xpiPath: 'dist/' + distFileName,
-        version: manifest.version + 'beta',
-        apiKey: process.env.AMO_API_KEY,
-        apiSecret: process.env.AMO_API_SECRET,
-        id: 'keefox@chris.tomlinson',
-        downloadDir: 'dist/signed/',
-        channel: 'unlisted'
-      })
-      .then(function(result) {
-        if (result.success) {
-          console.log("The following signed files were downloaded:");
-          console.log(result.downloadedFiles);
-          console.log("Reported file name: ");
-          if (result.downloadedFiles && result.downloadedFiles.length > 0) console.log(result.downloadedFiles[0]);
-        } else {
-          console.error("add-on could not be signed!");
-          console.error("Check the console for details.");
-        }
-        console.log(result.success ? "SUCCESS" : "FAIL");
-      })
-      .catch(function(error) {
-        console.error("Signing error:", error);
-      });
-});
+gulp.task('default', gulp.series('build:debug'));
+gulp.task('build', gulp.series('build:debug'));
