@@ -1,3 +1,15 @@
+import { KeeLog } from "../common/Logger";
+import { keeLoginInfo } from "../common/kfDataModel";
+import { configManager } from "../common/ConfigManager";
+
+declare const __publicSuffixList;
+declare const __punycode;
+declare const __pslData;
+
+// Pretend browser (WebExtensions) is chrome (we include a
+// polyfill from Mozilla but it doesn't work in some cases)
+declare const chrome;
+
 export class NetworkAuth {
     pendingRequests = [];
 

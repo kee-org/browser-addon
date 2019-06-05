@@ -2,6 +2,19 @@ import { PanelStub, PanelStubOptions } from "./PanelStub";
 import { FormUtils } from "./formsUtils";
 import { MatchResult } from "./MatchResult";
 import { FilledField } from "./FilledField";
+import { KeeLogger } from "../common/Logger";
+import { Config } from "../common/config";
+import { configManager } from "../common/ConfigManager";
+import { keeLoginField } from "../common/kfDataModel";
+import { AddonMessage } from "../common/AddonMessage";
+
+declare const __publicSuffixList;
+declare const __punycode;
+declare const __pslData;
+
+// Pretend browser (WebExtensions) is chrome (we include a
+// polyfill from Mozilla but it doesn't work in some cases)
+declare const chrome;
 
 interface SubmitHandlerAttachment {
     target: HTMLElement;

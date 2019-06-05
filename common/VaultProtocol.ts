@@ -1,4 +1,4 @@
-const enum VaultProtocol {
+export const enum VaultProtocol {
     Teardown = "teardown",
     Jsonrpc = "jsonrpc",
     Ping = "ping",

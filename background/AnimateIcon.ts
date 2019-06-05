@@ -1,3 +1,5 @@
+import { KeeLog } from "../common/Logger";
+
 export class AnimateIcon {
 
     private timer: number = null;

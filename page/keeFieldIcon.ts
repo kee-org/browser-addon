@@ -1,4 +1,7 @@
 import { FormUtils } from "./formsUtils";
+import { keeLoginField, keeLoginInfo } from "../common/kfDataModel";
+import { Action } from "../common/Action";
+import { AddonMessage } from "../common/AddonMessage";
 
 export class KeeFieldIcon {
 

@@ -1,4 +1,4 @@
-const enum Action {
+export const enum Action {
     CloseAllPanels = "closeAllPanels",
     DetectForms = "detectForms",
     GetPasswordProfiles = "getPasswordProfiles",

@@ -1,3 +1,8 @@
+import { configManager } from "../common/ConfigManager";
+import { Button } from "../common/Button";
+import { KeeNotification } from "../common/KeeNotification";
+import { utils } from "../common/utils";
+
 export function showUpdateSuccessNotification (uniqueID: string, fileName: string) {
     if (configManager.current.notifyWhenEntryUpdated) {
         const button1: Button = {

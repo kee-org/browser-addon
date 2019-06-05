@@ -1,4 +1,10 @@
 import { LoginMenus } from "./LoginMenus";
+import { Search, SearchResult } from "../common/search";
+import { AppState } from "../common/AppState";
+import { configManager } from "../common/ConfigManager";
+import { AddonMessage } from "../common/AddonMessage";
+import { keeLoginInfo } from "../common/kfDataModel";
+import { KeeLog } from "../common/Logger";
 
 export class SearchPanel {
 

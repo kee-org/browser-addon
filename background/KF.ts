@@ -7,6 +7,19 @@ import { AnimateIcon } from "./AnimateIcon";
 import { NativeNotification } from "./NativeNotification";
 import { commandManager } from "./commands";
 import { browserPopupMessageHandler, pageMessageHandler, vaultMessageHandler, iframeMessageHandler } from "./messageHandlers";
+import { AppState } from "../common/AppState";
+import { TabState } from "../common/TabState";
+import { Utils, utils } from "../common/utils";
+import { Search } from "../common/search";
+import { configManager } from "../common/ConfigManager";
+import { KeeLog } from "../common/Logger";
+import { AddonMessage } from "../common/AddonMessage";
+import { FrameState } from "../common/FrameState";
+import { VaultMessage } from "../common/VaultMessage";
+import { KeeNotification } from "../common/KeeNotification";
+import { VaultProtocol } from "../common/VaultProtocol";
+import { SessionType, Database, PasswordProfile } from "../common/kfDataModel";
+import { Action } from "../common/Action";
 
 export class Kee {
     accountManager: AccountManager;
@@ -271,7 +284,6 @@ export class Kee {
         // this.KeePassRPC = null;
 
         KeeLog.debug("Kee module shut down.");
-        KeeLog = null;
     }
 
     _keeBrowserStartup ()

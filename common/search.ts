@@ -1,9 +1,19 @@
+import { AppState } from "./AppState";
+import { KeeLog } from "./Logger";
+
 /*
   Includes contributions from https://github.com/haoshu
 */
 
+declare const __publicSuffixList;
+declare const __punycode;
+declare const __pslData;
 
-class SearchResult {
+// Pretend browser (WebExtensions) is chrome (we include a
+// polyfill from Mozilla but it doesn't work in some cases)
+declare const chrome;
+
+export class SearchResult {
     iconImageData: string;
     usernameValue: string;
     usernameName: string;
@@ -16,7 +26,7 @@ class SearchResult {
     relevanceScore: number;
 }
 
-class SearchConfig {
+export class SearchConfig {
     // Kee will check the supplied version number and behave consistently
     // for each version, regardless of the current Kee addon version.
     // If you supply a config object, you must at least include this property
@@ -57,7 +67,7 @@ class SearchConfig {
     onMatch: () => void;
 }
 
-class Search {
+export class Search {
 
     constructor (appState: AppState, config: Partial<SearchConfig>) {
         this.appState = appState;

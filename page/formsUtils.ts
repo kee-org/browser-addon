@@ -1,3 +1,6 @@
+import { KeeLogger } from "../common/Logger";
+import { keeLoginField } from "../common/kfDataModel";
+
 /*
   This contains code related to the management and manipulation of forms and form fields.
 */

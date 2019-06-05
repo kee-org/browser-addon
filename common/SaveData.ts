@@ -1,4 +1,4 @@
-interface SaveData {
+export interface SaveData {
     db: string;
     group: string;
     oldLoginUUID: string;

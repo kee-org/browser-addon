@@ -1,4 +1,4 @@
-class FeatureFlags {
+export class FeatureFlags {
 
     public static readonly offered: string[] = [
 

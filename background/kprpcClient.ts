@@ -1,6 +1,15 @@
 import { EventSessionManager } from "./EventSession";
 import { SRPc } from "./SRP";
 import { WebsocketSessionManager } from "./WebsocketSession";
+import { SessionType } from "../common/kfDataModel";
+import { VaultMessage } from "../common/VaultMessage";
+import { KeeLog } from "../common/Logger";
+import { VaultProtocol } from "../common/VaultProtocol";
+import { utils } from "../common/utils";
+import { Button } from "../common/Button";
+import { FeatureFlags } from "../common/FeatureFlags";
+import { KeeNotification } from "../common/KeeNotification";
+import { configManager } from "../common/ConfigManager";
 
 /*
 kprpcClient.js provides functionality for

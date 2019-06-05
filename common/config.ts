@@ -1,8 +1,8 @@
-type SiteConfigMethod = "Exact" | "Prefix" | "Regex";
-type SiteConfigTarget = "Domain" | "Host" | "Page";
-type SiteConfigNodeType = "Migration" | "User" | "Default";
+export type SiteConfigMethod = "Exact" | "Prefix" | "Regex";
+export type SiteConfigTarget = "Domain" | "Host" | "Page";
+export type SiteConfigNodeType = "Migration" | "User" | "Default";
 
-class FormMatchConfig {
+export class FormMatchConfig {
     form?: {
         names?: string[];
         ids?: string[];
@@ -14,23 +14,23 @@ class FormMatchConfig {
     querySelectors?: string[];
 }
 
-class SiteConfig {
+export class SiteConfig {
     whiteList?: FormMatchConfig;
     blackList?: FormMatchConfig;
     preventSaveNotification?: boolean;
 }
 
-class SiteConfigNode {
+export class SiteConfigNode {
     config: SiteConfig;
     matchWeight: number; // help to decide which config to use when more than one matches current URL
     source: SiteConfigNodeType;
 }
 
-class SiteConfigLookup {
+export class SiteConfigLookup {
     [key: string]: SiteConfigNode;
 }
 
-class SiteConfigIndex {
+export class SiteConfigIndex {
     domainRegex?: SiteConfigLookup;
     domainExact?: SiteConfigLookup;
     domainPrefix?: SiteConfigLookup;
@@ -42,7 +42,7 @@ class SiteConfigIndex {
     pagePrefix: SiteConfigLookup;
 }
 
-class Config {
+export class Config {
     autoFillDialogs: boolean;
     autoFillForms: boolean;
     autoFillFormsWithMultipleMatches: boolean;

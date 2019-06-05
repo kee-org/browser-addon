@@ -5,6 +5,18 @@ import { FormSaving } from "./formSaving";
 import { KeeFieldIcon } from "./keeFieldIcon";
 import { MatchResult } from "./MatchResult";
 import { FindMatchesBehaviour } from "./findMatchesBehaviour";
+import { KeeLogger, KeeLog } from "../common/Logger";
+import { Config } from "../common/config";
+import { keeLoginField, keeLoginInfo } from "../common/kfDataModel";
+import { configManager } from "../common/ConfigManager";
+
+declare const __publicSuffixList;
+declare const __punycode;
+declare const __pslData;
+
+// Pretend browser (WebExtensions) is chrome (we include a
+// polyfill from Mozilla but it doesn't work in some cases)
+declare const chrome;
 
 class FillAndSubmitAction { fill: boolean; submit: boolean; }
 

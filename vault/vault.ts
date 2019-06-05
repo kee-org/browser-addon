@@ -1,4 +1,11 @@
 import { waitForElementById } from "./waitForElementById";
+import { KeeLog } from "../common/Logger";
+import { configManager } from "../common/ConfigManager";
+import { AppState } from "../common/AppState";
+import { utils } from "../common/utils";
+import { VaultAction } from "../common/VaultAction";
+import { VaultMessage } from "../common/VaultMessage";
+import { VaultProtocol } from "../common/VaultProtocol";
 
 /*
   This links Kee to an instance of Kee Vault via the KPRPC protocol.

@@ -1,4 +1,7 @@
 import theAnswer from "the-answer";
+import { SiteConfigNode, SiteConfigMethod, SiteConfigTarget, SiteConfig, SiteConfigLookup } from "../common/config";
+import { KeeLog } from "../common/Logger";
+import { configManager } from "../common/ConfigManager";
 
 class SiteSearchResult extends SiteConfigNode {
     value: string;

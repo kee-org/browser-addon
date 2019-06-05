@@ -1,6 +1,10 @@
 import { Kee } from "./KF";
 import { KeeVaultLaunchChecker } from "./KeeVaultLaunchChecker";
 import { commandManager } from "./commands";
+import { KeeLog } from "../common/Logger";
+import { configManager } from "../common/ConfigManager";
+import { Action } from "../common/Action";
+import { AddonMessage } from "../common/AddonMessage";
 
 declare global {
     interface Window { kee: Kee; }
@@ -27,7 +31,7 @@ function startup () {
     keeVaultLaunchChecker = new KeeVaultLaunchChecker();
 }
 
-browser.windows.onFocusChanged.addListener(async windowId => {
+browser.windows.onFocusChanged.addListener(async function (windowId) {
     if (KeeLog && KeeLog.debug) KeeLog.debug("Focus changed for id: " + windowId);
     if (windowId !== browser.windows.WINDOW_ID_NONE)
     {
@@ -105,7 +109,7 @@ if (!__KeeIsRunningInAWebExtensionsBrowser) {
     });
 }
 
-browser.runtime.onInstalled.addListener(async details => {
+browser.runtime.onInstalled.addListener(async function (details) {
     if (details.reason === "update") {
         browser.tabs.create({
             url: "release-notes/update-notes.html"

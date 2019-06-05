@@ -1,3 +1,6 @@
+import { configManager } from "../common/ConfigManager";
+import { KeeLog } from "../common/Logger";
+
 export class KeeVaultLaunchChecker {
 
     // 404 until we have fixed a time

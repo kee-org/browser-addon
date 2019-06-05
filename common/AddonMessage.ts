@@ -1,10 +1,12 @@
-/// <reference path="../common/AppState.ts" />
-/// <reference path="../common/TabState.ts" />
-/// <reference path="../common/SubmittedData.ts" />
-/// <reference path="../common/SaveData.ts" />
-/// <reference path="../common/KeeNotification.ts" />
+import { AppState } from "./AppState";
+import { Action } from "./Action";
+import { FrameState } from "./FrameState";
+import { KeeNotification } from "./KeeNotification";
+import { keeLoginInfo, PasswordProfile } from "./kfDataModel";
+import { SubmittedData } from "./SubmittedData";
+import { SaveData } from "./SaveData";
 
-interface AddonMessage {
+export interface AddonMessage {
     appState?: AppState;
     frameState?: FrameState;
     isForegroundTab?: boolean;

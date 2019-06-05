@@ -1,4 +1,4 @@
-interface SubmittedData {
+export interface SubmittedData {
     url: string;
     usernameIndex: number;
     passwordFields: any[];

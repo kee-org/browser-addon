@@ -1,6 +1,6 @@
-/// <reference path="config.ts" />
+import { SiteConfigIndex, SiteConfigLookup } from "./config";
 
-let defaultSiteConfig = new SiteConfigIndex();
+export let defaultSiteConfig = new SiteConfigIndex();
 defaultSiteConfig.pageRegex = new SiteConfigLookup();
 
 defaultSiteConfig.pageRegex["^.*$"] =

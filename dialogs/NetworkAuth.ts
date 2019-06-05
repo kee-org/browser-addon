@@ -1,3 +1,7 @@
+import { keeLoginInfo } from "../common/kfDataModel";
+import { KeeLog } from "../common/Logger";
+import { configManager } from "../common/ConfigManager";
+
 class NetworkAuth {
     public setupPage (logins: keeLoginInfo[], realm: string, url: string, isProxy: boolean) {
         const instructions = isProxy ? $STRF("network_auth_proxy_description", [url]) : $STRF("network_auth_http_auth_description", [url, realm] );

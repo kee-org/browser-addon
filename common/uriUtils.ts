@@ -1,12 +1,14 @@
 
 /// <reference path="Logger.ts" />
 
+import { KeeLog } from "./Logger";
+
 /*
  * getURIExcludingQS
  *
  * Get a string that includes all but a URI's query string
  */
-let getURIExcludingQS = function (uriString) {
+export let getURIExcludingQS = function (uriString) {
     let realm = "";
     try {
         const uri = this._ioService.newURI(uriString, null, null);
@@ -41,7 +43,7 @@ let getURIExcludingQS = function (uriString) {
  * Get a string that includes only a URI's host and port.
  * EXCEPTION: For file protocol this returns the file path
  */
-let getURIHostAndPort = function (uriString) {
+export let getURIHostAndPort = function (uriString) {
     let uri;
     let realm = "";
     try {
@@ -78,7 +80,7 @@ let getURIHostAndPort = function (uriString) {
  * Get a string that includes only a URI's scheme, host and port
  * EXCEPTION: For file protocol this returns the file scheme and path
  */
-let getURISchemeHostAndPort = function (uriString) {
+export let getURISchemeHostAndPort = function (uriString) {
     let realm = "";
     try {
         const uri = this._ioService.newURI(uriString, null, null);
@@ -110,7 +112,7 @@ let getURISchemeHostAndPort = function (uriString) {
  *
  * Get a string that includes only a URI's scheme
  */
-let getURIScheme = function (uriString) {
+export let getURIScheme = function (uriString) {
     try {
         const uri = this._ioService.newURI(uriString, null, null);
         return uri.scheme;

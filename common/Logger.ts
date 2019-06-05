@@ -10,7 +10,7 @@
 */
 
 // constructor
-class KeeLogger {
+export class KeeLogger {
     private outputStarted = false;
     private config = {logLevel: 2};
 
@@ -76,4 +76,4 @@ class KeeLogger {
 
 }
 
-let KeeLog = new KeeLogger();
+export let KeeLog = new KeeLogger();

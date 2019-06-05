@@ -1,3 +1,6 @@
+import { configManager } from "../common/ConfigManager";
+import { KeeLog } from "../common/Logger";
+
 class SrpDialog {
     public setupPage () {
         (document.getElementById("pref_sl_server") as HTMLSelectElement).value =

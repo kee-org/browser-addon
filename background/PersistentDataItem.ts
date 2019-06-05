@@ -1,3 +1,6 @@
+import { SubmittedData } from "../common/SubmittedData";
+import { keeLoginInfo } from "../common/kfDataModel";
+
 export class PersistentDataItem {
     itemType: "submittedData";
     submittedData?: SubmittedData;

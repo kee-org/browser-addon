@@ -1,3 +1,5 @@
+import { getURISchemeHostAndPort, getURIHostAndPort, getURIExcludingQS } from "./uriUtils";
+
 /*
   keeLoginInfo:
   This was loosly based on the LoginInfo object that Mozilla provided with Firefox 3.0
@@ -11,9 +13,7 @@
   enumeration of form field type (e.g. text, checkbox, password, etc.)
 */
 
-/// <reference path="uriUtils.ts" />
-
-let keeFormFieldType =
+export let keeFormFieldType =
     {
         radio: "FFTradio",
         username: "FFTusername",
@@ -23,17 +23,17 @@ let keeFormFieldType =
         checkbox: "FFTcheckbox"
     };
 
-enum SessionType {
+    export enum SessionType {
     Event = "event",
     Websocket = "websocket"
 }
 
-class PasswordProfile {
+export class PasswordProfile {
     name: string;
     sessionType: SessionType;
 }
 
-class Database {
+export class Database {
     name: string;
     fileName: string;
     iconImageData: string;
@@ -43,7 +43,7 @@ class Database {
     sessionFeatures: string[];
 }
 
-class keeLoginInfo {
+export class keeLoginInfo {
 
     // array of URL strings (normally just one is needed
     // but a given login can be associated with more than one site
@@ -485,7 +485,7 @@ class keeLoginInfo {
 }
 
 
-class keeLoginField {
+export class keeLoginField {
 
     // "name" attribute on the HTML form element
     name: string;

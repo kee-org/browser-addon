@@ -1,4 +1,6 @@
 import { Command } from "./Command";
+import { Action } from "../common/Action";
+import { KeeLog } from "../common/Logger";
 
 export class KFCommands {
     private contextMenuUpdateLock = false;
