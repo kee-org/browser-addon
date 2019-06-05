@@ -1,3 +1,7 @@
+import { Config } from "../common/config";
+import { configManager } from "../common/ConfigManager";
+import { KeeLog } from "../common/Logger";
+
 export class ConfigSyncManager {
     private lastKnownSynced: {settings: Partial<Config>, version: number};
     private enabled: boolean = false;

@@ -2,6 +2,11 @@ import { FormFilling } from "./formFilling";
 import { FormUtils } from "./formsUtils";
 import { FormSaving } from "./formSaving";
 import { PasswordGenerator } from "./PasswordGenerator";
+import { KeeLog } from "../common/Logger";
+import { AppState } from "../common/AppState";
+import { configManager } from "../common/ConfigManager";
+import { AddonMessage } from "../common/AddonMessage";
+import { Action } from "../common/Action";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */

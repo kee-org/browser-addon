@@ -2,6 +2,12 @@ import { copyStringToClipboard } from "./copyStringToClipboard";
 import { MatchedLoginsPanel } from "./MatchedLoginsPanel";
 import { GeneratePasswordPanel } from "./GeneratePasswordPanel";
 import { SavePasswordPanel } from "./SavePasswordPanel";
+import { AppState } from "../common/AppState";
+import { FrameState } from "../common/FrameState";
+import { Action } from "../common/Action";
+import { KeeLog } from "../common/Logger";
+import { configManager } from "../common/ConfigManager";
+import { AddonMessage } from "../common/AddonMessage";
 
 let appState: AppState;
 let frameState: FrameState;

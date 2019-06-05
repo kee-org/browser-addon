@@ -1,8 +1,6 @@
 var gulp = require("gulp");
 var tslint = require("gulp-tslint");
-var ts = require("gulp-typescript");
 var fs = require("fs");
-var sourcemaps = require('gulp-sourcemaps');
 var zip = require('gulp-zip');
 var merge = require('merge-stream');
 var sequence = require('run-sequence');
@@ -16,12 +14,14 @@ var terser = require('rollup-plugin-terser').terser;
 var vue = require('rollup-plugin-vue');
 var commonjs = require('rollup-plugin-commonjs');
 var rollupReplace = require('rollup-plugin-replace');
+var iife = require('rollup-plugin-iife');
 
 // Some tasks set DEBUG to false so that a production build can be executed.
 // There doesn't appear to be a way to pass this as a local variable so we
 // have to ensure every invocation of gulp only builds in either production
 // or debug mode but not both (tasks run concurrently)
 var DEBUG = true;
+var WATCH = true;
 
 const buildDirDebug = "build/debug/all";
 const buildDirProd = "build/prod/all";
@@ -42,23 +42,6 @@ const globStaticBackground = 'background/*.{css,html}';
 const globStaticPage = 'page/*.{css,html}';
 const globStaticPanels = 'panels/*.{css,html}';
 const globStaticPopup = 'popup/*.{css,html}';
-const globTSCommon = 'common/**/*.ts';
-const globTSCommonOut = 'common.js';
-const globTSPopup = 'popup/**/*.{ts,vue}';
-const globTSPopupLint = 'popup/**/*.ts';
-const globTSPopupOut = 'popup.js';
-const globTSPanels = 'panels/**/*.ts';
-const globTSPanelsOut = 'panels.js';
-const globTSPage = 'page/**/*.ts';
-const globTSPageOut = 'page.js';
-const globTSVault = 'vault/**/*.ts';
-const globTSVaultOut = 'vault.js';
-const globTSBackground = 'background/**/*.ts';
-const globTSBackgroundOut = 'background.js';
-const globTSSettings = 'settings/**/*.ts';
-const globTSSettingsOut = 'settings.js';
-const globTSDialogs = 'dialogs/**/*.ts';
-const globTSDialogsOut = 'dialogs/**/*.js';
 
 
 /********** TOP-LEVEL ORCHESTRATION **********/
@@ -67,134 +50,52 @@ gulp.task('default', ['build:debug']);
 gulp.task('build', ['build:debug']);
 
 gulp.task('build:debug', function (done) {
+    WATCH = false;
     sequence(['compilets', 'static'], done);
 });
 gulp.task('build:prod', function (done) {
     DEBUG = false;
+    WATCH = false;
     sequence(['compilets', 'static'], done);
 });
 
 gulp.task("compilets", function (done) {
-    sequence("compilets:common", ["compilets:background", "compilets:popup",
-        "compilets:panels", "compilets:page", "compilets:vault", "compilets:settings",
-        "compilets:dialogs"], done);
+    sequence("compilets:all", done);
 });
 
 /********** LINTING TYPESCRIPT **********/
 
-gulp.task("lint:ts", ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:vault", "lint:settings", "lint:dialogs" ]);
-
-gulp.task("lint:background", function() {
-    return gulp.src([globTSBackground])
+gulp.task("lint:ts",
+// ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:vault", "lint:settings", "lint:dialogs" ],
+function() {
+    return gulp.src(["**/*.ts", "!node_modules/**/*.ts", "!typedefs/**/*.ts"])
         .pipe(tslint({
             formatter: "verbose"
         }))
         .pipe(tslint.report())
-});
-
-gulp.task("lint:page", function() {
-    return gulp.src([globTSPage])
-        .pipe(tslint({
-            formatter: "verbose"
-        }))
-        .pipe(tslint.report())
-});
-
-gulp.task("lint:vault", function() {
-    return gulp.src([globTSVault])
-        .pipe(tslint({
-            formatter: "verbose"
-        }))
-        .pipe(tslint.report())
-});
-
-gulp.task("lint:popup", function() {
-    return gulp.src([globTSPopupLint])
-        .pipe(tslint({
-            formatter: "verbose"
-        }))
-        .pipe(tslint.report())
-});
-
-gulp.task("lint:panels", function() {
-    return gulp.src([globTSPanels])
-        .pipe(tslint({
-            formatter: "verbose"
-        }))
-        .pipe(tslint.report())
-});
-
-gulp.task("lint:settings", function() {
-    return gulp.src([globTSSettings])
-        .pipe(tslint({
-            formatter: "verbose"
-        }))
-        .pipe(tslint.report())
-});
-
-gulp.task("lint:dialogs", function() {
-    return gulp.src([globTSDialogs])
-        .pipe(tslint({
-            formatter: "verbose"
-        }))
-        .pipe(tslint.report())
-});
-
-gulp.task("lint:common", function() {
-    return gulp.src([globTSCommon])
-        .pipe(tslint({
-            formatter: "verbose"
-        }))
-        .pipe(tslint.report())
-});
-
-/********** COMPILING SHARED TYPESCRIPT LIBRARY **********/
-
-var tsProjectCommon = ts.createProject("common/tsconfig.json", {
-    outFile: globTSCommonOut,
-    declaration: true
-});
-gulp.task("compilets:common", ["clean:ts:common", "lint:common"], function() {
-
-    if (DEBUG) {
-        var tsResult = tsProjectCommon.src()
-            .pipe(sourcemaps.init())
-            .pipe(tsProjectCommon());
-        return merge(
-        tsResult.dts.pipe(gulp.dest('typedefs')),
-        tsResult.js.pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(buildDirDebug + '/common'))
-        .pipe(gulp.dest(buildDirDebugChrome + '/common'))
-        .pipe(gulp.dest(buildDirDebugFirefox + '/common'))
-        );
-    } else {
-        var tsResult = tsProjectCommon.src()
-                .pipe(tsProjectCommon());
-            return merge(
-            tsResult.dts.pipe(gulp.dest('typedefs')),
-            tsResult.js
-            .pipe(gulp.dest(buildDirProd + '/common'))
-            .pipe(gulp.dest(buildDirProdChrome + '/common'))
-            .pipe(gulp.dest(buildDirProdFirefox + '/common'))
-            );
-    }
 });
 
 /********** COMPILING TYPESCRIPT **********/
 
-var buildAndBundleTypescript = function (name, fileNames) {
-    if (!fileNames || !fileNames.length) {
-        fileNames = [name];
-    }
-    bundleOps = [];
+gulp.task("watchts", ["clean:ts", "lint:ts"], function() {
+    return executeRollup();
+});
+
+gulp.task("compilets:all", ["clean:ts", "lint:ts"], function() {
+    return executeRollup();
+});
+
+var executeRollup = function () {
+
     const plugins = [
         resolve(),
         commonjs(),
         typescript({
             clean: true,
-            tsconfig: name + '/tsconfig.json',
-            typescript: require('typescript'),
+            tsconfig: 'tsconfig.json',
+            typescript: require('typescript')
         }),
+        iife(),
         rollupReplace({
             'process.env.NODE_ENV': JSON.stringify( DEBUG ? 'development' : 'production' )
           }),
@@ -204,62 +105,70 @@ var buildAndBundleTypescript = function (name, fileNames) {
     ];
     if (!DEBUG) plugins.push(terser());
 
-    for (const fileName of fileNames) {
-        const pathName = name + '/' + fileName;
-        bundleOps.push(rollup.rollup({
-            //external: ['vue'],
-            input: './' + pathName + '.ts',
-            plugins
-        }).then(bundle => {
-            return Promise.all([bundle.write({
-                file: (DEBUG ? buildDirDebug : buildDirProd) + '/' + pathName + '.js',
-                format: 'iife',
-                sourcemap: !!DEBUG
-            }), bundle.write({
-                file: (DEBUG ? buildDirDebugChrome : buildDirProdChrome) + '/' + pathName + '.js',
-                format: 'iife',
-                sourcemap: !!DEBUG
-            }), bundle.write({
-                file: (DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + '/' + pathName + '.js',
-                format: 'iife',
-                sourcemap: !!DEBUG
-            })]);
-        }));
+    var input = {
+        //external: ['vue','vueex'],
+        input: {
+            'vault/vault': './vault/vault.ts',
+            'background/background': './background/background.ts',
+            'popup/popup': './popup/popup.ts',
+            'settings/settings': './settings/settings.ts',
+            'panels/panels': './panels/panels.ts',
+            'page/page': './page/page.ts',
+            'dialogs/SRP': './dialogs/SRP.ts',
+            'dialogs/NetworkAuth': './dialogs/NetworkAuth.ts'
+        },
+        plugins,
+        manualChunks(id) {
+            if (id.includes('common/')) {
+              return 'common';
+            }
+        },
+        onwarn: function(warning) {
+            console.warn( warning.loc.file + ':' + warning.loc.line + ':' + warning.loc.column + ' ' + warning.message + '\n' + warning.frame );
+        }
+    };
+    const output = {
+        format: "es",
+        sourcemap: !!DEBUG,
+        // globals: {
+        //     vue: "Vue"
+        // },
+        chunkFileNames: "common/[name].js"
+    };
+    if (WATCH) {
+        return rollup.watch({
+            ...input,
+            output: [Object.assign({dir: buildDirDebug }, output)],
+            watch: {
+                clearScreen: false
+            }
+        });
+    } else {
+        return rollup.rollup(input).then(bundle => {
+
+            return Promise.all([
+                    bundle.write(Object.assign({dir: DEBUG ? buildDirDebug : buildDirProd}, output)),
+                    bundle.write(Object.assign({dir: DEBUG ? buildDirDebugChrome : buildDirProdChrome}, output)),
+                    bundle.write(Object.assign({dir: DEBUG ? buildDirDebugFirefox : buildDirProdFirefox}, output))
+                ]);
+        });
     }
-    return Promise.all(bundleOps);
-};
-
-gulp.task("compilets:background", ["clean:ts:background", "lint:background"], function() {
-    return buildAndBundleTypescript("background");
-});
-
-gulp.task("compilets:popup", ["clean:ts:popup", "lint:popup"], function() {
-    return buildAndBundleTypescript("popup");
-});
-gulp.task("compilets:panels", ["clean:ts:panels", "lint:panels"], function() {
-    return buildAndBundleTypescript("panels");
-});
-gulp.task("compilets:page", ["clean:ts:page", "lint:page"], function() {
-    return buildAndBundleTypescript("page");
-});
-gulp.task("compilets:vault", ["clean:ts:vault", "lint:vault"], function() {
-    return buildAndBundleTypescript("vault");
-});
-gulp.task("compilets:settings", ["clean:ts:settings", "lint:settings"], function() {
-    return buildAndBundleTypescript("settings");
-});
-gulp.task("compilets:dialogs", ["clean:ts:dialogs", "lint:dialogs"], function() {
-    return buildAndBundleTypescript("dialogs", ["SRP", "NetworkAuth"]);
-});
+}
 
 /********** STATIC FILE COPYING / MANIPULATION **********/
 
 var copyStatic = function (glob, dir) {
-    return gulp.src(glob)
-    .pipe(replace("<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->", DEBUG ? "<script src='https://localhost:8099'></script>" : ""))
-    .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir))
-    .pipe(gulp.dest((DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + dir))
-    .pipe(gulp.dest((DEBUG ? buildDirDebugChrome : buildDirProdChrome) + dir))
+    if (WATCH) {
+        return gulp.src(glob)
+        .pipe(replace("<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->", DEBUG ? "<script src='https://localhost:8099'></script>" : ""))
+        .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir))
+    } else {
+        return gulp.src(glob)
+        .pipe(replace("<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->", DEBUG ? "<script src='https://localhost:8099'></script>" : ""))
+        .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir))
+        .pipe(gulp.dest((DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + dir))
+        .pipe(gulp.dest((DEBUG ? buildDirDebugChrome : buildDirProdChrome) + dir))
+    }
 }
 
 gulp.task('static:popup', ["clean:static:popup"], function() {
@@ -307,10 +216,12 @@ gulp.task('modifyBuildFilesForCrossBrowser', function() {
     if (DEBUG) {
         return merge (
             gulp.src([buildDirDebugFirefox + '/manifest.json'])
+            .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
             .pipe(replace(/(.*"version": ")(.*)(",.*)/g, '$1$2beta$3'))
             .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ''))
             .pipe(gulp.dest(buildDirDebugFirefox)),
             gulp.src([buildDirDebugChrome + '/manifest.json'])
+            .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
             .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, '$1$2 Beta$3'))
             .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ''))
             // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
@@ -337,8 +248,8 @@ gulp.task('modifyBuildFilesForCrossBrowser', function() {
 });
 
 gulp.task('static:manifest', ["clean:static:manifest"], function(done) {
-
-    sequence("copyStaticManifest", "modifyBuildFilesForCrossBrowser", done);
+    if (WATCH) return sequence("copyStaticManifest", done);
+    else return sequence("copyStaticManifest", "modifyBuildFilesForCrossBrowser", done);
 });
 
 gulp.task('static', ['static:popup','static:panels','static:page','static:background',
@@ -348,15 +259,7 @@ gulp.task('static', ['static:popup','static:panels','static:page','static:backgr
 
 /********** WATCHING FOR CHANGES TO SOURCE FILES **********/
 
-gulp.task('watch', ['compilets', 'static'], function() {
-    gulp.watch([globTSCommon], ['compilets:common']);
-    gulp.watch([globTSPopup], ['compilets:popup']);
-    gulp.watch([globTSPanels], ['compilets:panels']);
-    gulp.watch([globTSPage], ['compilets:page']);
-    gulp.watch([globTSVault], ['compilets:vault']);
-    gulp.watch([globTSBackground], ['compilets:background']);
-    gulp.watch([globTSSettings], ['compilets:settings']);
-    gulp.watch([globTSDialogs], ['compilets:dialogs']);
+gulp.task('watch', ['watchts', 'static'], function() {
     gulp.watch([globStaticPopup], ['static:popup']);
     gulp.watch([globStaticPanels], ['static:panels']);
     gulp.watch([globStaticPage], ['static:page']);
@@ -408,10 +311,12 @@ gulp.task('xpi:debug', function() {
 
 gulp.task('package:prod', function (done) {
     DEBUG = false;
+    WATCH = false;
     sequence(['compilets', 'static'], ['xpi','zip'], done);
 });
 
 gulp.task('package:debug', function (done) {
+    WATCH = false;
     sequence(['compilets', 'static'], ['xpi:debug','zip:debug'], done);
 });
 
@@ -445,30 +350,10 @@ var deleteBuildFiles = function (includeGlobs, excludeGlobs) {
     return del(globs);
 };
 
-gulp.task('clean:ts:dialogs', function () {
-    return deleteBuildFiles([globTSDialogsOut, globTSDialogsOut + '.map'], ['dialogs']);
+gulp.task('clean:ts', function () {
+    return deleteBuildFiles([], ['lib']);
 });
-gulp.task('clean:ts:settings', function () {
-    return deleteBuildFiles([globTSSettingsOut, globTSSettingsOut + '.map']);
-});
-gulp.task('clean:ts:background', function () {
-    return deleteBuildFiles([globTSBackgroundOut, globTSBackgroundOut + '.map']);
-});
-gulp.task('clean:ts:page', function () {
-    return deleteBuildFiles([globTSPageOut, globTSPageOut + '.map']);
-});
-gulp.task('clean:ts:vault', function () {
-    return deleteBuildFiles([globTSVaultOut, globTSVaultOut + '.map']);
-});
-gulp.task('clean:ts:panels', function () {
-    return deleteBuildFiles([globTSPanelsOut, globTSPanelsOut + '.map']);
-});
-gulp.task('clean:ts:popup', function () {
-    return deleteBuildFiles([globTSPopupOut, globTSPopupOut + '.map']);
-});
-gulp.task('clean:ts:common', function () {
-    return deleteBuildFiles([globTSCommonOut, globTSCommonOut + '.map']);
-});
+
 gulp.task('clean:static:popup', function () {
     return deleteBuildFiles([globStaticPopup]);
 });
@@ -514,9 +399,7 @@ gulp.task('clean', [
     'clean:static:commonFonts', 'clean:static:commonImages',
     'clean:static:common', 'clean:static:dialogs', 'clean:static:settings',
     'clean:static:background', 'clean:static:page', 'clean:static:panels',
-    'clean:static:popup', 'clean:ts:common', 'clean:ts:popup', 'clean:ts:panels',
-    'clean:ts:page', 'clean:ts:vault', 'clean:ts:background', 'clean:ts:settings',
-    'clean:ts:dialogs'
+    'clean:static:popup', 'clean:ts:all'
 ]);
 
 gulp.task('sign', function () {

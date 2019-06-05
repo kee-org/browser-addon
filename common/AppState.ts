@@ -1,7 +1,7 @@
-/// <reference path="config.ts" />
-/// <reference path="KeeNotification.ts" />
+import { Database, PasswordProfile } from "./kfDataModel";
+import { KeeNotification } from "./KeeNotification";
 
-interface AppState {
+export interface AppState {
     latestConnectionError: string;
     lastKeePassRPCRefresh: number;
     ActiveKeePassDatabaseIndex: number;

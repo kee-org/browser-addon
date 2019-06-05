@@ -1,4 +1,8 @@
 import { copyStringToClipboard } from "./copyStringToClipboard";
+import { keeLoginInfo } from "../common/kfDataModel";
+import { KeeLog } from "../common/Logger";
+import { Action } from "../common/Action";
+import { AddonMessage } from "../common/AddonMessage";
 
 export class MatchedLoginsPanel {
 

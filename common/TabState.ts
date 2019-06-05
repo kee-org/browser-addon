@@ -1,6 +1,6 @@
-/// <reference path="../common/FrameState.ts" />
+import { FrameState } from "./FrameState";
 
-class TabState {
+export class TabState {
     frames: Map<number, FrameState> = new Map<number, FrameState>();
     url: string = "";
     framePorts: Map<number, browser.runtime.Port> = new Map<number, browser.runtime.Port>();

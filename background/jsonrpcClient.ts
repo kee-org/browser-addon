@@ -1,5 +1,10 @@
 import { kprpcClient, ResultWrapper } from "./kprpcClient";
 import { EventSessionManager } from "./EventSession";
+import { VaultMessage } from "../common/VaultMessage";
+import { SessionType, Database, PasswordProfile } from "../common/kfDataModel";
+import { KeeLog } from "../common/Logger";
+import { configManager } from "../common/ConfigManager";
+import { Config } from "../common/config";
 
 /*
 jsonrpcClient provides a JSON-RPC client and method proxies for

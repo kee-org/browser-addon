@@ -1,4 +1,7 @@
-class ConfigMigrations {
+import { SiteConfig, Config, SiteConfigLookup, SiteConfigIndex } from "./config";
+import { defaultSiteConfig } from "./DefaultSiteConfig";
+
+export class ConfigMigrations {
 
     public migrateToVersion6 (current: Config) {
         Object.assign(current, { animateWhenOfferingSave: true, version: 6 } as Partial<Config>);

@@ -1,4 +1,6 @@
 import { ResultWrapper } from "./kprpcClient";
+import { KeeLog } from "../common/Logger";
+import { configManager } from "../common/ConfigManager";
 
 /*
 WebsocketSessionManager.js manages the low-level websocket connection between this

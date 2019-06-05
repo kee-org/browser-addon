@@ -1,3 +1,6 @@
+import { AddonMessage } from "../common/AddonMessage";
+import { keeLoginInfo } from "../common/kfDataModel";
+
 export class LoginMenus {
 
     constructor (private myPort: browser.runtime.Port) {}

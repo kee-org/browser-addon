@@ -1,4 +1,5 @@
 import { FilledField } from "./FilledField";
+import { keeLoginInfo, keeLoginField } from "../common/kfDataModel";
 export class MatchResult {
     logins: keeLoginInfo[][];
     submitTargets: HTMLElement[];

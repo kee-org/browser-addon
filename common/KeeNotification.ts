@@ -1,11 +1,13 @@
-/// <reference path="../common/Button.ts" />
+import { Button, ButtonAction } from "./Button";
+import { AddonMessage } from "./AddonMessage";
+import { configManager } from "./ConfigManager";
 
 // These notifications are displayed within the Kee browser action popup.
 // They may persist for significant lengths of time.
 // For transient system notification popups (sometimes known as growls)
 // look at the background/NativeNotification class
 
-class KeeNotification {
+export class KeeNotification {
 
     constructor (
             public name: string,

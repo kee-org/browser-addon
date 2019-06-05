@@ -2,6 +2,13 @@ import {SearchPanel} from "./SearchPanel";
 import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
+import { AppState } from "../common/AppState";
+import { SessionType, keeLoginInfo } from "../common/kfDataModel";
+import { KeeNotification } from "../common/KeeNotification";
+import { KeeLog } from "../common/Logger";
+import { configManager } from "../common/ConfigManager";
+import { AddonMessage } from "../common/AddonMessage";
+import { Action } from "../common/Action";
 
 Vue.prototype.$browser = browser;
 

@@ -1,11 +1,12 @@
+import { Config, SiteConfig, SiteConfigLookup, SiteConfigNode } from "./config";
+import { keeLoginField } from "./kfDataModel";
+import { ConfigMigrations } from "./ConfigMigrations";
+import { defaultSiteConfig } from "./DefaultSiteConfig";
+
 /*
   Entry-specific configuration is stored in KeePass but in future maybe
   we'll still make it available from this interface.
 */
-
-/// <reference path="DefaultSiteConfig.ts" />
-/// <reference path="config.ts" />
-/// <reference path="kfDataModel.ts" />
 
 declare const __publicSuffixList;
 declare const __punycode;
@@ -16,9 +17,9 @@ declare const __pslData;
 declare const chrome;
 
 // increment when changes are introduced that require data migration
-const LATEST_VERSION: number = 6;
+export const LATEST_VERSION: number = 6;
 
-let defaultConfig = new Config();
+export let defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
 defaultConfig.autoFillForms = true;
 defaultConfig.autoFillFormsWithMultipleMatches = false;
@@ -65,7 +66,7 @@ defaultConfig.keeVaultLaunchStart = 8640000000000000;
 defaultConfig.keeVaultLaunchEnd = 8640000000000000;
 defaultConfig.manualSubmitOverrideProhibited = false;
 
-class ConfigManager {
+export class ConfigManager {
     public current: Config;
     private readonly maxCharsPerPage: number = 10000;
     private pslInitialised = false;
@@ -444,4 +445,4 @@ class ConfigManager {
 
 }
 
-let configManager = new ConfigManager();
+export let configManager = new ConfigManager();

@@ -1,3 +1,5 @@
+import { Action } from "../common/Action";
+
 export class GeneratePasswordPanel {
     constructor (private myPort: browser.runtime.Port,
         private closePanel: () => void) {}

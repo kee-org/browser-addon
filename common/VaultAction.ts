@@ -1,4 +1,4 @@
-const enum VaultAction {
+export const enum VaultAction {
     Init = "init",
     MessageToClient = "messageToClient",
     FocusRequired = "focusRequired",

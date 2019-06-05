@@ -1,8 +1,5 @@
-/// <reference path="../common/Logger.ts" />
-/// <reference path="../common/ConfigManager.ts" />
 
-// constructor
-class Utils {
+export class Utils {
     constructor ()
     {
     }
@@ -250,4 +247,4 @@ class Utils {
     };
 }
 
-let utils = new Utils();
+export let utils = new Utils();

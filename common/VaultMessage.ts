@@ -1,11 +1,10 @@
-/// <reference path="./AppState.ts" />
-/// <reference path="./FrameState.ts" />
-/// <reference path="./SubmittedData.ts" />
-/// <reference path="./VaultAction.ts" />
-/// <reference path="./VaultProtocol.ts" />
-/// <reference path="./Tokens.ts" />
+import { AppState } from "./AppState";
+import { FrameState } from "./FrameState";
+import { VaultAction } from "./VaultAction";
+import { Tokens } from "./Tokens";
+import { VaultProtocol } from "./VaultProtocol";
 
-interface VaultMessage {
+export interface VaultMessage {
     appState?: AppState;
     frameState?: FrameState;
     isForegroundTab?: boolean;

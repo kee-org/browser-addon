@@ -1,5 +1,14 @@
 import { fetchFavicon } from "./fetchFavicon";
 import { showUpdateSuccessNotification } from "./showUpdateSuccessNotification";
+import { AddonMessage } from "../common/AddonMessage";
+import { KeeLog } from "../common/Logger";
+import { KeeNotification } from "../common/KeeNotification";
+import { Action } from "../common/Action";
+import { configManager } from "../common/ConfigManager";
+import { keeLoginInfo, keeLoginField } from "../common/kfDataModel";
+import { VaultMessage } from "../common/VaultMessage";
+import { VaultAction } from "../common/VaultAction";
+import { SiteConfig } from "../common/config";
 
 // callbacks for messaging / ports
 

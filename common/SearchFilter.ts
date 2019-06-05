@@ -1,4 +1,14 @@
-class SearchFilter {
+import { Search } from "./search";
+
+declare const __publicSuffixList;
+declare const __punycode;
+declare const __pslData;
+
+// Pretend browser (WebExtensions) is chrome (we include a
+// polyfill from Mozilla but it doesn't work in some cases)
+declare const chrome;
+
+export class SearchFilter {
 
     private pslInitialised = false;
 

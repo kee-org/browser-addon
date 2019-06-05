@@ -1,6 +1,6 @@
-/// <reference path="../common/kfDataModel.ts" />
+import { keeLoginInfo } from "./kfDataModel";
 
-class FrameState {
+export class FrameState {
     logins: keeLoginInfo[] = [];
     url: string;
 }

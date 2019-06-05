@@ -1,4 +1,7 @@
 import { ResultWrapper } from "./kprpcClient";
+import { KeeLog } from "../common/Logger";
+import { VaultProtocol } from "../common/VaultProtocol";
+import { VaultMessage } from "../common/VaultMessage";
 
 /*
 EventSession.js manages the low-level transport connection between this

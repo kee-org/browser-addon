@@ -1,4 +1,5 @@
 import { JWT } from "./JWT";
+import { Tokens } from "../common/Tokens";
 
 export class KeeAccount {
     private _features: string[] = [];
