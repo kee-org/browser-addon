@@ -237,13 +237,18 @@ var executeRollup = function () {
         chunkFileNames: "common/[name].js"
     };
     if (WATCH) {
-        return rollup.watch({
+        const watcher = rollup.watch({
             ...input,
             output: [Object.assign({dir: buildDirDebug }, output)],
             watch: {
                 clearScreen: false
             }
         });
+        watcher.on('event', event => {
+            if (event.code === "START" || event.code === "END" || event.code === "ERROR" || event.code === "FATAL")
+            console.info(`WATCHER: ${event.code} : ${JSON.stringify(event)}`);
+        });
+        return watcher;
     } else {
         return rollup.rollup(input).then(bundle => {
 
