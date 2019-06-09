@@ -1,0 +1,84 @@
+import * as types from "./mutation-types";
+import { KeeState } from "./KeeState";
+import { keeLoginInfo } from "../common/kfDataModel";
+
+function undefAbort (payload) {
+    if (payload === undefined) {
+        throw new Error("FATAL! undefined value sent to commit that must never set an undefined value. No-one knows what will happen now but Kee is probably broken in some way until a browser restart.");
+    }
+}
+
+export default {
+    [types.UPDATE_TIMER] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.timer = payload;
+    },
+    [types.UPDATE_COUNTER] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.counter = payload;
+    },
+    [types.updateActiveKeePassDatabaseIndex] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.ActiveKeePassDatabaseIndex = payload;
+    },
+    [types.updateConnected] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.connected = payload;
+    },
+    [types.updateConnectedWebsocket] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.connectedWebsocket = payload;
+    },
+    [types.updateCurrentSearchTerm] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.currentSearchTerm = payload;
+    },
+    [types.updateKeePassDatabases] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.KeePassDatabases = payload;
+    },
+    [types.updateLastKeePassRPCRefresh] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.lastKeePassRPCRefresh = payload;
+    },
+    [types.updateLatestConnectionError] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.latestConnectionError = payload;
+    },
+    [types.updateLoginsFound] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.loginsFound = payload;
+    },
+    [types.updateNotifications] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.notifications = payload;
+    },
+    [types.updatePasswordProfiles] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.PasswordProfiles = payload;
+    },
+    [types.updateSubmittedData] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.submittedData = payload;
+    },
+    [types.updateSearchResults] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.searchResults = payload;
+    },
+    [types.updateContextMenuResult] (state: KeeState, payload: keeLoginInfo) {
+        undefAbort(payload);
+        const id = payload.uniqueID;
+        for (const s of state.searchResults) {
+            if (s.uniqueID === id) {
+                s.fullDetails = payload;
+                break;
+            }
+        }
+    },
+    incrementCounter (state: KeeState) {
+      state.counter++;
+    },
+    decrementCounter (state: KeeState) {
+      state.counter--;
+    }
+};
