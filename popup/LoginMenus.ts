@@ -134,6 +134,7 @@ export class LoginMenus {
 
     public onMouseLeaveLogin (event) {
         const optionsMenuTrigger = document.getElementById("Kee-optionsMenuTrigger");
+        if (!optionsMenuTrigger) return;
         event.target.removeChild(optionsMenuTrigger);
     }
 }

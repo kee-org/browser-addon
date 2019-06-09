@@ -8,6 +8,7 @@ import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
+import { isVuexMessage } from "../common/VuexMessage";
 
 let appState: AppState;
 let frameState: FrameState;
@@ -42,6 +43,7 @@ function startup () {
             matchedLoginsPanel = new MatchedLoginsPanel(myPort, closePanel, parentFrameId);
             document.getElementById("header").innerText = $STR("matched_logins_label");
             myPort.onMessage.addListener(function (m: AddonMessage) {
+                if (isVuexMessage(m)) return;
                 KeeLog.debug("In iframe script, received message from background script");
 
                 if (m.appState) updateAppState(m.appState);
@@ -63,6 +65,7 @@ function startup () {
             generatePasswordPanel = new GeneratePasswordPanel(myPort, closePanel);
             document.getElementById("header").innerText = $STR("Menu_Button_copyNewPasswordToClipboard_label");
             myPort.onMessage.addListener(function (m: AddonMessage) {
+                if (isVuexMessage(m)) return;
                 KeeLog.debug("In iframe script, received message from background script");
 
                 if (m.appState) updateAppState(m.appState);
@@ -113,6 +116,7 @@ function startup () {
         case "savePassword":
             document.getElementById("header").innerText = $STR("save_login");
             myPort.onMessage.addListener(function (m: AddonMessage) {
+                if (isVuexMessage(m)) return;
                 KeeLog.debug("In iframe script, received message from background script");
 
                 if (m.appState) updateAppState(m.appState);

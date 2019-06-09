@@ -20,6 +20,7 @@ import { KeeNotification } from "../common/KeeNotification";
 import { VaultProtocol } from "../common/VaultProtocol";
 import { SessionType, Database, PasswordProfile } from "../common/kfDataModel";
 import { Action } from "../common/Action";
+//import store, { mTypes } from "../store";
 
 export class Kee {
     accountManager: AccountManager;
@@ -54,6 +55,7 @@ export class Kee {
     {
         this.accountManager = new AccountManager();
 
+        //TODO:vuex: won't be needed in future
         this.appState = {
             latestConnectionError: "",
             lastKeePassRPCRefresh: 0,
@@ -95,6 +97,12 @@ export class Kee {
                 case "browserPopup": {
                     p.onMessage.addListener(browserPopupMessageHandler);
 
+                    // // Ultimately want all this data to be manipulated directly on the store
+                    // // but for transition, we can hack it in some key places like this
+                    // store.state.submittedData = null;
+                    // store.state.loginsFound = false;
+                    // store.state.appState = window.kee.appState;
+
                     const connectMessage = {
                         appState: window.kee.appState
                     } as AddonMessage;
@@ -110,7 +118,7 @@ export class Kee {
 
                     if (window.kee.tabStates.has(window.kee.foregroundTabId)
                         && window.kee.frameIdWithMatchedLogins(window.kee.tabStates.get(window.kee.foregroundTabId).frames) >= 0) {
-                        connectMessage.loginsFound = true;
+                            connectMessage.loginsFound = true;
                     }
 
                     p.postMessage(connectMessage);
@@ -290,6 +298,13 @@ export class Kee {
     {
         KeeLog.debug("Kee initialising");
         this.KeePassRPC = new jsonrpcClient();
+
+
+// Increase timer each second
+// setInterval(function () {
+//     store.commit(mTypes.UPDATE_TIMER, store.state.timer + 1);
+//   }, 1000);
+
         KeeLog.info("Kee initialised OK although the connection to a KeePassRPC server is probably not established just yet...");
     }
 

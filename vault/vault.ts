@@ -6,6 +6,7 @@ import { utils } from "../common/utils";
 import { VaultAction } from "../common/VaultAction";
 import { VaultMessage } from "../common/VaultMessage";
 import { VaultProtocol } from "../common/VaultProtocol";
+import { isVuexMessage } from "../common/VuexMessage";
 
 /*
   This links Kee to an instance of Kee Vault via the KPRPC protocol.
@@ -208,6 +209,7 @@ class Background {
         myPort = browser.runtime.connect({ name: "vault" });
 
         myPort.onMessage.addListener(function (m: VaultMessage) {
+            if (isVuexMessage(m)) return;
             KeeLog.debug("In browser content vault script, received message from background script");
 
             if (!appState) {

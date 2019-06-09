@@ -14,6 +14,7 @@ var vue = require('rollup-plugin-vue');
 var commonjs = require('rollup-plugin-commonjs');
 var rollupReplace = require('rollup-plugin-replace');
 var iife = require('rollup-plugin-iife');
+var url = require('rollup-plugin-url');
 
 // Some tasks set DEBUG to false so that a production build can be executed.
 // There doesn't appear to be a way to pass this as a local variable so we
@@ -202,7 +203,13 @@ var executeRollup = function () {
           }),
         vue({
             needMap: false // buggy so must be disabled to get sourcemaps to work at all
-        })
+        }),
+        // hack to allow images to load, until they don't. can't find any way to get rollup to just let fucking images work without such hacks...
+        url({
+            limit: 1024 * 1024, // inline files < 1M, copy files > 1M //TODO 4K
+            //include: ["**/*.svg"], // defaults to .svg, .png, .jpg and .gif files
+            emitFiles: true // defaults to true
+          })
     ];
     if (!DEBUG) plugins.push(terser());
 
@@ -220,18 +227,27 @@ var executeRollup = function () {
         },
         plugins,
         manualChunks(id) {
-            if (id.includes('common/')) {
-              return 'common';
+            //console.log(id);
+
+            //TODO:
+            // Always bundle into common for time being. Unlikely to pass AMO review but best "final" approach unclear at this point.
+            if (id.includes('/browser-addon/common/') ||
+            id.includes('/browser-addon/node_modules/tslib/') ||
+            id.includes('/browser-addon/node_modules/vue') ||
+            id.includes('/browser-addon/store/')
+            ) {
+                return 'common';
             }
         },
         onwarn: function(warning) {
-            console.warn( warning.loc.file + ':' + warning.loc.line + ':' + warning.loc.column + ' ' + warning.message + '\n' + warning.frame );
+            console.warn( (warning.loc ? warning.loc.file : '') + ':' + (warning.loc ? warning.loc.line : '') + ':'
+            + (warning.loc ? warning.loc.column : '') + ' ' + warning.message + '\n' + warning.frame );
         }
     };
     const output = {
         format: "es",
         sourcemap: !!DEBUG,
-        // globals: {
+        // globals: { // maps external modules above to specific global vars
         //     vue: "Vue"
         // },
         chunkFileNames: "common/[name].js"

@@ -7,6 +7,7 @@ import { AppState } from "../common/AppState";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { Action } from "../common/Action";
+import { isVuexMessage } from "../common/VuexMessage";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
@@ -184,6 +185,7 @@ function connectToMessagingPort () {
     myPort = browser.runtime.connect({ name: "page" });
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
+        if (isVuexMessage(m)) return;
         KeeLog.debug("In browser content page script, received message from background script");
 
         if (!appState) {

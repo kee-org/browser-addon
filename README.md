@@ -77,7 +77,11 @@ npm install -g https-proxy-cli
 ### Each time:
 
 `https-proxy -t http://localhost:8098 -p 8099`
+`vue-devtools`
 
 ### First time:
 
+sudo apt-get install libnss3-tools
 Manually load https://localhost:8099 in the browser and add self-signed cert to whitelist.
+certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n /home/luckyrat/Downloads/localproxy -i /home/luckyrat/Downloads/localproxy
+restart Chrome

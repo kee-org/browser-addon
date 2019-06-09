@@ -9,14 +9,17 @@ import { keeLoginInfo, keeLoginField } from "../common/kfDataModel";
 import { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
 import { SiteConfig } from "../common/config";
+import { isVuexMessage, VuexMessage } from "../common/VuexMessage";
 
 // callbacks for messaging / ports
 
-export function browserPopupMessageHandler (msg: AddonMessage) {
+export function browserPopupMessageHandler (msg: AddonMessage | VuexMessage) {
+    if (isVuexMessage(msg)) return;
     if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from browser popup script");
 
     if (msg.removeNotification) {
         window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
+        //TODO:
         try { window.kee.browserPopupPort.postMessage({ appState: window.kee.appState } as AddonMessage); } catch (e) {}
     }
     if (msg.loadUrlUpgradeKee) {
@@ -62,7 +65,8 @@ export function browserPopupMessageHandler (msg: AddonMessage) {
     }
 }
 
-export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
+export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage | VuexMessage) {
+    if (isVuexMessage(msg)) return;
     if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script");
 
     if (msg.findMatches) {
@@ -177,7 +181,8 @@ export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessag
 }
 
 
-export function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessage) {
+export function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessage | VuexMessage) {
+    if (isVuexMessage(msg)) return;
     let result;
     if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from vault script");
     switch (msg.action) {
@@ -203,7 +208,8 @@ export function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessa
     }
 }
 
-export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
+export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage | VuexMessage) {
+    if (isVuexMessage(msg)) return;
     if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from iframe script");
 
     const tabId = this.sender.tab.id;

@@ -1,5 +1,6 @@
 import { AppState } from "./AppState";
 import { KeeLog } from "./Logger";
+import { keeLoginInfo } from "./kfDataModel";
 
 /*
   Includes contributions from https://github.com/haoshu
@@ -24,6 +25,7 @@ export class SearchResult {
     uniqueID: string;
     dbFileName: string;
     relevanceScore: number;
+    fullDetails?: keeLoginInfo;
 }
 
 export class SearchConfig {
@@ -56,6 +58,7 @@ export class SearchConfig {
     // they want to accept a result. Return a falsey value from onMatch to indicate that
     // the match was not accepted and it will then not be counted towards this maximum.
     maximumResults: number;
+    //TODO: seems to apply per database rather than a total across all DBs
 
     // Include a callback function if you want to run the search asynchronously, if
     // omitted the search will block and return the full set of results.
