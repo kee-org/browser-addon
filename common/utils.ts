@@ -8,7 +8,7 @@ export class Utils {
     / General utility functions
     /*******************************************/
 
-    versionAsInt = function (versionArray)
+    versionAsInt (versionArray)
     {
         let value = 0;
         for ( let i = 0; i < versionArray.length; i++) {
@@ -16,9 +16,9 @@ export class Utils {
         }
 
         return value;
-    };
+    }
 
-    versionAsArray = function (versionInt)
+    versionAsArray (versionInt)
     {
         const byteArray = [0, 0, 0];
 
@@ -29,9 +29,9 @@ export class Utils {
         }
 
         return byteArray;
-    };
+    }
 
-    versionAsString = function (versionInt)
+    versionAsString (versionInt)
     {
         let value = "";
         const versionArray = this.versionAsArray(versionInt);
@@ -42,24 +42,24 @@ export class Utils {
         }
 
         return value;
-    };
+    }
 
     // return the two-digit hexadecimal code for a byte
-    toHexString = function (charCode)
+    toHexString (charCode)
     {
         return ("0" + charCode.toString(16)).slice(-2);
-    };
+    }
 
-    BigIntFromRandom = function (byteCount)
+    BigIntFromRandom (byteCount)
     {
         const bytes = new Uint8Array(byteCount);
         window.crypto.getRandomValues(bytes);
         const hex = Array.from(bytes).map(this.toHexString).join("");
         return BigInteger.parse(hex, 16);
-    };
+    }
 
     // input can be either UTF8 formatted string or a byte array
-    hash = function<T extends string | Uint8Array> (data: T, outFormat: string = "hex", algorithm: string = "SHA-256")
+    hash<T extends string | Uint8Array> (data: T, outFormat: string = "hex", algorithm: string = "SHA-256")
     {
         let inBuffer: any;
 
@@ -75,9 +75,9 @@ export class Utils {
                 return Array.from((new Uint8Array(outBuffer))).map(this.toHexString).join("");
             }
         });
-    };
+    }
 
-    intToByteArray = function (int) {
+    intToByteArray (int) {
         const byteArray = [0, 0, 0, 0];
 
         for ( let index = byteArray.length -1; index >= 0; index-- ) {
@@ -87,9 +87,9 @@ export class Utils {
         }
 
         return byteArray;
-    };
+    }
 
-    intArrayToByteArray = function (intArray) {
+    intArrayToByteArray (intArray) {
         const byteArray = new Array(intArray.length*4);
 
         for ( let index = 0; index < intArray.length; index ++ ) {
@@ -102,17 +102,17 @@ export class Utils {
         }
 
         return byteArray;
-    };
+    }
 
-    stringToByteArray = function (str)
+    stringToByteArray (str)
     {
         const e = new TextEncoder();
         return e.encode(str);
-    };
+    }
 
     // A variation of base64toByteArray which allows us to calculate a HMAC far
     // more efficiently than with seperate memory buffers
-    base64toByteArrayForHMAC = function (input, extraLength, view = null) {
+    base64toByteArrayForHMAC (input, extraLength, view = null) {
         const binary = atob(input);
         const len = binary.length;
         let offset = 0;
@@ -127,9 +127,9 @@ export class Utils {
             view[(i+offset)] = binary.charCodeAt(i);
         }
         return view;
-    };
+    }
 
-    base64toByteArray = function (input) {
+    base64toByteArray (input) {
         const binary = atob(input);
         const len = binary.length;
         const buffer = new ArrayBuffer(len);
@@ -139,9 +139,9 @@ export class Utils {
             view[i] = binary.charCodeAt(i);
         }
         return view;
-    };
+    }
 
-    byteArrayToBase64 = function (arrayBuffer): string {
+    byteArrayToBase64 (arrayBuffer): string {
         let base64 = "";
         const encodings = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
         const bytes = new Uint8Array(arrayBuffer);
@@ -195,9 +195,9 @@ export class Utils {
         }
 
         return base64;
-    };
+    }
 
-    hexStringToByteArray = function (hexString, byteArray = null) {
+    hexStringToByteArray (hexString, byteArray = null) {
         if (hexString.length % 2 !== 0) {
             throw Error("Must have an even number of hex digits to convert to bytes");
         }
@@ -208,9 +208,9 @@ export class Utils {
             byteArray[i] = parseInt(hexString.substr(i*2, 2), 16);
         }
         return byteArray;
-    };
+    }
 
-    newGUID = function ()
+    newGUID ()
     {
         const lut = []; for (let i=0; i<256; i++) { lut[i] = (i<16 ? "0": "")+(i).toString(16); }
 
@@ -223,15 +223,15 @@ export class Utils {
         return lut[d0&0xff]+lut[d0>>8&0xff]+lut[d0>>16&0xff]+lut[d0>>24&0xff]+"-"+
         lut[d1&0xff]+lut[d1>>8&0xff]+"-"+lut[d1>>16&0x0f|0x40]+lut[d1>>24&0xff]+"-"+
         lut[d2&0x3f|0x80]+lut[d2>>8&0xff]+"-"+lut[d2>>16&0xff]+lut[d2>>24&0xff]+    lut[d3&0xff]+lut[d3>>8&0xff]+lut[d3>>16&0xff]+lut[d3>>24&0xff];
-    };
+    }
 
 
-    base64urlDecode = function (input: string) {
+    base64urlDecode (input: string) {
         // I don't see why we do any replacements here. Seems a pointless waste of cycles. Needs testing and removal if I'm right.
         return atob(input.replace(/\-/g, "+").replace(/\_/g, "/"));
-    };
+    }
 
-    binaryToByteArray = function (binary: string): Uint8Array {
+    binaryToByteArray (binary: string): Uint8Array {
         const len = binary.length;
         const buffer = new ArrayBuffer(len);
         const view = new Uint8Array(buffer);
@@ -239,12 +239,12 @@ export class Utils {
             view[i] = binary.charCodeAt(i);
         }
         return view;
-    };
+    }
 
-    base64urltoByteArray = function (input: string) {
+    base64urltoByteArray (input: string) {
         const binary = this.base64urlDecode(input);
         return this.binaryToByteArray(binary);
-    };
+    }
 }
 
 export let utils = new Utils();

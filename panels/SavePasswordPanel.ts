@@ -109,18 +109,16 @@ export class SavePasswordPanel {
     }
 
     private createGroupSelect () {
-
-        const changeHandler = function (event) {
-            const opt = event.target.selectedOptions[0];
-            event.target.style.backgroundImage = opt.style.backgroundImage;
-            event.target.style.paddingLeft = (opt.style.paddingLeft.substring(0,
-                opt.style.paddingLeft.length - 2) - 5) + "px";
-            event.target.style.backgroundPosition = opt.style.backgroundPosition;
-            this.saveData.group = opt.value;
-        };
-
         const sel = this.doc.createElement("select") as HTMLSelectElement;
-        sel.addEventListener("change", changeHandler.bind(this), false);
+        sel.addEventListener("change", event => {
+            const target = event.target as HTMLSelectElement;
+            const opt = target.selectedOptions[0];
+            target.style.backgroundImage = opt.style.backgroundImage;
+            target.style.paddingLeft = (parseInt(opt.style.paddingLeft.substring(0,
+                opt.style.paddingLeft.length - 2)) - 5) + "px";
+            target.style.backgroundPosition = opt.style.backgroundPosition;
+            this.saveData.group = opt.value;
+        }, false);
         sel.setAttribute("id", "kee-save-password-group-select");
 
         return sel;
@@ -136,7 +134,8 @@ export class SavePasswordPanel {
             }
         }
 
-        function generateGroupOptions (group, depth) {
+        // Hacky this:any since code already works and is not long for this world
+        function generateGroupOptions (this: any, group, depth) {
 
             const opt = this.doc.createElement("option");
             opt.setAttribute("value", group.uniqueID);
@@ -554,7 +553,7 @@ export class SavePasswordPanel {
                     this.dispatchEvent(new CustomEvent("keeCommand", { detail: { button: event.button, ctrlKey: event.ctrlKey }}));
                 }
             }, false);
-            loginItem.addEventListener("keeCommand", function (event) {
+            loginItem.addEventListener("keeCommand", function (this: HTMLElement, event) {
                 ps.saveData.oldLoginUUID = this.getAttribute("data-uuid");
                 ps.saveData.db = this.getAttribute("data-filename");
 

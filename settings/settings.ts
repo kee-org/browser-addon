@@ -560,7 +560,7 @@ function showSiteList (filterTerm) {
         a.href = "#";
         a.innerText = searchResults[resultIndex].value;
         const td = document.createElement("td");
-        td.addEventListener("click", selectSite.bind(this, resultIndex));
+        td.addEventListener("click", () => selectSite(resultIndex));
 
         td.appendChild(a);
         tr.appendChild(td);

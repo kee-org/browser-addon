@@ -73,8 +73,8 @@ class NetworkAuth {
                 if (event.button == 0 || event.button == 1)
                     this.dispatchEvent(new Event("keeCommand"));
             }, false);
-            loginItem.addEventListener("keeCommand", function (event) {
-                networkAuth.supplyNetworkAuth(this.dataset.loginIndex);
+            loginItem.addEventListener("keeCommand", function (this: HTMLElement, event) {
+                networkAuth.supplyNetworkAuth(parseInt(this.dataset.loginIndex));
             }, false);
 
             container.appendChild(loginItem);

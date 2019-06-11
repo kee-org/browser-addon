@@ -125,7 +125,7 @@ export class Search {
         }
 
         const results = [];
-        function addResult (result) {
+        function addResult (this: any, result) {
             if (this.searchConfig.onMatch) {
                 result = this.searchConfig.onMatch(result);
                 if (result)
@@ -178,7 +178,7 @@ export class Search {
             };
         }
 
-        function actualSearch () {
+        function actualSearch (this: any) {
             let databases;
             if (this.searchConfig.searchAllDatabases)
                 databases = this.appState.KeePassDatabases;
