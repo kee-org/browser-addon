@@ -129,7 +129,7 @@ export class kprpcClient {
                 }
             } catch (ex) {
                 KeeLog.warn("JSON-RPC request could not be sent. Expect an async error soon. Exception: " + ex.message + ":" + ex.stack);
-                setTimeout(function () {
+                setTimeout(() => {
                     this.processJSONRPCresponse({
                         id: requestId,
                         error: {
@@ -137,7 +137,7 @@ export class kprpcClient {
                         },
                         message: "error"
                     }, sessionManager);
-                }.bind(this), 50);
+                }, 50);
             }
         }
     }
@@ -977,7 +977,7 @@ export class kprpcClient {
 
                 KeeLog.warn($STR("conn_setup_restart"));
                 window.kee.appState.latestConnectionError = "SECRET_KEY_HASH_FAILED";
-                this.showConnectionMessage($STR("conn_setup_restart")
+                KPRPC.showConnectionMessage($STR("conn_setup_restart")
                     + " " + $STR("conn_setup_retype_password"));
                 KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
                 KPRPC.websocketSessionManager.closeSession();

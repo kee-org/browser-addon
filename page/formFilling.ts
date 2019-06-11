@@ -657,7 +657,7 @@ export class FormFilling {
         return matchResult;
     }
 
-    getMostRelevantForm = function (formIndex?: number)
+    getMostRelevantForm (formIndex?: number)
     {
         const findMatchesResult = this.matchResult;
 
@@ -686,7 +686,7 @@ export class FormFilling {
             bestRelevanceScore: findMatchesResult.formRelevanceScores[mostRelevantFormIndex],
             bestFindMatchesResult: findMatchesResult
         };
-    };
+    }
 
     // automated could be on page load or resulting from other non-user-interaction.
     // It's possible to fill and submit a login with a specific uniqueID but

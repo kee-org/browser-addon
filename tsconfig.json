@@ -14,7 +14,7 @@
         // ],
         "typeRoots" : ["./typedefs"],
         "moduleResolution": "node",
-        "noImplicitThis": false
+        "noImplicitThis": true
     },
     "include": [
         "**/*"

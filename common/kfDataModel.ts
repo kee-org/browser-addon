@@ -1,5 +1,3 @@
-import { getURISchemeHostAndPort, getURIHostAndPort, getURIExcludingQS } from "./uriUtils";
-
 /*
   keeLoginInfo:
   This was loosly based on the LoginInfo object that Mozilla provided with Firefox 3.0
@@ -257,162 +255,170 @@ export class keeLoginInfo {
         this.matchAccuracy = entry.matchAccuracy;
     }
 
-    private allURLsMatch (URLs, ignoreURIPathsAndSchemes, ignoreURIPaths) {
-        if (this.URLs.length != URLs.length)
-            return false;
-        for (let i = 0; i < URLs.length; i++) {
-            const url1 = URLs[i];
-            for (let j = 0; j < this.URLs.length; j++) {
-                const url2 = this.URLs[j];
-                if (!ignoreURIPathsAndSchemes && getURISchemeHostAndPort(url1) != getURISchemeHostAndPort(url2))
-                    return false;
-                else if (ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIHostAndPort(url1) != getURIHostAndPort(url2))
-                    return false;
-                else if (!ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIExcludingQS(url1) != getURIExcludingQS(url2))
-                    return false;
-            }
-        }
-        return true;
-    }
+    //TODO: Unusued. Why, etc?
+    // private allURLsMatch (URLs, ignoreURIPathsAndSchemes, ignoreURIPaths) {
+    //     if (this.URLs.length != URLs.length)
+    //         return false;
+    //     for (let i = 0; i < URLs.length; i++) {
+    //         const url1 = URLs[i];
+    //         for (let j = 0; j < this.URLs.length; j++) {
+    //             const url2 = this.URLs[j];
+    //             if (!ignoreURIPathsAndSchemes && getURISchemeHostAndPort(url1) != getURISchemeHostAndPort(url2))
+    //                 return false;
+    //             else if (ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIHostAndPort(url1) != getURIHostAndPort(url2))
+    //                 return false;
+    //             else if (!ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIExcludingQS(url1) != getURIExcludingQS(url2))
+    //                 return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 
-    private allPasswordsMatch (passwords) {
-        let matches = 0;
-        if (this.passwords.length != passwords.length)
-            return false;
+    //TODO: Unusued. Why, etc?
+    // private allPasswordsMatch (passwords) {
+    //     let matches = 0;
+    //     if (this.passwords.length != passwords.length)
+    //         return false;
 
-        for (let i = 0; i < this.passwords.length; i++)
-            for (let j = 0; j < passwords.length; j++)
-                if (passwords[j].value == this.passwords[i].value) {
-                    matches++;
-                    break; // leave only the inner loop
-                }
+    //     for (let i = 0; i < this.passwords.length; i++)
+    //         for (let j = 0; j < passwords.length; j++)
+    //             if (passwords[j].value == this.passwords[i].value) {
+    //                 matches++;
+    //                 break; // leave only the inner loop
+    //             }
 
-        if (matches != passwords.length)
-            return false;
+    //     if (matches != passwords.length)
+    //         return false;
 
-        return true;
-    }
+    //     return true;
+    // }
 
-    private usernamesMatch (login: keeLoginInfo) {
-        if (this.otherFields.length != login.otherFields.length)
-            return false;
+    //TODO: Unusued. Why, etc?
+    // private usernamesMatch (login: keeLoginInfo) {
+    //     if (this.otherFields.length != login.otherFields.length)
+    //         return false;
 
-        let loginUsername: string = null;
-        if (login.usernameIndex >= 0 && login.otherFields != null && login.otherFields.length > login.usernameIndex) {
-            const temp = login.otherFields[login.usernameIndex];
-            loginUsername = temp.value;
-        }
+    //     let loginUsername: string = null;
+    //     if (login.usernameIndex >= 0 && login.otherFields != null && login.otherFields.length > login.usernameIndex) {
+    //         const temp = login.otherFields[login.usernameIndex];
+    //         loginUsername = temp.value;
+    //     }
 
-        let thisUsername: string = null;
-        if (this.usernameIndex >= 0 && this.otherFields != null && this.otherFields.length > this.usernameIndex) {
-            const temp = this.otherFields[this.usernameIndex];
-            thisUsername = temp.value;
-        }
+    //     let thisUsername: string = null;
+    //     if (this.usernameIndex >= 0 && this.otherFields != null && this.otherFields.length > this.usernameIndex) {
+    //         const temp = this.otherFields[this.usernameIndex];
+    //         thisUsername = temp.value;
+    //     }
 
-        if (thisUsername != loginUsername)
-            return false;
+    //     if (thisUsername != loginUsername)
+    //         return false;
 
-        return true;
-    }
+    //     return true;
+    // }
 
 
-    allURLsContainedIn (URLs, ignoreURIPathsAndSchemes, ignoreURIPaths) {
-        let matches = 0;
+    //TODO: Unusued. Why, etc?
+    // allURLsContainedIn (URLs, ignoreURIPathsAndSchemes, ignoreURIPaths) {
+    //     let matches = 0;
 
-        for (let i = 0; i < this.URLs.length; i++) {
-            const url1 = this.URLs[i];
-            for (let j = 0; j < URLs.length; j++) {
-                const url2 = URLs[j];
-                if (!ignoreURIPathsAndSchemes && url1.indexOf("://") > 0 &&
-                    getURISchemeHostAndPort(url1) != getURISchemeHostAndPort(url2))
-                { continue; }
-                else if (!ignoreURIPathsAndSchemes && url1.indexOf("://") <= 0
-                    && getURIHostAndPort(url1) != getURIHostAndPort(url2))
-                { continue; }
-                else if (ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIHostAndPort(url1) != getURIHostAndPort(url2))
-                { continue; }
-                else if (!ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIExcludingQS(url1) != getURIExcludingQS(url2))
-                { continue; }
-                else
-                { matches++; break; }
-            }
-        }
+    //     for (let i = 0; i < this.URLs.length; i++) {
+    //         const url1 = this.URLs[i];
+    //         for (let j = 0; j < URLs.length; j++) {
+    //             const url2 = URLs[j];
+    //             if (!ignoreURIPathsAndSchemes && url1.indexOf("://") > 0 &&
+    //                 getURISchemeHostAndPort(url1) != getURISchemeHostAndPort(url2))
+    //             { continue; }
+    //             else if (!ignoreURIPathsAndSchemes && url1.indexOf("://") <= 0
+    //                 && getURIHostAndPort(url1) != getURIHostAndPort(url2))
+    //             { continue; }
+    //             else if (ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIHostAndPort(url1) != getURIHostAndPort(url2))
+    //             { continue; }
+    //             else if (!ignoreURIPathsAndSchemes && !ignoreURIPaths && getURIExcludingQS(url1) != getURIExcludingQS(url2))
+    //             { continue; }
+    //             else
+    //             { matches++; break; }
+    //         }
+    //     }
 
-        if (matches >= this.URLs.length)
-            return true;
+    //     if (matches >= this.URLs.length)
+    //         return true;
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    private allPasswordsContainedIn (passwords) {
-        let matches = 0;
+    //TODO: Unusued. Why, etc?
+    // private allPasswordsContainedIn (passwords) {
+    //     let matches = 0;
 
-        for (let i = 0; i < this.passwords.length; i++)
-            for (let j = 0; j < passwords.length; j++)
-                if (passwords[j].value == this.passwords[i].value) {
-                    matches++;
-                    break; // leave only the inner loop
-                }
+    //     for (let i = 0; i < this.passwords.length; i++)
+    //         for (let j = 0; j < passwords.length; j++)
+    //             if (passwords[j].value == this.passwords[i].value) {
+    //                 matches++;
+    //                 break; // leave only the inner loop
+    //             }
 
-        if (matches >= this.passwords.length)
-            return true;
+    //     if (matches >= this.passwords.length)
+    //         return true;
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    private allOtherFieldsContainedIn (login) {
-        let matches = 0;
+    //TODO: Unusued. Why, etc?
+    // private allOtherFieldsContainedIn (login) {
+    //     let matches = 0;
 
-        for (let i = 0; i < this.otherFields.length; i++)
-            for (let j = 0; j < login.otherFields.length; j++)
-                if (login.otherFields[j].value == this.otherFields[i].value) {
-                    matches++;
-                    break; // leave only the inner loop
-                }
+    //     for (let i = 0; i < this.otherFields.length; i++)
+    //         for (let j = 0; j < login.otherFields.length; j++)
+    //             if (login.otherFields[j].value == this.otherFields[i].value) {
+    //                 matches++;
+    //                 break; // leave only the inner loop
+    //             }
 
-        if (matches >= this.otherFields.length)
-            return true;
+    //     if (matches >= this.otherFields.length)
+    //         return true;
 
-        return false;
-    }
+    //     return false;
+    // }
 
-    // determines if this matches another supplied login object, with a number
-    // of controllable definitions of "match" to support various use cases
-    matches (aLogin, ignorePasswords, ignoreURIPaths,
-        ignoreURIPathsAndSchemes, ignoreUsernames, uriUtils) {
-        if (!this.allURLsMatch(aLogin.URLs, ignoreURIPathsAndSchemes, ignoreURIPaths))
-            return false;
+    //TODO: Unused. Double-check why and then remove.
+    // // determines if this matches another supplied login object, with a number
+    // // of controllable definitions of "match" to support various use cases
+    // matches (aLogin, ignorePasswords, ignoreURIPaths,
+    //     ignoreURIPathsAndSchemes, ignoreUsernames, uriUtils) {
+    //     if (!this.allURLsMatch(aLogin.URLs, ignoreURIPathsAndSchemes, ignoreURIPaths))
+    //         return false;
 
-        if (this.httpRealm != aLogin.httpRealm && !(this.httpRealm == "" || aLogin.httpRealm == ""))
-            return false;
+    //     if (this.httpRealm != aLogin.httpRealm && !(this.httpRealm == "" || aLogin.httpRealm == ""))
+    //         return false;
 
-        if (!ignoreUsernames && !this.usernamesMatch(aLogin))
-            return false;
+    //     if (!ignoreUsernames && !this.usernamesMatch(aLogin))
+    //         return false;
 
-        if (!ignorePasswords && !this.allPasswordsMatch(aLogin.passwords))
-            return false;
+    //     if (!ignorePasswords && !this.allPasswordsMatch(aLogin.passwords))
+    //         return false;
 
-        return true;
-    }
+    //     return true;
+    // }
 
-    // determines if this login is contained within a supplied login object, with a number
-    // of controllable definitions of "containedIn" to support various use cases
-    containedIn (aLogin, ignorePasswords, ignoreURIPaths,
-        ignoreURIPathsAndSchemes, ignoreUsernames) {
-        if (!this.allURLsContainedIn(aLogin.URLs, ignoreURIPathsAndSchemes, ignoreURIPaths))
-            return false;
+    //TODO: Unusued. Why, etc?
+    // // determines if this login is contained within a supplied login object, with a number
+    // // of controllable definitions of "containedIn" to support various use cases
+    // containedIn (aLogin, ignorePasswords, ignoreURIPaths,
+    //     ignoreURIPathsAndSchemes, ignoreUsernames) {
+    //     if (!this.allURLsContainedIn(aLogin.URLs, ignoreURIPathsAndSchemes, ignoreURIPaths))
+    //         return false;
 
-        if (this.httpRealm != aLogin.httpRealm && !(this.httpRealm == "" || aLogin.httpRealm == ""))
-            return false;
+    //     if (this.httpRealm != aLogin.httpRealm && !(this.httpRealm == "" || aLogin.httpRealm == ""))
+    //         return false;
 
-        if (!ignoreUsernames && !this.allOtherFieldsContainedIn(aLogin))
-            return false;
+    //     if (!ignoreUsernames && !this.allOtherFieldsContainedIn(aLogin))
+    //         return false;
 
-        if (!ignorePasswords && !this.allPasswordsContainedIn(aLogin.passwords))
-            return false;
+    //     if (!ignorePasswords && !this.allPasswordsContainedIn(aLogin.passwords))
+    //         return false;
 
-        return true;
-    }
+    //     return true;
+    // }
 
     // merge another login into this one. Only certain fields are merged
     // - URLs, passwords and usernames

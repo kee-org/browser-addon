@@ -131,7 +131,7 @@ export class MatchedLoginsPanel {
         element.classList.add("enabled");
     }
 
-    private createContextActions (kfl: keeLoginInfo) {
+    private createContextActions (this: MatchedLoginsPanel, kfl: keeLoginInfo) {
         const loginContextActions = document.createElement("div");
         loginContextActions.classList.add("disabled");
 
@@ -189,7 +189,7 @@ export class MatchedLoginsPanel {
         if (otherFieldCount > 1 || passwordFieldCount > 1) {
 
             if (otherFieldCount > 1) {
-                kfl.otherFields.forEach(function (o, i) {
+                kfl.otherFields.forEach((o, i) => {
                     if (i != kfl.usernameIndex && o.type != "checkbox") {
                         const button = document.createElement("button");
                         button.textContent = $STR("copy") + " " + o.name + " (" + o.fieldId + ")";
@@ -205,10 +205,10 @@ export class MatchedLoginsPanel {
                         });
                         loginContextActions.appendChild(button);
                     }
-                }, this);
+                });
             }
             if (passwordFieldCount > 1) {
-                kfl.passwords.forEach(function (p, i) {
+                kfl.passwords.forEach((p, i) => {
                     if (i != 0 && p.type != "checkbox") {
                         const button = document.createElement("button");
                         button.textContent = $STR("copy") + " " + p.name + " (" + p.fieldId + ")";
@@ -224,7 +224,7 @@ export class MatchedLoginsPanel {
                         });
                         loginContextActions.appendChild(button);
                     }
-                }, this);
+                });
             }
         }
         return loginContextActions;
