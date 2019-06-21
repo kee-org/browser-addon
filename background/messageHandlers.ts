@@ -245,7 +245,11 @@ export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMess
 
     if (msg.action == Action.GeneratePassword) {
         window.kee.generatePassword(msg.passwordProfile, window.kee.tabStates.get(tabId).url, generatedPassword => {
-            port.postMessage({ generatedPassword: generatedPassword } as AddonMessage);
+            if (generatedPassword) {
+                port.postMessage({ generatedPassword: generatedPassword } as AddonMessage);
+            } else {
+                KeeLog.warn("Kee received an empty/missing password. Check the configuration of your password manager.");
+            }
         });
     }
 
