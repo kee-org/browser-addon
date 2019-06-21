@@ -987,7 +987,7 @@ export class kprpcClient {
 
     showConnectionMessage (msg: string, buttons?: Button[]) {
         window.kee.notifyUser(new KeeNotification(
-            "kee-connection-message", buttons ? buttons : [], utils.newGUID(), [msg], "Medium", false));
+            "kee-connection-message", buttons ? buttons : [], utils.newGUID(), [msg], "Medium"));
     }
 
 }
