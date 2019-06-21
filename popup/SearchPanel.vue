@@ -31,7 +31,7 @@ export default {
       ActiveKeePassDatabaseIndex: this.$store.getters.ActiveKeePassDatabaseIndex, } as any, {
         version: 1,
         searchAllDatabases: configManager.current.searchAllOpenDBs,
-        maximumResults: 5
+        maximumResults: 50
       });
     };
     this.onDBChanged();
