@@ -1,13 +1,5 @@
 import * as types from "./mutation-types";
 
-export const incrementCounter = ({ commit }) => {
-    commit("incrementCounter");
-};
-
-export const decrementCounter = ({ commit }) => {
-    commit("decrementCounter");
-};
-
 export const updateActiveKeePassDatabaseIndex = ({ commit }, payload) => {
     commit(types.updateActiveKeePassDatabaseIndex, payload);
 };
@@ -60,11 +52,6 @@ export const updateContextMenuResult = ({ commit }, payload) => {
     commit(types.updateContextMenuResult, payload || null);
 };
 
-
-export const BG_Eg = ({ commit }) => {
-    commit("decrementCounter");
-};
-
-export const POP_Eg = ({ commit }) => {
-    commit("decrementCounter");
+export const addNotification = ({ commit }, payload) => {
+    commit(types.addNotification, payload);
 };

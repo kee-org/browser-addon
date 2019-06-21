@@ -1,12 +1,14 @@
 import { waitForElementById } from "./waitForElementById";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
-import { AppState } from "../common/AppState";
 import { utils } from "../common/utils";
 import { VaultAction } from "../common/VaultAction";
 import { VaultMessage } from "../common/VaultMessage";
 import { VaultProtocol } from "../common/VaultProtocol";
-import { isVuexMessage } from "../common/VuexMessage";
+import { SyncContent } from "../store/syncContent";
+import store from "../store";
+import { MutationPayload } from "vuex";
+import { AddonMessage } from "../common/AddonMessage";
 
 /*
   This links Kee to an instance of Kee Vault via the KPRPC protocol.
@@ -48,11 +50,11 @@ if (keeDuplicationCount) {
 }
 keeDuplicationCount += 1;
 
-let appState: AppState;
 let tabId: number;
 let frameId: number;
 let myPort: browser.runtime.Port;
 let messagingPortConnectionRetryTimer: number;
+let connected: boolean = false;
 
 const customEventNameToPage = "KeeMessageToPage" + Math.random();
 const customEventNameFromPage = "KeeMessageFromPage" + Math.random();
@@ -74,7 +76,7 @@ function startup () {
     }
 
     messagingPortConnectionRetryTimer = setInterval(() => {
-        if (myPort == null || appState == null) {
+        if (myPort == null || !connected) {
             KeeLog.info("Messaging port was not established at vault startup. Retrying now...");
             try {
                 Background.connect();
@@ -92,16 +94,10 @@ function startup () {
     KeeLog.info("content vault ready");
 }
 
-function updateAppState (newState: AppState, isForegroundTab: boolean) {
-    const oldState = appState;
-    appState = newState;
-}
-
-function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, myTabId: number, myFrameId: number) {
+function onFirstConnect (myTabId: number, myFrameId: number) {
     tabId = myTabId;
     frameId = myFrameId;
     KeeLog.attachConfig(configManager.current);
-    updateAppState(currentAppState, isForegroundTab);
     Page.connect();
 }
 
@@ -199,6 +195,8 @@ class Page {
     }
 }
 
+let syncContent: SyncContent;
+
 // Orchestrate the link between this content script and the addon background process
 class Background {
 
@@ -209,18 +207,19 @@ class Background {
         myPort = browser.runtime.connect({ name: "vault" });
 
         myPort.onMessage.addListener(function (m: VaultMessage) {
-            if (isVuexMessage(m)) return;
             KeeLog.debug("In browser content vault script, received message from background script");
+            if (m.initialState) {
+                syncContent = new SyncContent(store, m.initialState, (mutation: MutationPayload) => {
+                    myPort.postMessage({mutation} as AddonMessage);
+                });
+            }
+            if (m.mutation) {
+                syncContent.onRemoteMutation(m.mutation);
+            }
 
-            if (!appState) {
-                if (m.appState) {
-                    onFirstConnect(m.appState, m.isForegroundTab, m.tabId, m.frameId);
-                } else {
-                    KeeLog.warn("browser content vault script received message before initialisation complete");
-                    return;
-                }
-            } else if (m.appState) {
-                updateAppState(m.appState, m.isForegroundTab);
+            if (!connected) {
+                onFirstConnect(m.tabId, m.frameId);
+                connected = true;
             }
 
             if (m.protocol) Background.receive(m);
@@ -310,7 +309,7 @@ window.addEventListener("pagehide", ev => {
     }
     sessionId = null;
     myPort = null;
-    appState = undefined;
+    connected = false;
     tabId = undefined;
     frameId = undefined;
 });

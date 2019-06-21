@@ -1,11 +1,11 @@
-import { AppState } from "./AppState";
 import { FrameState } from "./FrameState";
 import { VaultAction } from "./VaultAction";
 import { Tokens } from "./Tokens";
 import { VaultProtocol } from "./VaultProtocol";
+import { KeeState } from "../store/KeeState";
+import { MutationPayload } from "vuex";
 
 export interface VaultMessage {
-    appState?: AppState;
     frameState?: FrameState;
     isForegroundTab?: boolean;
     tabId?: number;
@@ -18,4 +18,6 @@ export interface VaultMessage {
     encryptionNotRequired?: boolean;
     error?: any;
     tokens?: Tokens;
+    initialState?: KeeState;
+    mutation?: MutationPayload;
 }

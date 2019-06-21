@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import VuexWebExtensions from "vuex-webextensions";
 
 import * as getters from "./getters";
 import mutations from "./mutations";
@@ -13,8 +12,6 @@ Vue.use(Vuex);
 export default new Vuex.Store<KeeState>({
     strict: true,
     state: {
-        timer: 0,
-        counter: 0,
         latestConnectionError: "",
         lastKeePassRPCRefresh: 0,
         ActiveKeePassDatabaseIndex: -1,
@@ -30,10 +27,7 @@ export default new Vuex.Store<KeeState>({
     },
     getters,
     mutations,
-    actions,
-    plugins: [
-        VuexWebExtensions({})
-    ]
+    actions
 });
 
 export { mTypes };

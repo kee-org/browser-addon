@@ -4,8 +4,6 @@ import { SubmittedData } from "../common/SubmittedData";
 import { SearchResult } from "../common/search";
 
 export interface KeeState {
-    timer: number;
-    counter: number;
     latestConnectionError: string;
     lastKeePassRPCRefresh: number;
     ActiveKeePassDatabaseIndex: number;

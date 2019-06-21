@@ -9,14 +9,6 @@ function undefAbort (payload) {
 }
 
 export default {
-    [types.UPDATE_TIMER] (state: KeeState, payload) {
-        undefAbort(payload);
-        state.timer = payload;
-    },
-    [types.UPDATE_COUNTER] (state: KeeState, payload) {
-        undefAbort(payload);
-        state.counter = payload;
-    },
     [types.updateActiveKeePassDatabaseIndex] (state: KeeState, payload) {
         undefAbort(payload);
         state.ActiveKeePassDatabaseIndex = payload;
@@ -75,10 +67,8 @@ export default {
             }
         }
     },
-    incrementCounter (state: KeeState) {
-      state.counter++;
-    },
-    decrementCounter (state: KeeState) {
-      state.counter--;
+    [types.addNotification] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.notifications.push(payload);
     }
 };

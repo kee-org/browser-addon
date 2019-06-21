@@ -1,10 +1,10 @@
 import { Search } from "../common/search";
 import { SubmittedData } from "../common/SubmittedData";
-import { AppState } from "../common/AppState";
 import { AddonMessage } from "../common/AddonMessage";
 import { configManager } from "../common/ConfigManager";
 import { SearchFilter } from "../common/SearchFilter";
 import { KeeLog } from "../common/Logger";
+import store from "../store";
 
 interface SaveData {
     db: string;
@@ -22,13 +22,12 @@ export class SavePasswordPanel {
     private submittedData: SubmittedData;
 
     constructor (private myPort: browser.runtime.Port,
-        private appState: AppState,
         submittedData: SubmittedData)
     {
         this.doc = window.document;
         this.submittedData = submittedData;
 
-        this.search = new Search(appState, {
+        this.search = new Search(store.state, {
             version: 1,
             searchAllDatabases: true,
             maximumResults: 50
@@ -72,7 +71,7 @@ export class SavePasswordPanel {
         const select = (event.target as HTMLSelectElement);
         const opt = select.selectedOptions[0] as HTMLOptionElement;
         select.style.backgroundImage = opt.style.backgroundImage;
-        this.updateGroups(this.appState.KeePassDatabases.find(db => db.fileName === select.value),
+        this.updateGroups(store.state.KeePassDatabases.find(db => db.fileName === select.value),
             this.doc.getElementById("kee-save-password-group-select"));
         this.saveData.db = opt.value;
     }
@@ -81,16 +80,16 @@ export class SavePasswordPanel {
 
         const dbOptions = [];
 
-        for (let dbi = 0; dbi < this.appState.KeePassDatabases.length; dbi++)
+        for (let dbi = 0; dbi < store.state.KeePassDatabases.length; dbi++)
         {
-            const db = this.appState.KeePassDatabases[dbi];
+            const db = store.state.KeePassDatabases[dbi];
             const opt: HTMLOptionElement = this.doc.createElement("option") as HTMLOptionElement;
             opt.setAttribute("value", db.fileName);
             if (db.name)
                 opt.textContent = db.name;
             else
                 opt.textContent = db.fileName;
-            if (dbi == this.appState.ActiveKeePassDatabaseIndex)
+            if (dbi == store.state.ActiveKeePassDatabaseIndex)
                 opt.selected = true;
             opt.style.backgroundImage = "url(data:image/png;base64," + db.iconImageData + ")";
             dbOptions.push(opt);
@@ -394,7 +393,7 @@ export class SavePasswordPanel {
     {
         const groupSel = this.createGroupSelect();
         this.updateGroups(
-           this.appState.KeePassDatabases[this.appState.ActiveKeePassDatabaseIndex], groupSel);
+            store.state.KeePassDatabases[store.state.ActiveKeePassDatabaseIndex], groupSel);
 
         const groupSelContainer = this.doc.createElement("div");
         groupSelContainer.classList.add("kee-save-password", "xulhbox");

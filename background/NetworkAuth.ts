@@ -1,6 +1,7 @@
 import { KeeLog } from "../common/Logger";
 import { keeLoginInfo } from "../common/kfDataModel";
 import { configManager } from "../common/ConfigManager";
+import store from "../store";
 
 declare const __publicSuffixList;
 declare const __punycode;
@@ -46,7 +47,7 @@ export class NetworkAuth {
 
         return new Promise<browser.webRequest.BlockingResponse>((resolve, reject) => {
 
-            if (!window.kee.appState.connected || window.kee.appState.ActiveKeePassDatabaseIndex < 0) {
+            if (!store.state.connected || store.state.ActiveKeePassDatabaseIndex < 0) {
                 resolve({ cancel: false });
                 return;
             }

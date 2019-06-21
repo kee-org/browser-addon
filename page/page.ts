@@ -3,11 +3,12 @@ import { FormUtils } from "./formsUtils";
 import { FormSaving } from "./formSaving";
 import { PasswordGenerator } from "./PasswordGenerator";
 import { KeeLog } from "../common/Logger";
-import { AppState } from "../common/AppState";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { Action } from "../common/Action";
-import { isVuexMessage } from "../common/VuexMessage";
+import store from "../store";
+import { SyncContent } from "../store/syncContent";
+import { MutationPayload } from "vuex";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
@@ -23,7 +24,6 @@ if (keeDuplicationCount) {
 }
 keeDuplicationCount += 1;
 
-let appState: AppState;
 const keePopupLoadTime = Date.now();
 let formUtils: FormUtils;
 let formFilling: FormFilling;
@@ -32,51 +32,10 @@ let passwordGenerator: PasswordGenerator;
 let tabId: number;
 let frameId: number;
 let myPort: browser.runtime.Port;
+let syncContent: SyncContent;
+let connected: boolean = false;
 let inputsObserver: MutationObserver;
 let messagingPortConnectionRetryTimer: number;
-
-const sameMembers = (arr1, arr2) =>
-    arr1.every(item => arr2.includes(item)) && arr2.every(item => arr1.includes(item));
-
-function shouldSearchForMatches (oldState: AppState, newState: AppState) {
-    if (newState.connected) {
-        if (newState.KeePassDatabases.length > 0) {
-            if (!oldState) {
-                return true;
-            }
-            if (oldState.KeePassDatabases.length != newState.KeePassDatabases.length) {
-                return true;
-            }
-            if (oldState.ActiveKeePassDatabaseIndex != newState.ActiveKeePassDatabaseIndex) {
-                return true;
-            }
-            if (sameMembers(oldState.KeePassDatabases, newState.KeePassDatabases)) {
-                return true; //TODO:4: Check that sameMembers does the comparison we want. Might need to go a level deeper and look at something unique like fileName
-            }
-        }
-    }
-    return false;
-}
-
-function updateAppState (newState: AppState, isForegroundTab: boolean) {
-    const oldState = appState;
-    appState = newState;
-    const shouldSearch = shouldSearchForMatches(oldState, appState);
-    const shouldRemoveMatches = shouldSearch || (oldState && oldState.connected &&
-        (!appState.connected || (oldState.KeePassDatabases.length > 0 && appState.KeePassDatabases.length == 0))
-    );
-    const shouldRemoveSubmitListeners = shouldRemoveMatches || (isForegroundTab && shouldSearch);
-
-    if (shouldRemoveMatches) {
-        formFilling.removeKeeIconFromAllFields();
-    }
-    if (shouldRemoveSubmitListeners) {
-        formSaving.removeAllSubmitHandlers();
-    }
-    if (isForegroundTab && shouldSearch) {
-        formFilling.findMatchesInThisFrame();
-    }
-}
 
 function matchFinder (uri: string) {
     myPort.postMessage({ findMatches: { uri } });
@@ -87,10 +46,10 @@ function tutorialIntegration () {
         || window.location.hostname.endsWith("tutorial-addon.kee.pm")) {
         const transferElement = document.createElement("KeeFoxAddonStateTransferElement");
         transferElement.setAttribute("state", JSON.stringify({
-            connected: appState.connected,
+            connected: store.state.connected,
             version: browser.runtime.getManifest().version,
-            dbLoaded: appState.KeePassDatabases.length > 0,
-            sessionNames: appState.KeePassDatabases.map(db => db.sessionType.toString()).filter((v, i, a) => a.indexOf(v) === i)
+            dbLoaded: store.state.KeePassDatabases.length > 0,
+            sessionNames: store.state.KeePassDatabases.map(db => db.sessionType.toString()).filter((v, i, a) => a.indexOf(v) === i)
         }));
         document.documentElement.appendChild(transferElement);
 
@@ -99,7 +58,7 @@ function tutorialIntegration () {
     }
 }
 
-function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, myTabId: number, myFrameId: number) {
+function onFirstConnect (myTabId: number, myFrameId: number) {
     tabId = myTabId;
     frameId = myFrameId;
 
@@ -111,8 +70,6 @@ function onFirstConnect (currentAppState: AppState, isForegroundTab: boolean, my
 
     inputsObserver.observe(document.body, { childList: true, subtree: true });
 
-    updateAppState(currentAppState, isForegroundTab);
-
     tutorialIntegration();
 }
 
@@ -122,7 +79,7 @@ inputsObserver = new MutationObserver(mutations => {
     if (formFilling.formFinderTimer !== null) return;
 
     // Only proceed if we have a DB to search
-    if (!appState.connected || appState.ActiveKeePassDatabaseIndex < 0) return;
+    if (!store.state.connected || store.state.ActiveKeePassDatabaseIndex < 0) return;
 
     let rescan = false;
     const interestingNodes = ["form", "input", "select"];
@@ -159,7 +116,7 @@ function startup () {
     }
 
     messagingPortConnectionRetryTimer = setInterval(() => {
-        if (myPort == null || appState == null) {
+        if (myPort == null || !connected) {
             KeeLog.info("Messaging port was not established at page startup. Retrying now...");
             try {
                 connectToMessagingPort();
@@ -185,21 +142,27 @@ function connectToMessagingPort () {
     myPort = browser.runtime.connect({ name: "page" });
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
-        if (isVuexMessage(m)) return;
         KeeLog.debug("In browser content page script, received message from background script");
 
-        if (!appState) {
-            if (m.appState && m.frameId >= 0) {
-                onFirstConnect(m.appState, m.isForegroundTab, m.tabId, m.frameId);
-            } else {
-                KeeLog.warn("browser content page script received message before initialisation complete");
-                return;
-            }
-        } else if (m.appState) {
-            updateAppState(m.appState, m.isForegroundTab);
+        if (m.initialState) {
+            syncContent = new SyncContent(store, m.initialState, (mutation: MutationPayload) => {
+                myPort.postMessage({mutation} as AddonMessage);
+            });
         }
-        //
-        //if (m.frameState) updateFrameState(m.frameState);
+        if (m.mutation) {
+            syncContent.onRemoteMutation(m.mutation);
+        }
+
+        if (!connected) {
+            onFirstConnect(m.tabId, m.frameId);
+            formFilling.findMatchesInThisFrame();
+            connected = true;
+        } else if (m.action == Action.DetectForms) {
+            formFilling.removeKeeIconFromAllFields();
+            formSaving.removeAllSubmitHandlers();
+            formFilling.findMatchesInThisFrame();
+        }
+
         if (m.submittedData) {
             formSaving.createSavePasswordPanel();
         }
@@ -213,11 +176,9 @@ function connectToMessagingPort () {
             formFilling.fillAndSubmit(false, null, m.selectedLoginIndex);
         }
 
-        if (m.action == Action.DetectForms) {
+        if (m.action == Action.ResetForms) {
             formFilling.removeKeeIconFromAllFields();
-            if (appState.connected && appState.KeePassDatabases.length > 0) {
-                formFilling.findMatchesInThisFrame();
-            }
+            formSaving.removeAllSubmitHandlers();
         }
 
         if (m.action == Action.Primary) {
@@ -243,27 +204,27 @@ function connectToMessagingPort () {
 }
 
 window.addEventListener("pageshow", ev => {
-    if (myPort) {
-        // I don't think this branch is ever hit but cross-browser behaviour might
-        // vary so this just ensures everything remains consistent
-        myPort.postMessage({ action: Action.PageShow });
-        if (appState && appState.connected && appState.KeePassDatabases.length > 0) {
-            formFilling.findMatchesInThisFrame();
-        }
-    } else {
+    // if (myPort) {
+    //     // I don't think this branch is ever hit but cross-browser behaviour might
+    //     // vary so this just ensures everything remains consistent
+    //     myPort.postMessage({ action: Action.PageShow });
+    //     if (appState && appState.connected && appState.KeePassDatabases.length > 0) {
+    //         formFilling.findMatchesInThisFrame();
+    //     }
+    // } else {
         pageShowFired = true;
         clearTimeout(missingPageShowTimer);
         if (configReady) {
             startup();
         }
-    }
+    // }
 });
 window.addEventListener("pagehide", ev => {
     inputsObserver.disconnect();
     if (myPort) myPort.postMessage({ action: Action.PageHide });
     formFilling.removeKeeIconFromAllFields();
     myPort = null;
-    appState = undefined;
+    connected = false;
     tabId = undefined;
     frameId = undefined;
     formUtils = undefined;

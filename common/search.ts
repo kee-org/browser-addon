@@ -1,6 +1,6 @@
-import { AppState } from "./AppState";
 import { KeeLog } from "./Logger";
 import { keeLoginInfo } from "./kfDataModel";
+import { KeeState } from "../store/KeeState";
 
 /*
   Includes contributions from https://github.com/haoshu
@@ -72,14 +72,12 @@ export class SearchConfig {
 
 export class Search {
 
-    constructor (appState: AppState, config: Partial<SearchConfig>) {
-        this.appState = appState;
+    constructor (private state: KeeState, config: Partial<SearchConfig>) {
         this.resolveConfig(config);
         this.validateConfig();
     }
     private configIsValid: boolean;
     private makeAsyncTimer;
-    private appState: AppState;
     private searchConfig: SearchConfig;
 
     private reconfigure (config) {
@@ -113,7 +111,7 @@ export class Search {
         if ((!query || query.length == 0) && !filteringByURL)
             abort = true;
 
-        if (this.appState.KeePassDatabases.length == 0)
+        if (this.state.KeePassDatabases.length == 0)
             abort = true;
 
         onComplete = onComplete || this.searchConfig.onComplete;
@@ -184,9 +182,9 @@ export class Search {
         function actualSearch (this: any) {
             let databases;
             if (this.searchConfig.searchAllDatabases)
-                databases = this.appState.KeePassDatabases;
+                databases = this.state.KeePassDatabases;
             else
-                databases = [this.appState.KeePassDatabases[this.appState.ActiveKeePassDatabaseIndex]];
+                databases = [this.state.KeePassDatabases[this.state.ActiveKeePassDatabaseIndex]];
 
             for (let i = 0; i < databases.length; i++) {
                 const root = databases[i].root;
