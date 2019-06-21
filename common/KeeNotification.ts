@@ -13,15 +13,13 @@ export class KeeNotification {
     // id: string; //Guid
     // messages: string[];
     // priority: "High" | "Medium" | "Low";
-    // allowMultiple: boolean;
 
     constructor (
         public name: string,
         public buttons: Button[],
         public id: string, //Guid
         public messages: string[],
-        public priority: "High" | "Medium" | "Low",
-        public allowMultiple: boolean //TODO: verify this is never true and remove it - otherwise Vue key based on id is going to be fucked
+        public priority: "High" | "Medium" | "Low"
     ) {}
 }
 

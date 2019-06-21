@@ -246,9 +246,7 @@ export class Kee {
     }
 
     notifyUser (notification: KeeNotification, nativeNotification?: NativeNotification) {
-        if (!notification.allowMultiple) {
-            window.kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
-        }
+        window.kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
         store.dispatch("addNotification", notification);
         browser.browserAction.setIcon({path: "common/images/highlight-48.png" });
         if (nativeNotification) {
