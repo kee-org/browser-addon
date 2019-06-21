@@ -10,6 +10,5 @@ export const enum Action {
     ShowMatchedLoginsPanel = "showMatchedLoginsPanel",
     SaveLatestLogin = "saveLatestLogin",
     PageHide = "pageHide",
-    PageShow = "pageShow",
     OpenKeePass = "openkeepass"
 }

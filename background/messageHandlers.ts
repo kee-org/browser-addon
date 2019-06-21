@@ -181,9 +181,6 @@ export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessag
             window.kee.deleteTabState(this.sender.tab.id);
         }
     }
-    if (msg.action === Action.PageShow) {
-        window.kee.createTabStateIfMissing(this.sender.tab.id);
-    }
 }
 
 
