@@ -7,7 +7,6 @@ import { AnimateIcon } from "./AnimateIcon";
 import { NativeNotification } from "./NativeNotification";
 import { commandManager } from "./commands";
 import { browserPopupMessageHandler, pageMessageHandler, vaultMessageHandler, iframeMessageHandler } from "./messageHandlers";
-import { AppState } from "../common/AppState";
 import { TabState } from "../common/TabState";
 import { Utils, utils } from "../common/utils";
 import { Search } from "../common/search";
@@ -20,11 +19,12 @@ import { KeeNotification } from "../common/KeeNotification";
 import { VaultProtocol } from "../common/VaultProtocol";
 import { SessionType, Database, PasswordProfile } from "../common/kfDataModel";
 import { Action } from "../common/Action";
-//import store, { mTypes } from "../store";
+import store from "../store";
+import { SyncBackground } from "../store/syncBackground";
+import { MutationPayload } from "vuex";
 
 export class Kee {
     accountManager: AccountManager;
-    appState: AppState;
     tabStates: Map<number, TabState>;
     persistentTabStates: Map<number, PersistentTabState>;
     utils: Utils;
@@ -50,23 +50,35 @@ export class Kee {
 
     networkAuth: NetworkAuth;
     animateIcon: AnimateIcon;
+    syncBackground: SyncBackground;
 
     constructor ()
     {
-        this.accountManager = new AccountManager();
+        this.syncBackground = new SyncBackground(store, (mutation: MutationPayload, excludedPort: browser.runtime.Port) => {
+            const allPorts: Partial<browser.runtime.Port>[] = [];
+            allPorts.push(this.browserPopupPort);
+            allPorts.push(this.vaultPort);
 
-        //TODO:vuex: won't be needed in future
-        this.appState = {
-            latestConnectionError: "",
-            lastKeePassRPCRefresh: 0,
-            ActiveKeePassDatabaseIndex: -1,
-            KeePassDatabases: [],
-            PasswordProfiles: [],
-            notifications: [],
-            connected: false,
-            connectedWebsocket: false,
-            currentSearchTerm: null
-        };
+            //TODO: Maybe could be lazy for all non-foreground tabs and queue up
+            //the mutations to be sent before the next AddonMessage needs to be sent?
+            // Needs consideration alongside Chrome page freezing, etc.
+
+            this.tabStates.forEach(ts => {
+                ts.framePorts.forEach(port => {
+                    allPorts.push(port);
+                });
+                ts.ourIframePorts.forEach(port => {
+                    allPorts.push(port);
+                });
+            });
+
+            for (const port of allPorts) {
+                if (port !== excludedPort) {
+                    port.postMessage({mutation} as AddonMessage);
+                }
+            }
+        });
+        this.accountManager = new AccountManager();
 
         this.tabStates = new Map<number, TabState>();
         this.persistentTabStates = new Map<number, PersistentTabState>();
@@ -75,7 +87,7 @@ export class Kee {
 
         this.utils = utils;
 
-        this.search = new Search(this.appState, {
+        this.search = new Search(store.state, {
             version: 1,
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
@@ -95,22 +107,19 @@ export class Kee {
             }
             switch (name) {
                 case "browserPopup": {
-                    p.onMessage.addListener(browserPopupMessageHandler);
-
-                    // // Ultimately want all this data to be manipulated directly on the store
-                    // // but for transition, we can hack it in some key places like this
-                    // store.state.submittedData = null;
-                    // store.state.loginsFound = false;
-                    // store.state.appState = window.kee.appState;
+                    p.onMessage.addListener(browserPopupMessageHandler.bind(p));
 
                     const connectMessage = {
-                        appState: window.kee.appState
+                        initialState: store.state
                     } as AddonMessage;
+
+                    let submittedData: any = null;
+                    let loginsFound: boolean = false;
 
                     if (window.kee.persistentTabStates.get(window.kee.foregroundTabId)) {
                         window.kee.persistentTabStates.get(window.kee.foregroundTabId).items.forEach(item => {
                             if (item.itemType === "submittedData") {
-                                connectMessage.submittedData = item.submittedData;
+                                submittedData = item.submittedData;
                                 item.accessCount++;
                             }
                         });
@@ -118,8 +127,10 @@ export class Kee {
 
                     if (window.kee.tabStates.has(window.kee.foregroundTabId)
                         && window.kee.frameIdWithMatchedLogins(window.kee.tabStates.get(window.kee.foregroundTabId).frames) >= 0) {
-                            connectMessage.loginsFound = true;
+                            loginsFound = true;
                     }
+                    store.dispatch("updateSubmittedData", submittedData);
+                    store.dispatch("updateLoginsFound", loginsFound);
 
                     p.postMessage(connectMessage);
                     window.kee.browserPopupPort = p;
@@ -130,7 +141,7 @@ export class Kee {
                     p.onMessage.addListener(pageMessageHandler.bind(p));
 
                     const connectMessage = {
-                        appState: window.kee.appState,
+                        initialState: store.state,
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
                         isForegroundTab: p.sender.tab.id === window.kee.foregroundTabId
@@ -155,7 +166,7 @@ export class Kee {
                     */
 
                     const connectMessage = {
-                        appState: window.kee.appState,
+                        initialState: store.state,
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
                         isForegroundTab: p.sender.tab.id === window.kee.foregroundTabId
@@ -169,7 +180,7 @@ export class Kee {
                     p.onMessage.addListener(iframeMessageHandler.bind(p));
 
                     const connectMessage = {
-                        appState: window.kee.appState,
+                        initialState: store.state,
                         frameState: window.kee.tabStates.get(p.sender.tab.id).frames.get(parentFrameId),
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
@@ -238,8 +249,7 @@ export class Kee {
         if (!notification.allowMultiple) {
             window.kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
         }
-        window.kee.appState.notifications.push(notification);
-        try { window.kee.browserPopupPort.postMessage({appState: window.kee.appState}); } catch (e) {}
+        store.dispatch("addNotification", notification);
         browser.browserAction.setIcon({path: "common/images/highlight-48.png" });
         if (nativeNotification) {
             browser.notifications.create({
@@ -262,8 +272,7 @@ export class Kee {
     }
 
     removeUserNotifications (unlessTrue: (notification: KeeNotification) => boolean) {
-        window.kee.appState.notifications = window.kee.appState.notifications.filter(unlessTrue);
-        try { window.kee.browserPopupPort.postMessage({appState: window.kee.appState}); } catch (e) {}
+        store.dispatch("updateNotifications", store.state.notifications.filter(unlessTrue));
     }
 
     animateBrowserActionIcon (duration: number = 1200) {
@@ -312,30 +321,14 @@ export class Kee {
     _pauseKee ()
     {
         KeeLog.debug("Pausing Kee.");
-        this.appState.KeePassDatabases = [];
-        this.appState.ActiveKeePassDatabaseIndex = -1;
-        this.appState.connected = false;
-        this.appState.connectedWebsocket = false;
+        store.dispatch("updateKeePassDatabases", []);
+        store.dispatch("updateActiveKeePassDatabaseIndex", -1);
+        store.dispatch("updateConnected", false);
+        store.dispatch("updateConnectedWebsocket", false);
 
-        try { window.kee.browserPopupPort.postMessage({appState: this.appState}); } catch (e) {}
         try
         {
-            // Poke every port. In future might just limit to active tab?
-            window.kee.tabStates.forEach((ts, tabId) => {
-                ts.framePorts.forEach((port, key, map) => {
-                    try {
-                        port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
-                    } catch (e) {
-                        if (KeeLog && KeeLog.info) {
-                            KeeLog.info("failed to _pauseKee on tab " + tabId +
-                            ". Assuming port is broken (possible browser bug) and deleting the port. " +
-                            "Kee may no longer work in the affected tab, if indeed the tab even " +
-                            "exists any more. The exception that caused this is: " + e.message + " : " + e.stack);
-                        }
-                        map.delete(key);
-                    }
-                }, this);
-            }, this);
+            this.refreshFormStatus(Action.ResetForms);
         }
         catch (e)
         {
@@ -365,6 +358,8 @@ export class Kee {
 
     updateKeePassDatabases (newDatabases: Database[])
     {
+        //TODO: May need to determine if anything has actually changed before
+        // doing the dispatches and poking the current tab frames to find logins
         let newDatabaseActiveIndex = -1;
         for (let i=0; i < newDatabases.length; i++)
         {
@@ -374,10 +369,10 @@ export class Kee {
                 break;
             }
         }
-        this.appState.connected = true;
-        this.appState.connectedWebsocket = this.KeePassRPC.websocketSessionManagerIsActive;
-        this.appState.KeePassDatabases = newDatabases;
-        this.appState.ActiveKeePassDatabaseIndex = newDatabaseActiveIndex;
+        store.dispatch("updateConnected", true);
+        store.dispatch("updateConnectedWebsocket", this.KeePassRPC.websocketSessionManagerIsActive);
+        store.dispatch("updateKeePassDatabases", newDatabases);
+        store.dispatch("updateActiveKeePassDatabaseIndex", newDatabaseActiveIndex);
 
         KeeLog.info("Number of databases open: " + newDatabases.length);
 
@@ -397,25 +392,9 @@ export class Kee {
                 configManager.save();
         }
 
-        try { window.kee.browserPopupPort.postMessage({appState: this.appState}); } catch (e) {}
         try
         {
-            // Poke every port. In future might just limit to active tab?
-            window.kee.tabStates.forEach((ts, tabId) => {
-                ts.framePorts.forEach((port, key, map) => {
-                    try {
-                        port.postMessage({ appState: this.appState, isForegroundTab: port.sender.tab.id === this.foregroundTabId });
-                    } catch (e) {
-                        if (KeeLog && KeeLog.info) {
-                            KeeLog.info("failed to updateKeePassDatabases on tab " + tabId +
-                            ". Assuming port is broken (possible browser bug) and deleting the port. " +
-                            "Kee may no longer work in the affected tab, if indeed the tab even " +
-                            "exists any more. The exception that caused this is: " + e.message + " : " + e.stack);
-                        }
-                        map.delete(key);
-                    }
-                }, this);
-            }, this);
+            this.refreshFormStatus(Action.DetectForms);
         }
         catch (e)
         {
@@ -423,6 +402,27 @@ export class Kee {
         }
 
         commandManager.setupContextMenuItems();
+    }
+
+    private refreshFormStatus (action: Action) {
+        window.kee.tabStates.forEach((ts, tabId) => {
+            ts.framePorts.forEach((port, key, map) => {
+                try {
+                    if (port.sender.tab.id === this.foregroundTabId) {
+                        port.postMessage({ action } as AddonMessage);
+                    }
+                }
+                catch (e) {
+                    if (KeeLog && KeeLog.info) {
+                        KeeLog.info("failed to request form field reset/update on tab " + tabId +
+                            ". Assuming port is broken (possible browser bug) and deleting the port. " +
+                            "Kee may no longer work in the affected tab, if indeed the tab even " +
+                            "exists any more. The exception that caused this is: " + e.message + " : " + e.stack);
+                    }
+                    map.delete(key);
+                }
+            }, this);
+        }, this);
     }
 
 // if the MRU database is known, open that but otherwise send empty string which will cause user
@@ -437,8 +437,8 @@ export class Kee {
 
     openKeePass ()
     {
-        const hasWebsocketDBs = this.appState.KeePassDatabases.some(db => db.sessionType === SessionType.Websocket);
-        const supportsWebsocketFocus = this.appState.KeePassDatabases.some(db => {
+        const hasWebsocketDBs = store.state.KeePassDatabases.some(db => db.sessionType === SessionType.Websocket);
+        const supportsWebsocketFocus = store.state.KeePassDatabases.some(db => {
                     return db.sessionType === SessionType.Websocket &&
                         db.sessionFeatures.indexOf("KPRPC_OPEN_AND_FOCUS_DATABASE") >= 0;
                 });
@@ -464,11 +464,11 @@ export class Kee {
     getDatabaseName (index)
     {
         if (index == undefined)
-            index = this.appState.ActiveKeePassDatabaseIndex;
-        if (this.appState.KeePassDatabases.length > 0
-            && this.appState.KeePassDatabases[index] != null
-            && this.appState.KeePassDatabases[index].root != null)
-            return this.appState.KeePassDatabases[index].name;
+            index = store.state.ActiveKeePassDatabaseIndex;
+        if (store.state.KeePassDatabases.length > 0
+            && store.state.KeePassDatabases[index] != null
+            && store.state.KeePassDatabases[index].root != null)
+            return store.state.KeePassDatabases[index].name;
         else
             return null;
     }
@@ -476,11 +476,11 @@ export class Kee {
     getDatabaseFileName (index?)
     {
         if (index == undefined)
-            index = this.appState.ActiveKeePassDatabaseIndex;
-        if (this.appState.KeePassDatabases.length > 0
-            && this.appState.KeePassDatabases[index] != null
-            && this.appState.KeePassDatabases[index].root != null)
-            return this.appState.KeePassDatabases[index].fileName;
+            index = store.state.ActiveKeePassDatabaseIndex;
+        if (store.state.KeePassDatabases.length > 0
+            && store.state.KeePassDatabases[index] != null
+            && store.state.KeePassDatabases[index].root != null)
+            return store.state.KeePassDatabases[index].fileName;
         else
             return null;
     }
@@ -645,7 +645,12 @@ export class Kee {
 
         if (refresh)
         {
-            if (executeNow) { window.kee.appState.lastKeePassRPCRefresh = now; window.kee._refreshKPDB(); } else window.kee.pendingCallback = "_refreshKPDB";
+            if (executeNow) {
+                store.dispatch("updateLastKeePassRPCRefresh", now);
+                window.kee._refreshKPDB();
+            } else {
+                window.kee.pendingCallback = "_refreshKPDB";
+            }
         }
 
         KeeLog.debug("Signal handled or queued. @" + sigTime);
@@ -695,7 +700,7 @@ export class Kee {
     }
 
     initiatePasswordGeneration () {
-        if (window.kee.appState.connected) {
+        if (store.state.connected) {
             const tabState = window.kee.tabStates.get(window.kee.foregroundTabId);
             if (tabState) {
                 const framePort = tabState.framePorts.get(0);

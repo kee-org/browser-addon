@@ -5,6 +5,7 @@ import { SessionType, Database, PasswordProfile } from "../common/kfDataModel";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Config } from "../common/config";
+import store from "../store";
 
 /*
 jsonrpcClient provides a JSON-RPC client and method proxies for
@@ -29,12 +30,12 @@ export class jsonrpcClient {
     }
 
     sessionManagerForFilename (dbFileName: string) {
-        const sessionType = window.kee.appState.KeePassDatabases.find(db => db.fileName === dbFileName).sessionType;
+        const sessionType = store.state.KeePassDatabases.find(db => db.fileName === dbFileName).sessionType;
         return this.kprpcClient.getSessionManagerByType(sessionType);
     }
 
     sessionManagerForPasswordProfile (profile: string) {
-        const sessionType = window.kee.appState.PasswordProfiles.find(p => p.name === profile).sessionType;
+        const sessionType = store.state.PasswordProfiles.find(p => p.name === profile).sessionType;
         return this.kprpcClient.getSessionManagerByType(sessionType);
     }
 
@@ -115,7 +116,7 @@ export class jsonrpcClient {
         if (dbFileName == undefined || dbFileName == null || dbFileName == "")
         {
             if (!configManager.current.searchAllOpenDBs)
-                dbFileName = window.kee.appState.KeePassDatabases[window.kee.appState.ActiveKeePassDatabaseIndex].fileName;
+                dbFileName = store.state.KeePassDatabases[store.state.ActiveKeePassDatabaseIndex].fileName;
             else
                 dbFileName = "";
         }

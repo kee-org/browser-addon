@@ -1,13 +1,9 @@
 import { KeeState } from "./KeeState";
 import { SessionType } from "../common/kfDataModel";
 
-export const timer = state => state.timer;
-export const counter = state => state.counter;
-export const magic = state => state.counter + state.timer;
-
-export const showGeneratePasswordLink = state => state.connected;
-export const showSaveLatestLogin = state => !!state.submittedData;
-export const showMatchedLogins = state => !!state.loginsFound;
+export const showGeneratePasswordLink = (state: KeeState) => state.connected;
+export const showSaveLatestLogin = (state: KeeState) => !!state.submittedData;
+export const showMatchedLogins = (state: KeeState) => !!state.loginsFound;
 export const showNotifications = (state: KeeState) => state.notifications && !!state.notifications.length;
 export const showSearchPanel = (state: KeeState) => state.connected && !!state.KeePassDatabases.length;
 export const notifications = (state: KeeState) => state.notifications;
@@ -16,7 +12,7 @@ export const searchResults = (state: KeeState) => state.searchResults;
 export const ActiveKeePassDatabaseIndex = (state: KeeState) => state.ActiveKeePassDatabaseIndex;
 export const KeePassDatabases = (state: KeeState) => state.KeePassDatabases;
 
-export const databaseName = state => {
+export const databaseName = (state: KeeState) => {
     if (state.KeePassDatabases && state.KeePassDatabases.length && state.ActiveKeePassDatabaseIndex >= 0) {
         const db = state.KeePassDatabases[state.ActiveKeePassDatabaseIndex];
         return db.name ? db.name : db.fileName.replace(/^.*[\\\/]/, "");

@@ -10,6 +10,7 @@ import { Button } from "../common/Button";
 import { FeatureFlags } from "../common/FeatureFlags";
 import { KeeNotification } from "../common/KeeNotification";
 import { configManager } from "../common/ConfigManager";
+import store from "../store";
 
 /*
 kprpcClient.js provides functionality for
@@ -234,27 +235,27 @@ export class kprpcClient {
                     if (data.error.code == "VERSION_CLIENT_TOO_LOW") {
                         // This means that the server requires us to support a feature that we don't have
                         KeeLog.error($STR("conn_setup_client_features_missing") + " Extra info: " + extra);
-                        window.kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_LOW";
+                        store.dispatch("updateLatestConnectionError", "VERSION_CLIENT_TOO_LOW");
                         this.showConnectionMessage($STR("conn_setup_client_features_missing"));
                     } else if (data.error.code == "UNRECOGNISED_PROTOCOL") {
                         KeeLog.error($STR("conn_unknown_protocol") + " "
                             + $STRF("further_info_may_follow", extra));
-                        window.kee.appState.latestConnectionError = "UNRECOGNISED_PROTOCOL";
+                        store.dispatch("updateLatestConnectionError", "UNRECOGNISED_PROTOCOL");
                     } else if (data.error.code == "INVALID_MESSAGE") {
                         KeeLog.error($STR("conn_invalid_message") + " "
                             + $STRF("further_info_may_follow", extra));
-                        window.kee.appState.latestConnectionError = "INVALID_MESSAGE";
+                        store.dispatch("updateLatestConnectionError", "INVALID_MESSAGE");
                     } else if (data.error.code == "AUTH_RESTART") {
                         KeeLog.error($STR("conn_setup_restart") + " "
                             + $STRF("further_info_may_follow", extra));
-                        window.kee.appState.latestConnectionError = "AUTH_RESTART";
+                        store.dispatch("updateLatestConnectionError", "AUTH_RESTART");
                         this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                         this.showConnectionMessage($STR("conn_setup_restart") + " "
                             + $STR("conn_setup_retype_password"));
                     } else {
                         KeeLog.error($STR("conn_unknown_error") + " "
                             + $STRF("further_info_may_follow", extra));
-                        window.kee.appState.latestConnectionError = "UNKNOWN_JSONRPC";
+                        store.dispatch("updateLatestConnectionError", "UNKNOWN_JSONRPC");
                         this.showConnectionMessage($STR("conn_unknown_error") + " "
                             + $STRF("further_info_may_follow", ["See Kee log"]));
                     }
@@ -276,7 +277,7 @@ export class kprpcClient {
                 extra[0] = data.error.messageParams[0];
             switch (data.error.code) {
                 case "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW": KeeLog.warn($STR("conn_setup_client_sl_low"));
-                    window.kee.appState.latestConnectionError = "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW";
+                    store.dispatch("updateLatestConnectionError", "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW");
                     const button: Button = {
                         label: $STR("conn_setup_client_sl_low_resolution"),
                         action: "enableHighSecurityKPRPCConnection"
@@ -285,7 +286,7 @@ export class kprpcClient {
                     break;
                 case "AUTH_FAILED": KeeLog.warn($STR("conn_setup_failed") + " "
                     + $STRF("further_info_may_follow", extra));
-                    window.kee.appState.latestConnectionError = "AUTH_FAILED";
+                    store.dispatch("updateLatestConnectionError", "AUTH_FAILED");
                     this.showConnectionMessage($STR("conn_setup_failed")
                         + " " + $STR("conn_setup_retype_password"));
                     // There may be a stored key that has become corrupt through a change of security level, etc.
@@ -293,26 +294,26 @@ export class kprpcClient {
                     break;
                 case "AUTH_RESTART": KeeLog.warn($STR("conn_setup_restart") + " "
                     + $STRF("further_info_may_follow", extra));
-                    window.kee.appState.latestConnectionError = "AUTH_RESTART";
+                    store.dispatch("updateLatestConnectionError", "AUTH_RESTART");
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     this.showConnectionMessage($STR("conn_setup_restart")
                         + " " + $STR("conn_setup_retype_password"));
                     break;
                 case "AUTH_EXPIRED": KeeLog.warn($STRF("conn_setup_expired", extra));
-                    window.kee.appState.latestConnectionError = "AUTH_EXPIRED";
+                    store.dispatch("updateLatestConnectionError", "AUTH_EXPIRED");
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     this.showConnectionMessage($STR("conn_setup_expired")
                         + " " + $STR("conn_setup_retype_password"));
                     break;
                 case "AUTH_INVALID_PARAM": KeeLog.error($STRF("conn_setup_invalid_param", extra));
-                    window.kee.appState.latestConnectionError = "AUTH_INVALID_PARAM";
+                    store.dispatch("updateLatestConnectionError", "AUTH_INVALID_PARAM");
                     break;
                 case "AUTH_MISSING_PARAM": KeeLog.error($STRF("conn_setup_missing_param", extra));
-                    window.kee.appState.latestConnectionError = "AUTH_MISSING_PARAM";
+                    store.dispatch("updateLatestConnectionError", "AUTH_MISSING_PARAM");
                     break;
                 default: KeeLog.error($STR("conn_unknown_error") + " "
                     + $STRF("further_info_may_follow", extra));
-                    window.kee.appState.latestConnectionError = "UNKNOWN_SETUP";
+                    store.dispatch("updateLatestConnectionError", "UNKNOWN_SETUP");
                     this.showConnectionMessage($STR("conn_unknown_error") + " "
                         + $STRF("further_info_may_follow", ["See Kee log"]));
                     break;
@@ -325,7 +326,7 @@ export class kprpcClient {
             (data.key && data.key.sc)) {
             if (!this.serverHasRequiredFeatures(data.features)) {
                 KeeLog.error($STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]));
-                window.kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
+                store.dispatch("updateLatestConnectionError", "VERSION_CLIENT_TOO_HIGH");
                 const button: Button = {
                     label: $STR("upgrade_kee"),
                     action: "loadUrlUpgradeKee"
@@ -349,7 +350,7 @@ export class kprpcClient {
                 }
             } else {
                 KeeLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
-                window.kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
+                store.dispatch("updateLatestConnectionError", "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW");
                 this.sendWebsocketsError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
                 this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
@@ -365,7 +366,7 @@ export class kprpcClient {
                 }
             } else {
                 KeeLog.warn($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
-                window.kee.appState.latestConnectionError = "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW";
+                store.dispatch("updateLatestConnectionError", "AUTH_SERVER_SECURITY_LEVEL_TOO_LOW");
                 this.sendWebsocketsError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [this.getSecurityLevelServerMinimum()]);
                 this.showConnectionMessage($STRF("conn_setup_server_sl_low", [this.getSecurityLevelServerMinimum().toString()]));
             }
@@ -439,7 +440,7 @@ export class kprpcClient {
 
             if (sr != data.key.sr) {
                 KeeLog.warn($STR("conn_setup_failed"));
-                window.kee.appState.latestConnectionError = "CHALLENGE_RESPONSE_MISMATCH";
+                store.dispatch("updateLatestConnectionError", "CHALLENGE_RESPONSE_MISMATCH");
                 this.showConnectionMessage($STR("conn_setup_failed")
                     + " " + $STR("conn_setup_retype_password"));
                 this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
@@ -506,7 +507,7 @@ export class kprpcClient {
 
         if (!this.srpClientInternals.authenticated) {
             KeeLog.warn($STR("conn_setup_failed"));
-            window.kee.appState.latestConnectionError = "SRP_AUTH_FAILURE";
+            store.dispatch("updateLatestConnectionError", "SRP_AUTH_FAILURE");
             this.showConnectionMessage($STR("conn_setup_failed")
                 + " " + $STR("conn_setup_retype_password"));
             this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
@@ -534,8 +535,7 @@ export class kprpcClient {
     onConnectStartup (type) {
         // if any errors were shown, they are now resolved
         window.kee.removeUserNotifications((notification: KeeNotification) => notification.name != "kee-connection-message");
-        window.kee.appState.latestConnectionError = "";
-
+        store.dispatch("updateLatestConnectionError", "");
         window.kee._refreshKPDB();
     }
 
@@ -638,7 +638,7 @@ export class kprpcClient {
         if (!this.serverHasRequiredFeatures(features))
         {
             KeeLog.error("eventSession: " + $STRF("conn_setup_server_features_missing", ["https://www.kee.pm/upgrade-kprpc"]));
-            window.kee.appState.latestConnectionError = "VERSION_CLIENT_TOO_HIGH";
+            store.dispatch("updateLatestConnectionError", "VERSION_CLIENT_TOO_HIGH");
             const button: Button = {
                 label: $STR("upgrade_kee"),
                 action: "loadUrlUpgradeKee"
@@ -963,7 +963,7 @@ export class kprpcClient {
                         KeeLog.error("Failed to decrypt. Exception: " + e);
 
                         KeeLog.warn($STR("conn_setup_restart"));
-                        window.kee.appState.latestConnectionError = "DECRYPTION_FAILED";
+                        store.dispatch("updateLatestConnectionError", "DECRYPTION_FAILED");
                         KPRPC.showConnectionMessage($STR("conn_setup_restart")
                             + " " + $STR("conn_setup_retype_password"));
                         KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
@@ -976,7 +976,7 @@ export class kprpcClient {
                 KeeLog.error("Failed to hash secret key. Exception: " + e);
 
                 KeeLog.warn($STR("conn_setup_restart"));
-                window.kee.appState.latestConnectionError = "SECRET_KEY_HASH_FAILED";
+                store.dispatch("updateLatestConnectionError", "SECRET_KEY_HASH_FAILED");
                 KPRPC.showConnectionMessage($STR("conn_setup_restart")
                     + " " + $STR("conn_setup_retype_password"));
                 KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));

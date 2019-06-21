@@ -1,5 +1,3 @@
-export const UPDATE_TIMER = "UPDATE_TIMER";
-export const UPDATE_COUNTER = "UPDATE_COUNTER";
 export const updateActiveKeePassDatabaseIndex = "updateActiveKeePassDatabaseIndex";
 export const updateConnected = "updateConnected";
 export const updateConnectedWebsocket = "updateConnectedWebsocket";
@@ -13,3 +11,4 @@ export const updateSubmittedData = "updateSubmittedData";
 export const updateLoginsFound = "updateLoginsFound";
 export const updateContextMenuResult = "updateContextMenuResult";
 export const updateSearchResults = "updateSearchResults";
+export const addNotification = "addNotification";

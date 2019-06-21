@@ -62,7 +62,7 @@ function updateForegroundTab (tabId: number) {
         {
             if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
             window.kee.tabStates.get(tabId).framePorts.forEach(port => {
-                port.postMessage({ appState: window.kee.appState, isForegroundTab: true, action: Action.DetectForms } as AddonMessage);
+                port.postMessage({ isForegroundTab: true, action: Action.DetectForms } as AddonMessage);
             });
         }
     }

@@ -1,13 +1,13 @@
-import { AppState } from "./AppState";
 import { Action } from "./Action";
 import { FrameState } from "./FrameState";
 import { KeeNotification } from "./KeeNotification";
 import { keeLoginInfo, PasswordProfile } from "./kfDataModel";
 import { SubmittedData } from "./SubmittedData";
 import { SaveData } from "./SaveData";
+import { KeeState } from "../store/KeeState";
+import { MutationPayload } from "vuex";
 
 export interface AddonMessage {
-    appState?: AppState;
     frameState?: FrameState;
     isForegroundTab?: boolean;
     tabId?: number;
@@ -29,4 +29,6 @@ export interface AddonMessage {
     neverSave?: boolean;
     loginsFound?: boolean;
     currentSearchTerm?: string;
+    initialState?: KeeState;
+    mutation?: MutationPayload;
 }

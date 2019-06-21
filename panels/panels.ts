@@ -2,21 +2,16 @@ import { copyStringToClipboard } from "./copyStringToClipboard";
 import { MatchedLoginsPanel } from "./MatchedLoginsPanel";
 import { GeneratePasswordPanel } from "./GeneratePasswordPanel";
 import { SavePasswordPanel } from "./SavePasswordPanel";
-import { AppState } from "../common/AppState";
 import { FrameState } from "../common/FrameState";
 import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
-import { isVuexMessage } from "../common/VuexMessage";
+import { SyncContent } from "../store/syncContent";
+import store from "../store";
+import { MutationPayload } from "vuex";
 
-let appState: AppState;
 let frameState: FrameState;
-
-function updateAppState (newState: AppState) {
-    const oldState = appState;
-    appState = newState;
-}
 
 function updateFrameState (newState: FrameState) {
     const oldState = frameState;
@@ -43,10 +38,17 @@ function startup () {
             matchedLoginsPanel = new MatchedLoginsPanel(myPort, closePanel, parentFrameId);
             document.getElementById("header").innerText = $STR("matched_logins_label");
             myPort.onMessage.addListener(function (m: AddonMessage) {
-                if (isVuexMessage(m)) return;
                 KeeLog.debug("In iframe script, received message from background script");
 
-                if (m.appState) updateAppState(m.appState);
+                if (m.initialState) {
+                    syncContent = new SyncContent(store, m.initialState, (mutation: MutationPayload) => {
+                        myPort.postMessage({mutation} as AddonMessage);
+                    });
+                }
+                if (m.mutation) {
+                    syncContent.onRemoteMutation(m.mutation);
+                }
+
                 if (m.frameState) updateFrameState(m.frameState);
 
                 const mainPanel = matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.logins);
@@ -65,10 +67,17 @@ function startup () {
             generatePasswordPanel = new GeneratePasswordPanel(myPort, closePanel);
             document.getElementById("header").innerText = $STR("Menu_Button_copyNewPasswordToClipboard_label");
             myPort.onMessage.addListener(function (m: AddonMessage) {
-                if (isVuexMessage(m)) return;
                 KeeLog.debug("In iframe script, received message from background script");
 
-                if (m.appState) updateAppState(m.appState);
+                if (m.initialState) {
+                    syncContent = new SyncContent(store, m.initialState, (mutation: MutationPayload) => {
+                        myPort.postMessage({mutation} as AddonMessage);
+                    });
+                }
+                if (m.mutation) {
+                    syncContent.onRemoteMutation(m.mutation);
+                }
+
                 if (m.frameState) updateFrameState(m.frameState);
 
                 if (m.passwordProfiles && m.passwordProfiles.length > 0) {
@@ -116,13 +125,20 @@ function startup () {
         case "savePassword":
             document.getElementById("header").innerText = $STR("save_login");
             myPort.onMessage.addListener(function (m: AddonMessage) {
-                if (isVuexMessage(m)) return;
                 KeeLog.debug("In iframe script, received message from background script");
 
-                if (m.appState) updateAppState(m.appState);
+                if (m.initialState) {
+                    syncContent = new SyncContent(store, m.initialState, (mutation: MutationPayload) => {
+                        myPort.postMessage({mutation} as AddonMessage);
+                    });
+                }
+                if (m.mutation) {
+                    syncContent.onRemoteMutation(m.mutation);
+                }
+
                 if (m.frameState) updateFrameState(m.frameState);
 
-                savePasswordPanel = new SavePasswordPanel(myPort, appState, m.submittedData);
+                savePasswordPanel = new SavePasswordPanel(myPort, m.submittedData);
 
                 const mainPanel = savePasswordPanel.createNearNode(document.getElementById("header"));
                 if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
@@ -182,6 +198,8 @@ let matchedLoginsPanel: MatchedLoginsPanel;
 let generatePasswordPanel: GeneratePasswordPanel;
 let savePasswordPanel: SavePasswordPanel;
 let myPort: browser.runtime.Port;
+let syncContent: SyncContent;
+
 const params = {};
 
 document.location.search.substr(1).split("&").forEach(pair => {

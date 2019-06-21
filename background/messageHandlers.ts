@@ -9,18 +9,19 @@ import { keeLoginInfo, keeLoginField } from "../common/kfDataModel";
 import { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
 import { SiteConfig } from "../common/config";
-import { isVuexMessage, VuexMessage } from "../common/VuexMessage";
+import store from "../store";
 
 // callbacks for messaging / ports
 
-export function browserPopupMessageHandler (msg: AddonMessage | VuexMessage) {
-    if (isVuexMessage(msg)) return;
+export function browserPopupMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
+    if (msg.mutation) {
+        window.kee.syncBackground.onMessage(this, msg.mutation);
+    }
+
     if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from browser popup script");
 
     if (msg.removeNotification) {
         window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
-        //TODO:
-        try { window.kee.browserPopupPort.postMessage({ appState: window.kee.appState } as AddonMessage); } catch (e) {}
     }
     if (msg.loadUrlUpgradeKee) {
         browser.tabs.create({
@@ -31,17 +32,17 @@ export function browserPopupMessageHandler (msg: AddonMessage | VuexMessage) {
         window.kee.initiatePasswordGeneration();
     }
     if (msg.action === Action.ShowMatchedLoginsPanel) {
-        if (window.kee.appState.connected) {
+        if (store.state.connected) {
             let frameIdWithMatchedLogins = window.kee.frameIdWithMatchedLogins(window.kee.tabStates.get(window.kee.foregroundTabId).frames);
             if (frameIdWithMatchedLogins == -1) frameIdWithMatchedLogins = 0;
             window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(0).postMessage({action: Action.ShowMatchedLoginsPanel, frameId: frameIdWithMatchedLogins });
         }
     }
     if (msg.action === Action.SaveLatestLogin) {
-        if (window.kee.appState.connected) {
+        if (store.state.connected) {
             const persistentItem = window.kee.persistentTabStates.get(window.kee.foregroundTabId).items.find(item => item.itemType == "submittedData");
             window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(0).postMessage(
-                { appState: window.kee.appState, submittedData: persistentItem.submittedData } as AddonMessage);
+                { submittedData: persistentItem.submittedData } as AddonMessage);
             persistentItem.accessCount++;
         }
     }
@@ -50,34 +51,39 @@ export function browserPopupMessageHandler (msg: AddonMessage | VuexMessage) {
     }
     if (msg.findMatches) {
         window.kee.findLogins(null, null, null, msg.findMatches.uuid, msg.findMatches.DBfilename, null, null, result => {
-            window.kee.browserPopupPort.postMessage({ appState: window.kee.appState, findMatchesResult: result.result } as AddonMessage);
+            window.kee.browserPopupPort.postMessage({ findMatchesResult: result.result } as AddonMessage);
         });
     }
     if (msg.loginEditor) {
         window.kee.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
     }
     if (msg.currentSearchTerm != null) {
-        window.kee.appState.currentSearchTerm = msg.currentSearchTerm;
+        // must be done here rather than the popup process so we can handle the timeouts, etc.
+        store.dispatch("updateCurrentSearchTerm", msg.currentSearchTerm);
         clearTimeout(window.kee.currentSearchTermTimer);
         window.kee.currentSearchTermTimer = setTimeout(() => {
-            window.kee.appState.currentSearchTerm = null;
+            store.dispatch("updateCurrentSearchTerm", null);
+            store.dispatch("updateSearchResults", null);
         }, configManager.current.currentSearchTermTimeout * 1000);
     }
 }
 
-export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage | VuexMessage) {
-    if (isVuexMessage(msg)) return;
+export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
+    if (msg.mutation) {
+        window.kee.syncBackground.onMessage(this, msg.mutation);
+    }
+
     if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script");
 
     if (msg.findMatches) {
         window.kee.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
-            this.postMessage({ appState: window.kee.appState, isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId,
+            this.postMessage({ isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId,
             findMatchesResult: result.result } as AddonMessage);
         });
     }
     if (msg.removeNotification) {
         window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
-        try { window.kee.browserPopupPort.postMessage({ appState: window.kee.appState, isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId } as AddonMessage); } catch (e) {}
+        try { window.kee.browserPopupPort.postMessage({ isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId } as AddonMessage); } catch (e) {}
     }
     if (msg.logins) {
         window.kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).logins = msg.logins;
@@ -181,8 +187,11 @@ export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessag
 }
 
 
-export function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessage | VuexMessage) {
-    if (isVuexMessage(msg)) return;
+export function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessage) {
+    if (msg.mutation) {
+        window.kee.syncBackground.onMessage(this, msg.mutation);
+    }
+
     let result;
     if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from vault script");
     switch (msg.action) {
@@ -208,8 +217,11 @@ export function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessa
     }
 }
 
-export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage | VuexMessage) {
-    if (isVuexMessage(msg)) return;
+export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
+    if (msg.mutation) {
+        window.kee.syncBackground.onMessage(this, msg.mutation);
+    }
+
     if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from iframe script");
 
     const tabId = this.sender.tab.id;
@@ -227,7 +239,7 @@ export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMess
 
     if (msg.action == Action.GetPasswordProfiles) {
         window.kee.getPasswordProfiles(passwordProfiles => {
-            window.kee.appState.PasswordProfiles = passwordProfiles;
+            store.dispatch("updatePasswordProfiles", passwordProfiles);
             if (passwordProfiles.length > 0) {
                 port.postMessage({ passwordProfiles } as AddonMessage);
             }
