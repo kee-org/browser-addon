@@ -68,6 +68,8 @@ You can then:
 
 ## Vue devtools
 
+It's likely that the below does not work. It might though, at least on one or two devices in the world when the stars are aligned.
+
 ### One time:
 ````
 npm install -g @vue/devtools
@@ -76,12 +78,12 @@ npm install -g https-proxy-cli
 
 ### Each time:
 
-`https-proxy -t http://localhost:8098 -p 8099`
+`https-proxy -t http://localhost:8098 -p 8099 --keys <folder to store and re-access self-signed certs> &`
 `vue-devtools`
 
 ### First time:
 
 sudo apt-get install libnss3-tools
-Manually load https://localhost:8099 in the browser and add self-signed cert to whitelist.
-certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n /home/luckyrat/Downloads/localproxy -i /home/luckyrat/Downloads/localproxy
+Manually load https://localhost:8099 in the browser, add self-signed cert to whitelist and export the cert to a local file (or just use the generated keys folder location above... not sure if that will work or not).
+`certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n <path to saved cert> -i <path to saved cert>`
 restart Chrome
