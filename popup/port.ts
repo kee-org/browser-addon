@@ -1,5 +1,3 @@
-
-//TODO: stub postMessage so Vue actions can still complete before this port is connected (unlikely to happen but might)
 export let myPort: browser.runtime.Port;
 
 export const portMixin = {

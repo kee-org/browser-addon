@@ -204,20 +204,11 @@ function connectToMessagingPort () {
 }
 
 window.addEventListener("pageshow", ev => {
-    // if (myPort) {
-    //     // I don't think this branch is ever hit but cross-browser behaviour might
-    //     // vary so this just ensures everything remains consistent
-    //     myPort.postMessage({ action: Action.PageShow });
-    //     if (appState && appState.connected && appState.KeePassDatabases.length > 0) {
-    //         formFilling.findMatchesInThisFrame();
-    //     }
-    // } else {
-        pageShowFired = true;
-        clearTimeout(missingPageShowTimer);
-        if (configReady) {
-            startup();
-        }
-    // }
+    pageShowFired = true;
+    clearTimeout(missingPageShowTimer);
+    if (configReady) {
+        startup();
+    }
 });
 window.addEventListener("pagehide", ev => {
     inputsObserver.disconnect();
