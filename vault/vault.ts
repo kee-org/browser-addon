@@ -9,7 +9,7 @@ import { SyncContent } from "../store/syncContent";
 import store from "../store";
 import { MutationPayload } from "vuex";
 import { AddonMessage } from "../common/AddonMessage";
-import { myPort, startupPort, shutdownPort } from "../popup/port";
+import { Port } from "../common/port";
 
 /*
   This links Kee to an instance of Kee Vault via the KPRPC protocol.
@@ -68,7 +68,7 @@ function startup () {
 
     try {
         Background.connect();
-        if (myPort == null) {
+        if (Port.raw == null) {
             KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
         }
     } catch (ex) {
@@ -76,11 +76,11 @@ function startup () {
     }
 
     messagingPortConnectionRetryTimer = setInterval(() => {
-        if (myPort == null || !connected) {
+        if (Port.raw == null || !connected) {
             KeeLog.info("Messaging port was not established at vault startup. Retrying now...");
             try {
                 Background.connect();
-                if (myPort == null) {
+                if (Port.raw == null) {
                     KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
                 }
             } catch (ex) {
@@ -201,16 +201,17 @@ let syncContent: SyncContent;
 class Background {
 
     public static connect () {
-        if (myPort) {
-            KeeLog.warn("port already set to: " + myPort.name);
+        if (Port.raw) {
+            KeeLog.warn("port already set to: " + Port.raw.name);
         }
-        startupPort("vault");
+        syncContent = new SyncContent(store);
+        Port.startup("vault");
 
-        myPort.onMessage.addListener(function (m: VaultMessage) {
+        Port.raw.onMessage.addListener(function (m: VaultMessage) {
             KeeLog.debug("In browser content vault script, received message from background script");
             if (m.initialState) {
-                syncContent = new SyncContent(store, m.initialState, (mutation: MutationPayload) => {
-                    myPort.postMessage({mutation} as AddonMessage);
+                syncContent.init(m.initialState, (mutation: MutationPayload) => {
+                    Port.postMessage({mutation} as AddonMessage);
                 });
             }
             if (m.mutation) {
@@ -258,7 +259,7 @@ class Background {
     }
 
     public static send (message: VaultMessage) {
-        myPort.postMessage(message);
+        Port.postMessage(message);
     }
 
 }
@@ -300,15 +301,15 @@ window.addEventListener("pagehide", ev => {
     // Session may have already been invalidated in which case
     // we don't want to make things worse by telling the client
     // to teardown an unknown session
-    if (myPort && sessionId) {
-        myPort.postMessage({
+    if (Port.raw && sessionId) {
+        Port.postMessage({
             action: VaultAction.MessageToClient,
             sessionId: sessionId,
             protocol: VaultProtocol.Teardown
         } as VaultMessage);
     }
     sessionId = null;
-    shutdownPort();
+    Port.shutdown();
     connected = false;
     tabId = undefined;
     frameId = undefined;

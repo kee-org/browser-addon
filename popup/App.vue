@@ -30,7 +30,7 @@ import { SessionType } from '../common/kfDataModel';
 import { KeeState } from '../store/KeeState';
 import Notification from "./Notification.vue";
 import SearchPanel from "./SearchPanel.vue";
-import { portMixin, myPort } from './port';
+import { Port } from '../common/port';
 import { Action } from '../common/Action';
 import { KeeLog } from '../common/Logger';
 
@@ -53,15 +53,15 @@ export default {
         window.close();
     },
     generatePassword: () => {
-        myPort.postMessage({ action: Action.GeneratePassword });
+        Port.postMessage({ action: Action.GeneratePassword });
         window.close();
     },
     saveLatestLogin: () => {
-        myPort.postMessage({ action: Action.SaveLatestLogin });
+        Port.postMessage({ action: Action.SaveLatestLogin });
         window.close();
     },
     showMatchedLoginsPanel: () => {
-        myPort.postMessage({ action: Action.ShowMatchedLoginsPanel });
+        Port.postMessage({ action: Action.ShowMatchedLoginsPanel });
         window.close();
     },
     showHelp: () => {
@@ -84,7 +84,7 @@ export default {
     openKeePass: function() {
         KeeLog.debug("open KeePass requested");
         if ((this as any).$store.state.connectedWebsocket) {
-            myPort.postMessage({ action: Action.OpenKeePass });
+            Port.postMessage({ action: Action.OpenKeePass });
         } else {
             KeeLog.info("KeePass no longer connected so taking no action");
         }
@@ -113,6 +113,6 @@ export default {
         }, 200);
     });
   },
-  mixins: [portMixin]
+  mixins: [Port.mixin]
 };
 </script>

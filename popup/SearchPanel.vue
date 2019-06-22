@@ -18,7 +18,7 @@ import { KeeState } from '../store/KeeState';
 import { ButtonAction } from '../common/Button';
 import { configManager } from '../common/ConfigManager';
 import { AddonMessage } from '../common/AddonMessage';
-import { portMixin, myPort } from './port';
+import { Port } from '../common/port';
 import { Search, SearchResult } from '../common/search';
 import LoginEntry from "./LoginEntry.vue";
 import { mTypes } from '../store';
@@ -139,6 +139,6 @@ export default {
       pm({ removeNotification: id } as AddonMessage);
     }
   },
-  mixins: [portMixin]
+  mixins: [Port.mixin]
 };
 </script>

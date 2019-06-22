@@ -21,7 +21,7 @@ import { KeeState } from '../store/KeeState';
 import { ButtonAction } from '../common/Button';
 import { configManager } from '../common/ConfigManager';
 import { AddonMessage } from '../common/AddonMessage';
-import { portMixin } from './port';
+import { Port } from '../common/port';
 
 export default {
   props: ['notification'],
@@ -56,6 +56,6 @@ export default {
       pm({ removeNotification: id } as AddonMessage);
     }
   },
-  mixins: [portMixin]
+  mixins: [Port.mixin]
 };
 </script>

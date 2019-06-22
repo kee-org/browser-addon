@@ -5,7 +5,7 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import i18n from "vue-plugin-webextension-i18n";
-import { myPort, startupPort } from "./port";
+import { Port } from "../common/port";
 import { keeLoginInfo } from "../common/kfDataModel";
 import { SyncContent } from "../store/syncContent";
 import { MutationPayload } from "vuex";
@@ -42,17 +42,16 @@ function convertSingleLoginEntryResult (result)
 
 function startup () {
     KeeLog.debug("popup started");
-
     KeeLog.attachConfig(configManager.current);
+    syncContent = new SyncContent(store);
+    Port.startup("browserPopup");
 
-    startupPort("browserPopup");
-
-    myPort.onMessage.addListener(function (m: AddonMessage) {
+    Port.raw.onMessage.addListener(function (m: AddonMessage) {
         KeeLog.debug("In browser popup script, received message from background script: ");
 
         if (m.initialState) {
-            syncContent = new SyncContent(store, m.initialState, (mutation: MutationPayload) => {
-                myPort.postMessage({mutation} as AddonMessage);
+            syncContent.init(m.initialState, (mutation: MutationPayload) => {
+                Port.postMessage({mutation} as AddonMessage);
             }, () => {
                 /* eslint-disable no-new */
                 // tslint:disable-next-line:no-unused-expression
