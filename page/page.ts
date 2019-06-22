@@ -9,6 +9,7 @@ import { Action } from "../common/Action";
 import store from "../store";
 import { SyncContent } from "../store/syncContent";
 import { MutationPayload } from "vuex";
+import { myPort, startupPort, shutdownPort } from "../popup/port";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
@@ -31,7 +32,6 @@ let formSaving: FormSaving;
 let passwordGenerator: PasswordGenerator;
 let tabId: number;
 let frameId: number;
-let myPort: browser.runtime.Port;
 let syncContent: SyncContent;
 let connected: boolean = false;
 let inputsObserver: MutationObserver;
@@ -139,7 +139,7 @@ function connectToMessagingPort () {
     if (myPort) {
         KeeLog.warn("port already set to: " + myPort.name);
     }
-    myPort = browser.runtime.connect({ name: "page" });
+    startupPort("page");
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
         KeeLog.debug("In browser content page script, received message from background script");
@@ -214,7 +214,7 @@ window.addEventListener("pagehide", ev => {
     inputsObserver.disconnect();
     if (myPort) myPort.postMessage({ action: Action.PageHide });
     formFilling.removeKeeIconFromAllFields();
-    myPort = null;
+    shutdownPort();
     connected = false;
     tabId = undefined;
     frameId = undefined;

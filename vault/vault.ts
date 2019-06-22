@@ -9,6 +9,7 @@ import { SyncContent } from "../store/syncContent";
 import store from "../store";
 import { MutationPayload } from "vuex";
 import { AddonMessage } from "../common/AddonMessage";
+import { myPort, startupPort, shutdownPort } from "../popup/port";
 
 /*
   This links Kee to an instance of Kee Vault via the KPRPC protocol.
@@ -52,7 +53,6 @@ keeDuplicationCount += 1;
 
 let tabId: number;
 let frameId: number;
-let myPort: browser.runtime.Port;
 let messagingPortConnectionRetryTimer: number;
 let connected: boolean = false;
 
@@ -204,7 +204,7 @@ class Background {
         if (myPort) {
             KeeLog.warn("port already set to: " + myPort.name);
         }
-        myPort = browser.runtime.connect({ name: "vault" });
+        startupPort("vault");
 
         myPort.onMessage.addListener(function (m: VaultMessage) {
             KeeLog.debug("In browser content vault script, received message from background script");
@@ -308,7 +308,7 @@ window.addEventListener("pagehide", ev => {
         } as VaultMessage);
     }
     sessionId = null;
-    myPort = null;
+    shutdownPort();
     connected = false;
     tabId = undefined;
     frameId = undefined;
