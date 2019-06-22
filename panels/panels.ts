@@ -10,6 +10,7 @@ import { AddonMessage } from "../common/AddonMessage";
 import { SyncContent } from "../store/syncContent";
 import store from "../store";
 import { MutationPayload } from "vuex";
+import { startupPort, myPort } from "../popup/port";
 
 let frameState: FrameState;
 
@@ -28,7 +29,7 @@ function startup () {
 
     KeeLog.attachConfig(configManager.current);
 
-    myPort = browser.runtime.connect({ name: "iframe_" + parentFrameId });
+    startupPort("iframe_" + parentFrameId);
 
     let cancelAutoClose: () => void;
 
@@ -197,7 +198,6 @@ function startup () {
 let matchedLoginsPanel: MatchedLoginsPanel;
 let generatePasswordPanel: GeneratePasswordPanel;
 let savePasswordPanel: SavePasswordPanel;
-let myPort: browser.runtime.Port;
 let syncContent: SyncContent;
 
 const params = {};

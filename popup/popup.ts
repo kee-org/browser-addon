@@ -45,7 +45,7 @@ function startup () {
 
     KeeLog.attachConfig(configManager.current);
 
-    startupPort();
+    startupPort("browserPopup");
 
     myPort.onMessage.addListener(function (m: AddonMessage) {
         KeeLog.debug("In browser popup script, received message from background script: ");

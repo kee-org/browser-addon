@@ -8,6 +8,10 @@ export const portMixin = {
     }
 };
 
-export function startupPort () {
-    myPort = browser.runtime.connect({ name: "browserPopup" });
+export function startupPort (name: string) {
+    myPort = browser.runtime.connect({ name });
+}
+
+export function shutdownPort () {
+    myPort = null;
 }
