@@ -6,21 +6,26 @@ export class SyncContent {
     initialized: any;
     receivedMutations: any;
     pendingMutations: any[];
+    private sendMutation: (mutation: MutationPayload) => void;
 
-    constructor (private store: Store<KeeState>, initialState: KeeState, private sendMutation: (mutation: MutationPayload) => void, vue?) {
+    constructor (private store: Store<KeeState>) {
         this.receivedMutations = [];
         this.initialized = false;
         this.pendingMutations = [];
+
+        this.store.subscribe(mutation => {
+            this.hookMutation(mutation);
+        });
+    }
+
+    init (initialState: KeeState, sendMutation, vueInit?) {
+        this.sendMutation = sendMutation;
 
         this.store.replaceState(initialState);
         this.initialized = true;
         this.processPendingMutations();
 
-        this.store.subscribe(mutation => {
-            this.hookMutation(mutation);
-        });
-
-        if (vue) vue();
+        if (vueInit) vueInit();
     }
 
     public onRemoteMutation (mutation) {
@@ -62,7 +67,8 @@ export class SyncContent {
         }
 
         for (let i = 0; i < this.pendingMutations.length; i++) {
-            this.store.commit(this.pendingMutations[i].type, this.pendingMutations[i].payload);
+            // Must be a locally committed mutation
+            this.sendMutation(this.pendingMutations[i]);
             this.pendingMutations.splice(i, 1);
         }
     }

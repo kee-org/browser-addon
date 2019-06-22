@@ -9,7 +9,7 @@ import { Action } from "../common/Action";
 import store from "../store";
 import { SyncContent } from "../store/syncContent";
 import { MutationPayload } from "vuex";
-import { myPort, startupPort, shutdownPort } from "../popup/port";
+import { Port } from "../common/port";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
@@ -38,7 +38,7 @@ let inputsObserver: MutationObserver;
 let messagingPortConnectionRetryTimer: number;
 
 function matchFinder (uri: string) {
-    myPort.postMessage({ findMatches: { uri } });
+    Port.postMessage({ findMatches: { uri } });
 }
 
 function tutorialIntegration () {
@@ -64,8 +64,8 @@ function onFirstConnect (myTabId: number, myFrameId: number) {
 
     KeeLog.attachConfig(configManager.current);
     formUtils = new FormUtils(KeeLog);
-    formSaving = new FormSaving(myPort, frameId, KeeLog, formUtils, configManager.current);
-    formFilling = new FormFilling(myPort, frameId, formUtils, formSaving, KeeLog, configManager.current, matchFinder);
+    formSaving = new FormSaving(Port.raw, frameId, KeeLog, formUtils, configManager.current);
+    formFilling = new FormFilling(Port.raw, frameId, formUtils, formSaving, KeeLog, configManager.current, matchFinder);
     passwordGenerator = new PasswordGenerator(frameId);
 
     inputsObserver.observe(document.body, { childList: true, subtree: true });
@@ -108,7 +108,7 @@ function startup () {
 
     try {
         connectToMessagingPort();
-        if (myPort == null) {
+        if (Port.raw == null) {
             KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
         }
     } catch (ex) {
@@ -116,11 +116,11 @@ function startup () {
     }
 
     messagingPortConnectionRetryTimer = setInterval(() => {
-        if (myPort == null || !connected) {
+        if (Port.raw == null || !connected) {
             KeeLog.info("Messaging port was not established at page startup. Retrying now...");
             try {
                 connectToMessagingPort();
-                if (myPort == null) {
+                if (Port.raw == null) {
                     KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
                 }
             } catch (ex) {
@@ -136,17 +136,18 @@ function startup () {
 
 function connectToMessagingPort () {
 
-    if (myPort) {
-        KeeLog.warn("port already set to: " + myPort.name);
+    if (Port.raw) {
+        KeeLog.warn("port already set to: " + Port.raw.name);
     }
-    startupPort("page");
+    syncContent = new SyncContent(store);
+    Port.startup("page");
 
-    myPort.onMessage.addListener(function (m: AddonMessage) {
+    Port.raw.onMessage.addListener(function (m: AddonMessage) {
         KeeLog.debug("In browser content page script, received message from background script");
 
         if (m.initialState) {
-            syncContent = new SyncContent(store, m.initialState, (mutation: MutationPayload) => {
-                myPort.postMessage({mutation} as AddonMessage);
+            syncContent.init(m.initialState, (mutation: MutationPayload) => {
+                Port.postMessage({mutation} as AddonMessage);
             });
         }
         if (m.mutation) {
@@ -193,7 +194,7 @@ function connectToMessagingPort () {
             passwordGenerator.closeGeneratePasswordPanel();
             formFilling.closeMatchedLoginsPanel();
             formSaving.closeSavePasswordPanel();
-            myPort.postMessage({ action: Action.RemoveSubmittedData } as AddonMessage);
+            Port.postMessage({ action: Action.RemoveSubmittedData } as AddonMessage);
         }
 
         if (m.action == Action.ShowMatchedLoginsPanel) {
@@ -212,9 +213,9 @@ window.addEventListener("pageshow", ev => {
 });
 window.addEventListener("pagehide", ev => {
     inputsObserver.disconnect();
-    if (myPort) myPort.postMessage({ action: Action.PageHide });
+    if (Port.raw) Port.postMessage({ action: Action.PageHide });
     formFilling.removeKeeIconFromAllFields();
-    shutdownPort();
+    Port.shutdown();
     connected = false;
     tabId = undefined;
     frameId = undefined;

@@ -35,7 +35,7 @@ import { KeeState } from '../store/KeeState';
 import { ButtonAction } from '../common/Button';
 import { configManager } from '../common/ConfigManager';
 import { AddonMessage } from '../common/AddonMessage';
-import { portMixin, myPort } from './port';
+import { Port } from '../common/port';
 import { LoginMenus } from './LoginMenus';
 
 export default {
@@ -44,7 +44,7 @@ export default {
     return {};
   },
   created(this: any){
-    this.loginMenus = new LoginMenus(myPort);
+    this.loginMenus = new LoginMenus(Port.raw);
   },
   watch: {
       // Eventually we'll rewrite LoginMenus.ts into Vue and then this watch and associated hacks can go away
@@ -163,7 +163,7 @@ export default {
         t.loginMenus.showContextActions(t.entry.uniqueID, t.entry.dbFileName);
     }
   },
-  mixins: [portMixin]
+  mixins: [Port.mixin]
 };
 
 </script>
