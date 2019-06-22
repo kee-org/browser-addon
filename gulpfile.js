@@ -192,6 +192,9 @@ var executeRollup = function () {
     const plugins = [
         resolve(),
         commonjs(),
+        rollupReplace({
+            'strict: true, //__VUEX_STRICT_CONFIG__': WATCH ? 'strict: true,' : ''
+          }),
         typescript({
             clean: true,
             tsconfig: 'tsconfig.json',
