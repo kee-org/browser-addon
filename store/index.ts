@@ -10,7 +10,7 @@ import { KeeState } from "./KeeState";
 Vue.use(Vuex);
 
 export default new Vuex.Store<KeeState>({
-    strict: true,
+    strict: true, //__VUEX_STRICT_CONFIG__
     state: {
         latestConnectionError: "",
         lastKeePassRPCRefresh: 0,
