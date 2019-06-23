@@ -18,6 +18,8 @@
             "lib/pslData.js",
             "lib/tp/publicsuffixlist.min.js",
             "lib/tp/fast-equals.min.js",
+            "lib/pkg/vue.runtime.min.js",
+            "lib/pkg/vuex.min.js",
             "common/common.js",
             "lib/tp/biginteger.js",
             "lib/firefoxBug1408996Workaround.js",
@@ -38,6 +40,8 @@
                 "lib/moduleUnhack.js",
                 "lib/pslData.js",
                 "lib/tp/publicsuffixlist.min.js",
+                "lib/pkg/vue.runtime.min.js",
+                "lib/pkg/vuex.min.js",
                 "common/common.js",
                 "lib/firefoxBug1408996Workaround.js",
                 "page/page.js"
@@ -56,6 +60,8 @@
                 "lib/moduleUnhack.js",
                 "lib/pslData.js",
                 "lib/tp/publicsuffixlist.min.js",
+                "lib/pkg/vue.runtime.min.js",
+                "lib/pkg/vuex.min.js",
                 "common/common.js",
                 "lib/firefoxBug1408996Workaround.js",
                 "vault/vault.js"
