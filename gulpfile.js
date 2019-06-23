@@ -15,6 +15,7 @@ var commonjs = require('rollup-plugin-commonjs');
 var rollupReplace = require('rollup-plugin-replace');
 var iife = require('rollup-plugin-iife');
 var url = require('rollup-plugin-url');
+var copy = require('rollup-plugin-copy');
 
 // Some tasks set DEBUG to false so that a production build can be executed.
 // There doesn't appear to be a way to pass this as a local variable so we
@@ -194,7 +195,7 @@ var executeRollup = function () {
         commonjs(),
         rollupReplace({
             'strict: true, //__VUEX_STRICT_CONFIG__': WATCH ? 'strict: true,' : ''
-          }),
+        }),
         typescript({
             clean: true,
             tsconfig: 'tsconfig.json',
@@ -203,21 +204,27 @@ var executeRollup = function () {
         iife(),
         rollupReplace({
             'process.env.NODE_ENV': JSON.stringify( DEBUG ? 'development' : 'production' )
-          }),
+        }),
         vue({
             needMap: false // buggy so must be disabled to get sourcemaps to work at all
         }),
-        // hack to allow images to load, until they don't. can't find any way to get rollup to just let fucking images work without such hacks...
+        // hack to allow images to load, until they don't. can't find any way to get rollup to just let images work without such hacks...
         url({
             limit: 1024 * 1024, // inline files < 1M, copy files > 1M //TODO 4K
             //include: ["**/*.svg"], // defaults to .svg, .png, .jpg and .gif files
             emitFiles: true // defaults to true
-          })
+        }),
+        copy({
+            targets: [
+                { src: 'node_modules/vue/dist/vue.runtime.min.js', dest: 'lib/pkg' },
+                { src: 'node_modules/vuex/dist/vuex.min.js', dest: 'lib/pkg' }
+            ]
+        })
     ];
     if (!DEBUG) plugins.push(terser());
 
     var input = {
-        //external: ['vue','vueex'],
+        external: ['vue','vueex'],
         input: {
             'vault/vault': './vault/vault.ts',
             'background/background': './background/background.ts',
@@ -231,12 +238,7 @@ var executeRollup = function () {
         plugins,
         manualChunks(id) {
             //console.log(id);
-
-            //TODO:
-            // Always bundle into common for time being. Unlikely to pass AMO review but best "final" approach unclear at this point.
             if (id.includes('/browser-addon/common/') ||
-            id.includes('/browser-addon/node_modules/tslib/') ||
-            id.includes('/browser-addon/node_modules/vue') ||
             id.includes('/browser-addon/store/')
             ) {
                 return 'common';
@@ -250,9 +252,9 @@ var executeRollup = function () {
     const output = {
         format: "es",
         sourcemap: !!DEBUG,
-        // globals: { // maps external modules above to specific global vars
-        //     vue: "Vue"
-        // },
+        globals: { // maps external modules above to specific global vars
+            vue: "Vue"
+        },
         chunkFileNames: "common/[name].js"
     };
     if (WATCH) {

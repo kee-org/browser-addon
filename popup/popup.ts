@@ -4,7 +4,7 @@ import store from "../store";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
-import i18n from "vue-plugin-webextension-i18n";
+import i18n from "../common/Vuei18n";
 import { Port } from "../common/port";
 import { keeLoginInfo } from "../common/kfDataModel";
 import { SyncContent } from "../store/syncContent";
