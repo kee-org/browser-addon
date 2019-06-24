@@ -39,8 +39,22 @@ class NetworkAuth {
                 return;
             }
 
-            const url = new URL(requestDetails.url);
-            url.hostname = __punycode.toUnicode(url.hostname);
+                let originalUrl;
+
+                if (requestDetails.isProxy) {
+                    if (requestDetails.proxyInfo) {
+                        // Firefox
+                        originalUrl = requestDetails.proxyInfo.host;
+                    } else {
+                        // Chrome
+                        originalUrl = requestDetails.challenger.host;
+                    }
+                } else {
+                    originalUrl = requestDetails.url;
+                }
+
+                const url = new URL(originalUrl);
+                url.hostname = __punycode.toUnicode(url.hostname);
 
             kee.findLogins(url.href, null, requestDetails.realm, null, null, null, null, result => {
 

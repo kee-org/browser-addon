@@ -96,7 +96,8 @@
         "webRequest",
         "<all_urls>",
         "notifications",
-        "unlimitedStorage"
+        "unlimitedStorage",
+        "proxy"
     ],
     "web_accessible_resources" : [
 		"panels/*"

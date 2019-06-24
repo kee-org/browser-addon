@@ -3886,15 +3886,35 @@ declare namespace browser.webRequest {
         port: number;
     }
 
+    interface ProxyInfo {
+        host: string;
+        port: number;
+        type: string;
+        /* One of:
+
+            "http": HTTP proxy (or SSL CONNECT for HTTPS)
+            "https": HTTP proxying over TLS connection to proxy
+            "socks": SOCKS v5 proxy
+            "socks4": SOCKS v4 proxy
+            "direct": no proxy
+            "unknown": unknown proxy
+        */
+        username: string;
+        proxyDNS: boolean;
+        failoverTimeout: number;
+    }
+
     interface WebAuthenticationChallengeDetails extends WebResponseHeadersDetails {
         /** The authentication scheme, e.g. Basic or Digest. */
         scheme: string;
         /** The authentication realm provided by the server, if there is one. */
         realm?: string;
-        /** The server requesting authentication. */
+        /** The server requesting authentication. In Chrome, host is the proxy host if isProxy is true */
         challenger: WebAuthChallenger;
         /** True for Proxy-Authenticate, false for WWW-Authenticate. */
         isProxy: boolean;
+        /** Firefox only. This property is present only if the request is being proxied. */
+        proxyInfo?: ProxyInfo;
     }
 
     /** An object describing filters to apply to webRequest events. */
