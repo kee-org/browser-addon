@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html style="overflow-y: hidden">
     <head>
-        <link href="../lib/bootstrap.min.css" type="text/css" rel="stylesheet">
-        <link href="popup.css" type="text/css" rel="stylesheet">
+        <link href="../lib/css/material-design-icons.css" type="text/css" rel="stylesheet">
+        <link href="../lib/css/vuetify.min.css" type="text/css" rel="stylesheet">
         <meta charset="utf-8"/>
         <script src="https://localhost:8099"></script>
     </head>
-    <body>
-        <div id="main">
+    <body style="overflow-y: hidden; font-size: 100%; width: 400px; height: 570px;"> <!-- Ubuntu injects some 75% font crap -->
+        <div id="main" style="overflow-y: hidden">
         </div>
         <script src="../lib/detectWebExtensions.js"></script>
         <script src="../lib/tp/browser-polyfill.min.js"></script>
         <script src="../lib/dollar-polyfill.js"></script>
         <script src="../lib/i18n.js"></script>
+        <script src="../lib/moduleHack.js"></script>
+        <script src="../lib/tp/punycode.js"></script>
+        <script src="../lib/moduleUnhack.js"></script>
+        <script src="../lib/pslData.js"></script>
+        <script src="../lib/tp/publicsuffixlist.min.js"></script>
         <script src="../lib/pkg/vue.runtime.min.js"></script>
         <script src="../lib/pkg/vuex.min.js"></script>
+        <script src="../lib/pkg/vuetify.min.js"></script>
         <script src="../common/common.js"></script>
+        <script src="../lib/firefoxBug1408996Workaround.js"></script>
         <script src="popup.js"></script>
     </body>
 </html>

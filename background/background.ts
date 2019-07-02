@@ -10,10 +10,6 @@ declare global {
     interface Window { kee: Kee; }
 }
 
-// window.kee = window.kee || {};
-
-// let kee: Kee;
-// let updateForegroundTabRetryTimer;
 let keeVaultLaunchChecker: KeeVaultLaunchChecker;
 
 // Make sure user knows we're not ready yet

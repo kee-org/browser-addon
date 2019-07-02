@@ -1,11 +1,13 @@
 import { KeeState } from "./KeeState";
 import { SessionType } from "../common/kfDataModel";
 
+export const connected = (state: KeeState) => state.connected;
 export const showGeneratePasswordLink = (state: KeeState) => state.connected;
 export const showSaveLatestLogin = (state: KeeState) => !!state.submittedData;
 export const showMatchedLogins = (state: KeeState) => !!state.loginsFound;
 export const showNotifications = (state: KeeState) => state.notifications && !!state.notifications.length;
-export const showSearchPanel = (state: KeeState) => state.connected && !!state.KeePassDatabases.length;
+export const databaseIsOpen = (state: KeeState) => state.connected && !!state.KeePassDatabases.length;
+export const showSearchPanel = (state: KeeState, getters) => getters.databaseIsOpen;
 export const notifications = (state: KeeState) => state.notifications;
 export const currentSearchTerm = (state: KeeState) => state.currentSearchTerm;
 export const searchResults = (state: KeeState) => state.searchResults;
@@ -20,6 +22,19 @@ export const databaseName = (state: KeeState) => {
     return "";
 };
 export const connectionStatus = (state: KeeState, getters) => {
+    if (state.connected) {
+        if (state.KeePassDatabases.length > 1) {
+            return $STRF("multiplePasswordSourcesEnabled", [state.KeePassDatabases.length.toString()]);
+        } else if (state.KeePassDatabases.length == 1) {
+            return getters.databaseName;
+        } else {
+            return $STR("notifyBarLoginToKeePassButton_tip");
+        }
+    } else {
+        return $STR("notifyBarLaunchKeePassButton_tip");
+    }
+};
+export const connectionStatusDetail = (state: KeeState, getters) => {
     if (state.connected) {
         if (state.KeePassDatabases.length > 1) {
             return $STRF("loggedInMultiple_tip", [state.KeePassDatabases.length.toString(), getters.databaseName]);

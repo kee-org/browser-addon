@@ -125,9 +125,15 @@ export class Kee {
                         });
                     }
 
-                    if (window.kee.tabStates.has(window.kee.foregroundTabId)
-                        && window.kee.frameIdWithMatchedLogins(window.kee.tabStates.get(window.kee.foregroundTabId).frames) >= 0) {
+                    if (window.kee.tabStates.has(window.kee.foregroundTabId)) {
+                        const frames = window.kee.tabStates.get(window.kee.foregroundTabId).frames;
+                        const matchedFrameID = window.kee.frameIdWithMatchedLogins(frames);
+                        if (matchedFrameID >= 0) {
                             loginsFound = true;
+                            connectMessage.logins = frames.get(matchedFrameID).logins;
+                            connectMessage.frameId = matchedFrameID;
+                            connectMessage.tabId = window.kee.foregroundTabId;
+                        }
                     }
                     store.dispatch("updateSubmittedData", submittedData);
                     store.dispatch("updateLoginsFound", loginsFound);
@@ -305,13 +311,6 @@ export class Kee {
     {
         KeeLog.debug("Kee initialising");
         this.KeePassRPC = new jsonrpcClient();
-
-
-// Increase timer each second
-// setInterval(function () {
-//     store.commit(mTypes.UPDATE_TIMER, store.state.timer + 1);
-//   }, 1000);
-
         KeeLog.info("Kee initialised OK although the connection to a KeePassRPC server is probably not established just yet...");
     }
 

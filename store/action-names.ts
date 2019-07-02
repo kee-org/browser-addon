@@ -2,4 +2,4 @@ import * as actions from "./actions";
 
 export const names = Object.keys(actions);
 
-console.log(names);
+// for dev debugging only: console.log(names);
