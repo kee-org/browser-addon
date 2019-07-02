@@ -1,5 +1,13 @@
 
+
+// declare const __publicSuffixList;
+// declare const __punycode;
+// declare const __pslData;
+
 export class Utils {
+
+    // private pslInitialised = false;
+
     constructor ()
     {
     }
@@ -245,6 +253,15 @@ export class Utils {
         const binary = this.base64urlDecode(input);
         return this.binaryToByteArray(binary);
     }
+
+    // public get psl () {
+    //     if (!__publicSuffixList) throw new Error("publicSuffixList library not present");
+    //     if (!this.pslInitialised) {
+    //         __publicSuffixList.parse(__pslData.text, __punycode.toASCII);
+    //         this.pslInitialised = true;
+    //     }
+    //     return __publicSuffixList;
+    // }
 }
 
 export let utils = new Utils();

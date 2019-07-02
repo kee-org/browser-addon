@@ -19,7 +19,7 @@ export function showUpdateSuccessNotification (uniqueID: string, fileName: strin
         $STR("change_field_status"),
         $STR("change_field_explanation"),
         $STR("multi_page_update_warning")];
-        const notification = new KeeNotification("password-updated", [button1, button2], utils.newGUID(), messages, "Medium");
+        const notification = new KeeNotification("password-updated", [button2, button1], utils.newGUID(), messages, "Medium");
         window.kee.notifyUser(notification);
     }
 }

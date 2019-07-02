@@ -31,13 +31,13 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
     if (msg.action === Action.GeneratePassword) {
         window.kee.initiatePasswordGeneration();
     }
-    if (msg.action === Action.ShowMatchedLoginsPanel) {
-        if (store.state.connected) {
-            let frameIdWithMatchedLogins = window.kee.frameIdWithMatchedLogins(window.kee.tabStates.get(window.kee.foregroundTabId).frames);
-            if (frameIdWithMatchedLogins == -1) frameIdWithMatchedLogins = 0;
-            window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(0).postMessage({action: Action.ShowMatchedLoginsPanel, frameId: frameIdWithMatchedLogins });
-        }
-    }
+    // if (msg.action === Action.ShowMatchedLoginsPanel) {
+    //     if (store.state.connected) {
+    //         let frameIdWithMatchedLogins = window.kee.frameIdWithMatchedLogins(window.kee.tabStates.get(window.kee.foregroundTabId).frames);
+    //         if (frameIdWithMatchedLogins == -1) frameIdWithMatchedLogins = 0;
+    //         window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(0).postMessage({action: Action.ShowMatchedLoginsPanel, frameId: frameIdWithMatchedLogins });
+    //     }
+    // }
     if (msg.action === Action.SaveLatestLogin) {
         if (store.state.connected) {
             const persistentItem = window.kee.persistentTabStates.get(window.kee.foregroundTabId).items.find(item => item.itemType == "submittedData");
@@ -46,6 +46,12 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
             persistentItem.accessCount++;
         }
     }
+
+    if (msg.action == Action.ManualFill && msg.selectedLoginIndex != null) {
+        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(msg.frameId || 0).postMessage(msg);
+        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(0).postMessage({ action: Action.CloseAllPanels });
+    }
+
     if (msg.action === Action.OpenKeePass) {
         window.kee.openKeePass();
     }

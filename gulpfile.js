@@ -7,14 +7,14 @@ var del = require('del');
 var replace = require('gulp-replace');
 var signAddon = require('sign-addon').default;
 var rollup = require('rollup');
-var resolve = require('rollup-plugin-node-resolve');
+var resolve = require('@rollup/plugin-node-resolve');
 var typescript = require('rollup-plugin-typescript2');
 var terser = require('rollup-plugin-terser').terser;
 var vue = require('rollup-plugin-vue');
 var commonjs = require('rollup-plugin-commonjs');
 var rollupReplace = require('rollup-plugin-replace');
 var iife = require('rollup-plugin-iife');
-var url = require('rollup-plugin-url');
+var url = require('@rollup/plugin-url');
 var copy = require('rollup-plugin-copy');
 
 // Some tasks set DEBUG to false so that a production build can be executed.
@@ -217,14 +217,16 @@ var executeRollup = function () {
         copy({
             targets: [
                 { src: 'node_modules/vue/dist/vue.runtime.min.js', dest: 'lib/pkg' },
-                { src: 'node_modules/vuex/dist/vuex.min.js', dest: 'lib/pkg' }
+                { src: 'node_modules/vuex/dist/vuex.min.js', dest: 'lib/pkg' },
+                { src: 'node_modules/vuetify/dist/vuetify.min.js', dest: 'lib/pkg' },
+                { src: 'node_modules/vuetify/dist/vuetify.min.css', dest: 'lib/css' }
             ]
         })
     ];
     if (!DEBUG) plugins.push(terser());
 
     var input = {
-        external: ['vue','vueex'],
+        external: ['vue','vueex','vuetify'],
         input: {
             'vault/vault': './vault/vault.ts',
             'background/background': './background/background.ts',
@@ -253,7 +255,8 @@ var executeRollup = function () {
         format: "es",
         sourcemap: !!DEBUG,
         globals: { // maps external modules above to specific global vars
-            vue: "Vue"
+            vue: "Vue",
+            vuetify: "Vuetify"
         },
         chunkFileNames: "common/[name].js"
     };

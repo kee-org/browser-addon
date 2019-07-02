@@ -5,13 +5,6 @@
         "preserveConstEnums": true,
         "sourceMap": true,
         "target": "ES6",
-        // "types": [
-        //     "filesystem",
-        //     "filewriter",
-        //     "browser",
-        //     "biginteger",
-        //     "dollar-polyfill"
-        // ],
         "typeRoots" : ["./typedefs"],
         "moduleResolution": "node",
         "noImplicitThis": true
