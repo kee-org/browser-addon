@@ -69,6 +69,9 @@ export default {
     onSearchInput (evt) {
       const pm = (this as any).postMessage;
       pm({currentSearchTerm: evt.target.value} as AddonMessage);
+      
+      // Think this is OK but if it is actually async then user may have subsequent 
+      // characters deleted when the change is actually applied
       (this as any).$store.dispatch('updateCurrentSearchTerm', evt.target.value);
       (this as any).search.execute(evt.target.value,
           (this as any).onSearchComplete.bind(this), []
