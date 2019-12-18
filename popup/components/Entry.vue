@@ -20,7 +20,7 @@
       <v-layout
         row
         justify-center
-        align-center
+        align-start
         :style="`${hover ? 'cursor: pointer' : ''}`"
         @click.left.exact="primaryClickAction"
         @click.middle.exact="loadInNewTab"
