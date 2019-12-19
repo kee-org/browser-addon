@@ -173,22 +173,6 @@ export default {
       SearchInput
   },
 
-  mounted: function () {
-    // Hack around Firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=1516132
-    // and https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1416505
-    document.addEventListener("DOMContentLoaded", () => {
-        let count = 0;
-        const timer = setInterval(() => {
-            let newPl = "";
-            const pl = document.getElementById("searchBox").getAttribute("placeholder");
-            if (pl.endsWith(" ")) newPl = pl.trim();
-            else newPl = pl + " ";
-            document.getElementById("searchBox").setAttribute("placeholder", newPl);
-            count++;
-            if (count > 20) clearInterval(timer);
-        }, 200);
-    });
-  },
   mixins: [Port.mixin]
 };
 </script>
