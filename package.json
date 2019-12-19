@@ -19,14 +19,14 @@
     "rollup-plugin-typescript2": "^0.25.3",
     "@rollup/plugin-url": "^4.0.0",
     "rollup-plugin-vue": "^5.1.4",
-    "sign-addon": "^2.0.3",
+    "sign-addon": "^2.0.4",
     "tslint": "^5.20.1",
     "typescript": "^3.7.3",
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
     "vue": "^2.6.11",
-    "vuetify": "^1.5.16",
+    "vuetify": "^1.5.21",
     "vuex": "^3.1.2"
   },
   "scripts": {
