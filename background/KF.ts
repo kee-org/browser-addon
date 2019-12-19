@@ -74,7 +74,13 @@ export class Kee {
 
             for (const port of allPorts) {
                 if (port !== excludedPort) {
-                    port.postMessage({mutation} as AddonMessage);
+                    try {
+                        port.postMessage({mutation} as AddonMessage);
+                    } catch (e) {
+                        // Sometimes dead ports are left lying around by the browser (especially
+                        // during upgrades, etc.). We can do nothing about this but must not let
+                        // it cause this function to fail to execute to the end.
+                    }
                 }
             }
         });
@@ -107,7 +113,14 @@ export class Kee {
             }
             switch (name) {
                 case "browserPopup": {
+                    clearTimeout(window.kee.currentSearchTermTimer);
                     p.onMessage.addListener(browserPopupMessageHandler.bind(p));
+                    p.onDisconnect.addListener(() => {
+                        window.kee.currentSearchTermTimer = setTimeout(() => {
+                            store.dispatch("updateCurrentSearchTerm", null);
+                            store.dispatch("updateSearchResults", null);
+                        }, configManager.current.currentSearchTermTimeout * 1000);
+                    });
 
                     const connectMessage = {
                         initialState: store.state
@@ -135,6 +148,9 @@ export class Kee {
                             connectMessage.tabId = window.kee.foregroundTabId;
                         }
                     }
+
+                    //TODO: These get distributed to the popup port. Shouldn't do any
+                    // harm but is inefficient so try to avoid somehow.
                     store.dispatch("updateSubmittedData", submittedData);
                     store.dispatch("updateLoginsFound", loginsFound);
 

@@ -28,7 +28,6 @@ export interface AddonMessage {
     loginEditor?: { uniqueID: string, DBfilename: string};
     neverSave?: boolean;
     loginsFound?: boolean;
-    currentSearchTerm?: string;
     initialState?: KeeState;
     mutation?: MutationPayload;
 }

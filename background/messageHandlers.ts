@@ -63,17 +63,6 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
     if (msg.loginEditor) {
         window.kee.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
     }
-    if (msg.currentSearchTerm != null) {
-        // must be done here rather than the popup process so we can handle the timeouts, etc.
-        // no longer used - only interest is in clearing after a timeout - actual data changes handled
-        // in the process that creates them otherwise we end up racing. Should switch to a simpler message at some point.
-        //store.dispatch("updateCurrentSearchTerm", msg.currentSearchTerm);
-        clearTimeout(window.kee.currentSearchTermTimer);
-        window.kee.currentSearchTermTimer = setTimeout(() => {
-            store.dispatch("updateCurrentSearchTerm", null);
-            store.dispatch("updateSearchResults", null);
-        }, configManager.current.currentSearchTermTimeout * 1000);
-    }
 }
 
 export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
