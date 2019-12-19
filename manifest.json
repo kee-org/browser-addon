@@ -22,7 +22,6 @@
             "lib/pkg/vuex.min.js",
             "common/common.js",
             "lib/tp/biginteger.js",
-            "lib/firefoxBug1408996Workaround.js",
             "background/background.js"
         ],
         "persistent": true
@@ -43,7 +42,6 @@
                 "lib/pkg/vue.runtime.min.js",
                 "lib/pkg/vuex.min.js",
                 "common/common.js",
-                "lib/firefoxBug1408996Workaround.js",
                 "page/page.js"
         ],
         "run_at": "document_end"
@@ -63,7 +61,6 @@
                 "lib/pkg/vue.runtime.min.js",
                 "lib/pkg/vuex.min.js",
                 "common/common.js",
-                "lib/firefoxBug1408996Workaround.js",
                 "vault/vault.js"
         ],
         "run_at": "document_end"

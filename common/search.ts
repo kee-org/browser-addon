@@ -1,14 +1,11 @@
 import { KeeLog } from "./Logger";
 import { keeLoginInfo } from "./kfDataModel";
 import { KeeState } from "../store/KeeState";
+import { utils } from "./utils";
 
 /*
   Includes contributions from https://github.com/haoshu
 */
-
-declare const __publicSuffixList;
-declare const __punycode;
-declare const __pslData;
 
 // Pretend browser (WebExtensions) is chrome (we include a
 // polyfill from Mozilla but it doesn't work in some cases)
@@ -165,17 +162,6 @@ export class Search {
         return this.validateConfig();
     }
 
-    private pslInitialised = false;
-
-    get psl () {
-        if (!__publicSuffixList) throw new Error("publicSuffixList library not present");
-        if (!this.pslInitialised) {
-            __publicSuffixList.parse(__pslData.text, __punycode.toASCII);
-            this.pslInitialised = true;
-        }
-        return __publicSuffixList;
-    }
-
     public execute (query, onComplete, filterDomains: string[]) {
         let abort = false;
         const filteringByURL = (filterDomains
@@ -248,7 +234,7 @@ export class Search {
                                     itemHostname = new URL(itemURL).hostname;
                                 }
                                 const itemIsIPAddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/.test(itemHostname);
-                                const itemDomain = itemIsIPAddress ? itemHostname : this.psl.getDomain(itemHostname);
+                                const itemDomain = itemIsIPAddress ? itemHostname : utils.psl.getDomain(itemHostname);
                                 return (filterDomain === itemDomain);
                             } catch (e) { return false; } // ignore invalid URLs
                             });

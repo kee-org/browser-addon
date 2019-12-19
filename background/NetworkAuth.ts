@@ -3,9 +3,7 @@ import { keeLoginInfo } from "../common/kfDataModel";
 import { configManager } from "../common/ConfigManager";
 import store from "../store";
 
-declare const __publicSuffixList;
-declare const __punycode;
-declare const __pslData;
+declare const punycode;
 
 // Pretend browser (WebExtensions) is chrome (we include a
 // polyfill from Mozilla but it doesn't work in some cases)
@@ -53,7 +51,7 @@ export class NetworkAuth {
             }
 
             const url = new URL(requestDetails.url);
-            url.hostname = __punycode.toUnicode(url.hostname);
+            url.hostname = punycode.toUnicode(url.hostname);
 
             window.kee.findLogins(url.href, null, requestDetails.realm, null, null, null, null, result => {
 
