@@ -121,19 +121,7 @@ export class NetworkAuth {
                     width: 600,
                     height: 300
                 };
-                browser.windows.create(createData)
-
-                // This is a workaround for the Firefox bug in #71
-                .then(win => setTimeout(() => {
-                    try {
-                    return browser.windows.update(win.id, {width: 610, height: 310 })
-                    .then(() => {
-                        browser.windows.update(win.id, {width: 600, height: 300 });
-                    });
-                } catch (e) {
-                    // Ignore - just means that the window has already been closed.
-                }
-                }, 1500));
+                browser.windows.create(createData);
             });
         });
     }
