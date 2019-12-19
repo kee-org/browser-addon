@@ -1,12 +1,12 @@
 
 
-// declare const __publicSuffixList;
-// declare const __punycode;
-// declare const __pslData;
+declare const publicSuffixList;
+declare const punycode;
+declare const pslData;
 
 export class Utils {
 
-    // private pslInitialised = false;
+    private pslInitialised = false;
 
     constructor ()
     {
@@ -254,14 +254,14 @@ export class Utils {
         return this.binaryToByteArray(binary);
     }
 
-    // public get psl () {
-    //     if (!__publicSuffixList) throw new Error("publicSuffixList library not present");
-    //     if (!this.pslInitialised) {
-    //         __publicSuffixList.parse(__pslData.text, __punycode.toASCII);
-    //         this.pslInitialised = true;
-    //     }
-    //     return __publicSuffixList;
-    // }
+    public get psl () {
+        if (!publicSuffixList) throw new Error("publicSuffixList library not present");
+        if (!this.pslInitialised) {
+            publicSuffixList.parse(pslData.text, punycode.toASCII);
+            this.pslInitialised = true;
+        }
+        return publicSuffixList;
+    }
 }
 
 export let utils = new Utils();

@@ -10,9 +10,7 @@ import { Config } from "../common/config";
 import { keeLoginField, keeLoginInfo } from "../common/kfDataModel";
 import { configManager } from "../common/ConfigManager";
 
-declare const __publicSuffixList;
-declare const __punycode;
-declare const __pslData;
+declare const punycode;
 
 // Pretend browser (WebExtensions) is chrome (we include a
 // polyfill from Mozilla but it doesn't work in some cases)
@@ -397,7 +395,7 @@ export class FormFilling {
         }
 
         const url = new URL(window.document.URL);
-        url.hostname = __punycode.toUnicode(url.hostname);
+        url.hostname = punycode.toUnicode(url.hostname);
 
         this.Logger.info("Finding matches in a document. readyState: " + window.document.readyState);
 

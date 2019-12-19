@@ -2,15 +2,12 @@ import { Config, SiteConfig, SiteConfigLookup, SiteConfigNode } from "./config";
 import { keeLoginField } from "./kfDataModel";
 import { ConfigMigrations } from "./ConfigMigrations";
 import { defaultSiteConfig } from "./DefaultSiteConfig";
+import { utils } from "./utils";
 
 /*
   Entry-specific configuration is stored in KeePass but in future maybe
   we'll still make it available from this interface.
 */
-
-declare const __publicSuffixList;
-declare const __punycode;
-declare const __pslData;
 
 // Pretend browser (WebExtensions) is chrome (we include a
 // polyfill from Mozilla but it doesn't work in some cases)
@@ -69,21 +66,11 @@ defaultConfig.manualSubmitOverrideProhibited = false;
 export class ConfigManager {
     public current: Config;
     private readonly maxCharsPerPage: number = 10000;
-    private pslInitialised = false;
     private _listeners = [];
 
     public constructor () {
         this.current = defaultConfig;
         browser.storage.onChanged.addListener((a, b) => this.reloadOnStorageChange(a, b));
-    }
-
-    private get psl () {
-        if (!__publicSuffixList) throw new Error("publicSuffixList library not present");
-        if (!this.pslInitialised) {
-            __publicSuffixList.parse(__pslData.text, __punycode.toASCII);
-            this.pslInitialised = true;
-        }
-        return __publicSuffixList;
     }
 
     // Some processes may want to take action when settings are changed (e.g. the background
@@ -291,7 +278,7 @@ export class ConfigManager {
         const url = new URL(urlString);
         const host = url.host;
         const page = host + url.pathname;
-        const domain = this.psl.getDomain(host);
+        const domain = utils.psl.getDomain(host);
 
         for (const value in this.current.siteConfig.domainExact) {
             if (value === domain) {

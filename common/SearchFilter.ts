@@ -1,25 +1,11 @@
 import { Search } from "./search";
-
-declare const __publicSuffixList;
-declare const __punycode;
-declare const __pslData;
+import { utils } from "./utils";
 
 // Pretend browser (WebExtensions) is chrome (we include a
 // polyfill from Mozilla but it doesn't work in some cases)
 declare const chrome;
 
 export class SearchFilter {
-
-    private pslInitialised = false;
-
-    get psl () {
-        if (!__publicSuffixList) throw new Error("publicSuffixList library not present");
-        if (!this.pslInitialised) {
-            __publicSuffixList.parse(__pslData.text, __punycode.toASCII);
-            this.pslInitialised = true;
-        }
-        return __publicSuffixList;
-    }
 
     public attachFilterToSearchBox (searchBox: HTMLInputElement, searchRequestor, currentURIs: string[], search: Search) {
         let inMainPanel = false;
@@ -78,7 +64,7 @@ export class SearchFilter {
             try {
                 const hostname = new URL(currentURL).hostname;
                 const isIPAddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/.test(hostname);
-                const domain = isIPAddress ? hostname : this.psl.getDomain(hostname);
+                const domain = isIPAddress ? hostname : utils.psl.getDomain(hostname);
                 this.updateSearchFilterFinish(searchFilter, current, [domain]);
             } catch (e) {
                 searchFilter.setAttribute("disabled", "true");

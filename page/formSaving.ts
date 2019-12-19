@@ -8,9 +8,7 @@ import { configManager } from "../common/ConfigManager";
 import { keeLoginField } from "../common/kfDataModel";
 import { AddonMessage } from "../common/AddonMessage";
 
-declare const __publicSuffixList;
-declare const __punycode;
-declare const __pslData;
+declare const punycode;
 
 // Pretend browser (WebExtensions) is chrome (we include a
 // polyfill from Mozilla but it doesn't work in some cases)
@@ -94,7 +92,7 @@ export class FormSaving {
 
         const doc = form.ownerDocument;
         const url = new URL(doc.URL);
-        url.hostname = __punycode.toUnicode(url.hostname);
+        url.hostname = punycode.toUnicode(url.hostname);
 
         const conf = configManager.siteConfigFor(url.href);
         if (conf.preventSaveNotification) return;
