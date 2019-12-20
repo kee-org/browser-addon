@@ -5,13 +5,14 @@ import { configManager } from "../common/ConfigManager";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
 import store from "../store";
-import { PersistentLogger } from "../common/PersistentLogger";
+// import { PersistentLogger } from "../common/PersistentLogger";
 
 declare global {
-    interface Window { kee: Kee; KeePersistentLogger: PersistentLogger; }
+    interface Window { kee: Kee; }
+    // interface Window { kee: Kee; KeePersistentLogger: PersistentLogger; }
 }
 
-window.KeePersistentLogger = new PersistentLogger();
+// window.KeePersistentLogger = new PersistentLogger();
 
 // Make sure user knows we're not ready yet
 browser.browserAction.setBadgeText({ text: "OFF" });
@@ -20,7 +21,7 @@ browser.browserAction.disable();
 
 // Assumes config and logging have been initialised before this is called.
 function startup () {
-    window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
+    // window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
     KeeLog.attachConfig(configManager.current);
     window.kee = new Kee();
     window.kee.init();

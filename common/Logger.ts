@@ -9,7 +9,8 @@
   The default level (Warn) will be set as part of the installation process.
 
   If Debug level is selected, a PersistentLogger object in the background
-  process will store the log entries in localStorage on a regular basis.
+  process will store the log entries in localStorage on a regular basis. But
+  only if you edit the code to enable this feature because it is very resource-hungry
 
 */
 
@@ -84,13 +85,17 @@ export class KeeLogger {
     }
 
     send (logLevel: 1|2|3|4, message: string) {
-        const logEntry = {logLevel, timestamp: Date.now(), message};
-        if (window.KeePersistentLogger) {
-            // Will only be true in the background process
-            window.KeePersistentLogger.emit(logEntry);
-        } else {
-            browser.runtime.sendMessage(logEntry);
-        }
+        // Do nothing.
+        // For advanced debugging, especially across browser restarts,
+        // enable the code below and the relevant PersistentLogger lines
+        // in background.ts
+        // const logEntry = {logLevel, timestamp: Date.now(), message};
+        // if (window.KeePersistentLogger) {
+        //     // Will only be true in the background process
+        //     window.KeePersistentLogger.emit(logEntry);
+        // } else {
+        //     browser.runtime.sendMessage(logEntry);
+        // }
     }
 
     stackTrace () {
