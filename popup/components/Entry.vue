@@ -208,6 +208,7 @@ export default {
     },
     loadInNewTab(this: any) {
         browser.tabs.create({url: this.entry.url});
+        window.close();
     },
     manualFill(this: any) {
         Port.postMessage({
