@@ -1,4 +1,5 @@
 import { utils } from "./utils";
+import { KeeLog } from "./Logger";
 
 export class KeeURL {
 
@@ -31,7 +32,7 @@ export class KeeURL {
             const domain = isIPAddress ? null : utils.psl.getDomain(url.hostname);
             return new KeeURL(domain, url, isIPAddress);
         } catch (e) {
-            console.warn("Error processing URL: " + e);
+            KeeLog.warn("Error processing URL: " + e);
         }
         return null;
     }

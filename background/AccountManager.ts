@@ -1,5 +1,6 @@
 import { JWT } from "./JWT";
 import { Tokens } from "../common/Tokens";
+import { KeeLog } from "../common/Logger";
 
 export class KeeAccount {
     private _features: string[] = [];
@@ -35,7 +36,7 @@ export class KeeAccount {
                 }
             }
         } catch (e) {
-            console.log("Token error: " + e);
+            KeeLog.error("Token error: " + e);
         }
     }
 }

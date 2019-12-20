@@ -28,6 +28,10 @@ export class SyncContent {
         if (vueInit) vueInit();
     }
 
+    reset (newState: KeeState) {
+        this.store.replaceState(newState);
+    }
+
     public onRemoteMutation (mutation) {
         if (!this.initialized) {
             return;

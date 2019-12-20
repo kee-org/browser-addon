@@ -59,18 +59,15 @@ export class Kee {
             allPorts.push(this.browserPopupPort);
             allPorts.push(this.vaultPort);
 
-            //TODO: Maybe could be lazy for all non-foreground tabs and queue up
-            //the mutations to be sent before the next AddonMessage needs to be sent?
-            // Needs consideration alongside Chrome page freezing, etc.
-
-            this.tabStates.forEach(ts => {
+            const ts = window.kee.tabStates.get(window.kee.foregroundTabId);
+            if (ts) {
                 ts.framePorts.forEach(port => {
                     allPorts.push(port);
                 });
                 ts.ourIframePorts.forEach(port => {
                     allPorts.push(port);
                 });
-            });
+            }
 
             for (const port of allPorts) {
                 if (port !== excludedPort) {

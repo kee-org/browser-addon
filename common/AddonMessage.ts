@@ -29,5 +29,6 @@ export interface AddonMessage {
     neverSave?: boolean;
     loginsFound?: boolean;
     initialState?: KeeState;
+    resetState?: KeeState;
     mutation?: MutationPayload;
 }

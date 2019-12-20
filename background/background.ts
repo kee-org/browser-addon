@@ -1,16 +1,17 @@
 import { Kee } from "./KF";
-import { KeeVaultLaunchChecker } from "./KeeVaultLaunchChecker";
 import { commandManager } from "./commands";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
+import store from "../store";
+import { PersistentLogger } from "../common/PersistentLogger";
 
 declare global {
-    interface Window { kee: Kee; }
+    interface Window { kee: Kee; KeePersistentLogger: PersistentLogger; }
 }
 
-let keeVaultLaunchChecker: KeeVaultLaunchChecker;
+window.KeePersistentLogger = new PersistentLogger();
 
 // Make sure user knows we're not ready yet
 browser.browserAction.setBadgeText({ text: "OFF" });
@@ -19,12 +20,12 @@ browser.browserAction.disable();
 
 // Assumes config and logging have been initialised before this is called.
 function startup () {
+    window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
     KeeLog.attachConfig(configManager.current);
     window.kee = new Kee();
     window.kee.init();
     configManager.addChangeListener(() => window.kee.configSyncManager.updateToRemoteConfig(configManager.current));
     browser.browserAction.enable();
-    keeVaultLaunchChecker = new KeeVaultLaunchChecker();
 }
 
 browser.windows.onFocusChanged.addListener(async function (windowId) {
@@ -58,7 +59,7 @@ function updateForegroundTab (tabId: number) {
         {
             if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
             window.kee.tabStates.get(tabId).framePorts.forEach(port => {
-                port.postMessage({ isForegroundTab: true, action: Action.DetectForms } as AddonMessage);
+                port.postMessage({ isForegroundTab: true, action: Action.DetectForms, resetState: store.state } as AddonMessage);
             });
         }
     }

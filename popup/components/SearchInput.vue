@@ -25,6 +25,7 @@ import { AddonMessage } from "../../common/AddonMessage";
 import { Port } from "../../common/port";
 import { Search, SearchResult } from "../../common/search";
 import { mTypes } from "../../store";
+import { KeeLog } from '../../common/Logger';
 
 export default {
   created(this: any) {
@@ -62,7 +63,7 @@ export default {
   methods: {
     ...mapActions(actionNames),
     onSearchComplete(logins: SearchResult[]) {
-      console.log("onSearchComplete");
+      KeeLog.debug("onSearchComplete");
       logins = logins
         .sort(function(a, b) {
           if (a.relevanceScore > b.relevanceScore) return -1;

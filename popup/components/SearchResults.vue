@@ -38,6 +38,7 @@ import { AddonMessage } from "../../common/AddonMessage";
 import { Search, SearchResult, SearchOnlyMatches } from "../../common/search";
 import Entry from "./Entry.vue";
 import { mTypes } from "../../store";
+import { KeeLog } from '../../common/Logger';
 
 export default {
   props: ['matchedLogins', 'frameId'],
@@ -86,7 +87,7 @@ export default {
   methods: {
     ...mapActions(actionNames),
     onSearchOnlyMatchesComplete(this: any, logins: SearchResult[]) {
-      console.log("onSearchOnlyMatchesComplete");
+      KeeLog.debug("onSearchOnlyMatchesComplete");
       logins = logins
         .sort(function(a, b) {
           if (a.relevanceScore > b.relevanceScore) return -1;

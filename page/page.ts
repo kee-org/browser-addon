@@ -159,6 +159,7 @@ function connectToMessagingPort () {
             formFilling.findMatchesInThisFrame();
             connected = true;
         } else if (m.action == Action.DetectForms) {
+            syncContent.reset(m.resetState);
             formFilling.removeKeeIconFromAllFields();
             formSaving.removeAllSubmitHandlers();
             formFilling.findMatchesInThisFrame();
