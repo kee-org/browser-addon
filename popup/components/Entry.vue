@@ -185,12 +185,21 @@ export default {
         this.focussed = false;
       }
     },
-    primaryClickAction(this: any) {
+    async primaryClickAction(this: any) {
         if (this.loginIndex !== undefined) {
             // We are expected to fill an already discovered entry
             this.manualFill();
         } else {
+          // Overwriting the Kee Vault tab causes much confusion so prevent that from happening
+          const currentTab = await browser.tabs.query({
+            currentWindow: true, 
+            active: true, 
+            url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]});
+          if (currentTab && currentTab.length > 0) {
+            this.loadInNewTab();
+          } else {
             this.loadInSameTab();
+          }
         }
     },
     loadInSameTab(this: any) {
