@@ -172,7 +172,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Take this automatic action even when multiple matching entries are found",
+        "message": "Tee näin automaattisesti siitä huolimatta, että sopivia kohteita on useampia",
         "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_keePassDBToOpen_label": {
@@ -220,7 +220,7 @@
         "description": "Option to enable or disable the information displayed when a password has been updated"
     },
     "pref_animateWhenOfferingSave_label": {
-        "message": "Animate the Kee icon when offering to save",
+        "message": "Animoi Kee kuvake, kun salasana voidaan tallentaa",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
@@ -256,7 +256,7 @@
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
-        "message": "Automaattinen täyttö",
+        "message": "Lomakkeiden havaitseminen",
         "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from the password manager"
     },
     "site_options_valid_form_intro_desc": {
@@ -300,11 +300,11 @@
         "description": "Link to the add-on's settings"
     },
     "Menu_Button_open_keepass_label": {
-        "message": "Open KeePass",
+        "message": "Avaa KeePass",
         "description": "Action button to launch, unlock and/or focus KeePass"
     },
     "Menu_Button_open_kee_vault_label": {
-        "message": "Open Kee Vault",
+        "message": "Avaa Kee Vault",
         "description": "Action button to launch, unlock and/or focus Kee Vault"
     },
     "Search_label": {
@@ -359,6 +359,22 @@
         "message": "Kopioi",
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
+    "copy_value_to_clipboard": {
+        "message": "Copy value to clipboard",
+        "description": "Indicates to the user that when they click here the value for that field will be copied to the clipboard."
+    },
+    "click_to_reveal_hide": {
+        "message": "Click to reveal/hide",
+        "description": "Indicates to the user that when they click here the value of the protected field will be displayed or hidden (toggled)."
+    },
+    "no_name": {
+        "message": "no name",
+        "description": "Used in place of a field name when the specific field has no name. Will be surrounded by [ square brackets ]"
+    },
+    "matches_from_other_sites": {
+        "message": "Matches from other sites",
+        "description": "Search results section header."
+    },
     "create": {
         "message": "Tallenna",
         "description": ""
@@ -388,11 +404,11 @@
         "description": ""
     },
     "website_options_search_placeholder": {
-        "message": "e.g. www.google.com",
+        "message": "esim. www.google.com",
         "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "website_options_search_tooltip": {
-        "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+        "message": "esim. www.google.com (Älä lisää https:// tai muita protokollia alkuun)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "database_label": {
@@ -430,6 +446,10 @@
     "loggedInMultiple_tip": {
         "message": "Sinulla on auki $1 salasanatietokantaa. '$2' on käytössä.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "multiplePasswordSourcesEnabled": {
+        "message": "$1 password sources enabled",
+        "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
         "message": "$1 - $2",
@@ -768,39 +788,23 @@
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
     "list_version_upgrade_3_2": {
-        "message": "Overriding the auto-submit behaviour of an entry in Kee Vault or KeePass now also affects the behaviour of Kee when you manually ask Kee to fill an entry.;Re-arranged the \"Filling Entries\" section in Kee Options to clarify which settings affect automatic and manual entry filling behaviour.;Automatic fill operations now skip filling if pre-existing text is found in the field.;A dismissable message announcing the launch of Kee Vault can be added to the bottom of the Kee panel when we are ready to launch.;Removed old logging features (initial load notification and sensitive logging option for debugging).",
+        "message": "Automaattisen täytön ja lähettämisen asetukset KeePassissa tai Kee Vaultissa, vaikuttavat nyt myös Kee:n toimintaan, kun valitset kirjautumistiedon itse;Uudelleenjärjestetty \"Automaattinen täyttö\" osiota Kee:n asetuksissa. Uusi järjestety selkeyttää asetuksien vaikutuksien hahmottamista automaattisen ja manuaalisen täytön toiminnassa; Automaattinen täyttö ohittaa täytön jos kentässä on jo tekstiä;Lisätty Kee:n paneeliin suljettava ilmoitus jossa kerrotaan Kee Vaultin julkaisemisesta;Poistettu vanhat lokitusominaisuudet (joitain lokitusvalintoja jätetty virheenjäljitystä varten).",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
-    "kee_vault_launch_hidden_confirmation": {
-        "message": "We won't show you this again. If you want to support Kee later, visit www.kee.pm. Thanks!",
-        "description": "Shown to user after they permanently dismiss the Kee Vault Launch message at the bottom of the main Kee popup."
-    },
-    "kee_vault_launch_now": {
-        "message": "Kee Vault is launching now on Product Hunt!",
-        "description": "Main Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_support_us": {
-        "message": "Please support us and check out our time-limited launch offer.",
-        "description": "Secondary Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_cta": {
-        "message": "Visit us on Product Hunt",
-        "description": "Button Call To Action text for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period. Ideally, please start or end the statement with 'Product Hunt' since this will appear neater, but don't worry if that just doesn't make sense in your language."
-    },
     "pref_automatic": {
-        "message": "Automatic",
+        "message": "Automaattinen",
         "description": "Group of settings that relate to the actions that Kee can take automatically when filling entries"
     },
     "pref_manual": {
-        "message": "Manual",
+        "message": "Manuaalinen",
         "description": "Group of settings that relate to the actions that Kee takes when the user explicitly asks Kee to fill an entry"
     },
     "pref_fill_override_hint": {
-        "message": "Edit individual entries in your password manager to override this behaviour.",
+        "message": "Muokkaa yksittäisiä tietueita salasanahallinta sovelluksessa ohittaaksesi automaattiset käytännöt",
         "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_fill_override_option": {
-        "message": "Editing the Auto-submit behaviour of an entry also overrides this behaviour",
+        "message": "Muokkaamalla Lähetä-automaattisesti toimintoa, ohitat myös tämän toiminnon",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "KB_shortcut_simple_2_desc": {

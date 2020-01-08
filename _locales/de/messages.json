@@ -359,6 +359,22 @@
         "message": "Kopieren",
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
+    "copy_value_to_clipboard": {
+        "message": "Wert in die Zwischenablage kopieren",
+        "description": "Indicates to the user that when they click here the value for that field will be copied to the clipboard."
+    },
+    "click_to_reveal_hide": {
+        "message": "Zum Ein- / Ausblenden klicken",
+        "description": "Indicates to the user that when they click here the value of the protected field will be displayed or hidden (toggled)."
+    },
+    "no_name": {
+        "message": "Kein Name",
+        "description": "Used in place of a field name when the specific field has no name. Will be surrounded by [ square brackets ]"
+    },
+    "matches_from_other_sites": {
+        "message": "Passendes von anderen Seiten",
+        "description": "Search results section header."
+    },
     "create": {
         "message": "Erstellen",
         "description": ""
@@ -430,6 +446,10 @@
     "loggedInMultiple_tip": {
         "message": "Sie sind an der '$1'-Datenbank angemeldet. '$2' ist aktiv.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "multiplePasswordSourcesEnabled": {
+        "message": "$1 Passwort-Quellen aktiviert",
+        "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
         "message": "$1 - $2",
@@ -770,22 +790,6 @@
     "list_version_upgrade_3_2": {
         "message": "Der Vorrang der automatischen Übermittlung eines Eintrags in Kee Vault oder KeePass wirkt sich nun auch auf das Verhalten von Kee aus, wenn Sie Kee manuell bitten, einen Eintrag zu füllen.;Der Abschnitt \"Einträge ausfüllen\" in den Kee-Optionen wurde neu angeordnet, um zu verdeutlichen, welche Einstellungen das automatische und manuelle Füllen von Einträgen beeinflussen.;Automatische Füllvorgänge überspringen nun das Füllen, wenn bereits vorhandener Text im Feld gefunden wird.;Eine ablehnbare Nachricht, die den Start von Kee Vault ankündigt, kann am unteren Rand des Kee-Panels hinzugefügt werden, wenn wir zum Starten bereit sind.;Alte Protokollierungsfunktionen wurden entfernt (Benachrichtigung beim erstmaligen Laden und vertrauliche Protokollierungsoption für das Debuggen).",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
-    },
-    "kee_vault_launch_hidden_confirmation": {
-        "message": "Wir werden Ihnen das nicht noch einmal zeigen. Wenn Sie Kee später unterstützen möchten, besuchen Sie www.kee.pm. Danke!",
-        "description": "Shown to user after they permanently dismiss the Kee Vault Launch message at the bottom of the main Kee popup."
-    },
-    "kee_vault_launch_now": {
-        "message": "Kee Vault startet jetzt auf Product Hunt!",
-        "description": "Main Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_support_us": {
-        "message": "Bitte unterstützen Sie uns und schauen Sie sich unser zeitlich begrenztes Einführungsangebot an.",
-        "description": "Secondary Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_cta": {
-        "message": "Besuchen Sie uns auf Product Hunt",
-        "description": "Button Call To Action text for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period. Ideally, please start or end the statement with 'Product Hunt' since this will appear neater, but don't worry if that just doesn't make sense in your language."
     },
     "pref_automatic": {
         "message": "Automatisch",

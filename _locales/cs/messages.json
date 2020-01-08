@@ -172,7 +172,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Take this automatic action even when multiple matching entries are found",
+        "message": "Udělej tuto automatickou akci i přesto, že bylo nalezeno více shodných položek.",
         "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_keePassDBToOpen_label": {
@@ -359,6 +359,22 @@
         "message": "Kopírovat",
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
+    "copy_value_to_clipboard": {
+        "message": "Kopírovat hodnotu do schránky",
+        "description": "Indicates to the user that when they click here the value for that field will be copied to the clipboard."
+    },
+    "click_to_reveal_hide": {
+        "message": "Klikněte pro odkrytí/skrytí",
+        "description": "Indicates to the user that when they click here the value of the protected field will be displayed or hidden (toggled)."
+    },
+    "no_name": {
+        "message": "beze jména",
+        "description": "Used in place of a field name when the specific field has no name. Will be surrounded by [ square brackets ]"
+    },
+    "matches_from_other_sites": {
+        "message": "Shoda na více webech",
+        "description": "Search results section header."
+    },
     "create": {
         "message": "Vytvořit",
         "description": ""
@@ -430,6 +446,10 @@
     "loggedInMultiple_tip": {
         "message": "Jste přihlášeni do $1 databází hesel. Aktivní je '$2'.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "multiplePasswordSourcesEnabled": {
+        "message": "$1 zdroj/e hesel aktivní",
+        "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
         "message": "$1 - $2",
@@ -588,7 +608,7 @@
         "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
     },
     "pref_when_one_matching_network_login": {
-        "message": "Pokud Kee nalezne jen jedno siťové přihlašovací jméno (např. HTTP Auth) automaticky vás přihlásí",
+        "message": "Pokud Kee nalezne jen jedno síťové přihlašovací jméno (např. HTTP Auth) automaticky vás přihlásí",
         "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
     },
     "network_authentication": {
@@ -768,39 +788,23 @@
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
     "list_version_upgrade_3_2": {
-        "message": "Overriding the auto-submit behaviour of an entry in Kee Vault or KeePass now also affects the behaviour of Kee when you manually ask Kee to fill an entry.;Re-arranged the \"Filling Entries\" section in Kee Options to clarify which settings affect automatic and manual entry filling behaviour.;Automatic fill operations now skip filling if pre-existing text is found in the field.;A dismissable message announcing the launch of Kee Vault can be added to the bottom of the Kee panel when we are ready to launch.;Removed old logging features (initial load notification and sensitive logging option for debugging).",
+        "message": "Přepsání chování automatického potvrzování položek v Kee Vault nebo KeePass ovlivní také chování Kee, když manuálně požádáte Kee o vyplnění položek.;Uspořádání sekce \"Vyplňování položek\" v nastavení Kee, aby se vyjasnilo chování ovlivňující chování automatického a ručního vyplňování položek.;Operace automatického vyplnění nyní přeskočí pole, pokud je v nich existující text.;Až budeme připraveni ke spuštění, může být do dolní části panelu Kee přidána zamítnutelná zpráva oznamující spuštění Kee Vault.; Odstraněna stará funkce logování (oznámení o prvnotním načtení a volba protokolování citlivých dat pro ladění).",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
-    "kee_vault_launch_hidden_confirmation": {
-        "message": "We won't show you this again. If you want to support Kee later, visit www.kee.pm. Thanks!",
-        "description": "Shown to user after they permanently dismiss the Kee Vault Launch message at the bottom of the main Kee popup."
-    },
-    "kee_vault_launch_now": {
-        "message": "Kee Vault is launching now on Product Hunt!",
-        "description": "Main Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_support_us": {
-        "message": "Please support us and check out our time-limited launch offer.",
-        "description": "Secondary Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_cta": {
-        "message": "Visit us on Product Hunt",
-        "description": "Button Call To Action text for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period. Ideally, please start or end the statement with 'Product Hunt' since this will appear neater, but don't worry if that just doesn't make sense in your language."
-    },
     "pref_automatic": {
-        "message": "Automatic",
+        "message": "Automatický",
         "description": "Group of settings that relate to the actions that Kee can take automatically when filling entries"
     },
     "pref_manual": {
-        "message": "Manual",
+        "message": "Ruční",
         "description": "Group of settings that relate to the actions that Kee takes when the user explicitly asks Kee to fill an entry"
     },
     "pref_fill_override_hint": {
-        "message": "Edit individual entries in your password manager to override this behaviour.",
+        "message": "Upravit jednotlivé položky ve vašem správci hesel a tak přepsat toto chování.",
         "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_fill_override_option": {
-        "message": "Editing the Auto-submit behaviour of an entry also overrides this behaviour",
+        "message": "Upravit chování automatického potvrzování položky a přepsat toto chování",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "KB_shortcut_simple_2_desc": {

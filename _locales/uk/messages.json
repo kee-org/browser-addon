@@ -172,7 +172,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Take this automatic action even when multiple matching entries are found",
+        "message": "Виконувати цю автоматичну дію, навіть якщо знайдено декілька відповідних записів",
         "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_keePassDBToOpen_label": {
@@ -220,7 +220,7 @@
         "description": "Option to enable or disable the information displayed when a password has been updated"
     },
     "pref_animateWhenOfferingSave_label": {
-        "message": "Animate the Kee icon when offering to save",
+        "message": "Анімація піктограми Kee при пропозиції збереження",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
@@ -300,11 +300,11 @@
         "description": "Link to the add-on's settings"
     },
     "Menu_Button_open_keepass_label": {
-        "message": "Open KeePass",
+        "message": "Відкрити KeePass",
         "description": "Action button to launch, unlock and/or focus KeePass"
     },
     "Menu_Button_open_kee_vault_label": {
-        "message": "Open Kee Vault",
+        "message": "Відкрити Kee Vault",
         "description": "Action button to launch, unlock and/or focus Kee Vault"
     },
     "Search_label": {
@@ -359,6 +359,22 @@
         "message": "Копіювати",
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
+    "copy_value_to_clipboard": {
+        "message": "Копіювати значення в буфер",
+        "description": "Indicates to the user that when they click here the value for that field will be copied to the clipboard."
+    },
+    "click_to_reveal_hide": {
+        "message": "Клацніть, щоб показати/приховати",
+        "description": "Indicates to the user that when they click here the value of the protected field will be displayed or hidden (toggled)."
+    },
+    "no_name": {
+        "message": "без назви",
+        "description": "Used in place of a field name when the specific field has no name. Will be surrounded by [ square brackets ]"
+    },
+    "matches_from_other_sites": {
+        "message": "Збіги з інших сайтів",
+        "description": "Search results section header."
+    },
     "create": {
         "message": "Створити",
         "description": ""
@@ -388,11 +404,11 @@
         "description": ""
     },
     "website_options_search_placeholder": {
-        "message": "e.g. www.google.com",
+        "message": "наприклад, www.google.com",
         "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "website_options_search_tooltip": {
-        "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+        "message": "наприклад, www.google.com (Не вказуйте https:// чи інші протоколи)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "database_label": {
@@ -430,6 +446,10 @@
     "loggedInMultiple_tip": {
         "message": "Ви увійшли в бази паролів $1. Зараз активна '$2'.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "multiplePasswordSourcesEnabled": {
+        "message": "$1 джерел паролів увімкнено",
+        "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
         "message": "$1 - $2",
@@ -620,67 +640,67 @@
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "introduction_to_kee": {
-        "message": "Kee automatically fills login forms to save you time and protect you from security risks.",
+        "message": "Kee автоматично заповнює форми входу, щоб заощадити ваш час і захистити від ризиків безпеки.",
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
     "kee_works_with_a_password_manager": {
-        "message": "The credentials Kee enters for you are stored securely in a password manager behind a single \"master password\".",
+        "message": "Облікові дані, які вводить Kee, надійно зберігаються в менеджері паролів під захистом головного пароля.",
         "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
     "recommend_start_with_kee_vault": {
-        "message": "We recommend trying out the Kee Vault password manager 14 day free trial. It's only £2 per month after the trial and does not require payment details when you sign up so is risk free.",
+        "message": "Ми рекомендуємо спробувати менеджер паролів Kee Vault безкоштовно протягом 14 днів. Після завершення пробного періоду він коштуватиме лише £2 на місяць і не вимагає платіжної інформації під час реєстрації, отже жодних ризиків.",
         "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
     },
     "load_kee_vault_now": {
-        "message": "Load Kee Vault now",
+        "message": "Завантажити Kee Vault",
         "description": "Call To Action button text. On click, the Kee Vault app will load and focus in a new tab."
     },
     "you_can_use_KeePass_instead": {
-        "message": "Alternatively, you can choose to configure KeePass Password Safe 2 instead.",
+        "message": "Натомість, ви можете налаштувати KeePass Password Safe 2.",
         "description": "Explains that Kee also works with KeePass so they can choose to configure that if they prefer to avoid all financial expenditure."
     },
     "table_summarises_differences": {
-        "message": "The table below summarises the main differences.",
+        "message": "Таблиця внизу відображає основні відмінності.",
         "description": "Introduces the summary table that will help users choose a password manager to start with."
     },
     "installation_required": {
-        "message": "Installation required",
+        "message": "Необхідне встановлення",
         "description": "States that the user will need to install components on their computer"
     },
     "access_from_multiple_devices": {
-        "message": "Access from multiple desktop and mobile devices",
+        "message": "Доступ з декількох комп'ютерів та мобільних пристроїв",
         "description": "Covers web browsers and mobiles, laptops, tablets, etc."
     },
     "shared_preferences": {
-        "message": "Shared preferences",
+        "message": "Спільні налаштування",
         "description": "Labels the process of synchronising browser extension and password manager configuration options/preferences across multiple locations."
     },
     "yes_configure_once": {
-        "message": "Yes, configure once",
+        "message": "Так, налаштувати один раз",
         "description": "Supports synchronising browser extension and password manager configuration options/preferences"
     },
     "no_configure_multiple": {
-        "message": "No, configure on every web browser or device you use",
+        "message": "Ні, налаштувати в кожному браузері чи пристрої",
         "description": "Does not support synchronising browser extension and password manager configuration options/preferences"
     },
     "difficulty": {
-        "message": "Difficulty",
+        "message": "Складність",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "difficulty_kee_vault": {
-        "message": "Easy",
+        "message": "Легка",
         "description": "Indicates that it is easy to get started with Kee Vault"
     },
     "difficulty_keepass": {
-        "message": "Medium (Hard on Mac computers)",
+        "message": "Середня (Для Mac - Складна)",
         "description": "Indicates that more work is required to get started with KeePass"
     },
     "keepass_sync_config_explanation": {
-        "message": "For KeePass, a partial solution for multi-device access can be manually configured using 3rd party services, some of which charge a fee. Each device must be prepared and configured in advance.",
+        "message": "Для KeePass частковим рішенням для доступу з різних пристроїв може бути ручна конфігурація з використанням сторонніх сервісів, деякі з яких є платними. Кожен пристрій повинен бути налаштований для цього завчасно.",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "point_user_to_keepass_install_instructions_start": {
-        "message": "Instructions for installing and configuring KeePass and the required KeePassRPC.plgx plugin can be found on our",
+        "message": "Інструкції з встановлення і налаштування KeePass та необхідного плагіна KeePassRPC.plgx ви можете знайти на",
         "description": "Left part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_keepass_install_instructions_end": {
@@ -724,83 +744,67 @@
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
     "other_technical_improvements": {
-        "message": "Other technical improvements",
+        "message": "Інші технічні вдосконалення",
         "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
     },
     "reliability_improvements": {
-        "message": "Reliability improvements",
+        "message": "Вдосконалення стабільності",
         "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
     },
     "new_icon": {
-        "message": "New icon",
+        "message": "Нова піктограма",
         "description": "Heading for text that explains we have a new icon / branding"
     },
     "reliability_improvements_text1": {
-        "message": "We've improved the link between the web browser and each individual page you load, resulting in more reliable features like form filling.",
+        "message": "Ми вдосконалили з'єднання між браузером та кожною окремою сторінкою, яку ви завантажуєте, таким чином покращивши роботу функції автозаповнення.",
         "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
     },
     "reliability_improvements_text2": {
-        "message": "We've improved the detection of form submit buttons. This means more successful form submission on some websites such as the Google sign-in page.",
+        "message": "Ми вдосконалили виявлення кнопок відправлення форм. Це означає, що відправлення заповнених форм стало точнішим на деяких веб-сайтах, таких як сторінка входу в Google.",
         "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
     },
     "kee_vault_announcement_1": {
-        "message": "Kee Vault is a new open source password manager. It runs in your web browser so no installation is necessary.",
+        "message": "Kee Vault - це новий менеджер паролів з відкритим кодом. Він працює у вашому браузері, отже його не потрібно встановлювати.",
         "description": "Introduction to what Kee Vault is"
     },
     "kee_vault_announcement_2": {
-        "message": "It works on any modern device or web browser, even when offline. After importing your existing KeePass database you can access your Kee Vault from everywhere, with your changes and configuration preferences automatically sent to each of your devices and browsers.",
+        "message": "Він працює з будь-яким сучасним пристроєм чи браузером, навіть офлайн. Після імпорту вашої бази даних KeePass ви можете отримати доступ до Kee Vault звідусіль, з останніми вашими змінами та налаштуваннями, що автоматично зберігаються на кожному вашому пристрої та браузері.",
         "description": "Outlines a few benefits of Kee Vault compared to KeePass"
     },
     "kee_vault_announcement_3": {
-        "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
+        "message": "Kee версії 3.0 дозволяє вам використовувати Kee Vault замість програми KeePass, з підтримкою всіх наявних функцій Kee, таких як заповнення форм, збереження, пошук та генерування паролів.",
         "description": "Explains that Kee v3 works with Kee Vault"
     },
     "kee_vault_announcement_4": {
-        "message": "Kee Vault is almost ready to launch as a public beta and I'm delighted to offer all existing Kee users an opportunity to get early access before this happens!",
+        "message": "Kee Vault майже готовий до запуску у вигляді публічної бета-версії, і я з радістю пропоную всім користувачам Kee можливість раннього доступу, до того як це станеться!",
         "description": "Announces the pre-release availability of Kee Vault"
     },
     "kee_vault_announcement_5": {
-        "message": "Read more and register for early access",
+        "message": "Дізнайтеся більше та зареєструйтеся для раннього доступу",
         "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
     },
     "showEntry": {
-        "message": "Show Entry",
+        "message": "Показати запис",
         "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
     },
     "list_version_upgrade_3_2": {
-        "message": "Overriding the auto-submit behaviour of an entry in Kee Vault or KeePass now also affects the behaviour of Kee when you manually ask Kee to fill an entry.;Re-arranged the \"Filling Entries\" section in Kee Options to clarify which settings affect automatic and manual entry filling behaviour.;Automatic fill operations now skip filling if pre-existing text is found in the field.;A dismissable message announcing the launch of Kee Vault can be added to the bottom of the Kee panel when we are ready to launch.;Removed old logging features (initial load notification and sensitive logging option for debugging).",
+        "message": "Перевизначення автоматичного відправлення форм для запису в Kee Vault чи KeePass тепер також впливає на поведінку Kee, коли ви обираєте вручну заповнення форм в Kee.;Перевизначено розділ \"Заповнення записів\" в налаштуваннях Kee, щоб відобразити які налаштування впливають на автоматичне та ручне заповнення форм.;Операції автоматичного заповнення тепер пропускають заповнення, якщо в полі виявлено наявний текст.;Одноразове повідомлення про запуск Kee Vault може бути додано до нижньої частини панелі Kee, коли ми готові до запуску.;Вилучено застарілі функції журналювання (початкове сповіщення про завантаження та чутливість журналювання для зневадження).",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
-    "kee_vault_launch_hidden_confirmation": {
-        "message": "We won't show you this again. If you want to support Kee later, visit www.kee.pm. Thanks!",
-        "description": "Shown to user after they permanently dismiss the Kee Vault Launch message at the bottom of the main Kee popup."
-    },
-    "kee_vault_launch_now": {
-        "message": "Kee Vault is launching now on Product Hunt!",
-        "description": "Main Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_support_us": {
-        "message": "Please support us and check out our time-limited launch offer.",
-        "description": "Secondary Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_cta": {
-        "message": "Visit us on Product Hunt",
-        "description": "Button Call To Action text for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period. Ideally, please start or end the statement with 'Product Hunt' since this will appear neater, but don't worry if that just doesn't make sense in your language."
-    },
     "pref_automatic": {
-        "message": "Automatic",
+        "message": "Автоматично",
         "description": "Group of settings that relate to the actions that Kee can take automatically when filling entries"
     },
     "pref_manual": {
-        "message": "Manual",
+        "message": "Вручну",
         "description": "Group of settings that relate to the actions that Kee takes when the user explicitly asks Kee to fill an entry"
     },
     "pref_fill_override_hint": {
-        "message": "Edit individual entries in your password manager to override this behaviour.",
+        "message": "Змінюйте окремі записи в своєму менеджері паролів, щоб перевизначити цю поведінку.",
         "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_fill_override_option": {
-        "message": "Editing the Auto-submit behaviour of an entry also overrides this behaviour",
+        "message": "Зміна поведінки автоматичного відправлення запису також перевизначає цю поведінку",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "KB_shortcut_simple_2_desc": {

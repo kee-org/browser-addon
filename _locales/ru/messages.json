@@ -359,6 +359,22 @@
         "message": "Копировать",
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
+    "copy_value_to_clipboard": {
+        "message": "Copy value to clipboard",
+        "description": "Indicates to the user that when they click here the value for that field will be copied to the clipboard."
+    },
+    "click_to_reveal_hide": {
+        "message": "Click to reveal/hide",
+        "description": "Indicates to the user that when they click here the value of the protected field will be displayed or hidden (toggled)."
+    },
+    "no_name": {
+        "message": "no name",
+        "description": "Used in place of a field name when the specific field has no name. Will be surrounded by [ square brackets ]"
+    },
+    "matches_from_other_sites": {
+        "message": "Matches from other sites",
+        "description": "Search results section header."
+    },
     "create": {
         "message": "Создать",
         "description": ""
@@ -430,6 +446,10 @@
     "loggedInMultiple_tip": {
         "message": "Вы подключены к $1 базам паролей. '$2' активна.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "multiplePasswordSourcesEnabled": {
+        "message": "$1 password sources enabled",
+        "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
         "message": "$1 - $2",
@@ -770,22 +790,6 @@
     "list_version_upgrade_3_2": {
         "message": "Overriding the auto-submit behaviour of an entry in Kee Vault or KeePass now also affects the behaviour of Kee when you manually ask Kee to fill an entry.;Re-arranged the \"Filling Entries\" section in Kee Options to clarify which settings affect automatic and manual entry filling behaviour.;Automatic fill operations now skip filling if pre-existing text is found in the field.;A dismissable message announcing the launch of Kee Vault can be added to the bottom of the Kee panel when we are ready to launch.;Removed old logging features (initial load notification and sensitive logging option for debugging).",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
-    },
-    "kee_vault_launch_hidden_confirmation": {
-        "message": "We won't show you this again. If you want to support Kee later, visit www.kee.pm. Thanks!",
-        "description": "Shown to user after they permanently dismiss the Kee Vault Launch message at the bottom of the main Kee popup."
-    },
-    "kee_vault_launch_now": {
-        "message": "Kee Vault is launching now on Product Hunt!",
-        "description": "Main Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_support_us": {
-        "message": "Please support us and check out our time-limited launch offer.",
-        "description": "Secondary Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_cta": {
-        "message": "Visit us on Product Hunt",
-        "description": "Button Call To Action text for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period. Ideally, please start or end the statement with 'Product Hunt' since this will appear neater, but don't worry if that just doesn't make sense in your language."
     },
     "pref_automatic": {
         "message": "Automatic",

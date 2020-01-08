@@ -359,6 +359,22 @@
         "message": "Copiar",
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
+    "copy_value_to_clipboard": {
+        "message": "Copiar valor para área de transferência",
+        "description": "Indicates to the user that when they click here the value for that field will be copied to the clipboard."
+    },
+    "click_to_reveal_hide": {
+        "message": "Clique para revelar/ocultar",
+        "description": "Indicates to the user that when they click here the value of the protected field will be displayed or hidden (toggled)."
+    },
+    "no_name": {
+        "message": "sem nome",
+        "description": "Used in place of a field name when the specific field has no name. Will be surrounded by [ square brackets ]"
+    },
+    "matches_from_other_sites": {
+        "message": "Correspondências de outros sites",
+        "description": "Search results section header."
+    },
     "create": {
         "message": "Criar",
         "description": ""
@@ -430,6 +446,10 @@
     "loggedInMultiple_tip": {
         "message": "Você está logado em $1 banco de dados de senhas. '$2' está ativo.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
+    },
+    "multiplePasswordSourcesEnabled": {
+        "message": "$1 fontes de senhas habilitadas",
+        "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
         "message": "$1 - $2",
@@ -770,22 +790,6 @@
     "list_version_upgrade_3_2": {
         "message": "Ignorar o comportamento de envio automático de uma entrada no Kee Vault ou KeePass agora também afeta o comportamento do Kee quando você solicita manualmente ao Kee para preencher uma entrada.; Reorganizou a seção \"Entradas de preenchimento\" nas Opções do Kee para esclarecer quais configurações afetam e o comportamento de preenchimento de entrada manual. As operações de preenchimento automático agora ignoram o preenchimento se for encontrado texto preexistente no campo. Uma mensagem descartável anunciando o lançamento do Kee Vault pode ser adicionada à parte inferior do painel do Kee quando estivermos prontos para iniciar.;Removido antigos recursos de registro (notificação de carregamento inicial e opção de registro sensível para depuração).",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
-    },
-    "kee_vault_launch_hidden_confirmation": {
-        "message": "Nós não vamos mostrar isso de novo. Se você quiser apoiar o Kee mais tarde, visite www.kee.pm. Obrigado!",
-        "description": "Shown to user after they permanently dismiss the Kee Vault Launch message at the bottom of the main Kee popup."
-    },
-    "kee_vault_launch_now": {
-        "message": "O Kee Vault está sendo lançado agora no Product Hunt!",
-        "description": "Main Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_support_us": {
-        "message": "Por favor, apoie-nos e confira nossa oferta de lançamento por tempo limitado.",
-        "description": "Secondary Heading for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period."
-    },
-    "kee_vault_launch_cta": {
-        "message": "Visite-nos no Product Hunt",
-        "description": "Button Call To Action text for the Kee Vault Launch message at the bottom of the main Kee popup that will be displayed during the launch period. Ideally, please start or end the statement with 'Product Hunt' since this will appear neater, but don't worry if that just doesn't make sense in your language."
     },
     "pref_automatic": {
         "message": "Automático",
