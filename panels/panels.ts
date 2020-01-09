@@ -47,6 +47,7 @@ function startup () {
                 }
                 if (m.mutation) {
                     syncContent.onRemoteMutation(m.mutation);
+                    return;
                 }
 
                 if (m.frameState) updateFrameState(m.frameState);
@@ -76,6 +77,7 @@ function startup () {
                 }
                 if (m.mutation) {
                     syncContent.onRemoteMutation(m.mutation);
+                    return;
                 }
 
                 if (m.frameState) updateFrameState(m.frameState);
@@ -134,6 +136,7 @@ function startup () {
                 }
                 if (m.mutation) {
                     syncContent.onRemoteMutation(m.mutation);
+                    return;
                 }
 
                 if (m.frameState) updateFrameState(m.frameState);

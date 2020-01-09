@@ -152,6 +152,7 @@ function connectToMessagingPort () {
         }
         if (m.mutation) {
             syncContent.onRemoteMutation(m.mutation);
+            return;
         }
 
         if (!connected) {

@@ -97,6 +97,7 @@ function startup () {
         }
         if (m.mutation) {
             syncContent.onRemoteMutation(m.mutation);
+            return;
         }
 
         if (store.state.connected && m.findMatchesResult) {
