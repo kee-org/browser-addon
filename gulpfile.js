@@ -344,6 +344,7 @@ gulp.task('copyStaticManifest', gulp.series(function copyStaticManifest() {
 
 gulp.task('modifyBuildFilesForCrossBrowser', gulp.series(function modifyBuildFilesForCrossBrowser() {
     if (DEBUG) {
+        console.log("Modifying manifest for cross-browser debug");
         return merge (
             gulp.src([buildDirDebugFirefox + '/manifest.json'])
             .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
@@ -360,6 +361,7 @@ gulp.task('modifyBuildFilesForCrossBrowser', gulp.series(function modifyBuildFil
             .pipe(gulp.dest(buildDirDebugChrome))
         );
     } else {
+        console.log("Modifying manifest for cross-browser production");
         return merge (
             gulp.src([buildDirProdFirefox + '/manifest.json'])
             .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
@@ -377,10 +379,11 @@ gulp.task('modifyBuildFilesForCrossBrowser', gulp.series(function modifyBuildFil
     }
 }));
 
-gulp.task('static:manifest', gulp.series("clean:static:manifest", (function staticManifest() {
-    if (WATCH) return gulp.series("copyStaticManifest");
-    else return gulp.series("copyStaticManifest", "modifyBuildFilesForCrossBrowser");
-})()));
+gulp.task('static:manifest', gulp.series("clean:static:manifest", function staticManifest(done) {
+    if (WATCH) gulp.series("copyStaticManifest")();
+    else gulp.series("copyStaticManifest", "modifyBuildFilesForCrossBrowser")();
+    done();
+}));
 
 gulp.task('static', gulp.parallel('static:popup','static:panels','static:page','static:background',
     'static:settings','static:dialogs','static:common','static:commonFonts',
