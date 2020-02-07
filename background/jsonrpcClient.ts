@@ -6,6 +6,7 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Config } from "../common/config";
 import store from "../store";
+import { WebsocketSessionManager } from "./WebsocketSession";
 
 /*
 jsonrpcClient provides a JSON-RPC client and method proxies for
@@ -107,6 +108,9 @@ export class jsonrpcClient {
 
     findLogins (fullURL: string, formSubmitURL, httpRealm, uniqueID: string, dbFileName, freeText, username, callback: (resultWrapper: Partial<ResultWrapper>) => void)
     {
+        if (store.state.KeePassDatabases.length <= 0) {
+            callback({ result: []});
+        }
         let lst = "LSTall";
         if (httpRealm == undefined || httpRealm == null || httpRealm == "")
             lst = "LSTnoRealms";
@@ -123,11 +127,22 @@ export class jsonrpcClient {
 
         // If we have been asked to search in a specific DB filename (possibly implicitly by
         // user settings) we can search in just that session, otherwise we search them all
-        const sessionManagers = [];
+        const potentialSessionManagers: (WebsocketSessionManager | EventSessionManager)[] = [];
         if (dbFileName)
-            sessionManagers.push(this.sessionManagerForFilename(dbFileName));
+            potentialSessionManagers.push(this.sessionManagerForFilename(dbFileName));
         else {
-            sessionManagers.push(...this.kprpcClient.getManagersForActiveSessions());
+            potentialSessionManagers.push(...this.kprpcClient.getManagersForActiveSessions());
+        }
+
+        const sessionManagers = potentialSessionManagers.filter(sm =>
+            {
+                return (sm instanceof EventSessionManager && store.state.KeePassDatabases.some(db => db.sessionType == SessionType.Event))
+                || (sm instanceof WebsocketSessionManager && store.state.KeePassDatabases.some(db => db.sessionType == SessionType.Websocket));
+            }
+        );
+
+        if (sessionManagers.length <= 0) {
+            callback({ result: []});
         }
 
         const urls = [];
