@@ -44,6 +44,10 @@ export const updateSubmittedData = ({ commit }, payload) => {
     commit(types.updateSubmittedData, payload || null);
 };
 
+export const updateSaveState = ({ commit }, payload) => {
+    commit(types.updateSaveState, payload || null);
+};
+
 export const updateSearchResults = ({ commit }, payload) => {
     commit(types.updateSearchResults, payload || null);
 };

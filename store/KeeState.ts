@@ -1,7 +1,7 @@
 import { Database, PasswordProfile } from "../common/kfDataModel";
 import { KeeNotification } from "../common/KeeNotification";
-import { SubmittedData } from "../common/SubmittedData";
 import { SearchResult } from "../common/search";
+import { SaveState } from "../common/SaveState";
 
 export interface KeeState {
     latestConnectionError: string;
@@ -13,7 +13,7 @@ export interface KeeState {
     connected: boolean;
     connectedWebsocket: boolean;
     currentSearchTerm: string;
-    submittedData: SubmittedData;
     loginsFound: boolean;
     searchResults: SearchResult[];
+    saveState: SaveState;
 }
