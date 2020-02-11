@@ -1,37 +1,51 @@
 
 <template>
   <v-app id="inspire" :dark="darkTheme" style="overflow-y: hidden">
-      <v-toolbar app fixed style="max-width: 400px;">
-          <SearchInput v-show="showSearchPanel"/>
+    <v-toolbar v-show="showSearchPanel" app fixed style="max-width: 400px;">
+        <SearchInput/>
       </v-toolbar>
     <v-content style="overflow-y: hidden">
       <v-container fluid fill-height style="padding: 0px; overflow-y: hidden">
         <v-layout row wrap justify-center align-top style="overflow-y: scroll;padding-right: 24px;padding-left: 32px;">
           <v-flex xs12 class="pb-4">
+            <v-alert
+              v-show="showSaveRecovery"
+              :value="true"
+              color="warning"
+              icon="warning"
+              outline
+            >Continue saving or discard your changes?<br/>
+                  <v-btn>Take action</v-btn>
+                  <v-btn>Take action 2</v-btn>
+            </v-alert>
             <div v-if="showNotifications" id="notifications" class="pt-4">
                 <Notification v-for="n of notifications" :notification="n" :key="n.id"></Notification>
             </div>
             <SearchResults v-show="showSearchPanel" :matchedLogins="matchedLogins" :frameId="frameId"></SearchResults>
+            <Save1stParty v-show="showSaveStart"></Save1stParty>
+            
+            
           </v-flex>
         </v-layout>
         
       </v-container>
     </v-content>
 
-<v-speed-dial v-show="showSaveLatestLogin || showGeneratePasswordLink" absolute bottom right direction="top" style="bottom: 75px; right: 24px">
-            <template v-slot:activator>
-              <v-btn color="light-blue darken-2" fab small>
-                <v-icon>add</v-icon>
-                <v-icon>close</v-icon>
-              </v-btn>
-            </template>
-            <v-btn v-show="showSaveLatestLogin" right color="light-blue lighten-3" absolute style="bottom: 80px; right: 0px" @click="saveLatestLogin">{{ $i18n('saveLatestLogin') }}
-                <v-icon class="pl-3">add_circle</v-icon>
-            </v-btn>
-            <v-btn v-show="showGeneratePasswordLink" right color="light-blue lighten-3" absolute style="bottom: 20px; right: 0px" @click="generatePassword">{{ $i18n('Menu_Button_copyNewPasswordToClipboard_label') }}
-              <v-icon class="pl-3">flash_on</v-icon>
-            </v-btn>
-          </v-speed-dial>
+    <v-fade-transition>
+      <v-btn
+        v-show="showSearchPanel && !showSaveRecovery"
+        color="light-blue darken-2"
+        fab
+        small
+        absolute
+        bottom
+        right
+        style="bottom: 75px; right: 24px"
+        @click="saveStart"
+      >
+        <v-icon>add</v-icon>
+      </v-btn>
+    </v-fade-transition> <!-- </v-fab-transition> -->
 
     <v-footer height="auto">
       <v-tooltip top>
@@ -94,22 +108,26 @@
 import { Component } from "vue";
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 import { names as actionNames } from '../store/action-names';
-import { SessionType } from '../common/kfDataModel';
+import { SessionType, keeLoginInfo } from '../common/kfDataModel';
 import { KeeState } from '../store/KeeState';
 import Notification from "./components/Notification.vue";
 import SearchInput from "./components/SearchInput.vue";
 import SearchResults from "./components/SearchResults.vue";
+import Save1stParty from "./components/Save1stParty.vue";
 import { Port } from '../common/port';
 import { Action } from '../common/Action';
 import { KeeLog } from '../common/Logger';
+import { SaveState } from "../common/SaveState";
+import { KeeVue } from "./KeeVue";
 
 export default {
     props: ['matchedLogins', 'frameId'],
   computed: {
-    ...mapGetters(['showGeneratePasswordLink', 'showSaveLatestLogin', 
+    ...mapGetters(['showGeneratePasswordLink', 'saveState', 
     'showMatchedLogins','showOpenKeePassButton','connectionStatus',
     'connectionStatusDetail', 'connected', 'databaseIsOpen',
-    'notifications', 'showNotifications', 'showSearchPanel']),
+    'notifications', 'showNotifications', 'showSearchPanel',
+    'showSaveStart','showSaveRecovery']),
     darkTheme: () => window.matchMedia("prefers-color-scheme: dark").matches,
     statusIconColour: function (this: any) {
         if (this.connected && this.databaseIsOpen) {
@@ -127,9 +145,12 @@ export default {
         browser.runtime.openOptionsPage();
         window.close();
     },
-    generatePassword: () => {
-        Port.postMessage({ action: Action.GeneratePassword });
-        window.close();
+    saveStart: function(this: KeeVue) {
+      const newObj = Object.assign(Object.assign({}, this.$store.state.saveState), {startedAt: new Date()});
+      this.$store.dispatch(
+        "updateSaveState",
+        newObj
+      );
     },
     saveLatestLogin: () => {
         Port.postMessage({ action: Action.SaveLatestLogin });
@@ -170,7 +191,8 @@ export default {
   components: {
       Notification,
       SearchResults,
-      SearchInput
+      SearchInput,
+      Save1stParty
   },
 
   mixins: [Port.mixin]

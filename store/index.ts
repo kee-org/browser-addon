@@ -6,6 +6,7 @@ import mutations from "./mutations";
 import * as actions from "./actions";
 import * as mTypes from "./mutation-types";
 import { KeeState } from "./KeeState";
+import {SaveState} from "../common/SaveState";
 
 Vue.use(Vuex);
 
@@ -21,9 +22,9 @@ export default new Vuex.Store<KeeState>({
         connected: false,
         connectedWebsocket: false,
         currentSearchTerm: null,
-        submittedData: null,
         loginsFound: false,
-        searchResults: null
+        searchResults: null,
+        saveState: new SaveState()
     },
     getters,
     mutations,

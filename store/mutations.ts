@@ -1,6 +1,7 @@
 import * as types from "./mutation-types";
 import { KeeState } from "./KeeState";
 import { keeLoginInfo } from "../common/kfDataModel";
+import { SaveState } from "../common/SaveState";
 
 function undefAbort (payload) {
     if (payload === undefined) {
@@ -51,7 +52,14 @@ export default {
     },
     [types.updateSubmittedData] (state: KeeState, payload) {
         undefAbort(payload);
-        state.submittedData = payload;
+        if (!state.saveState) {
+            state.saveState = new SaveState();
+        }
+        state.saveState.submittedData = payload;
+    },
+    [types.updateSaveState] (state: KeeState, payload: SaveState) {
+        undefAbort(payload);
+        state.saveState = payload;
     },
     [types.updateSearchResults] (state: KeeState, payload) {
         undefAbort(payload);

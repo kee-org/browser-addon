@@ -12,3 +12,4 @@ export const updateLoginsFound = "updateLoginsFound";
 export const updateContextMenuResult = "updateContextMenuResult";
 export const updateSearchResults = "updateSearchResults";
 export const addNotification = "addNotification";
+export const updateSaveState = "updateSaveState";
