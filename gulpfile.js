@@ -166,13 +166,11 @@ gulp.task("sign", function sign (done) {
     done();
 });
 
+/********** LINTING TYPESCRIPT AND VUE **********/
 
-/********** LINTING TYPESCRIPT **********/
-
-gulp.task("lint:ts",
-// ["lint:background", "lint:popup", "lint:panels", "lint:page", "lint:vault", "lint:settings", "lint:dialogs" ],
-    gulp.series(function lintTs () {
-        return gulp.src(["**/*.ts", "!node_modules/**/*.ts", "!typedefs/**/*.ts"])
+gulp.task("lint",
+    gulp.series(function lint () {
+        return gulp.src(["**/*.{vue,ts}", "!node_modules/**/*.ts", "!typedefs/**/*.ts"])
             // eslint() attaches the lint output to the "eslint" property
             // of the file object so it can be used by other modules.
             .pipe(eslint())
@@ -186,11 +184,11 @@ gulp.task("lint:ts",
 
 /********** COMPILING TYPESCRIPT **********/
 
-gulp.task("watchts", gulp.series(gulp.parallel("clean:ts", "lint:ts"), function watchTs () {
+gulp.task("watchts", gulp.series(gulp.parallel("clean:ts", "lint"), function watchTs () {
     return executeRollup();
 }));
 
-gulp.task("compilets:all", gulp.series(gulp.parallel("clean:ts", "lint:ts"), function compileTsAll () {
+gulp.task("compilets:all", gulp.series(gulp.parallel("clean:ts", "lint"), function compileTsAll () {
     return executeRollup();
 }));
 
