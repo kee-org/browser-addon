@@ -59,6 +59,11 @@ function startup () {
                 new Vue({
                     el: "#main",
                     store,
+                    vuetify: new Vuetify({
+                        theme: {
+                            dark: window.matchMedia("prefers-color-scheme: dark").matches
+                        }
+                    }),
                     //render: h => h(App),
                     render (h) {
                         return h(App, {

@@ -5,10 +5,11 @@
     "@rollup/plugin-node-resolve": "^6.0.0",
     "@rollup/plugin-url": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^2.19.2",
-    "@typescript-eslint/eslint-plugin-tslint": "^2.19.2",
     "@typescript-eslint/parser": "^2.19.2",
     "del": "^5.1.0",
     "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^6.1.2",
+    "eslint-plugin-vuetify": "^1.0.0-beta.6",
     "firefox-addons-add-update-version": "1.0.1",
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
@@ -24,13 +25,12 @@
     "rollup-plugin-typescript2": "^0.25.3",
     "rollup-plugin-vue": "^5.1.4",
     "sign-addon": "^2.0.4",
-    "tslint": "^5.20.1",
     "typescript": "^3.7.3",
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
     "vue": "^2.6.11",
-    "vuetify": "^1.5.21",
+    "vuetify": "^2.2.12",
     "vuex": "^3.1.2"
   },
   "scripts": {
@@ -41,6 +41,6 @@
     "package:prod": "gulp package:prod",
     "package": "gulp package:prod & gulp package:debug",
     "sign": "gulp sign",
-    "lint": "gulp lint:ts"
+    "lint": "gulp lint"
   }
 }

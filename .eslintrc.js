@@ -1,5 +1,9 @@
+const INLINE_ELEMENTS = require('./node_modules/eslint-plugin-vue/lib/utils/inline-non-void-elements.json');
+const htmlElementContentNewlineIgnores = ["pre", "textarea", "v-icon", ...INLINE_ELEMENTS];
+
 module.exports = {
-    "extends": "eslint:recommended",
+    "extends": ["eslint:recommended",
+    'plugin:vue/recommended'],
     "env": {
         "browser": true,
         "es6": true
@@ -14,16 +18,33 @@ module.exports = {
         "BigInteger": "readonly",
         "__KeeIsRunningInAWebExtensionsBrowser": "readonly"
     },
-    "parser": "@typescript-eslint/parser",
+    "parser": "vue-eslint-parser",
     "parserOptions": {
+        "parser": "@typescript-eslint/parser",
         "project": "tsconfig.json",
-        "sourceType": "module"
+        "sourceType": "module",
+        "extraFileExtensions": [".vue"]
     },
     "plugins": [
         "@typescript-eslint",
-        "@typescript-eslint/tslint"
+        "vuetify"
     ],
     "rules": {
+        "vue/require-prop-types": "off",
+        "vue/singleline-html-element-content-newline": ["error", {
+            "ignoreWhenNoAttributes": true,
+            "ignoreWhenEmpty": true,
+            "ignores": htmlElementContentNewlineIgnores
+        }],
+        "vue/multiline-html-element-content-newline": ["error", {
+            "ignoreWhenEmpty": true,
+            "ignores": htmlElementContentNewlineIgnores,
+            "allowEmptyLines": false
+        }],
+        "vue/attribute-hyphenation": "off",
+        "vuetify/no-deprecated-classes": "error",
+        "vuetify/grid-unknown-attributes": "error",
+        "vuetify/no-legacy-grid": "error",
         "@typescript-eslint/consistent-type-assertions": "error",
         "@typescript-eslint/indent": "error",
         "@typescript-eslint/member-delimiter-style": [
@@ -134,18 +155,18 @@ module.exports = {
             "error",
             "always"
         ],
-        "@typescript-eslint/tslint/config": [
-            "error",
-            {
-                "rules": {
-                    "whitespace": [
-                        true,
-                        "check-branch",
-                        "check-separator",
-                        "check-type"
-                    ]
-                }
-            }
-        ]
+        // "@typescript-eslint/tslint/config": [
+        //     "error",
+        //     {
+        //         "rules": {
+        //             "whitespace": [
+        //                 true,
+        //                 "check-branch",
+        //                 "check-separator",
+        //                 "check-type"
+        //             ]
+        //         }
+        //     }
+        // ]
     }
 };
