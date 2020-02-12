@@ -237,9 +237,11 @@ export class Search {
                                 const itemDomain = itemIsIPAddress ? itemHostname : utils.psl.getDomain(itemHostname);
                                 return (filterDomain === itemDomain);
                             } catch (e) { return false; } // ignore invalid URLs
-                            });
+                        });
                         if (filteredItems.length > 0) return true;
-                    } catch (e) { } // ignore invalid URLs
+                    } catch (e) {
+                        // ignore invalid URLs
+                    }
                 }
                 return false;
             };

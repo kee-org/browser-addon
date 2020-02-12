@@ -25,10 +25,10 @@ function convertSingleLoginEntryResult (result)
 
     try {
         if (result && result.length == 1) {
-                const kfl = new keeLoginInfo();
-                kfl.initFromEntry(result[0]);
-                // strip functions in case this upsets vuex state transfer across processes
-                return JSON.parse(JSON.stringify(kfl));
+            const kfl = new keeLoginInfo();
+            kfl.initFromEntry(result[0]);
+            // strip functions in case this upsets vuex state transfer across processes
+            return JSON.parse(JSON.stringify(kfl));
         } else {
             isError = true;
         }
@@ -56,34 +56,32 @@ function startup () {
             syncContent.init(m.initialState, (mutation: MutationPayload) => {
                 Port.postMessage({mutation} as AddonMessage);
             }, () => {
-                /* eslint-disable no-new */
-                // tslint:disable-next-line:no-unused-expression
                 new Vue({
                     el: "#main",
                     store,
                     //render: h => h(App),
                     render (h) {
                         return h(App, {
-                          props: {
-                            matchedLogins: !m.logins ? null : m.logins.map(
-                                e => ({
-                                    fullDetails: e,
-                                    dbFileName: e.database.fileName,
-                                    iconImageData: e.iconImageData,
-                                    path: e.parentGroup.path,
-                                    relevanceScore: e.relevanceScore,
-                                    title: e.title,
-                                    uRLs: e.URLs,
-                                    uniqueID: e.uniqueID,
-                                    url: e.URLs[0],
-                                    usernameName: (e.otherFields && e.usernameIndex >= 0) ? e.otherFields[e.usernameIndex].name : "<no username>",
-                                    usernameValue: (e.otherFields && e.usernameIndex >= 0) ? e.otherFields[e.usernameIndex].value : "<no username>"
-                                } as SearchResult)
-                            ),
-                            frameId: m.frameId
-                          }
+                            props: {
+                                matchedLogins: !m.logins ? null : m.logins.map(
+                                    e => ({
+                                        fullDetails: e,
+                                        dbFileName: e.database.fileName,
+                                        iconImageData: e.iconImageData,
+                                        path: e.parentGroup.path,
+                                        relevanceScore: e.relevanceScore,
+                                        title: e.title,
+                                        uRLs: e.URLs,
+                                        uniqueID: e.uniqueID,
+                                        url: e.URLs[0],
+                                        usernameName: (e.otherFields && e.usernameIndex >= 0) ? e.otherFields[e.usernameIndex].name : "<no username>",
+                                        usernameValue: (e.otherFields && e.usernameIndex >= 0) ? e.otherFields[e.usernameIndex].value : "<no username>"
+                                    } as SearchResult)
+                                ),
+                                frameId: m.frameId
+                            }
                         });
-                      }
+                    }
                 });
 
                 // This maybe could be moved to onMounted once all vuex state is changed before this popup is opened.
@@ -101,7 +99,7 @@ function startup () {
         }
 
         if (store.state.connected && m.findMatchesResult) {
-             store.dispatch("updateContextMenuResult", convertSingleLoginEntryResult(m.findMatchesResult) );
+            store.dispatch("updateContextMenuResult", convertSingleLoginEntryResult(m.findMatchesResult) );
         }
 
         // if (store.state.connected && m.findMatchesResult) {

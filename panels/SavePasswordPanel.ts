@@ -100,7 +100,7 @@ export class SavePasswordPanel {
         sel.setAttribute("id", "kee-save-password-db-select");
         sel.addEventListener("change", this.DBChangeHandler.bind(this), false);
         for (const o of dbOptions)
-          sel.appendChild(o);
+            sel.appendChild(o);
 
         this.saveData.db = sel.selectedOptions[0].value;
 
@@ -160,7 +160,7 @@ export class SavePasswordPanel {
             sel.remove(opt);
         }
         for (const o of groupOptions)
-          sel.appendChild(o);
+            sel.appendChild(o);
 
         const currentOpt = sel.selectedOptions[0];
         sel.style.backgroundImage = currentOpt.style.backgroundImage;
@@ -264,7 +264,7 @@ export class SavePasswordPanel {
         searchBox.classList.add("Kee-Search");
         searchBox.addEventListener("input", e => {
             this.search.execute((e.target as any).value, this.onSearchComplete.bind(this),
-            (e.target as any).ownerDocument.getElementById("Kee-SaveLogin-searchfilter").selectedOptions[0].value.split(","));
+                (e.target as any).ownerDocument.getElementById("Kee-SaveLogin-searchfilter").selectedOptions[0].value.split(","));
         }, false);
 
         const searchFields = (new SearchFilter()).attachFilterToSearchBox(searchBox, this, [this.submittedData.url], this.search);

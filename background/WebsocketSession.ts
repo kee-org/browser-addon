@@ -77,8 +77,7 @@ export class WebsocketSessionManager {
         this.reconnectionAttemptFrequency = 2000;
         this.connectionTimeout = 10000; // short timeout for connections
         this.activityTimeout = 3600000; // long timeout for activity
-        this.connectLock = false;       // protect the connect function so only one event
-                                        // thread (e.g. timer) can execute it at the same time
+        this.connectLock = false;       // protect the connect function so only one event thread (e.g. timer) can execute it at the same time
         this.wasEverOpen = false;       // Allows us to only do cleanup when required
 
         this.webSocketHost = "127.0.0.1";

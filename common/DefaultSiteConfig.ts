@@ -1,6 +1,6 @@
 import { SiteConfigIndex, SiteConfigLookup } from "./config";
 
-export let defaultSiteConfig = new SiteConfigIndex();
+export const defaultSiteConfig = new SiteConfigIndex();
 defaultSiteConfig.pageRegex = new SiteConfigLookup();
 
 defaultSiteConfig.pageRegex["^.*$"] =
@@ -37,18 +37,18 @@ defaultSiteConfig.pageRegex["^.*$"] =
             whiteList: {
                 form: { names: ["login"], ids: ["login"]},
                 fields: { names: ["username", "j_username", "user_name", "user", "user-name",
-                 "login", "vb_login_username", "name", "user name", "user id",
-                  "user-id", "userid", "email", "e-mail", "id", "form_loginname",
-                   "wpname", "mail", "loginid", "login id", "login_name",
+                    "login", "vb_login_username", "name", "user name", "user id",
+                    "user-id", "userid", "email", "e-mail", "id", "form_loginname",
+                    "wpname", "mail", "loginid", "login id", "login_name",
                     "openid_identifier", "authentication_email", "openid",
-                     "auth_email", "auth_id", "authentication_identifier",
-                      "authentication_id", "customer_number", "customernumber", "onlineid"],
-                      ids: ["username", "j_username", "user_name", "user", "user-name",
-                 "login", "vb_login_username", "name", "user-id", "userid", "email",
-                  "e-mail", "id", "form_loginname", "wpname", "mail", "loginid",
-                   "login_name", "openid_identifier", "authentication_email", "openid",
+                    "auth_email", "auth_id", "authentication_identifier",
+                    "authentication_id", "customer_number", "customernumber", "onlineid"],
+                ids: ["username", "j_username", "user_name", "user", "user-name",
+                    "login", "vb_login_username", "name", "user-id", "userid", "email",
+                    "e-mail", "id", "form_loginname", "wpname", "mail", "loginid",
+                    "login_name", "openid_identifier", "authentication_email", "openid",
                     "auth_email", "auth_id", "authentication_identifier", "authentication_id",
-                     "customer_number", "customernumber", "onlineid"]}
+                    "customer_number", "customernumber", "onlineid"]}
             }
         },
         matchWeight: 0,

@@ -106,4 +106,4 @@ export class KeeLogger {
 
 }
 
-export let KeeLog = new KeeLogger();
+export const KeeLog = new KeeLogger();

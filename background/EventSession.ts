@@ -34,7 +34,7 @@ export class EventSessionManager {
     }
 
     public features () {
-        return !!this.latestSession ? this._features : [];
+        return this.latestSession ? this._features : [];
     }
 
     public registerCallback (requestId: number, callback: (resultWrapper: Partial<ResultWrapper>) => void) {

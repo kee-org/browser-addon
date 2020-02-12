@@ -136,18 +136,18 @@ export class MatchedLoginsPanel {
         loginContextActions.classList.add("disabled");
 
         const editButton = document.createElement("button");
-            editButton.textContent = $STR("Logins_Context_Edit_Login_label");
-            //"chrome://kee/skin/pencil.png"
-            editButton.addEventListener("click", event => {
-                event.stopPropagation();
-                event.preventDefault();
-                this.myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
-                this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
-            }, false);
-            editButton.addEventListener("keydown", event => {
-                if (event.keyCode === 13) editButton.click();
-            });
-            loginContextActions.appendChild(editButton);
+        editButton.textContent = $STR("Logins_Context_Edit_Login_label");
+        //"chrome://kee/skin/pencil.png"
+        editButton.addEventListener("click", event => {
+            event.stopPropagation();
+            event.preventDefault();
+            this.myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
+            this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
+        }, false);
+        editButton.addEventListener("keydown", event => {
+            if (event.keyCode === 13) editButton.click();
+        });
+        loginContextActions.appendChild(editButton);
 
         const otherFieldCount = (kfl.otherFields != null && kfl.otherFields.length > 0) ? kfl.otherFields.length : 0;
         const usernameField = (otherFieldCount > 0) ? kfl.otherFields[kfl.usernameIndex] : null;

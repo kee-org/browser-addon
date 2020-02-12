@@ -15,7 +15,7 @@ export interface AddonMessage {
     loadUrlUpgradeKee?: boolean;
     addNotification?: KeeNotification;
     removeNotification?: string;
-    findMatches?: { uri?: string, uuid?: string, DBfilename?: string };
+    findMatches?: { uri?: string; uuid?: string; DBfilename?: string };
     findMatchesResult?: any;
     logins?: keeLoginInfo[];
     action?: Action;
@@ -25,7 +25,7 @@ export interface AddonMessage {
     passwordProfile?: string;
     submittedData?: SubmittedData;
     saveData?: SaveData;
-    loginEditor?: { uniqueID: string, DBfilename: string};
+    loginEditor?: { uniqueID: string; DBfilename: string};
     neverSave?: boolean;
     loginsFound?: boolean;
     initialState?: KeeState;

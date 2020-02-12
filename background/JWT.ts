@@ -2,7 +2,7 @@ import { Claim } from "./Claim";
 
 export class JWT {
 
-    public static async verify (sig: string): Promise<{audience: string, claim?: Claim}> {
+    public static async verify (sig: string): Promise<{audience: string; claim?: Claim}> {
 
         const sigParts = sig.split(".");
 

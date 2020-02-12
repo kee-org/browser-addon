@@ -27,14 +27,14 @@ export class NetworkAuth {
         // only executes in other browsers
 
         this.provideCredentialsAsync(requestDetails)
-        .then(
-            result => callback(result)
-        ).catch(
-            reason => {
-                KeeLog.error("AsyncBlockingCallback promise failed: " + reason);
-                callback({ cancel: false });
-            }
-        );
+            .then(
+                result => callback(result)
+            ).catch(
+                reason => {
+                    KeeLog.error("AsyncBlockingCallback promise failed: " + reason);
+                    callback({ cancel: false });
+                }
+            );
     }
 
     public provideCredentialsAsync (
@@ -92,16 +92,18 @@ export class NetworkAuth {
 
                 function handleMessage (request, sender: browser.runtime.MessageSender, sendResponse) {
                     switch (request.action) {
-                        case "NetworkAuth_ok":
+                        case "NetworkAuth_ok": {
                             const login = convertedResult[request.selectedLoginIndex];
                             resolve({ authCredentials: { username: login.otherFields[login.usernameIndex].value, password: login.passwords[0].value } });
                             browser.runtime.onMessage.removeListener(handleMessage);
                             break;
-                        case "NetworkAuth_cancel":
+                        }
+                        case "NetworkAuth_cancel": {
                             resolve({ cancel: false });
                             browser.runtime.onMessage.removeListener(handleMessage);
                             break;
-                        case "NetworkAuth_load":
+                        }
+                        case "NetworkAuth_load": {
                             // Can't use sendResponse() because Mozilla chose to not implement it, contrary to the MDN docs
                             browser.tabs.sendMessage(sender.tab.id, {
                                 action: "NetworkAuth_matchedLogins",
@@ -110,6 +112,7 @@ export class NetworkAuth {
                                 url: url.href,
                                 isProxy: requestDetails.isProxy });
                             break;
+                        }
                     }
                 }
 

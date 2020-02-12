@@ -13,7 +13,7 @@
     {
         "taskName": "lint:ts",
         "args": [],
-        "problemMatcher": "$tslint5"
+        "problemMatcher": "$eslint-stylish"
     },
     {
         "isBuildCommand": true,

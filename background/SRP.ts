@@ -51,7 +51,7 @@ export class SRPc {
     }
 
     // Receive login salts from the server, promise to start calculations
-    receive_salts (s, Bstr) {
+    receiveSalts (s, Bstr) {
         return this.calculations(s, Bstr, this.p);
     }
 
@@ -84,7 +84,7 @@ export class SRPc {
     }
 
     // Receive M2 from the server and verify it
-    confirm_authentication (M2server) {
+    confirmAuthentication (M2server) {
         if (M2server.toLowerCase() == this.M2.toLowerCase()) {
             this.authenticated = true;
             this.success();

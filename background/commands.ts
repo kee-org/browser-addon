@@ -16,7 +16,7 @@ export class KFCommands {
                             port.postMessage({ action: Action.DetectForms });
                         }, this);
                     }
-                break;
+                    break;
                 case Command.PrimaryAction:
                     if (store.state.ActiveKeePassDatabaseIndex < 0) {
                         window.kee.loginToPasswordManager();
@@ -25,10 +25,10 @@ export class KFCommands {
                             port.postMessage({ action: Action.Primary });
                         }, this);
                     }
-                break;
+                    break;
                 case Command.GeneratePassword:
                     window.kee.initiatePasswordGeneration();
-                break;
+                    break;
             }
         });
 
@@ -41,7 +41,7 @@ export class KFCommands {
                             port.postMessage({ action: Action.DetectForms });
                         }, this);
                     }
-                break;
+                    break;
                 // case Command.PrimaryAction:
                 //     if (store.state.ActiveKeePassDatabaseIndex < 0) {
                 //         window.kee.loginToPasswordManager();
@@ -53,7 +53,7 @@ export class KFCommands {
                 // break;
                 case Command.GeneratePassword:
                     window.kee.initiatePasswordGeneration();
-                break;
+                    break;
             }
             if (id.startsWith("matchedLogin-")) {
                 window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(info.frameId).postMessage({ action: Action.ManualFill, selectedLoginIndex: id.substr(id.indexOf("-")+1) });
@@ -81,12 +81,12 @@ export class KFCommands {
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
                         contexts: [ "editable",
-                                "frame",
-                                "image",
-                                "link",
-                                "page",
-                                "password",
-                                "selection" ]
+                            "frame",
+                            "image",
+                            "link",
+                            "page",
+                            "password",
+                            "selection" ]
                     });
                 } catch (e) {
                     // try again with Chrome-supported contexts
@@ -117,7 +117,7 @@ export class KFCommands {
                             "page",
                             "password",
                             "selection" ]
-                });
+                    });
                 } catch (e) {
                     // try again with Chrome-supported contexts
                     browser.contextMenus.create({
@@ -152,7 +152,7 @@ export class KFCommands {
                                     "page",
                                     "password",
                                     "selection" ]
-                        });
+                            });
                         } catch (e) {
                             // try again with Chrome-supported contexts
                             browser.contextMenus.create({
@@ -177,5 +177,5 @@ export class KFCommands {
 }
 
 // initialise the command system
-export let commandManager = new KFCommands();
+export const commandManager = new KFCommands();
 commandManager.init();

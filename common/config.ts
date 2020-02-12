@@ -74,7 +74,7 @@ export class Config {
     saveFavicons: boolean;
     searchAllOpenDBs: boolean;
     siteConfig: SiteConfigIndex;
-    config: { url: string, config: {} }[];
+    config: { url: string; config: {} }[];
     tutorialProgress: string;
     version: number; // default is incremented when changes are introduced that require data migration
     triggerChangeInputEventAfterFill: boolean;

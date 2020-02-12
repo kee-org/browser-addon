@@ -19,7 +19,7 @@ export const KeePassDatabases = (state: KeeState) => state.KeePassDatabases;
 export const databaseName = (state: KeeState) => {
     if (state.KeePassDatabases && state.KeePassDatabases.length && state.ActiveKeePassDatabaseIndex >= 0) {
         const db = state.KeePassDatabases[state.ActiveKeePassDatabaseIndex];
-        return db.name ? db.name : db.fileName.replace(/^.*[\\\/]/, "");
+        return db.name ? db.name : db.fileName.replace(/^.*[\\/]/, "");
     }
     return "";
 };
@@ -52,10 +52,8 @@ export const connectionStatusDetail = (state: KeeState, getters) => {
 export const showOpenKeePassButton = (state: KeeState) => {
     if (state.connectedWebsocket) {
         const hasWebsocketDBs = state.KeePassDatabases.some(db => db.sessionType === SessionType.Websocket);
-        const supportsWebsocketFocus = state.KeePassDatabases.some(db => {
-            return db.sessionType === SessionType.Websocket &&
-                db.sessionFeatures.indexOf("KPRPC_OPEN_AND_FOCUS_DATABASE") >= 0;
-        });
+        const supportsWebsocketFocus = state.KeePassDatabases.some(db => db.sessionType === SessionType.Websocket &&
+                db.sessionFeatures.indexOf("KPRPC_OPEN_AND_FOCUS_DATABASE") >= 0);
         if (!hasWebsocketDBs || supportsWebsocketFocus) {
             return true;
         } else {

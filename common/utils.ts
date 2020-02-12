@@ -236,7 +236,7 @@ export class Utils {
 
     base64urlDecode (input: string) {
         // I don't see why we do any replacements here. Seems a pointless waste of cycles. Needs testing and removal if I'm right.
-        return atob(input.replace(/\-/g, "+").replace(/\_/g, "/"));
+        return atob(input.replace(/-/g, "+").replace(/_/g, "/"));
     }
 
     binaryToByteArray (binary: string): Uint8Array {
@@ -264,4 +264,4 @@ export class Utils {
     }
 }
 
-export let utils = new Utils();
+export const utils = new Utils();

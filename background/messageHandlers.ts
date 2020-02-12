@@ -75,12 +75,13 @@ export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessag
     if (msg.findMatches) {
         window.kee.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
             this.postMessage({ isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId,
-            findMatchesResult: result.result } as AddonMessage);
+                findMatchesResult: result.result } as AddonMessage);
         });
     }
     if (msg.removeNotification) {
         window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
-        try { window.kee.browserPopupPort.postMessage({ isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId } as AddonMessage); } catch (e) {}
+        try { window.kee.browserPopupPort.postMessage({ isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId } as AddonMessage); }
+        catch (e) { /* whatever */ }
     }
     if (msg.logins) {
         window.kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).logins = msg.logins;
@@ -93,22 +94,22 @@ export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessag
 
         const submittedLogin = new keeLoginInfo();
         submittedLogin.init([msg.submittedData.url], null, null, msg.submittedData.usernameIndex,
-        msg.submittedData.passwordFields.map(function (item) {
-            const newField = new keeLoginField();
-            newField.fieldId = item.fieldId;
-            newField.type = item.type;
-            newField.name = item.name;
-            newField.value = item.value;
-            return newField; }),
-        null, msg.submittedData.title,
-        msg.submittedData.otherFields.map(function (item) {
-            const newField = new keeLoginField();
-            newField.fieldId = item.fieldId;
-            newField.type = item.type;
-            newField.name = item.name;
-            newField.value = item.value;
-            return newField; }),
-        1);
+            msg.submittedData.passwordFields.map(function (item) {
+                const newField = new keeLoginField();
+                newField.fieldId = item.fieldId;
+                newField.type = item.type;
+                newField.name = item.name;
+                newField.value = item.value;
+                return newField; }),
+            null, msg.submittedData.title,
+            msg.submittedData.otherFields.map(function (item) {
+                const newField = new keeLoginField();
+                newField.fieldId = item.fieldId;
+                newField.type = item.type;
+                newField.name = item.name;
+                newField.value = item.value;
+                return newField; }),
+            1);
 
         const persistentItem = {
             itemType: "submittedData" as "submittedData",
@@ -156,18 +157,18 @@ export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessag
     if (msg.action === Action.PageHide) {
         try {
             window.kee.tabStates.get(this.sender.frameId).framePorts.forEach((port, key, map) => {
-            try {
-                port.disconnect();
-            } catch (e) {
-                if (KeeLog && KeeLog.debug) {
-                    KeeLog.debug("failed to disconnect a frame port on tab " + key +
+                try {
+                    port.disconnect();
+                } catch (e) {
+                    if (KeeLog && KeeLog.debug) {
+                        KeeLog.debug("failed to disconnect a frame port on tab " + key +
                     ". This is probably not a problem but we may now be reliant on browser " +
                     "GC to clear down memory. The exception that caused this is: " + e.message + " : " + e.stack);
+                    }
+                } finally {
+                    map.delete(key);
                 }
-            } finally {
-                map.delete(key);
-            }
-        });
+            });
         } catch (e) {
             // Happens when an iframe is hidden after the top-level frame. The
             // only impact is some messaging ports remaining open for longer
