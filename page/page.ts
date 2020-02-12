@@ -14,7 +14,7 @@ import { Port } from "../common/port";
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
 
-// tslint:disable-next-line:no-var-keyword
+// eslint-disable-next-line no-var
 var keeDuplicationCount;
 
 if (keeDuplicationCount) {
@@ -34,7 +34,6 @@ let tabId: number;
 let frameId: number;
 let syncContent: SyncContent;
 let connected: boolean = false;
-let inputsObserver: MutationObserver;
 let messagingPortConnectionRetryTimer: number;
 
 function matchFinder (uri: string) {
@@ -73,7 +72,7 @@ function onFirstConnect (myTabId: number, myFrameId: number) {
     tutorialIntegration();
 }
 
-inputsObserver = new MutationObserver(mutations => {
+const inputsObserver = new MutationObserver(mutations => {
 
     // If we have already scheduled a rescan recently, no further action required
     if (formFilling.formFinderTimer !== null) return;

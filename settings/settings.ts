@@ -206,9 +206,7 @@ function validateSitePropertiesValue () {
 
     if ((document.getElementById("sitePropertiesMethodRegex") as HTMLInputElement).checked) {
         try {
-            /* tslint:disable */
             new RegExp((document.getElementById("sitePropertiesValue") as HTMLInputElement).value);
-            /* tslint:enable */
         } catch (e) {
             isValid = false;
         }
@@ -618,7 +616,7 @@ function findSiteConfigValues (
     lookup: SiteConfigLookup,
     target: "Domain" | "Host" | "Page",
     method: "Exact" | "Prefix" | "Regex"
-    ) {
+) {
 
     for (const siteConfigNodeIndex in lookup) {
         if (siteConfigNodeIndex !== "^.*$" && siteConfigNodeIndex.startsWith(searchTerm)) {

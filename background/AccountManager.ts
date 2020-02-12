@@ -73,15 +73,15 @@ export class AccountManager {
         return this.account.featureExpiry > Date.now() - seconds * 1000;
     }
 
-    public get fe_multiSessionTypes () : boolean {
+    public get featureEnabledMultiSessionTypes () : boolean {
         return this.account.features.indexOf("multiSession") >= 0 && this.featuresValidSecondsAgo(3600*24*7);
     }
 
-    public get fe_syncSettings () : boolean {
+    public get featureEnabledSyncSettings () : boolean {
         return this.account.features.indexOf("syncSettings") >= 0 && this.featuresValidSecondsAgo(3600*24*14);
     }
 
-    public get fe_formAccuracy () : boolean {
+    public get featureEnabledFormAccuracy () : boolean {
         return this.account.features.indexOf("formAccuracy") >= 0 && this.featuresValidSecondsAgo(3600*24*3);
     }
 }

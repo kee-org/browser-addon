@@ -16,7 +16,7 @@ declare const chrome;
 // increment when changes are introduced that require data migration
 export const LATEST_VERSION: number = 6;
 
-export let defaultConfig = new Config();
+export const defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
 defaultConfig.autoFillForms = true;
 defaultConfig.autoFillFormsWithMultipleMatches = false;
@@ -183,6 +183,7 @@ export class ConfigManager {
     private migrateToLatestVersion () {
         if (this.current.version >= LATEST_VERSION) return;
         const migrations = new ConfigMigrations();
+        /* eslint-disable no-fallthrough */
         switch (this.current.version) {
             case 1: migrations.migrateToVersion2(this.current);
             case 2: migrations.migrateToVersion3(this.current);
@@ -190,6 +191,7 @@ export class ConfigManager {
             case 4: migrations.migrateToVersion5(this.current);
             case 5: migrations.migrateToVersion6(this.current);
         }
+        /* eslint-enable no-fallthrough */
         this.save();
     }
 
@@ -432,4 +434,4 @@ export class ConfigManager {
 
 }
 
-export let configManager = new ConfigManager();
+export const configManager = new ConfigManager();

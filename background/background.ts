@@ -8,7 +8,7 @@ import store from "../store";
 // import { PersistentLogger } from "../common/PersistentLogger";
 
 declare global {
-    interface Window { kee: Kee; }
+    interface Window { kee: Kee }
     // interface Window { kee: Kee; KeePersistentLogger: PersistentLogger; }
 }
 

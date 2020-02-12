@@ -247,7 +247,7 @@ export class Kee {
             // We don't bother with the WebSocket equivalent because that will automatically be tried
             // regularly anyway.
             // We also don't worry about kicking people off from active sessions if their license expires.
-            if (this.accountManager.fe_multiSessionTypes && !this.KeePassRPC.eventSessionManagerIsActive) {
+            if (this.accountManager.featureEnabledMultiSessionTypes && !this.KeePassRPC.eventSessionManagerIsActive) {
                 this.inviteKeeVaultConnection();
             }
         });
@@ -399,7 +399,7 @@ export class Kee {
             const MRUFN = this.getDatabaseFileName();
             if (MRUFN != null && MRUFN != undefined)
                 configManager.current.keePassMRUDB = MRUFN;
-                configManager.save();
+            configManager.save();
         }
 
         try
@@ -435,7 +435,7 @@ export class Kee {
         }, this);
     }
 
-// if the MRU database is known, open that but otherwise send empty string which will cause user
+    // if the MRU database is known, open that but otherwise send empty string which will cause user
     // to be prompted to choose a DB to open
     getFileNameToOpen ()
     {
@@ -448,10 +448,8 @@ export class Kee {
     openKeePass ()
     {
         const hasWebsocketDBs = store.state.KeePassDatabases.some(db => db.sessionType === SessionType.Websocket);
-        const supportsWebsocketFocus = store.state.KeePassDatabases.some(db => {
-                    return db.sessionType === SessionType.Websocket &&
-                        db.sessionFeatures.indexOf("KPRPC_OPEN_AND_FOCUS_DATABASE") >= 0;
-                });
+        const supportsWebsocketFocus = store.state.KeePassDatabases.some(db => db.sessionType === SessionType.Websocket &&
+                        db.sessionFeatures.indexOf("KPRPC_OPEN_AND_FOCUS_DATABASE") >= 0);
 
         if (hasWebsocketDBs && !supportsWebsocketFocus) {
             KeeLog.warn("Can't open KeePass because KeePassRPC version does not support KPRPC_OPEN_AND_FOCUS_DATABASE");

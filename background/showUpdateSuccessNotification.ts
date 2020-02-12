@@ -15,10 +15,10 @@ export function showUpdateSuccessNotification (uniqueID: string, fileName: strin
             values: { uniqueID, fileName }
         };
         const messages = [$STR("password_successfully_updated"),
-        $STR("entry_history_pointer"),
-        $STR("change_field_status"),
-        $STR("change_field_explanation"),
-        $STR("multi_page_update_warning")];
+            $STR("entry_history_pointer"),
+            $STR("change_field_status"),
+            $STR("change_field_explanation"),
+            $STR("multi_page_update_warning")];
         const notification = new KeeNotification("password-updated", [button2, button1], utils.newGUID(), messages, "Medium");
         window.kee.notifyUser(notification);
     }

@@ -11,7 +11,7 @@
   enumeration of form field type (e.g. text, checkbox, password, etc.)
 */
 
-export let keeFormFieldType =
+export const keeFormFieldType =
     {
         radio: "FFTradio",
         username: "FFTusername",
@@ -21,7 +21,7 @@ export let keeFormFieldType =
         checkbox: "FFTcheckbox"
     };
 
-    export enum SessionType {
+export enum SessionType {
     Event = "event",
     Websocket = "websocket"
 }

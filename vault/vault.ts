@@ -40,7 +40,7 @@ import { Port } from "../common/port";
   we do take steps to prevent accidental data disclosure.
 */
 
-// tslint:disable-next-line:no-var-keyword
+// eslint-disable-next-line no-var
 var keeDuplicationCount;
 
 if (keeDuplicationCount) {
@@ -244,7 +244,7 @@ class Background {
             case VaultProtocol.Jsonrpc: Background.receiveJsonrpc(message.jsonrpc); break;
             case VaultProtocol.Reconnect: Background.initLink(); break;
             case VaultProtocol.ShowGenerator: Page.send(JSON.stringify({protocol: VaultProtocol.ShowGenerator} as VaultMessage)); break;
-            default: throw new Error("Unexpected protocol message from addon background"); break;
+            default: throw new Error("Unexpected protocol message from addon background");
         }
     }
 

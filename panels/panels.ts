@@ -63,7 +63,7 @@ function startup () {
 
                 if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
             });
-        break;
+            break;
         case "generatePassword":
             generatePasswordPanel = new GeneratePasswordPanel(Port.raw, closePanel);
             document.getElementById("header").innerText = $STR("Menu_Button_copyNewPasswordToClipboard_label");
@@ -123,7 +123,7 @@ function startup () {
                     Port.postMessage({ action: Action.GetPasswordProfiles });
                 }
             });
-        break;
+            break;
         case "savePassword":
             document.getElementById("header").innerText = $STR("save_login");
             Port.raw.onMessage.addListener(function (m: AddonMessage) {
@@ -146,7 +146,7 @@ function startup () {
                 const mainPanel = savePasswordPanel.createNearNode(document.getElementById("header"));
                 if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
             });
-        break;
+            break;
     }
 
     const closeButton = document.createElement("button");

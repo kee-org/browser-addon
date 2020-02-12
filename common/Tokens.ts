@@ -3,5 +3,5 @@ export type Tokens = {
     // storage?: string,
     // forms?: string,
     // identity?: string,
-    client?: string
+    client?: string;
 };

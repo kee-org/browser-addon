@@ -85,15 +85,15 @@ export class PanelStub {
         }
     }
 
-     public updateBoundingClientRect () {
+    public updateBoundingClientRect () {
         const oldRect = this.targetRelativeRect;
         this.targetRelativeRect = this.target.getBoundingClientRect();
 
         if (oldRect.top != this.targetRelativeRect.top || oldRect.bottom != this.targetRelativeRect.bottom
          || oldRect.left != this.targetRelativeRect.left || oldRect.right != this.targetRelativeRect.right) {
-             this.positionPanel();
-         }
-     }
+            this.positionPanel();
+        }
+    }
 
     private positionPanel () {
 

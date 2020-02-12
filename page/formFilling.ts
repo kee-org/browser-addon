@@ -110,13 +110,13 @@ export class FormFilling {
             && !(formField.type == "radio" && dataField.type == "radio")
             && !(formField.type == "checkbox" && dataField.type == "checkbox")
             && !(formField.type == "select-one" && dataField.type == "select-one")
-            )
+        )
             return 0;
 
         // If field IDs match +++++
         if (formField.fieldId != null && formField.fieldId != undefined
             && formField.fieldId != "" && formField.fieldId == dataField.fieldId
-            ) {
+        ) {
             score += 50;
         } else if (config.punishWrongIDAndName && dataField.fieldId) {
             score -= 5;
@@ -128,7 +128,7 @@ export class FormFilling {
         // might allow them to work correctly)
         if (formField.name != null && formField.name != undefined
                 && formField.name != "" && formField.name == dataField.name
-            ) {
+        ) {
             score += 40;
         } else if (config.punishWrongIDAndName && dataField.name) {
             score -= 5;
@@ -138,7 +138,7 @@ export class FormFilling {
         // a useful cue when both id and name matching fails
         if (formField.type == "radio" && formField.value != null && formField.value != undefined
                 && formField.value != "" && formField.value == dataField.value
-            )
+        )
             score += 30;
 
         // Although there is a formField.formFieldPage property, it is not accurate
@@ -619,8 +619,8 @@ export class FormFilling {
                     punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
                 };
                 const {score, lowFieldMatchRatio} = this.calculateRelevanceScore(matchResult.logins[i][v],
-                        matchResult.passwordFieldsArray[i], matchResult.otherFieldsArray[i],
-                        matchResult.currentPage, formVisible, fieldMatchScoreConfig, visibleFieldCache);
+                    matchResult.passwordFieldsArray[i], matchResult.otherFieldsArray[i],
+                    matchResult.currentPage, formVisible, fieldMatchScoreConfig, visibleFieldCache);
 
                 // choosing best login form should not be affected by lowFieldMatchRatio login score
                 // but when we come to fill the form we can force ourselves into a no-auto-fill behaviour.
@@ -1069,7 +1069,7 @@ export class FormFilling {
                     let score = semanticScore;
                     score += value.type == "button" ? CAT_BUTTONINPUTINFORM_SCORE :
                         (value.type == "image" ? CAT_IMAGEINPUTINFORM_SCORE :
-                        CAT_SUBMITINPUTINFORM_SCORE);
+                            CAT_SUBMITINPUTINFORM_SCORE);
                     verifyPotentialCandidate(value, score);
                 }
             }
@@ -1207,6 +1207,7 @@ export class FormFilling {
         const pendingMap: Array<Node> = [];
         let pendingMapStartDistance = 0;
 
+        // eslint-disable-next-line no-cond-assign
         while (nodeA = nodeA.parentElement) {
             const cachedNodeDistance = distanceMap.get(nodeA);
 
@@ -1347,7 +1348,7 @@ export class FormFilling {
         // Mitigating by adjusting min relevancy values, etc. so can remove
         // this comment in a few versions if all is good.
         const formFieldCount = passwordFields.concat(otherFields)
-        .filter(f => f.fieldId || f.name || f.value).length;
+            .filter(f => f.fieldId || f.name || f.value).length;
         const loginFieldCount = login.passwords.concat(login.otherFields)
             .filter(f => f.fieldId || f.name || f.value).length;
 
