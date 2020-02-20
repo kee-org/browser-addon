@@ -1,9 +1,9 @@
-import { keeLoginInfo } from "./kfDataModel";
 import { SubmittedData } from "./SubmittedData";
+import { Entry } from "./model/Entry";
 
 export class SaveState {
-    originalEntry?: keeLoginInfo;
-    newEntry?: keeLoginInfo;
+    originalEntry?: Entry;
+    newEntry: Entry = new Entry({});
     submittedData?: SubmittedData;
-    startedAt?: Date;
+    lastActiveAt?: Date;
 }

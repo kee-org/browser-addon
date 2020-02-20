@@ -1,7 +1,7 @@
 import * as types from "./mutation-types";
 import { KeeState } from "./KeeState";
-import { keeLoginInfo } from "../common/kfDataModel";
 import { SaveState } from "../common/SaveState";
+import { Entry } from "../common/model/Entry";
 
 function undefAbort (payload) {
     if (payload === undefined) {
@@ -65,9 +65,9 @@ export default {
         undefAbort(payload);
         state.searchResults = payload;
     },
-    [types.updateContextMenuResult] (state: KeeState, payload: keeLoginInfo) {
+    [types.updateContextMenuResult] (state: KeeState, payload: Entry) {
         undefAbort(payload);
-        const id = payload.uniqueID;
+        const id = payload.uuid;
         for (const s of state.searchResults) {
             if (s.uniqueID === id) {
                 s.fullDetails = payload;

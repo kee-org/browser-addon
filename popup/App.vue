@@ -22,8 +22,12 @@
           outlined
         >
           Continue saving or discard your changes?<br>
-          <v-btn>Take action</v-btn>
-          <v-btn>Take action 2</v-btn>
+          <v-btn @click="saveRecover">
+            Continue
+          </v-btn>
+          <v-btn @click="saveDiscard">
+            Discard
+          </v-btn>
         </v-alert>
         <div
           v-if="showNotifications"
@@ -189,6 +193,7 @@ import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
 import { SaveState } from "../common/SaveState";
 import { KeeVue } from "./KeeVue";
+import { Entry, mapToFields } from "../common/model/Entry";
 
 export default {
     components: {
@@ -199,12 +204,14 @@ export default {
     },
     mixins: [Port.mixin],
     props: ["matchedLogins", "frameId"],
+    data: () => ({
+        saveLastActiveAt: null
+    }),
     computed: {
         ...mapGetters(["showGeneratePasswordLink", "saveState",
             "showMatchedLogins","showOpenKeePassButton","connectionStatus",
             "connectionStatusDetail", "connected", "databaseIsOpen",
-            "notifications", "showNotifications", "showSearchPanel",
-            "showSaveStart","showSaveRecovery"]),
+            "notifications", "showNotifications"]),
         statusIconColour: function (this: any) {
             if (this.connected && this.databaseIsOpen) {
                 return "green";
@@ -212,21 +219,49 @@ export default {
                 return "orange";
             }
             return "red";
+        },
+        showSaveStart: function (this: any) {
+            return this.saveLastActiveAt > new Date(Date.now()-6000);
+        },
+        showSaveRecovery: function (this: any) {
+            return !this.showSaveStart && this.saveLastActiveAt > new Date(Date.now()-12000);
+        },
+        showSearchPanel: function (this: any) {
+            return this.databaseIsOpen && !this.showSaveStart;
         }
     },
-
+    mounted (this: any) {
+        const ss = this.$store.state.saveState as SaveState;
+        this.saveLastActiveAt = ss?.lastActiveAt;
+    },
     methods: {
         ...mapActions(actionNames),
         showOptions: () => {
             browser.runtime.openOptionsPage();
             window.close();
         },
-        saveStart: function (this: KeeVue) {
-            const newObj = Object.assign(Object.assign({}, this.$store.state.saveState), {startedAt: new Date()});
-            this.$store.dispatch(
-                "updateSaveState",
-                newObj
-            );
+        saveStart: function (this: any) {
+            const ss = this.$store.state.saveState as SaveState;
+            const updatedSaveState = Object.assign({}, ss);
+            updatedSaveState.newEntry = supplementEntryState(new Entry({}), ss);
+            updatedSaveState.lastActiveAt = new Date();
+            this.$store.dispatch("updateSaveState", updatedSaveState);
+            this.saveLastActiveAt = updatedSaveState.lastActiveAt;
+        },
+        saveRecover: function (this: any) {
+            const ss = this.$store.state.saveState as SaveState;
+            const updatedSaveState = Object.assign({}, ss);
+            updatedSaveState.lastActiveAt = new Date();
+            this.$store.dispatch("updateSaveState", updatedSaveState);
+            this.saveLastActiveAt = updatedSaveState.lastActiveAt;
+        },
+        saveDiscard: function (this: any) {
+            const ss = this.$store.state.saveState as SaveState;
+            const updatedSaveState = Object.assign({}, ss);
+            updatedSaveState.newEntry = new Entry({});
+            updatedSaveState.lastActiveAt = null;
+            this.$store.dispatch("updateSaveState", updatedSaveState);
+            this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
         saveLatestLogin: () => {
             Port.postMessage({ action: Action.SaveLatestLogin });
@@ -264,6 +299,17 @@ export default {
         }
     }
 };
+
+function supplementEntryState (entry: Entry, saveState: SaveState) {
+    const sd = saveState.submittedData;
+    const overwrite = (sd ? {
+        URLs: [sd.url],
+        fields: mapToFields(sd.usernameIndex, sd.otherFields, sd.passwordFields),
+        title: sd.title
+    //TODO: e.iconImageData
+    } : {}) as Entry;
+    return Object.assign(Object.assign({}, entry), overwrite);
+}
 </script>
 
 <style>

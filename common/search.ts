@@ -1,7 +1,7 @@
 import { KeeLog } from "./Logger";
-import { keeLoginInfo } from "./kfDataModel";
 import { KeeState } from "../store/KeeState";
 import { utils } from "./utils";
+import { Entry } from "./model/Entry";
 
 /*
   Includes contributions from https://github.com/haoshu
@@ -22,7 +22,7 @@ export class SearchResult {
     uniqueID: string;
     dbFileName: string;
     relevanceScore: number;
-    fullDetails?: keeLoginInfo;
+    fullDetails?: Entry;
 }
 
 export class SearchConfig {

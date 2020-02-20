@@ -11,6 +11,7 @@ import { keeLoginInfo } from "../common/kfDataModel";
 import { SyncContent } from "../store/syncContent";
 import { MutationPayload } from "vuex";
 import { SearchResult } from "../common/search";
+import { Entry } from "../common/model/Entry";
 
 Vue.use(i18n);
 Vue.use(Vuetify);
@@ -70,7 +71,7 @@ function startup () {
                             props: {
                                 matchedLogins: !m.logins ? null : m.logins.map(
                                     e => ({
-                                        fullDetails: e,
+                                        fullDetails: Entry.fromKeeLoginInfo(e),
                                         dbFileName: e.database.fileName,
                                         iconImageData: e.iconImageData,
                                         path: e.parentGroup.path,
