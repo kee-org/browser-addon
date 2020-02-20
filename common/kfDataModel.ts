@@ -4,6 +4,20 @@
   but it has been heavily modified to support some of the extra features
   that Kee can support compared to the built-in Firefox login manager.
 
+  It's the model for internal Kee processes such as determining suitability of matches.
+
+  It's also sometimes the data transfer model for KPRPC <= 1.10.
+  Future KPRPC versions may support new models such as ./Field.ts and ./Locator.ts
+
+  Some classes are still used for the Kee GUI but others are being gradually
+  replaced by the new models mentioned above.
+
+  "Entry" can refer to the implicit data structure used for KPRPC <=1.10 communication
+  OR to the explicit data structure in ./Entry.ts
+
+  Hmmm... basically impossible for anyone except luckyrat to understand now so
+   meh. Will explore ways to make it understandable in the coming weeks.
+
   keeLoginField:
   Represents an individual form field
 
@@ -35,7 +49,7 @@ export class Database {
     name: string;
     fileName: string;
     iconImageData: string;
-    root: any;
+    root: any; //TODO: can we end up with Entry's and keeLoginInfo's in here?...
     active: boolean;
     sessionType: SessionType;
     sessionFeatures: string[];
@@ -100,7 +114,7 @@ export class keeLoginInfo {
     neverAutoSubmit: boolean;
     database : Database;
 
-    lowFieldMatchRatio: any;
+    lowFieldMatchRatio: boolean;
     formIndex: number;
     loginIndex: number;
     frameKey: any;
@@ -325,6 +339,7 @@ export class keeLoginInfo {
 
 }
 
+export type keeLoginFieldType = "password" | "text" | "radio" | "select-one" | "checkbox";
 
 export class keeLoginField {
 
@@ -342,7 +357,7 @@ export class keeLoginField {
     DOMSelectElement: HTMLSelectElement;
 
     // "type" attribute on the HTML form element
-    type: "password" | "text" | "radio" | "select-one" | "checkbox";
+    type: keeLoginFieldType;
 
     formFieldPage: number;
 
