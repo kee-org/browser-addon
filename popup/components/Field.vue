@@ -26,6 +26,7 @@
             icon
             class="my-0"
             v-on="on"
+            @click="copyValue"
           >
             <v-icon small>
               mdi-content-copy

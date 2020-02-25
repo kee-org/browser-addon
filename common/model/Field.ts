@@ -1,4 +1,4 @@
-import { keeLoginField, keeFormFieldType } from "../kfDataModel";
+import { keeLoginField, keeLoginFieldType } from "../kfDataModel";
 import { utils } from "../utils";
 import { Locator } from "./Locator";
 
@@ -32,7 +32,7 @@ export class Field {
     // tracks the most recent value we want to reset to in cases where the user has that possibility
     readonly resetValue: string;
 
-    //TODO: Will only need these once we proceed with further removal of the keeLoginField class
+    //TODO:4: Will only need these once we proceed with further removal of the keeLoginField class
     // The HTML form element DOM objects - transient (not sent to KeePass)
     // DOMInputElement: HTMLInputElement;
     // DOMSelectElement: HTMLSelectElement;
@@ -45,6 +45,7 @@ export class Field {
         this.resetValue = field.resetValue || "";
         this.uuid = field.uuid || "";
         this.type = field.type || "text";
+        this.locators = field.locators || [];
     }
 
     static fromKeeLoginField (f: keeLoginField) {
@@ -71,5 +72,30 @@ export class Field {
                 type: locatorType
             })]
         });
+    }
+
+    public static toKeeLoginField (f: Field) {
+
+        if (f.locators.length !== 1) {
+            throw new Error("Exactly 1 Locator required for conversion to legacy model.");
+        }
+
+        let type: keeLoginFieldType = "text";
+
+        switch (f.locators[0].type) {
+            case "password": type = "password"; break;
+            case "radio": type = "radio"; break;
+            case "checkbox": type = "checkbox"; break;
+            case "select": type = "select-one"; break;
+            case "text": type = "text"; break;
+        }
+
+        const klf = new keeLoginField();
+        klf.name = f.locators[0].name;
+        klf.value = f.value;
+        klf.fieldId = f.locators[0].id;
+        klf.type = type;
+
+        return klf;
     }
 }

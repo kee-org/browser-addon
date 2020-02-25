@@ -8,7 +8,7 @@
     <Entry
       v-for="(match, index) of filteredMatches"
       :key="match.entry.uniqueID"
-      :entry="match.entry"
+      :entrySummary="match.entry"
       :index="index"
       :frame-id="frame-id"
       :login-index="match.originalIndex"
@@ -29,7 +29,7 @@
     <Entry
       v-for="(entry, index) of deduplicatedSearchResults"
       :key="entry.uniqueID"
-      :entry="entry"
+      :entrySummary="entry"
       :index="index"
     />
   </div>

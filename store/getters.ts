@@ -12,6 +12,8 @@ export const currentSearchTerm = (state: KeeState) => state.currentSearchTerm;
 export const searchResults = (state: KeeState) => state.searchResults;
 export const ActiveKeePassDatabaseIndex = (state: KeeState) => state.ActiveKeePassDatabaseIndex;
 export const KeePassDatabases = (state: KeeState) => state.KeePassDatabases;
+export const PasswordProfiles = (state: KeeState) => state.PasswordProfiles;
+export const generatedPassword = (state: KeeState) => state.generatedPassword;
 
 export const databaseName = (state: KeeState) => {
     if (state.KeePassDatabases && state.KeePassDatabases.length && state.ActiveKeePassDatabaseIndex >= 0) {

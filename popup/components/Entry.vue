@@ -38,7 +38,7 @@
               >
                 <v-row no-gutters>
                   <v-col class="text-truncate">
-                    {{ entry.title }}
+                    {{ entrySummary.title }}
                   </v-col>
                 </v-row>
                 <v-row no-gutters>
@@ -56,7 +56,7 @@
               >
                 <v-row>
                   <v-col class="text-truncate">
-                    {{ entry.title }}
+                    {{ entrySummary.title }}
                   </v-col>
                   <v-col
                     :style="`${expanded ? 'visibility:hidden' : ''}`"
@@ -85,7 +85,7 @@
       <v-card-text class="py-0 text-truncate">
         <v-slide-y-transition>
           <v-container
-            v-if="expanded && !!entry.fullDetails"
+            v-if="expanded && !!entrySummary.fullDetails"
             class="my-0 pa-0 mx-2"
           >
             <!-- TODO: show a loading screen and also allow initial rendering to be expanded -->
@@ -133,7 +133,7 @@
                       <span class="text-truncate caption py-1">{{ entryDomain }}</span>
                     </v-row>
                   </template>
-                  <span>{{ entry.url }}</span>
+                  <span>{{ entrySummary.url }}</span>
                 </v-tooltip>
               </v-col>
 
@@ -161,14 +161,16 @@ import { AddonMessage } from "../../common/AddonMessage";
 import { Port } from "../../common/port";
 import { mapActions } from "vuex";
 import { names as actionNames } from "../../store/action-names";
-import { keeLoginInfo } from "../../common/kfDataModel";
 import { KeeURL } from "../../common/KeeURL";
 import { Action } from "../../common/Action";
+import supplementEntryState from "../supplementEntryState";
+import { SaveState } from "../../common/SaveState";
+import { Entry } from "../../common/model/Entry";
 
 export default {
     components: { Field },
     mixins: [Port.mixin],
-    props: ["entry","index","loginIndex","frameId"], //TODO: make index optional for when we're not part of a list
+    props: ["entrySummary","index","loginIndex","frameId"], //TODO: make index optional for when we're not part of a list
     data: () => ({
         expanded: false,
         focussed: false
@@ -177,12 +179,12 @@ export default {
         titleStyle: function (this: any) {
             return (
                 "background-position:24px calc(50% - 10px); background-image:url(data:image/png;base64," +
-        this.entry.iconImageData +
+        this.entrySummary.iconImageData +
         ")"
             );
         },
         usernameDisplayValue: function (this: any) {
-            const e = this.entry;
+            const e = this.entrySummary;
             return e && e.usernameValue
                 ? e.usernameValue
                 : "[" + $STR("noUsername_partial_tip") + "]";
@@ -191,11 +193,11 @@ export default {
             return this.index === 0 ? "0" : "-1";
         },
         allFields: function (this: any) {
-            const e = this.entry.fullDetails as keeLoginInfo;
-            return e.otherFields.concat(e.passwords);
+            const e = this.entrySummary.fullDetails as Entry;
+            return e.fields;
         },
         entryDomain: function (this: any) {
-            const urlStr = this.entry.url;
+            const urlStr = this.entrySummary.url;
             if (!urlStr || urlStr.length < 4) return "<unknown>";
             const kurl = KeeURL.fromString(urlStr);
             if (!kurl) {
@@ -207,14 +209,14 @@ export default {
             if (!this.entryPathIsLong) {
                 return this.fullEntryPath;
             }
-            const e = this.entry.fullDetails as keeLoginInfo;
+            const e = this.entrySummary.fullDetails as Entry;
             return "... > " + e.parentGroup.path;
         },
         entryPathIsLong: function (this: any) {
             return this.fullEntryPath.length > 35;
         },
         fullEntryPath: function (this: any) {
-            const e = this.entry.fullDetails as keeLoginInfo;
+            const e = this.entrySummary.fullDetails as Entry;
             return e.database.name + " > " + e.parentGroup.path;
         }
     },
@@ -228,11 +230,11 @@ export default {
             }
         },
         showFullDetails (this: any) {
-            if (!this.expanded && !this.entry.fullDetails) {
+            if (!this.expanded && !this.entrySummary.fullDetails) {
                 Port.postMessage({
                     findMatches: {
-                        uuid: this.entry.uniqueID,
-                        DBfilename: this.entry.dbFileName
+                        uuid: this.entrySummary.uniqueID,
+                        DBfilename: this.entrySummary.dbFileName
                     }
                 } as AddonMessage);
             }
@@ -242,13 +244,14 @@ export default {
             this.expanded = false;
         },
         editEntry (this: any) {
-            Port.postMessage({
-                loginEditor: {
-                    uniqueID: this.entry.uniqueID,
-                    DBfilename: this.entry.dbFileName
-                }
-            } as AddonMessage);
-            window.close();
+            // user clicks edit on an entry > replace saveState.newEntry with the originalEntry, supplemented with submitteddata if present
+
+            const ss = this.$store.state.saveState as SaveState;
+            const updatedSaveState = Object.assign({}, ss);
+            updatedSaveState.newEntry = supplementEntryState(this.entrySummary.fullDetails, ss);
+            updatedSaveState.titleResetValue = updatedSaveState.newEntry.title;
+            updatedSaveState.lastActiveAt = new Date();
+            this.$store.dispatch("updateSaveState", updatedSaveState);
         },
         focusin: function (this: any, e) {
             if (!(this.$refs.card as any).$el.contains(e.relatedTarget)) {
@@ -278,11 +281,11 @@ export default {
             }
         },
         loadInSameTab (this: any) {
-            browser.tabs.update({url: this.entry.url});
+            browser.tabs.update({url: this.entrySummary.url});
             window.close();
         },
         loadInNewTab (this: any) {
-            browser.tabs.create({url: this.entry.url});
+            browser.tabs.create({url: this.entrySummary.url});
             window.close();
         },
         manualFill (this: any) {

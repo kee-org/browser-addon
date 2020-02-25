@@ -1,7 +1,7 @@
 import { kprpcClient, ResultWrapper } from "./kprpcClient";
 import { EventSessionManager } from "./EventSession";
 import { VaultMessage } from "../common/VaultMessage";
-import { SessionType, Database, PasswordProfile } from "../common/kfDataModel";
+import { SessionType, Database, PasswordProfile, keeLoginInfo } from "../common/kfDataModel";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Config } from "../common/config";
@@ -95,13 +95,13 @@ export class jsonrpcClient {
         }
     }
 
-    addLogin (login, parentUUID, dbFileName)
+    addLogin (login: keeLoginInfo, parentUUID: string, dbFileName: string)
     {
         const jslogin = login.asEntry();
         this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "AddLogin", [jslogin, parentUUID, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
-    updateLogin (login, oldLoginUUID, urlMergeMode, dbFileName) {
+    updateLogin (login: keeLoginInfo, oldLoginUUID: string, urlMergeMode: number, dbFileName: string) {
         const jslogin = login.asEntry();
         this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "UpdateLogin", [jslogin, oldLoginUUID, urlMergeMode, dbFileName], null, ++this.kprpcClient.requestId);
     }

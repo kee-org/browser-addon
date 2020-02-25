@@ -12,7 +12,7 @@
         :append-outer-icon="field.type === 'password' ? 'mdi-flash' : ''"
         :type="renderType"
         @input="valueChanged"
-        @click:append-outer="reset"
+        @click:append-outer="showPasswordGenerator = true"
       >
         <template slot="append">
           <v-btn
@@ -33,16 +33,26 @@
           </v-btn>
         </template>
       </v-text-field>
+      <PasswordGenerator
+        v-if="showPasswordGenerator"
+        @dialog-closed="passwordGeneratorClosed"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
 import { Field } from "../../common/model/Field";
+import PasswordGenerator from "./PasswordGenerator.vue";
+
 export default {
+    components: {
+        PasswordGenerator
+    },
     props: ["field"],
     data: () => ({
-        revealed: false //TODO: does it matter that this gets lost when popup closes? probably too minor an issue to worry about urgently
+        revealed: false, //TODO: does it matter that this gets lost when popup closes? probably too minor an issue to worry about urgently
+        showPasswordGenerator: false
     }),
     computed: {
         renderType: function (this: any) {
@@ -64,6 +74,10 @@ export default {
         },
         valueChanged: function (this:any, value) {
             this.$emit("field-value-changed", { uuid: this.field.uuid, value });
+        },
+        passwordGeneratorClosed: function (this: any, payload) {
+            if (payload?.value) this.valueChanged(payload.value);
+            this.showPasswordGenerator = false;
         }
     }
 };

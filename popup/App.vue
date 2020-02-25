@@ -45,7 +45,13 @@
           :matched-logins="matchedLogins"
           :frame-id="frameId"
         />
-        <Save1stParty v-show="showSaveStart" />
+        <Save1stParty
+          v-if="showSaveStart && !showSaveWhere"
+          @save-where-clicked="saveWhere"
+        />
+        <SaveWhere
+          v-if="showSaveWhere"
+        />
       </v-container>
     </v-content>
 
@@ -188,24 +194,32 @@ import Notification from "./components/Notification.vue";
 import SearchInput from "./components/SearchInput.vue";
 import SearchResults from "./components/SearchResults.vue";
 import Save1stParty from "./components/Save1stParty.vue";
+import SaveWhere from "./components/SaveWhere.vue";
 import { Port } from "../common/port";
 import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
 import { SaveState } from "../common/SaveState";
 import { KeeVue } from "./KeeVue";
 import { Entry, mapToFields } from "../common/model/Entry";
+import supplementEntryState from "./supplementEntryState";
 
 export default {
     components: {
         Notification,
         SearchResults,
         SearchInput,
-        Save1stParty
+        Save1stParty,
+        SaveWhere
     },
     mixins: [Port.mixin],
     props: ["matchedLogins", "frameId"],
     data: () => ({
-        saveLastActiveAt: null
+        // We can't use the Vuex property directly because when it changes it causes 
+        // the app to re-render from scratch, destroying the user input that triggered 
+        // the datestamp change. Instead we can watch for changes and only modify this
+        // value in a set of circumstances that meet our requirements.
+        saveLastActiveAt: null,
+        showSaveWhere: false
     }),
     computed: {
         ...mapGetters(["showGeneratePasswordLink", "saveState",
@@ -230,9 +244,22 @@ export default {
             return this.databaseIsOpen && !this.showSaveStart;
         }
     },
+    watch: {
+        saveState: function (this: any, newState: SaveState, oldState: SaveState) {
+            if (newState?.newEntry?.uuid !== oldState?.newEntry?.uuid) {
+                this.saveLastActiveAt = newState.lastActiveAt;
+            }
+        }
+    },
     mounted (this: any) {
         const ss = this.$store.state.saveState as SaveState;
         this.saveLastActiveAt = ss?.lastActiveAt;
+
+        // Clear the newEntry if it is beyond our maximum recovery time
+        // This frees up memory but more importantly allows the watch for saveState to set the appropriate last active datetime when the user attempts to re-edit the same entry as most recently.
+        if (ss?.lastActiveAt <= new Date(Date.now()-12000)) {
+            this.saveDiscard();
+        }
     },
     methods: {
         ...mapActions(actionNames),
@@ -244,24 +271,31 @@ export default {
             const ss = this.$store.state.saveState as SaveState;
             const updatedSaveState = Object.assign({}, ss);
             updatedSaveState.newEntry = supplementEntryState(new Entry({}), ss);
+            updatedSaveState.titleResetValue = updatedSaveState.newEntry.title;
             updatedSaveState.lastActiveAt = new Date();
             this.$store.dispatch("updateSaveState", updatedSaveState);
-            this.saveLastActiveAt = updatedSaveState.lastActiveAt;
+            //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
         saveRecover: function (this: any) {
             const ss = this.$store.state.saveState as SaveState;
             const updatedSaveState = Object.assign({}, ss);
             updatedSaveState.lastActiveAt = new Date();
             this.$store.dispatch("updateSaveState", updatedSaveState);
+
+            // Normally we ignore active datetime changes but user has explicitly requested this
             this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
         saveDiscard: function (this: any) {
             const ss = this.$store.state.saveState as SaveState;
             const updatedSaveState = Object.assign({}, ss);
             updatedSaveState.newEntry = new Entry({});
+            updatedSaveState.titleResetValue = null;
             updatedSaveState.lastActiveAt = null;
             this.$store.dispatch("updateSaveState", updatedSaveState);
-            this.saveLastActiveAt = updatedSaveState.lastActiveAt;
+            //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
+        },
+        saveWhere: function (this: any) {
+            this.showSaveWhere = true;
         },
         saveLatestLogin: () => {
             Port.postMessage({ action: Action.SaveLatestLogin });
@@ -299,17 +333,6 @@ export default {
         }
     }
 };
-
-function supplementEntryState (entry: Entry, saveState: SaveState) {
-    const sd = saveState.submittedData;
-    const overwrite = (sd ? {
-        URLs: [sd.url],
-        fields: mapToFields(sd.usernameIndex, sd.otherFields, sd.passwordFields),
-        title: sd.title
-    //TODO: e.iconImageData
-    } : {}) as Entry;
-    return Object.assign(Object.assign({}, entry), overwrite);
-}
 </script>
 
 <style>

@@ -10,6 +10,7 @@ import { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
 import { SiteConfig } from "../common/config";
 import store from "../store";
+import { Entry } from "../common/model/Entry";
 
 // callbacks for messaging / ports
 
@@ -18,7 +19,7 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
         window.kee.syncBackground.onMessage(this, msg.mutation);
     }
 
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from browser popup script");
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from browser popup script: " + JSON.stringify(msg));
 
     if (msg.removeNotification) {
         window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
@@ -28,8 +29,19 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
             url: "https://www.kee.pm/upgrade-kprpc"
         });
     }
+    if (msg.action == Action.GetPasswordProfiles) {
+        window.kee.getPasswordProfiles(passwordProfiles => {
+            store.dispatch("updatePasswordProfiles", passwordProfiles);
+        });
+    }
     if (msg.action === Action.GeneratePassword) {
-        window.kee.initiatePasswordGeneration();
+        window.kee.generatePassword(msg.passwordProfile, "unknown URL", generatedPassword => {
+            if (generatedPassword) {
+                store.dispatch("updateGeneratedPassword", generatedPassword);
+            } else {
+                KeeLog.warn("Kee received an empty/missing password. Check the configuration of your password manager.");
+            }
+        });
     }
     // if (msg.action === Action.ShowMatchedLoginsPanel) {
     //     if (store.state.connected) {
@@ -44,6 +56,42 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
             window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(0).postMessage(
                 { submittedData: persistentItem.submittedData } as AddonMessage);
             persistentItem.accessCount++;
+        }
+    }
+    if (msg.action === Action.CreateEntry || msg.action === Action.UpdateEntry) {
+        if (store.state.connected) {
+            const entry = Entry.toKeeLoginInfo(store.state.saveState.newEntry);
+            const existingOrTemporaryUuid = entry.uniqueID;
+            const db = entry.database;
+            const parentGroupUuid: string = entry.parentGroup.uniqueID;
+
+            // KPRPC has particular expectations about some Entry properties.
+            // parent group UUID, DB and UUID should all be undefined or null as set below.
+            entry.parentGroup = undefined;
+            entry.uniqueID = null;
+            entry.database = undefined;
+            if (msg.action === Action.UpdateEntry) {
+                window.kee.updateLogin(
+                    entry,
+                    existingOrTemporaryUuid,
+                    2, //TODO: Sometimes needs to be 4 - "Keep the old entry's URL (don't add the new URL to the entry)"
+                    db.fileName);
+                //TODO: consider if this is needed anymore, once user can see what bits
+                // they have edited, it's probably redundant or even detrimental to the experience.
+                showUpdateSuccessNotification(existingOrTemporaryUuid, db.fileName);
+
+            } else {
+                window.kee.addLogin(entry, parentGroupUuid, db.fileName);
+            }
+            if (configManager.current.rememberMRUGroup) {
+                if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
+                configManager.current.mruGroup[db.fileName] = parentGroupUuid;
+                configManager.save();
+            }
+
+            // Trigger the clear-out of the last submitted data if it exists
+            const persistentItem = window.kee.persistentTabStates.get(window.kee.foregroundTabId)?.items?.find(item => item.itemType == "submittedData");
+            if (persistentItem) persistentItem.accessCount++;
         }
     }
 
@@ -70,7 +118,7 @@ export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessag
         window.kee.syncBackground.onMessage(this, msg.mutation);
     }
 
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script");
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script" + JSON.stringify(msg));
 
     if (msg.findMatches) {
         window.kee.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
@@ -188,7 +236,7 @@ export function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessa
     }
 
     let result;
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from vault script");
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from vault script" + JSON.stringify(msg));
     switch (msg.action) {
         case VaultAction.Init:
             result = window.kee.KeePassRPC.startEventSession(msg.sessionId, msg.features, msgToPage => this.postMessage(msgToPage));
@@ -217,7 +265,7 @@ export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMess
         window.kee.syncBackground.onMessage(this, msg.mutation);
     }
 
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from iframe script");
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from iframe script" + JSON.stringify(msg));
 
     const tabId = this.sender.tab.id;
     const frameId = this.sender.frameId;

@@ -17,7 +17,7 @@ import { FrameState } from "../common/FrameState";
 import { VaultMessage } from "../common/VaultMessage";
 import { KeeNotification } from "../common/KeeNotification";
 import { VaultProtocol } from "../common/VaultProtocol";
-import { SessionType, Database, PasswordProfile } from "../common/kfDataModel";
+import { SessionType, Database, PasswordProfile, keeLoginInfo } from "../common/kfDataModel";
 import { Action } from "../common/Action";
 import store from "../store";
 import { SyncBackground } from "../store/syncBackground";
@@ -505,7 +505,7 @@ export class Kee {
         }
     }
 
-    addLogin (login, parentUUID, dbFileName)
+    addLogin (login: keeLoginInfo, parentUUID: string, dbFileName: string)
     {
         try
         {
@@ -517,7 +517,7 @@ export class Kee {
         }
     }
 
-    updateLogin (login, oldLoginUUID, urlMergeMode, dbFileName)
+    updateLogin (login: keeLoginInfo, oldLoginUUID: string, urlMergeMode: number, dbFileName: string)
     {
         try
         {

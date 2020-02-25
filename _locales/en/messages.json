@@ -812,5 +812,13 @@
   "pref_fill_override_option": {
     "message": "Editing the Auto-submit behaviour of an entry also overrides this behaviour",
     "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
+  },
+  "next": {
+      "message": "Next",
+      "description": "Action button for user to advance to the next step in a multi-step process. E.g. to confirm username and password for a new entry and load the panel that allows selection of where to save the new entry."
+  },
+  "title": {
+      "message": "Title",
+      "description": "E.g. the title of an entry."
   }
 }

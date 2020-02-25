@@ -24,7 +24,8 @@ export default new Vuex.Store<KeeState>({
         currentSearchTerm: null,
         loginsFound: false,
         searchResults: null,
-        saveState: new SaveState()
+        saveState: new SaveState(),
+        generatedPassword: ""
     },
     getters,
     mutations,

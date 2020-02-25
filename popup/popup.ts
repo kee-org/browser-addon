@@ -12,6 +12,7 @@ import { SyncContent } from "../store/syncContent";
 import { MutationPayload } from "vuex";
 import { SearchResult } from "../common/search";
 import { Entry } from "../common/model/Entry";
+import { Action } from "../common/Action";
 
 Vue.use(i18n);
 Vue.use(Vuetify);
@@ -20,7 +21,7 @@ Vue.prototype.$browser = browser;
 
 let syncContent: SyncContent;
 
-function convertSingleLoginEntryResult (result)
+function convertSingleLoginEntryResult (result): keeLoginInfo
 {
     let isError = false;
 
@@ -65,7 +66,11 @@ function startup () {
                             dark: window.matchMedia("prefers-color-scheme: dark").matches
                         }
                     }),
-                    //render: h => h(App),
+                    mounted () {
+                        // This can wait until after the popup app has rendered, at least until there is
+                        // some way to launch in password generation mode
+                        Port.postMessage({ action: Action.GetPasswordProfiles });
+                    },
                     render (h) {
                         return h(App, {
                             props: {
@@ -90,6 +95,7 @@ function startup () {
                     }
                 });
 
+
                 // This maybe could be moved to onMounted once all vuex state is changed before this popup is opened.
                 setTimeout(() => {
                     window.focus();
@@ -105,20 +111,8 @@ function startup () {
         }
 
         if (store.state.connected && m.findMatchesResult) {
-            store.dispatch("updateContextMenuResult", convertSingleLoginEntryResult(m.findMatchesResult) );
+            store.dispatch("updateSearchResultWithFullDetails", Entry.fromKeeLoginInfo(convertSingleLoginEntryResult(m.findMatchesResult)));
         }
-
-        // if (store.state.connected && m.findMatchesResult) {
-        //     const kfl = convertSingleLoginEntryResult(m.findMatchesResult);
-        //     const id = kfl.uniqueID;
-        //     for (const s of state.searchResults) {
-        //         if (s.uniqueID === id) {
-        //             s.fullDetails = kfl;
-        //             break;
-        //         }
-        //     }
-        // }
-
     });
 
     KeeLog.info("popup ready");

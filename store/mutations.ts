@@ -50,6 +50,10 @@ export default {
         undefAbort(payload);
         state.PasswordProfiles = payload;
     },
+    [types.updateGeneratedPassword] (state: KeeState, payload) {
+        undefAbort(payload);
+        state.generatedPassword = payload;
+    },
     [types.updateSubmittedData] (state: KeeState, payload) {
         undefAbort(payload);
         if (!state.saveState) {
@@ -65,7 +69,7 @@ export default {
         undefAbort(payload);
         state.searchResults = payload;
     },
-    [types.updateContextMenuResult] (state: KeeState, payload: Entry) {
+    [types.updateSearchResultWithFullDetails] (state: KeeState, payload: Entry) {
         undefAbort(payload);
         const id = payload.uuid;
         for (const s of state.searchResults) {

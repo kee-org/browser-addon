@@ -49,7 +49,7 @@ export class Database {
     name: string;
     fileName: string;
     iconImageData: string;
-    root: any; //TODO: can we end up with Entry's and keeLoginInfo's in here?...
+    root: any;
     active: boolean;
     sessionType: SessionType;
     sessionFeatures: string[];
