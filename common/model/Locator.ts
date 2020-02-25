@@ -19,5 +19,5 @@ export class Locator {
         this.query = locator.query;
     }
 
-    //TODO: Things like MaxLength that can be used to both help identify the field and generate new values/passwords
+    //TODO:4: Things like MaxLength that can be used to both help identify the field and generate new values/passwords
 }

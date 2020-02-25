@@ -3,6 +3,7 @@ import { Database } from "./Database";
 import { keeLoginInfo, keeLoginField } from "../kfDataModel";
 import { utils } from "../utils";
 import { Field } from "./Field";
+//import { Group } from "./"
 
 // Although we use uuids for Fields and possibly Locators, we don't allow them to exist outside of their parent entry.
 
@@ -28,6 +29,13 @@ export class Entry {
     // The KeePass entry's uniqueID (if known)
     readonly uuid: string;
 
+    //TODO:4: Remove once legacy Group class is no longer needed
+    // This is needed for treeview iteration in the UI - both groups and
+    // entries need to have the same property names
+    public get uniqueID () : string {
+        return this.uuid;
+    }
+
     // The title of the KeePass entry (auto-generated from the page title by default,
     // or the page URL's hostname if no title is set)
     readonly title: string;
@@ -35,7 +43,7 @@ export class Entry {
 
     readonly icon: Icon;
 
-    readonly parentGroup; //TODO: What type? New Group class? seems to just be used for parentGroup.path (string) so far?
+    readonly parentGroup: any; //TODO:4: Can currently be some sort of unspecified Group class. E.g. used for parentGroup.path (string).
 
     readonly alwaysAutoFill: boolean;
     readonly alwaysAutoSubmit: boolean;
@@ -46,7 +54,7 @@ export class Entry {
 
     // How relevant this login entry is to the current form in
     // the browser - transient (not stored in KeePass)
-    //TODO: denormalise match data into a new object?
+    //TODO:4: put all match data into a new object?
     relevanceScore: number;
     lowFieldMatchRatio: any;
     formIndex: number;
@@ -66,14 +74,16 @@ export class Entry {
         this.title = e.title || "";
         this.matchAccuracy = e.matchAccuracy || 0;
         this.icon = e.icon || { version: 1, iconImageData: "" };
+        this.database = e.database || new Database();
+        // this.database = e.database || null;
     }
 
 
-    //TODO: allow mapping to/from KPRPC DTOs directly.
+    //TODO:4: allow mapping to/from KPRPC DTOs directly.
     // In short term we only use this new model for the popup GUI but ultimately want to
     //replace keeLoginInfo which will mean implementing a different set of mappings
 
-    static fromKeeLoginInfo (kli: keeLoginInfo) {
+    public static fromKeeLoginInfo (kli: keeLoginInfo) {
 
         const entry = new Entry({
             URLs: kli.URLs,
@@ -95,37 +105,28 @@ export class Entry {
 
     }
 
-    // toKeeLoginInfo () {
-    //     const entry: any = {};
-
-    //     entry.db = this.database;
-    //     entry.parent = this.parentGroup;
-    //     entry.iconImageData = this.iconImageData;
-    //     entry.alwaysAutoFill = this.alwaysAutoFill;
-    //     entry.alwaysAutoSubmit = this.alwaysAutoSubmit;
-    //     entry.neverAutoFill = this.neverAutoFill;
-    //     entry.neverAutoSubmit = this.neverAutoSubmit;
-    //     entry.priority = this.priority;
-    //     entry.uRLs = this.URLs;
-    //     entry.matchAccuracy = this.matchAccuracy;
-    //     entry.hTTPRealm = this.httpRealm;
-    //     entry.uniqueID = this.uniqueID;
-    //     entry.title = this.title;
-    //     entry.formFieldList = [];
-    //     for (const password of this.passwords)
-    //         entry.formFieldList.push(password.asFormField(false));
-    //     for (let i = 0; i < this.otherFields.length; i++)
-    //         if (this.usernameIndex == i)
-    //             entry.formFieldList.push(this.otherFields[i].asFormField(true));
-    //         else
-    //             entry.formFieldList.push(this.otherFields[i].asFormField(false));
-
-    //     return entry;
-    // }
+    public static toKeeLoginInfo (entry: Entry) {
+        const kli: keeLoginInfo = new keeLoginInfo();
+        kli.URLs = entry.URLs;
+        kli.alwaysAutoFill = entry.alwaysAutoFill;
+        kli.alwaysAutoSubmit = entry.alwaysAutoSubmit;
+        kli.database = entry.database;
+        kli.httpRealm = entry.httpRealm || null; // KPRPC (possibly) expects null rather than "" or undefined so we're defensive
+        kli.iconImageData = entry.icon.iconImageData;
+        kli.matchAccuracy = entry.matchAccuracy;
+        kli.neverAutoFill = entry.neverAutoFill;
+        kli.neverAutoSubmit = entry.neverAutoSubmit;
+        kli.otherFields = entry.fields.filter(f => f.type !== "password").map(f => Field.toKeeLoginField(f));
+        kli.parentGroup = entry.parentGroup;
+        kli.passwords = entry.fields.filter(f => f.type === "password").map(f => Field.toKeeLoginField(f));
+        kli.uniqueID = entry.uuid;
+        kli.usernameIndex = 0;
+        kli.title = entry.title;
+        kli.priority = 0; // See #999999
+        return kli;
+    }
 
 }
-
-//TODO: Verify that the round-trips don't delete fields of types we're not showing in the UI (checkboxes, etc.)
 
 // By convention the first entry will be the username
 export function mapToFields (usernameIndex: number, otherFields: keeLoginField[], passwords: keeLoginField[]) {

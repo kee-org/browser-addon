@@ -16,4 +16,5 @@ export interface KeeState {
     loginsFound: boolean;
     searchResults: SearchResult[];
     saveState: SaveState;
+    generatedPassword: string;
 }

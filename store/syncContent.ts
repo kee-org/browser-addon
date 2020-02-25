@@ -49,16 +49,24 @@ export class SyncContent {
         if (!this.receivedMutations.length) {
             return this.sendMutation(mutation);
         }
-        if (this.receivedMutations.length > 1) {
-            KeeLog.error("Misunderstood mutation hook ordering. Bugs ahoy!");
-        }
 
         // Check if it's received mutation, if it's just ignore it, if not send to background
         for (let i = this.receivedMutations.length - 1; i >= 0; i--) {
             if (this.receivedMutations[i].type == mutation.type && this.receivedMutations[i].payload == mutation.payload) {
-                // If multiple mutations can be in received queue, think we should break here... otherwise duplicate received
-                // mutations could be sent cos more than one will have been removed from the list of known local mutations
                 this.receivedMutations.splice(i, 1);
+
+                // Multiple mutations can be in the received queue so we have to break,
+                // otherwise duplicate received mutations will result in some being sent
+                // to the background thread, leading to an infinite loop.
+                // The exact mechanism by which this can happen is unclear and it
+                // may be a bug or mutable implementation detail of VueX. I hypothesise
+                // that multiple mutations arriving in a short period of time can get
+                // batched together in a way that allows multiple hooks to queue up
+                // before being invoked. Thus the first time that this loop is created
+                // it sets up a higher chance that the loop will repeat again, until
+                // such time as the batching behaviour is all but guaranteed and the
+                // loop can never end.
+                break;
             } else if (i == 0) {
                 this.sendMutation(mutation);
             }

@@ -2,21 +2,32 @@
   <div>
     <v-slide-y-transition>
       <v-container
-        class="my-0 pa-0 mx-2"
+        class="my-0 pa-0"
       >
-        <v-row
-          dense
-          justify="center"
-          align="center"
-        >
-          <v-col class="">
+        <v-row>
+          <v-col>
             <v-text-field
-              :placeholder="TITLE"
+              :label="$i18n('title')"
               style=""
               :value="saveState.newEntry.title"
+              dense
+              outlined
+              hide-details="auto"
+              :type="text"
               autofocus
               @input="setTitle"
-            />
+            >
+              <template slot="append">
+                <v-btn
+                  v-if="resettableTitle"
+                  small
+                  icon
+                  @click="resetTitle"
+                >
+                  <v-icon>mdi-undo</v-icon>
+                </v-btn>
+              </template>
+            </v-text-field>
           </v-col>
         </v-row>
 
@@ -29,17 +40,44 @@
       </v-container>
     </v-slide-y-transition>
 
-    Hello
     <v-btn
+      v-if="!editingExisting"
       right
       color="light-blue lighten-3"
-      absolute
-      style="bottom: 20px; right: 0px"
-      @click="generatePassword"
+      @click="nextClicked"
     >
-      {{ $i18n('Menu_Button_copyNewPasswordToClipboard_label') }}
-      <v-icon class="pl-4">mdi-flash</v-icon>
+      {{ $i18n('next') }}
     </v-btn>
+    <v-btn
+      v-if="editingExisting"
+      right
+      color="light-blue lighten-3"
+      @click="updateEntry"
+    >
+      update
+    </v-btn>
+    <v-alert
+      v-if="editingExisting"
+      border="top"
+      colored-border
+      type="info"
+      elevation="1"
+      class="my-4"
+    >
+      <v-row align="center">
+        <v-col class="grow">
+          Additional changes can be made using the full editor.
+        </v-col>
+        <v-col class="shrink">
+          <v-btn
+            small
+            @click="openFullEntryEditor"
+          >
+            Open advanced editor
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-alert>
   </div>
 </template>
 
@@ -51,6 +89,7 @@ import { SaveState } from "../../common/SaveState";
 import { Entry } from "../../common/model/Entry";
 import FieldEditor from "./FieldEditor.vue";
 import { Field } from "../../common/model/Field";
+import { AddonMessage } from "../../common/AddonMessage";
 
 export default {
     components: {
@@ -60,11 +99,35 @@ export default {
         originalFields: []
     }),
     computed: {
-        ...mapGetters(["saveState"])
+        ...mapGetters(["saveState"]),
+        resettableTitle: function (this: any) {
+            return this.$store.state.saveState.titleResetValue !== this.$store.state.saveState.newEntry.title;
+        },
+        editingExisting: function (this: any) {
+            console.error("db: " + (this.$store.state.saveState as SaveState).newEntry.database.fileName);
+            return !!(this.$store.state.saveState as SaveState).newEntry.database.fileName;
+        }
     },
     methods: {
         generatePassword: function (this: any) {
             Port.postMessage({ action: Action.GeneratePassword });
+            window.close();
+        },
+        nextClicked: function (this: any) {
+            this.$emit("save-where-clicked");
+        },
+        updateEntry: function (this: any) {
+            Port.postMessage({ action: Action.UpdateEntry } as AddonMessage);
+            window.close();
+        },
+        openFullEntryEditor (this: any) {
+            const entry = (this.$store.state.saveState as SaveState).newEntry;
+            Port.postMessage({
+                loginEditor: {
+                    uniqueID: entry.uuid, //TODO: needs to be uniqueId instead? test if editing old and new entries works in KV and KP
+                    DBfilename: entry.database.fileName
+                }
+            } as AddonMessage);
             window.close();
         },
         setTitle: function (this: any, value) {
@@ -72,6 +135,9 @@ export default {
             const updatedSaveState = Object.assign({}, this.$store.state.saveState) as SaveState;
             updatedSaveState.newEntry = new Entry({...updatedSaveState.newEntry, title: value });
             this.$store.dispatch("updateSaveState", updatedSaveState);
+        },
+        resetTitle: function (this: any) {
+            this.setTitle(this.$store.state.saveState.titleResetValue);
         },
         fieldValueChanged: function (this: any, change) {
             console.error(change);

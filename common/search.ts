@@ -11,7 +11,7 @@ import { Entry } from "./model/Entry";
 // polyfill from Mozilla but it doesn't work in some cases)
 declare const chrome;
 
-export class SearchResult {
+export class SearchResult { //TODO: EntrySummary
     iconImageData: string;
     usernameValue: string;
     usernameName: string;
@@ -387,7 +387,7 @@ export class Search {
 
 }
 
-export class SearchOnlyMatches {
+export class SearchOnlyMatches { //TODO: Filters list of matched logins using text keyword
     private searchConfig: SearchConfig;
     constructor (private matchedLogins: SearchResult[]) {
         this.searchConfig = resolveConfig({version: 1});
