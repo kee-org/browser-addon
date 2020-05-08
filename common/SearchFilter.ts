@@ -1,4 +1,4 @@
-import { Search } from "./search";
+import { SearcherAll } from "./SearcherAll";
 import { utils } from "./utils";
 
 // Pretend browser (WebExtensions) is chrome (we include a
@@ -7,7 +7,7 @@ declare const chrome;
 
 export class SearchFilter {
 
-    public attachFilterToSearchBox (searchBox: HTMLInputElement, searchRequestor, currentURIs: string[], search: Search) {
+    public attachFilterToSearchBox (searchBox: HTMLInputElement, searchRequestor, currentURIs: string[], search: SearcherAll) {
         let inMainPanel = false;
         if (searchBox.getAttribute("id") === "Kee-PanelSection-searchbox")
             inMainPanel = true;

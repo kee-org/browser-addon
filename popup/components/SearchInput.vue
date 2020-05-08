@@ -23,9 +23,10 @@ import { names as actionNames } from "../../store/action-names";
 import { configManager } from "../../common/ConfigManager";
 import { AddonMessage } from "../../common/AddonMessage";
 import { Port } from "../../common/port";
-import { Search, SearchResult } from "../../common/search";
+import { SearcherAll } from "../../common/SearcherAll";
 import { mTypes } from "../../store";
 import { KeeLog } from "../../common/Logger";
+import { EntrySummary } from "../../common/model/EntrySummary";
 
 export default {
     mixins: [Port.mixin],
@@ -37,7 +38,7 @@ export default {
     },
     created (this: any) {
         this.onDBChanged = () => {
-            this.search = new Search(
+            this.search = new SearcherAll(
                 {
                     KeePassDatabases: this.$store.getters.KeePassDatabases,
                     ActiveKeePassDatabaseIndex: this.$store.getters
@@ -61,7 +62,7 @@ export default {
     },
     methods: {
         ...mapActions(actionNames),
-        onSearchComplete (logins: SearchResult[]) {
+        onSearchComplete (logins: EntrySummary[]) {
             KeeLog.debug("onSearchComplete");
             logins = logins
                 .sort(function (a, b) {

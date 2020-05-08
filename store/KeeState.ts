@@ -1,6 +1,6 @@
 import { Database, PasswordProfile } from "../common/kfDataModel";
 import { KeeNotification } from "../common/KeeNotification";
-import { SearchResult } from "../common/search";
+import { EntrySummary } from "../common/model/EntrySummary";
 import { SaveState } from "../common/SaveState";
 
 export interface KeeState {
@@ -14,7 +14,7 @@ export interface KeeState {
     connectedWebsocket: boolean;
     currentSearchTerm: string;
     loginsFound: boolean;
-    searchResults: SearchResult[];
+    searchResults: EntrySummary[];
     saveState: SaveState;
     generatedPassword: string;
 }

@@ -49,7 +49,7 @@ import { Action } from "../../common/Action";
 export default {
     props: ["field"],
     data: () => ({
-        selectedProfile: "" //TODO: select most recently used or first result or something
+        selectedProfile: ""
     }),
     computed: {
         ...mapGetters(["PasswordProfiles", ""]),

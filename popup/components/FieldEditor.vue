@@ -51,7 +51,7 @@ export default {
     },
     props: ["field"],
     data: () => ({
-        revealed: false, //TODO: does it matter that this gets lost when popup closes? probably too minor an issue to worry about urgently
+        revealed: false,
         showPasswordGenerator: false
     }),
     computed: {

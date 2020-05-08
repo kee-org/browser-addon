@@ -41,10 +41,11 @@ import { mapActions, mapGetters } from "vuex";
 import { names as actionNames } from "../../store/action-names";
 import { configManager } from "../../common/ConfigManager";
 import { AddonMessage } from "../../common/AddonMessage";
-import { Search, SearchResult, SearchOnlyMatches } from "../../common/search";
 import Entry from "./Entry.vue";
 import { mTypes } from "../../store";
 import { KeeLog } from "../../common/Logger";
+import { EntrySummary } from "../../common/model/EntrySummary";
+import { SearcherMatchedOnly } from "../../common/SearcherMatchedOnly";
 
 export default {
     components: { Entry },
@@ -75,7 +76,7 @@ export default {
                 this.uidMap.set(this.matchedLogins[i].uniqueID, i);
             }
         }
-        this.searchOnlyMatches = new SearchOnlyMatches(this.matchedLogins);
+        this.searchOnlyMatches = new SearcherMatchedOnly(this.matchedLogins);
         this.searchOnlyMatches.execute(this.currentSearchTerm, (this as any).onSearchOnlyMatchesComplete.bind(this));
     },
     mounted (this: any) {
@@ -90,7 +91,7 @@ export default {
     },
     methods: {
         ...mapActions(actionNames),
-        onSearchOnlyMatchesComplete (this: any, logins: SearchResult[]) {
+        onSearchOnlyMatchesComplete (this: any, logins: EntrySummary[]) {
             KeeLog.debug("onSearchOnlyMatchesComplete");
             logins = logins
                 .sort(function (a, b) {
