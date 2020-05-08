@@ -1,153 +1,11 @@
 import { KeeLog } from "./Logger";
 import { KeeState } from "../store/KeeState";
+import { SearchConfig } from "./model/SearchConfig";
 import { utils } from "./utils";
-import { Entry } from "./model/Entry";
+import { EntrySummary } from "./model/EntrySummary";
+import { resolveConfig, tokenise, isMatched } from "./SearchUtils";
 
-/*
-  Includes contributions from https://github.com/haoshu
-*/
-
-// Pretend browser (WebExtensions) is chrome (we include a
-// polyfill from Mozilla but it doesn't work in some cases)
-declare const chrome;
-
-export class SearchResult { //TODO: EntrySummary
-    iconImageData: string;
-    usernameValue: string;
-    usernameName: string;
-    path: string;
-    title: string;
-    uRLs: string[];
-    url: string;
-    uniqueID: string;
-    dbFileName: string;
-    relevanceScore: number;
-    fullDetails?: Entry;
-}
-
-export class SearchConfig {
-    // Kee will check the supplied version number and behave consistently
-    // for each version, regardless of the current Kee addon version.
-    // If you supply a config object, you must at least include this property
-    version: number;
-
-    // Whether to search all logged in databases or just the active one
-    // (generally will want to respect the Kee option with this name)
-    searchAllDatabases: boolean;
-
-    // Disable searching in some parts of the entries if required
-    searchTitles: boolean;
-    searchUsernames: boolean;
-    searchGroups: boolean;
-    searchURLs: boolean;
-
-    // Custom weights allow the order of results to be manipulated in a way
-    // that best fits the context in which those results will be displayed
-    // A relevanceScore will be returned with each result item - it's up to
-    // the caller whether they are interested in processing this score data (e.g.
-    // ordering results in relevance order)
-    weightTitles: number;
-    weightUsernames: number;
-    weightGroups: number;
-    weightURLs: number;
-
-    // Maximum number of results to return, it's up to the caller to decide if
-    // they want to accept a result. Return a falsey value from onMatch to indicate that
-    // the match was not accepted and it will then not be counted towards this maximum.
-    // This applies per database rather than a total across all DBs
-    maximumResults: number;
-
-    // Include a callback function if you want to run the search asynchronously, if
-    // omitted the search will block and return the full set of results.
-    // You can also set a unique callback for each call: Search.execute(query, useThisCallbackInstead);
-    onComplete: () => void;
-
-    // A callback function to handle an individual result. Whatever is
-    // returned from this optional function will be added to the list of complete results
-    onMatch: () => void;
-}
-
-function isMatched (item, keywords, isInMatchingGroup, searchConfig: SearchConfig, filter?) {
-
-    if (filter) {
-        if (!filter(item))
-            return 0;
-        if (keywords.length < 1)
-            return 1; // Fixed relevance score for all matches
-    } else if (keywords.length < 1) {
-        return 0;
-    }
-
-    if (!item.url) {
-        // must be a group.
-        // If we know that a parent group has already matched, no point in searching further
-        if (isInMatchingGroup)
-            return 1;
-        for (const keyword of keywords) {
-            if (item.title.toLowerCase().indexOf(keyword) >= 0)
-                return 1;
-        }
-        return 0;
-    }
-
-    let matchScore = 0.0;
-
-    for (const keyword of keywords) {
-        let keywordScore = 0;
-        if (searchConfig.searchTitles && item.title && item.title.toLowerCase().indexOf(keyword) >= 0)
-            keywordScore += searchConfig.weightTitles;
-        if (searchConfig.searchUsernames && item.usernameValue && item.usernameValue.toLowerCase().indexOf(keyword) >= 0)
-            keywordScore += searchConfig.weightUsernames;
-        if (searchConfig.searchURLs && item.uRLs &&
-            item.uRLs.filter(function (i) { return (i.toLowerCase().indexOf(keyword) >= 0); }).length > 0)
-            keywordScore += searchConfig.weightURLs;
-
-        // Increment the relevance score proportionally to the number of keywords
-        matchScore += keywordScore * (1 / keywords.length);
-    }
-
-    if (isInMatchingGroup)
-        matchScore += searchConfig.weightGroups;
-
-    return matchScore;
-}
-
-function resolveConfig (config: Partial<SearchConfig>) {
-    if (!config)
-        config = {};
-    else {
-        if (config.version != 1)
-            KeeLog.warn("Unknown search config version. Will use version 1 defaults");
-    }
-
-    return {
-        version: 1,
-        searchAllDatabases: (typeof config.searchAllDatabases !== "undefined" ? config.searchAllDatabases : true),
-        searchTitles: (typeof config.searchTitles !== "undefined" ? config.searchTitles : true),
-        searchUsernames: (typeof config.searchUsernames !== "undefined" ? config.searchUsernames : true),
-        searchGroups: (typeof config.searchGroups !== "undefined" ? config.searchGroups : true),
-        searchURLs: (typeof config.searchURLs !== "undefined" ? config.searchURLs : true),
-        weightTitles: config.weightTitles || 2,
-        weightUsernames: config.weightUsernames || 1,
-        weightGroups: config.weightGroups || 0.25,
-        weightURLs: config.weightURLs || 0.75,
-        maximumResults: (typeof config.maximumResults !== "undefined" ? config.maximumResults : 30),
-        onComplete: config.onComplete,
-        onMatch: config.onMatch
-    };
-}
-
-function tokenise (text) {
-    const tokens = text.match(/'[^']*'|"[^"]*"|[^\s ]+/g) || [];
-    tokens.forEach(function (value, index, array) {
-        array[index] = array[index].replace(/(^['"])|(['"]$)/g, "")
-            .replace(/[\s ]+/g, " ")
-            .toLowerCase();
-    });
-    return tokens;
-}
-
-export class Search {
+export class SearcherAll {
 
     constructor (private state: KeeState, config: Partial<SearchConfig>) {
         this.searchConfig = resolveConfig(config);
@@ -344,7 +202,7 @@ export class Search {
     }
 
     private convertItem (path, node, dbFileName) {
-        const item: SearchResult = new SearchResult();
+        const item: EntrySummary = new EntrySummary();
         item.iconImageData = node.iconImageData;
         item.usernameValue = node.usernameValue;
         item.usernameName = node.usernameName;
@@ -357,7 +215,7 @@ export class Search {
         return item;
     }
 
-    private treeTraversal (branch, path, isInMatchingGroup, keywords, addResult: (item: SearchResult) => boolean, currentResultCount, dbFileName, filter) {
+    private treeTraversal (branch, path, isInMatchingGroup, keywords, addResult: (item: EntrySummary) => boolean, currentResultCount, dbFileName, filter) {
         let totalResultCount = currentResultCount;
         for (const leaf of branch.childLightEntries) {
             const item = this.convertItem(path, leaf, dbFileName);
@@ -385,52 +243,4 @@ export class Search {
         return totalResultCount;
     }
 
-}
-
-export class SearchOnlyMatches { //TODO: Filters list of matched logins using text keyword
-    private searchConfig: SearchConfig;
-    constructor (private matchedLogins: SearchResult[]) {
-        this.searchConfig = resolveConfig({version: 1});
-    }
-
-    private filterExistingResults (logins: SearchResult[], keywords) {
-        return logins.filter(login => isMatched(login, keywords, false, this.searchConfig));
-    }
-
-    public execute (query, onComplete) {
-        let abort = false;
-
-        if (!this.matchedLogins || this.matchedLogins.length === 0) abort = true;
-
-        onComplete = onComplete || this.searchConfig.onComplete;
-
-        if (!onComplete) abort = true;
-
-        if (abort) {
-            if (onComplete) {
-                onComplete([]);
-                return;
-            } else {
-                return [];
-            }
-        }
-
-        if (!query || query.length === 0) {
-            onComplete(this.matchedLogins);
-            return;
-        }
-
-        // allow pre-tokenised search terms to be supplied
-        let keywords = [];
-        if (Array.isArray(query))
-            keywords = query;
-        else if (query.length > 0)
-            keywords = tokenise(query);
-
-        // Create a timer to make the search run async
-        setTimeout(() => {
-            const results = this.filterExistingResults(this.matchedLogins, keywords);
-            onComplete(results);
-        }, 1);
-    }
 }

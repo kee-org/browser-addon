@@ -9,7 +9,7 @@ import { commandManager } from "./commands";
 import { browserPopupMessageHandler, pageMessageHandler, vaultMessageHandler, iframeMessageHandler } from "./messageHandlers";
 import { TabState } from "../common/TabState";
 import { Utils, utils } from "../common/utils";
-import { Search } from "../common/search";
+import { SearcherAll } from "../common/SearcherAll";
 import { configManager } from "../common/ConfigManager";
 import { KeeLog } from "../common/Logger";
 import { AddonMessage } from "../common/AddonMessage";
@@ -28,7 +28,7 @@ export class Kee {
     tabStates: Map<number, TabState>;
     persistentTabStates: Map<number, PersistentTabState>;
     utils: Utils;
-    search: Search;
+    search: SearcherAll;
     foregroundTabId: number;
 
     regularKPRPCListenerQueueHandlerTimer: number;
@@ -90,7 +90,7 @@ export class Kee {
 
         this.utils = utils;
 
-        this.search = new Search(store.state, {
+        this.search = new SearcherAll(store.state, {
             version: 1,
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });

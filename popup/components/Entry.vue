@@ -163,7 +163,7 @@ import { mapActions } from "vuex";
 import { names as actionNames } from "../../store/action-names";
 import { KeeURL } from "../../common/KeeURL";
 import { Action } from "../../common/Action";
-import supplementEntryState from "../supplementEntryState";
+import { supplementEntryState } from "../supplementEntryState";
 import { SaveState } from "../../common/SaveState";
 import { Entry } from "../../common/model/Entry";
 

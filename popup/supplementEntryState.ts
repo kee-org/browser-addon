@@ -1,7 +1,7 @@
 import { SaveState } from "../common/SaveState";
 import { Entry, mapToFields } from "../common/model/Entry";
 
-export default function supplementEntryState (entry: Entry, saveState: SaveState) {
+export function supplementEntryState (entry: Entry, saveState: SaveState) {
     const sd = saveState.submittedData;
     const overwrite = (sd ? {
         URLs: [sd.url],

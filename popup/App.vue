@@ -201,7 +201,7 @@ import { KeeLog } from "../common/Logger";
 import { SaveState } from "../common/SaveState";
 import { KeeVue } from "./KeeVue";
 import { Entry, mapToFields } from "../common/model/Entry";
-import supplementEntryState from "./supplementEntryState";
+import { supplementEntryState } from "./supplementEntryState";
 
 export default {
     components: {

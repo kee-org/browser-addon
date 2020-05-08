@@ -1,4 +1,4 @@
-import { Search } from "../common/search";
+import { SearcherAll } from "../common/SearcherAll";
 import { SubmittedData } from "../common/SubmittedData";
 import { AddonMessage } from "../common/AddonMessage";
 import { configManager } from "../common/ConfigManager";
@@ -18,7 +18,7 @@ export class SavePasswordPanel {
 
     private doc: HTMLDocument;
     private saveData: SaveData;
-    private search: Search;
+    private search: SearcherAll;
     private submittedData: SubmittedData;
 
     constructor (private myPort: browser.runtime.Port,
@@ -27,7 +27,7 @@ export class SavePasswordPanel {
         this.doc = window.document;
         this.submittedData = submittedData;
 
-        this.search = new Search(store.state, {
+        this.search = new SearcherAll(store.state, {
             version: 1,
             searchAllDatabases: true,
             maximumResults: 50

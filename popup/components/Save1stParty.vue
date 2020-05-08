@@ -124,7 +124,7 @@ export default {
             const entry = (this.$store.state.saveState as SaveState).newEntry;
             Port.postMessage({
                 loginEditor: {
-                    uniqueID: entry.uuid, //TODO: needs to be uniqueId instead? test if editing old and new entries works in KV and KP
+                    uniqueID: entry.uuid,
                     DBfilename: entry.database.fileName
                 }
             } as AddonMessage);
@@ -147,7 +147,7 @@ export default {
             const originalFieldIndex = (this.$store.state.saveState as SaveState).newEntry.fields.findIndex(f => f.uuid === change.uuid);
             const originalField = (this.$store.state.saveState as SaveState).newEntry.fields[originalFieldIndex];
             const newField = new Field({...originalField, value: change.value });
-            //TODO: faster deep clone
+            //TODO:4: faster deep clone
             const newFields = JSON.parse(JSON.stringify(updatedSaveState.newEntry.fields));
             newFields[originalFieldIndex] = newField;
             updatedSaveState.newEntry = new Entry({...updatedSaveState.newEntry, fields: newFields });

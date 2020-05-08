@@ -10,9 +10,9 @@ import { Port } from "../common/port";
 import { keeLoginInfo } from "../common/kfDataModel";
 import { SyncContent } from "../store/syncContent";
 import { MutationPayload } from "vuex";
-import { SearchResult } from "../common/search";
 import { Entry } from "../common/model/Entry";
 import { Action } from "../common/Action";
+import { EntrySummary } from "../common/model/EntrySummary";
 
 Vue.use(i18n);
 Vue.use(Vuetify);
@@ -87,7 +87,7 @@ function startup () {
                                         url: e.URLs[0],
                                         usernameName: (e.otherFields && e.usernameIndex >= 0) ? e.otherFields[e.usernameIndex].name : "<no username>",
                                         usernameValue: (e.otherFields && e.usernameIndex >= 0) ? e.otherFields[e.usernameIndex].value : "<no username>"
-                                    } as SearchResult)
+                                    } as EntrySummary)
                                 ),
                                 frameId: m.frameId
                             }
