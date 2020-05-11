@@ -8,4 +8,5 @@ export class SaveState {
     submittedData?: SubmittedData;
     lastActiveAt?: Date;
     showURLMismatchWarning: boolean;
+    favicon?: string;
 }

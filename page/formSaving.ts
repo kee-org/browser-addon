@@ -189,6 +189,8 @@ export class FormSaving {
                 //,savePageCountToTab
             };
 
+            // console.error("favicon page: " + this.);
+
             this.myPort.postMessage({submittedData} as AddonMessage);
         }
     }

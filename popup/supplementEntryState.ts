@@ -10,7 +10,6 @@ export function supplementEntryState (entry: Entry, saveState: SaveState, urls?:
         URLs: urls ?? [sd.url],
         fields: newFields,
         title: sd.title
-    //TODO: e.iconImageData
     } : {}) as Entry;
     return Object.assign(Object.assign({}, entry), overwrite);
 }

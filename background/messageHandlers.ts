@@ -1,4 +1,3 @@
-import { fetchFavicon } from "./fetchFavicon";
 import { showUpdateSuccessNotification } from "./showUpdateSuccessNotification";
 import { AddonMessage } from "../common/AddonMessage";
 import { KeeLog } from "../common/Logger";
@@ -70,6 +69,12 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
             entry.parentGroup = undefined;
             entry.uniqueID = null;
             entry.database = undefined;
+
+            // We will rarely have access to the favicon data at the time the initial
+            // Entry is created for editing in the popup so set it at this much later
+            // point instead.
+            entry.iconImageData = store.state.saveState.favicon;
+
             if (msg.action === Action.UpdateEntry) {
                 window.kee.updateLogin(
                     entry,
@@ -112,7 +117,7 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
     }
 }
 
-export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
+export async function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.mutation) {
         window.kee.syncBackground.onMessage(this, msg.mutation);
     }
@@ -134,11 +139,6 @@ export function pageMessageHandler (this: browser.runtime.Port, msg: AddonMessag
         window.kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).logins = msg.logins;
     }
     if (msg.submittedData) {
-
-        // Record the URL of the favicon now but don't resolve it to
-        // data until we know we want to actually save this login
-        msg.submittedData.favIconUrl = this.sender.tab.favIconUrl;
-
         const submittedLogin = new keeLoginInfo();
         submittedLogin.init([msg.submittedData.url], null, null, msg.submittedData.usernameIndex,
             msg.submittedData.passwordFields.map(function (item) {
@@ -302,31 +302,31 @@ export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMess
         window.kee.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
     }
 
-    if (msg.saveData) {
-        const persistentItem = window.kee.persistentTabStates.get(tabId).items.find(item => item.itemType == "submittedData");
+    // if (msg.saveData) {
+    //     const persistentItem = window.kee.persistentTabStates.get(tabId).items.find(item => item.itemType == "submittedData");
 
-        fetchFavicon(persistentItem.submittedData.favIconUrl).then(dataUrl => {
+    //     fetchFavicon(persistentItem.submittedData.favIconUrl).then(dataUrl => {
 
-            if (dataUrl) {
-                persistentItem.submittedLogin.iconImageData = dataUrl.substr(22);
-            }
+    //         if (dataUrl) {
+    //             persistentItem.submittedLogin.iconImageData = dataUrl.substr(22);
+    //         }
 
-            if (msg.saveData.update) {
-                window.kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.db);
-                showUpdateSuccessNotification(msg.saveData.oldLoginUUID, msg.saveData.db);
-            }
-            else {
-                const result = window.kee.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
-                if (configManager.current.rememberMRUGroup) {
-                    if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
-                    configManager.current.mruGroup[msg.saveData.db] = msg.saveData.group;
-                    configManager.save();
-                }
-            }
+    //         if (msg.saveData.update) {
+    //             window.kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.db);
+    //             showUpdateSuccessNotification(msg.saveData.oldLoginUUID, msg.saveData.db);
+    //         }
+    //         else {
+    //             const result = window.kee.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
+    //             if (configManager.current.rememberMRUGroup) {
+    //                 if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
+    //                 configManager.current.mruGroup[msg.saveData.db] = msg.saveData.group;
+    //                 configManager.save();
+    //             }
+    //         }
 
-            window.kee.tabStates.get(tabId).framePorts.get(0).postMessage({ action: Action.CloseAllPanels });
-        });
-    }
+    //         window.kee.tabStates.get(tabId).framePorts.get(0).postMessage({ action: Action.CloseAllPanels });
+    //     });
+    // }
 
     if (msg.neverSave) {
         const persistentItem = window.kee.persistentTabStates.get(tabId).items.find(item => item.itemType == "submittedData");
