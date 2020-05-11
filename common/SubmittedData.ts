@@ -4,9 +4,6 @@ export interface SubmittedData {
     passwordFields: any[];
     title: string;
     otherFields: any[];
-    //currentPage,
     isPasswordChangeForm: boolean;
     isRegistrationForm: boolean;
-    //,savePageCountToTab
-    favIconUrl: string;
 }

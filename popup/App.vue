@@ -203,6 +203,7 @@ import { SaveState } from "../common/SaveState";
 import { KeeVue } from "./KeeVue";
 import { Entry, mapToFields } from "../common/model/Entry";
 import { supplementEntryState } from "./supplementEntryState";
+import { fetchFavicon, getFaviconUrl } from "./favicon";
 
 export default {
     components: {
@@ -261,6 +262,15 @@ export default {
         if (ss?.lastActiveAt <= new Date(Date.now()-12000)) {
             this.saveDiscard();
         }
+
+        const favIconUrl = await getFaviconUrl();
+        if (!favIconUrl) return;
+        const favicon = await fetchFavicon(favIconUrl);
+        if (!favicon) return;
+
+        const updatedSaveState = Object.assign({}, ss);
+        updatedSaveState.favicon = favicon;
+        this.$store.dispatch("updateSaveState", updatedSaveState);
     },
     methods: {
         ...mapActions(actionNames),
@@ -294,6 +304,7 @@ export default {
             updatedSaveState.titleResetValue = null;
             updatedSaveState.lastActiveAt = null;
             updatedSaveState.showURLMismatchWarning = false;
+            updatedSaveState.favicon = null;
             this.$store.dispatch("updateSaveState", updatedSaveState);
             //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },

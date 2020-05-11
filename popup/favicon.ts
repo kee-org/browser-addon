@@ -1,3 +1,7 @@
+async function sleep (milliseconds: number) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
 export function fetchFavicon (url): Promise<string> {
     return new Promise(function (resolve, reject) {
         if (!url) {
@@ -12,8 +16,19 @@ export function fetchFavicon (url): Promise<string> {
             const ctx = canvas.getContext("2d");
             ctx.drawImage(this, 0, 0);
             const dataURL = canvas.toDataURL("image/png");
-            resolve(dataURL);
+            resolve(dataURL.substr(22));
         };
         img.src = url;
     });
+}
+
+export async function getFaviconUrl () {
+    for (let i=0; i<45; i++) {
+        const tab = (await browser.tabs.query({ active: true, currentWindow:true }))[0];
+        if (tab) {
+            console.error("favicon popup: " + tab.favIconUrl);
+            return tab.favIconUrl;
+        }
+        sleep(1000);
+    }
 }
