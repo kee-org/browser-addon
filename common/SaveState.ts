@@ -7,4 +7,5 @@ export class SaveState {
     titleResetValue: string;
     submittedData?: SubmittedData;
     lastActiveAt?: Date;
+    showURLMismatchWarning: boolean;
 }

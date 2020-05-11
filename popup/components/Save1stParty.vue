@@ -39,7 +39,39 @@
         />
       </v-container>
     </v-slide-y-transition>
-
+    <v-alert
+      v-if="showURLMismatchWarning"
+      border="top"
+      colored-border
+      type="warning"
+      elevation="1"
+      class="my-3"
+    >
+      <v-row align="center">
+        <v-col>
+          <p>This entry is for a different site.</p>
+          <p>Continuing with this update will enable you to fill these credentials into this site too.</p>
+          <p>Make sure this is not an attempt to trick you into revealing your password!</p>
+        </v-col>
+      </v-row>
+      <v-row align="center">
+        <v-col>
+          <div>
+            <v-checkbox
+              v-model="differentSiteConfirmation"
+              label="I understand; there is a legitimate reason for these credentials to be shared with the current website from now on."
+            />
+          </div>
+        </v-col>
+      </v-row>
+    </v-alert>
+    <v-btn
+      right
+      color="light-blue lighten-3"
+      @click="cancel"
+    >
+      {{ $i18n('cancel') }}
+    </v-btn>
     <v-btn
       v-if="!editingExisting"
       right
@@ -50,6 +82,7 @@
     </v-btn>
     <v-btn
       v-if="editingExisting"
+      :disabled="showURLMismatchWarning && !differentSiteConfirmation"
       right
       color="light-blue lighten-3"
       @click="updateEntry"
@@ -96,7 +129,8 @@ export default {
         FieldEditor
     },
     data: () => ({
-        originalFields: []
+        originalFields: [],
+        differentSiteConfirmation: false
     }),
     computed: {
         ...mapGetters(["saveState"]),
@@ -106,9 +140,15 @@ export default {
         editingExisting: function (this: any) {
             console.error("db: " + (this.$store.state.saveState as SaveState).newEntry.database.fileName);
             return !!(this.$store.state.saveState as SaveState).newEntry.database.fileName;
+        },
+        showURLMismatchWarning: function (this: any) {
+            return this.saveState.showURLMismatchWarning;
         }
     },
     methods: {
+        cancel: function (this: any) {
+            this.$emit("cancel-clicked");
+        },
         generatePassword: function (this: any) {
             Port.postMessage({ action: Action.GeneratePassword });
             window.close();

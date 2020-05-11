@@ -74,7 +74,6 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
                 window.kee.updateLogin(
                     entry,
                     existingOrTemporaryUuid,
-                    2, //TODO: Sometimes needs to be 4 - "Keep the old entry's URL (don't add the new URL to the entry)"
                     db.fileName);
                 //TODO: consider if this is needed anymore, once user can see what bits
                 // they have edited, it's probably redundant or even detrimental to the experience.
@@ -313,7 +312,7 @@ export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMess
             }
 
             if (msg.saveData.update) {
-                window.kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.urlMergeMode, msg.saveData.db);
+                window.kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.db);
                 showUpdateSuccessNotification(msg.saveData.oldLoginUUID, msg.saveData.db);
             }
             else {

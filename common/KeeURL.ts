@@ -14,6 +14,9 @@ export class KeeURL {
     public get isIPAddress () : boolean {
         return this._isIPAddress;
     }
+    public get domainOrIPAddress () : string {
+        return this._domain ?? (this._isIPAddress ? this._url.hostname : "");
+    }
 
     public get domainWithPort () : string {
         if (!this._domain) return "";

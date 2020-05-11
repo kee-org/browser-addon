@@ -28,7 +28,4 @@ export class FeatureFlags {
         "KPRPC_GENERAL_CLIENTS"
 
     ];
-
-    public static received: string[];
-
 }
