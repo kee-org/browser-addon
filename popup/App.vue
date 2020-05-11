@@ -48,6 +48,7 @@
         <Save1stParty
           v-if="showSaveStart && !showSaveWhere"
           @save-where-clicked="saveWhere"
+          @cancel-clicked="saveDiscard"
         />
         <SaveWhere
           v-if="showSaveWhere"
@@ -251,7 +252,7 @@ export default {
             }
         }
     },
-    mounted (this: any) {
+    async mounted (this: any) {
         const ss = this.$store.state.saveState as SaveState;
         this.saveLastActiveAt = ss?.lastActiveAt;
 
@@ -273,6 +274,7 @@ export default {
             updatedSaveState.newEntry = supplementEntryState(new Entry({}), ss);
             updatedSaveState.titleResetValue = updatedSaveState.newEntry.title;
             updatedSaveState.lastActiveAt = new Date();
+            updatedSaveState.showURLMismatchWarning = false;
             this.$store.dispatch("updateSaveState", updatedSaveState);
             //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
@@ -291,6 +293,7 @@ export default {
             updatedSaveState.newEntry = new Entry({});
             updatedSaveState.titleResetValue = null;
             updatedSaveState.lastActiveAt = null;
+            updatedSaveState.showURLMismatchWarning = false;
             this.$store.dispatch("updateSaveState", updatedSaveState);
             //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },

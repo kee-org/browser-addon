@@ -101,9 +101,11 @@ export class jsonrpcClient {
         this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "AddLogin", [jslogin, parentUUID, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
-    updateLogin (login: keeLoginInfo, oldLoginUUID: string, urlMergeMode: number, dbFileName: string) {
+    updateLogin (login: keeLoginInfo, oldLoginUUID: string, dbFileName: string) {
         const jslogin = login.asEntry();
-        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "UpdateLogin", [jslogin, oldLoginUUID, urlMergeMode, dbFileName], null, ++this.kprpcClient.requestId);
+        const sessionManager = this.sessionManagerForFilename(dbFileName);
+        const urlMergeMode = sessionManager.features().some(f => f === "KPRPC_FEATURE_ENTRY_URL_REPLACEMENT") ? 5 : 2;
+        this.kprpcClient.request([sessionManager], "UpdateLogin", [jslogin, oldLoginUUID, urlMergeMode, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
     findLogins (fullURL: string, formSubmitURL, httpRealm, uniqueID: string, dbFileName, freeText, username, callback: (resultWrapper: Partial<ResultWrapper>) => void)

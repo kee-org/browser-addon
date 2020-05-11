@@ -164,6 +164,7 @@ import { names as actionNames } from "../../store/action-names";
 import { KeeURL } from "../../common/KeeURL";
 import { Action } from "../../common/Action";
 import { supplementEntryState } from "../supplementEntryState";
+import { reconcileURLs } from "../reconcileURLs";
 import { SaveState } from "../../common/SaveState";
 import { Entry } from "../../common/model/Entry";
 
@@ -243,14 +244,15 @@ export default {
         hideFullDetails (this: any) {
             this.expanded = false;
         },
-        editEntry (this: any) {
-            // user clicks edit on an entry > replace saveState.newEntry with the originalEntry, supplemented with submitteddata if present
-
+        async editEntry (this: any) {
             const ss = this.$store.state.saveState as SaveState;
+            const entry = this.entrySummary.fullDetails as Entry;
             const updatedSaveState = Object.assign({}, ss);
-            updatedSaveState.newEntry = supplementEntryState(this.entrySummary.fullDetails, ss);
+            const { urls, showWarning } = await reconcileURLs(entry.URLs, ss.submittedData?.url);
+            updatedSaveState.newEntry = supplementEntryState(entry, ss, urls);
             updatedSaveState.titleResetValue = updatedSaveState.newEntry.title;
             updatedSaveState.lastActiveAt = new Date();
+            updatedSaveState.showURLMismatchWarning = showWarning;
             this.$store.dispatch("updateSaveState", updatedSaveState);
         },
         focusin: function (this: any, e) {

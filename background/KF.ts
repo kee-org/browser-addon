@@ -517,11 +517,11 @@ export class Kee {
         }
     }
 
-    updateLogin (login: keeLoginInfo, oldLoginUUID: string, urlMergeMode: number, dbFileName: string)
+    updateLogin (login: keeLoginInfo, oldLoginUUID: string, dbFileName: string)
     {
         try
         {
-            return this.KeePassRPC.updateLogin(login, oldLoginUUID, urlMergeMode, dbFileName);
+            return this.KeePassRPC.updateLogin(login, oldLoginUUID, dbFileName);
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
