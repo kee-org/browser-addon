@@ -88,13 +88,11 @@
             v-if="expanded && !!entrySummary.fullDetails"
             class="my-0 pa-0 mx-2"
           >
-            <!-- TODO: show a loading screen and also allow initial rendering to be expanded -->
             <Field
               v-for="f of allFields"
-              :key="f.value"
+              :key="f.uuid"
               :field="f"
             />
-            <!-- TODO new uuids for keys? -->
             <v-row
               justify="space-between"
               align="center"
@@ -171,7 +169,7 @@ import { Entry } from "../../common/model/Entry";
 export default {
     components: { Field },
     mixins: [Port.mixin],
-    props: ["entrySummary","index","loginIndex","frameId"], //TODO: make index optional for when we're not part of a list
+    props: ["entrySummary","index","loginIndex","frameId"], //TODO:* make index optional for when we're not part of a list
     data: () => ({
         expanded: false,
         focussed: false
@@ -308,12 +306,12 @@ export default {
             if (target.previousElementSibling) {
                 (target.previousElementSibling as HTMLLIElement).focus();
             } else {
-            //TODO: generalise for more than just search result items
+            //TODO:* generalise for more than just search result items - pull all three of these list management methods into emit handlers above, provided the focus call is still allowed via that diconnected event handler in Chrome and FF.
                 (document.getElementById("searchBox") as HTMLInputElement).focus();
             }
         },
         exitList (this: any, event: Event) {
-        //TODO: generalise for more than just search result items
+        //TODO:* generalise for more than just search result items
             (document.getElementById("searchBox") as HTMLInputElement).focus();
         }
     }
