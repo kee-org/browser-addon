@@ -169,7 +169,7 @@ import { Entry } from "../../common/model/Entry";
 export default {
     components: { Field },
     mixins: [Port.mixin],
-    props: ["entrySummary","index","loginIndex","frameId"], //TODO:* make index optional for when we're not part of a list
+    props: ["entrySummary","isFirstInAList","loginIndex","frameId"],
     data: () => ({
         expanded: false,
         focussed: false
@@ -189,7 +189,7 @@ export default {
                 : "[" + $STR("noUsername_partial_tip") + "]";
         },
         tabindex: function (this: any) {
-            return this.index === 0 ? "0" : "-1";
+            return this.isFirstInAList ? "0" : "-1";
         },
         allFields: function (this: any) {
             const e = this.entrySummary.fullDetails as Entry;
@@ -296,23 +296,13 @@ export default {
             window.close();
         },
         nextInList (this: any, event: Event) {
-            const target = event.target as HTMLLIElement;
-            if (target.nextElementSibling) {
-                (target.nextElementSibling as HTMLLIElement).focus();
-            }
+            this.$emit("move-next-in-list");
         },
         prevInList (this: any, event: Event) {
-            const target = event.target as HTMLLIElement;
-            if (target.previousElementSibling) {
-                (target.previousElementSibling as HTMLLIElement).focus();
-            } else {
-            //TODO:* generalise for more than just search result items - pull all three of these list management methods into emit handlers above, provided the focus call is still allowed via that diconnected event handler in Chrome and FF.
-                (document.getElementById("searchBox") as HTMLInputElement).focus();
-            }
+            this.$emit("move-prev-in-list");
         },
         exitList (this: any, event: Event) {
-        //TODO:* generalise for more than just search result items
-            (document.getElementById("searchBox") as HTMLInputElement).focus();
+            this.$emit("move-out-of-list");
         }
     }
 };
