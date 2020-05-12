@@ -29,7 +29,7 @@ export class Entry {
     // The KeePass entry's uniqueID (if known)
     readonly uuid: string;
 
-    //TODO:4: Remove once legacy Group class is no longer needed
+    //TODO:* Remove once legacy Group (implicit) class is no longer needed
     // This is needed for treeview iteration in the UI - both groups and
     // entries need to have the same property names
     public get uniqueID () : string {
@@ -43,7 +43,7 @@ export class Entry {
 
     readonly icon: Icon;
 
-    readonly parentGroup: any; //TODO:4: Can currently be some sort of unspecified Group class. E.g. used for parentGroup.path (string).
+    readonly parentGroup: any; //TODO:* Can currently be some sort of unspecified (implicit) Group class. E.g. used for parentGroup.path (string).
 
     readonly alwaysAutoFill: boolean;
     readonly alwaysAutoSubmit: boolean;
@@ -54,7 +54,7 @@ export class Entry {
 
     // How relevant this login entry is to the current form in
     // the browser - transient (not stored in KeePass)
-    //TODO:4: put all match data into a new object?
+    //TODO:* put all match data into a new object?
     relevanceScore: number;
     lowFieldMatchRatio: any;
     formIndex: number;
@@ -79,7 +79,7 @@ export class Entry {
     }
 
 
-    //TODO:4: allow mapping to/from KPRPC DTOs directly.
+    //TODO:* allow mapping to/from KPRPC DTOs directly.
     // In short term we only use this new model for the popup GUI but ultimately want to
     //replace keeLoginInfo which will mean implementing a different set of mappings
 

@@ -1317,22 +1317,6 @@ export class FormFilling {
         // match for 3 or 4 field forms; etc.
         const minMatchedFieldCountRatio = 0.501;
 
-
-        // Must be careful to not let radio fields cause false negatives
-        // Other fields which can't ever be matched to minimum relevance
-        // are discounted later so we don't consider them here
-        //TODO: Why? Shouldn't we discount all radio types from total
-        //counts below as for empty fields?
-        // I think this is rubbish now and no longer needed but don't fully
-        // understand why there was an exception in the first place so
-        // leaving here for a version or two in case bugs relating to
-        // radio buttons crop up
-        // for (let i = 0; i < login.otherFields.length; i++)
-        // {
-        //     if (login.otherFields[i].type == "radio")
-        //         otherFieldMatchSuccesses[i] = true;
-        // }
-
         const [ otherRelevanceScore, otherFieldMatchSuccesses ] = this.determineRelevanceScores(
             "other", otherFields, login.otherFields, currentPage, scoreConfig, visibleFieldCache.other);
         const [ passwordRelevanceScore, passwordFieldMatchSuccesses ] = this.determineRelevanceScores(

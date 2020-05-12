@@ -32,7 +32,7 @@ export class Field {
     // tracks the most recent value we want to reset to in cases where the user has that possibility
     readonly resetValue: string;
 
-    //TODO:4: Will only need these once we proceed with further removal of the keeLoginField class
+    //TODO:* Will only need these once we proceed with further removal of the keeLoginField class
     // The HTML form element DOM objects - transient (not sent to KeePass)
     // DOMInputElement: HTMLInputElement;
     // DOMSelectElement: HTMLSelectElement;

@@ -80,7 +80,7 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
                     entry,
                     existingOrTemporaryUuid,
                     db.fileName);
-                //TODO: consider if this is needed anymore, once user can see what bits
+                //TODO:* consider if this is needed anymore, once user can see what bits
                 // they have edited, it's probably redundant or even detrimental to the experience.
                 showUpdateSuccessNotification(existingOrTemporaryUuid, db.fileName);
 

@@ -146,8 +146,13 @@ export class Kee {
                         }
                     }
 
-                    //TODO: These get distributed to the popup port. Shouldn't do any
-                    // harm but is inefficient so try to avoid somehow.
+                    // Minor performance issue:
+                    // These get distributed to the popup port now (along with all
+                    // other page/iframe ports). Shouldn't do any harm because
+                    // the popup will just queue up the mutations and apply them
+                    // when it's ready but it is inefficient because the same
+                    // data is included in the connect message we're literally
+                    // just about to send.
                     store.dispatch("updateSubmittedData", submittedData);
                     store.dispatch("updateLoginsFound", loginsFound);
 
@@ -368,8 +373,9 @@ export class Kee {
 
     updateKeePassDatabases (newDatabases: Database[])
     {
-        //TODO: May need to determine if anything has actually changed before
-        // doing the dispatches and poking the current tab frames to find logins
+        //TODO:4: To improve performance we might need to determine if anything
+        // has actually changed before doing the dispatches and poking the
+        // current tab frames to find logins
         let newDatabaseActiveIndex = -1;
         for (let i=0; i < newDatabases.length; i++)
         {
