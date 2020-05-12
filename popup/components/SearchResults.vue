@@ -8,10 +8,14 @@
     <Entry
       v-for="(match, index) of filteredMatches"
       :key="match.entry.uniqueID"
+      ref="listAarray"
       :entrySummary="match.entry"
-      :index="index"
+      :isFirstInAList="index === 0"
       :frame-id="frame-id"
       :login-index="match.originalIndex"
+      @move-next-in-list="nextInList(index, 'listAarray', filteredMatches.length)"
+      @move-prev-in-list="prevInList(index, 'listAarray', filteredMatches.length)"
+      @move-out-of-list="exitList"
     />
 
     <v-divider
@@ -29,8 +33,13 @@
     <Entry
       v-for="(entry, index) of deduplicatedSearchResults"
       :key="entry.uniqueID"
+      ref="listBarray"
       :entrySummary="entry"
-      :index="index"
+      :isFirstInAList="index === 0"
+      :data-index="index"
+      @move-next-in-list="nextInList(index, 'listBarray', deduplicatedSearchResults.length)"
+      @move-prev-in-list="prevInList(index, 'listBarray', deduplicatedSearchResults.length)"
+      @move-out-of-list="exitList"
     />
   </div>
 </template>
@@ -103,6 +112,29 @@ export default {
                 entry: m,
                 originalIndex: this.uidMap.get(m.uniqueID)
             }));
+        },
+        nextInList (this: any, currentIndex: number, listName: string, listLength: any) {
+            const currentVueNode = this.$refs[listName].find(e => parseInt(e.$el.dataset.index) === currentIndex);
+            if (currentIndex < listLength - 1) {
+                currentVueNode.$el.nextElementSibling.focus();
+            } else if (listName === "listAarray" && this.deduplicatedSearchResults.length > 0) {
+                const firstBListVueNode = this.$refs["listBarray"].find(e => parseInt(e.$el.dataset.index) === 0);
+                firstBListVueNode.$el.focus();
+            }
+        },
+        prevInList (this: any, currentIndex: number, listName: string, listLength: any) {
+            const currentVueNode = this.$refs[listName].find(e => parseInt(e.$el.dataset.index) === currentIndex);
+            if (currentIndex > 0) {
+                currentVueNode.$el.previousElementSibling.focus();
+            } else if (listName === "listBarray" && this.filteredMatches.length > 0) {
+                const lastAListVueNode = this.$refs["listAarray"].find(e => parseInt(e.$el.dataset.index) === this.filteredMatches.length - 1);
+                lastAListVueNode.$el.focus();
+            } else {
+                (document.getElementById("searchBox") as HTMLInputElement).focus();
+            }
+        },
+        exitList (this: any) {
+            (document.getElementById("searchBox") as HTMLInputElement).focus();
         }
     }
 };
