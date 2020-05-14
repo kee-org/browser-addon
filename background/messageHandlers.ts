@@ -4,7 +4,6 @@ import { KeeLog } from "../common/Logger";
 import { KeeNotification } from "../common/KeeNotification";
 import { Action } from "../common/Action";
 import { configManager } from "../common/ConfigManager";
-import { keeLoginInfo, keeLoginField } from "../common/kfDataModel";
 import { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
 import { SiteConfig } from "../common/config";
@@ -34,7 +33,7 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
         });
     }
     if (msg.action === Action.GeneratePassword) {
-        window.kee.generatePassword(msg.passwordProfile, "unknown URL", generatedPassword => {
+        window.kee.generatePassword(msg.passwordProfile, msg.url ?? "unknown URL", generatedPassword => {
             if (generatedPassword) {
                 store.dispatch("updateGeneratedPassword", generatedPassword);
             } else {
@@ -59,21 +58,29 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
     }
     if (msg.action === Action.CreateEntry || msg.action === Action.UpdateEntry) {
         if (store.state.connected) {
-            const entry = Entry.toKeeLoginInfo(store.state.saveState.newEntry);
-            const existingOrTemporaryUuid = entry.uniqueID;
-            const db = entry.database;
-            const parentGroupUuid: string = entry.parentGroup.uniqueID;
+            const sourceEntry = store.state.saveState.newEntry;
+            const existingOrTemporaryUuid = sourceEntry.uuid;
+            const db = sourceEntry.database;
+            const parentGroupUuid: string = sourceEntry.parentGroup.uuid;
 
+            // shallow clone so we don't impact the values we have to wipe out below
             // KPRPC has particular expectations about some Entry properties.
             // parent group UUID, DB and UUID should all be undefined or null as set below.
-            entry.parentGroup = undefined;
-            entry.uniqueID = null;
-            entry.database = undefined;
+            const entry = new Entry(
+                Object.assign(
+                    Object.assign({} as Entry, sourceEntry) as Entry,
+                    {
+                        parentGroup: undefined,
+                        uuid: null,
+                        database: undefined,
 
-            // We will rarely have access to the favicon data at the time the initial
-            // Entry is created for editing in the popup so set it at this much later
-            // point instead.
-            entry.iconImageData = store.state.saveState.favicon;
+                        // We will rarely have access to the favicon data at the time the initial
+                        // Entry is created for editing in the popup so set it at this much later
+                        // point instead.
+                        icon: { version: 1, iconImageData: store.state.saveState.favicon }
+                    }
+                )
+            );
 
             if (msg.action === Action.UpdateEntry) {
                 window.kee.updateLogin(
@@ -99,7 +106,7 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
         }
     }
 
-    if (msg.action == Action.ManualFill && msg.selectedLoginIndex != null) {
+    if (msg.action == Action.ManualFill && msg.selectedEntryIndex != null) {
         window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(msg.frameId || 0).postMessage(msg);
         window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(0).postMessage({ action: Action.CloseAllPanels });
     }
@@ -109,11 +116,11 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
     }
     if (msg.findMatches) {
         window.kee.findLogins(null, null, null, msg.findMatches.uuid, msg.findMatches.DBfilename, null, null, result => {
-            window.kee.browserPopupPort.postMessage({ findMatchesResult: result.result } as AddonMessage);
+            window.kee.browserPopupPort.postMessage({ findMatchesResult: result } as AddonMessage);
         });
     }
     if (msg.loginEditor) {
-        window.kee.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
+        window.kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
     }
 }
 
@@ -127,7 +134,7 @@ export async function pageMessageHandler (this: browser.runtime.Port, msg: Addon
     if (msg.findMatches) {
         window.kee.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
             this.postMessage({ isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId,
-                findMatchesResult: result.result } as AddonMessage);
+                findMatchesResult: result } as AddonMessage);
         });
     }
     if (msg.removeNotification) {
@@ -135,33 +142,14 @@ export async function pageMessageHandler (this: browser.runtime.Port, msg: Addon
         try { window.kee.browserPopupPort.postMessage({ isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId } as AddonMessage); }
         catch (e) { /* whatever */ }
     }
-    if (msg.logins) {
-        window.kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).logins = msg.logins;
+    if (msg.entries) {
+        window.kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).entries = msg.entries;
     }
     if (msg.submittedData) {
-        const submittedLogin = new keeLoginInfo();
-        submittedLogin.init([msg.submittedData.url], null, null, msg.submittedData.usernameIndex,
-            msg.submittedData.passwordFields.map(function (item) {
-                const newField = new keeLoginField();
-                newField.fieldId = item.fieldId;
-                newField.type = item.type;
-                newField.name = item.name;
-                newField.value = item.value;
-                return newField; }),
-            null, msg.submittedData.title,
-            msg.submittedData.otherFields.map(function (item) {
-                const newField = new keeLoginField();
-                newField.fieldId = item.fieldId;
-                newField.type = item.type;
-                newField.name = item.name;
-                newField.value = item.value;
-                return newField; }),
-            1);
 
         const persistentItem = {
             itemType: "submittedData" as "submittedData",
             submittedData: msg.submittedData,
-            submittedLogin: submittedLogin,
             creationDate: new Date(),
             accessCount: 0,
             maxAccessCount: 20
@@ -171,7 +159,7 @@ export async function pageMessageHandler (this: browser.runtime.Port, msg: Addon
             window.kee.persistentTabStates.set(this.sender.tab.id, {items: [] });
         }
 
-        // Don't allow more than one login to be tracked for this tab
+        // Don't allow more than one entry to be tracked for this tab
         if (window.kee.persistentTabStates.get(this.sender.tab.id)) {
             window.kee.persistentTabStates.get(this.sender.tab.id).items =
                 window.kee.persistentTabStates.get(this.sender.tab.id).items.filter(item => item.itemType !== "submittedData");
@@ -270,7 +258,7 @@ export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMess
     const frameId = this.sender.frameId;
     const port = this;
 
-    if (msg.action == Action.ManualFill && msg.selectedLoginIndex != null) {
+    if (msg.action == Action.ManualFill && msg.selectedEntryIndex != null) {
         window.kee.tabStates.get(tabId).framePorts.get(msg.frameId || 0).postMessage(msg);
         window.kee.tabStates.get(tabId).framePorts.get(0).postMessage({ action: Action.CloseAllPanels });
     }
@@ -299,7 +287,7 @@ export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMess
     }
 
     if (msg.loginEditor) {
-        window.kee.launchLoginEditor(msg.loginEditor.uniqueID, msg.loginEditor.DBfilename);
+        window.kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
     }
 
     // if (msg.saveData) {

@@ -1,4 +1,5 @@
-import { Database, PasswordProfile } from "../common/kfDataModel";
+import { Database } from "../common/model/Database";
+import { PasswordProfile } from "../common/model/PasswordProfile";
 import { KeeNotification } from "../common/KeeNotification";
 import { EntrySummary } from "../common/model/EntrySummary";
 import { SaveState } from "../common/SaveState";

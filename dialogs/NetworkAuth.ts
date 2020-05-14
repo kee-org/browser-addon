@@ -1,70 +1,56 @@
-import { keeLoginInfo } from "../common/kfDataModel";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
+import { Entry } from "../common/model/Entry";
 
 class NetworkAuth {
-    public setupPage (logins: keeLoginInfo[], realm: string, url: string, isProxy: boolean) {
+    public setupPage (entries: Entry[], realm: string, url: string, isProxy: boolean) {
         const instructions = isProxy ? $STRF("network_auth_proxy_description", [url]) : $STRF("network_auth_http_auth_description", [url, realm] );
         document.getElementById("network_auth_instructions").textContent = instructions;
-        this.createNearNode(document.getElementById("network_auth_choose"), logins);
+        this.createNearNode(document.getElementById("network_auth_choose"), entries);
     }
 
-    supplyNetworkAuth (loginIndex: number) {
+    supplyNetworkAuth (entryIndex: number) {
         browser.tabs.getCurrent().then(tab => {
-            browser.runtime.sendMessage({action: "NetworkAuth_ok", selectedLoginIndex: loginIndex });
+            browser.runtime.sendMessage({action: "NetworkAuth_ok", selectedEntryIndex: entryIndex });
             const removing = browser.tabs.remove(tab.id);
         });
     }
 
-    public createNearNode (node: HTMLElement, logins) {
+    public createNearNode (node: HTMLElement, entries: Entry[]) {
         const container = document.createElement("div");
         container.id = "Kee-MatchedLoginsList";
         const list = document.createElement("ul");
-        this.setLogins(logins, list);
+        this.setLogins(entries, list);
         container.appendChild(list);
         node.parentNode.insertBefore(container, node.nextSibling);
     }
 
-    private setLogins (logins, container)
+    private setLogins (entries: Entry[], container)
     {
-        this.setLoginsAllMatches(logins, container);
-    }
+        KeeLog.debug("setting " + entries.length + " matched entries");
 
-    private setLoginsAllMatches (logins: keeLoginInfo[], container) {
-        KeeLog.debug("setting " + logins.length + " matched logins");
-
-        // add every matched login to the container(s)
-        for (let i = 0; i < logins.length; i++) {
-            const login = logins[i];
-            let usernameValue = "";
+        // add every matched entry to the container(s)
+        for (let i = 0; i < entries.length; i++) {
+            const entry = entries[i];
             let usernameDisplayValue = "[" + $STR("noUsername_partial_tip") + "]";
-            let usernameName = "";
-            let usernameId = "";
-            const displayGroupPath = login.database.name + "/" + login.parentGroup.path;
+            const displayGroupPath = entry.database.name + "/" + entry.parentGroup.path;
 
-            if (login.usernameIndex != null && login.usernameIndex != undefined && login.usernameIndex >= 0
-                && login.otherFields != null && login.otherFields.length > 0) {
-                const field = login.otherFields[login.usernameIndex];
-
-                usernameValue = field.value;
-                if (usernameValue != undefined && usernameValue != null && usernameValue != "")
-                    usernameDisplayValue = usernameValue;
-                usernameName = field.name;
-                usernameId = field.fieldId;
+            const usernameField = Entry.getUsernameField(entry);
+            if (usernameField && usernameField.value) {
+                usernameDisplayValue = usernameField.value;
             }
 
             const loginItem = document.createElement("li");
             loginItem.className = "";
-            loginItem.style.backgroundImage = "url(data:image/png;base64," + login.iconImageData + ")";
-            loginItem.dataset.filename = login.database.fileName;
-            loginItem.dataset.frameKey = login.frameKey;
-            loginItem.dataset.formIndex = login.formIndex != null ? login.formIndex.toString() : "";
-            loginItem.dataset.loginIndex = i.toString();
-            loginItem.dataset.uuid = login.uniqueID;
-            loginItem.title = $STRF("matchedLogin_tip", [login.title, displayGroupPath, usernameDisplayValue]);
+            loginItem.style.backgroundImage = "url(data:image/png;base64," + entry.icon.iconImageData + ")";
+            loginItem.dataset.filename = entry.database.fileName;
+            loginItem.dataset.formIndex = entry.formIndex != null ? entry.formIndex.toString() : "";
+            loginItem.dataset.entryIndex = i.toString();
+            loginItem.dataset.uuid = entry.uuid;
+            loginItem.title = $STRF("matchedLogin_tip", [entry.title, displayGroupPath, usernameDisplayValue]);
             loginItem.tabIndex = -1;
 
-            loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, login.title]);
+            loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, entry.title]);
 
             //TODO:4: keyboard nav
             //loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
@@ -74,7 +60,7 @@ class NetworkAuth {
                     this.dispatchEvent(new Event("keeCommand"));
             }, false);
             loginItem.addEventListener("keeCommand", function (this: HTMLElement, event) {
-                networkAuth.supplyNetworkAuth(parseInt(this.dataset.loginIndex));
+                networkAuth.supplyNetworkAuth(parseInt(this.dataset.entryIndex));
             }, false);
 
             container.appendChild(loginItem);
@@ -89,8 +75,8 @@ function setupNetworkAuthDialog () {
     KeeLog.attachConfig(configManager.current);
     networkAuth = new NetworkAuth();
     browser.runtime.onMessage.addListener(message => {
-        if (message && message.action && message.action === "NetworkAuth_matchedLogins")
-            networkAuth.setupPage(message.logins, message.realm, message.url, message.isProxy);
+        if (message && message.action && message.action === "NetworkAuth_matchedEntries")
+            networkAuth.setupPage(message.entries, message.realm, message.url, message.isProxy);
     });
     browser.runtime.sendMessage({action: "NetworkAuth_load" });
     document.getElementById("i18n_root").style.display = "block";

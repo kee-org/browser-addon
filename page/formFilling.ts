@@ -7,8 +7,17 @@ import { MatchResult } from "./MatchResult";
 import { FindMatchesBehaviour } from "./findMatchesBehaviour";
 import { KeeLogger, KeeLog } from "../common/Logger";
 import { Config } from "../common/config";
-import { keeLoginField, keeLoginInfo } from "../common/kfDataModel";
 import { configManager } from "../common/ConfigManager";
+import { MatchedField } from "./MatchedField";
+import { Field } from "../common/model/Field";
+import store from "../store";
+import { Entry } from "../common/model/Entry";
+
+interface ScoreMatrix {
+    score: number;
+    formFieldIndex: number;
+    dataFieldIndex: number;
+}
 
 declare const punycode;
 
@@ -62,11 +71,11 @@ export class FormFilling {
     }
 
     public executePrimaryAction () {
-        if (this.matchResult.logins && this.matchResult.logins.length > 0 && this.matchResult.mostRelevantFormIndex != null && this.matchResult.mostRelevantFormIndex >= 0) {
-            if (this.matchResult.logins[this.matchResult.mostRelevantFormIndex].length == 1) {
+        if (this.matchResult.entries && this.matchResult.entries.length > 0 && this.matchResult.mostRelevantFormIndex != null && this.matchResult.mostRelevantFormIndex >= 0) {
+            if (this.matchResult.entries[this.matchResult.mostRelevantFormIndex].length == 1) {
                 this.fillAndSubmit(false, this.matchResult.mostRelevantFormIndex, 0);
                 this.closeMatchedLoginsPanel();
-            } else if (this.matchResult.logins[this.matchResult.mostRelevantFormIndex].length > 1) {
+            } else if (this.matchResult.entries[this.matchResult.mostRelevantFormIndex].length > 1) {
                 this.closeMatchedLoginsPanel();
                 this.matchedLoginsPanelStub = new PanelStub(PanelStubOptions.MatchedLogins, null, this.parentFrameId);
                 this.matchedLoginsPanelStub.createPanel();
@@ -98,27 +107,29 @@ export class FormFilling {
         this.matchedLoginsPanelStubRaf = requestAnimationFrame(() => this.updateMatchedLoginsPanelPosition());
     }
 
-    private calculateFieldMatchScore (formField: keeLoginField, dataField, currentPage, config: FieldMatchScoreConfig, isVisible?: boolean)
+    private calculateFieldMatchScore (matchedField: MatchedField, dataField: Field, currentPage, config: FieldMatchScoreConfig, isVisible?: boolean)
     {
+        const formField = matchedField.field;
         // Default score is 1 so that bad matches which are at least the correct type
         // have a chance of being selected if no good matches are found
         let score = 1;
 
         // Do not allow any match if field types are significantly mismatched (e.g. checkbox vs text field)
-        if ( !( this.formUtils.isATextFormFieldType(formField.type) && (dataField.type == "username" || dataField.type == "text") )
-            && !(formField.type == "password" && dataField.type == "password")
-            && !(formField.type == "radio" && dataField.type == "radio")
-            && !(formField.type == "checkbox" && dataField.type == "checkbox")
-            && !(formField.type == "select-one" && dataField.type == "select-one")
-        )
+        // if ( !( this.formUtils.isATextFormFieldType(formField.locators[0].type) && dataField.type === "text" )
+        //     && !(formField.type === "password" && dataField.type === "password")
+        //     && !(formField.type === "" && dataField.type === "radio")
+        //     && !(formField.type === "checkbox" && dataField.type === "checkbox")
+        //     && !(formField.type === "select-one" && dataField.type === "select-one")
+        // )
+        if (formField.type !== dataField.type)
             return 0;
 
         // If field IDs match +++++
-        if (formField.fieldId != null && formField.fieldId != undefined
-            && formField.fieldId != "" && formField.fieldId == dataField.fieldId
+        if (formField.locators[0].id != null && formField.locators[0].id != undefined
+            && formField.locators[0].id != "" && formField.locators[0].id == dataField.locators[0].id
         ) {
             score += 50;
-        } else if (config.punishWrongIDAndName && dataField.fieldId) {
+        } else if (config.punishWrongIDAndName && dataField.locators[0].id) {
             score -= 5;
         }
 
@@ -126,35 +137,37 @@ export class FormFilling {
         // (We do not treat ID and NAME as mutually exclusive because some badly written
         // websites might have duplicate IDs but different names so this combined approach
         // might allow them to work correctly)
-        if (formField.name != null && formField.name != undefined
-                && formField.name != "" && formField.name == dataField.name
+        if (formField.locators[0].name != null && formField.locators[0].name != undefined
+                && formField.locators[0].name != "" && formField.locators[0].name == dataField.locators[0].name
         ) {
             score += 40;
-        } else if (config.punishWrongIDAndName && dataField.name) {
+        } else if (config.punishWrongIDAndName && dataField.locators[0].name) {
             score -= 5;
         }
 
         // Radio buttons have their values set by the website and hence can provide
         // a useful cue when both id and name matching fails
-        if (formField.type == "radio" && formField.value != null && formField.value != undefined
+        if (formField.locators[0].type === "radio" && formField.value != null && formField.value != undefined
                 && formField.value != "" && formField.value == dataField.value
         )
             score += 30;
 
-        // Although there is a formField.formFieldPage property, it is not accurate
-        // so we just compare against the supplied currentPage
-        // If page # matches exactly ++
-        if (currentPage > 0 && dataField.formFieldPage == currentPage)
-            score += 20;
+        //TODO:* Verify that removing page support is acceptable wrt new multi-page plan
 
-        // If page # is wrong --
-        else if (currentPage > 0 && dataField.formFieldPage != currentPage)
-            score -= 19; // 20 would cause a tie for an otherwise good name match
+        // // Although there is a formField.formFieldPage property, it is not accurate
+        // // so we just compare against the supplied currentPage
+        // // If page # matches exactly ++
+        // if (currentPage > 0 && dataField.formFieldPage == currentPage)
+        //     score += 20;
 
-        // If page # is unestablished (<=0)
-        //else do nothing
+        // // If page # is wrong --
+        // else if (currentPage > 0 && dataField.formFieldPage != currentPage)
+        //     score -= 19; // 20 would cause a tie for an otherwise good name match
 
-        if (isVisible === undefined && this.formUtils.isDOMElementVisible(formField.DOMInputElement || formField.DOMSelectElement))
+        // // If page # is unestablished (<=0)
+        // //else do nothing
+
+        if (isVisible === undefined && this.formUtils.isDOMElementVisible(matchedField.DOMelement))
             isVisible = true;
 
         score += isVisible ? 35 : 0;
@@ -162,7 +175,7 @@ export class FormFilling {
         return score;
     }
 
-    private fillMatchedFields (fieldScoreMatrix, dataFields, formFields, automated: boolean)
+    private fillMatchedFields (fieldScoreMatrix: ScoreMatrix[], dataFields: Field[], formFields: MatchedField[], automated: boolean)
     {
         // We want to make sure each data field is matched to only one form field but we
         // don't know which field will be the best match and we don't want to ignore
@@ -199,27 +212,24 @@ export class FormFilling {
         {
             const ffi = fieldScoreMatrix[0].formFieldIndex;
             const dfi = fieldScoreMatrix[0].dataFieldIndex;
-            let DOMelement;
+            const formField = formFields[ffi];
+            const dataField = dataFields[dfi];
+            const domElement = formField.DOMelement;
 
-            if (formFields[ffi].type === "select-one")
-                DOMelement = formFields[ffi].DOMSelectElement;
-            else
-                DOMelement = formFields[ffi].DOMInputElement;
+            const currentValue = this.getFormFieldCurrentValue(domElement, formField.field.locators[0].type);
 
-            const currentValue = this.getFormFieldCurrentValue(DOMelement, formFields[ffi].type);
-
-            if (automated && currentValue && currentValue !== DOMelement.keeInitialDetectedValue) {
+            if (automated && currentValue && currentValue !== (domElement as any).keeInitialDetectedValue) {
                 this.Logger.info("Not filling field because it's not empty and was edited by user since last load/fill");
             } else {
-                this.Logger.info("We will populate field " + ffi + " (id:" + formFields[ffi].fieldId + ")");
-                this.fillASingleField(DOMelement, formFields[ffi].type, dataFields[dfi].value);
+                this.Logger.info("We will populate field " + ffi + " (id:" + formField.field.locators[0].id + ")");
+                this.fillASingleField(domElement, formField.field.locators[0].type, dataField.value);
             }
 
             filledFields.push({
-                id: formFields[ffi].fieldId,
-                DOMelement: DOMelement,
-                name: formFields[ffi].name,
-                value: dataFields[dfi].value
+                id: formField.field.locators[0].id,
+                DOMelement: domElement,
+                name: formField.field.locators[0].name,
+                value: dataField.value
             });
 
             fieldScoreMatrix = fieldScoreMatrix.filter(function (element, index, array) {
@@ -233,10 +243,10 @@ export class FormFilling {
         return filledFields;
     }
 
-    private getFormFieldCurrentValue (DOMelement: any, fieldType: string) {
-        let currentValue = DOMelement.value;
-        if (fieldType === "checkbox") {
-            if (DOMelement.checked) {
+    private getFormFieldCurrentValue (domElement: HTMLInputElement | HTMLSelectElement, fieldType: string) {
+        let currentValue = domElement.value;
+        if (domElement instanceof HTMLInputElement && fieldType === "checkbox") {
+            if (domElement.checked) {
                 currentValue = "KEEFOX_CHECKED_FLAG_TRUE";
             } else {
                 currentValue = "KEEFOX_CHECKED_FLAG_FALSE";
@@ -245,18 +255,18 @@ export class FormFilling {
         return currentValue;
     }
 
-    private fillASingleField (domElement, fieldType, value)
+    private fillASingleField (domElement: HTMLInputElement | HTMLSelectElement, fieldType: string, value: string)
     {
         if (fieldType == "select-one")
         {
             domElement.value = value;
-        } else if (fieldType == "checkbox")
+        } else if (domElement instanceof HTMLInputElement && fieldType == "checkbox")
         {
             if (value == "KEEFOX_CHECKED_FLAG_TRUE")
                 domElement.checked = true;
             else
                 domElement.checked = false;
-        } else if (fieldType == "radio")
+        } else if (domElement instanceof HTMLInputElement && fieldType == "radio")
         {
             domElement.checked = true;
         } else
@@ -264,13 +274,14 @@ export class FormFilling {
             domElement.value = value;
         }
 
-        domElement.keeInitialDetectedValue = value;
+        //TODO:4: Investigate and document why we're not using data attributes to store this string in the DOM
+        (domElement as any).keeInitialDetectedValue = value;
 
         domElement.dispatchEvent(new UIEvent("input", {view: window, bubbles: true, cancelable: true}));
         domElement.dispatchEvent(new UIEvent("change", {view: window, bubbles: true, cancelable: true}));
     }
 
-    private fillManyFormFields (formFields, dataFields, currentPage, scoreConfig: FieldMatchScoreConfig, automated: boolean)
+    private fillManyFormFields (formFields: MatchedField[], dataFields: Field[], currentPage, scoreConfig: FieldMatchScoreConfig, automated: boolean)
     {
         this.Logger.debug("_fillManyFormFields started");
 
@@ -295,7 +306,7 @@ export class FormFilling {
                 const score = this.calculateFieldMatchScore(
                     formFields[i], dataFields[j], currentPage, scoreConfig);
                 this.Logger.debug("Suitability of putting data field "+j+" into form field "+i
-                    +" (id: "+formFields[i].fieldId + ") is " + score);
+                    +" (id: "+formFields[i].field.locators[0].id + ") is " + score);
                 fieldScoreMatrix.push({score: score, dataFieldIndex: j, formFieldIndex: i});
             }
         }
@@ -308,7 +319,7 @@ export class FormFilling {
         //TODO:4: #6 create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
         // matchResult = new MatchResult();
         this.matchResult.UUID = "";
-        this.matchResult.logins = [];
+        this.matchResult.entries = [];
         this.matchResult.mostRelevantFormIndex = null;
 
         this.matchResult.mustAutoFillForm = false;
@@ -412,7 +423,7 @@ export class FormFilling {
         for (let i = 0; i < forms.length; i++)
         {
             const form = forms[i];
-            this.matchResult.logins[i] = [];
+            this.matchResult.entries[i] = [];
 
             // the overall relevance of this form is the maximum of it's
             // matching entries (so we fill the most relevant form)
@@ -431,7 +442,7 @@ export class FormFilling {
             // we check whether any whitelist or blacklist entries must override that behaviour
             let interestingForm: boolean = null;
 
-            interestingForm = configManager.isFormInteresting(form, conf, otherFields);
+            interestingForm = configManager.isFormInteresting(form, conf, otherFields.map(f => f.field));
 
             if (interestingForm === false)
             {
@@ -452,9 +463,9 @@ export class FormFilling {
             let submitTargetNeighbour: HTMLElement;
             if (noPasswordField)
             {
-                submitTargetNeighbour = otherFields[usernameIndex].DOMInputElement || otherFields[usernameIndex].DOMSelectElement;
+                submitTargetNeighbour = otherFields[usernameIndex].DOMelement;
             } else {
-                submitTargetNeighbour = passwordFields[0].DOMInputElement;
+                submitTargetNeighbour = passwordFields[0].DOMelement;
             }
 
             this.attachSubmitHandlers(form, submitTargetNeighbour, i);
@@ -464,7 +475,7 @@ export class FormFilling {
             this.matchResult.otherFieldsArray[i] = otherFields;
             this.matchResult.submitTargets[i] = submitTargetNeighbour;
 
-            // The logins returned from KeePass for every form will be identical (based on tab/frame URL)
+            // The entries returned from KeePass for every form will be identical (based on tab/frame URL)
             if (!searchSentToKeePass)
             {
                 this.findLoginOp.forms = forms;
@@ -473,11 +484,11 @@ export class FormFilling {
                 this.matchResult.wrappers[i] = this.findLoginOp;
                 this.matchResult.requestCount++;
 
-                // Search for matching logins for the relevant URL. This request is asynchronous.
+                // Search for matching entries for the relevant URL. This request is asynchronous.
                 this.matchFinder(url.href);
                 searchSentToKeePass = true;
             } else {
-                this.Logger.debug("form[" + i + "]: reusing logins from last form.");
+                this.Logger.debug("form[" + i + "]: reusing entries from last form.");
                 this.findLoginOp.formIndexes.push(i);
             }
 
@@ -485,7 +496,7 @@ export class FormFilling {
     }
 
     // It's OK for this to take a few seconds - humans can't type that fast.
-    // By making this async we allow the search for logins to begin earlier
+    // By making this async we allow the search for entries to begin earlier
     // and reduce perceived impact on page load time
     private async attachSubmitHandlers (form: HTMLFormElement, submitTargetNeighbour: HTMLElement, formNumber: number) {
         try {
@@ -535,66 +546,36 @@ export class FormFilling {
         return pseudoForm;
     }
 
-    public findLoginsResultHandler (result)
+    public findLoginsResultHandler (entries: Entry[])
     {
-        let foundLogins = null;
-        const convertedResult = [];
-        let isError = false;
+        if (!entries) return;
+        const validEntries = entries.filter(e => Entry.getUsernameField(e) ||  Entry.getPasswordField(e));
 
-        try
-        {
-            if (result)
-            {
-                foundLogins = result;
-
-                for (const i in foundLogins)
-                {
-                    const kfl = new keeLoginInfo();
-                    kfl.initFromEntry(foundLogins[i]);
-
-                    // Only consider logins that have some kind of form data to fill in
-                    if ((kfl.passwords != null && kfl.passwords.length > 0)
-                        || (kfl.otherFields != null && kfl.otherFields.length > 0))
-                        convertedResult.push(kfl);
-                }
-            } else
-            {
-                isError = true;
-            }
-        } catch (e) {
-            isError = true;
-        }
-
-        if (isError)
-        {
-            return;
-        }
-
-        this.matchResult = this.getRelevanceOfLoginMatchesAgainstAllForms(convertedResult, this.findLoginOp, this.matchResult);
+        this.matchResult = this.getRelevanceOfLoginMatchesAgainstAllForms(validEntries, this.findLoginOp, this.matchResult);
 
         this.fillAndSubmit(true);
     }
 
-    getRelevanceOfLoginMatchesAgainstAllForms (convertedResult, findLoginOp, matchResult: MatchResult)
+    getRelevanceOfLoginMatchesAgainstAllForms (entries: Entry[], findLoginOp, matchResult: MatchResult)
     {
-        const crString = JSON.stringify(convertedResult);
+        const crString = JSON.stringify(entries);
         let firstMatchProcessed = false;
 
         for (let i=0; i < findLoginOp.forms.length; i++)
         {
-            // Skip any form that we don't want to match against this set of logins
+            // Skip any form that we don't want to match against this set of entries
             if (findLoginOp.formIndexes.indexOf(i) == -1)
                 continue;
 
-            // if there is more than one form, we have to work with clones of the login result so
+            // if there is more than one form, we have to work with clones of the entry so
             // that we can manipulate the relevancy scores, etc. independently for each
-            // form and login combination. We could be more efficient for the common case of 1 form
+            // form and entry combination. We could be more efficient for the common case of 1 form
             // by avoiding the clone then but keeping the same behaviour gives us a higher chance
             // of noticing bugs.
-            matchResult.logins[i] = JSON.parse(crString); //TODO:4: faster clone? https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
+            matchResult.entries[i] = JSON.parse(crString); //TODO:4: faster clone? https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
 
-            // Nothing to do if we have no matching logins available.
-            if (matchResult.logins[i].length == 0)
+            // Nothing to do if we have no matching entries available.
+            if (matchResult.entries[i].length == 0)
                 continue;
 
             this.Logger.info("match found!");
@@ -603,49 +584,48 @@ export class FormFilling {
             this.Logger.debug("formVisible: " + formVisible);
 
             const visibleFieldCache = {
-                other: matchResult.otherFieldsArray[i].map(f => this.formUtils.isDOMElementVisible(f.DOMInputElement || f.DOMSelectElement)),
-                password: matchResult.passwordFieldsArray[i].map(f => this.formUtils.isDOMElementVisible(f.DOMInputElement || f.DOMSelectElement))
+                other: matchResult.otherFieldsArray[i].map(f => this.formUtils.isDOMElementVisible(f.DOMelement)),
+                password: matchResult.passwordFieldsArray[i].map(f => this.formUtils.isDOMElementVisible(f.DOMelement))
             };
 
-            // determine the relevance of each login entry to this form
-            // we could skip this when autofilling based on uniqueID but we would have to check for
-            // matches first or else we risk no match and no alternative matching logins on the mainUI
+            // determine the relevance of each entry to this form
+            // we could skip this when autofilling based on uuid but we would have to check for
+            // matches first or else we risk no match and no alternative matching entries on the mainUI
             // and we also now consider the totality of possible matches against a field in order
             // to limit which fields we shove a Kee icon into.
-            for (let v = 0; v < matchResult.logins[i].length; v++)
+            for (let v = 0; v < matchResult.entries[i].length; v++)
             {
-                const features = matchResult.logins[i][v].database.sessionFeatures;
+                const features = store.state.KeePassDatabases.find(db => db.fileName === matchResult.entries[i][v].database.fileName).sessionFeatures;
                 const fieldMatchScoreConfig: FieldMatchScoreConfig = {
                     punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
                 };
-                const {score, lowFieldMatchRatio} = this.calculateRelevanceScore(matchResult.logins[i][v],
+                const {score, lowFieldMatchRatio} = this.calculateRelevanceScore(matchResult.entries[i][v],
                     matchResult.passwordFieldsArray[i], matchResult.otherFieldsArray[i],
                     matchResult.currentPage, formVisible, fieldMatchScoreConfig, visibleFieldCache);
 
-                // choosing best login form should not be affected by lowFieldMatchRatio login score
+                // choosing best form should not be affected by lowFieldMatchRatio entry score
                 // but when we come to fill the form we can force ourselves into a no-auto-fill behaviour.
-                matchResult.logins[i][v].relevanceScore = score;
-                matchResult.logins[i][v].lowFieldMatchRatio = lowFieldMatchRatio;
+                matchResult.entries[i][v].relevanceScore = score;
+                matchResult.entries[i][v].lowFieldMatchRatio = lowFieldMatchRatio;
 
-                // also set the form ID and login ID on the internal login object so
+                // also set the form index and entry index on the internal entry object so
                 // it will persist when later passed to the UI and we can ultimately
-                // find the same login object when processing a matched login
-                matchResult.logins[i][v].formIndex = i;
-                matchResult.logins[i][v].loginIndex = v;
-                matchResult.logins[i][v].frameKey = findLoginOp.frameArrayKey;
+                // find the same entry object when processing a matched entry
+                matchResult.entries[i][v].formIndex = i;
+                matchResult.entries[i][v].entryIndex = v;
 
-                // Remember the best form for each login
-                if (!firstMatchProcessed || matchResult.logins[i][v].relevanceScore > matchResult.allMatchingLogins[v].relevanceScore)
+                // Remember the best form for each entry
+                if (!firstMatchProcessed || matchResult.entries[i][v].relevanceScore > matchResult.allMatchingLogins[v].relevanceScore)
                 {
-                    this.Logger.debug("Higher relevance score found for login " + v + " with formIndex "
-                        + matchResult.logins[i][v].formIndex + " (" + findLoginOp.forms[i].id + ")");
-                    matchResult.allMatchingLogins[v] = matchResult.logins[i][v];
+                    this.Logger.debug("Higher relevance score found for entry " + v + " with formIndex "
+                        + matchResult.entries[i][v].formIndex + " (" + findLoginOp.forms[i].id + ")");
+                    matchResult.allMatchingLogins[v] = matchResult.entries[i][v];
                 }
             }
             firstMatchProcessed = true;
 
-            // Find the best login for this form
-            matchResult.logins[i].forEach(function (c) {
+            // Find the best entry for this form
+            matchResult.entries[i].forEach(function (c) {
                 if (c.relevanceScore > matchResult.formRelevanceScores[i])
                     matchResult.formRelevanceScores[i] = c.relevanceScore;
             } );
@@ -687,13 +667,13 @@ export class FormFilling {
     }
 
     // automated could be on page load or resulting from other non-user-interaction.
-    // It's possible to fill and submit a login with a specific uniqueID but
+    // It's possible to fill and submit a entry with a specific uuid but
     // that process is now centered on the findMatches function. This function just
-    // takes the results of that (which may include a specific login to fill and submit to a specific form)
-    fillAndSubmit (automated, formIndex?, loginIndex?)
+    // takes the results of that (which may include a specific entry to fill and submit to a specific form)
+    fillAndSubmit (automated: boolean, formIndex?: number, entryIndex?: number)
     {
         this.Logger.debug("fillAndSubmit started. automated: " + automated
-            + ", formIndex: " + formIndex + ", loginIndex: " + loginIndex);
+            + ", formIndex: " + formIndex + ", entryIndex: " + entryIndex);
 
         const matchResult = this.matchResult;
         let submitTargetNeighbour;
@@ -703,10 +683,10 @@ export class FormFilling {
             return;
 
         // We do some things differently if we're being manually asked to fill and
-        // submit a specific matched login
+        // submit a specific matched entry
         const isMatchedLoginRequest = !automated
             && ((matchResult.mostRelevantFormIndex !== null && matchResult.mostRelevantFormIndex >= 0) || typeof(formIndex) != "undefined")
-            && typeof(loginIndex) != "undefined";
+            && typeof(entryIndex) != "undefined";
 
         if (!isMatchedLoginRequest) {
             matchResult.mostRelevantFormIndex = this.getMostRelevantForm().bestFormIndex;
@@ -722,15 +702,15 @@ export class FormFilling {
         const usernameIndex = matchResult.usernameIndexArray[matchResult.mostRelevantFormIndex];
         const otherFields = matchResult.otherFieldsArray[matchResult.mostRelevantFormIndex];
 
-        if (!isMatchedLoginRequest && matchResult.logins[matchResult.mostRelevantFormIndex].length > 0) {
-            this.myPort.postMessage({ logins: matchResult.logins[matchResult.mostRelevantFormIndex] });
+        if (!isMatchedLoginRequest && matchResult.entries[matchResult.mostRelevantFormIndex].length > 0) {
+            this.myPort.postMessage({ entries: matchResult.entries[matchResult.mostRelevantFormIndex] });
 
-            // Give the user a way to choose a login interactively
-            this.keeFieldIcon.addKeeIconToFields(passwordFields, otherFields, matchResult.logins[matchResult.mostRelevantFormIndex]);
+            // Give the user a way to choose an entry interactively
+            this.keeFieldIcon.addKeeIconToFields(passwordFields, otherFields, matchResult.entries[matchResult.mostRelevantFormIndex]);
         }
 
-        // this records the login that we eventually choose as the one to fill the chosen form with
-        let matchingLogin = null;
+        // this records the entry that we eventually choose as the one to fill the chosen form with
+        let matchingLogin: Entry = null;
         let action: FillAndSubmitAction = { fill: false, submit: false };
         let multipleMatches = false;
 
@@ -746,49 +726,49 @@ export class FormFilling {
         if (automated && matchResult.autosubmitOnSuccess === false)
             matchResult.cannotAutoSubmitForm = true;
 
-        // No point looking at login specific preferences if we are not allowed to auto-fill
+        // No point looking at entry specific preferences if we are not allowed to auto-fill
         if (!matchResult.cannotAutoFillForm)
         {
             this.Logger.debug("We are allowed to auto-fill this form.");
 
-            // If we've been instructed to fill a specific login, we need to select that
-            // login and clear any previously set information about an auto-filled login
+            // If we've been instructed to fill a specific entry, we need to select that
+            // entry and clear any previously set information about an auto-filled entry
             // so it can be set correctly later
-            if (loginIndex >= 0)
+            if (entryIndex >= 0)
             {
-                matchingLogin = matchResult.logins[matchResult.mostRelevantFormIndex][loginIndex];
+                matchingLogin = matchResult.entries[matchResult.mostRelevantFormIndex][entryIndex];
                 matchResult.UUID = null;
                 matchResult.dbFileName = null;
             }
 
             let checkMatchingLoginRelevanceThreshold = false;
-            if (matchingLogin == null && matchResult.logins[matchResult.mostRelevantFormIndex].length == 1) {
-                matchingLogin = matchResult.logins[matchResult.mostRelevantFormIndex][0];
+            if (matchingLogin == null && matchResult.entries[matchResult.mostRelevantFormIndex].length == 1) {
+                matchingLogin = matchResult.entries[matchResult.mostRelevantFormIndex][0];
                 checkMatchingLoginRelevanceThreshold = true;
             } else if (matchResult.UUID != undefined && matchResult.UUID != null && matchResult.UUID != "") {
                 // Skip the relevance tests if we have been told to use a specific UUID
-                this.Logger.debug("We've been told to use a login with this UUID: " + matchResult.UUID);
-                for (let count = 0; count < matchResult.logins[matchResult.mostRelevantFormIndex].length; count++)
-                    if (matchResult.logins[matchResult.mostRelevantFormIndex][count].uniqueID == matchResult.UUID)
+                this.Logger.debug("We've been told to use an entry with this UUID: " + matchResult.UUID);
+                for (let count = 0; count < matchResult.entries[matchResult.mostRelevantFormIndex].length; count++)
+                    if (matchResult.entries[matchResult.mostRelevantFormIndex][count].uuid == matchResult.UUID)
                     {
-                        matchingLogin = matchResult.logins[matchResult.mostRelevantFormIndex][count];
+                        matchingLogin = matchResult.entries[matchResult.mostRelevantFormIndex][count];
                         break;
                     }
                 if (matchingLogin == null)
                     this.Logger.warn("Could not find the required KeePass entry. Maybe the website redirected you to a different domain or hostname?");
 
-            } else if (matchingLogin == null && (!matchResult.logins[matchResult.mostRelevantFormIndex] || !matchResult.logins[matchResult.mostRelevantFormIndex].length)) {
-                this.Logger.debug("No logins for form.");
+            } else if (matchingLogin == null && (!matchResult.entries[matchResult.mostRelevantFormIndex] || !matchResult.entries[matchResult.mostRelevantFormIndex].length)) {
+                this.Logger.debug("No entries for form.");
             } else if (matchingLogin == null) {
-                this.Logger.debug("Multiple logins for form, so estimating most relevant.");
-                let mostRelevantLoginIndex = 0;
+                this.Logger.debug("Multiple entries for form, so estimating most relevant.");
+                let mostRelevantEntryIndex = 0;
 
-                for (let count = 0; count < matchResult.logins[matchResult.mostRelevantFormIndex].length; count++)
-                    if (matchResult.logins[matchResult.mostRelevantFormIndex][count].relevanceScore > matchResult.logins[matchResult.mostRelevantFormIndex][mostRelevantLoginIndex].relevanceScore)
-                        mostRelevantLoginIndex = count;
+                for (let count = 0; count < matchResult.entries[matchResult.mostRelevantFormIndex].length; count++)
+                    if (matchResult.entries[matchResult.mostRelevantFormIndex][count].relevanceScore > matchResult.entries[matchResult.mostRelevantFormIndex][mostRelevantEntryIndex].relevanceScore)
+                        mostRelevantEntryIndex = count;
 
-                this.Logger.debug("We think login " + mostRelevantLoginIndex + " is most relevant.");
-                matchingLogin = matchResult.logins[matchResult.mostRelevantFormIndex][mostRelevantLoginIndex];
+                this.Logger.debug("We think entry " + mostRelevantEntryIndex + " is most relevant.");
+                matchingLogin = matchResult.entries[matchResult.mostRelevantFormIndex][mostRelevantEntryIndex];
                 multipleMatches = true;
 
                 checkMatchingLoginRelevanceThreshold = true;
@@ -798,11 +778,11 @@ export class FormFilling {
             {
                 if (matchingLogin.relevanceScore < 1)
                 {
-                    this.Logger.info("Our selected login is not relevant enough to exceed our threshold so will not be auto-filled.");
+                    this.Logger.info("Our selected entry is not relevant enough to exceed our threshold so will not be auto-filled.");
                     matchingLogin = null;
                 } else if (matchingLogin.lowFieldMatchRatio)
                 {
-                    this.Logger.info("Our selected login has a low field match ratio so will not be auto-filled.");
+                    this.Logger.info("Our selected entry has a low field match ratio so will not be auto-filled.");
                     matchingLogin = null;
                 }
             }
@@ -829,32 +809,32 @@ export class FormFilling {
                 //     this.Logger.info("Exceeded expected number of pages during this form-filling session. Not auto-submiting this form.");
                 // }
 
-                // If the user manually requested this to be filled in or the current page is unknown
-                if (!automated)//TODO:4: #6 multi-page || tabState.currentPage <= 0)
-                {
-                    let maximumPageCount = 1;
-                    for (let i = 0; i < matchingLogin.passwords.length; i++)
-                    {
-                        const passField = matchingLogin.passwords[i];
-                        if (passField.formFieldPage > maximumPageCount)
-                            maximumPageCount = passField.formFieldPage;
-                    }
-                    for (let i = 0; i < matchingLogin.otherFields.length; i++)
-                    {
-                        const otherField = matchingLogin.otherFields[i];
-                        if (otherField.formFieldPage > maximumPageCount)
-                            maximumPageCount = otherField.formFieldPage;
-                    }
-                    //TODO:4: #6: multi-page
-                    // // always assume page 1 (very rare cases will go wrong - see github KeeFox #411 for relevant enhancement request)
-                    // // Possible regression since v1.4: We used to ignore currentPage entirely for the first
-                    // // page of a submission, now we might try to give preference to page 1 fields (though total
-                    // // relevance score shouldn't be shifted by enough to affect otherwise well-matched fields)
-                    // tabState.currentPage = 1;
-                    // tabState.maximumPage = maximumPageCount;
-                    // this.Logger.debug("currentPage is: " + tabState.currentPage);
-                    // this.Logger.debug("maximumPage is: " + tabState.maximumPage);
-                }
+                // // If the user manually requested this to be filled in or the current page is unknown
+                // if (!automated)//TODO:4: #6 multi-page || tabState.currentPage <= 0)
+                // {
+                //     let maximumPageCount = 1;
+                //     for (let i = 0; i < matchingLogin.passwords.length; i++)
+                //     {
+                //         const passField = matchingLogin.passwords[i];
+                //         if (passField.formFieldPage > maximumPageCount)
+                //             maximumPageCount = passField.formFieldPage;
+                //     }
+                //     for (let i = 0; i < matchingLogin.otherFields.length; i++)
+                //     {
+                //         const otherField = matchingLogin.otherFields[i];
+                //         if (otherField.formFieldPage > maximumPageCount)
+                //             maximumPageCount = otherField.formFieldPage;
+                //     }
+                //     //TODO:4: #6: multi-page
+                //     // // always assume page 1 (very rare cases will go wrong - see github KeeFox #411 for relevant enhancement request)
+                //     // // Possible regression since v1.4: We used to ignore currentPage entirely for the first
+                //     // // page of a submission, now we might try to give preference to page 1 fields (though total
+                //     // // relevance score shouldn't be shifted by enough to affect otherwise well-matched fields)
+                //     // tabState.currentPage = 1;
+                //     // tabState.maximumPage = maximumPageCount;
+                //     // this.Logger.debug("currentPage is: " + tabState.currentPage);
+                //     // this.Logger.debug("maximumPage is: " + tabState.maximumPage);
+                // }
 
                 // Default auto-fill behaviour depends upon whether this is automatic or
                 // manual, the corresponding user "automatic" option, if there are one or many matches
@@ -868,7 +848,7 @@ export class FormFilling {
                 action = { fill: autoFillEnabled, submit: autoSubmitEnabled };
 
                 // Override fill preferences from per-entry configuration options
-                // unless user explicity selected the matched login
+                // unless user explicity selected the matched entry
                 if (!isMatchedLoginRequest) {
                     if (matchingLogin.alwaysAutoFill) action.fill = true;
                     if (matchingLogin.neverAutoFill) action.fill = false;
@@ -884,13 +864,13 @@ export class FormFilling {
                 {
                     this.Logger.debug("Going to auto-fill a form");
 
-                    const features = matchingLogin.database.sessionFeatures;
+                    const features = store.state.KeePassDatabases.find(db => db.fileName === matchingLogin.database.fileName).sessionFeatures;
                     const scoreConfig: FieldMatchScoreConfig = {
                         punishWrongIDAndName: features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
                     };
-                    const lastFilledPasswords = this.fillManyFormFields(passwordFields, matchingLogin.passwords,
+                    const lastFilledPasswords = this.fillManyFormFields(passwordFields, matchingLogin.fields.filter(f => f.type === "password"),
                         -1, scoreConfig, automated);
-                    const lastFilledOther = this.fillManyFormFields(otherFields, matchingLogin.otherFields,
+                    const lastFilledOther = this.fillManyFormFields(otherFields, matchingLogin.fields.filter(f => f.type !== "password"),
                         -1, scoreConfig, automated);
                     matchResult.formReadyForSubmit = true;
                     matchResult.lastFilledPasswords = lastFilledPasswords;
@@ -908,11 +888,11 @@ export class FormFilling {
         // We only do this if any forms were auto-filled successfully
         if (matchResult.formReadyForSubmit)
         {
-            // if we didn't already define a uniqueID, we set it up now
+            // if we didn't already define a uuid, we set it up now
             if (matchResult.UUID == undefined || matchResult.UUID == null || matchResult.UUID == "")
             {
-                this.Logger.debug("Syncing UUID to: " + matchingLogin.uniqueID);
-                matchResult.UUID = matchingLogin.uniqueID;
+                this.Logger.debug("Syncing UUID to: " + matchingLogin.uuid);
+                matchResult.UUID = matchingLogin.uuid;
                 matchResult.dbFileName = matchingLogin.database.fileName;
             }
         }
@@ -935,7 +915,7 @@ export class FormFilling {
         //             tabState.dbFileName = matchResult.dbFileName;
         //         }
 
-        //         // We force auto submit for all multi-page logins that have been triggered
+        //         // We force auto submit for all multi-page entries that have been triggered
         //         // by a one-click or matched login user selection, provided that operation
         //         // has not already been marked complete by the onFormSubmitHandler in formsSaveTab.js
         //         if (tabState.userRecentlyDemandedAutoSubmit)
@@ -953,7 +933,7 @@ export class FormFilling {
             this.submitForm(form, submitTargetNeighbour);
         } else if (isMatchedLoginRequest)
         {
-            this.Logger.debug("Matched login request is not being auto-submitted.");
+            this.Logger.debug("Matched entry request is not being auto-submitted.");
         } else
         {
 
@@ -1284,24 +1264,24 @@ export class FormFilling {
         */
     }
 
-    private calculateRelevanceScore (login: keeLoginInfo, passwordFields: keeLoginField[],
-        otherFields: keeLoginField[], currentPage: number, formVisible: boolean,
+    private calculateRelevanceScore (entry: Entry, passwordFields: MatchedField[],
+        otherFields: MatchedField[], currentPage: number, formVisible: boolean,
         scoreConfig: FieldMatchScoreConfig, visibleFieldCache: VisibleFieldCache) {
 
         let score = 0;
         let lowFieldMatchRatio = false;
 
-        // entry priorities provide a large score such that no other combination of relevance
-        // can override them but there will still be differences in relevance for the same
-        // entry when compared against different forms
-        if (login.priority > 0)
-            score = 1000000000 - login.priority * 1000;
+        // // entry priorities provide a large score such that no other combination of relevance
+        // // can override them but there will still be differences in relevance for the same
+        // // entry when compared against different forms
+        // if (entry.priority > 0)
+        //     score = 1000000000 - entry.priority * 1000;
 
         // Kee 1.5+ no longer considers action URLs in relevance weighting. Since the only
-        // login entries of interest are already pre-matched by KeePass, this should have been
+        // entry entries of interest are already pre-matched by KeePass, this should have been
         // adding negligable accuracy to the form matching.
 
-        score += login.matchAccuracy;
+        score += entry.matchAccuracy;
 
         // Punish but don't entirely exclude matches against invisible forms
         // This is in addition to the maximum score of invisible fields being limited
@@ -1318,9 +1298,9 @@ export class FormFilling {
         const minMatchedFieldCountRatio = 0.501;
 
         const [ otherRelevanceScore, otherFieldMatchSuccesses ] = this.determineRelevanceScores(
-            "other", otherFields, login.otherFields, currentPage, scoreConfig, visibleFieldCache.other);
+            "other", otherFields, entry.fields.filter(f => f.type !== "password"), currentPage, scoreConfig, visibleFieldCache.other);
         const [ passwordRelevanceScore, passwordFieldMatchSuccesses ] = this.determineRelevanceScores(
-            "password", passwordFields, login.passwords, currentPage, scoreConfig, visibleFieldCache.password);
+            "password", passwordFields, entry.fields.filter(f => f.type === "password"), currentPage, scoreConfig, visibleFieldCache.password);
 
         const totalRelevanceScore = otherRelevanceScore + passwordRelevanceScore;
 
@@ -1332,9 +1312,9 @@ export class FormFilling {
         // Mitigating by adjusting min relevancy values, etc. so can remove
         // this comment in a few versions if all is good.
         const formFieldCount = passwordFields.concat(otherFields)
-            .filter(f => f.fieldId || f.name || f.value).length;
-        const loginFieldCount = login.passwords.concat(login.otherFields)
-            .filter(f => f.fieldId || f.name || f.value).length;
+            .filter(f => f.field.locators[0].id || f.field.locators[0].name || f.field.value).length;
+        const loginFieldCount = entry.fields
+            .filter(f => f.locators[0].id || f.locators[0].name || f.value).length;
 
         const formMatchedFieldCount = otherFieldMatchSuccesses.filter(s => s === true).length
             + passwordFieldMatchSuccesses.filter(s => s === true).length;
@@ -1346,7 +1326,7 @@ export class FormFilling {
 
         if (fieldMatchRatio < minMatchedFieldCountRatio)
         {
-            this.Logger.info(login.uniqueID + " will be forced to not auto-fill because the form field match ratio (" + fieldMatchRatio + ") is not high enough.");
+            this.Logger.info(entry.uuid + " will be forced to not auto-fill because the form field match ratio (" + fieldMatchRatio + ") is not high enough.");
             lowFieldMatchRatio = true;
         }
 
@@ -1355,34 +1335,35 @@ export class FormFilling {
 
         score += adjustedRelevance;
 
-        this.Logger.info("Relevance for " + login.uniqueID + " is: " + score);
+        this.Logger.info("Relevance for " + entry.uuid + " is: " + score);
         return {score: score, lowFieldMatchRatio: lowFieldMatchRatio};
     }
 
-    private determineRelevanceScores (debugName: string, formFields: keeLoginField[], loginFields: keeLoginField[],
+    private determineRelevanceScores (debugName: string, matchedFields: MatchedField[], entryFields: Field[],
         currentPage: number, scoreConfig: FieldMatchScoreConfig, visibleFieldMap: boolean[]): [ number, boolean[] ] {
 
         let totalRelevanceScore = 0;
         const minFieldRelevance = 1;
         const fieldMatchSuccesses: boolean[] = [];
 
-        for (let i = 0; i < formFields.length; i++) {
+        for (let i = 0; i < matchedFields.length; i++) {
             let mostRelevantScore = 0;
-            for (let j = 0; j < loginFields.length; j++) {
-                const fmscore = this.calculateFieldMatchScore(formFields[i], loginFields[j], currentPage, scoreConfig, visibleFieldMap[i]);
+            const formField = matchedFields[i].field;
+            for (let j = 0; j < entryFields.length; j++) {
+                const fmscore = this.calculateFieldMatchScore(matchedFields[i], entryFields[j], currentPage, scoreConfig, visibleFieldMap[i]);
                 this.Logger.debug("Suitability of putting " + debugName + " field " + j + " into form field " + i
-                    + " (id: " + formFields[i].fieldId + ") is " + fmscore);
+                    + " (id: " + formField.locators[0].id + ") is " + fmscore);
                 if (fmscore > mostRelevantScore) {
                     mostRelevantScore = fmscore;
                 }
                 const fmscoreForRatio = fmscore - (visibleFieldMap[i] ? 35 : 0);
                 if (fmscoreForRatio >= minFieldRelevance
-                    && loginFields[j].value
+                    && entryFields[j].value
                     && !fieldMatchSuccesses[i]) {
                     fieldMatchSuccesses[i] = true;
                 }
-                if (formFields[i].highestScore == null || fmscore > formFields[i].highestScore) {
-                    formFields[i].highestScore = fmscore;
+                if (matchedFields[i].highestScore == null || fmscore > matchedFields[i].highestScore) {
+                    matchedFields[i].highestScore = fmscore;
                 }
             }
             totalRelevanceScore += mostRelevantScore;

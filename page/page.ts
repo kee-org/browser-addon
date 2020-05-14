@@ -173,9 +173,9 @@ function connectToMessagingPort () {
             formFilling.findLoginsResultHandler(m.findMatchesResult);
         }
 
-        if (m.action == Action.ManualFill && m.selectedLoginIndex != null) {
+        if (m.action == Action.ManualFill && m.selectedEntryIndex != null) {
             formFilling.closeMatchedLoginsPanel();
-            formFilling.fillAndSubmit(false, null, m.selectedLoginIndex);
+            formFilling.fillAndSubmit(false, null, m.selectedEntryIndex);
         }
 
         if (m.action == Action.ResetForms) {

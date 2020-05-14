@@ -41,8 +41,7 @@
 
 <script lang="ts">
 import { copyStringToClipboard } from "../copyStringToClipboard";
-
-const protectedText = "**********";
+import { Field } from "../../common/model/Field";
 
 export default {
     props: ["field"],
@@ -51,18 +50,10 @@ export default {
     }),
     computed: {
         displayValue: function (this: any) {
-            return this.field.type === "password" && !this.revealed
-                ? protectedText
-                : this.field.value;
+            return Field.getDisplayValue(this.field, this.revealed);
         },
         tooltip: function (this: any) {
-            return (
-                (this.field.name ? this.field.name : "[ " + $STR("no_name") + " ]") +
-        ": " +
-        (this.displayValue === protectedText
-            ? $STR("click_to_reveal_hide")
-            : this.field.value)
-            );
+            return Field.getDisplayTooltip(this.field, this.revealed);
         },
         useful: function (this:any) {
             return this.field.type !== "checkbox" && this.displayValue.length > 0;
@@ -73,7 +64,7 @@ export default {
             this.revealed = !this.revealed;
         },
         copyValue: function (this: any) {
-            copyStringToClipboard(this.field.value);
+            copyStringToClipboard(Field.getDisplayValue(this.field, true));
         }
     }
 };

@@ -165,11 +165,12 @@ import { supplementEntryState } from "../supplementEntryState";
 import { reconcileURLs } from "../reconcileURLs";
 import { SaveState } from "../../common/SaveState";
 import { Entry } from "../../common/model/Entry";
+import { EntrySummary } from "../../common/model/EntrySummary";
 
 export default {
     components: { Field },
     mixins: [Port.mixin],
-    props: ["entrySummary","isFirstInAList","loginIndex","frameId"],
+    props: ["entrySummary","isFirstInAList","entryIndex","frameId"],
     data: () => ({
         expanded: false,
         focussed: false
@@ -183,7 +184,7 @@ export default {
             );
         },
         usernameDisplayValue: function (this: any) {
-            const e = this.entrySummary;
+            const e = this.entrySummary as EntrySummary;
             return e && e.usernameValue
                 ? e.usernameValue
                 : "[" + $STR("noUsername_partial_tip") + "]";
@@ -232,7 +233,7 @@ export default {
             if (!this.expanded && !this.entrySummary.fullDetails) {
                 Port.postMessage({
                     findMatches: {
-                        uuid: this.entrySummary.uniqueID,
+                        uuid: this.entrySummary.uuid,
                         DBfilename: this.entrySummary.dbFileName
                     }
                 } as AddonMessage);
@@ -264,7 +265,7 @@ export default {
             }
         },
         async primaryClickAction (this: any) {
-            if (this.loginIndex !== undefined) {
+            if (this.entryIndex !== undefined) {
             // We are expected to fill an already discovered entry
                 this.manualFill();
             } else {
@@ -291,7 +292,7 @@ export default {
         manualFill (this: any) {
             Port.postMessage({
                 action: Action.ManualFill,
-                selectedLoginIndex: this.loginIndex,
+                selectedEntryIndex: this.entryIndex,
                 frameId: this.frameId });
             window.close();
         },

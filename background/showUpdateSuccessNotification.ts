@@ -3,7 +3,7 @@ import { Button } from "../common/Button";
 import { KeeNotification } from "../common/KeeNotification";
 import { utils } from "../common/utils";
 
-export function showUpdateSuccessNotification (uniqueID: string, fileName: string) {
+export function showUpdateSuccessNotification (uuid: string, fileName: string) {
     if (configManager.current.notifyWhenEntryUpdated) {
         const button1: Button = {
             label: $STR("dont_show_again"),
@@ -12,7 +12,7 @@ export function showUpdateSuccessNotification (uniqueID: string, fileName: strin
         const button2: Button = {
             label: $STR("showEntry"),
             action: "launchLoginEditorFromNotification",
-            values: { uniqueID, fileName }
+            values: { uuid, fileName }
         };
         const messages = [$STR("password_successfully_updated"),
             $STR("entry_history_pointer"),

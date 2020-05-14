@@ -5,8 +5,9 @@ import { FilledField } from "./FilledField";
 import { KeeLogger } from "../common/Logger";
 import { Config } from "../common/config";
 import { configManager } from "../common/ConfigManager";
-import { keeLoginField } from "../common/kfDataModel";
 import { AddonMessage } from "../common/AddonMessage";
+import { MatchedField } from "./MatchedField";
+import { Field } from "../common/model/Field";
 
 declare const punycode;
 
@@ -101,7 +102,7 @@ export class FormSaving {
         let isRegistrationForm = false;
 
         // Get the appropriate fields from the form.
-        const passwordFields: keeLoginField[] = [];
+        const passwordFields: MatchedField[] = [];
         const { actualUsernameIndex: usernameIndex, pwFields: passwords, otherFields } =
             this.formUtils.getFormFields(form, true);
 
@@ -112,7 +113,7 @@ export class FormSaving {
             let twoPasswordsMatchIndex=-1;
             for (let i=0; i<passwords.length && twoPasswordsMatchIndex == -1; i++)
                 for (let j=i+1; j<passwords.length && twoPasswordsMatchIndex == -1; j++)
-                    if (passwords[j].value==passwords[i].value) twoPasswordsMatchIndex=j;
+                    if (passwords[j].field.value==passwords[i].field.value) twoPasswordsMatchIndex=j;
 
             if (twoPasswordsMatchIndex == -1) // either mis-typed password change form, single password change box form or multi-password login/signup, assuming latter.
             {
@@ -179,14 +180,10 @@ export class FormSaving {
 
             const submittedData = {
                 url: url.href,
-                usernameIndex,
-                passwordFields: this.prepareFormFieldsForSaving(nonEmptyPasswordFields),
+                fields: Field.combineDomFieldLists(usernameIndex, nonEmptyOtherFields.map(f => f.field), nonEmptyPasswordFields.map(f => f.field)),
                 title: doc.title || url.hostname,
-                otherFields: this.prepareFormFieldsForSaving(nonEmptyOtherFields),
-                //currentPage,
                 isPasswordChangeForm,
                 isRegistrationForm
-                //,savePageCountToTab
             };
 
             // console.error("favicon page: " + this.);
@@ -195,25 +192,25 @@ export class FormSaving {
         }
     }
 
-    private removeEmptyFields (fields: keeLoginField[]) {
-        return fields.filter(f => f.value || f.type === "checkbox");
+    private removeEmptyFields (fields: MatchedField[]) {
+        return fields.filter(f => f.field.value || f.field.type === "boolean");
     }
 
-    private hasFieldBeenModified (newlySubmittedFields, previouslyFilledFields: FilledField[]) {
+    private hasFieldBeenModified (newlySubmittedFields: MatchedField[], previouslyFilledFields: FilledField[]) {
         return !!previouslyFilledFields.find(filledField => {
             const submittedField = newlySubmittedFields.find(
-                f => filledField.DOMelement == f.DOMInputElement || filledField.DOMelement == f.DOMSelectElement);
+                f => filledField.DOMelement == f.DOMelement);
 
             // If we haven't submitted the same DOM element we filled in
             if (!submittedField) return true;
 
-            if (submittedField.value != filledField.value) return true;
+            if (submittedField.field.value != filledField.value) return true;
 
             return false;
         });
     }
 
-    private prepareFormFieldsForSaving (fields) {
-        return fields.map(f => { f.DOMInputElement = undefined; f.DOMSelectElement = undefined; return f; });
+    private prepareFormFieldsForSaving (fields: MatchedField[]) {
+        return fields.map(f => { f.DOMelement = undefined; return f; });
     }
 }

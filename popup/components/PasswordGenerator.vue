@@ -45,6 +45,7 @@
 import { Port } from "../../common/port";
 import { mapGetters } from "vuex";
 import { Action } from "../../common/Action";
+import { SaveState } from "../../common/SaveState";
 
 export default {
     props: ["field"],
@@ -52,7 +53,7 @@ export default {
         selectedProfile: ""
     }),
     computed: {
-        ...mapGetters(["PasswordProfiles", ""]),
+        ...mapGetters(["PasswordProfiles", "saveState"]),
         items: function (this: any) {
             return this.PasswordProfiles.map(p => p.name);
         }
@@ -67,7 +68,7 @@ export default {
                     this.$emit("dialog-closed", { value: newValue });
                 }
             );
-            Port.postMessage({ action: Action.GeneratePassword, passwordProfile: this.selectedProfile });
+            Port.postMessage({ action: Action.GeneratePassword, passwordProfile: this.selectedProfile, url: (this.saveState as SaveState).newEntry?.URLs?.[0] });
         },
         cancel: function (this: any) {
             this.$emit("dialog-closed");

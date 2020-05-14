@@ -62,16 +62,16 @@ export default {
     },
     methods: {
         ...mapActions(actionNames),
-        onSearchComplete (logins: EntrySummary[]) {
+        onSearchComplete (entrySummaries: EntrySummary[]) {
             KeeLog.debug("onSearchComplete");
-            logins = logins
+            entrySummaries = entrySummaries
                 .sort(function (a, b) {
                     if (a.relevanceScore > b.relevanceScore) return -1;
                     if (a.relevanceScore < b.relevanceScore) return 1;
                     return 0;
                 })
                 .map(l => Object.assign(l, { fullDetails: null }));
-            (this as any).$store.dispatch("updateSearchResults", logins);
+            (this as any).$store.dispatch("updateSearchResults", entrySummaries);
         },
         onSearchInput (value) {
             // Think this is OK but if it is actually async then user may have subsequent

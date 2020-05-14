@@ -1,8 +1,8 @@
 import { copyStringToClipboard } from "./copyStringToClipboard";
-import { keeLoginInfo } from "../common/kfDataModel";
 import { KeeLog } from "../common/Logger";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
+import { Entry } from "../common/model/Entry";
 
 export class MatchedLoginsPanel {
 
@@ -10,60 +10,47 @@ export class MatchedLoginsPanel {
         private closePanel: () => void,
         private parentFrameId: number) {}
 
-    public createNearNode (node: HTMLElement, logins) {
+    public createNearNode (node: HTMLElement, entries: Entry[]) {
         const container = document.createElement("div");
         container.id = "Kee-MatchedLoginsList";
         const list = document.createElement("ul");
-        this.setLogins(logins, list);
+        this.setLogins(entries, list);
         container.appendChild(list);
         node.parentNode.insertBefore(container, node.nextSibling);
 
         return container;
     }
 
-    private setLogins (logins, container)
+    private setLogins (entries: Entry[], container)
     {
-        logins.sort((a, b) => b.relevanceScore - a.relevanceScore);
-        this.setLoginsAllMatches(logins, container);
-    }
+        KeeLog.debug("setting " + entries.length + " matched entries");
 
-    private setLoginsAllMatches (logins: keeLoginInfo[], container) {
-        KeeLog.debug("setting " + logins.length + " matched logins");
+        entries.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
-        // add every matched login to the container(s)
-        for (let i = 0; i < logins.length; i++) {
-            const login = logins[i];
-            let usernameValue = "";
+        // add every matched entry to the container(s)
+        for (let i = 0; i < entries.length; i++) {
+            const entry = entries[i];
             let usernameDisplayValue = "[" + $STR("noUsername_partial_tip") + "]";
-            let usernameName = "";
-            let usernameId = "";
-            const displayGroupPath = login.database.name + "/" + login.parentGroup.path;
+            const displayGroupPath = entry.database.name + "/" + entry.parentGroup.path;
 
-            if (login.usernameIndex != null && login.usernameIndex != undefined && login.usernameIndex >= 0
-                && login.otherFields != null && login.otherFields.length > 0) {
-                const field = login.otherFields[login.usernameIndex];
-
-                usernameValue = field.value;
-                if (usernameValue != undefined && usernameValue != null && usernameValue != "")
-                    usernameDisplayValue = usernameValue;
-                usernameName = field.name;
-                usernameId = field.fieldId;
+            const usernameField = Entry.getUsernameField(entry);
+            if (usernameField && usernameField.value) {
+                usernameDisplayValue = usernameField.value;
             }
 
             const loginItem = document.createElement("li");
             loginItem.className = "";
-            loginItem.style.backgroundImage = "url(data:image/png;base64," + login.iconImageData + ")";
-            loginItem.dataset.filename = login.database.fileName;
-            loginItem.dataset.frameKey = login.frameKey;
-            loginItem.dataset.formIndex = login.formIndex.toString();
-            loginItem.dataset.loginIndex = login.loginIndex.toString();
-            loginItem.dataset.uuid = login.uniqueID;
-            loginItem.title = $STRF("matchedLogin_tip", [login.title, displayGroupPath, usernameDisplayValue]);
+            loginItem.style.backgroundImage = "url(data:image/png;base64," + entry.icon.iconImageData + ")";
+            loginItem.dataset.filename = entry.database.fileName;
+            loginItem.dataset.formIndex = entry.formIndex.toString();
+            loginItem.dataset.entryIndex = entry.entryIndex.toString();
+            loginItem.dataset.uuid = entry.uuid;
+            loginItem.title = $STRF("matchedLogin_tip", [entry.title, displayGroupPath, usernameDisplayValue]);
             loginItem.tabIndex = i == 0 ? 0 : -1;
 
-            loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, login.title]);
+            loginItem.textContent = $STRF("matchedLogin_label", [usernameDisplayValue, entry.title]);
 
-            const loginContextActions = this.createContextActions(login);
+            const loginContextActions = this.createContextActions(entry);
             loginItem.appendChild(loginContextActions);
 
             loginItem.addEventListener("keydown", e => this.keyboardNavHandler(e), false);
@@ -80,7 +67,7 @@ export class MatchedLoginsPanel {
             loginItem.addEventListener("keeCommand", event => {
                 this.myPort.postMessage({
                     action: Action.ManualFill,
-                    selectedLoginIndex: (event.currentTarget as any).dataset.loginIndex,
+                    selectedEntryIndex: (event.currentTarget as any).dataset.entryIndex,
                     frameId: this.parentFrameId });
             }, false);
             loginItem.addEventListener("mouseenter", e => this.onMouseEnterLogin(e), false);
@@ -131,7 +118,7 @@ export class MatchedLoginsPanel {
         element.classList.add("enabled");
     }
 
-    private createContextActions (this: MatchedLoginsPanel, kfl: keeLoginInfo) {
+    private createContextActions (this: MatchedLoginsPanel, entry: Entry) {
         const loginContextActions = document.createElement("div");
         loginContextActions.classList.add("disabled");
 
@@ -141,7 +128,7 @@ export class MatchedLoginsPanel {
         editButton.addEventListener("click", event => {
             event.stopPropagation();
             event.preventDefault();
-            this.myPort.postMessage({loginEditor: { uniqueID: kfl.uniqueID, DBfilename: kfl.database.fileName}} as AddonMessage);
+            this.myPort.postMessage({loginEditor: { uuid: entry.uuid, DBfilename: entry.database.fileName}} as AddonMessage);
             this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
         }, false);
         editButton.addEventListener("keydown", event => {
@@ -149,10 +136,10 @@ export class MatchedLoginsPanel {
         });
         loginContextActions.appendChild(editButton);
 
-        const otherFieldCount = (kfl.otherFields != null && kfl.otherFields.length > 0) ? kfl.otherFields.length : 0;
-        const usernameField = (otherFieldCount > 0) ? kfl.otherFields[kfl.usernameIndex] : null;
-        const passwordFieldCount = (kfl.passwords != null && kfl.passwords.length > 0) ? kfl.passwords.length : 0;
-        const passwordField = (passwordFieldCount > 0) ? kfl.passwords[0] : null;
+        const otherFieldCount = entry.fields.filter(f => f.type !== "password").length ?? 0;
+        const usernameField = Entry.getUsernameField(entry);
+        const passwordFieldCount = entry.fields.filter(f => f.type === "password").length ?? 0;
+        const passwordField = Entry.getPasswordField(entry);
 
         if (usernameField != null)
         {
@@ -186,46 +173,43 @@ export class MatchedLoginsPanel {
             });
             loginContextActions.appendChild(button);
         }
-        if (otherFieldCount > 1 || passwordFieldCount > 1) {
-
-            if (otherFieldCount > 1) {
-                kfl.otherFields.forEach((o, i) => {
-                    if (i != kfl.usernameIndex && o.type != "checkbox") {
-                        const button = document.createElement("button");
-                        button.textContent = $STR("copy") + " " + o.name + " (" + o.fieldId + ")";
-                        //"chrome://kee/skin/copy.png",
-                        button.addEventListener("click", event => {
-                            event.stopPropagation();
-                            event.preventDefault();
-                            copyStringToClipboard(o.value);
-                            this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
-                        }, false);
-                        button.addEventListener("keydown", event => {
-                            if (event.keyCode === 13) button.click();
-                        });
-                        loginContextActions.appendChild(button);
-                    }
-                });
-            }
-            if (passwordFieldCount > 1) {
-                kfl.passwords.forEach((p, i) => {
-                    if (i != 0 && p.type != "checkbox") {
-                        const button = document.createElement("button");
-                        button.textContent = $STR("copy") + " " + p.name + " (" + p.fieldId + ")";
-                        //"chrome://kee/skin/copy.png",
-                        button.addEventListener("click", event => {
-                            event.stopPropagation();
-                            event.preventDefault();
-                            copyStringToClipboard(p.value);
-                            this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
-                        }, false);
-                        button.addEventListener("keydown", event => {
-                            if (event.keyCode === 13) button.click();
-                        });
-                        loginContextActions.appendChild(button);
-                    }
-                });
-            }
+        if (otherFieldCount > 1) {
+            entry.fields.filter(f => f.type !== "password").forEach((o, i) => {
+                if (i != 0 && o.locators[0].type != "checkbox") {
+                    const button = document.createElement("button");
+                    button.textContent = $STR("copy") + " " + o.name + " (" + o.locators[0].id + ")";
+                    //"chrome://kee/skin/copy.png",
+                    button.addEventListener("click", event => {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        copyStringToClipboard(o.value);
+                        this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
+                    }, false);
+                    button.addEventListener("keydown", event => {
+                        if (event.keyCode === 13) button.click();
+                    });
+                    loginContextActions.appendChild(button);
+                }
+            });
+        }
+        if (passwordFieldCount > 1) {
+            entry.fields.filter(f => f.type === "password").forEach((p, i) => {
+                if (i != 0) {
+                    const button = document.createElement("button");
+                    button.textContent = $STR("copy") + " " + p.name + " (" + p.locators[0].id + ")";
+                    //"chrome://kee/skin/copy.png",
+                    button.addEventListener("click", event => {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        copyStringToClipboard(p.value);
+                        this.myPort.postMessage({action: Action.CloseAllPanels} as AddonMessage);
+                    }, false);
+                    button.addEventListener("keydown", event => {
+                        if (event.keyCode === 13) button.click();
+                    });
+                    loginContextActions.appendChild(button);
+                }
+            });
         }
         return loginContextActions;
     }

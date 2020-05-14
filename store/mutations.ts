@@ -73,7 +73,7 @@ export default {
         undefAbort(payload);
         const id = payload.uuid;
         for (const s of state.searchResults) {
-            if (s.uniqueID === id) {
+            if (s.uuid === id) {
                 s.fullDetails = payload;
                 break;
             }

@@ -1,7 +1,7 @@
 import { copyStringToClipboard } from "./copyStringToClipboard";
 import { MatchedLoginsPanel } from "./MatchedLoginsPanel";
 import { GeneratePasswordPanel } from "./GeneratePasswordPanel";
-import { SavePasswordPanel } from "./SavePasswordPanel";
+//import { SavePasswordPanel } from "./SavePasswordPanel";
 import { FrameState } from "../common/FrameState";
 import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
@@ -52,10 +52,10 @@ function startup () {
 
                 if (m.frameState) updateFrameState(m.frameState);
 
-                const mainPanel = matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.logins);
+                const mainPanel = matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.entries);
 
                 // Focus the window (required in Firefox to get focus onto the new iframe)
-                // and then the first login item (enables keyboard navigation). Combined,
+                // and then the first entry item (enables keyboard navigation). Combined,
                 // these operations blur focus from the text box, thereby hiding any
                 // autocomplete popup the browser has displayed)
                 window.focus();
@@ -124,29 +124,29 @@ function startup () {
                 }
             });
             break;
-        case "savePassword":
-            document.getElementById("header").innerText = $STR("save_login");
-            Port.raw.onMessage.addListener(function (m: AddonMessage) {
-                KeeLog.debug("In iframe script, received message from background script");
+        // case "savePassword":
+        //     document.getElementById("header").innerText = $STR("save_login");
+        //     Port.raw.onMessage.addListener(function (m: AddonMessage) {
+        //         KeeLog.debug("In iframe script, received message from background script");
 
-                if (m.initialState) {
-                    syncContent.init(m.initialState, (mutation: MutationPayload) => {
-                        Port.postMessage({mutation} as AddonMessage);
-                    });
-                }
-                if (m.mutation) {
-                    syncContent.onRemoteMutation(m.mutation);
-                    return;
-                }
+        //         if (m.initialState) {
+        //             syncContent.init(m.initialState, (mutation: MutationPayload) => {
+        //                 Port.postMessage({mutation} as AddonMessage);
+        //             });
+        //         }
+        //         if (m.mutation) {
+        //             syncContent.onRemoteMutation(m.mutation);
+        //             return;
+        //         }
 
-                if (m.frameState) updateFrameState(m.frameState);
+        //         if (m.frameState) updateFrameState(m.frameState);
 
-                savePasswordPanel = new SavePasswordPanel(Port.raw, m.submittedData);
+        //         savePasswordPanel = new SavePasswordPanel(Port.raw, m.submittedData);
 
-                const mainPanel = savePasswordPanel.createNearNode(document.getElementById("header"));
-                if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
-            });
-            break;
+        //         const mainPanel = savePasswordPanel.createNearNode(document.getElementById("header"));
+        //         if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
+        //     });
+        //     break;
     }
 
     const closeButton = document.createElement("button");
@@ -199,7 +199,7 @@ function startup () {
 
 let matchedLoginsPanel: MatchedLoginsPanel;
 let generatePasswordPanel: GeneratePasswordPanel;
-let savePasswordPanel: SavePasswordPanel;
+//let savePasswordPanel: SavePasswordPanel;
 let syncContent: SyncContent;
 
 const params = {};

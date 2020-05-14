@@ -1,7 +1,13 @@
 import { KeeLog } from "./Logger";
 import { SearchConfig } from "./model/SearchConfig";
+import { EntrySummary } from "./model/EntrySummary";
+import { Group } from "./model/Group";
 
-export function isMatched (item, keywords, isInMatchingGroup, searchConfig: SearchConfig, filter?) {
+function isEntrySummary (item: Partial<Group> | EntrySummary): item is EntrySummary {
+    return !(item as EntrySummary).url;
+}
+
+export function calculateMatchScore (item: EntrySummary | Partial<Group>, keywords: string[], isInMatchingGroup, searchConfig: SearchConfig, filter?) {
 
     if (filter) {
         if (!filter(item))
@@ -12,7 +18,7 @@ export function isMatched (item, keywords, isInMatchingGroup, searchConfig: Sear
         return 0;
     }
 
-    if (!item.url) {
+    if (!isEntrySummary(item)) {
         // must be a group.
         // If we know that a parent group has already matched, no point in searching further
         if (isInMatchingGroup)
@@ -33,7 +39,7 @@ export function isMatched (item, keywords, isInMatchingGroup, searchConfig: Sear
         if (searchConfig.searchUsernames && item.usernameValue && item.usernameValue.toLowerCase().indexOf(keyword) >= 0)
             keywordScore += searchConfig.weightUsernames;
         if (searchConfig.searchURLs && item.uRLs &&
-            item.uRLs.filter(function (i) { return (i.toLowerCase().indexOf(keyword) >= 0); }).length > 0)
+        item.uRLs.filter(function (i) { return (i.toLowerCase().indexOf(keyword) >= 0); }).length > 0)
             keywordScore += searchConfig.weightURLs;
 
         // Increment the relevance score proportionally to the number of keywords

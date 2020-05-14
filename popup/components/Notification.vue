@@ -91,7 +91,7 @@ export default {
                     configManager.save();
                     break;
                 case "launchLoginEditorFromNotification":
-                    pm({loginEditor: { uniqueID: data.uniqueID, DBfilename: data.fileName}} as AddonMessage);
+                    pm({loginEditor: { uuid: data.uuid, DBfilename: data.fileName}} as AddonMessage);
                     break;
             }
             pm({ removeNotification: id } as AddonMessage);

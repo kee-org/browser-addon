@@ -7,12 +7,12 @@
 
     <Entry
       v-for="(match, index) of filteredMatches"
-      :key="match.entry.uniqueID"
+      :key="match.entry.uuid"
       ref="listAarray"
       :entrySummary="match.entry"
       :isFirstInAList="index === 0"
       :frame-id="frame-id"
-      :login-index="match.originalIndex"
+      :entry-index="match.originalIndex"
       @move-next-in-list="nextInList(index, 'listAarray', filteredMatches.length)"
       @move-prev-in-list="prevInList(index, 'listAarray', filteredMatches.length)"
       @move-out-of-list="exitList"
@@ -32,7 +32,7 @@
 
     <Entry
       v-for="(entry, index) of deduplicatedSearchResults"
-      :key="entry.uniqueID"
+      :key="entry.uuid"
       ref="listBarray"
       :entrySummary="entry"
       :isFirstInAList="index === 0"
@@ -58,7 +58,7 @@ import { SearcherMatchedOnly } from "../../common/SearcherMatchedOnly";
 
 export default {
     components: { Entry },
-    props: ["matchedLogins", "frameId"],
+    props: ["matchedEntries", "frameId"],
     data () {
         return {
             filteredMatches: null,
@@ -69,9 +69,9 @@ export default {
         ...mapGetters(["currentSearchTerm", "searchResults"]),
         deduplicatedSearchResults: function (this: any) {
             if (this.searchResults) {
-                if (this.matchedLogins) {
+                if (this.matchedEntries) {
                     return this.searchResults.filter(
-                        e => !this.matchedLogins.some(m => m.uniqueID === e.uniqueID));
+                        e => !this.matchedEntries.some(m => m.uuid === e.uuid));
                 } else {
                     return this.searchResults;
                 }
@@ -80,12 +80,12 @@ export default {
         }
     },
     created (this: any) {
-        if (this.matchedLogins) {
-            for (let i=0; i < this.matchedLogins.length; i++) {
-                this.uidMap.set(this.matchedLogins[i].uniqueID, i);
+        if (this.matchedEntries) {
+            for (let i=0; i < this.matchedEntries.length; i++) {
+                this.uidMap.set(this.matchedEntries[i].uuid, i);
             }
         }
-        this.searchOnlyMatches = new SearcherMatchedOnly(this.matchedLogins);
+        this.searchOnlyMatches = new SearcherMatchedOnly(this.matchedEntries?.map(e => EntrySummary.fromEntry(e)));
         this.searchOnlyMatches.execute(this.currentSearchTerm, (this as any).onSearchOnlyMatchesComplete.bind(this));
     },
     mounted (this: any) {
@@ -100,17 +100,17 @@ export default {
     },
     methods: {
         ...mapActions(actionNames),
-        onSearchOnlyMatchesComplete (this: any, logins: EntrySummary[]) {
+        onSearchOnlyMatchesComplete (this: any, entrySummaries: EntrySummary[]) {
             KeeLog.debug("onSearchOnlyMatchesComplete");
-            logins = logins
+            entrySummaries = entrySummaries
                 .sort(function (a, b) {
                     if (a.relevanceScore > b.relevanceScore) return -1;
                     if (a.relevanceScore < b.relevanceScore) return 1;
                     return 0;
                 });
-            this.filteredMatches = logins.map(m => ({
+            this.filteredMatches = entrySummaries.map(m => ({
                 entry: m,
-                originalIndex: this.uidMap.get(m.uniqueID)
+                originalIndex: this.uidMap.get(m.uuid)
             }));
         },
         nextInList (this: any, currentIndex: number, listName: string, listLength: any) {

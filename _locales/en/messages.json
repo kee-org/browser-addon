@@ -820,5 +820,17 @@
   "title": {
       "message": "Title",
       "description": "E.g. the title of an entry."
+  },
+  "username": {
+      "message": "Username",
+      "description": "Use the most generic and common term available for the primary sign-in identifier for an account. In practice may be an email address, number, surname, username, etc. but in all cases this will refer to the string the user has stored in the entry's primary Username field."
+  },
+  "enabled": {
+      "message": "Enabled",
+      "description": "Indicates that a boolean option such as a checkbox is in an enabled/on/true state"
+  },
+  "disabled": {
+      "message": "Disabled",
+      "description": "Indicates that a boolean option such as a checkbox is in an disabled/off/false state"
   }
 }

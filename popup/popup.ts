@@ -7,7 +7,6 @@ import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import i18n from "../common/Vuei18n";
 import { Port } from "../common/port";
-import { keeLoginInfo } from "../common/kfDataModel";
 import { SyncContent } from "../store/syncContent";
 import { MutationPayload } from "vuex";
 import { Entry } from "../common/model/Entry";
@@ -20,30 +19,6 @@ Vue.use(Vuetify);
 Vue.prototype.$browser = browser;
 
 let syncContent: SyncContent;
-
-function convertSingleLoginEntryResult (result): keeLoginInfo
-{
-    let isError = false;
-
-    try {
-        if (result && result.length == 1) {
-            const kfl = new keeLoginInfo();
-            kfl.initFromEntry(result[0]);
-            // strip functions in case this upsets vuex state transfer across processes
-            return JSON.parse(JSON.stringify(kfl));
-        } else {
-            isError = true;
-        }
-    } catch (e) {
-        isError = true;
-    }
-
-    if (isError) {
-        KeeLog.error("Unexpected error handling response for detailed field data");
-    }
-
-    return;
-}
 
 function startup () {
     KeeLog.debug("popup started");
@@ -74,21 +49,7 @@ function startup () {
                     render (h) {
                         return h(App, {
                             props: {
-                                matchedLogins: !m.logins ? null : m.logins.map(
-                                    e => ({
-                                        fullDetails: Entry.fromKeeLoginInfo(e),
-                                        dbFileName: e.database.fileName,
-                                        iconImageData: e.iconImageData,
-                                        path: e.parentGroup.path,
-                                        relevanceScore: e.relevanceScore,
-                                        title: e.title,
-                                        uRLs: e.URLs,
-                                        uniqueID: e.uniqueID,
-                                        url: e.URLs[0],
-                                        usernameName: (e.otherFields && e.usernameIndex >= 0) ? e.otherFields[e.usernameIndex].name : "<no username>",
-                                        usernameValue: (e.otherFields && e.usernameIndex >= 0) ? e.otherFields[e.usernameIndex].value : "<no username>"
-                                    } as EntrySummary)
-                                ),
+                                matchedEntries: !m.entries ? null : m.entries,
                                 frameId: m.frameId
                             }
                         });
@@ -111,7 +72,8 @@ function startup () {
         }
 
         if (store.state.connected && m.findMatchesResult) {
-            store.dispatch("updateSearchResultWithFullDetails", Entry.fromKeeLoginInfo(convertSingleLoginEntryResult(m.findMatchesResult)));
+            console.warn(m);
+            store.dispatch("updateSearchResultWithFullDetails", JSON.parse(JSON.stringify(m.findMatchesResult[0])));
         }
     });
 

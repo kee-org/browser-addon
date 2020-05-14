@@ -12,17 +12,23 @@ export async function reconcileURLs (oldUrls: string[], submittedUrl?: string) {
         return { urls: oldUrls, showWarning: false};
     }
 
+    const compareURLDomainOrIPAddress = KeeURL.fromString(compareUrl)?.domainOrIPAddress;
+
+    if (!compareURLDomainOrIPAddress) {
+        return { urls: oldUrls, showWarning: false};
+    }
+
     // A Domain match, regardless of the existing entry's configuration
-    if (oldUrls.some(url => KeeURL.fromString(url).domainOrIPAddress === KeeURL.fromString(compareUrl).domainOrIPAddress)) {
+    if (oldUrls.some(url => KeeURL.fromString(url)?.domainOrIPAddress === compareURLDomainOrIPAddress)) {
         return { urls: [compareUrl].concat(oldUrls.slice(1)), showWarning: false};
     }
 
     if (!submittedUrl) {
         const allFrameUrls = await getAllFrameURLs(currentTab);
-        if (oldUrls.some(url => allFrameUrls.some(fu => KeeURL.fromString(fu).domainOrIPAddress === KeeURL.fromString(url).domainOrIPAddress))) {
+        if (oldUrls.some(url => allFrameUrls.some(fu => KeeURL.fromString(fu)?.domainOrIPAddress === KeeURL.fromString(url)?.domainOrIPAddress))) {
             return { urls: oldUrls, showWarning: false};
         }
     }
 
-    return { urls: [compareUrl].concat(oldUrls.slice(1)), showWarning: true};
+    return { urls: [compareUrl].concat(oldUrls), showWarning: true};
 }

@@ -17,11 +17,14 @@ import { FrameState } from "../common/FrameState";
 import { VaultMessage } from "../common/VaultMessage";
 import { KeeNotification } from "../common/KeeNotification";
 import { VaultProtocol } from "../common/VaultProtocol";
-import { SessionType, Database, PasswordProfile, keeLoginInfo } from "../common/kfDataModel";
+import { SessionType } from "../common/kfDataModel";
+import { PasswordProfile } from "../common/model/PasswordProfile";
 import { Action } from "../common/Action";
 import store from "../store";
 import { SyncBackground } from "../store/syncBackground";
 import { MutationPayload } from "vuex";
+import { Database } from "../common/model/Database";
+import { Entry } from "../common/model/Entry";
 
 export class Kee {
     accountManager: AccountManager;
@@ -140,7 +143,7 @@ export class Kee {
                         const matchedFrameID = window.kee.frameIdWithMatchedLogins(frames);
                         if (matchedFrameID >= 0) {
                             loginsFound = true;
-                            connectMessage.logins = frames.get(matchedFrameID).logins;
+                            connectMessage.entries = frames.get(matchedFrameID).entries;
                             connectMessage.frameId = matchedFrameID;
                             connectMessage.tabId = window.kee.foregroundTabId;
                         }
@@ -231,7 +234,7 @@ export class Kee {
     frameIdWithMatchedLogins (frames: Map<number, FrameState>) {
         let frameId = -1;
         frames.forEach((frame, i) => {
-            if (frameId == -1 && frame && frame.logins && frame.logins.length > 0) frameId = i;
+            if (frameId == -1 && frame && frame.entries && frame.entries.length > 0) frameId = i;
         });
         return frameId;
     }
@@ -375,7 +378,7 @@ export class Kee {
     {
         //TODO:4: To improve performance we might need to determine if anything
         // has actually changed before doing the dispatches and poking the
-        // current tab frames to find logins
+        // current tab frames to find entries
         let newDatabaseActiveIndex = -1;
         for (let i=0; i < newDatabases.length; i++)
         {
@@ -511,11 +514,11 @@ export class Kee {
         }
     }
 
-    addLogin (login: keeLoginInfo, parentUUID: string, dbFileName: string)
+    addLogin (entry: Entry, parentUUID: string, dbFileName: string)
     {
         try
         {
-            return this.KeePassRPC.addLogin(login, parentUUID, dbFileName);
+            return this.KeePassRPC.addLogin(entry, parentUUID, dbFileName);
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
@@ -523,11 +526,11 @@ export class Kee {
         }
     }
 
-    updateLogin (login: keeLoginInfo, oldLoginUUID: string, dbFileName: string)
+    updateLogin (entry: Entry, oldLoginUUID: string, dbFileName: string)
     {
         try
         {
-            return this.KeePassRPC.updateLogin(login, oldLoginUUID, dbFileName);
+            return this.KeePassRPC.updateLogin(entry, oldLoginUUID, dbFileName);
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
@@ -547,11 +550,11 @@ export class Kee {
         }
     }
 
-    findLogins (fullURL, formSubmitURL, httpRealm, uniqueID, dbFileName, freeText, username, callback)
+    findLogins (fullURL, formSubmitURL, httpRealm, uuid, dbFileName, freeText, username, callback: (result: Entry[]) => void)
     {
         try
         {
-            return this.KeePassRPC.findLogins(fullURL, formSubmitURL, httpRealm, uniqueID, dbFileName, freeText, username, callback);
+            return this.KeePassRPC.findLogins(fullURL, formSubmitURL, httpRealm, uuid, dbFileName, freeText, username, callback);
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
@@ -595,7 +598,7 @@ export class Kee {
         }
     }
 
-    generatePassword (profileName, url, callback)
+    generatePassword (profileName: string, url: string, callback: (generatedPassword: string) => void)
     {
         try
         {
