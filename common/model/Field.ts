@@ -1,6 +1,8 @@
-import { keeLoginField, keeLoginFieldType } from "../kfDataModel";
 import { utils } from "../utils";
 import { Locator } from "./Locator";
+import { FieldDto, FormFieldTypeDTO } from "./KPRPCDTOs";
+
+const protectedText = "********";
 
 export type FieldType = "password" | "text" | "existing" | "boolean" | "otp" | "some-chars";
 
@@ -32,70 +34,135 @@ export class Field {
     // tracks the most recent value we want to reset to in cases where the user has that possibility
     readonly resetValue: string;
 
-    //TODO:* Will only need these once we proceed with further removal of the keeLoginField class
-    // The HTML form element DOM objects - transient (not sent to KeePass)
-    // DOMInputElement: HTMLInputElement;
-    // DOMSelectElement: HTMLSelectElement;
-    // Best score for any potential entry that is being considered for selection - transient (not sent to KeePass)
-    // highestScore: number;
-
     constructor (field: Partial<Field>) {
         this.name = field.name || "";
         this.value = field.value || "";
         this.resetValue = field.resetValue || "";
-        this.uuid = field.uuid || "";
+        this.uuid = field.uuid || utils.newGUID();
         this.type = field.type || "text";
         this.locators = field.locators || [];
     }
 
-    static fromKeeLoginField (f: keeLoginField) {
+    private static getDisplayValueInternal (field: Field, revealPasswords: boolean, replacementIfProtected: string) {
+        if (field.type === "boolean") {
+            return field.value === "KEEFOX_CHECKED_FLAG_TRUE" ? $STR("enabled") : $STR("disabled");
+        } else {
+            return field.type === "password" && !revealPasswords
+                ? replacementIfProtected
+                : field.value;
+        }
+    }
+
+    static getDisplayValue (field: Field, revealPasswords: boolean) {
+        return Field.getDisplayValueInternal(field, revealPasswords, protectedText);
+    }
+
+    static getDisplayName (field: Field) {
+        if (field.name === "KeePass username") {
+            return $STR("username");
+        } else if (field.name === "KeePass password") {
+            return $STR("password");
+        } else {
+            return (field.name ? field.name : "[ " + $STR("no_name") + " ]");
+        }
+    }
+
+    static getDisplayTooltip (field: Field, revealPasswords: boolean) {
+        return (
+            Field.getDisplayName(field) + ": " +
+            Field.getDisplayValueInternal(field, revealPasswords, $STR("click_to_reveal_hide"))
+        );
+    }
+
+    static typeFromDOMtype (domType: string): FieldType {
+        // We can't know every type that may exist in future so assume:
+        // 1. unknown types must be text
+        // 2. we won't be asked to handle types for irrelevant elements such as buttons
+        switch (domType) {
+            case "password": return "password";
+            case "radio": return "existing";
+            case "checkbox": return "boolean";
+            case "select-one": return "existing";
+            default: return "text";
+        }
+    }
+
+    // By convention the first non-password item will be the username and the password will be either 1st or 2nd in the list
+    static combineDomFieldLists (usernameIndex: number, otherFields: Field[], passwords: Field[]) {
+        const fields: Field[] = [];
+        if (usernameIndex >= 0 && otherFields[usernameIndex]) {
+            fields.push(otherFields[usernameIndex]);
+        }
+        passwords.forEach(f => {
+            fields.push(f);
+        });
+        otherFields.forEach((f, index) => {
+            if (index !== usernameIndex) {
+                fields.push(f);
+            }
+        });
+        return fields;
+    }
+
+    static fromDOM (element: any, domType: string, value: string) {
+        return new Field({
+            uuid: utils.newGUID(),
+            name: element.name, //TODO:4: try to find a more user-facing name for the field (e.g. via a label element)
+            locators: [new Locator({
+                name: element.name,
+                id: element.id,
+                type: domType
+            })],
+            value,
+            type: Field.typeFromDOMtype(domType)
+        });
+    }
+
+    static fromKPRPCFieldDTO (f: FieldDto) {
         let type: FieldType = "text";
         let locatorType: string = "text";
 
         switch (f.type) {
-            case "password": type = "password"; locatorType = "password"; break;
-            case "radio": type = "existing"; locatorType = "radio"; break;
-            case "checkbox": type = "boolean"; locatorType = "checkbox"; break;
-            case "select-one": type = "existing"; locatorType = "select"; break;
-            case "text": type = "text"; locatorType = "text"; break;
+            case FormFieldTypeDTO.password: type = "password"; locatorType = "password"; break;
+            case FormFieldTypeDTO.radio: type = "existing"; locatorType = "radio"; break;
+            case FormFieldTypeDTO.checkbox: type = "boolean"; locatorType = "checkbox"; break;
+            case FormFieldTypeDTO.select: type = "existing"; locatorType = "select"; break;
+            case FormFieldTypeDTO.username: type = "text"; locatorType = "text"; break;
+            case FormFieldTypeDTO.text: type = "text"; locatorType = "text"; break;
         }
 
         return new Field({
-            name: f.name,
+            name: f.displayName || f.name,
             uuid: utils.newGUID(),
             value: f.value,
             resetValue: f.value,
             type: type,
             locators: [new Locator({
-                id: f.fieldId,
+                id: f.id,
                 name: f.name,
                 type: locatorType
             })]
         });
     }
 
-    public static toKeeLoginField (f: Field) {
-
-        if (f.locators.length !== 1) {
-            throw new Error("Exactly 1 Locator required for conversion to legacy model.");
-        }
-
-        let type: keeLoginFieldType = "text";
+    static toKPRPCFieldDTO (f: Field, isUsername: boolean) {
+        let fft: FormFieldTypeDTO;
 
         switch (f.locators[0].type) {
-            case "password": type = "password"; break;
-            case "radio": type = "radio"; break;
-            case "checkbox": type = "checkbox"; break;
-            case "select": type = "select-one"; break;
-            case "text": type = "text"; break;
+            case "password": fft = FormFieldTypeDTO.password; break;
+            case "radio": fft = FormFieldTypeDTO.radio; break;
+            case "checkbox": fft = FormFieldTypeDTO.checkbox; break;
+            case "select": fft = FormFieldTypeDTO.select; break;
+            case "text": fft = isUsername ? FormFieldTypeDTO.username : FormFieldTypeDTO.text; break;
         }
 
-        const klf = new keeLoginField();
-        klf.name = f.locators[0].name;
-        klf.value = f.value;
-        klf.fieldId = f.locators[0].id;
-        klf.type = type;
-
-        return klf;
+        return {
+            displayName: f.name,
+            id: f.locators[0].id,
+            name: f.locators[0].name,
+            type: fft,
+            value: f.value,
+            page: -1
+        } as FieldDto;
     }
 }

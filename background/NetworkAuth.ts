@@ -1,7 +1,10 @@
 import { KeeLog } from "../common/Logger";
-import { keeLoginInfo } from "../common/kfDataModel";
 import { configManager } from "../common/ConfigManager";
 import store from "../store";
+import { EntrySummary } from "../common/model/EntrySummary";
+import { EntrySummaryDto, EntryDto, FormFieldTypeDTO } from "../common/model/KPRPCDTOs";
+import { Entry } from "../common/model/Entry";
+import { AddonMessage } from "../common/AddonMessage";
 
 declare const punycode;
 
@@ -55,23 +58,12 @@ export class NetworkAuth {
 
             window.kee.findLogins(url.href, null, requestDetails.realm, null, null, null, null, result => {
 
-                let foundLogins = null;
-                const convertedResult: keeLoginInfo[] = [];
+                let matchedEntries: Entry[] = [];
                 let isError = false;
 
                 try {
-                    if (result.result) {
-                        foundLogins = result.result;
-
-                        for (const i in foundLogins) {
-                            const kfl = new keeLoginInfo();
-                            kfl.initFromEntry(foundLogins[i]);
-
-                            // Only consider logins that contain a username and password to fill in
-                            if (kfl.passwords != null && kfl.passwords.length > 0
-                                && kfl.otherFields != null && kfl.otherFields.length > 0)
-                                convertedResult.push(kfl);
-                        }
+                    if (result) {
+                        matchedEntries = result.filter((entry: Entry) => Entry.getUsernameField(entry) && Entry.getPasswordField(entry));
                     } else {
                         isError = true;
                     }
@@ -79,22 +71,22 @@ export class NetworkAuth {
                     isError = true;
                 }
 
-                if (isError || convertedResult.length <= 0) {
+                if (isError || matchedEntries.length <= 0) {
                     resolve( { cancel: false } );
                     return;
                 }
 
-                if (convertedResult.length === 1 && configManager.current.autoSubmitNetworkAuthWithSingleMatch) {
-                    const login = convertedResult[0];
-                    resolve({ authCredentials: { username: login.otherFields[login.usernameIndex].value, password: login.passwords[0].value } });
+                if (matchedEntries.length === 1 && configManager.current.autoSubmitNetworkAuthWithSingleMatch) {
+                    const entry = matchedEntries[0];
+                    resolve({ authCredentials: { username: Entry.getUsernameField(entry).value, password: Entry.getUsernameField(entry).value } });
                     return;
                 }
 
                 function handleMessage (request, sender: browser.runtime.MessageSender, sendResponse) {
                     switch (request.action) {
                         case "NetworkAuth_ok": {
-                            const login = convertedResult[request.selectedLoginIndex];
-                            resolve({ authCredentials: { username: login.otherFields[login.usernameIndex].value, password: login.passwords[0].value } });
+                            const entry = matchedEntries[request.selectedEntryIndex];
+                            resolve({ authCredentials: { username: Entry.getUsernameField(entry).value, password: Entry.getUsernameField(entry).value } });
                             browser.runtime.onMessage.removeListener(handleMessage);
                             break;
                         }
@@ -106,8 +98,8 @@ export class NetworkAuth {
                         case "NetworkAuth_load": {
                             // Can't use sendResponse() because Mozilla chose to not implement it, contrary to the MDN docs
                             browser.tabs.sendMessage(sender.tab.id, {
-                                action: "NetworkAuth_matchedLogins",
-                                logins: convertedResult,
+                                action: "NetworkAuth_matchedEntries",
+                                entries: matchedEntries,
                                 realm: requestDetails.realm,
                                 url: url.href,
                                 isProxy: requestDetails.isProxy });

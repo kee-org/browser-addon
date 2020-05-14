@@ -1,6 +1,6 @@
-import { keeLoginInfo } from "./kfDataModel";
+import { Entry } from "./model/Entry";
 
 export class FrameState {
-    logins: keeLoginInfo[] = [];
+    entries: Entry[] = [];
     url: string;
 }

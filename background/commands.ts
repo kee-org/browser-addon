@@ -56,7 +56,7 @@ export class KFCommands {
                     break;
             }
             if (id.startsWith("matchedLogin-")) {
-                window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(info.frameId).postMessage({ action: Action.ManualFill, selectedLoginIndex: id.substr(id.indexOf("-")+1) });
+                window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(info.frameId).postMessage({ action: Action.ManualFill, selectedEntryIndex: id.substr(id.indexOf("-")+1) });
             }
         });
     }
@@ -138,12 +138,12 @@ export class KFCommands {
             && window.kee.tabStates.has(window.kee.foregroundTabId)
             && window.kee.tabStates.get(window.kee.foregroundTabId).frames) {
                 window.kee.tabStates.get(window.kee.foregroundTabId).frames.forEach(frame => {
-                    for (let j=0; j<frame.logins.length; j++) {
-                        const login = frame.logins[j];
+                    for (let j=0; j<frame.entries.length; j++) {
+                        const entry = frame.entries[j];
                         try {
                             browser.contextMenus.create({
                                 id: "matchedLogin-" + j,
-                                title: login.title,
+                                title: entry.title,
                                 documentUrlPatterns: ["http://*/*", "https://*/*"],
                                 contexts: [ "editable",
                                     "frame",
@@ -157,7 +157,7 @@ export class KFCommands {
                             // try again with Chrome-supported contexts
                             browser.contextMenus.create({
                                 id: "matchedLogin-" + j,
-                                title: login.title,
+                                title: entry.title,
                                 documentUrlPatterns: ["http://*/*", "https://*/*"],
                                 contexts: [ "editable",
                                     "frame",

@@ -1,8 +1,8 @@
 import { Config, SiteConfig, SiteConfigLookup, SiteConfigNode } from "./config";
-import { keeLoginField } from "./kfDataModel";
 import { ConfigMigrations } from "./ConfigMigrations";
 import { defaultSiteConfig } from "./DefaultSiteConfig";
 import { utils } from "./utils";
+import { Field } from "./model/Field";
 
 /*
   Entry-specific configuration is stored in KeePass but in future maybe
@@ -413,19 +413,19 @@ export class ConfigManager {
         return derivedConfig;
     }
 
-    public isFormInteresting (form: HTMLFormElement, conf: SiteConfig, otherFields: keeLoginField[]) {
+    public isFormInteresting (form: HTMLFormElement, conf: SiteConfig, otherFields: Field[]) {
 
         const blacklisted = (conf.blackList && conf.blackList.form && conf.blackList.form.ids || []).indexOf(form.id) >= 0
             || (conf.blackList && conf.blackList.form && conf.blackList.form.names || []).indexOf(form.name) >= 0
-            || (conf.blackList && conf.blackList.fields && conf.blackList.fields.ids || []).some(id => otherFields.find(field => id === field.fieldId) !== undefined)
-            || (conf.blackList && conf.blackList.fields && conf.blackList.fields.names || []).some(name => otherFields.find(field => name === field.name) !== undefined);
+            || (conf.blackList && conf.blackList.fields && conf.blackList.fields.ids || []).some(id => otherFields.find(field => id === field.locators[0].id) !== undefined)
+            || (conf.blackList && conf.blackList.fields && conf.blackList.fields.names || []).some(name => otherFields.find(field => name === field.locators[0].name) !== undefined);
 
         if (blacklisted) return false;
 
         const whitelisted = (conf.whiteList && conf.whiteList.form && conf.whiteList.form.ids || []).indexOf(form.id) >= 0
             || (conf.whiteList && conf.whiteList.form && conf.whiteList.form.names || []).indexOf(form.name) >= 0
-            || (conf.whiteList && conf.whiteList.fields && conf.whiteList.fields.ids || []).some(id => otherFields.find(field => id === field.fieldId) !== undefined)
-            || (conf.whiteList && conf.whiteList.fields && conf.whiteList.fields.names || []).some(name => otherFields.find(field => name === field.name) !== undefined);
+            || (conf.whiteList && conf.whiteList.fields && conf.whiteList.fields.ids || []).some(id => otherFields.find(field => id === field.locators[0].id) !== undefined)
+            || (conf.whiteList && conf.whiteList.fields && conf.whiteList.fields.names || []).some(name => otherFields.find(field => name === field.locators[0].name) !== undefined);
 
         if (whitelisted) return true;
 

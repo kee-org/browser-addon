@@ -1,21 +1,21 @@
 import { SearchConfig } from "./model/SearchConfig";
 import { EntrySummary } from "./model/EntrySummary";
-import { resolveConfig, tokenise, isMatched } from "./SearchUtils";
+import { resolveConfig, tokenise, calculateMatchScore } from "./SearchUtils";
 
 export class SearcherMatchedOnly {
     private searchConfig: SearchConfig;
-    constructor (private matchedLogins: EntrySummary[]) {
+    constructor (private matchedEntrySummaries: EntrySummary[]) {
         this.searchConfig = resolveConfig({version: 1});
     }
 
-    private filterExistingResults (logins: EntrySummary[], keywords) {
-        return logins.filter(login => isMatched(login, keywords, false, this.searchConfig));
+    private filterExistingResults (entrySummaries: EntrySummary[], keywords: string[]) {
+        return entrySummaries.filter(entrySummary => calculateMatchScore(entrySummary, keywords, false, this.searchConfig));
     }
 
-    public execute (query, onComplete) {
+    public execute (query: string, onComplete) {
         let abort = false;
 
-        if (!this.matchedLogins || this.matchedLogins.length === 0) abort = true;
+        if (!this.matchedEntrySummaries || this.matchedEntrySummaries.length === 0) abort = true;
 
         onComplete = onComplete || this.searchConfig.onComplete;
 
@@ -31,7 +31,7 @@ export class SearcherMatchedOnly {
         }
 
         if (!query || query.length === 0) {
-            onComplete(this.matchedLogins);
+            onComplete(this.matchedEntrySummaries);
             return;
         }
 
@@ -44,7 +44,7 @@ export class SearcherMatchedOnly {
 
         // Create a timer to make the search run async
         setTimeout(() => {
-            const results = this.filterExistingResults(this.matchedLogins, keywords);
+            const results = this.filterExistingResults(this.matchedEntrySummaries, keywords);
             onComplete(results);
         }, 1);
     }

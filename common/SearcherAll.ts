@@ -3,7 +3,8 @@ import { KeeState } from "../store/KeeState";
 import { SearchConfig } from "./model/SearchConfig";
 import { utils } from "./utils";
 import { EntrySummary } from "./model/EntrySummary";
-import { resolveConfig, tokenise, isMatched } from "./SearchUtils";
+import { resolveConfig, tokenise, calculateMatchScore } from "./SearchUtils";
+import { Group } from "./model/Group";
 
 export class SearcherAll {
 
@@ -201,32 +202,31 @@ export class SearcherAll {
         return this.configIsValid;
     }
 
-    private convertItem (path, node, dbFileName) {
-        const item: EntrySummary = new EntrySummary();
-        item.iconImageData = node.iconImageData;
-        item.usernameValue = node.usernameValue;
-        item.usernameName = node.usernameName;
-        item.path = path;
-        item.title = node.title;
-        item.uRLs = node.uRLs;
-        item.url = node.uRLs[0];
-        item.uniqueID = node.uniqueID;
-        item.dbFileName = dbFileName;
-        return item;
-    }
+    // private convertItem (path, node, dbFileName) {
+    //     const item: EntrySummary = new EntrySummary();
+    //     item.iconImageData = node.iconImageData;
+    //     item.usernameValue = node.usernameValue;
+    //     item.usernameName = node.usernameName;
+    //     item.path = path;
+    //     item.title = node.title;
+    //     item.uRLs = node.uRLs;
+    //     item.url = node.uRLs[0];
+    //     item.uniqueID = node.uniqueID;
+    //     item.dbFileName = dbFileName;
+    //     return item;
+    // }
 
-    private treeTraversal (branch, path, isInMatchingGroup, keywords, addResult: (item: EntrySummary) => boolean, currentResultCount, dbFileName, filter) {
+    private treeTraversal (branch: Group, path: string, matchScore: number, keywords, addResult: (item: EntrySummary) => boolean, currentResultCount, dbFileName, filter) {
         let totalResultCount = currentResultCount;
-        for (const leaf of branch.childLightEntries) {
-            const item = this.convertItem(path, leaf, dbFileName);
+        for (const leaf of branch.entrySummaries) {
+            const item = leaf; //TODO:* maybe need to assign the path? if not, remove all that cruft from this algorithm
 
             // We might already know this is a match if the item is contained within
             // a matching group but we check again because we probably want to update
             // the relevance score for the item
-            const matchResult = isMatched(item, keywords, isInMatchingGroup, this.searchConfig, filter);
+            const matchResult = calculateMatchScore(item, keywords, matchScore, this.searchConfig, filter);
             if (matchResult > 0.0) {
-                item.relevanceScore = matchResult;
-                const accepted = addResult(item);
+                const accepted = addResult({...item, ...{relevanceScore: matchResult}});
                 if (accepted) {
                     totalResultCount++;
                     if (totalResultCount >= this.searchConfig.maximumResults)
@@ -234,8 +234,8 @@ export class SearcherAll {
                 }
             }
         }
-        for (const subBranch of branch.childGroups) {
-            const subIsInMatchingGroup = isMatched({ title: subBranch.title }, keywords, isInMatchingGroup, this.searchConfig, filter);
+        for (const subBranch of branch.groups) {
+            const subIsInMatchingGroup = calculateMatchScore({ title: subBranch.title }, keywords, matchScore, this.searchConfig, filter);
             totalResultCount = this.treeTraversal(subBranch, path + "/" + subBranch.title, subIsInMatchingGroup, keywords, addResult, totalResultCount, dbFileName, filter);
             if (totalResultCount >= this.searchConfig.maximumResults)
                 return totalResultCount;

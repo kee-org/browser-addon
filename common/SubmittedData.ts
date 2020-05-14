@@ -1,9 +1,9 @@
+import { Field } from "./model/Field";
+
 export interface SubmittedData {
     url: string;
-    usernameIndex: number;
-    passwordFields: any[];
+    fields: Field[];
     title: string;
-    otherFields: any[];
     isPasswordChangeForm: boolean;
     isRegistrationForm: boolean;
 }

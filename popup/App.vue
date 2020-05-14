@@ -42,7 +42,7 @@
         </div>
         <SearchResults
           v-show="showSearchPanel"
-          :matched-logins="matchedLogins"
+          :matched-entries="matchedEntries"
           :frame-id="frameId"
         />
         <Save1stParty
@@ -189,7 +189,7 @@
 import { Component } from "vue";
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import { names as actionNames } from "../store/action-names";
-import { SessionType, keeLoginInfo } from "../common/kfDataModel";
+import { SessionType } from "../common/kfDataModel";
 import { KeeState } from "../store/KeeState";
 import Notification from "./components/Notification.vue";
 import SearchInput from "./components/SearchInput.vue";
@@ -201,7 +201,7 @@ import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
 import { SaveState } from "../common/SaveState";
 import { KeeVue } from "./KeeVue";
-import { Entry, mapToFields } from "../common/model/Entry";
+import { Entry } from "../common/model/Entry";
 import { supplementEntryState } from "./supplementEntryState";
 import { fetchFavicon, getFaviconUrl } from "./favicon";
 
@@ -214,7 +214,7 @@ export default {
         SaveWhere
     },
     mixins: [Port.mixin],
-    props: ["matchedLogins", "frameId"],
+    props: ["matchedEntries", "frameId"],
     data: () => ({
         // We can't use the Vuex property directly because when it changes it causes 
         // the app to re-render from scratch, destroying the user input that triggered 
@@ -278,10 +278,16 @@ export default {
             browser.runtime.openOptionsPage();
             window.close();
         },
-        saveStart: function (this: any) {
+        saveStart: async function (this: any) {
+            const currentTab = (await browser.tabs.query({ active: true, currentWindow:true }))[0];
+            if (!currentTab) return;
+            const entryTemplate = {
+                URLs: [currentTab.url],
+                title: currentTab.title
+            };
             const ss = this.$store.state.saveState as SaveState;
             const updatedSaveState = Object.assign({}, ss);
-            updatedSaveState.newEntry = supplementEntryState(new Entry({}), ss);
+            updatedSaveState.newEntry = supplementEntryState(new Entry(entryTemplate), ss);
             updatedSaveState.titleResetValue = updatedSaveState.newEntry.title;
             updatedSaveState.lastActiveAt = new Date();
             updatedSaveState.showURLMismatchWarning = false;

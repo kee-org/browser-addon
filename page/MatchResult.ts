@@ -1,11 +1,13 @@
 import { FilledField } from "./FilledField";
-import { keeLoginInfo, keeLoginField } from "../common/kfDataModel";
+import { Entry } from "../common/model/Entry";
+import { MatchedField } from "./MatchedField";
+
 export class MatchResult {
-    logins: keeLoginInfo[][];
+    entries: Entry[][];
     submitTargets: HTMLElement[];
     usernameIndexArray: number[];
-    passwordFieldsArray: keeLoginField[][];
-    otherFieldsArray: keeLoginField[][];
+    passwordFieldsArray: MatchedField[][];
+    otherFieldsArray: MatchedField[][];
     currentPage: number;
     allMatchingLogins: any[];
     formRelevanceScores: number[];

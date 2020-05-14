@@ -1,15 +1,18 @@
 import { SaveState } from "../common/SaveState";
-import { Entry, mapToFields } from "../common/model/Entry";
+import { Entry } from "../common/model/Entry";
 import { reconcileFieldLists } from "./reconcileFieldLists";
 
 export function supplementEntryState (entry: Entry, saveState: SaveState, urls?: string[]) {
     const sd = saveState.submittedData;
-    const submittedFields = sd ? mapToFields(sd.usernameIndex, sd.otherFields, sd.passwordFields) : [];
+    const submittedFields = sd ? sd.fields : [];
     const newFields = reconcileFieldLists(JSON.parse(JSON.stringify(entry.fields)), submittedFields);
-    const overwrite = (sd ? {
-        URLs: urls ?? [sd.url],
+    const overwriteWithSubmittedData = (sd ? {
+        URLs: [sd.url],
         fields: newFields,
         title: sd.title
     } : {}) as Entry;
-    return Object.assign(Object.assign({}, entry), overwrite);
+    const overwriteWithURLs = (urls ? {
+        URLs: urls
+    } : {}) as Entry;
+    return Object.assign({}, entry, overwriteWithSubmittedData, overwriteWithURLs);
 }

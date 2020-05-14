@@ -1,5 +1,7 @@
 import { KeeLogger } from "../common/Logger";
-import { keeLoginField } from "../common/kfDataModel";
+import { MatchedField } from "./MatchedField";
+import { Field } from "../common/model/Field";
+import { Locator } from "../common/model/Locator";
 
 /*
   This contains code related to the management and manipulation of forms and form fields.
@@ -76,9 +78,9 @@ export class FormUtils {
 */
     public getFormFields (form, isSubmission, currentPage?)
     {
-        const pwFields: keeLoginField[] = [];
-        const otherFields: keeLoginField[] = [];
-        const allFields: { index: number; element: keeLoginField; type: string }[] = [];
+        const pwFields: MatchedField[] = [];
+        const otherFields: MatchedField[] = [];
+        const allFields: { index: number; element: MatchedField; type: string }[] = [];
         let firstPasswordIndex = -1;
         let firstPossibleUsernameIndex = -1;
         let usernameIndex = -1;
@@ -93,44 +95,40 @@ export class FormUtils {
             && (form.elements[i].type == undefined || form.elements[i].type == null)))
                 continue; // maybe it's something un-interesting
 
-            const DOMtype: string = form.elements[i].type.toLowerCase();
+            const domType: string = form.elements[i].type.toLowerCase();
 
-            if (DOMtype == "fieldset")
+            if (domType == "fieldset")
                 continue; // not interested in fieldsets
 
-            if (DOMtype != "password" && !this.isATextFormFieldType(DOMtype) && DOMtype != "checkbox"
-            && DOMtype != "radio" && DOMtype != "select-one")
+            if (domType != "password" && !this.isATextFormFieldType(domType) && domType != "checkbox"
+            && domType != "radio" && domType != "select-one")
                 continue; // ignoring other form types
 
-            if (DOMtype == "radio" && isSubmission && form.elements[i].checked == false) continue;
-            if (DOMtype == "password" && isSubmission && !form.elements[i].value) continue;
-            if (DOMtype == "select-one" && isSubmission && !form.elements[i].value) continue;
+            if (domType == "radio" && isSubmission && form.elements[i].checked == false) continue;
+            if (domType == "password" && isSubmission && !form.elements[i].value) continue;
+            if (domType == "select-one" && isSubmission && !form.elements[i].value) continue;
 
-            this.Logger.debug(`processing field with domtype ${DOMtype}...`);
+            this.Logger.debug(`processing field with domtype ${domType}...`);
             allFields[allFields.length] =
         {
             index   : i,
-            element : new keeLoginField(),
-            type    : DOMtype
+            element : new MatchedField(),
+            type    : domType
         };
             let fieldValue = form.elements[i].value;
-            if (DOMtype == "checkbox")
+            if (domType == "checkbox")
             {
                 if (form.elements[i].checked)
                     fieldValue = "KEEFOX_CHECKED_FLAG_TRUE";
                 else
                     fieldValue = "KEEFOX_CHECKED_FLAG_FALSE";
             }
-            allFields[allFields.length-1].element.init(
-                form.elements[i].name, fieldValue, form.elements[i].id, DOMtype, currentPage);
-            if (DOMtype == "select-one")
-                allFields[allFields.length-1].element.DOMSelectElement = form.elements[i];
-            else
-                allFields[allFields.length-1].element.DOMInputElement = form.elements[i];
+            allFields[allFields.length-1].element.field = Field.fromDOM(form.elements[i], domType, fieldValue);
+            allFields[allFields.length-1].element.DOMelement = form.elements[i];
 
-            if (DOMtype == "password" && firstPasswordIndex == -1)
+            if (domType == "password" && firstPasswordIndex == -1)
                 firstPasswordIndex = allFields.length-1;
-            if (this.isATextFormFieldType(DOMtype) && firstPossibleUsernameIndex == -1
+            if (this.isATextFormFieldType(domType) && firstPossibleUsernameIndex == -1
             && this.isAKnownUsernameString(form.elements[i].name))
                 firstPossibleUsernameIndex = allFields.length-1;
 

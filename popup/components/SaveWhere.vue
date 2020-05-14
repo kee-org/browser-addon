@@ -33,8 +33,8 @@
                   :items="items"
                   :search="search"
                   selection-type="independent"
-                  item-children="childGroups"
-                  item-key="uniqueID"
+                  item-children="groups"
+                  item-key="uuid"
                   item-text="title"
                   open-all
                   dense
@@ -67,9 +67,11 @@ import { Action } from "../../common/Action";
 import { mapGetters } from "vuex";
 import { SaveState } from "../../common/SaveState";
 import { Entry } from "../../common/model/Entry";
+import { Group } from "../../common/model/Group";
 import { Field } from "../../common/model/Field";
 import { AddonMessage } from "../../common/AddonMessage";
-import { Database } from "../../common/kfDataModel";
+import { Database } from "../../common/model/Database";
+import { DatabaseSummary } from "../../common/model/DatabaseSummary";
 
 const deepMapKeys = (obj, f) =>
     Array.isArray(obj)
@@ -83,16 +85,16 @@ const deepMapKeys = (obj, f) =>
             }, {})
             : obj;
 
-function groupContainsId (group, id: string) {
-    if (group.uniqueID === id) return true;
+function groupContainsId (group: Group, id: string) {
+    if (group.uuid === id) return true;
 
-    if (group.childGroups && group.childGroups.some(g => groupContainsId(g, id))) return true;
+    if (group.groups && group.groups.some(g => groupContainsId(g, id))) return true;
 
     return false;
 }
 
-function findDatabaseByGroup (databases: Database[], group) {
-    return databases.find(db => groupContainsId(db.root, group.uniqueID));
+function findDatabaseByGroup (databases: Database[], group: Group) {
+    return databases.find(db => groupContainsId(db.root, group.uuid));
 }
 
 export default {
@@ -102,7 +104,7 @@ export default {
     computed: {
         ...mapGetters(["saveState", "KeePassDatabases", "ActiveKeePassDatabaseIndex"]),
         rootGroupUUID: function (this: any) {
-            return this.KeePassDatabases[this.ActiveKeePassDatabaseIndex].root.uniqueID;
+            return this.KeePassDatabases[this.ActiveKeePassDatabaseIndex].root.uuid;
         },
         rootGroup: function (this: any) {
             return this.KeePassDatabases[this.ActiveKeePassDatabaseIndex].root;
@@ -125,7 +127,7 @@ export default {
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
                 parentGroup: value[0],
-                database
+                database: DatabaseSummary.fromDatabase(database)
             });
             this.$store.dispatch("updateSaveState", updatedSaveState);
         }

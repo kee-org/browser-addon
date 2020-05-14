@@ -1,7 +1,8 @@
 import { FormUtils } from "./formsUtils";
-import { keeLoginField, keeLoginInfo } from "../common/kfDataModel";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
+import { MatchedField } from "./MatchedField";
+import { Entry } from "../common/model/Entry";
 
 export class KeeFieldIcon {
 
@@ -10,16 +11,16 @@ export class KeeFieldIcon {
         private formUtils: FormUtils,
         private createMatchedLoginsPanelNearNode: (e: HTMLElement) => void) {}
 
-    private fieldsWithIcons: keeLoginField[] = [];
-    private passwordFields: keeLoginField[];
-    private otherFields: keeLoginField[];
+    private fieldsWithIcons: MatchedField[] = [];
+    private passwordFields: MatchedField[];
+    private otherFields: MatchedField[];
 
     public removeKeeIconFromAllFields () {
         for (const field of this.fieldsWithIcons) {
-            const element: HTMLElement = field.DOMInputElement;
+            const element: HTMLElement = field.DOMelement;
             if (!element) continue;
-            element.removeEventListener("click", this.showMatchedLoginsPanel);
-            element.removeEventListener("mousemove", this.hoverOverInput);
+            element.removeEventListener("click", this);
+            element.removeEventListener("mousemove", this);
             element.style.setProperty("background-image", "");
             element.style.setProperty("background-repeat", "");
             element.style.setProperty("background-attachment", "");
@@ -31,48 +32,54 @@ export class KeeFieldIcon {
         this.otherFields = null;
     }
 
-    public addKeeIconToFields (passwordFields: keeLoginField[], otherFields: keeLoginField[], logins: keeLoginInfo[]) {
+    public addKeeIconToFields (passwordFields: MatchedField[], otherFields: MatchedField[], entries: Entry[]) {
         this.passwordFields = passwordFields;
         this.otherFields = otherFields;
 
-        if (logins.length > 1) {
-            this.getLabelledIcon(logins.length.toString());
+        if (entries.length > 1) {
+            this.getLabelledIcon(entries.length.toString());
         } else {
             this.afterImageLoaded(this.KEEFOX_ICON_16);
         }
 
     }
 
-    private skipField (field: keeLoginField) {
-        if (!this.formUtils.isATextFormFieldType(field.type) && field.type != "password") return true;
-        if (!field.DOMInputElement || !field.DOMInputElement.isConnected) return true;
-        if (field.DOMInputElement.maxLength > 0 && field.DOMInputElement.maxLength <= 3) return true;
-        if (field.DOMInputElement.offsetWidth < 50) return true;
+    private skipField (field: MatchedField) {
+        if (!this.formUtils.isATextFormFieldType(field.field.type) && field.field.type != "password") return true;
+        if (!field.DOMelement || field.DOMelement instanceof HTMLSelectElement || !field.DOMelement.isConnected) return true;
+        if (field.DOMelement.maxLength > 0 && field.DOMelement.maxLength <= 3) return true;
+        if (field.DOMelement.offsetWidth < 50) return true;
         return false;
     }
 
-    private addIcon (field: keeLoginField, image: string) {
+    private addIcon (field: MatchedField, image: string) {
         this.fieldsWithIcons.push(field);
 
-        const element: HTMLElement = field.DOMInputElement;
-        element.addEventListener("click", e => this.showMatchedLoginsPanel(e));
-        element.addEventListener("mousemove", e => this.hoverOverInput(e));
+        const element: HTMLElement = field.DOMelement;
+        element.addEventListener("click", this);
+        element.addEventListener("mousemove", this);
 
         element.style.setProperty("background-image", "url('" + image + "')", "important");
         element.style.setProperty("background-repeat", "no-repeat", "important");
         element.style.setProperty("background-attachment", "scroll", "important");
         element.style.setProperty("background-size", "16px 16px", "important");
         element.style.setProperty("background-position", "calc(100% - 4px) 50%", "important");
+        element.style.setProperty("cursor", "auto");
 
-        const transitionConfig = window.getComputedStyle(field.DOMInputElement).getPropertyValue("transition-property");
+        const transitionConfig = window.getComputedStyle(field.DOMelement).getPropertyValue("transition-property");
         if (["all", "background"].some(val => transitionConfig.includes(val))) {
-            field.DOMInputElement.style.setProperty("transition", "none", "important");
+            field.DOMelement.style.setProperty("transition", "none", "important");
         }
 
         this.overrideBoxShadows(element);
     }
 
-    private limitFields (fields: keeLoginField[]) {
+    public handleEvent (e: Event) {
+        if (e.type === "click") this.showMatchedLoginsPanel(e);
+        if (e.type === "mousemove") this.hoverOverInput(e);
+    }
+
+    private limitFields (fields: MatchedField[]) {
         const orderedFields = fields.filter(f => !this.skipField(f)).sort((a, b) => {
             if (a.highestScore === b.highestScore) return 0;
             return a.highestScore < b.highestScore ? 1 : -1;

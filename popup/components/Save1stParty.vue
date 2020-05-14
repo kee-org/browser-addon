@@ -149,10 +149,6 @@ export default {
         cancel: function (this: any) {
             this.$emit("cancel-clicked");
         },
-        generatePassword: function (this: any) {
-            Port.postMessage({ action: Action.GeneratePassword });
-            window.close();
-        },
         nextClicked: function (this: any) {
             this.$emit("save-where-clicked");
         },
@@ -164,7 +160,7 @@ export default {
             const entry = (this.$store.state.saveState as SaveState).newEntry;
             Port.postMessage({
                 loginEditor: {
-                    uniqueID: entry.uuid,
+                    uuid: entry.uuid,
                     DBfilename: entry.database.fileName
                 }
             } as AddonMessage);
@@ -188,13 +184,10 @@ export default {
             const originalField = (this.$store.state.saveState as SaveState).newEntry.fields[originalFieldIndex];
             const newField = new Field({...originalField, value: change.value });
             //TODO:4: faster deep clone
-            const newFields = JSON.parse(JSON.stringify(updatedSaveState.newEntry.fields));
+            const newFields = JSON.parse(JSON.stringify(updatedSaveState.newEntry.fields)) as Field[];
             newFields[originalFieldIndex] = newField;
             updatedSaveState.newEntry = new Entry({...updatedSaveState.newEntry, fields: newFields });
             this.$store.dispatch("updateSaveState", updatedSaveState);
-            // get original field index position
-            // clone original field, including updated value
-            // set index position to new field
         }
     }
 };

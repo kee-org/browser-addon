@@ -65,7 +65,7 @@ export default {
             return this.field.resetValue !== this.field.value;
         },
         label: function (this: any) {
-            return (this.field as Field).name;
+            return Field.getDisplayName(this.field);
         }
     },
     methods: {

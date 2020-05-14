@@ -1,12 +1,17 @@
 import { kprpcClient, ResultWrapper } from "./kprpcClient";
 import { EventSessionManager } from "./EventSession";
 import { VaultMessage } from "../common/VaultMessage";
-import { SessionType, Database, PasswordProfile, keeLoginInfo } from "../common/kfDataModel";
+import { SessionType } from "../common/kfDataModel";
+import { PasswordProfile } from "../common/model/PasswordProfile";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Config } from "../common/config";
 import store from "../store";
 import { WebsocketSessionManager } from "./WebsocketSession";
+import { DatabaseDto, EntryDto } from "../common/model/KPRPCDTOs";
+import { Database } from "../common/model/Database";
+import { Entry } from "../common/model/Entry";
+import { DatabaseSummary } from "../common/model/DatabaseSummary";
 
 /*
 jsonrpcClient provides a JSON-RPC client and method proxies for
@@ -55,14 +60,14 @@ export class jsonrpcClient {
     // See KeePassRPCService.cs for more detail on what each method does.
     //***************************************
 
-    launchGroupEditor (uniqueID, dbFileName)
+    launchGroupEditor (uuid: string, dbFileName: string)
     {
-        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "LaunchGroupEditor", [uniqueID, dbFileName], null, ++this.kprpcClient.requestId);
+        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "LaunchGroupEditor", [uuid, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
-    launchLoginEditor (uniqueID, dbFileName)
+    launchLoginEditor (uuid: string, dbFileName: string)
     {
-        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "LaunchLoginEditor", [uniqueID, dbFileName], null, ++this.kprpcClient.requestId);
+        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "LaunchLoginEditor", [uuid, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
     selectDB (fileName: string, requestFocusReturn: boolean, sessionType?: SessionType)
@@ -95,24 +100,27 @@ export class jsonrpcClient {
         }
     }
 
-    addLogin (login: keeLoginInfo, parentUUID: string, dbFileName: string)
+    addLogin (entry: Entry, parentUUID: string, dbFileName: string)
     {
-        const jslogin = login.asEntry();
+        const jslogin = Entry.toKPRPCEntryDTO(entry);
         this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "AddLogin", [jslogin, parentUUID, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
-    updateLogin (login: keeLoginInfo, oldLoginUUID: string, dbFileName: string) {
-        const jslogin = login.asEntry();
+    updateLogin (entry: Entry, oldLoginUUID: string, dbFileName: string) {
+        const jslogin = Entry.toKPRPCEntryDTO(entry);
         const sessionManager = this.sessionManagerForFilename(dbFileName);
         const urlMergeMode = sessionManager.features().some(f => f === "KPRPC_FEATURE_ENTRY_URL_REPLACEMENT") ? 5 : 2;
         this.kprpcClient.request([sessionManager], "UpdateLogin", [jslogin, oldLoginUUID, urlMergeMode, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
-    findLogins (fullURL: string, formSubmitURL, httpRealm, uniqueID: string, dbFileName, freeText, username, callback: (resultWrapper: Partial<ResultWrapper>) => void)
+    findLogins (fullURL: string, formSubmitURL: string, httpRealm: string, uuid: string, dbFileName: string, freeText: string, username: string, callback: (result: Entry[]) => void)
     {
         if (store.state.KeePassDatabases.length <= 0) {
-            callback({ result: []});
+            callback([]);
         }
+
+        //TODO:*: It appears that these values have no impact in KPRPC.plgx (and kprpc?)
+        // No matter which option is chosen we search all URLs (TWICE!)
         let lst = "LSTall";
         if (httpRealm == undefined || httpRealm == null || httpRealm == "")
             lst = "LSTnoRealms";
@@ -142,7 +150,7 @@ export class jsonrpcClient {
         );
 
         if (sessionManagers.length <= 0) {
-            callback({ result: []});
+            callback([]);
         }
 
         const urls = [];
@@ -156,19 +164,15 @@ export class jsonrpcClient {
                 urls.push("https://accounts.google.com");
         }
 
-        this.kprpcClient.request(sessionManagers, "FindLogins", [urls, formSubmitURL, httpRealm, lst, false, uniqueID, dbFileName, freeText, username], sessionResponses => {
-            const results: any[] = [];
+        this.kprpcClient.request(sessionManagers, "FindLogins", [urls, formSubmitURL, httpRealm, lst, false, uuid, dbFileName, freeText, username], sessionResponses => {
+            const results: Entry[] = [];
             for (const sessionResponse of sessionResponses) {
-                if (sessionResponse.resultWrapper.result != null) {
-                    results.push(...sessionResponse.resultWrapper.result.map(res => {
-                        res.db.sessionType = sessionResponse.sessionType;
-                        res.db.sessionFeatures = sessionResponse.features;
-                        return res;
-                    }));
+                if (sessionResponse.resultWrapper?.result?.[0]) {
+                    const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO(sessionResponse.resultWrapper.result[0].db);
+                    results.push(...sessionResponse.resultWrapper.result.map((res: EntryDto) => Entry.fromKPRPCEntryDTO(res, db)));
                 }
             }
-            callback({ result: results });
-            //TODO:4: Refactor so we return entries instead of the raw wrappers (not a keeLoginInfo though cos that is not JSONifiable)
+            callback(results);
         }, ++this.kprpcClient.requestId);
     }
 
@@ -183,11 +187,9 @@ export class jsonrpcClient {
                 if (sessionResponse.resultWrapper.result !== null) {
                     const recievedDBs = sessionResponse.sessionType === SessionType.Event
                         ? sessionResponse.resultWrapper.result.dbs : sessionResponse.resultWrapper.result;
-                    for (const db of recievedDBs as Array<Database>) {
+                    for (const db of recievedDBs as Array<DatabaseDto>) {
                         if (!dbs.find(d => d.fileName === db.fileName)) {
-                            db.sessionType = sessionResponse.sessionType;
-                            db.sessionFeatures = sessionResponse.features;
-                            dbs.push(db);
+                            dbs.push(Database.fromKPRPCDatabaseDTO(db, sessionResponse.sessionType, sessionResponse.features));
                         } else
                         {
                             KeeLog.debug("Database with duplicate file name found. Ignoring.");
@@ -220,7 +222,7 @@ export class jsonrpcClient {
             sessionResponses.sort(s => s.sessionType === SessionType.Event ? -1 : 1);
             for (const sessionResponse of sessionResponses) {
                 if (sessionResponse.resultWrapper.result !== null) {
-                    for (const profileName of sessionResponse.resultWrapper.result as Array<string>) {
+                    for (const profileName of sessionResponse.resultWrapper.result as string[]) {
                         if (!profiles.find(p => p.name === profileName)) {
                             profiles.push({name: profileName, sessionType: sessionResponse.sessionType});
                         } else
@@ -234,7 +236,7 @@ export class jsonrpcClient {
         }, ++this.kprpcClient.requestId);
     }
 
-    generatePassword (profileName, url, callback)
+    generatePassword (profileName: string, url: string, callback: (generatedPassword: string) => void)
     {
         const session = this.sessionManagerForPasswordProfile(profileName);
         this.kprpcClient.request([session], "GeneratePassword", [profileName, url], sessionResponses => {
