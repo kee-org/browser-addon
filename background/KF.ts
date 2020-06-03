@@ -343,6 +343,8 @@ export class Kee {
         store.dispatch("updateActiveKeePassDatabaseIndex", -1);
         store.dispatch("updateConnected", false);
         store.dispatch("updateConnectedWebsocket", false);
+        store.dispatch("updateCurrentSearchTerm", null);
+        store.dispatch("updateSearchResults", null);
 
         try
         {
@@ -392,6 +394,8 @@ export class Kee {
         store.dispatch("updateConnectedWebsocket", this.KeePassRPC.websocketSessionManagerIsActive);
         store.dispatch("updateKeePassDatabases", newDatabases);
         store.dispatch("updateActiveKeePassDatabaseIndex", newDatabaseActiveIndex);
+        store.dispatch("updateSearchResults", null);
+        store.dispatch("updateCurrentSearchTerm", null);
 
         KeeLog.info("Number of databases open: " + newDatabases.length);
 
