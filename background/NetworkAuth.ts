@@ -82,6 +82,8 @@ export class NetworkAuth {
                     return;
                 }
 
+                matchedEntries.sort((_e1, e2) => e2.httpRealm === requestDetails.realm ? 1 : 0);
+
                 function handleMessage (request, sender: browser.runtime.MessageSender, sendResponse) {
                     switch (request.action) {
                         case "NetworkAuth_ok": {
