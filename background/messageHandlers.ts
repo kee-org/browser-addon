@@ -1,4 +1,3 @@
-import { showUpdateSuccessNotification } from "./showUpdateSuccessNotification";
 import { AddonMessage } from "../common/AddonMessage";
 import { KeeLog } from "../common/Logger";
 import { KeeNotification } from "../common/KeeNotification";
@@ -87,9 +86,6 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
                     entry,
                     existingOrTemporaryUuid,
                     db.fileName);
-                //TODO:* consider if this is needed anymore, once user can see what bits
-                // they have edited, it's probably redundant or even detrimental to the experience.
-                showUpdateSuccessNotification(existingOrTemporaryUuid, db.fileName);
 
             } else {
                 window.kee.addLogin(entry, parentGroupUuid, db.fileName);
@@ -289,32 +285,6 @@ export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMess
     if (msg.loginEditor) {
         window.kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
     }
-
-    // if (msg.saveData) {
-    //     const persistentItem = window.kee.persistentTabStates.get(tabId).items.find(item => item.itemType == "submittedData");
-
-    //     fetchFavicon(persistentItem.submittedData.favIconUrl).then(dataUrl => {
-
-    //         if (dataUrl) {
-    //             persistentItem.submittedLogin.iconImageData = dataUrl.substr(22);
-    //         }
-
-    //         if (msg.saveData.update) {
-    //             window.kee.updateLogin(persistentItem.submittedLogin, msg.saveData.oldLoginUUID, msg.saveData.db);
-    //             showUpdateSuccessNotification(msg.saveData.oldLoginUUID, msg.saveData.db);
-    //         }
-    //         else {
-    //             const result = window.kee.addLogin(persistentItem.submittedLogin, msg.saveData.group, msg.saveData.db);
-    //             if (configManager.current.rememberMRUGroup) {
-    //                 if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
-    //                 configManager.current.mruGroup[msg.saveData.db] = msg.saveData.group;
-    //                 configManager.save();
-    //             }
-    //         }
-
-    //         window.kee.tabStates.get(tabId).framePorts.get(0).postMessage({ action: Action.CloseAllPanels });
-    //     });
-    // }
 
     if (msg.neverSave) {
         const persistentItem = window.kee.persistentTabStates.get(tabId).items.find(item => item.itemType == "submittedData");
