@@ -205,6 +205,9 @@ import { Entry } from "../common/model/Entry";
 import { supplementEntryState } from "./supplementEntryState";
 import { fetchFavicon, getFaviconUrl } from "./favicon";
 
+const autoRecoveryTimeMs = 120_000;
+const manualRecoveryPromptTimeMs = 3_600_000;
+
 export default {
     components: {
         Notification,
@@ -237,10 +240,10 @@ export default {
             return "red";
         },
         showSaveStart: function (this: any) {
-            return this.saveLastActiveAt > new Date(Date.now()-6000);
+            return this.saveLastActiveAt > new Date(Date.now()-autoRecoveryTimeMs);
         },
         showSaveRecovery: function (this: any) {
-            return !this.showSaveStart && this.saveLastActiveAt > new Date(Date.now()-12000);
+            return !this.showSaveStart && this.saveLastActiveAt > new Date(Date.now()-manualRecoveryPromptTimeMs);
         },
         showSearchPanel: function (this: any) {
             return this.databaseIsOpen && !this.showSaveStart;
@@ -259,7 +262,7 @@ export default {
 
         // Clear the newEntry if it is beyond our maximum recovery time
         // This frees up memory but more importantly allows the watch for saveState to set the appropriate last active datetime when the user attempts to re-edit the same entry as most recently.
-        if (ss?.lastActiveAt <= new Date(Date.now()-12000)) {
+        if (ss?.lastActiveAt <= new Date(Date.now()-manualRecoveryPromptTimeMs)) {
             this.saveDiscard();
         }
 
