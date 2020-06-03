@@ -119,9 +119,6 @@ export default {
             window.close();
         },
         setGroup: function (this: any, value) {
-            console.error(this.$store.state.saveState.newEntry.parentGroup);
-            console.error(value);
-            console.error(value[0]);
             const database = findDatabaseByGroup(this.KeePassDatabases, value[0]);
             const updatedSaveState = Object.assign({}, this.$store.state.saveState) as SaveState;
             updatedSaveState.newEntry = new Entry({

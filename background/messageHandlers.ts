@@ -16,7 +16,7 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
         window.kee.syncBackground.onMessage(this, msg.mutation);
     }
 
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from browser popup script: " + JSON.stringify(msg));
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from browser popup script.");
 
     if (msg.removeNotification) {
         window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
@@ -125,7 +125,7 @@ export async function pageMessageHandler (this: browser.runtime.Port, msg: Addon
         window.kee.syncBackground.onMessage(this, msg.mutation);
     }
 
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script" + JSON.stringify(msg));
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script.");
 
     if (msg.findMatches) {
         window.kee.findLogins(msg.findMatches.uri, null, null, null, null, null, result => {
@@ -219,7 +219,7 @@ export function vaultMessageHandler (this: browser.runtime.Port, msg: VaultMessa
     }
 
     let result;
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from vault script" + JSON.stringify(msg));
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from vault script.");
     switch (msg.action) {
         case VaultAction.Init:
             result = window.kee.KeePassRPC.startEventSession(msg.sessionId, msg.features, msgToPage => this.postMessage(msgToPage));
@@ -248,7 +248,7 @@ export function iframeMessageHandler (this: browser.runtime.Port, msg: AddonMess
         window.kee.syncBackground.onMessage(this, msg.mutation);
     }
 
-    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from iframe script" + JSON.stringify(msg));
+    if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from iframe script.");
 
     const tabId = this.sender.tab.id;
     const frameId = this.sender.frameId;

@@ -138,7 +138,6 @@ export default {
             return this.$store.state.saveState.titleResetValue !== this.$store.state.saveState.newEntry.title;
         },
         editingExisting: function (this: any) {
-            console.error("db: " + (this.$store.state.saveState as SaveState).newEntry.database.fileName);
             return !!(this.$store.state.saveState as SaveState).newEntry.database.fileName;
         },
         showURLMismatchWarning: function (this: any) {
@@ -167,7 +166,6 @@ export default {
             window.close();
         },
         setTitle: function (this: any, value) {
-            console.error(this.$store.state.saveState.newEntry.title);
             const updatedSaveState = Object.assign({}, this.$store.state.saveState) as SaveState;
             updatedSaveState.newEntry = new Entry({...updatedSaveState.newEntry, title: value });
             this.$store.dispatch("updateSaveState", updatedSaveState);
@@ -176,9 +174,6 @@ export default {
             this.setTitle(this.$store.state.saveState.titleResetValue);
         },
         fieldValueChanged: function (this: any, change) {
-            console.error(change);
-            console.error(change.value);
-            console.error(change.uuid);
             const updatedSaveState = Object.assign({}, this.$store.state.saveState) as SaveState;
             const originalFieldIndex = (this.$store.state.saveState as SaveState).newEntry.fields.findIndex(f => f.uuid === change.uuid);
             const originalField = (this.$store.state.saveState as SaveState).newEntry.fields[originalFieldIndex];
