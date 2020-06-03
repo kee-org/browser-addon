@@ -111,7 +111,7 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
         window.kee.openKeePass();
     }
     if (msg.findMatches) {
-        window.kee.findLogins(null, null, null, msg.findMatches.uuid, msg.findMatches.DBfilename, null, null, result => {
+        window.kee.findLogins(null, null, msg.findMatches.uuid, msg.findMatches.DBfilename, null, null, result => {
             window.kee.browserPopupPort.postMessage({ findMatchesResult: result } as AddonMessage);
         });
     }
@@ -128,7 +128,7 @@ export async function pageMessageHandler (this: browser.runtime.Port, msg: Addon
     if (KeeLog && KeeLog.debug) KeeLog.debug("In background script, received message from page script" + JSON.stringify(msg));
 
     if (msg.findMatches) {
-        window.kee.findLogins(msg.findMatches.uri, null, null, null, null, null, null, result => {
+        window.kee.findLogins(msg.findMatches.uri, null, null, null, null, null, result => {
             this.postMessage({ isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId,
                 findMatchesResult: result } as AddonMessage);
         });

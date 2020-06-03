@@ -113,19 +113,17 @@ export class jsonrpcClient {
         this.kprpcClient.request([sessionManager], "UpdateLogin", [jslogin, oldLoginUUID, urlMergeMode, dbFileName], null, ++this.kprpcClient.requestId);
     }
 
-    findLogins (fullURL: string, formSubmitURL: string, httpRealm: string, uuid: string, dbFileName: string, freeText: string, username: string, callback: (result: Entry[]) => void)
+    findLogins (fullURL: string, httpRealm: string, uuid: string, dbFileName: string, freeText: string, username: string, callback: (result: Entry[]) => void)
     {
         if (store.state.KeePassDatabases.length <= 0) {
             callback([]);
         }
 
-        //TODO:*: It appears that these values have no impact in KPRPC.plgx (and kprpc?)
-        // No matter which option is chosen we search all URLs (TWICE!)
-        let lst = "LSTall";
-        if (httpRealm == undefined || httpRealm == null || httpRealm == "")
-            lst = "LSTnoRealms";
-        else if (formSubmitURL == undefined || formSubmitURL == null || formSubmitURL == "")
-            lst = "LSTnoForms";
+        // This has no meaning any more and is ignored in KPRPC 1.10+ but if
+        // we don't supply it to older versions of KPRPC, all non-matching
+        // entries will have their URLs tested twice before they are determined
+        // to be not a match.
+        const lst = "LSTnoForms";
 
         if (dbFileName == undefined || dbFileName == null || dbFileName == "")
         {
@@ -164,7 +162,7 @@ export class jsonrpcClient {
                 urls.push("https://accounts.google.com");
         }
 
-        this.kprpcClient.request(sessionManagers, "FindLogins", [urls, formSubmitURL, httpRealm, lst, false, uuid, dbFileName, freeText, username], sessionResponses => {
+        this.kprpcClient.request(sessionManagers, "FindLogins", [urls, null, httpRealm, lst, false, uuid, dbFileName, freeText, username], sessionResponses => {
             const results: Entry[] = [];
             for (const sessionResponse of sessionResponses) {
                 if (sessionResponse.resultWrapper?.result?.[0]) {
