@@ -159,7 +159,13 @@ function connectToMessagingPort () {
             formFilling.findMatchesInThisFrame();
             connected = true;
         } else if (m.action == Action.DetectForms) {
-            syncContent.reset(m.resetState);
+            if (m.resetState) {
+                // Sometimes the page's Vuex state can be out of sync with the
+                // background - e.g. when the tab has been inactive for some
+                // time. In these cases, we must supply the full state again
+                // before looking for matching entries.
+                syncContent.reset(m.resetState);
+            }
             formFilling.removeKeeIconFromAllFields();
             formSaving.removeAllSubmitHandlers();
             formFilling.findMatchesInThisFrame();
