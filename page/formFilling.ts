@@ -115,12 +115,6 @@ export class FormFilling {
         let score = 1;
 
         // Do not allow any match if field types are significantly mismatched (e.g. checkbox vs text field)
-        // if ( !( this.formUtils.isATextFormFieldType(formField.locators[0].type) && dataField.type === "text" )
-        //     && !(formField.type === "password" && dataField.type === "password")
-        //     && !(formField.type === "" && dataField.type === "radio")
-        //     && !(formField.type === "checkbox" && dataField.type === "checkbox")
-        //     && !(formField.type === "select-one" && dataField.type === "select-one")
-        // )
         if (formField.type !== dataField.type)
             return 0;
 
@@ -151,21 +145,6 @@ export class FormFilling {
                 && formField.value != "" && formField.value == dataField.value
         )
             score += 30;
-
-        //TODO:* Verify that removing page support is acceptable wrt new multi-page plan
-
-        // // Although there is a formField.formFieldPage property, it is not accurate
-        // // so we just compare against the supplied currentPage
-        // // If page # matches exactly ++
-        // if (currentPage > 0 && dataField.formFieldPage == currentPage)
-        //     score += 20;
-
-        // // If page # is wrong --
-        // else if (currentPage > 0 && dataField.formFieldPage != currentPage)
-        //     score -= 19; // 20 would cause a tie for an otherwise good name match
-
-        // // If page # is unestablished (<=0)
-        // //else do nothing
 
         if (isVisible === undefined && this.formUtils.isDOMElementVisible(matchedField.DOMelement))
             isVisible = true;
