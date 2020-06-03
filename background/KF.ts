@@ -554,11 +554,11 @@ export class Kee {
         }
     }
 
-    findLogins (fullURL, formSubmitURL, httpRealm, uuid, dbFileName, freeText, username, callback: (result: Entry[]) => void)
+    findLogins (fullURL, httpRealm, uuid, dbFileName, freeText, username, callback: (result: Entry[]) => void)
     {
         try
         {
-            return this.KeePassRPC.findLogins(fullURL, formSubmitURL, httpRealm, uuid, dbFileName, freeText, username, callback);
+            return this.KeePassRPC.findLogins(fullURL, httpRealm, uuid, dbFileName, freeText, username, callback);
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);

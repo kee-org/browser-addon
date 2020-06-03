@@ -56,7 +56,7 @@ export class NetworkAuth {
             const url = new URL(requestDetails.url);
             url.hostname = punycode.toUnicode(url.hostname);
 
-            window.kee.findLogins(url.href, null, requestDetails.realm, null, null, null, null, result => {
+            window.kee.findLogins(url.href, requestDetails.realm, null, null, null, null, result => {
 
                 let matchedEntries: Entry[] = [];
                 let isError = false;
