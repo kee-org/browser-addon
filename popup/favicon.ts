@@ -26,7 +26,6 @@ export async function getFaviconUrl () {
     for (let i=0; i<45; i++) {
         const tab = (await browser.tabs.query({ active: true, currentWindow:true }))[0];
         if (tab) {
-            console.error("favicon popup: " + tab.favIconUrl);
             return tab.favIconUrl;
         }
         sleep(1000);
