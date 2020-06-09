@@ -147,10 +147,6 @@
     "message": "Fill in and submit the form",
     "description": ""
   },
-  "pref_FillAndSubmitPrompt_desc": {
-    "message": "Fill in and submit the login prompt",
-    "description": ""
-  },
   "pref_FillForm_desc": {
     "message": "Fill in the form",
     "description": ""
@@ -158,10 +154,6 @@
   "pref_FillingEntries_heading": {
     "message": "Filling entries",
     "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
-  },
-  "pref_FillPrompt_desc": {
-    "message": "Fill in the login prompt",
-    "description": ""
   },
   "pref_FindingEntries_heading": {
     "message": "Finding entries",
@@ -315,40 +307,8 @@
     "message": "Search...",
     "description": ""
   },
-  "Search_tip": {
-    "message": "Start typing to display your matching login entries",
-    "description": ""
-  },
   "PasswordProfilesExplanation_label": {
     "message": "You can optionally create a different one by selecting a password profile below. Create new profiles in Kee Vault or KeePass.",
-    "description": ""
-  },
-  "change_field_explanation": {
-    "message": "Kee will also update the website icon (favicon) and any HTTP Auth Realm information. More complex modifications will require you to manually edit the entry.",
-    "description": ""
-  },
-  "change_field_status": {
-    "message": "The selected entry will have all username, password and other form fields replaced with the values you have just entered.",
-    "description": ""
-  },
-  "change_url_status": {
-    "message": "The entry's web page address (URL) will be updated with the latest URL.",
-    "description": ""
-  },
-  "change_url_option_1": {
-    "message": "Replace the entry's URL (but still fill forms if you visit the old URL)",
-    "description": ""
-  },
-  "change_url_option_2": {
-    "message": "Replace the entry's URL (delete the old URL completely)",
-    "description": ""
-  },
-  "change_url_option_3": {
-    "message": "Keep the old entry's URL (but still fill forms if you visit the new URL)",
-    "description": ""
-  },
-  "change_url_option_4": {
-    "message": "Keep the old entry's URL (don't add the new URL to the entry)",
     "description": ""
   },
   "copy_password_label": {
@@ -379,14 +339,6 @@
     "message": "Matches from other sites",
     "description": "Search results section header."
   },
-  "create": {
-    "message": "Create",
-    "description": ""
-  },
-  "create_new_entry": {
-    "message": "Create new entry",
-    "description": "Create new entry"
-  },
   "showing_options_for": {
     "message": "Showing options for",
     "description": "label for a group of radio buttons that allows the user to change the scope of the settings they are changing - e.g. all websites or just one specific website"
@@ -415,10 +367,6 @@
     "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
     "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
   },
-  "database_label": {
-    "message": "Database",
-    "description": ""
-  },
   "generatePassword_copied": {
     "message": "A new password has been copied to your clipboard.",
     "description": ""
@@ -433,14 +381,6 @@
   },
   "generatePassword_done_2": {
     "message": "Paste it into a \"new password\" field or wherever else you want.",
-    "description": ""
-  },
-  "group_label": {
-    "message": "Group",
-    "description": ""
-  },
-  "entry_history_pointer": {
-    "message": "Your password manager has an \"undo\" feature. Find the entry and then you can view the entry history and use the \"Restore\" button to revert to an older version if necessary.",
     "description": ""
   },
   "loggedIn_tip": {
@@ -463,14 +403,6 @@
     "message": "$1 in the $2 group ($3)",
     "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
   },
-  "more_options": {
-    "message": "More options",
-    "description": ""
-  },
-  "multi_page_update_warning": {
-    "message": "Multi-page login forms may also require manual editing.",
-    "description": ""
-  },
   "noUsername_partial_tip": {
     "message": "no username",
     "description": ""
@@ -487,48 +419,18 @@
     "message": "Unlock your password manager to enable Kee",
     "description": ""
   },
-  "notifyBarNeverForSiteButton_label": {
-    "message": "Never for this site",
-    "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
-  },
   "save": {
     "message": "Save",
-    "description": ""
-  },
-  "password_successfully_updated": {
-    "message": "Password successfully updated.",
-    "description": ""
-  },
-  "saveMultiPagePasswordText": {
-    "message": "Do you want Kee to save this multi-page password?",
-    "description": ""
-  },
-  "savePasswordLogin_tip": {
-    "message": "Username: $1. Website address (URL): $2",
     "description": ""
   },
   "savePasswordText": {
     "message": "Do you want Kee to save this password?",
     "description": ""
   },
-  "search_again": {
-    "message": "Search again",
-    "description": ""
-  },
   "update": {
     "message": "Update",
     "description": ""
   },
-  "update_existing_entry": {
-    "message": "Update existing entry",
-    "description": ""
-  },
-  "whichEntry_label": {
-    "message": "Choose an entry...",
-    "description": ""
-  },
-
-
   "close": {
       "message": "Close",
       "description": "Action user can click on to close/dismiss a panel or other user interface element"
@@ -632,14 +534,6 @@
   "network_auth_choose": {
     "message": "Choose a login from the list below or close this window to manually enter the required login information.",
     "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
-  },
-  "save_login": {
-      "message": "Save login",
-      "description": "Heading for panel that allows user to create or update a new login entry"
-  },
-  "saveLatestLogin": {
-      "message": "Save latest login",
-      "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
   },
   "welcome_to_kee": {
       "message": "Welcome to Kee",
@@ -761,14 +655,6 @@
       "message": "New icon",
       "description": "Heading for text that explains we have a new icon / branding"
   },
-  "reliability_improvements_text1": {
-      "message": "We've improved the link between the web browser and each individual page you load, resulting in more reliable features like form filling.",
-      "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
-  },
-  "reliability_improvements_text2": {
-      "message": "We've improved the detection of form submit buttons. This means more successful form submission on some websites such as the Google sign-in page.",
-      "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-  },
   "kee_vault_announcement_1": {
       "message": "Kee Vault is a new open source password manager. It runs in your web browser so no installation is necessary.",
       "description": "Introduction to what Kee Vault is"
@@ -781,20 +667,8 @@
       "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
       "description": "Explains that Kee v3 works with Kee Vault"
   },
-  "kee_vault_announcement_4": {
-      "message": "Kee Vault is almost ready to launch as a public beta and I'm delighted to offer all existing Kee users an opportunity to get early access before this happens!",
-      "description": "Announces the pre-release availability of Kee Vault"
-  },
-  "kee_vault_announcement_5": {
-      "message": "Read more and register for early access",
-      "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
-  },
-  "showEntry": {
-      "message": "Show Entry",
-      "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
-  },
-  "list_version_upgrade_3_2": {
-    "message": "Overriding the auto-submit behaviour of an entry in Kee Vault or KeePass now also affects the behaviour of Kee when you manually ask Kee to fill an entry.;Re-arranged the \"Filling Entries\" section in Kee Options to clarify which settings affect automatic and manual entry filling behaviour.;Automatic fill operations now skip filling if pre-existing text is found in the field.;A dismissable message announcing the launch of Kee Vault can be added to the bottom of the Kee panel when we are ready to launch.;Removed old logging features (initial load notification and sensitive logging option for debugging).",
+  "list_version_upgrade_3_4": {
+    "message": "Improved password saving experience;More modern appearance/style (partially complete);etc.",
     "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
   },
   "pref_automatic": {

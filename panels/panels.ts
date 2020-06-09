@@ -1,7 +1,6 @@
 import { copyStringToClipboard } from "./copyStringToClipboard";
 import { MatchedLoginsPanel } from "./MatchedLoginsPanel";
 import { GeneratePasswordPanel } from "./GeneratePasswordPanel";
-//import { SavePasswordPanel } from "./SavePasswordPanel";
 import { FrameState } from "../common/FrameState";
 import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
@@ -124,29 +123,6 @@ function startup () {
                 }
             });
             break;
-        // case "savePassword":
-        //     document.getElementById("header").innerText = $STR("save_login");
-        //     Port.raw.onMessage.addListener(function (m: AddonMessage) {
-        //         KeeLog.debug("In iframe script, received message from background script");
-
-        //         if (m.initialState) {
-        //             syncContent.init(m.initialState, (mutation: MutationPayload) => {
-        //                 Port.postMessage({mutation} as AddonMessage);
-        //             });
-        //         }
-        //         if (m.mutation) {
-        //             syncContent.onRemoteMutation(m.mutation);
-        //             return;
-        //         }
-
-        //         if (m.frameState) updateFrameState(m.frameState);
-
-        //         savePasswordPanel = new SavePasswordPanel(Port.raw, m.submittedData);
-
-        //         const mainPanel = savePasswordPanel.createNearNode(document.getElementById("header"));
-        //         if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
-        //     });
-        //     break;
     }
 
     const closeButton = document.createElement("button");
