@@ -11,9 +11,9 @@
           <v-select
             v-model="selectedProfile"
             :items="items"
-            label="Password profile"
+            :label="$i18n('password_profile')"
             outlined
-            hint="Select which set of rules the new password will follow. Rules include password length and the sort of characters that are allowed. Create new profiles in your password manager."
+            :hint="$i18n('password_profile_hint')"
             persistent-hint
           />
         </v-card-text>
@@ -26,7 +26,7 @@
           text
           @click="cancel"
         >
-          Cancel
+          {{ $i18n('cancel') }}
         </v-btn>
 
         <v-btn
@@ -34,7 +34,7 @@
           text
           @click="ok"
         >
-          OK
+          {{ $i18n('Menu_Button_copyNewPasswordToClipboard_label') }}
         </v-btn>
       </v-card-actions>
     </v-card>

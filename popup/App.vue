@@ -1,4 +1,3 @@
-
 <template>
   <v-app
     id="inspire"
@@ -21,12 +20,12 @@
           icon="mdi-warning"
           outlined
         >
-          Continue saving or discard your changes?<br>
+          {{ $i18n('unsaved_changes') }}<br>
           <v-btn @click="saveRecover">
-            Continue
+            {{ $i18n('continue_saving') }}
           </v-btn>
           <v-btn @click="saveDiscard">
-            Discard
+            {{ $i18n('discard_changes') }}
           </v-btn>
         </v-alert>
         <div
@@ -56,21 +55,19 @@
       </v-container>
     </v-content>
 
-    <v-fade-transition>
-      <v-btn
-        v-show="showSearchPanel && !showSaveRecovery"
-        color="light-blue darken-2"
-        fab
-        small
-        absolute
-        bottom
-        right
-        style="bottom: 75px; right: 24px"
-        @click="saveStart"
-      >
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
-    </v-fade-transition> <!-- </v-fab-transition> -->
+    <v-btn
+      v-show="showSearchPanel && !showSaveRecovery"
+      color="light-blue darken-2"
+      fab
+      small
+      absolute
+      bottom
+      right
+      style="bottom: 75px; right: 24px"
+      @click="saveStart"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
 
     <v-footer
       app
@@ -156,10 +153,6 @@
         </template>
 
         <v-list>
-          <!-- <v-list-tile @click="">
-                <v-list-tile-title class="mr-4 text-xs-right body-2">Force form field detection</v-list-tile-title>
-                <v-icon size="20px">mdi-refresh</v-icon>
-                </v-list-tile> -->
           <v-list-item @click="showHelp">
             <v-list-item-title
               right
@@ -261,7 +254,9 @@ export default {
         this.saveLastActiveAt = ss?.lastActiveAt;
 
         // Clear the newEntry if it is beyond our maximum recovery time
-        // This frees up memory but more importantly allows the watch for saveState to set the appropriate last active datetime when the user attempts to re-edit the same entry as most recently.
+        // This frees up memory but more importantly allows the watch for saveState to 
+        // set the appropriate last active datetime when the user attempts to re-edit
+        // the same entry as most recently.
         if (ss?.lastActiveAt <= new Date(Date.now()-manualRecoveryPromptTimeMs)) {
             this.saveDiscard();
         }
@@ -359,29 +354,6 @@ export default {
 </script>
 
 <style>
-/*
-html {
-  overflow-y: hidden;
-}
-
-body {
-    max-height: 570px;
-}
-
-.application--wrap {
-  display: grid;
-  min-height: 570px;
-  max-height: 570px;
-  height: 570px;
-  grid-template-rows: 1fr auto;
-}
-
-.v-content {
-  flex: 0 1 auto;
-  max-height: 100%;
-  overflow-y: hidden;
-} */
-
 .v-content__wrap {
   overflow-y: scroll;
 }
@@ -397,6 +369,4 @@ body {
   min-height: 522px;
   height: 522px;
 }
-
-
 </style>

@@ -8,7 +8,6 @@
     style=""
     name="cc5704978dc0411591addc66d25c325b"
     :value="currentSearchTerm"
-    :title="$i18n('Search_tip')"
     autofocus
     @input="onSearchInput"
     @keyup.arrow-down.stop.prevent="focusFirstResult"

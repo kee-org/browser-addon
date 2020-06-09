@@ -6,7 +6,7 @@
       >
         <v-row>
           <v-col>
-            Where? {{ rootGroupUUID }}
+            {{ $i18n('where') }}
           </v-col>
         </v-row>
         <v-row>
@@ -18,7 +18,7 @@
               <v-sheet class="pa-4 primary lighten-2">
                 <v-text-field
                   v-model="search"
-                  label="Search"
+                  :label="$i18n('Search_label')"
                   dark
                   flat
                   solo-inverted
@@ -132,6 +132,3 @@ export default {
 };
 
 </script>
-
-<style>
-</style>
