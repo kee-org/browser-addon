@@ -1,11 +1,10 @@
 import { Icon } from "./Icon";
 import { Database } from "./Database";
 import { utils } from "../utils";
-import { Field, FieldType } from "./Field";
+import { Field } from "./Field";
 import { EntryDto, FormFieldTypeDTO } from "./KPRPCDTOs";
 import { DatabaseSummary } from "./DatabaseSummary";
 import { GroupSummary } from "./GroupSummary";
-//import { Group } from "./"
 
 // Although we use uuids for Fields and possibly Locators, we don't allow them to exist outside of their parent entry.
 
@@ -34,7 +33,6 @@ export class Entry {
     // The title of the KeePass entry (auto-generated from the page title by default,
     // or the page URL's hostname if no title is set)
     readonly title: string;
-
 
     readonly icon: Icon;
 
@@ -69,7 +67,6 @@ export class Entry {
         this.matchAccuracy = e.matchAccuracy || 0;
         this.icon = e.icon || { version: 1, iconImageData: "" };
         this.database = e.database || new Database({});
-        // this.database = e.database || null;
     }
 
     public static getUsernameField (entry: Entry) {

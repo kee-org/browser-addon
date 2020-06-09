@@ -186,8 +186,6 @@ export class FormSaving {
                 isRegistrationForm
             };
 
-            // console.error("favicon page: " + this.);
-
             this.myPort.postMessage({submittedData} as AddonMessage);
         }
     }

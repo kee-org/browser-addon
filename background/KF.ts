@@ -17,7 +17,7 @@ import { FrameState } from "../common/FrameState";
 import { VaultMessage } from "../common/VaultMessage";
 import { KeeNotification } from "../common/KeeNotification";
 import { VaultProtocol } from "../common/VaultProtocol";
-import { SessionType } from "../common/kfDataModel";
+import { SessionType } from "../common/SessionType";
 import { PasswordProfile } from "../common/model/PasswordProfile";
 import { Action } from "../common/Action";
 import store from "../store";

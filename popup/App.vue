@@ -182,7 +182,7 @@
 import { Component } from "vue";
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import { names as actionNames } from "../store/action-names";
-import { SessionType } from "../common/kfDataModel";
+import { SessionType } from "../common/SessionType";
 import { KeeState } from "../store/KeeState";
 import Notification from "./components/Notification.vue";
 import SearchInput from "./components/SearchInput.vue";

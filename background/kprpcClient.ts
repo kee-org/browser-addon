@@ -1,7 +1,7 @@
 import { EventSessionManager } from "./EventSession";
 import { SRPc } from "./SRP";
 import { WebsocketSessionManager } from "./WebsocketSession";
-import { SessionType } from "../common/kfDataModel";
+import { SessionType } from "../common/SessionType";
 import { VaultMessage } from "../common/VaultMessage";
 import { KeeLog } from "../common/Logger";
 import { VaultProtocol } from "../common/VaultProtocol";

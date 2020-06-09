@@ -1,6 +1,5 @@
 import { SessionType } from "./SessionType";
 
-
 export class PasswordProfileDto {
     name: string;
     sessionType: SessionType;
