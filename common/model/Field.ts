@@ -27,8 +27,7 @@ export class Field {
     // like a radio button or select option already present on the HTML form; boolean would match a checkbox.
     readonly type: FieldType;
 
-    // How we can find the correct target in the HTML. Probably will only want one so can maybe remove the array if that
-    // doesn't complicate the Vue normalisation process in the coming weeks.
+    // How we can find the correct target in the HTML.
     readonly locators: Locator[];
 
     // tracks the most recent value we want to reset to in cases where the user has that possibility

@@ -1250,11 +1250,8 @@ export class FormFilling {
         let score = 0;
         let lowFieldMatchRatio = false;
 
-        // // entry priorities provide a large score such that no other combination of relevance
-        // // can override them but there will still be differences in relevance for the same
-        // // entry when compared against different forms
-        // if (entry.priority > 0)
-        //     score = 1000000000 - entry.priority * 1000;
+        // Kee 3.4+ no longer considers priority overrides because they were
+        // complicated and unreliable even when fully understood.
 
         // Kee 1.5+ no longer considers action URLs in relevance weighting. Since the only
         // entry entries of interest are already pre-matched by KeePass, this should have been

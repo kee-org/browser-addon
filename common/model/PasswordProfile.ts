@@ -1,4 +1,4 @@
-import { SessionType } from "../kfDataModel";
+import { SessionType } from "../SessionType";
 
 export class PasswordProfile {
     name: string;

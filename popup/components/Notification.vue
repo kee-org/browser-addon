@@ -60,7 +60,7 @@
 import { Component } from "vue";
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import { names as actionNames } from "../../store/action-names";
-import { SessionType } from "../../common/kfDataModel";
+import { SessionType } from "../../common/SessionType";
 import { KeeState } from "../../store/KeeState";
 import { ButtonAction } from "../../common/Button";
 import { configManager } from "../../common/ConfigManager";

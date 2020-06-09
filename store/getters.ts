@@ -1,5 +1,5 @@
 import { KeeState } from "./KeeState";
-import { SessionType } from "../common/kfDataModel";
+import { SessionType } from "../common/SessionType";
 
 export const connected = (state: KeeState) => state.connected;
 export const showGeneratePasswordLink = (state: KeeState) => state.connected;
