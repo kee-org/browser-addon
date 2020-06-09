@@ -49,9 +49,9 @@
     >
       <v-row align="center">
         <v-col>
-          <p>This entry is for a different site.</p>
-          <p>Continuing with this update will enable you to fill these credentials into this site too.</p>
-          <p>Make sure this is not an attempt to trick you into revealing your password!</p>
+          <p>{{ $i18n('url_mismatch_1') }}</p>
+          <p>{{ $i18n('url_mismatch_2') }}</p>
+          <p>{{ $i18n('url_mismatch_3') }}</p>
         </v-col>
       </v-row>
       <v-row align="center">
@@ -59,7 +59,7 @@
           <div>
             <v-checkbox
               v-model="differentSiteConfirmation"
-              label="I understand; there is a legitimate reason for these credentials to be shared with the current website from now on."
+              :label="$i18n('url_mismatch_confirm', entryDomain)"
             />
           </div>
         </v-col>
@@ -87,7 +87,7 @@
       color="light-blue lighten-3"
       @click="updateEntry"
     >
-      update
+      {{ $i18n('update') }}
     </v-btn>
     <v-alert
       v-if="editingExisting"
@@ -99,14 +99,14 @@
     >
       <v-row align="center">
         <v-col class="grow">
-          Additional changes can be made using the full editor.
+          {{ $i18n('make_additional_changes_using_full_editor') }}
         </v-col>
         <v-col class="shrink">
           <v-btn
             small
             @click="openFullEntryEditor"
           >
-            Open advanced editor
+            {{ $i18n('open_full_editor') }}
           </v-btn>
         </v-col>
       </v-row>
@@ -123,6 +123,7 @@ import { Entry } from "../../common/model/Entry";
 import FieldEditor from "./FieldEditor.vue";
 import { Field } from "../../common/model/Field";
 import { AddonMessage } from "../../common/AddonMessage";
+import { KeeURL } from "../../common/KeeURL";
 
 export default {
     components: {
@@ -142,6 +143,15 @@ export default {
         },
         showURLMismatchWarning: function (this: any) {
             return this.saveState.showURLMismatchWarning;
+        },
+        entryDomain: function (this: any) {
+            const urlStr = (this.saveState as SaveState).newEntry.URLs[0];
+            if (!urlStr || urlStr.length < 4) return "<unknown>";
+            const kurl = KeeURL.fromString(urlStr);
+            if (!kurl) {
+                return "<error>";
+            }
+            return kurl.domainWithPort || kurl.url.host;
         }
     },
     methods: {
@@ -187,6 +197,3 @@ export default {
     }
 };
 </script>
-
-<style>
-</style>

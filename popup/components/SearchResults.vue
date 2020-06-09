@@ -90,9 +90,6 @@ export default {
     },
     mounted (this: any) {
         this.$store.subscribe((mutation, state) => {
-            // if (mutation.type === mTypes.updateKeePassDatabases) {
-            //   this.onDBChanged();
-            // }
             if (mutation.type === mTypes.updateCurrentSearchTerm) {
                 this.searchOnlyMatches.execute(this.currentSearchTerm, (this as any).onSearchOnlyMatchesComplete.bind(this));
             }
@@ -139,6 +136,3 @@ export default {
     }
 };
 </script>
-
-<style>
-</style>

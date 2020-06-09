@@ -832,5 +832,53 @@
   "disabled": {
       "message": "Disabled",
       "description": "Indicates that a boolean option such as a checkbox is in an disabled/off/false state"
+  },
+  "unsaved_changes": {
+      "message": "You have recent unsaved changes.",
+      "description": "Shown to user when the popup is opened and a new or existing entry is part-way through being edited from a recent popup session. Note that very recent popup sessions are automatically 'continued' without the user needing to consider this information."
+  },
+  "continue_saving": {
+      "message": "Continue saving",
+      "description": "Action for user to continue editing the same entry that was being edited when the popup recently closed."
+  },
+  "discard_changes": {
+      "message": "Discard changes",
+      "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
+  },
+  "password_profile_hint": {
+      "message": "Select which set of rules the new password will follow. Rules include password length and the sort of characters that may be used. Create new profiles in your password manager.",
+      "description": "Explains what a password profile is and how to create new ones."
+  },
+  "password_profile": {
+      "message": "Password profile",
+      "description": "Name of the profiles used by KeePass and Kee Vault to construct new random passwords."
+  },
+  "url_mismatch_1": {
+      "message": "This entry is for a different site.",
+      "description": "1st sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+  },
+  "url_mismatch_2": {
+      "message": "Continuing with this update will enable you to fill these credentials into this site too.",
+      "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+  },
+  "url_mismatch_3": {
+      "message": "Make sure this is not an attempt to trick you into revealing your password!",
+      "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+  },
+  "url_mismatch_confirm": {
+      "message": "I understand the risk; Share these credentials with $1.",
+      "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
+  },
+  "make_additional_changes_using_full_editor": {
+      "message": "Additional changes can be made using the full editor.",
+      "description": "Note to user that the Kee interface does not allow every possible type of edit to an entry."
+  },
+  "open_full_editor": {
+      "message": "Open advanced editor",
+      "description": "Button action to open the full entry editor in KeePass or Kee Vault. Be sure to imply that the need to click the button is 'unusual', as I have done with the word 'advanced'"
+  },
+  "where": {
+      "message": "Where?",
+      "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
   }
 }

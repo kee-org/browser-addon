@@ -50,22 +50,6 @@
                   </v-col>
                 </v-row>
               </v-container>
-              <!-- <v-card-title
-                :class="`pl-12 ml-2 py-0 mt-4 ${expanded ? 'mb-0' : 'mb-4'} subtitle-1`"
-                :style="titleStyle"
-              >
-                <v-row>
-                  <v-col class="text-truncate">
-                    {{ entrySummary.title }}
-                  </v-col>
-                  <v-col
-                    :style="`${expanded ? 'visibility:hidden' : ''}`"
-                    class="text-truncate caption pr-2 pt-1 py-1"
-                  >
-                    {{ usernameDisplayValue }}
-                  </v-col>
-                </v-row>
-              </v-card-title> -->
             </v-hover>
           </v-col>
           <v-col
