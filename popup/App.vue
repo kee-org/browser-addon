@@ -133,7 +133,7 @@
         <template v-slot:activator="{ on }">
           <div
             class="caption py-1 shrink"
-            style="word-break: break-word;overflow-wrap: break-word;max-width: 250px;"
+            style="word-break: break-word;overflow-wrap: break-word;max-width: 210px;"
             v-on="on"
           >
             {{ connectionStatus }}
