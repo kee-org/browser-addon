@@ -55,19 +55,28 @@
       </v-container>
     </v-content>
 
-    <v-btn
-      v-show="showSearchPanel && !showSaveRecovery"
-      color="light-blue darken-2"
-      fab
-      small
-      absolute
-      bottom
-      right
-      style="bottom: 75px; right: 24px"
-      @click="saveStart"
+    <v-tooltip
+      left
+      :open-delay="tooltipDelay"
     >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on }">
+        <v-btn
+          v-show="showSearchPanel && !showSaveRecovery"
+          color="light-blue darken-2"
+          fab
+          small
+          absolute
+          bottom
+          right
+          style="bottom: 75px; right: 24px"
+          v-on="on"
+          @click="saveStart"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </template>
+      <span>{{ $i18n('create_new_entry') }}</span>
+    </v-tooltip>
 
     <v-footer
       app

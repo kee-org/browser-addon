@@ -339,6 +339,10 @@
     "message": "Matches from other sites",
     "description": "Search results section header."
   },
+  "create_new_entry": {
+    "message": "Create new entry",
+    "description": "Create new entry"
+  },
   "showing_options_for": {
     "message": "Showing options for",
     "description": "label for a group of radio buttons that allows the user to change the scope of the settings they are changing - e.g. all websites or just one specific website"
