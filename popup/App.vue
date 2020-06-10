@@ -81,7 +81,7 @@
           <v-btn
             id="password-open-kee-vault"
             :aria-label="$i18n('Menu_Button_open_kee_vault_label')"
-            class="mx-2"
+            class="ml-0 mr-2"
             icon
             v-on="on"
             @click="openKeeVault"
@@ -104,7 +104,7 @@
             v-show="showOpenKeePassButton"
             id="password-open-keepass"
             :aria-label="$i18n('Menu_Button_open_keepass_label')"
-            class="mx-0"
+            class="mr-2 ml-n1"
             icon
             v-on="on"
             @click="openKeePass"
