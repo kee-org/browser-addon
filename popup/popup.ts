@@ -38,7 +38,7 @@ function startup () {
                     store,
                     vuetify: new Vuetify({
                         theme: {
-                            dark: window.matchMedia("prefers-color-scheme: dark").matches
+                            dark: window.matchMedia("(prefers-color-scheme: dark)").matches
                         }
                     }),
                     mounted () {
