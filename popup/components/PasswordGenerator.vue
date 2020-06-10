@@ -32,6 +32,7 @@
         <v-btn
           color="green darken-1"
           text
+          :disabled="disabled"
           @click="ok"
         >
           {{ $i18n('Menu_Button_copyNewPasswordToClipboard_label') }}
@@ -56,6 +57,9 @@ export default {
         ...mapGetters(["PasswordProfiles", "saveState"]),
         items: function (this: any) {
             return this.PasswordProfiles.map(p => p.name);
+        },
+        disabled: function (this: any) {
+            return !this.selectedProfile;
         }
     },
     methods: {
