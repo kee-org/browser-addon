@@ -118,9 +118,7 @@
         </template>
         <span>{{ $i18n('Menu_Button_open_keepass_label') }}</span>
       </v-tooltip>
-      <v-divider
-        vertical
-      ></v-divider>
+      <v-divider vertical />
       <v-icon
         size="20px"
         :color="statusIconColour"
@@ -144,7 +142,7 @@
         <span>{{ connectionStatusDetail }}</span>
       </v-tooltip>
 
-      <v-spacer></v-spacer>
+      <v-spacer />
 
       <v-menu
         top
