@@ -5,7 +5,7 @@
         class="my-0 pa-0"
       >
         <v-row>
-          <v-col>
+          <v-col style="cursor: default">
             {{ $i18n('where') }}
           </v-col>
         </v-row>
@@ -40,7 +40,7 @@
                   dense
                   activatable
                   hoverable
-                  style="height:250px; overflow-y: auto;"
+                  style="height:250px; overflow-y: auto; cursor: pointer"
                   return-object="true"
                   @update:active="setGroup"
                 />

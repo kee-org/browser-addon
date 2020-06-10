@@ -73,7 +73,10 @@
       app
       height="auto"
     >
-      <v-tooltip top>
+      <v-tooltip
+        top
+        :open-delay="tooltipDelay"
+      >
         <template v-slot:activator="{ on }">
           <v-btn
             id="password-open-kee-vault"
@@ -92,7 +95,10 @@
         </template>
         <span>{{ $i18n('Menu_Button_open_kee_vault_label') }}</span>
       </v-tooltip>
-      <v-tooltip top>
+      <v-tooltip
+        top
+        :open-delay="tooltipDelay"
+      >
         <template v-slot:activator="{ on }">
           <v-btn
             v-show="showOpenKeePassButton"
@@ -122,7 +128,10 @@
       >
         mdi-lock
       </v-icon>
-      <v-tooltip top>
+      <v-tooltip
+        top
+        :open-delay="tooltipDelay"
+      >
         <template v-slot:activator="{ on }">
           <div
             class="caption py-1 shrink"
@@ -197,9 +206,7 @@ import { KeeVue } from "./KeeVue";
 import { Entry } from "../common/model/Entry";
 import { supplementEntryState } from "./supplementEntryState";
 import { fetchFavicon, getFaviconUrl } from "./favicon";
-
-const autoRecoveryTimeMs = 120_000;
-const manualRecoveryPromptTimeMs = 3_600_000;
+import { autoRecoveryTimeMs, manualRecoveryPromptTimeMs, tooltipDelay } from "../common/Timings";
 
 export default {
     components: {
@@ -217,7 +224,8 @@ export default {
         // the datestamp change. Instead we can watch for changes and only modify this
         // value in a set of circumstances that meet our requirements.
         saveLastActiveAt: null,
-        showSaveWhere: false
+        showSaveWhere: false,
+        tooltipDelay
     }),
     computed: {
         ...mapGetters(["showGeneratePasswordLink", "saveState",

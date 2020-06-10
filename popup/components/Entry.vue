@@ -6,6 +6,7 @@
       :tabindex="`${tabindex}`"
       :elevation="`${hover ? 12 : 3}`"
       class="my-2"
+      :ripple="false"
       @focusin="focusin"
       @focusout="focusout"
       @keyup.context-menu.stop.prevent="showFullDetails"
@@ -66,7 +67,10 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-card-text class="py-0 text-truncate">
+      <v-card-text
+        class="py-0 text-truncate"
+        style="cursor: default"
+      >
         <v-slide-y-transition>
           <v-container
             v-if="expanded && !!entrySummary.fullDetails"
@@ -85,6 +89,7 @@
                 <v-tooltip
                   top
                   :disabled="!entryPathIsLong"
+                  :open-delay="tooltipDelay"
                 >
                   <template v-slot:activator="{ on }">
                     <v-row
@@ -101,7 +106,10 @@
                   </template>
                   <span>{{ fullEntryPath }}</span>
                 </v-tooltip>
-                <v-tooltip top>
+                <v-tooltip
+                  top
+                  :open-delay="tooltipDelay"
+                >
                   <template v-slot:activator="{ on }">
                     <v-row
                       class="justify-left text-truncate flex-nowrap"
@@ -150,6 +158,7 @@ import { reconcileURLs } from "../reconcileURLs";
 import { SaveState } from "../../common/SaveState";
 import { Entry } from "../../common/model/Entry";
 import { EntrySummary } from "../../common/model/EntrySummary";
+import { tooltipDelay } from "../../common/Timings";
 
 export default {
     components: { Field },
@@ -157,7 +166,8 @@ export default {
     props: ["entrySummary","isFirstInAList","entryIndex","frameId"],
     data: () => ({
         expanded: false,
-        focussed: false
+        focussed: false,
+        tooltipDelay
     }),
     computed: {
         titleStyle: function (this: any) {
