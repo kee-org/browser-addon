@@ -5,9 +5,13 @@
     align="center"
   >
     <v-col class="text-truncate my-2 text-right">
-      <v-tooltip bottom>
+      <v-tooltip
+        bottom
+        :open-delay="tooltipDelay"
+      >
         <template v-slot:activator="{ on }">
           <span
+            :style="fieldStyle"
             v-on="on"
             @click="toggleReveal"
           >{{ displayValue }}</span>
@@ -19,7 +23,10 @@
     <v-col
       class="my-0 shrink"
     >
-      <v-tooltip left>
+      <v-tooltip
+        left
+        :open-delay="tooltipDelay"
+      >
         <template v-slot:activator="{ on }">
           <v-btn
             small
@@ -42,11 +49,13 @@
 <script lang="ts">
 import { copyStringToClipboard } from "../copyStringToClipboard";
 import { Field } from "../../common/model/Field";
+import { tooltipDelay } from "../../common/Timings";
 
 export default {
     props: ["field"],
     data: () => ({
-        revealed: false
+        revealed: false,
+        tooltipDelay
     }),
     computed: {
         displayValue: function (this: any) {
@@ -57,6 +66,9 @@ export default {
         },
         useful: function (this:any) {
             return this.field.type !== "checkbox" && this.displayValue.length > 0;
+        },
+        fieldStyle: function (this:any) {
+            return this.field.type === "password" ? "cursor: pointer" : "cursor: default";
         }
     },
     methods: {

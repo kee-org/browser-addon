@@ -35,6 +35,7 @@
               :key="index"
               top
               :disabled="!but.tooltip"
+              :open-delay="tooltipDelay"
             >
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -66,14 +67,14 @@ import { ButtonAction } from "../../common/Button";
 import { configManager } from "../../common/ConfigManager";
 import { AddonMessage } from "../../common/AddonMessage";
 import { Port } from "../../common/port";
+import { tooltipDelay } from "../../common/Timings";
 
 export default {
     mixins: [Port.mixin],
     props: ["notification"],
-    data () {
-        return {};
-    },
-
+    data: () => ({
+        tooltipDelay
+    }),
     methods: {
         ...mapActions(actionNames),
         dispatchActionResponse (id: string, action: ButtonAction, data: { [id: string] : string }) {
