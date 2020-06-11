@@ -8,7 +8,6 @@ export const enum Action {
     Primary = "primary",
     RemoveSubmittedData = "removeSubmittedData",
     ShowMatchedLoginsPanel = "showMatchedLoginsPanel",
-    SaveLatestLogin = "saveLatestLogin",
     PageHide = "pageHide",
     OpenKeePass = "openkeepass",
     CreateEntry = "createEntry",
