@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuetify from "vuetify";
+import colors from "vuetify/lib/util/colors";
 import App from "./App.vue";
 import store from "../store";
 import { KeeLog } from "../common/Logger";
@@ -9,9 +10,7 @@ import i18n from "../common/Vuei18n";
 import { Port } from "../common/port";
 import { SyncContent } from "../store/syncContent";
 import { MutationPayload } from "vuex";
-import { Entry } from "../common/model/Entry";
 import { Action } from "../common/Action";
-import { EntrySummary } from "../common/model/EntrySummary";
 
 Vue.use(i18n);
 Vue.use(Vuetify);
@@ -38,7 +37,27 @@ function startup () {
                     store,
                     vuetify: new Vuetify({
                         theme: {
-                            dark: window.matchMedia("(prefers-color-scheme: dark)").matches
+                            dark: window.matchMedia("(prefers-color-scheme: dark)").matches,
+                            themes: {
+                                dark: {
+                                    primary: "#1a466b",
+                                    secondary: "#ABB2BF",
+                                    tertiary: "#e66a2b",
+                                    error: "#C34034",
+                                    info: "#2196F3",
+                                    success: "#4CAF50",
+                                    warning: "#FFC107"
+                                },
+                                light: {
+                                    primary: "#1a466b",
+                                    secondary: "#13334e",
+                                    tertiary: "#e66a2b",
+                                    error: "#C34034",
+                                    info: "#2196F3",
+                                    success: "#4CAF50",
+                                    warning: "#FFC107"
+                                }
+                            }
                         }
                     }),
                     mounted () {
@@ -72,7 +91,6 @@ function startup () {
         }
 
         if (store.state.connected && m.findMatchesResult) {
-            console.warn(m);
             store.dispatch("updateSearchResultWithFullDetails", JSON.parse(JSON.stringify(m.findMatchesResult[0])));
         }
     });

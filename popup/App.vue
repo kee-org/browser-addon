@@ -16,17 +16,35 @@
         <v-alert
           v-show="showSaveRecovery"
           :value="true"
-          color="warning"
-          icon="mdi-warning"
-          outlined
+          color="secondary"
+          icon="mdi-alert-circle"
+          text
         >
-          {{ $i18n('unsaved_changes') }}<br>
-          <v-btn @click="saveRecover">
-            {{ $i18n('continue_saving') }}
-          </v-btn>
-          <v-btn @click="saveDiscard">
-            {{ $i18n('discard_changes') }}
-          </v-btn>
+          <v-row dense>
+            <v-col>{{ $i18n('unsaved_changes') }}</v-col>
+          </v-row>
+          <v-row
+            dense
+            align="start"
+          >
+            <v-col>
+              <v-btn
+                color="primary"
+                @click="saveRecover"
+              >
+                {{ $i18n('continue_saving') }}
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn
+                color="tertiary"
+                @click="saveDiscard"
+              >
+                {{ $i18n('discard_changes') }}
+              </v-btn>
+            </v-col>
+            <v-spacer />
+          </v-row>
         </v-alert>
         <div
           v-if="showNotifications"
@@ -62,12 +80,12 @@
       <template v-slot:activator="{ on }">
         <v-btn
           v-show="showSearchPanel && !showSaveRecovery"
-          color="light-blue darken-2"
           fab
           small
           absolute
           bottom
           right
+          color="primary"
           style="bottom: 75px; right: 24px"
           v-on="on"
           @click="saveStart"
@@ -230,6 +248,10 @@ export default {
         // the app to re-render from scratch, destroying the user input that triggered 
         // the datestamp change. Instead we can watch for changes and only modify this
         // value in a set of circumstances that meet our requirements.
+        // Also note that Chromium and Firefox extensions behave differently - Chrome
+        // persists strings to represent the Date whereas Firefox persists a valid
+        // Date object. Hence every place where this is used, you must wrap the
+        // variable in a new Date(...) call before comparing against other Dates
         saveLastActiveAt: null,
         showSaveWhere: false,
         tooltipDelay
@@ -248,10 +270,10 @@ export default {
             return "red";
         },
         showSaveStart: function (this: any) {
-            return this.saveLastActiveAt > new Date(Date.now()-autoRecoveryTimeMs);
+            return new Date(this.saveLastActiveAt) > new Date(Date.now()-autoRecoveryTimeMs);
         },
         showSaveRecovery: function (this: any) {
-            return !this.showSaveStart && this.saveLastActiveAt > new Date(Date.now()-manualRecoveryPromptTimeMs);
+            return !this.showSaveStart && new Date(this.saveLastActiveAt) > new Date(Date.now()-manualRecoveryPromptTimeMs);
         },
         showSearchPanel: function (this: any) {
             return this.databaseIsOpen && !this.showSaveStart;

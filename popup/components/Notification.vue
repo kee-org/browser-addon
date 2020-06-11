@@ -41,7 +41,6 @@
                 <v-btn
                   :id="but.id"
                   class="mr-4 my-2"
-                  color="primary"
                   v-on="on"
                   @click="dispatchActionResponse(notification.id, but.action, but.values)"
                 >
