@@ -4,8 +4,8 @@
       <v-text-field
         v-if="field.type === 'password' || field.type === 'text'"
         :label="label"
-        style=""
         :value="field.value"
+        color="secondary"
         dense
         outlined
         hide-details="auto"

@@ -13,6 +13,7 @@
             :items="items"
             :label="$i18n('password_profile')"
             outlined
+            color="secondary"
             :hint="$i18n('password_profile_hint')"
             persistent-hint
           />
@@ -22,16 +23,14 @@
         <v-spacer />
 
         <v-btn
-          color="green darken-1"
-          text
+          color="tertiary"
           @click="cancel"
         >
           {{ $i18n('cancel') }}
         </v-btn>
 
         <v-btn
-          color="green darken-1"
-          text
+          color="primary"
           :disabled="disabled"
           @click="ok"
         >

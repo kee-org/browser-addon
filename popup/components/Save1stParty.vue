@@ -8,7 +8,7 @@
           <v-col>
             <v-text-field
               :label="$i18n('title')"
-              style=""
+              color="secondary"
               :value="saveState.newEntry.title"
               dense
               outlined
@@ -67,7 +67,7 @@
     </v-alert>
     <v-btn
       right
-      color="light-blue lighten-3"
+      color="tertiary"
       @click="cancel"
     >
       {{ $i18n('cancel') }}
@@ -75,7 +75,7 @@
     <v-btn
       v-if="!editingExisting"
       right
-      color="light-blue lighten-3"
+      color="primary"
       @click="nextClicked"
     >
       {{ $i18n('next') }}
@@ -84,7 +84,7 @@
       v-if="editingExisting"
       :disabled="showURLMismatchWarning && !differentSiteConfirmation"
       right
-      color="light-blue lighten-3"
+      color="primary"
       @click="updateEntry"
     >
       {{ $i18n('update') }}

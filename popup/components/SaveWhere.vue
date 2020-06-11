@@ -4,8 +4,11 @@
       <v-container
         class="my-0 pa-0"
       >
-        <v-row>
-          <v-col style="cursor: default">
+        <v-row justify="center">
+          <v-col
+            style="cursor: default"
+            class="title text-center"
+          >
             {{ $i18n('where') }}
           </v-col>
         </v-row>
@@ -15,13 +18,12 @@
               class="mx-auto"
               max-width="500"
             >
-              <v-sheet class="pa-4 primary lighten-2">
+              <v-sheet class="pa-4">
                 <v-text-field
                   v-model="search"
                   :label="$i18n('Search_label')"
-                  dark
-                  flat
-                  solo-inverted
+                  color="secondary"
+                  outlined
                   hide-details
                   clearable
                   dense
@@ -40,6 +42,7 @@
                   dense
                   activatable
                   hoverable
+                  color="secondary"
                   style="height:250px; overflow-y: auto; cursor: pointer"
                   return-object="true"
                   @update:active="setGroup"
@@ -53,7 +56,7 @@
 
     <v-btn
       right
-      color="light-blue lighten-3"
+      color="primary"
       @click="saveEntry"
     >
       {{ $i18n('save') }}
