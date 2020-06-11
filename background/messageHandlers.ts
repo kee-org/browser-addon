@@ -40,21 +40,6 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
             }
         });
     }
-    // if (msg.action === Action.ShowMatchedLoginsPanel) {
-    //     if (store.state.connected) {
-    //         let frameIdWithMatchedLogins = window.kee.frameIdWithMatchedLogins(window.kee.tabStates.get(window.kee.foregroundTabId).frames);
-    //         if (frameIdWithMatchedLogins == -1) frameIdWithMatchedLogins = 0;
-    //         window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(0).postMessage({action: Action.ShowMatchedLoginsPanel, frameId: frameIdWithMatchedLogins });
-    //     }
-    // }
-    if (msg.action === Action.SaveLatestLogin) {
-        if (store.state.connected) {
-            const persistentItem = window.kee.persistentTabStates.get(window.kee.foregroundTabId).items.find(item => item.itemType == "submittedData");
-            window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(0).postMessage(
-                { submittedData: persistentItem.submittedData } as AddonMessage);
-            persistentItem.accessCount++;
-        }
-    }
     if (msg.action === Action.CreateEntry || msg.action === Action.UpdateEntry) {
         if (store.state.connected) {
             const sourceEntry = store.state.saveState.newEntry;

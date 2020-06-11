@@ -352,14 +352,6 @@ export default {
         saveWhere: function (this: any) {
             this.showSaveWhere = true;
         },
-        saveLatestLogin: () => {
-            Port.postMessage({ action: Action.SaveLatestLogin });
-            window.close();
-        },
-        showMatchedLoginsPanel: () => {
-            Port.postMessage({ action: Action.ShowMatchedLoginsPanel });
-            window.close();
-        },
         showHelp: () => {
             browser.tabs.create({ url: "https://www.kee.pm/help" });
             window.close();
