@@ -41,12 +41,9 @@ export const connectionStatusDetail = (state: KeeState, getters) => {
             return $STRF("loggedInMultiple_tip", [state.KeePassDatabases.length.toString(), getters.databaseName]);
         } else if (state.KeePassDatabases.length == 1) {
             return $STRF("loggedIn_tip", getters.databaseName);
-        } else {
-            return $STR("notifyBarLaunchKeePass_label") + " " + $STR("notifyBarLoginToKeePassButton_tip");
         }
-    } else {
-        return $STR("notifyBarLaunchKeePass_label") + " " + $STR("notifyBarLaunchKeePassButton_tip");
     }
+    return $STR("notifyBarLaunchKeePass_label");
 };
 export const showOpenKeePassButton = (state: KeeState) => {
     if (state.connectedWebsocket) {
