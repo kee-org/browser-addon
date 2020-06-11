@@ -34,3 +34,5 @@ export class GroupSummary {
         });
     }
 }
+
+export const TemporaryIDString = "TEMPORARY ID TO IDENTIFY THIS AS A DIRTY ENTRY THAT DOESN'T EXIST IN SOURCE DATABASE YET";

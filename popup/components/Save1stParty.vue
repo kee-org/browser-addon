@@ -126,6 +126,7 @@ import FieldEditor from "./FieldEditor.vue";
 import { Field } from "../../common/model/Field";
 import { AddonMessage } from "../../common/AddonMessage";
 import { KeeURL } from "../../common/KeeURL";
+import { TemporaryIDString } from "../../common/model/GroupSummary";
 
 export default {
     components: {
@@ -141,7 +142,8 @@ export default {
             return this.$store.state.saveState.titleResetValue !== this.$store.state.saveState.newEntry.title;
         },
         editingExisting: function (this: any) {
-            return !!(this.$store.state.saveState as SaveState).newEntry.database.fileName;
+            const e = (this.$store.state.saveState as SaveState).newEntry;
+            return e.database.fileName && e.database.root.uuid !== TemporaryIDString;
         },
         showURLMismatchWarning: function (this: any) {
             return this.saveState.showURLMismatchWarning;
