@@ -44,7 +44,7 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
         if (store.state.connected) {
             const sourceEntry = store.state.saveState.newEntry;
             const existingOrTemporaryUuid = sourceEntry.uuid;
-            const db = sourceEntry.database;
+            const dbFileName = sourceEntry.database.fileName;
             const parentGroupUuid: string = sourceEntry.parentGroup.uuid;
 
             // shallow clone so we don't impact the values we have to wipe out below
@@ -70,14 +70,14 @@ export function browserPopupMessageHandler (this: browser.runtime.Port, msg: Add
                 window.kee.updateLogin(
                     entry,
                     existingOrTemporaryUuid,
-                    db.fileName);
+                    dbFileName);
 
             } else {
-                window.kee.addLogin(entry, parentGroupUuid, db.fileName);
+                window.kee.addLogin(entry, parentGroupUuid, dbFileName);
             }
             if (configManager.current.rememberMRUGroup) {
                 if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
-                configManager.current.mruGroup[db.fileName] = parentGroupUuid;
+                configManager.current.mruGroup[dbFileName] = parentGroupUuid;
                 configManager.save();
             }
 

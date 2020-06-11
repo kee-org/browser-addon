@@ -75,6 +75,7 @@ import { Field } from "../../common/model/Field";
 import { AddonMessage } from "../../common/AddonMessage";
 import { Database } from "../../common/model/Database";
 import { DatabaseSummary } from "../../common/model/DatabaseSummary";
+import { GroupSummary, TemporaryIDString } from "../../common/model/GroupSummary";
 
 const deepMapKeys = (obj, f) =>
     Array.isArray(obj)
@@ -127,7 +128,7 @@ export default {
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
                 parentGroup: value[0],
-                database: DatabaseSummary.fromDatabase(database)
+                database: new DatabaseSummary({ fileName: database.fileName, root: new GroupSummary({ uuid: TemporaryIDString }) })
             });
             this.$store.dispatch("updateSaveState", updatedSaveState);
         }
