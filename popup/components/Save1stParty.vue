@@ -47,18 +47,20 @@
       elevation="1"
       class="my-3"
     >
-      <v-row align="center">
+      <v-row dense>
         <v-col>
           <p>{{ $i18n('url_mismatch_1') }}</p>
           <p>{{ $i18n('url_mismatch_2') }}</p>
           <p>{{ $i18n('url_mismatch_3') }}</p>
         </v-col>
       </v-row>
-      <v-row align="center">
-        <v-col>
+      <v-row dense>
+        <v-col class="my-0 py-0">
           <div>
             <v-checkbox
               v-model="differentSiteConfirmation"
+              class="my-0 py-0"
+              hide-details
               :label="$i18n('url_mismatch_confirm', entryDomain)"
             />
           </div>
