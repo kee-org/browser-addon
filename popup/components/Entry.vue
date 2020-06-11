@@ -171,9 +171,10 @@ export default {
     }),
     computed: {
         titleStyle: function (this: any) {
+            const e = this.entrySummary as EntrySummary;
             return (
                 "background-position:24px calc(50% - 10px); background-image:url(data:image/png;base64," +
-        this.entrySummary.iconImageData +
+        e.icon.iconImageData +
         ")"
             );
         },
