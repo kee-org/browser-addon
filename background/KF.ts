@@ -25,6 +25,7 @@ import { SyncBackground } from "../store/syncBackground";
 import { MutationPayload } from "vuex";
 import { Database } from "../common/model/Database";
 import { Entry } from "../common/model/Entry";
+import { SaveEntryResult } from "../common/SaveEntryResult";
 
 export class Kee {
     accountManager: AccountManager;
@@ -116,6 +117,7 @@ export class Kee {
                     clearTimeout(window.kee.currentSearchTermTimer);
                     p.onMessage.addListener(browserPopupMessageHandler.bind(p));
                     p.onDisconnect.addListener(() => {
+                        window.kee.browserPopupPort = {postMessage: msg => {} };
                         window.kee.currentSearchTermTimer = setTimeout(() => {
                             store.dispatch("updateCurrentSearchTerm", null);
                             store.dispatch("updateSearchResults", null);
@@ -149,13 +151,6 @@ export class Kee {
                         }
                     }
 
-                    // Minor performance issue:
-                    // These get distributed to the popup port now (along with all
-                    // other page/iframe ports). Shouldn't do any harm because
-                    // the popup will just queue up the mutations and apply them
-                    // when it's ready but it is inefficient because the same
-                    // data is included in the connect message we're literally
-                    // just about to send.
                     store.dispatch("updateSubmittedData", submittedData);
                     store.dispatch("updateLoginsFound", loginsFound);
 
@@ -477,6 +472,14 @@ export class Kee {
         this.selectDatabase(this.getFileNameToOpen(), true);
     }
 
+    recordEntrySaveResult (saveType: "updated" | "created", entry?: Entry) {
+        if (!entry) {
+            store.dispatch("updateSaveEntryResult", { result: "error", receivedAt: new Date() } as SaveEntryResult);
+        } else {
+            store.dispatch("updateSaveEntryResult", { result: saveType, receivedAt: new Date() } as SaveEntryResult);
+        }
+    }
+
     /*******************************************
     / These functions are essentially wrappers for the actions that
     / Kee needs to take against KeePass via the KeePassRPC plugin connection.
@@ -522,7 +525,7 @@ export class Kee {
     {
         try
         {
-            return this.KeePassRPC.addLogin(entry, parentUUID, dbFileName);
+            return this.KeePassRPC.addLogin(entry, parentUUID, dbFileName, newEntry => this.recordEntrySaveResult("created", newEntry));
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
@@ -534,7 +537,7 @@ export class Kee {
     {
         try
         {
-            return this.KeePassRPC.updateLogin(entry, oldLoginUUID, dbFileName);
+            return this.KeePassRPC.updateLogin(entry, oldLoginUUID, dbFileName, changedEntry => this.recordEntrySaveResult("updated", changedEntry));
         } catch (e)
         {
             KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);

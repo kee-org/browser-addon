@@ -3,6 +3,7 @@ import { PasswordProfile } from "../common/model/PasswordProfile";
 import { KeeNotification } from "../common/KeeNotification";
 import { EntrySummary } from "../common/model/EntrySummary";
 import { SaveState } from "../common/SaveState";
+import { SaveEntryResult } from "../common/SaveEntryResult";
 
 export interface KeeState {
     latestConnectionError: string;
@@ -18,4 +19,5 @@ export interface KeeState {
     searchResults: EntrySummary[];
     saveState: SaveState;
     generatedPassword: string;
+    saveEntryResult: SaveEntryResult;
 }
