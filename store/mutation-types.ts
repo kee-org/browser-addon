@@ -14,3 +14,4 @@ export const updateSearchResultWithFullDetails = "updateSearchResultWithFullDeta
 export const updateSearchResults = "updateSearchResults";
 export const addNotification = "addNotification";
 export const updateSaveState = "updateSaveState";
+export const updateSaveEntryResult = "updateSaveEntryResult";

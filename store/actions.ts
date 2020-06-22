@@ -63,3 +63,7 @@ export const updateSearchResultWithFullDetails = ({ commit }, payload) => {
 export const addNotification = ({ commit }, payload) => {
     commit(types.addNotification, payload);
 };
+
+export const updateSaveEntryResult = ({ commit }, payload) => {
+    commit(types.updateSaveEntryResult, payload || null);
+};

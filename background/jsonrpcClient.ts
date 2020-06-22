@@ -100,17 +100,33 @@ export class jsonrpcClient {
         }
     }
 
-    addLogin (entry: Entry, parentUUID: string, dbFileName: string)
+    addLogin (entry: Entry, parentUUID: string, dbFileName: string, callback: (result?: Entry) => void)
     {
         const jslogin = Entry.toKPRPCEntryDTO(entry);
-        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "AddLogin", [jslogin, parentUUID, dbFileName], null, ++this.kprpcClient.requestId);
+        this.kprpcClient.request([this.sessionManagerForFilename(dbFileName)], "AddLogin", [jslogin, parentUUID, dbFileName], sessionResponses => {
+            const result = sessionResponses?.[0].resultWrapper?.result;
+            if (result) {
+                const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO(result.db);
+                callback(Entry.fromKPRPCEntryDTO(result, db));
+                return;
+            }
+            callback();
+        }, ++this.kprpcClient.requestId);
     }
 
-    updateLogin (entry: Entry, oldLoginUUID: string, dbFileName: string) {
+    updateLogin (entry: Entry, oldLoginUUID: string, dbFileName: string, callback: (result?: Entry) => void) {
         const jslogin = Entry.toKPRPCEntryDTO(entry);
         const sessionManager = this.sessionManagerForFilename(dbFileName);
         const urlMergeMode = sessionManager.features().some(f => f === "KPRPC_FEATURE_ENTRY_URL_REPLACEMENT") ? 5 : 2;
-        this.kprpcClient.request([sessionManager], "UpdateLogin", [jslogin, oldLoginUUID, urlMergeMode, dbFileName], null, ++this.kprpcClient.requestId);
+        this.kprpcClient.request([sessionManager], "UpdateLogin", [jslogin, oldLoginUUID, urlMergeMode, dbFileName], sessionResponses => {
+            const result = sessionResponses?.[0].resultWrapper?.result;
+            if (result) {
+                const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO(result.db);
+                callback(Entry.fromKPRPCEntryDTO(result, db));
+                return;
+            }
+            callback();
+        }, ++this.kprpcClient.requestId);
     }
 
     findLogins (fullURL: string, httpRealm: string, uuid: string, dbFileName: string, freeText: string, username: string, callback: (result: Entry[]) => void)

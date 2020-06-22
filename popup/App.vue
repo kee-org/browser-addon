@@ -232,6 +232,7 @@ import { Entry } from "../common/model/Entry";
 import { supplementEntryState } from "./supplementEntryState";
 import { fetchFavicon, getFaviconUrl } from "./favicon";
 import { autoRecoveryTimeMs, manualRecoveryPromptTimeMs, tooltipDelay } from "../common/Timings";
+import { SaveEntryResult } from "../common/SaveEntryResult";
 
 export default {
     components: {
@@ -254,7 +255,11 @@ export default {
         // variable in a new Date(...) call before comparing against other Dates
         saveLastActiveAt: null,
         showSaveWhere: false,
-        tooltipDelay
+
+        // imported constants are only available in Vue if we assign them to data
+        tooltipDelay,
+        manualRecoveryPromptTimeMs,
+        autoRecoveryTimeMs
     }),
     computed: {
         ...mapGetters(["showGeneratePasswordLink", "saveState",
@@ -270,10 +275,10 @@ export default {
             return "red";
         },
         showSaveStart: function (this: any) {
-            return new Date(this.saveLastActiveAt) > new Date(Date.now()-autoRecoveryTimeMs);
+            return new Date(this.saveLastActiveAt) > new Date(Date.now()-this.autoRecoveryTimeMs);
         },
         showSaveRecovery: function (this: any) {
-            return !this.showSaveStart && new Date(this.saveLastActiveAt) > new Date(Date.now()-manualRecoveryPromptTimeMs);
+            return !this.showSaveStart && new Date(this.saveLastActiveAt) > new Date(Date.now()-this.manualRecoveryPromptTimeMs);
         },
         showSearchPanel: function (this: any) {
             return this.databaseIsOpen && !this.showSaveStart;
@@ -287,14 +292,15 @@ export default {
         }
     },
     async mounted (this: any) {
-        const ss = this.$store.state.saveState as SaveState;
-        this.saveLastActiveAt = ss?.lastActiveAt;
+        this.saveLastActiveAt = this.$store.state.saveState?.lastActiveAt;
+
+        const discardRequired = this.handleLastSaveResult();
 
         // Clear the newEntry if it is beyond our maximum recovery time
         // This frees up memory but more importantly allows the watch for saveState to 
         // set the appropriate last active datetime when the user attempts to re-edit
         // the same entry as most recently.
-        if (ss?.lastActiveAt <= new Date(Date.now()-manualRecoveryPromptTimeMs)) {
+        if (discardRequired || this.$store.state.saveState?.lastActiveAt <= new Date(Date.now()-this.manualRecoveryPromptTimeMs)) {
             this.saveDiscard();
         }
 
@@ -303,7 +309,7 @@ export default {
         const favicon = await fetchFavicon(favIconUrl);
         if (!favicon) return;
 
-        const updatedSaveState = Object.assign({}, ss);
+        const updatedSaveState = Object.assign({}, this.$store.state.saveState);
         updatedSaveState.favicon = favicon;
         this.$store.dispatch("updateSaveState", updatedSaveState);
     },
@@ -377,6 +383,20 @@ export default {
                 KeeLog.info("KeePass no longer connected so taking no action");
             }
             window.close();
+        },
+        handleLastSaveResult: function (this: any) {
+            const lastResult = this.$store.state.saveEntryResult as SaveEntryResult;
+
+            if (!lastResult.result) return false;
+
+            if (lastResult.result === "created" || lastResult.result === "updated") {
+                //TODO: Render info notification panel before wiping current data - see #263
+                this.$store.dispatch("updateSaveEntryResult", { result: null, receivedAt: new Date() } as SaveEntryResult);
+                return true;
+            } else {
+                this.$store.dispatch("updateSaveEntryResult", { result: null, receivedAt: new Date() } as SaveEntryResult);
+                return false;
+            }
         }
     }
 };

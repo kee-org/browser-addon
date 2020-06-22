@@ -2,6 +2,7 @@ import * as types from "./mutation-types";
 import { KeeState } from "./KeeState";
 import { SaveState } from "../common/SaveState";
 import { Entry } from "../common/model/Entry";
+import { SaveEntryResult } from "../common/SaveEntryResult";
 
 function undefAbort (payload) {
     if (payload === undefined) {
@@ -82,5 +83,9 @@ export default {
     [types.addNotification] (state: KeeState, payload) {
         undefAbort(payload);
         state.notifications.push(payload);
+    },
+    [types.updateSaveEntryResult] (state: KeeState, payload: SaveEntryResult) {
+        undefAbort(payload);
+        state.saveEntryResult = payload;
     }
 };
