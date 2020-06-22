@@ -173,7 +173,7 @@ export default {
         titleStyle: function (this: any) {
             const e = this.entrySummary as EntrySummary;
             return (
-                "background-position:24px calc(50% - 10px); background-image:url(data:image/png;base64," +
+                "background-size:32px; background-position:16px calc(50% + 1px); background-image:url(data:image/png;base64," +
         e.icon.iconImageData +
         ")"
             );
