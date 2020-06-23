@@ -75,8 +75,8 @@ export default {
         toggleReveal: function (this: any) {
             this.revealed = !this.revealed;
         },
-        copyValue: function (this: any) {
-            copyStringToClipboard(Field.getDisplayValue(this.field, true));
+        copyValue: async function (this: any) {
+            await copyStringToClipboard(Field.getDisplayValue(this.field, true));
         }
     }
 };

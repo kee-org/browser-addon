@@ -758,5 +758,29 @@
   "where": {
       "message": "Where?",
       "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
+  },
+  "will_be_copied_to_clipboard": {
+      "message": "This new password will be copied to your clipboard",
+      "description": ""
+  },
+  "password_will_be_set_on_field": {
+      "message": "Your password field will be set to this password",
+      "description": ""
+  },
+  "also_copy_to_clipboard": {
+      "message": "Also copy to clipboard",
+      "description": "Explains that enabling this option will copy the value to the clipboard in addition to the default behaviour"
+  },
+  "generator_action_copy": {
+      "message": "Copy",
+      "description": "Action button to copy to the clipboard a value such as a newly generated password"
+  },
+  "generator_action_apply": {
+      "message": "Apply",
+      "description": "Action button to apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
+  },
+  "generator_action_apply_and_copy": {
+      "message": "Apply and copy",
+      "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
   }
 }
