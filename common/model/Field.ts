@@ -2,8 +2,6 @@ import { utils } from "../utils";
 import { Locator } from "./Locator";
 import { FieldDto, FormFieldTypeDTO } from "./KPRPCDTOs";
 
-const protectedText = "********";
-
 export type FieldType = "password" | "text" | "existing" | "boolean" | "otp" | "some-chars";
 
 export class Field {
@@ -53,7 +51,7 @@ export class Field {
     }
 
     static getDisplayValue (field: Field, revealPasswords: boolean) {
-        return Field.getDisplayValueInternal(field, revealPasswords, protectedText);
+        return Field.getDisplayValueInternal(field, revealPasswords, "*".repeat(field.value.length));
     }
 
     static getDisplayName (field: Field) {
