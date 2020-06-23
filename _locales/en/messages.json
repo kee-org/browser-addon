@@ -671,10 +671,6 @@
       "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
       "description": "Explains that Kee v3 works with Kee Vault"
   },
-  "list_version_upgrade_3_4": {
-    "message": "Improved password saving experience;More modern appearance/style (partially complete);etc.",
-    "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
-  },
   "pref_automatic": {
       "message": "Automatic",
       "description": "Group of settings that relate to the actions that Kee can take automatically when filling entries"
