@@ -16,7 +16,49 @@
             color="secondary"
             :hint="$i18n('password_profile_hint')"
             persistent-hint
+            @change="profileChanged"
           />
+          <v-card
+            :loading="loading"
+            class="mx-auto px-3 py-0"
+            style="font-family: monospace"
+            max-width="300"
+          >
+            <v-row
+              class="flex-nowrap"
+              align="center"
+            >
+              <v-col
+                cols="10"
+                class="text-center"
+              >
+                {{ renderedPassword }}
+              </v-col>
+              <v-col cols="2">
+                <v-btn
+                  small
+                  icon
+                  @click="revealed = !revealed"
+                >
+                  <v-icon>
+                    {{ revealed ? 'mdi-eye' : 'mdi-eye-off' }}
+                  </v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card>
+          <div>
+            <br>
+            {{ $i18n('password_will_be_set_on_field') }}
+          </div>
+          <div>
+            <v-checkbox
+              v-model="forceCopy"
+              :label="$i18n('also_copy_to_clipboard')"
+              persistent-hint="auto"
+              :hint="forceCopyHint"
+            />
+          </div>
         </v-card-text>
       </div>
       <v-card-actions>
@@ -34,7 +76,7 @@
           :disabled="disabled"
           @click="ok"
         >
-          {{ $i18n('Menu_Button_copyNewPasswordToClipboard_label') }}
+          {{ forceCopy ? $i18n('generator_action_apply_and_copy') : $i18n('generator_action_apply') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -46,11 +88,16 @@ import { Port } from "../../common/port";
 import { mapGetters } from "vuex";
 import { Action } from "../../common/Action";
 import { SaveState } from "../../common/SaveState";
+import { copyStringToClipboard } from "../copyStringToClipboard";
 
 export default {
     props: ["field"],
     data: () => ({
-        selectedProfile: ""
+        selectedProfile: "",
+        forceCopy: false,
+        generatedPassword: "",
+        revealed: false,
+        loading: false
     }),
     computed: {
         ...mapGetters(["PasswordProfiles", "saveState"]),
@@ -58,23 +105,37 @@ export default {
             return this.PasswordProfiles.map(p => p.name);
         },
         disabled: function (this: any) {
-            return !this.selectedProfile;
+            return !this.generatedPassword;
+        },
+        forceCopyHint: function (this: any) {
+            return this.forceCopy ? this.$i18n("generatePassword_done_2") : "";
+        },
+        renderedPassword: function (this: any) {
+            return this.revealed ? this.generatedPassword : "*".repeat(this.generatedPassword.length);
         }
     },
     methods: {
         ok: async function (this: any) {
+            if (this.forceCopy) {
+                await copyStringToClipboard(this.generatedPassword);
+            }
+            this.$emit("dialog-closed", { value: this.generatedPassword });
+        },
+        cancel: function (this: any) {
+            this.$emit("dialog-closed");
+        },
+        profileChanged: function (this: any, item: string) {
+            this.loading = true;
             const unwatch = this.$watch(
                 "$store.state.generatedPassword",
                 function (this: any, newValue) {
                     unwatch();
                     this.$store.dispatch("updateGeneratedPassword", "");
-                    this.$emit("dialog-closed", { value: newValue });
+                    this.generatedPassword = newValue;
+                    this.loading = false;
                 }
             );
-            Port.postMessage({ action: Action.GeneratePassword, passwordProfile: this.selectedProfile, url: (this.saveState as SaveState).newEntry?.URLs?.[0] });
-        },
-        cancel: function (this: any) {
-            this.$emit("dialog-closed");
+            Port.postMessage({ action: Action.GeneratePassword, passwordProfile: item, url: (this.saveState as SaveState).newEntry?.URLs?.[0] });
         }
     }
 };
