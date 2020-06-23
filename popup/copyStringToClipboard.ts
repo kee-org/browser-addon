@@ -1,9 +1,9 @@
-export function copyStringToClipboard (value) {
-    const copyFrom = document.createElement("textarea");
-    copyFrom.textContent = value;
-    const body = document.getElementsByTagName("body")[0];
-    body.appendChild(copyFrom);
-    copyFrom.select();
-    document.execCommand("copy");
-    body.removeChild(copyFrom);
+import { KeeLog } from "../common/Logger";
+
+export async function copyStringToClipboard (value: string) {
+    try {
+        await navigator.clipboard.writeText(value);
+    } catch (e) {
+        KeeLog.error("Failed to write to clipboard");
+    }
 }
