@@ -26,8 +26,7 @@ module.exports = {
         "extraFileExtensions": [".vue"]
     },
     "plugins": [
-        "@typescript-eslint",
-        "vuetify"
+        "@typescript-eslint"
     ],
     "rules": {
         "vue/require-prop-types": "off",
@@ -42,9 +41,6 @@ module.exports = {
             "allowEmptyLines": false
         }],
         "vue/attribute-hyphenation": "off",
-        "vuetify/no-deprecated-classes": "error",
-        "vuetify/grid-unknown-attributes": "error",
-        "vuetify/no-legacy-grid": "error",
         "@typescript-eslint/consistent-type-assertions": "error",
         "@typescript-eslint/indent": "error",
         "@typescript-eslint/member-delimiter-style": [

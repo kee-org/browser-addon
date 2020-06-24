@@ -45,7 +45,7 @@
                 <v-row no-gutters>
                   <v-col
                     :style="`${expanded ? 'visibility:hidden' : ''}`"
-                    class="text-truncate caption"
+                    class="text-truncate text-caption"
                   >
                     {{ usernameDisplayValue }}
                   </v-col>
@@ -101,7 +101,7 @@
                         small
                         class="py-1 pl-0 pr-2"
                       >mdi-folder</v-icon>
-                      <span class="text-truncate caption py-1">{{ entryPath }}</span>
+                      <span class="text-truncate text-caption py-1">{{ entryPath }}</span>
                     </v-row>
                   </template>
                   <span>{{ fullEntryPath }}</span>
@@ -120,7 +120,7 @@
                         small
                         class="py-1 pl-0 pr-2"
                       >mdi-cloud</v-icon>
-                      <span class="text-truncate caption py-1">{{ entryDomain }}</span>
+                      <span class="text-truncate text-caption py-1">{{ entryDomain }}</span>
                     </v-row>
                   </template>
                   <span>{{ entrySummary.url }}</span>

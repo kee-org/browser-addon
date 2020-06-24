@@ -7,7 +7,7 @@
         <v-row justify="center">
           <v-col
             style="cursor: default"
-            class="title text-center"
+            class="text-h6 text-center"
           >
             {{ $i18n('where') }}
           </v-col>

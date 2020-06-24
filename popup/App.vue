@@ -9,7 +9,7 @@
     >
       <SearchInput />
     </v-app-bar>
-    <v-content :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
+    <v-main :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
       <v-container
         fluid
       >
@@ -71,7 +71,7 @@
           v-if="showSaveWhere"
         />
       </v-container>
-    </v-content>
+    </v-main>
 
     <v-tooltip
       left
@@ -159,7 +159,7 @@
       >
         <template v-slot:activator="{ on }">
           <div
-            class="caption py-1 shrink"
+            class="text-caption py-1 shrink"
             style="word-break: break-word;overflow-wrap: break-word;max-width: 210px;"
             v-on="on"
           >
@@ -190,7 +190,7 @@
           <v-list-item @click="showHelp">
             <v-list-item-title
               right
-              class="mr-4 text-right body-2"
+              class="mr-4 text-right text-body-2"
             >
               {{ $i18n('Help_Centre_Button_label') }}
             </v-list-item-title>
@@ -403,17 +403,17 @@ export default {
 </script>
 
 <style>
-.v-content__wrap {
+.v-main__wrap {
   overflow-y: scroll;
 }
 
-.app_height_medium .v-content__wrap {
+.app_height_medium .v-main__wrap {
   max-height: 466px;
   min-height: 466px;
   height: 466px;
 }
 
-.app_height_tall .v-content__wrap {
+.app_height_tall .v-main__wrap {
   max-height: 522px;
   min-height: 522px;
   height: 522px;
