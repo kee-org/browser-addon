@@ -9,7 +9,7 @@ export class SearcherMatchedOnly {
     }
 
     private filterExistingResults (entrySummaries: EntrySummary[], keywords: string[]) {
-        return entrySummaries.filter(entrySummary => calculateMatchScore(entrySummary, keywords, false, this.searchConfig));
+        return entrySummaries.filter(entrySummary => calculateMatchScore(entrySummary, keywords, 0, this.searchConfig));
     }
 
     public execute (query: string, onComplete) {

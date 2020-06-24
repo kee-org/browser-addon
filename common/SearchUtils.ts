@@ -4,10 +4,10 @@ import { EntrySummary } from "./model/EntrySummary";
 import { Group } from "./model/Group";
 
 function isEntrySummary (item: Partial<Group> | EntrySummary): item is EntrySummary {
-    return !(item as EntrySummary).url;
+    return !!(item as EntrySummary).url;
 }
 
-export function calculateMatchScore (item: EntrySummary | Partial<Group>, keywords: string[], isInMatchingGroup, searchConfig: SearchConfig, filter?) {
+export function calculateMatchScore (item: EntrySummary | Partial<Group>, keywords: string[], parentGroupMatchScore: number, searchConfig: SearchConfig, filter?) {
 
     if (filter) {
         if (!filter(item))
@@ -21,7 +21,7 @@ export function calculateMatchScore (item: EntrySummary | Partial<Group>, keywor
     if (!isEntrySummary(item)) {
         // must be a group.
         // If we know that a parent group has already matched, no point in searching further
-        if (isInMatchingGroup)
+        if (parentGroupMatchScore > 0)
             return 1;
         for (const keyword of keywords) {
             if (item.title.toLowerCase().indexOf(keyword) >= 0)
@@ -46,7 +46,7 @@ export function calculateMatchScore (item: EntrySummary | Partial<Group>, keywor
         matchScore += keywordScore * (1 / keywords.length);
     }
 
-    if (isInMatchingGroup)
+    if (parentGroupMatchScore > 0)
         matchScore += searchConfig.weightGroups;
 
     return matchScore;
