@@ -143,10 +143,6 @@
         "message": "Preencher e enviar o formulário",
         "description": ""
     },
-    "pref_FillAndSubmitPrompt_desc": {
-        "message": "Preencher e enviar o campo de login",
-        "description": ""
-    },
     "pref_FillForm_desc": {
         "message": "Preencher o formulário",
         "description": ""
@@ -154,10 +150,6 @@
     "pref_FillingEntries_heading": {
         "message": "Preenchendo entradas",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
-    },
-    "pref_FillPrompt_desc": {
-        "message": "Preencher o campo de login",
-        "description": ""
     },
     "pref_FindingEntries_heading": {
         "message": "Procurando entradas",
@@ -311,40 +303,8 @@
         "message": "Buscar...",
         "description": ""
     },
-    "Search_tip": {
-        "message": "Comece a digitar para exibir suas entradas de login correspondentes",
-        "description": ""
-    },
     "PasswordProfilesExplanation_label": {
         "message": "Opcionalmente, você pode criar um diferente selecionando um perfil de senha abaixo. Crie novos perfis no Kee Vault ou no KeePass.",
-        "description": ""
-    },
-    "change_field_explanation": {
-        "message": "Kee também atualizará o ícone do site (favicon) e qualquer informação HTTP Auth Realm. Modificações mais complexas exigirão que você edite manualmente a entrada.",
-        "description": ""
-    },
-    "change_field_status": {
-        "message": "A entrada selecionada terá todos os campos de nome de usuário, senha e outros campos substituídos pelos valores que você acabou de entrar.",
-        "description": ""
-    },
-    "change_url_status": {
-        "message": "O endereço da página da web da entrada (URL) será atualizado com o URL mais recente.",
-        "description": ""
-    },
-    "change_url_option_1": {
-        "message": "Substituir a URL da entrada (mas ainda preencha os formulários se você visitar a URL antiga)",
-        "description": ""
-    },
-    "change_url_option_2": {
-        "message": "Substitua a URL da entrada (apague completamente a URL antiga)",
-        "description": ""
-    },
-    "change_url_option_3": {
-        "message": "Manter a URL da entrada antiga (mas ainda preencha os formulários se você visitar a novo URL)",
-        "description": ""
-    },
-    "change_url_option_4": {
-        "message": "Manter a URL da entrada antiga (não adicione a novo URL à entrada)",
         "description": ""
     },
     "copy_password_label": {
@@ -374,10 +334,6 @@
     "matches_from_other_sites": {
         "message": "Correspondências de outros sites",
         "description": "Search results section header."
-    },
-    "create": {
-        "message": "Criar",
-        "description": ""
     },
     "create_new_entry": {
         "message": "Criar nova entrada",
@@ -411,10 +367,6 @@
         "message": "exemplo: www.google.com (NÃO inclua https:// ou outros protocolos)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
-    "database_label": {
-        "message": "Banco de dados",
-        "description": ""
-    },
     "generatePassword_copied": {
         "message": "Uma nova senha foi copiada para a área de transferência.",
         "description": ""
@@ -429,14 +381,6 @@
     },
     "generatePassword_done_2": {
         "message": "Cole-o em no campo “nova senha” ou em qualquer outro lugar que você desejar.",
-        "description": ""
-    },
-    "group_label": {
-        "message": "Grupo",
-        "description": ""
-    },
-    "entry_history_pointer": {
-        "message": "Seu gerenciador de senhas tem um recurso “desfazer”. Encontre a entrada e, em seguida, você pode visualizar o histórico de entradas e usar o botão “Restaurar” para reverter para uma versão mais antiga, se necessário.",
         "description": ""
     },
     "loggedIn_tip": {
@@ -459,14 +403,6 @@
         "message": "$1 no $2 grupo ($3)",
         "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
     },
-    "more_options": {
-        "message": "Mais opções",
-        "description": ""
-    },
-    "multi_page_update_warning": {
-        "message": "Os formulários de login multi-páginas também podem exigir a edição manual.",
-        "description": ""
-    },
     "noUsername_partial_tip": {
         "message": "sem nome de usuário",
         "description": ""
@@ -483,44 +419,16 @@
         "message": "Desbloqueie seu gerenciador de senhas para habilitar o Kee",
         "description": ""
     },
-    "notifyBarNeverForSiteButton_label": {
-        "message": "Nunca para este site",
-        "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
-    },
     "save": {
         "message": "Salvar",
-        "description": ""
-    },
-    "password_successfully_updated": {
-        "message": "Senha atualizada com sucesso.",
-        "description": ""
-    },
-    "saveMultiPagePasswordText": {
-        "message": "Quer que o Kee salve esta senha multi-página?",
-        "description": ""
-    },
-    "savePasswordLogin_tip": {
-        "message": "Nome de usuário: $1. Endereço do website (URL): $2",
         "description": ""
     },
     "savePasswordText": {
         "message": "Você quer que Kee guarde esta senha?",
         "description": ""
     },
-    "search_again": {
-        "message": "Buscar novamente",
-        "description": ""
-    },
     "update": {
         "message": "Atualizar",
-        "description": ""
-    },
-    "update_existing_entry": {
-        "message": "Atualizar entrada existente",
-        "description": ""
-    },
-    "whichEntry_label": {
-        "message": "Escolher uma entrada...",
         "description": ""
     },
     "close": {
@@ -626,14 +534,6 @@
     "network_auth_choose": {
         "message": "Escolha um login da lista abaixo ou feche esta janela para inserir manualmente as informações de login necessárias.",
         "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
-    },
-    "save_login": {
-        "message": "Salvar login",
-        "description": "Heading for panel that allows user to create or update a new login entry"
-    },
-    "saveLatestLogin": {
-        "message": "Salvar o último login",
-        "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
     },
     "welcome_to_kee": {
         "message": "Bem-vindo ao Kee",
@@ -755,14 +655,6 @@
         "message": "Novo ícone",
         "description": "Heading for text that explains we have a new icon / branding"
     },
-    "reliability_improvements_text1": {
-        "message": "Melhoramos o link entre o navegador da Web e cada página individual que você carrega, resultando em recursos mais confiáveis, como o preenchimento de formulários.",
-        "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
-    },
-    "reliability_improvements_text2": {
-        "message": "Melhoramos a detecção de botões de envio de formulário. Isso significa um envio de formulário mais bem-sucedido em alguns sites, como a página de login do Google.",
-        "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-    },
     "kee_vault_announcement_1": {
         "message": "O Kee Vault é um novo gerenciador de senhas de código aberto. Ele é executado no seu navegador da Web, portanto, nenhuma instalação é necessária.",
         "description": "Introduction to what Kee Vault is"
@@ -774,22 +666,6 @@
     "kee_vault_announcement_3": {
         "message": "O Kee versão 3.0 permite que você use o Kee Vault no lugar do aplicativo KeePass, com suporte para todos os recursos existentes do Kee, como preenchimento e salvamento de formulários, pesquisa e geração de senhas.",
         "description": "Explains that Kee v3 works with Kee Vault"
-    },
-    "kee_vault_announcement_4": {
-        "message": "O Kee Vault está quase pronto para ser lançado como um beta público e eu estou feliz em oferecer a todos os usuários existentes do Kee a oportunidade de obter acesso antecipado antes que isso aconteça!",
-        "description": "Announces the pre-release availability of Kee Vault"
-    },
-    "kee_vault_announcement_5": {
-        "message": "Leia mais e registre-se para acesso antecipado",
-        "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
-    },
-    "showEntry": {
-        "message": "Mostrar Entrada",
-        "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
-    },
-    "list_version_upgrade_3_2": {
-        "message": "Ignorar o comportamento de envio automático de uma entrada no Kee Vault ou KeePass agora também afeta o comportamento do Kee quando você solicita manualmente ao Kee para preencher uma entrada.; Reorganizou a seção \"Entradas de preenchimento\" nas Opções do Kee para esclarecer quais configurações afetam e o comportamento de preenchimento de entrada manual. As operações de preenchimento automático agora ignoram o preenchimento se for encontrado texto preexistente no campo. Uma mensagem descartável anunciando o lançamento do Kee Vault pode ser adicionada à parte inferior do painel do Kee quando estivermos prontos para iniciar.;Removido antigos recursos de registro (notificação de carregamento inicial e opção de registro sensível para depuração).",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "pref_automatic": {
         "message": "Automático",
@@ -806,6 +682,98 @@
     "pref_fill_override_option": {
         "message": "Editar o comportamento de envio automático de uma entrada também substitui esse comportamento",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
+    },
+    "next": {
+        "message": "Próximo",
+        "description": "Action button for user to advance to the next step in a multi-step process. E.g. to confirm username and password for a new entry and load the panel that allows selection of where to save the new entry."
+    },
+    "title": {
+        "message": "Título",
+        "description": "E.g. the title of an entry."
+    },
+    "username": {
+        "message": "Nome de Usuário",
+        "description": "Use the most generic and common term available for the primary sign-in identifier for an account. In practice may be an email address, number, surname, username, etc. but in all cases this will refer to the string the user has stored in the entry's primary Username field."
+    },
+    "enabled": {
+        "message": "Habilitado",
+        "description": "Indicates that a boolean option such as a checkbox is in an enabled/on/true state"
+    },
+    "disabled": {
+        "message": "Desabilitado",
+        "description": "Indicates that a boolean option such as a checkbox is in an disabled/off/false state"
+    },
+    "unsaved_changes": {
+        "message": "Você tem mudanças recentes não salvas.",
+        "description": "Shown to user when the popup is opened and a new or existing entry is part-way through being edited from a recent popup session. Note that very recent popup sessions are automatically 'continued' without the user needing to consider this information."
+    },
+    "continue_saving": {
+        "message": "Continuar salvando",
+        "description": "Action for user to continue editing the same entry that was being edited when the popup recently closed."
+    },
+    "discard_changes": {
+        "message": "Descartar mudanças",
+        "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
+    },
+    "password_profile_hint": {
+        "message": "Selecione qual conjunto de regras a nova senha seguirá. As regras incluem o tamanho da senha e o tipo de caracteres que podem ser usados. Crie novos perfis no seu gerenciador de senhas.",
+        "description": "Explains what a password profile is and how to create new ones."
+    },
+    "password_profile": {
+        "message": "Perfil da senha",
+        "description": "Name of the profiles used by KeePass and Kee Vault to construct new random passwords."
+    },
+    "url_mismatch_1": {
+        "message": "Esta entrada é para um site diferente.",
+        "description": "1st sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_2": {
+        "message": "Continuar com esta atualização também permitirá que você preencha essas credenciais neste site.",
+        "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_3": {
+        "message": "Verifique se isso não é uma tentativa de induzi-lo a revelar sua senha!",
+        "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_confirm": {
+        "message": "Eu entendo o risco; Compartilhe essas credenciais com $1.",
+        "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
+    },
+    "make_additional_changes_using_full_editor": {
+        "message": "Alterações adicionais podem ser feitas usando o editor completo.",
+        "description": "Note to user that the Kee interface does not allow every possible type of edit to an entry."
+    },
+    "open_full_editor": {
+        "message": "Abrir editor avançado",
+        "description": "Button action to open the full entry editor in KeePass or Kee Vault. Be sure to imply that the need to click the button is 'unusual', as I have done with the word 'advanced'"
+    },
+    "where": {
+        "message": "Onde?",
+        "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
+    },
+    "will_be_copied_to_clipboard": {
+        "message": "Esta nova senha irá ser copiada para sua área de transferência",
+        "description": ""
+    },
+    "password_will_be_set_on_field": {
+        "message": "Seu campo de senha será definido para esta senha",
+        "description": ""
+    },
+    "also_copy_to_clipboard": {
+        "message": "Também copiar para área de transferência",
+        "description": "Explains that enabling this option will copy the value to the clipboard in addition to the default behaviour"
+    },
+    "generator_action_copy": {
+        "message": "Copiar",
+        "description": "Action button to copy to the clipboard a value such as a newly generated password"
+    },
+    "generator_action_apply": {
+        "message": "Aplicar",
+        "description": "Action button to apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
+    },
+    "generator_action_apply_and_copy": {
+        "message": "Aplicar e copiar",
+        "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Entrar no gerenciador de senhas / Selecionar login correspondente / Mostrar lista de logins correspondentes",

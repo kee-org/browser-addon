@@ -143,10 +143,6 @@
         "message": "填写并提交表单",
         "description": ""
     },
-    "pref_FillAndSubmitPrompt_desc": {
-        "message": "填写并提交登录提示",
-        "description": ""
-    },
     "pref_FillForm_desc": {
         "message": "填写表单",
         "description": ""
@@ -154,10 +150,6 @@
     "pref_FillingEntries_heading": {
         "message": "填写记录",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
-    },
-    "pref_FillPrompt_desc": {
-        "message": "填写登录提示",
-        "description": ""
     },
     "pref_FindingEntries_heading": {
         "message": "正在查找记录",
@@ -311,40 +303,8 @@
         "message": "搜索...",
         "description": ""
     },
-    "Search_tip": {
-        "message": "开始输入以显示您的登录项",
-        "description": ""
-    },
     "PasswordProfilesExplanation_label": {
         "message": "You can optionally create a different one by selecting a password profile below. Create new profiles in Kee Vault or KeePass.",
-        "description": ""
-    },
-    "change_field_explanation": {
-        "message": "Kee 也将更新网站图标（小图标）和所有 HTTP 基本验证信息。\n更复杂的修改需要您手动编辑该记录。",
-        "description": ""
-    },
-    "change_field_status": {
-        "message": "所选记录将把所有的用户名、密码和其他表单字段替换成您刚刚输入的值。",
-        "description": ""
-    },
-    "change_url_status": {
-        "message": "该记录的网页地址（URL）将用最新的网址更新。",
-        "description": ""
-    },
-    "change_url_option_1": {
-        "message": "替换该记录的网址（但如果访问旧网址，仍填写表单）",
-        "description": ""
-    },
-    "change_url_option_2": {
-        "message": "替换该记录的网址（完全删除旧网址）",
-        "description": ""
-    },
-    "change_url_option_3": {
-        "message": "保留该记录的旧网址（但仍填写表单，如果您访问新网址）",
-        "description": ""
-    },
-    "change_url_option_4": {
-        "message": "保留记录的旧网址（不将新网址添加到记录）",
         "description": ""
     },
     "copy_password_label": {
@@ -374,10 +334,6 @@
     "matches_from_other_sites": {
         "message": "Matches from other sites",
         "description": "Search results section header."
-    },
-    "create": {
-        "message": "创建",
-        "description": ""
     },
     "create_new_entry": {
         "message": "创建新记录",
@@ -411,10 +367,6 @@
         "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
-    "database_label": {
-        "message": "数据库",
-        "description": ""
-    },
     "generatePassword_copied": {
         "message": "一个新密码已复制到您的剪贴板。",
         "description": ""
@@ -429,14 +381,6 @@
     },
     "generatePassword_done_2": {
         "message": "Paste it into a \"new password\" field or wherever else you want.",
-        "description": ""
-    },
-    "group_label": {
-        "message": "组",
-        "description": ""
-    },
-    "entry_history_pointer": {
-        "message": "Your password manager has an \"undo\" feature. Find the entry and then you can view the entry history and use the \"Restore\" button to revert to an older version if necessary.",
         "description": ""
     },
     "loggedIn_tip": {
@@ -459,14 +403,6 @@
         "message": "$1 位于 $2 组 ($3)",
         "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
     },
-    "more_options": {
-        "message": "更多选项",
-        "description": ""
-    },
-    "multi_page_update_warning": {
-        "message": "多页面登录表单可能也需要手动编辑。",
-        "description": ""
-    },
     "noUsername_partial_tip": {
         "message": "无用户名",
         "description": ""
@@ -483,44 +419,16 @@
         "message": "Unlock your password manager to enable Kee",
         "description": ""
     },
-    "notifyBarNeverForSiteButton_label": {
-        "message": "不再提示此网站",
-        "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
-    },
     "save": {
         "message": "保存",
-        "description": ""
-    },
-    "password_successfully_updated": {
-        "message": "密码更新成功。",
-        "description": ""
-    },
-    "saveMultiPagePasswordText": {
-        "message": "您想让 Kee 保存这个多页面密码吗？",
-        "description": ""
-    },
-    "savePasswordLogin_tip": {
-        "message": "用户名: $1。网址（URL）: $2",
         "description": ""
     },
     "savePasswordText": {
         "message": "您希望 Kee 保存此密码吗？",
         "description": ""
     },
-    "search_again": {
-        "message": "再次搜索",
-        "description": ""
-    },
     "update": {
         "message": "更新",
-        "description": ""
-    },
-    "update_existing_entry": {
-        "message": "更新现有记录",
-        "description": ""
-    },
-    "whichEntry_label": {
-        "message": "选择一项...",
         "description": ""
     },
     "close": {
@@ -626,14 +534,6 @@
     "network_auth_choose": {
         "message": "从下面的列表中选择一个记录，或者关闭此窗口来手动输入所需的登录信息。",
         "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
-    },
-    "save_login": {
-        "message": "保存记录",
-        "description": "Heading for panel that allows user to create or update a new login entry"
-    },
-    "saveLatestLogin": {
-        "message": "保存最新登录信息",
-        "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
     },
     "welcome_to_kee": {
         "message": "欢迎使用 Kee",
@@ -755,14 +655,6 @@
         "message": "New icon",
         "description": "Heading for text that explains we have a new icon / branding"
     },
-    "reliability_improvements_text1": {
-        "message": "We've improved the link between the web browser and each individual page you load, resulting in more reliable features like form filling.",
-        "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
-    },
-    "reliability_improvements_text2": {
-        "message": "We've improved the detection of form submit buttons. This means more successful form submission on some websites such as the Google sign-in page.",
-        "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-    },
     "kee_vault_announcement_1": {
         "message": "Kee Vault is a new open source password manager. It runs in your web browser so no installation is necessary.",
         "description": "Introduction to what Kee Vault is"
@@ -774,22 +666,6 @@
     "kee_vault_announcement_3": {
         "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
         "description": "Explains that Kee v3 works with Kee Vault"
-    },
-    "kee_vault_announcement_4": {
-        "message": "Kee Vault is almost ready to launch as a public beta and I'm delighted to offer all existing Kee users an opportunity to get early access before this happens!",
-        "description": "Announces the pre-release availability of Kee Vault"
-    },
-    "kee_vault_announcement_5": {
-        "message": "Read more and register for early access",
-        "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
-    },
-    "showEntry": {
-        "message": "Show Entry",
-        "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
-    },
-    "list_version_upgrade_3_2": {
-        "message": "Overriding the auto-submit behaviour of an entry in Kee Vault or KeePass now also affects the behaviour of Kee when you manually ask Kee to fill an entry.;Re-arranged the \"Filling Entries\" section in Kee Options to clarify which settings affect automatic and manual entry filling behaviour.;Automatic fill operations now skip filling if pre-existing text is found in the field.;A dismissable message announcing the launch of Kee Vault can be added to the bottom of the Kee panel when we are ready to launch.;Removed old logging features (initial load notification and sensitive logging option for debugging).",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "pref_automatic": {
         "message": "Automatic",
@@ -806,6 +682,98 @@
     "pref_fill_override_option": {
         "message": "Editing the Auto-submit behaviour of an entry also overrides this behaviour",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
+    },
+    "next": {
+        "message": "Next",
+        "description": "Action button for user to advance to the next step in a multi-step process. E.g. to confirm username and password for a new entry and load the panel that allows selection of where to save the new entry."
+    },
+    "title": {
+        "message": "Title",
+        "description": "E.g. the title of an entry."
+    },
+    "username": {
+        "message": "Username",
+        "description": "Use the most generic and common term available for the primary sign-in identifier for an account. In practice may be an email address, number, surname, username, etc. but in all cases this will refer to the string the user has stored in the entry's primary Username field."
+    },
+    "enabled": {
+        "message": "Enabled",
+        "description": "Indicates that a boolean option such as a checkbox is in an enabled/on/true state"
+    },
+    "disabled": {
+        "message": "Disabled",
+        "description": "Indicates that a boolean option such as a checkbox is in an disabled/off/false state"
+    },
+    "unsaved_changes": {
+        "message": "You have recent unsaved changes.",
+        "description": "Shown to user when the popup is opened and a new or existing entry is part-way through being edited from a recent popup session. Note that very recent popup sessions are automatically 'continued' without the user needing to consider this information."
+    },
+    "continue_saving": {
+        "message": "Continue saving",
+        "description": "Action for user to continue editing the same entry that was being edited when the popup recently closed."
+    },
+    "discard_changes": {
+        "message": "Discard changes",
+        "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
+    },
+    "password_profile_hint": {
+        "message": "Select which set of rules the new password will follow. Rules include password length and the sort of characters that may be used. Create new profiles in your password manager.",
+        "description": "Explains what a password profile is and how to create new ones."
+    },
+    "password_profile": {
+        "message": "Password profile",
+        "description": "Name of the profiles used by KeePass and Kee Vault to construct new random passwords."
+    },
+    "url_mismatch_1": {
+        "message": "This entry is for a different site.",
+        "description": "1st sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_2": {
+        "message": "Continuing with this update will enable you to fill these credentials into this site too.",
+        "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_3": {
+        "message": "Make sure this is not an attempt to trick you into revealing your password!",
+        "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_confirm": {
+        "message": "I understand the risk; Share these credentials with $1.",
+        "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
+    },
+    "make_additional_changes_using_full_editor": {
+        "message": "Additional changes can be made using the full editor.",
+        "description": "Note to user that the Kee interface does not allow every possible type of edit to an entry."
+    },
+    "open_full_editor": {
+        "message": "Open advanced editor",
+        "description": "Button action to open the full entry editor in KeePass or Kee Vault. Be sure to imply that the need to click the button is 'unusual', as I have done with the word 'advanced'"
+    },
+    "where": {
+        "message": "Where?",
+        "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
+    },
+    "will_be_copied_to_clipboard": {
+        "message": "This new password will be copied to your clipboard",
+        "description": ""
+    },
+    "password_will_be_set_on_field": {
+        "message": "Your password field will be set to this password",
+        "description": ""
+    },
+    "also_copy_to_clipboard": {
+        "message": "Also copy to clipboard",
+        "description": "Explains that enabling this option will copy the value to the clipboard in addition to the default behaviour"
+    },
+    "generator_action_copy": {
+        "message": "Copy",
+        "description": "Action button to copy to the clipboard a value such as a newly generated password"
+    },
+    "generator_action_apply": {
+        "message": "Apply",
+        "description": "Action button to apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
+    },
+    "generator_action_apply_and_copy": {
+        "message": "Apply and copy",
+        "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Sign in to password manager / Select matched login / Show matched logins list",
