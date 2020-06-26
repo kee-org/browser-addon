@@ -23,7 +23,7 @@ export class NetworkAuth {
     }
 
     public provideCredentialsAsyncBlockingCallback(
-        requestDetails: browser.webRequest.WebAuthenticationChallengeDetails,
+        requestDetails: any,
         callback: (response: browser.webRequest.BlockingResponse) => void
     ) {
         // Firefox fails to register the event listener so this function
@@ -38,7 +38,7 @@ export class NetworkAuth {
     }
 
     public provideCredentialsAsync(
-        requestDetails: browser.webRequest.WebAuthenticationChallengeDetails
+        requestDetails: any
     ): Promise<browser.webRequest.BlockingResponse> {
         this.pendingRequests.push(requestDetails.requestId);
         KeeLog.debug("Providing credentials for: " + requestDetails.requestId);
