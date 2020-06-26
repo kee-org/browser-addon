@@ -16,7 +16,7 @@ export class EntrySummary {
     relevanceScore: number;
     fullDetails?: Entry; //TODO:4: remove circular reference by maintaining independent Entry lookup by uuid?
 
-    constructor (e: Partial<EntrySummary>) {
+    constructor(e: Partial<EntrySummary>) {
         this.icon = e.icon || { version: 1, iconImageData: "" };
         this.usernameValue = e.usernameValue || "<no username>";
         this.usernameName = e.usernameName || "<no username>";
@@ -30,7 +30,7 @@ export class EntrySummary {
         this.fullDetails = e.fullDetails;
     }
 
-    public static fromEntry (entry: Entry) {
+    public static fromEntry(entry: Entry) {
         return new EntrySummary({
             icon: entry.icon,
             usernameValue: Entry.getUsernameField(entry).value,
@@ -44,7 +44,11 @@ export class EntrySummary {
         });
     }
 
-    public static fromKPRPCEntrySummaryDTO (entrySummaryDto: EntrySummaryDto, path: string, dbFileName: string) {
+    public static fromKPRPCEntrySummaryDTO(
+        entrySummaryDto: EntrySummaryDto,
+        path: string,
+        dbFileName: string
+    ) {
         return new EntrySummary({
             icon: { version: 1, iconImageData: entrySummaryDto.iconImageData },
             usernameValue: entrySummaryDto.usernameValue,
@@ -58,4 +62,3 @@ export class EntrySummary {
         });
     }
 }
-

@@ -1,5 +1,4 @@
 export class Locator {
-
     // HTML id attribute
     id: string;
 
@@ -12,7 +11,7 @@ export class Locator {
     // HTML DOM select query
     query?: string;
 
-    constructor (locator: Partial<Locator>) {
+    constructor(locator: Partial<Locator>) {
         this.id = locator.id || "";
         this.name = locator.name || "";
         this.type = locator.type || "";

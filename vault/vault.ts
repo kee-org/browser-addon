@@ -44,8 +44,16 @@ import { Port } from "../common/port";
 var keeDuplicationCount;
 
 if (keeDuplicationCount) {
-    if (KeeLog && KeeLog.error) KeeLog.error("Duplicate Kee content script instance detected! Found this many other instances: " + keeDuplicationCount);
-    else console.error("Duplicate Kee content script instance detected! Found this many other instances: " + keeDuplicationCount);
+    if (KeeLog && KeeLog.error)
+        KeeLog.error(
+            "Duplicate Kee content script instance detected! Found this many other instances: " +
+                keeDuplicationCount
+        );
+    else
+        console.error(
+            "Duplicate Kee content script instance detected! Found this many other instances: " +
+                keeDuplicationCount
+        );
 } else {
     keeDuplicationCount = 0;
 }
@@ -63,7 +71,7 @@ let sessionId: string;
 
 // let observer: MutationObserver = new MutationObserver();
 
-function startup () {
+function startup() {
     KeeLog.debug("content vault starting");
 
     try {
@@ -72,7 +80,10 @@ function startup () {
             KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
         }
     } catch (ex) {
-        KeeLog.warn("Failed to connect to messaging port. We'll try again later. Exception message: " + ex.message);
+        KeeLog.warn(
+            "Failed to connect to messaging port. We'll try again later. Exception message: " +
+                ex.message
+        );
     }
 
     messagingPortConnectionRetryTimer = setInterval(() => {
@@ -84,7 +95,10 @@ function startup () {
                     KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
                 }
             } catch (ex) {
-                KeeLog.warn("Failed to connect to messaging port. We'll try again later. Exception message: " + ex.message);
+                KeeLog.warn(
+                    "Failed to connect to messaging port. We'll try again later. Exception message: " +
+                        ex.message
+                );
             }
         } else {
             clearInterval(messagingPortConnectionRetryTimer);
@@ -94,7 +108,7 @@ function startup () {
     KeeLog.info("content vault ready");
 }
 
-function onFirstConnect (myTabId: number, myFrameId: number) {
+function onFirstConnect(myTabId: number, myFrameId: number) {
     tabId = myTabId;
     frameId = myFrameId;
     KeeLog.attachConfig(configManager.current);
@@ -103,16 +117,17 @@ function onFirstConnect (myTabId: number, myFrameId: number) {
 
 // Orchestrate the link between this content script and the web page
 class Page {
-
     // Inject an idempotent script to the page which is (probably) running an instance of a KPRPC server
-    public static async connect () {
+    public static async connect() {
         // Look for a special DOM element so we only attempt to
         // connect to pages that claim to expose a KPRPC interface for us
         const magicTag = await waitForElementById("keeVaultMagic_existsHere");
         if (!magicTag) {
             // It often does not exist at page load but something
             // weird is happening if it still doesn't by this point
-            KeeLog.error("Unexpected failure waiting for indication from Kee Vault that we should connect to it");
+            KeeLog.error(
+                "Unexpected failure waiting for indication from Kee Vault that we should connect to it"
+            );
             return;
         }
 
@@ -146,12 +161,14 @@ class Page {
         body.appendChild(script);
     }
 
-    public static send (msg) {
-        const messageEvent = new CustomEvent(customEventNameToPage, {detail: msg});
+    public static send(msg) {
+        const messageEvent = new CustomEvent(customEventNameToPage, {
+            detail: msg
+        });
         document.dispatchEvent(messageEvent);
     }
 
-    public static receive (event: CustomEvent) {
+    public static receive(event: CustomEvent) {
         if (!sessionId && !event.detail.features && !event.detail.tokens) {
             // We have no active session but the app did not supply init data
             // (list of supported features) so we have to assume a fault in
@@ -190,7 +207,7 @@ class Page {
         }
     }
 
-    public static invalidateCurrentSession () {
+    public static invalidateCurrentSession() {
         sessionId = null;
     }
 }
@@ -199,8 +216,7 @@ let syncContent: SyncContent;
 
 // Orchestrate the link between this content script and the addon background process
 class Background {
-
-    public static connect () {
+    public static connect() {
         if (Port.raw) {
             KeeLog.warn("port already set to: " + Port.raw.name);
         }
@@ -208,10 +224,12 @@ class Background {
         Port.startup("vault");
 
         Port.raw.onMessage.addListener(function (m: VaultMessage) {
-            KeeLog.debug("In browser content vault script, received message from background script");
+            KeeLog.debug(
+                "In browser content vault script, received message from background script"
+            );
             if (m.initialState) {
                 syncContent.init(m.initialState, (mutation: MutationPayload) => {
-                    Port.postMessage({mutation} as AddonMessage);
+                    Port.postMessage({ mutation } as AddonMessage);
                 });
             }
             if (m.mutation) {
@@ -228,7 +246,7 @@ class Background {
         });
     }
 
-    public static initLink () {
+    public static initLink() {
         // we're ready to accept messages for any KPRPC server hosted within this frame
         Background.send({
             action: VaultAction.Init,
@@ -237,41 +255,62 @@ class Background {
         } as VaultMessage);
     }
 
-    public static receive (message: VaultMessage) {
+    public static receive(message: VaultMessage) {
         switch (message.protocol) {
-            case VaultProtocol.AckInit: Page.send(JSON.stringify({protocol: VaultProtocol.AckInit} as VaultMessage)); break;
-            case VaultProtocol.Error: Background.receiveError(message.error); break;
-            case VaultProtocol.Jsonrpc: Background.receiveJsonrpc(message.jsonrpc); break;
-            case VaultProtocol.Reconnect: Background.initLink(); break;
-            case VaultProtocol.ShowGenerator: Page.send(JSON.stringify({protocol: VaultProtocol.ShowGenerator} as VaultMessage)); break;
-            default: throw new Error("Unexpected protocol message from addon background");
+            case VaultProtocol.AckInit:
+                Page.send(
+                    JSON.stringify({
+                        protocol: VaultProtocol.AckInit
+                    } as VaultMessage)
+                );
+                break;
+            case VaultProtocol.Error:
+                Background.receiveError(message.error);
+                break;
+            case VaultProtocol.Jsonrpc:
+                Background.receiveJsonrpc(message.jsonrpc);
+                break;
+            case VaultProtocol.Reconnect:
+                Background.initLink();
+                break;
+            case VaultProtocol.ShowGenerator:
+                Page.send(
+                    JSON.stringify({
+                        protocol: VaultProtocol.ShowGenerator
+                    } as VaultMessage)
+                );
+                break;
+            default:
+                throw new Error("Unexpected protocol message from addon background");
         }
     }
 
-    public static receiveError (error) {
+    public static receiveError(error) {
         if (!tryHandleErrorLocally(error)) {
-            if (KeeLog && KeeLog.error) KeeLog.error("Did not know how to handle this error. Errors outside of the JSONRPC protocol"
-                + " are unexpected within the context of a single browser: " + error);
+            if (KeeLog && KeeLog.error)
+                KeeLog.error(
+                    "Did not know how to handle this error. Errors outside of the JSONRPC protocol" +
+                        " are unexpected within the context of a single browser: " +
+                        error
+                );
         }
     }
 
-    public static receiveJsonrpc (json) {
+    public static receiveJsonrpc(json) {
         Page.send(json);
     }
 
-    public static send (message: VaultMessage) {
+    public static send(message: VaultMessage) {
         Port.postMessage(message);
     }
-
 }
 
-function tryHandleErrorLocally (error) {
-
+function tryHandleErrorLocally(error) {
     KeeLog.info("Attempting to handle error locally: " + error.code);
 
-    switch (error.code)
-    {
-        case "ALREADY_CONNECTED": return true;
+    switch (error.code) {
+        case "ALREADY_CONNECTED":
+            return true;
         case "SESSION_MISSING":
             // We probably timed out so we'll reinit
             Page.invalidateCurrentSession();
@@ -284,7 +323,8 @@ function tryHandleErrorLocally (error) {
             Page.invalidateCurrentSession();
             Page.connect();
             return true;
-        default: return false;
+        default:
+            return false;
     }
 }
 

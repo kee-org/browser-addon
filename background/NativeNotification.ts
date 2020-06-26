@@ -4,8 +4,5 @@
 // look at the common/KeeNotification class
 
 export class NativeNotification {
-    constructor (
-        public title: string,
-        public message: string
-    ) {}
+    constructor(public title: string, public message: string) {}
 }

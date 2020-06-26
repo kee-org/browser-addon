@@ -1,20 +1,25 @@
 import { Field } from "../common/model/Field";
 import { Locator } from "../common/model/Locator";
 
-function locatorMatches (locator1: Locator, locator2: Locator) {
+function locatorMatches(locator1: Locator, locator2: Locator) {
     if (locator1.type !== locator2.type) return false;
     if (locator1.id === locator2.id && locator1.name === locator2.name) return true;
     return false;
 }
 
-function fieldMatches (oldField: Field, newField: Field) {
+function fieldMatches(oldField: Field, newField: Field) {
     if (oldField.type !== newField.type) return false;
     if (oldField.value === newField.value) return true;
-    if (oldField.locators.some(locator1 => newField.locators.some(locator2 => locatorMatches(locator1, locator2)))) return true;
+    if (
+        oldField.locators.some(locator1 =>
+            newField.locators.some(locator2 => locatorMatches(locator1, locator2))
+        )
+    )
+        return true;
     return false;
 }
 
-export function reconcileFieldLists (oldFields: Field[], newFields: Field[]) {
+export function reconcileFieldLists(oldFields: Field[], newFields: Field[]) {
     // If field value or location can be matched against an existing field,
     // assume it is a new version of the same field. Otherwise we'll list
     // all fields from both existing and newly submitted data.

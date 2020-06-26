@@ -1,4 +1,4 @@
-export function waitForElementById (id) {
+export function waitForElementById(id) {
     return new Promise(function (resolve, reject) {
         let element = document.getElementById(id);
         if (element) {
@@ -15,6 +15,9 @@ export function waitForElementById (id) {
                 return;
             }
         });
-        observer.observe(document.documentElement, { childList: true, subtree: true });
+        observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true
+        });
     });
 }

@@ -7,8 +7,7 @@ import { resolveConfig, tokenise, calculateMatchScore } from "./SearchUtils";
 import { Group } from "./model/Group";
 
 export class SearcherAll {
-
-    constructor (private state: KeeState, config: Partial<SearchConfig>) {
+    constructor(private state: KeeState, config: Partial<SearchConfig>) {
         this.searchConfig = resolveConfig(config);
         this.validateConfig();
     }
@@ -16,28 +15,31 @@ export class SearcherAll {
     private makeAsyncTimer;
     private searchConfig: SearchConfig;
 
-    private reconfigure (config) {
+    private reconfigure(config) {
         this.searchConfig = resolveConfig(config);
         return this.validateConfig();
     }
 
-    public execute (query, onComplete, filterDomains: string[]) {
+    public execute(query, onComplete, filterDomains: string[]) {
         let abort = false;
-        const filteringByURL = (filterDomains
-            && filterDomains.length > 0
-            && Array.isArray(filterDomains)
-            && filterDomains[0].length > 0) ? true : false;
+        const filteringByURL =
+            filterDomains &&
+            filterDomains.length > 0 &&
+            Array.isArray(filterDomains) &&
+            filterDomains[0].length > 0
+                ? true
+                : false;
 
         if (!this.configIsValid) {
-            KeeLog.error("You can't execute a search while the search configuration is invalid. Please fix it by calling reconfigure().");
+            KeeLog.error(
+                "You can't execute a search while the search configuration is invalid. Please fix it by calling reconfigure()."
+            );
             abort = true;
         }
 
-        if ((!query || query.length == 0) && !filteringByURL)
-            abort = true;
+        if ((!query || query.length == 0) && !filteringByURL) abort = true;
 
-        if (this.state.KeePassDatabases.length == 0)
-            abort = true;
+        if (this.state.KeePassDatabases.length == 0) abort = true;
 
         onComplete = onComplete || this.searchConfig.onComplete;
 
@@ -51,32 +53,25 @@ export class SearcherAll {
         }
 
         const results = [];
-        function addResult (this: any, result) {
+        function addResult(this: any, result) {
             if (this.searchConfig.onMatch) {
                 result = this.searchConfig.onMatch(result);
-                if (result)
-                    results.push(result);
-                else
-                    return false;
-            }
-            else
-                results.push(result);
+                if (result) results.push(result);
+                else return false;
+            } else results.push(result);
             return true;
         }
 
         // allow pre-tokenised search terms to be supplied
         let keywords = [];
-        if (Array.isArray(query))
-            keywords = query;
-        else if (query.length > 0)
-            keywords = tokenise(query);
+        if (Array.isArray(query)) keywords = query;
+        else if (query.length > 0) keywords = tokenise(query);
 
         let filter;
 
         if (filteringByURL) {
             filter = item => {
-                if (!item.uRLs || item.uRLs.length <= 0)
-                    return false;
+                if (!item.uRLs || item.uRLs.length <= 0) return false;
 
                 for (const filterDomain of filterDomains) {
                     try {
@@ -85,17 +80,25 @@ export class SearcherAll {
                                 let itemHostname: string;
                                 // We're only really interested in the domain so can be lax about
                                 // protocols and just prepend if necessary in order to make valid URLs
-                                if (!itemURL.startsWith("https://") && !itemURL.startsWith("http://") && !itemURL.startsWith("file://"))
-                                {
+                                if (
+                                    !itemURL.startsWith("https://") &&
+                                    !itemURL.startsWith("http://") &&
+                                    !itemURL.startsWith("file://")
+                                ) {
                                     itemHostname = new URL("http://" + itemURL).hostname;
-                                } else
-                                {
+                                } else {
                                     itemHostname = new URL(itemURL).hostname;
                                 }
-                                const itemIsIPAddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/.test(itemHostname);
-                                const itemDomain = itemIsIPAddress ? itemHostname : utils.psl.getDomain(itemHostname);
-                                return (filterDomain === itemDomain);
-                            } catch (e) { return false; } // ignore invalid URLs
+                                const itemIsIPAddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/.test(
+                                    itemHostname
+                                );
+                                const itemDomain = itemIsIPAddress
+                                    ? itemHostname
+                                    : utils.psl.getDomain(itemHostname);
+                                return filterDomain === itemDomain;
+                            } catch (e) {
+                                return false;
+                            } // ignore invalid URLs
                         });
                         if (filteredItems.length > 0) return true;
                     } catch (e) {
@@ -106,12 +109,10 @@ export class SearcherAll {
             };
         }
 
-        function actualSearch (this: SearcherAll) {
+        function actualSearch(this: SearcherAll) {
             let databases;
-            if (this.searchConfig.searchAllDatabases)
-                databases = this.state.KeePassDatabases;
-            else
-                databases = [this.state.KeePassDatabases[this.state.ActiveKeePassDatabaseIndex]];
+            if (this.searchConfig.searchAllDatabases) databases = this.state.KeePassDatabases;
+            else databases = [this.state.KeePassDatabases[this.state.ActiveKeePassDatabaseIndex]];
 
             for (let i = 0; i < databases.length; i++) {
                 const root = databases[i].root;
@@ -131,7 +132,7 @@ export class SearcherAll {
         }
     }
 
-    private validateConfig () {
+    private validateConfig() {
         this.configIsValid = true;
 
         if (this.searchConfig.version != 1) {
@@ -139,7 +140,10 @@ export class SearcherAll {
             this.configIsValid = false;
         }
 
-        if (this.searchConfig.searchAllDatabases !== true && this.searchConfig.searchAllDatabases !== false) {
+        if (
+            this.searchConfig.searchAllDatabases !== true &&
+            this.searchConfig.searchAllDatabases !== false
+        ) {
             KeeLog.warn("searchAllDatabases should be a boolean");
             this.configIsValid = false;
         }
@@ -149,7 +153,10 @@ export class SearcherAll {
             this.configIsValid = false;
         }
 
-        if (this.searchConfig.searchUsernames !== true && this.searchConfig.searchUsernames !== false) {
+        if (
+            this.searchConfig.searchUsernames !== true &&
+            this.searchConfig.searchUsernames !== false
+        ) {
             KeeLog.warn("searchUsernames should be a boolean");
             this.configIsValid = false;
         }
@@ -189,12 +196,15 @@ export class SearcherAll {
             this.configIsValid = false;
         }
 
-        if (this.searchConfig.onComplete != null && typeof (this.searchConfig.onComplete) !== "function") {
+        if (
+            this.searchConfig.onComplete != null &&
+            typeof this.searchConfig.onComplete !== "function"
+        ) {
             KeeLog.warn("onComplete should be a function (or ommitted)");
             this.configIsValid = false;
         }
 
-        if (this.searchConfig.onMatch != null && typeof (this.searchConfig.onMatch) !== "function") {
+        if (this.searchConfig.onMatch != null && typeof this.searchConfig.onMatch !== "function") {
             KeeLog.warn("onMatch should be a function (or ommitted)");
             this.configIsValid = false;
         }
@@ -202,7 +212,15 @@ export class SearcherAll {
         return this.configIsValid;
     }
 
-    private treeTraversal (branch: Group, keywords: string[], parentGroupMatchScore: number, addResult: (item: EntrySummary) => boolean, currentResultCount, dbFileName, filter) {
+    private treeTraversal(
+        branch: Group,
+        keywords: string[],
+        parentGroupMatchScore: number,
+        addResult: (item: EntrySummary) => boolean,
+        currentResultCount,
+        dbFileName,
+        filter
+    ) {
         let totalResultCount = currentResultCount;
         for (const leaf of branch.entrySummaries) {
             const item = leaf;
@@ -210,9 +228,18 @@ export class SearcherAll {
             // We might already know this is a match if the item is contained within
             // a matching group but we check again because we probably want to update
             // the relevance score for the item
-            const matchResult = calculateMatchScore(item, keywords, parentGroupMatchScore, this.searchConfig, filter);
+            const matchResult = calculateMatchScore(
+                item,
+                keywords,
+                parentGroupMatchScore,
+                this.searchConfig,
+                filter
+            );
             if (matchResult > 0.0) {
-                const accepted = addResult({...item, ...{relevanceScore: matchResult}});
+                const accepted = addResult({
+                    ...item,
+                    ...{ relevanceScore: matchResult }
+                });
                 if (accepted) {
                     totalResultCount++;
                     if (totalResultCount >= this.searchConfig.maximumResults)
@@ -221,12 +248,24 @@ export class SearcherAll {
             }
         }
         for (const subBranch of branch.groups) {
-            const groupMatchScore = calculateMatchScore({ title: subBranch.title }, keywords, parentGroupMatchScore, this.searchConfig, filter);
-            totalResultCount = this.treeTraversal(subBranch, keywords, groupMatchScore, addResult, totalResultCount, dbFileName, filter);
-            if (totalResultCount >= this.searchConfig.maximumResults)
-                return totalResultCount;
+            const groupMatchScore = calculateMatchScore(
+                { title: subBranch.title },
+                keywords,
+                parentGroupMatchScore,
+                this.searchConfig,
+                filter
+            );
+            totalResultCount = this.treeTraversal(
+                subBranch,
+                keywords,
+                groupMatchScore,
+                addResult,
+                totalResultCount,
+                dbFileName,
+                filter
+            );
+            if (totalResultCount >= this.searchConfig.maximumResults) return totalResultCount;
         }
         return totalResultCount;
     }
-
 }

@@ -55,7 +55,7 @@ export class Config {
     keePassMRUDB: string;
     KeePassRPCWebSocketPort: number;
     KPRPCUsername: string;
-    KPRPCStoredKeys: {[key: string]: string};
+    KPRPCStoredKeys: { [key: string]: string };
     lastConnectedToKeePass: string;
     listAllOpenDBs: boolean;
     logLevel: number;
@@ -64,7 +64,7 @@ export class Config {
     logSensitiveData: boolean;
     metricsUsageDisabled: boolean;
     metricsUserId: string;
-    mruGroup: {[key: string]: string};
+    mruGroup: { [key: string]: string };
     notifyWhenEntryUpdated: boolean;
     notifyWhenLateDiscovery: boolean;
     notifyWhenLoggedOut: boolean;

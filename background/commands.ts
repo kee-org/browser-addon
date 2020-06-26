@@ -6,24 +6,29 @@ import store from "../store";
 export class KFCommands {
     private contextMenuUpdateLock = false;
 
-    public init ()
-    {
+    public init() {
         browser.commands.onCommand.addListener(command => {
             switch (command) {
                 case Command.DetectForms:
                     if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
-                        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
-                            port.postMessage({ action: Action.DetectForms });
-                        }, this);
+                        window.kee.tabStates
+                            .get(window.kee.foregroundTabId)
+                            .framePorts.forEach(port => {
+                                port.postMessage({
+                                    action: Action.DetectForms
+                                });
+                            }, this);
                     }
                     break;
                 case Command.PrimaryAction:
                     if (store.state.ActiveKeePassDatabaseIndex < 0) {
                         window.kee.loginToPasswordManager();
                     } else {
-                        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
-                            port.postMessage({ action: Action.Primary });
-                        }, this);
+                        window.kee.tabStates
+                            .get(window.kee.foregroundTabId)
+                            .framePorts.forEach(port => {
+                                port.postMessage({ action: Action.Primary });
+                            }, this);
                     }
                     break;
                 case Command.GeneratePassword:
@@ -33,13 +38,17 @@ export class KFCommands {
         });
 
         browser.contextMenus.onClicked.addListener((info, tab) => {
-            const id = (info.menuItemId as string);
+            const id = info.menuItemId as string;
             switch (id) {
                 case Command.DetectForms:
                     if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
-                        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
-                            port.postMessage({ action: Action.DetectForms });
-                        }, this);
+                        window.kee.tabStates
+                            .get(window.kee.foregroundTabId)
+                            .framePorts.forEach(port => {
+                                port.postMessage({
+                                    action: Action.DetectForms
+                                });
+                            }, this);
                     }
                     break;
                 // case Command.PrimaryAction:
@@ -56,17 +65,25 @@ export class KFCommands {
                     break;
             }
             if (id.startsWith("matchedLogin-")) {
-                window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.get(info.frameId).postMessage({ action: Action.ManualFill, selectedEntryIndex: id.substr(id.indexOf("-")+1) });
+                window.kee.tabStates
+                    .get(window.kee.foregroundTabId)
+                    .framePorts.get(info.frameId)
+                    .postMessage({
+                        action: Action.ManualFill,
+                        selectedEntryIndex: id.substr(id.indexOf("-") + 1)
+                    });
             }
         });
     }
 
-    public async setupContextMenuItems () {
+    public async setupContextMenuItems() {
         if (commandManager.contextMenuUpdateLock) {
-            KeeLog.debug("If you are missing entries from your context menu, we will need" +
-                " to spend more effort on the setupContextMenuItems implementation (wait" +
-                " by using semaphores rather than assuming new search results always follow" +
-                " setup requests with no results)");
+            KeeLog.debug(
+                "If you are missing entries from your context menu, we will need" +
+                    " to spend more effort on the setupContextMenuItems implementation (wait" +
+                    " by using semaphores rather than assuming new search results always follow" +
+                    " setup requests with no results)"
+            );
             return;
         }
 
@@ -80,13 +97,15 @@ export class KFCommands {
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
-                        contexts: [ "editable",
+                        contexts: [
+                            "editable",
                             "frame",
                             "image",
                             "link",
                             "page",
                             "password",
-                            "selection" ]
+                            "selection"
+                        ]
                     });
                 } catch (e) {
                     // try again with Chrome-supported contexts
@@ -94,12 +113,7 @@ export class KFCommands {
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
-                        contexts: [ "editable",
-                            "frame",
-                            "image",
-                            "link",
-                            "page",
-                            "selection" ]
+                        contexts: ["editable", "frame", "image", "link", "page", "selection"]
                     });
                 }
             }
@@ -110,13 +124,15 @@ export class KFCommands {
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
-                        contexts: [ "editable",
+                        contexts: [
+                            "editable",
                             "frame",
                             "image",
                             "link",
                             "page",
                             "password",
-                            "selection" ]
+                            "selection"
+                        ]
                     });
                 } catch (e) {
                     // try again with Chrome-supported contexts
@@ -124,34 +140,33 @@ export class KFCommands {
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
-                        contexts: [ "editable",
-                            "frame",
-                            "image",
-                            "link",
-                            "page",
-                            "selection" ]
+                        contexts: ["editable", "frame", "image", "link", "page", "selection"]
                     });
                 }
             }
 
-            if (window.kee.foregroundTabId >= 0
-            && window.kee.tabStates.has(window.kee.foregroundTabId)
-            && window.kee.tabStates.get(window.kee.foregroundTabId).frames) {
+            if (
+                window.kee.foregroundTabId >= 0 &&
+                window.kee.tabStates.has(window.kee.foregroundTabId) &&
+                window.kee.tabStates.get(window.kee.foregroundTabId).frames
+            ) {
                 window.kee.tabStates.get(window.kee.foregroundTabId).frames.forEach(frame => {
-                    for (let j=0; j<frame.entries.length; j++) {
+                    for (let j = 0; j < frame.entries.length; j++) {
                         const entry = frame.entries[j];
                         try {
                             browser.contextMenus.create({
                                 id: "matchedLogin-" + j,
                                 title: entry.title,
                                 documentUrlPatterns: ["http://*/*", "https://*/*"],
-                                contexts: [ "editable",
+                                contexts: [
+                                    "editable",
                                     "frame",
                                     "image",
                                     "link",
                                     "page",
                                     "password",
-                                    "selection" ]
+                                    "selection"
+                                ]
                             });
                         } catch (e) {
                             // try again with Chrome-supported contexts
@@ -159,12 +174,14 @@ export class KFCommands {
                                 id: "matchedLogin-" + j,
                                 title: entry.title,
                                 documentUrlPatterns: ["http://*/*", "https://*/*"],
-                                contexts: [ "editable",
+                                contexts: [
+                                    "editable",
                                     "frame",
                                     "image",
                                     "link",
                                     "page",
-                                    "selection" ]
+                                    "selection"
+                                ]
                             });
                         }
                     }

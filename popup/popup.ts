@@ -19,7 +19,7 @@ Vue.prototype.$browser = browser;
 
 let syncContent: SyncContent;
 
-function startup () {
+function startup() {
     KeeLog.debug("popup started");
     KeeLog.attachConfig(configManager.current);
     syncContent = new SyncContent(store);
@@ -29,61 +29,66 @@ function startup () {
         KeeLog.debug("In browser popup script, received message from background script: ");
 
         if (m.initialState) {
-            syncContent.init(m.initialState, (mutation: MutationPayload) => {
-                Port.postMessage({mutation} as AddonMessage);
-            }, () => {
-                new Vue({
-                    el: "#main",
-                    store,
-                    vuetify: new Vuetify({
-                        theme: {
-                            dark: window.matchMedia("(prefers-color-scheme: dark)").matches,
-                            themes: {
-                                dark: {
-                                    primary: "#1a466b",
-                                    secondary: "#ABB2BF",
-                                    tertiary: "#e66a2b",
-                                    error: "#C34034",
-                                    info: "#2196F3",
-                                    success: "#4CAF50",
-                                    warning: "#FFC107"
-                                },
-                                light: {
-                                    primary: "#1a466b",
-                                    secondary: "#13334e",
-                                    tertiary: "#e66a2b",
-                                    error: "#C34034",
-                                    info: "#2196F3",
-                                    success: "#4CAF50",
-                                    warning: "#FFC107"
+            syncContent.init(
+                m.initialState,
+                (mutation: MutationPayload) => {
+                    Port.postMessage({ mutation } as AddonMessage);
+                },
+                () => {
+                    new Vue({
+                        el: "#main",
+                        store,
+                        vuetify: new Vuetify({
+                            theme: {
+                                dark: window.matchMedia("(prefers-color-scheme: dark)").matches,
+                                themes: {
+                                    dark: {
+                                        primary: "#1a466b",
+                                        secondary: "#ABB2BF",
+                                        tertiary: "#e66a2b",
+                                        error: "#C34034",
+                                        info: "#2196F3",
+                                        success: "#4CAF50",
+                                        warning: "#FFC107"
+                                    },
+                                    light: {
+                                        primary: "#1a466b",
+                                        secondary: "#13334e",
+                                        tertiary: "#e66a2b",
+                                        error: "#C34034",
+                                        info: "#2196F3",
+                                        success: "#4CAF50",
+                                        warning: "#FFC107"
+                                    }
                                 }
                             }
+                        }),
+                        mounted() {
+                            // This can wait until after the popup app has rendered, at least until there is
+                            // some way to launch in password generation mode
+                            Port.postMessage({
+                                action: Action.GetPasswordProfiles
+                            });
+                        },
+                        render(h) {
+                            return h(App, {
+                                props: {
+                                    matchedEntries: !m.entries ? null : m.entries,
+                                    frameId: m.frameId
+                                }
+                            });
                         }
-                    }),
-                    mounted () {
-                        // This can wait until after the popup app has rendered, at least until there is
-                        // some way to launch in password generation mode
-                        Port.postMessage({ action: Action.GetPasswordProfiles });
-                    },
-                    render (h) {
-                        return h(App, {
-                            props: {
-                                matchedEntries: !m.entries ? null : m.entries,
-                                frameId: m.frameId
-                            }
-                        });
-                    }
-                });
+                    });
 
-
-                // This maybe could be moved to onMounted once all vuex state is changed before this popup is opened.
-                setTimeout(() => {
-                    window.focus();
-                    const sb = $("#searchBox");
-                    if (sb) sb.focus();
-                    window.scrollTo(0, 0);
-                }, 50);
-            });
+                    // This maybe could be moved to onMounted once all vuex state is changed before this popup is opened.
+                    setTimeout(() => {
+                        window.focus();
+                        const sb = $("#searchBox");
+                        if (sb) sb.focus();
+                        window.scrollTo(0, 0);
+                    }, 50);
+                }
+            );
         }
         if (m.mutation) {
             syncContent.onRemoteMutation(m.mutation);
@@ -91,7 +96,10 @@ function startup () {
         }
 
         if (store.state.connected && m.findMatchesResult) {
-            store.dispatch("updateSearchResultWithFullDetails", JSON.parse(JSON.stringify(m.findMatchesResult[0])));
+            store.dispatch(
+                "updateSearchResultWithFullDetails",
+                JSON.parse(JSON.stringify(m.findMatchesResult[0]))
+            );
         }
     });
 

@@ -8,7 +8,9 @@ import store from "../store";
 // import { PersistentLogger } from "../common/PersistentLogger";
 
 declare global {
-    interface Window { kee: Kee }
+    interface Window {
+        kee: Kee;
+    }
     // interface Window { kee: Kee; KeePersistentLogger: PersistentLogger; }
 }
 
@@ -20,20 +22,24 @@ browser.browserAction.setBadgeBackgroundColor({ color: "red" });
 browser.browserAction.disable();
 
 // Assumes config and logging have been initialised before this is called.
-function startup () {
+function startup() {
     // window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
     KeeLog.attachConfig(configManager.current);
     window.kee = new Kee();
     window.kee.init();
-    configManager.addChangeListener(() => window.kee.configSyncManager.updateToRemoteConfig(configManager.current));
+    configManager.addChangeListener(() =>
+        window.kee.configSyncManager.updateToRemoteConfig(configManager.current)
+    );
     browser.browserAction.enable();
 }
 
 browser.windows.onFocusChanged.addListener(async function (windowId) {
     if (KeeLog && KeeLog.debug) KeeLog.debug("Focus changed for id: " + windowId);
-    if (windowId !== browser.windows.WINDOW_ID_NONE)
-    {
-        const tabs = await browser.tabs.query({active: true, windowId: windowId});
+    if (windowId !== browser.windows.WINDOW_ID_NONE) {
+        const tabs = await browser.tabs.query({
+            active: true,
+            windowId: windowId
+        });
         if (tabs[0] && tabs[0].id != null) onTabActivated(tabs[0].id);
     }
 });
@@ -43,24 +49,28 @@ browser.tabs.onActivated.addListener(event => {
     onTabActivated(event.tabId);
 });
 
-function onTabActivated (tabId) {
-
+function onTabActivated(tabId) {
     updateForegroundTab(tabId);
 
-    if (window.kee) // May not have set up kee yet
-    {
+    if (window.kee) {
+        // May not have set up kee yet
         commandManager.setupContextMenuItems();
     }
 }
 
-function updateForegroundTab (tabId: number) {
-    if (window.kee && window.kee.foregroundTabId !== tabId) { // May not have set up kee yet
+function updateForegroundTab(tabId: number) {
+    if (window.kee && window.kee.foregroundTabId !== tabId) {
+        // May not have set up kee yet
         window.kee.foregroundTabId = tabId;
-        if (window.kee.tabStates.has(tabId) && window.kee.tabStates.get(tabId).framePorts) // May not have set up port yet
-        {
+        if (window.kee.tabStates.has(tabId) && window.kee.tabStates.get(tabId).framePorts) {
+            // May not have set up port yet
             if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
             window.kee.tabStates.get(tabId).framePorts.forEach(port => {
-                port.postMessage({ isForegroundTab: true, action: Action.DetectForms, resetState: store.state } as AddonMessage);
+                port.postMessage({
+                    isForegroundTab: true,
+                    action: Action.DetectForms,
+                    resetState: store.state
+                } as AddonMessage);
             });
         }
     }
@@ -85,7 +95,12 @@ if (!__KeeIsRunningInAWebExtensionsBrowser) {
             // the manifest because there is no API available to automatically handle
             // the manifest globs and it's not worth bundling a generic parser for
             // just this one use case.
-            const vaultURLs = ["https://app-dev.kee.pm:8087/", "https://app-beta.kee.pm/", "https://app.kee.pm/", "https://keevault.pm/"];
+            const vaultURLs = [
+                "https://app-dev.kee.pm:8087/",
+                "https://app-beta.kee.pm/",
+                "https://app.kee.pm/",
+                "https://keevault.pm/"
+            ];
 
             const loadContentScripts = (tab: browser.tabs.Tab) => {
                 if (tab.url && tab.url.startsWith("chrome://")) return;
@@ -113,7 +128,9 @@ browser.runtime.onInstalled.addListener(async function (details) {
             url: "release-notes/update-notes.html"
         });
     } else if (details.reason === "install") {
-        const vaultTabs = await browser.tabs.query({url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]});
+        const vaultTabs = await browser.tabs.query({
+            url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]
+        });
         if (vaultTabs && vaultTabs[0]) {
             browser.tabs.update(vaultTabs[0].id, { active: true });
         } else {

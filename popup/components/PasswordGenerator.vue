@@ -1,86 +1,68 @@
 <template>
-  <v-dialog
-    value="true"
-    fullscreen
-    hide-overlay
-    transition="dialog-transition"
-  >
-    <v-card>
-      <div>
-        <v-card-text>
-          <v-select
-            v-model="selectedProfile"
-            :items="items"
-            :label="$i18n('password_profile')"
-            outlined
-            color="secondary"
-            :hint="$i18n('password_profile_hint')"
-            persistent-hint
-            @change="profileChanged"
-          />
-          <v-card
-            :loading="loading"
-            class="mx-auto px-3 py-0"
-            style="font-family: monospace"
-            max-width="300"
-          >
-            <v-row
-              class="flex-nowrap"
-              align="center"
-            >
-              <v-col
-                cols="10"
-                class="text-center"
-              >
-                {{ renderedPassword }}
-              </v-col>
-              <v-col cols="2">
-                <v-btn
-                  small
-                  icon
-                  @click="revealed = !revealed"
-                >
-                  <v-icon>
-                    {{ revealed ? 'mdi-eye' : 'mdi-eye-off' }}
-                  </v-icon>
+    <v-dialog value="true" fullscreen hide-overlay transition="dialog-transition">
+        <v-card>
+            <div>
+                <v-card-text>
+                    <v-select
+                        v-model="selectedProfile"
+                        :items="items"
+                        :label="$i18n('password_profile')"
+                        outlined
+                        color="secondary"
+                        :hint="$i18n('password_profile_hint')"
+                        persistent-hint
+                        @change="profileChanged"
+                    />
+                    <v-card
+                        :loading="loading"
+                        class="mx-auto px-3 py-0"
+                        style="font-family: monospace;"
+                        max-width="300"
+                    >
+                        <v-row class="flex-nowrap" align="center">
+                            <v-col cols="10" class="text-center">
+                                {{ renderedPassword }}
+                            </v-col>
+                            <v-col cols="2">
+                                <v-btn small icon @click="revealed = !revealed">
+                                    <v-icon>
+                                        {{ revealed ? "mdi-eye" : "mdi-eye-off" }}
+                                    </v-icon>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card>
+                    <div>
+                        <br />
+                        {{ $i18n("password_will_be_set_on_field") }}
+                    </div>
+                    <div>
+                        <v-checkbox
+                            v-model="forceCopy"
+                            :label="$i18n('also_copy_to_clipboard')"
+                            persistent-hint="auto"
+                            :hint="forceCopyHint"
+                        />
+                    </div>
+                </v-card-text>
+            </div>
+            <v-card-actions>
+                <v-spacer />
+
+                <v-btn color="tertiary" @click="cancel">
+                    {{ $i18n("cancel") }}
                 </v-btn>
-              </v-col>
-            </v-row>
-          </v-card>
-          <div>
-            <br>
-            {{ $i18n('password_will_be_set_on_field') }}
-          </div>
-          <div>
-            <v-checkbox
-              v-model="forceCopy"
-              :label="$i18n('also_copy_to_clipboard')"
-              persistent-hint="auto"
-              :hint="forceCopyHint"
-            />
-          </div>
-        </v-card-text>
-      </div>
-      <v-card-actions>
-        <v-spacer />
 
-        <v-btn
-          color="tertiary"
-          @click="cancel"
-        >
-          {{ $i18n('cancel') }}
-        </v-btn>
-
-        <v-btn
-          color="primary"
-          :disabled="disabled"
-          @click="ok"
-        >
-          {{ forceCopy ? $i18n('generator_action_apply_and_copy') : $i18n('generator_action_apply') }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+                <v-btn color="primary" :disabled="disabled" @click="ok">
+                    {{
+                        forceCopy
+                            ? $i18n("generator_action_apply_and_copy")
+                            : $i18n("generator_action_apply")
+                    }}
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script lang="ts">
@@ -111,7 +93,9 @@ export default {
             return this.forceCopy ? this.$i18n("generatePassword_done_2") : "";
         },
         renderedPassword: function (this: any) {
-            return this.revealed ? this.generatedPassword : "*".repeat(this.generatedPassword.length);
+            return this.revealed
+                ? this.generatedPassword
+                : "*".repeat(this.generatedPassword.length);
         }
     },
     methods: {
@@ -126,16 +110,20 @@ export default {
         },
         profileChanged: function (this: any, item: string) {
             this.loading = true;
-            const unwatch = this.$watch(
-                "$store.state.generatedPassword",
-                function (this: any, newValue) {
-                    unwatch();
-                    this.$store.dispatch("updateGeneratedPassword", "");
-                    this.generatedPassword = newValue;
-                    this.loading = false;
-                }
-            );
-            Port.postMessage({ action: Action.GeneratePassword, passwordProfile: item, url: (this.saveState as SaveState).newEntry?.URLs?.[0] });
+            const unwatch = this.$watch("$store.state.generatedPassword", function (
+                this: any,
+                newValue
+            ) {
+                unwatch();
+                this.$store.dispatch("updateGeneratedPassword", "");
+                this.generatedPassword = newValue;
+                this.loading = false;
+            });
+            Port.postMessage({
+                action: Action.GeneratePassword,
+                passwordProfile: item,
+                url: (this.saveState as SaveState).newEntry?.URLs?.[0]
+            });
         }
     }
 };

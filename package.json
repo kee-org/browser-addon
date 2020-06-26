@@ -8,13 +8,17 @@
     "@typescript-eslint/parser": "^3.4.0",
     "del": "^5.1.0",
     "eslint": "^7.3.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-vue": "^6.2.2",
     "firefox-addons-add-update-version": "1.0.1",
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
+    "gulp-if": "^3.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-zip": "^5.0.1",
     "merge-stream": "^2.0.0",
+    "prettier": "2.0.5",
     "rollup": "^2.18.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-copy": "^3.3.0",
@@ -40,6 +44,7 @@
     "package:prod": "gulp package:prod",
     "package": "gulp package:prod & gulp package:debug",
     "sign": "gulp sign",
-    "lint": "gulp lint"
+    "lint": "gulp lint",
+    "lint:fix": "gulp lint:fix"
   }
 }

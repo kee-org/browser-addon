@@ -1,59 +1,51 @@
 <template>
-  <v-card color="yellow lighten-3">
-    <div style="float: right">
-      <v-btn
-        text
-        class="ml-4 mr-2 px-2"
-        @click="closeNotification(notification.id)"
-      >
-        {{ $i18n('close') }}
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </div>
+    <v-card color="yellow lighten-3">
+        <div style="float: right;">
+            <v-btn text class="ml-4 mr-2 px-2" @click="closeNotification(notification.id)">
+                {{ $i18n("close") }}
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </div>
 
-    <v-card-text>
-      <p
-        v-for="(msg, index) of notification.messages"
-        :key="index"
-      >
-        {{ msg }}
-      </p>
-    </v-card-text>
-    <v-card-actions>
-      <v-row
-        justify="center"
-        align="end"
-        class="mb-1 mt-1"
-      >
-        <v-col>
-          <v-row
-            align="end"
-            class="ml-2 justify-left"
-          >
-            <v-tooltip
-              v-for="(but, index) of notification.buttons"
-              :key="index"
-              top
-              :disabled="!but.tooltip"
-              :open-delay="tooltipDelay"
-            >
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  :id="but.id"
-                  class="mr-4 my-2"
-                  v-on="on"
-                  @click="dispatchActionResponse(notification.id, but.action, but.values)"
-                >
-                  {{ but.label }}
-                </v-btn>
-                <span>{{ but.tooltip }}</span>
-              </template>
-            </v-tooltip>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-card-actions>
-  </v-card>
+        <v-card-text>
+            <p v-for="(msg, index) of notification.messages" :key="index">
+                {{ msg }}
+            </p>
+        </v-card-text>
+        <v-card-actions>
+            <v-row justify="center" align="end" class="mb-1 mt-1">
+                <v-col>
+                    <v-row align="end" class="ml-2 justify-left">
+                        <v-tooltip
+                            v-for="(but, index) of notification.buttons"
+                            :key="index"
+                            top
+                            :disabled="!but.tooltip"
+                            :open-delay="tooltipDelay"
+                        >
+                            <template v-slot:activator="{ on }">
+                                <v-btn
+                                    :id="but.id"
+                                    class="mr-4 my-2"
+                                    v-on="on"
+                                    @click="
+                                        dispatchActionResponse(
+                                            notification.id,
+                                            but.action,
+                                            but.values
+                                        )
+                                    "
+                                >
+                                    {{ but.label }}
+                                </v-btn>
+                                <span>{{ but.tooltip }}</span>
+                            </template>
+                        </v-tooltip>
+                    </v-row>
+                </v-col>
+            </v-row>
+        </v-card-actions>
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -76,7 +68,7 @@ export default {
     }),
     methods: {
         ...mapActions(actionNames),
-        dispatchActionResponse (id: string, action: ButtonAction, data: { [id: string] : string }) {
+        dispatchActionResponse(id: string, action: ButtonAction, data: { [id: string]: string }) {
             const pm = (this as any).postMessage;
             switch (action) {
                 case "enableHighSecurityKPRPCConnection":
@@ -91,12 +83,17 @@ export default {
                     configManager.save();
                     break;
                 case "launchLoginEditorFromNotification":
-                    pm({loginEditor: { uuid: data.uuid, DBfilename: data.fileName}} as AddonMessage);
+                    pm({
+                        loginEditor: {
+                            uuid: data.uuid,
+                            DBfilename: data.fileName
+                        }
+                    } as AddonMessage);
                     break;
             }
             pm({ removeNotification: id } as AddonMessage);
         },
-        closeNotification (id: string) {
+        closeNotification(id: string) {
             const pm = (this as any).postMessage;
             pm({ removeNotification: id } as AddonMessage);
         }

@@ -7,6 +7,7 @@ var gulpZip = require("gulp-zip");
 var merge = require("merge-stream");
 var del = require("del");
 var replace = require("gulp-replace");
+var gulpIf = require("gulp-if");
 var signAddon = require("sign-addon").default;
 var rollup = require("rollup");
 var resolve = require("@rollup/plugin-node-resolve").nodeResolve;
@@ -46,7 +47,6 @@ const globStaticPage = "page/*.{css,html}";
 const globStaticPanels = "panels/*.{css,html}";
 const globStaticPopup = "popup/*.{css,html}";
 
-
 /********** CLEANING **********/
 
 // Assumes inclusions and exclusions are the same for all browsers
@@ -63,80 +63,101 @@ var deleteBuildFiles = function (includeGlobs, excludeGlobs) {
             globs.push(buildDirProdChrome + "/" + g);
         }
     }
-    if (excludeGlobs) for (const g of excludeGlobs) {
-        if (DEBUG) {
-            globs.push("!" + buildDirDebug + "/" + g);
-            globs.push("!" + buildDirDebugFirefox + "/" + g);
-            globs.push("!" + buildDirDebugChrome + "/" + g);
-        } else {
-            globs.push("!" + buildDirProd + "/" + g);
-            globs.push("!" + buildDirProdFirefox + "/" + g);
-            globs.push("!" + buildDirProdChrome + "/" + g);
+    if (excludeGlobs)
+        for (const g of excludeGlobs) {
+            if (DEBUG) {
+                globs.push("!" + buildDirDebug + "/" + g);
+                globs.push("!" + buildDirDebugFirefox + "/" + g);
+                globs.push("!" + buildDirDebugChrome + "/" + g);
+            } else {
+                globs.push("!" + buildDirProd + "/" + g);
+                globs.push("!" + buildDirProdFirefox + "/" + g);
+                globs.push("!" + buildDirProdChrome + "/" + g);
+            }
         }
-    }
     return del(globs);
 };
 
-gulp.task("clean:ts", function cleanTS () {
+gulp.task("clean:ts", function cleanTS() {
     return deleteBuildFiles([], ["lib"]);
 });
 
-gulp.task("clean:static:popup", function cleanStaticPopup () {
+gulp.task("clean:static:popup", function cleanStaticPopup() {
     return deleteBuildFiles([globStaticPopup]);
 });
-gulp.task("clean:static:panels", function cleanStaticPanels () {
+gulp.task("clean:static:panels", function cleanStaticPanels() {
     return deleteBuildFiles([globStaticPanels]);
 });
-gulp.task("clean:static:page", function cleanStaticPage () {
+gulp.task("clean:static:page", function cleanStaticPage() {
     return deleteBuildFiles([globStaticPage]);
 });
-gulp.task("clean:static:background", function cleanStaticBackground () {
+gulp.task("clean:static:background", function cleanStaticBackground() {
     return deleteBuildFiles([globStaticBackground]);
 });
-gulp.task("clean:static:settings", function cleanStaticSettings () {
+gulp.task("clean:static:settings", function cleanStaticSettings() {
     return deleteBuildFiles([globStaticSettings]);
 });
-gulp.task("clean:static:dialogs", function cleanStaticDialogs () {
+gulp.task("clean:static:dialogs", function cleanStaticDialogs() {
     return deleteBuildFiles([globStaticDialogs]);
 });
-gulp.task("clean:static:lib", function cleanStaticLib () {
+gulp.task("clean:static:lib", function cleanStaticLib() {
     return deleteBuildFiles([globStaticLib]);
 });
-gulp.task("clean:static:common", function cleanStaticCommon () {
+gulp.task("clean:static:common", function cleanStaticCommon() {
     return deleteBuildFiles([globStaticCommon]);
 });
-gulp.task("clean:static:commonImages", function cleanStaticCommonImages () {
+gulp.task("clean:static:commonImages", function cleanStaticCommonImages() {
     return deleteBuildFiles([globStaticCommonImages]);
 });
-gulp.task("clean:static:commonFonts", function cleanStaticCommonFonts () {
+gulp.task("clean:static:commonFonts", function cleanStaticCommonFonts() {
     return deleteBuildFiles([globStaticCommonFonts]);
 });
-gulp.task("clean:static:releasenotes", function cleanStaticReleaseNotes () {
+gulp.task("clean:static:releasenotes", function cleanStaticReleaseNotes() {
     return deleteBuildFiles([globStaticReleaseNotes]);
 });
-gulp.task("clean:static:locales", function cleanStaticLocales () {
+gulp.task("clean:static:locales", function cleanStaticLocales() {
     return deleteBuildFiles([globStaticLocales]);
 });
-gulp.task("clean:static:manifest", function cleanStaticManifest () {
+gulp.task("clean:static:manifest", function cleanStaticManifest() {
     return deleteBuildFiles([globStaticManifest]);
 });
 
-gulp.task("clean", gulp.parallel(
-    "clean:static:manifest", "clean:static:locales", "clean:static:releasenotes",
-    "clean:static:commonFonts", "clean:static:commonImages",
-    "clean:static:common", "clean:static:dialogs", "clean:static:settings",
-    "clean:static:background", "clean:static:page", "clean:static:panels",
-    "clean:static:popup", "clean:ts"
-));
+gulp.task(
+    "clean",
+    gulp.parallel(
+        "clean:static:manifest",
+        "clean:static:locales",
+        "clean:static:releasenotes",
+        "clean:static:commonFonts",
+        "clean:static:commonImages",
+        "clean:static:common",
+        "clean:static:dialogs",
+        "clean:static:settings",
+        "clean:static:background",
+        "clean:static:page",
+        "clean:static:panels",
+        "clean:static:popup",
+        "clean:ts"
+    )
+);
 
-gulp.task("sign", function sign (done) {
+gulp.task("sign", function sign(done) {
     const manifest = require("./manifest");
     const distFileName = manifest.name + "-v" + manifest.version + "-debug.xpi";
 
     //TODO:4: If API output is suitable, derive these file names from that in case Mozilla change file naming conventions one day
-    fs.writeFileSync(".signedKeeXPI", "kee_password_manager-" + manifest.version + "beta-an+fx.xpi");
-    fs.writeFileSync(".downloadLinkKeeXPI", "https://github.com/kee-org/browser-addon/releases/download/"
-        + manifest.version + "/kee_password_manager-" + manifest.version + "beta-an+fx.xpi");
+    fs.writeFileSync(
+        ".signedKeeXPI",
+        "kee_password_manager-" + manifest.version + "beta-an+fx.xpi"
+    );
+    fs.writeFileSync(
+        ".downloadLinkKeeXPI",
+        "https://github.com/kee-org/browser-addon/releases/download/" +
+            manifest.version +
+            "/kee_password_manager-" +
+            manifest.version +
+            "beta-an+fx.xpi"
+    );
 
     signAddon({
         xpiPath: "dist/" + distFileName,
@@ -152,7 +173,8 @@ gulp.task("sign", function sign (done) {
                 console.log("The following signed files were downloaded:");
                 console.log(result.downloadedFiles);
                 console.log("Reported file name: ");
-                if (result.downloadedFiles && result.downloadedFiles.length > 0) console.log(result.downloadedFiles[0]);
+                if (result.downloadedFiles && result.downloadedFiles.length > 0)
+                    console.log(result.downloadedFiles[0]);
             } else {
                 console.error("add-on could not be signed!");
                 console.error("Check the console for details.");
@@ -168,37 +190,80 @@ gulp.task("sign", function sign (done) {
 
 /********** LINTING TYPESCRIPT AND VUE **********/
 
-gulp.task("lint",
-    gulp.series(function lint () {
-        return gulp.src(["**/*.{vue,ts}", "!node_modules/**/*.ts", "!typedefs/**/*.ts"])
-            // eslint() attaches the lint output to the "eslint" property
-            // of the file object so it can be used by other modules.
-            .pipe(eslint())
-            // eslint.format() outputs the lint results to the console.
-            // Alternatively use eslint.formatEach() (see Docs).
-            .pipe(eslint.format())
-            // To have the process exit with an error code (1) on
-            // lint error, return the stream and pipe to failAfterError last.
-            .pipe(eslint.failAfterError());
-    }));
+function isFixed(file) {
+    // Has ESLint fixed the file contents?
+    return file.eslint != null && file.eslint.fixed;
+}
+
+gulp.task(
+    "lint",
+    gulp.series(function lint() {
+        return (
+            gulp
+                .src([
+                    "**/*.{vue,ts}",
+                    "!node_modules/**/*.ts",
+                    "!typedefs/**/*.ts"
+                ])
+                // eslint() attaches the lint output to the "eslint" property
+                // of the file object so it can be used by other modules.
+                .pipe(eslint())
+                // eslint.format() outputs the lint results to the console.
+                // Alternatively use eslint.formatEach() (see Docs).
+                .pipe(eslint.format())
+                // To have the process exit with an error code (1) on
+                // lint error, return the stream and pipe to failAfterError last.
+                .pipe(eslint.failAfterError())
+        );
+    })
+);
+
+gulp.task(
+    "lint:fix",
+    gulp.series(function lintFix() {
+        return (
+            gulp
+                .src([
+                    "**/*.{vue,ts}",
+                    "!node_modules/**/*.ts",
+                    "!typedefs/**/*.ts"
+                ])
+                // eslint() attaches the lint output to the "eslint" property
+                // of the file object so it can be used by other modules.
+                .pipe(eslint({ fix: true }))
+                // eslint.format() outputs the lint results to the console.
+                // Alternatively use eslint.formatEach() (see Docs).
+                .pipe(eslint.format())
+                // if fixed, write to disk
+                .pipe(gulpIf(isFixed, gulp.dest("./")))
+        );
+    })
+);
 
 /********** COMPILING TYPESCRIPT **********/
 
-gulp.task("watchts", gulp.series(gulp.parallel("clean:ts", "lint"), function watchTs () {
-    return executeRollup();
-}));
+gulp.task(
+    "watchts",
+    gulp.series(gulp.parallel("clean:ts", "lint"), function watchTs() {
+        return executeRollup();
+    })
+);
 
-gulp.task("compilets:all", gulp.series(gulp.parallel("clean:ts", "lint"), function compileTsAll () {
-    return executeRollup();
-}));
+gulp.task(
+    "compilets:all",
+    gulp.series(gulp.parallel("clean:ts", "lint"), function compileTsAll() {
+        return executeRollup();
+    })
+);
 
 var executeRollup = function () {
-
     const plugins = [
         resolve(),
         commonjs(),
         rollupReplace({
-            "strict: true, //__VUEX_STRICT_CONFIG__": WATCH ? "strict: true," : ""
+            "strict: true, //__VUEX_STRICT_CONFIG__": WATCH
+                ? "strict: true,"
+                : ""
         }),
         typescript({
             clean: true,
@@ -207,7 +272,9 @@ var executeRollup = function () {
         }),
         iife(),
         rollupReplace({
-            "process.env.NODE_ENV": JSON.stringify( DEBUG ? "development" : "production" )
+            "process.env.NODE_ENV": JSON.stringify(
+                DEBUG ? "development" : "production"
+            )
         }),
         vue({
             needMap: false // buggy so must be disabled to get sourcemaps to work at all
@@ -220,17 +287,26 @@ var executeRollup = function () {
         }),
         copy({
             targets: [
-                { src: "node_modules/vue/dist/vue.runtime.min.js", dest: "lib/pkg" },
+                {
+                    src: "node_modules/vue/dist/vue.runtime.min.js",
+                    dest: "lib/pkg"
+                },
                 { src: "node_modules/vuex/dist/vuex.min.js", dest: "lib/pkg" },
-                { src: "node_modules/vuetify/dist/vuetify.min.js", dest: "lib/pkg" },
-                { src: "node_modules/vuetify/dist/vuetify.min.css", dest: "lib/css" }
+                {
+                    src: "node_modules/vuetify/dist/vuetify.min.js",
+                    dest: "lib/pkg"
+                },
+                {
+                    src: "node_modules/vuetify/dist/vuetify.min.css",
+                    dest: "lib/css"
+                }
             ]
         })
     ];
     if (!DEBUG) plugins.push(terser());
 
     var input = {
-        external: ["vue","vueex","vuetify"],
+        external: ["vue", "vueex", "vuetify"],
         input: {
             "vault/vault": "./vault/vault.ts",
             "background/background": "./background/background.ts",
@@ -242,23 +318,34 @@ var executeRollup = function () {
             "dialogs/NetworkAuth": "./dialogs/NetworkAuth.ts"
         },
         plugins,
-        manualChunks (id) {
+        manualChunks(id) {
             //console.log(id);
-            if (id.includes("/browser-addon/common/") ||
-            id.includes("/browser-addon/store/")
+            if (
+                id.includes("/browser-addon/common/") ||
+                id.includes("/browser-addon/store/")
             ) {
                 return "common";
             }
         },
         onwarn: function (warning) {
-            console.warn( (warning.loc ? warning.loc.file : "") + ":" + (warning.loc ? warning.loc.line : "") + ":"
-            + (warning.loc ? warning.loc.column : "") + " " + warning.message + "\n" + warning.frame );
+            console.warn(
+                (warning.loc ? warning.loc.file : "") +
+                    ":" +
+                    (warning.loc ? warning.loc.line : "") +
+                    ":" +
+                    (warning.loc ? warning.loc.column : "") +
+                    " " +
+                    warning.message +
+                    "\n" +
+                    warning.frame
+            );
         }
     };
     const output = {
         format: "es",
         sourcemap: !!DEBUG,
-        globals: { // maps external modules above to specific global vars
+        globals: {
+            // maps external modules above to specific global vars
             vue: "Vue",
             vuetify: "Vuetify"
         },
@@ -267,22 +354,54 @@ var executeRollup = function () {
     if (WATCH) {
         const watcher = rollup.watch({
             ...input,
-            output: [Object.assign({dir: buildDirDebug }, output)],
+            output: [Object.assign({ dir: buildDirDebug }, output)],
             watch: {
                 clearScreen: false
             }
         });
         watcher.on("event", event => {
-            if (event.code === "START" || event.code === "END" || event.code === "ERROR" || event.code === "FATAL")
-                console.info(`WATCHER: ${event.code} : ${JSON.stringify(event)}`);
+            if (
+                event.code === "START" ||
+                event.code === "END" ||
+                event.code === "ERROR" ||
+                event.code === "FATAL"
+            )
+                console.info(
+                    `WATCHER: ${event.code} : ${JSON.stringify(event)}`
+                );
         });
         return watcher;
     } else {
-        return rollup.rollup(input).then(bundle => Promise.all([
-            bundle.write(Object.assign({dir: DEBUG ? buildDirDebug : buildDirProd}, output)),
-            bundle.write(Object.assign({dir: DEBUG ? buildDirDebugChrome : buildDirProdChrome}, output)),
-            bundle.write(Object.assign({dir: DEBUG ? buildDirDebugFirefox : buildDirProdFirefox}, output))
-        ]));
+        return rollup.rollup(input).then(bundle =>
+            Promise.all([
+                bundle.write(
+                    Object.assign(
+                        { dir: DEBUG ? buildDirDebug : buildDirProd },
+                        output
+                    )
+                ),
+                bundle.write(
+                    Object.assign(
+                        {
+                            dir: DEBUG
+                                ? buildDirDebugChrome
+                                : buildDirProdChrome
+                        },
+                        output
+                    )
+                ),
+                bundle.write(
+                    Object.assign(
+                        {
+                            dir: DEBUG
+                                ? buildDirDebugFirefox
+                                : buildDirProdFirefox
+                        },
+                        output
+                    )
+                )
+            ])
+        );
     }
 };
 
@@ -290,110 +409,230 @@ var executeRollup = function () {
 
 var copyStatic = function (glob, dir) {
     if (WATCH) {
-        return gulp.src(glob)
-            .pipe(replace("<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->", DEBUG ? "<script src='https://localhost:8099'></script>" : ""))
+        return gulp
+            .src(glob)
+            .pipe(
+                replace(
+                    "<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->",
+                    DEBUG
+                        ? "<script src='https://localhost:8099'></script>"
+                        : ""
+                )
+            )
             .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir));
     } else {
-        return gulp.src(glob)
-            .pipe(replace("<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->", DEBUG ? "<script src='https://localhost:8099'></script>" : ""))
+        return gulp
+            .src(glob)
+            .pipe(
+                replace(
+                    "<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->",
+                    DEBUG
+                        ? "<script src='https://localhost:8099'></script>"
+                        : ""
+                )
+            )
             .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir))
-            .pipe(gulp.dest((DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + dir))
-            .pipe(gulp.dest((DEBUG ? buildDirDebugChrome : buildDirProdChrome) + dir));
+            .pipe(
+                gulp.dest(
+                    (DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + dir
+                )
+            )
+            .pipe(
+                gulp.dest(
+                    (DEBUG ? buildDirDebugChrome : buildDirProdChrome) + dir
+                )
+            );
     }
 };
 
-gulp.task("static:popup", gulp.series("clean:static:popup", function staticPopup () {
-    return copyStatic(globStaticPopup, "/popup");
-}));
-gulp.task("static:panels", gulp.series("clean:static:panels", function staticPanels () {
-    return copyStatic(globStaticPanels, "/panels");
-}));
-gulp.task("static:page", gulp.series("clean:static:page", function staticPage () {
-    return copyStatic(globStaticPage, "/page");
-}));
-gulp.task("static:background", gulp.series("clean:static:background", function staticBackground () {
-    return copyStatic(globStaticBackground, "/background");
-}));
-gulp.task("static:settings", gulp.series("clean:static:settings", function staticSettings () {
-    return copyStatic(globStaticSettings, "/settings");
-}));
-gulp.task("static:dialogs", gulp.series("clean:static:dialogs", function staticDialogs () {
-    return copyStatic(globStaticDialogs, "/dialogs");
-}));
-gulp.task("static:lib", gulp.series("clean:static:lib", function staticLib () {
-    return copyStatic(globStaticLib, "/lib");
-}));
-gulp.task("static:common", gulp.series("clean:static:common", function staticCommon () {
-    return copyStatic(globStaticCommon, "/common");
-}));
-gulp.task("static:commonFonts", gulp.series("clean:static:commonFonts", function staticCommonFonts () {
-    return copyStatic(globStaticCommonFonts, "/common/fonts");
-}));
-gulp.task("static:commonImages", gulp.series("clean:static:commonImages", function staticCommonImages () {
-    return copyStatic(globStaticCommonImages, "/common/images");
-}));
-gulp.task("static:releasenotes", gulp.series("clean:static:releasenotes", function staticReleaseNotes () {
-    return copyStatic(globStaticReleaseNotes, "/release-notes");
-}));
-gulp.task("static:locales", gulp.series("clean:static:locales", function staticLocales () {
-    return copyStatic(globStaticLocales, "/_locales");
-}));
+gulp.task(
+    "static:popup",
+    gulp.series("clean:static:popup", function staticPopup() {
+        return copyStatic(globStaticPopup, "/popup");
+    })
+);
+gulp.task(
+    "static:panels",
+    gulp.series("clean:static:panels", function staticPanels() {
+        return copyStatic(globStaticPanels, "/panels");
+    })
+);
+gulp.task(
+    "static:page",
+    gulp.series("clean:static:page", function staticPage() {
+        return copyStatic(globStaticPage, "/page");
+    })
+);
+gulp.task(
+    "static:background",
+    gulp.series("clean:static:background", function staticBackground() {
+        return copyStatic(globStaticBackground, "/background");
+    })
+);
+gulp.task(
+    "static:settings",
+    gulp.series("clean:static:settings", function staticSettings() {
+        return copyStatic(globStaticSettings, "/settings");
+    })
+);
+gulp.task(
+    "static:dialogs",
+    gulp.series("clean:static:dialogs", function staticDialogs() {
+        return copyStatic(globStaticDialogs, "/dialogs");
+    })
+);
+gulp.task(
+    "static:lib",
+    gulp.series("clean:static:lib", function staticLib() {
+        return copyStatic(globStaticLib, "/lib");
+    })
+);
+gulp.task(
+    "static:common",
+    gulp.series("clean:static:common", function staticCommon() {
+        return copyStatic(globStaticCommon, "/common");
+    })
+);
+gulp.task(
+    "static:commonFonts",
+    gulp.series("clean:static:commonFonts", function staticCommonFonts() {
+        return copyStatic(globStaticCommonFonts, "/common/fonts");
+    })
+);
+gulp.task(
+    "static:commonImages",
+    gulp.series("clean:static:commonImages", function staticCommonImages() {
+        return copyStatic(globStaticCommonImages, "/common/images");
+    })
+);
+gulp.task(
+    "static:releasenotes",
+    gulp.series("clean:static:releasenotes", function staticReleaseNotes() {
+        return copyStatic(globStaticReleaseNotes, "/release-notes");
+    })
+);
+gulp.task(
+    "static:locales",
+    gulp.series("clean:static:locales", function staticLocales() {
+        return copyStatic(globStaticLocales, "/_locales");
+    })
+);
 
-gulp.task("copyStaticManifest", gulp.series(function copyStaticManifest () {
-    return copyStatic(globStaticManifest, "");
-}));
+gulp.task(
+    "copyStaticManifest",
+    gulp.series(function copyStaticManifest() {
+        return copyStatic(globStaticManifest, "");
+    })
+);
 
-gulp.task("modifyBuildFilesForCrossBrowser", gulp.series(function modifyBuildFilesForCrossBrowser () {
-    if (DEBUG) {
-        console.log("Modifying manifest for cross-browser debug");
-        return merge (
-            gulp.src([buildDirDebugFirefox + "/manifest.json"])
-                .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
-                .pipe(replace(/(.*"version": ")(.*)(",.*)/g, "$1$2beta$3"))
-                .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ""))
-                .pipe(gulp.dest(buildDirDebugFirefox)),
-            gulp.src([buildDirDebugChrome + "/manifest.json"])
-                .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
-                .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, "$1$2 Beta$3"))
-                .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ""))
-            // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
-                .pipe(replace(/(.*"clipboardWrite",)(.*)/g, ""))
-                .pipe(replace(/(.*"clipboardRead",)(.*)/g, ""))
-                .pipe(gulp.dest(buildDirDebugChrome))
-        );
-    } else {
-        console.log("Modifying manifest for cross-browser production");
-        return merge (
-            gulp.src([buildDirProdFirefox + "/manifest.json"])
-                .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
-                .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ""))
-                .pipe(replace(/(.*"update_url": ")(.*)(",.*)/g, ""))
-                .pipe(gulp.dest(buildDirProdFirefox)),
-            gulp.src([buildDirProdChrome + "/manifest.json"])
-                .pipe(replace("\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",", ""))
-                .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ""))
-            // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
-                .pipe(replace(/(.*"clipboardWrite",)(.*)/g, ""))
-                .pipe(replace(/(.*"clipboardRead",)(.*)/g, ""))
-                .pipe(gulp.dest(buildDirProdChrome))
-        );
-    }
-}));
+gulp.task(
+    "modifyBuildFilesForCrossBrowser",
+    gulp.series(function modifyBuildFilesForCrossBrowser() {
+        if (DEBUG) {
+            console.log("Modifying manifest for cross-browser debug");
+            return merge(
+                gulp
+                    .src([buildDirDebugFirefox + "/manifest.json"])
+                    .pipe(
+                        replace(
+                            "\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",",
+                            ""
+                        )
+                    )
+                    .pipe(replace(/(.*"version": ")(.*)(",.*)/g, "$1$2beta$3"))
+                    .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ""))
+                    .pipe(gulp.dest(buildDirDebugFirefox)),
+                gulp
+                    .src([buildDirDebugChrome + "/manifest.json"])
+                    .pipe(
+                        replace(
+                            "\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",",
+                            ""
+                        )
+                    )
+                    .pipe(
+                        replace(
+                            /(.*"version_name": ")(.*)(",.*)/g,
+                            "$1$2 Beta$3"
+                        )
+                    )
+                    .pipe(
+                        replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, "")
+                    )
+                    // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
+                    .pipe(replace(/(.*"clipboardWrite",)(.*)/g, ""))
+                    .pipe(replace(/(.*"clipboardRead",)(.*)/g, ""))
+                    .pipe(gulp.dest(buildDirDebugChrome))
+            );
+        } else {
+            console.log("Modifying manifest for cross-browser production");
+            return merge(
+                gulp
+                    .src([buildDirProdFirefox + "/manifest.json"])
+                    .pipe(
+                        replace(
+                            "\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",",
+                            ""
+                        )
+                    )
+                    .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, ""))
+                    .pipe(replace(/(.*"update_url": ")(.*)(",.*)/g, ""))
+                    .pipe(gulp.dest(buildDirProdFirefox)),
+                gulp
+                    .src([buildDirProdChrome + "/manifest.json"])
+                    .pipe(
+                        replace(
+                            "\"content_security_policy\": \"script-src 'self' https://localhost:8099; object-src 'self';\",",
+                            ""
+                        )
+                    )
+                    .pipe(
+                        replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, "")
+                    )
+                    // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
+                    .pipe(replace(/(.*"clipboardWrite",)(.*)/g, ""))
+                    .pipe(replace(/(.*"clipboardRead",)(.*)/g, ""))
+                    .pipe(gulp.dest(buildDirProdChrome))
+            );
+        }
+    })
+);
 
-gulp.task("static:manifest", gulp.series("clean:static:manifest", function staticManifest (done) {
-    if (WATCH) gulp.series("copyStaticManifest")();
-    else gulp.series("copyStaticManifest", "modifyBuildFilesForCrossBrowser")();
-    done();
-}));
+gulp.task(
+    "static:manifest",
+    gulp.series("clean:static:manifest", function staticManifest(done) {
+        if (WATCH) gulp.series("copyStaticManifest")();
+        else
+            gulp.series(
+                "copyStaticManifest",
+                "modifyBuildFilesForCrossBrowser"
+            )();
+        done();
+    })
+);
 
-gulp.task("static", gulp.parallel("static:popup","static:panels","static:page","static:background",
-    "static:settings","static:dialogs","static:common","static:commonFonts",
-    "static:commonImages","static:releasenotes","static:locales",
-    "static:manifest", "static:lib"));
+gulp.task(
+    "static",
+    gulp.parallel(
+        "static:popup",
+        "static:panels",
+        "static:page",
+        "static:background",
+        "static:settings",
+        "static:dialogs",
+        "static:common",
+        "static:commonFonts",
+        "static:commonImages",
+        "static:releasenotes",
+        "static:locales",
+        "static:manifest",
+        "static:lib"
+    )
+);
 
 /********** WATCHING FOR CHANGES TO SOURCE FILES **********/
 
-function watch () {
+function watch() {
     gulp.watch([globStaticPopup], ["static:popup"]);
     gulp.watch([globStaticPanels], ["static:panels"]);
     gulp.watch([globStaticPage], ["static:page"]);
@@ -413,72 +652,96 @@ gulp.task("watch", gulp.series(gulp.parallel("watchts", "static"), watch));
 
 /********** PACKAGING **********/
 
-gulp.task("zip", function zip () {
+gulp.task("zip", function zip() {
     var manifest = require("./manifest");
     var distFileName = manifest.name + "-v" + manifest.version + ".zip";
     console.log(buildDirProdChrome);
     console.log("ok");
-    return gulp.src(buildDirProdChrome + "/**")
+    return gulp
+        .src(buildDirProdChrome + "/**")
         .pipe(gulpZip(distFileName))
         .pipe(gulp.dest("dist"));
 });
 
-gulp.task("xpi", function xpi () {
+gulp.task("xpi", function xpi() {
     var manifest = require("./manifest");
     var distFileName = manifest.name + "-v" + manifest.version + ".xpi";
-    return gulp.src(buildDirProdFirefox + "/**")
+    return gulp
+        .src(buildDirProdFirefox + "/**")
         .pipe(gulpZip(distFileName))
         .pipe(gulp.dest("dist"));
 });
 
-gulp.task("zip:debug", function zipDebug () {
+gulp.task("zip:debug", function zipDebug() {
     var manifest = require("./manifest");
     var distFileName = manifest.name + "-v" + manifest.version + "-debug.zip";
-    return gulp.src(buildDirDebugChrome + "/**")
+    return gulp
+        .src(buildDirDebugChrome + "/**")
         .pipe(gulpZip(distFileName))
         .pipe(gulp.dest("dist"));
 });
 
-gulp.task("xpi:debug", function xpiDebug () {
+gulp.task("xpi:debug", function xpiDebug() {
     var manifest = require("./manifest");
     var distFileName = manifest.name + "-v" + manifest.version + "-debug.xpi";
-    return gulp.src(buildDirDebugFirefox + "/**")
+    return gulp
+        .src(buildDirDebugFirefox + "/**")
         .pipe(gulpZip(distFileName))
         .pipe(gulp.dest("dist"));
 });
-
 
 /********** TOP-LEVEL ORCHESTRATION **********/
 
-
 gulp.task("compilets", gulp.series("compilets:all"));
 
-gulp.task("build:debug", gulp.series(function buildDebug (done) {
-    WATCH = false;
-    done();
-}, "compilets", "static"));
-gulp.task("build:prod", gulp.series(function buildProd (done) {
-    DEBUG = false;
-    WATCH = false;
-    done();
-}, "compilets", "static"));
+gulp.task(
+    "build:debug",
+    gulp.series(
+        function buildDebug(done) {
+            WATCH = false;
+            done();
+        },
+        "compilets",
+        "static"
+    )
+);
+gulp.task(
+    "build:prod",
+    gulp.series(
+        function buildProd(done) {
+            DEBUG = false;
+            WATCH = false;
+            done();
+        },
+        "compilets",
+        "static"
+    )
+);
 
-gulp.task("package:prod", gulp.series(function packageProd (done) {
-    DEBUG = false;
-    WATCH = false;
-    done();
-},
-gulp.parallel("compilets", "static"),
-gulp.parallel("xpi","zip")
-));
+gulp.task(
+    "package:prod",
+    gulp.series(
+        function packageProd(done) {
+            DEBUG = false;
+            WATCH = false;
+            done();
+        },
+        gulp.parallel("compilets", "static"),
+        gulp.parallel("xpi", "zip")
+    )
+);
 
-gulp.task("package:debug", gulp.series(function packageDebug (done) {
-    WATCH = false;
-    done();
-},
-gulp.parallel("compilets", "static"),
-gulp.parallel("xpi:debug","zip:debug")
-));
+gulp.task(
+    "package:debug",
+    gulp.series(
+        function packageDebug(done) {
+            WATCH = false;
+            done();
+        },
+        gulp.parallel("compilets", "static"),
+        gulp.parallel("xpi:debug", "zip:debug")
+    )
+);
 
 gulp.task("default", gulp.series("build:debug"));
 gulp.task("build", gulp.series("build:debug"));

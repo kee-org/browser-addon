@@ -5,17 +5,18 @@ import { MatchedField } from "./MatchedField";
 import { Entry } from "../common/model/Entry";
 
 export class KeeFieldIcon {
-
-    constructor (private myPort: browser.runtime.Port,
+    constructor(
+        private myPort: browser.runtime.Port,
         private parentFrameId: number,
         private formUtils: FormUtils,
-        private createMatchedLoginsPanelNearNode: (e: HTMLElement) => void) {}
+        private createMatchedLoginsPanelNearNode: (e: HTMLElement) => void
+    ) {}
 
     private fieldsWithIcons: MatchedField[] = [];
     private passwordFields: MatchedField[];
     private otherFields: MatchedField[];
 
-    public removeKeeIconFromAllFields () {
+    public removeKeeIconFromAllFields() {
         for (const field of this.fieldsWithIcons) {
             const element: HTMLElement = field.DOMelement;
             if (!element) continue;
@@ -32,7 +33,11 @@ export class KeeFieldIcon {
         this.otherFields = null;
     }
 
-    public addKeeIconToFields (passwordFields: MatchedField[], otherFields: MatchedField[], entries: Entry[]) {
+    public addKeeIconToFields(
+        passwordFields: MatchedField[],
+        otherFields: MatchedField[],
+        entries: Entry[]
+    ) {
         this.passwordFields = passwordFields;
         this.otherFields = otherFields;
 
@@ -41,18 +46,26 @@ export class KeeFieldIcon {
         } else {
             this.afterImageLoaded(this.KEEFOX_ICON_16);
         }
-
     }
 
-    private skipField (field: MatchedField) {
-        if (!this.formUtils.isATextFormFieldType(field.field.type) && field.field.type != "password") return true;
-        if (!field.DOMelement || field.DOMelement instanceof HTMLSelectElement || !field.DOMelement.isConnected) return true;
+    private skipField(field: MatchedField) {
+        if (
+            !this.formUtils.isATextFormFieldType(field.field.type) &&
+            field.field.type != "password"
+        )
+            return true;
+        if (
+            !field.DOMelement ||
+            field.DOMelement instanceof HTMLSelectElement ||
+            !field.DOMelement.isConnected
+        )
+            return true;
         if (field.DOMelement.maxLength > 0 && field.DOMelement.maxLength <= 3) return true;
         if (field.DOMelement.offsetWidth < 50) return true;
         return false;
     }
 
-    private addIcon (field: MatchedField, image: string) {
+    private addIcon(field: MatchedField, image: string) {
         this.fieldsWithIcons.push(field);
 
         const element: HTMLElement = field.DOMelement;
@@ -66,7 +79,9 @@ export class KeeFieldIcon {
         element.style.setProperty("background-position", "calc(100% - 4px) 50%", "important");
         element.style.setProperty("cursor", "auto");
 
-        const transitionConfig = window.getComputedStyle(field.DOMelement).getPropertyValue("transition-property");
+        const transitionConfig = window
+            .getComputedStyle(field.DOMelement)
+            .getPropertyValue("transition-property");
         if (["all", "background"].some(val => transitionConfig.includes(val))) {
             field.DOMelement.style.setProperty("transition", "none", "important");
         }
@@ -74,20 +89,22 @@ export class KeeFieldIcon {
         this.overrideBoxShadows(element);
     }
 
-    public handleEvent (e: Event) {
+    public handleEvent(e: Event) {
         if (e.type === "click") this.showMatchedLoginsPanel(e);
         if (e.type === "mousemove") this.hoverOverInput(e);
     }
 
-    private limitFields (fields: MatchedField[]) {
-        const orderedFields = fields.filter(f => !this.skipField(f)).sort((a, b) => {
-            if (a.highestScore === b.highestScore) return 0;
-            return a.highestScore < b.highestScore ? 1 : -1;
-        });
+    private limitFields(fields: MatchedField[]) {
+        const orderedFields = fields
+            .filter(f => !this.skipField(f))
+            .sort((a, b) => {
+                if (a.highestScore === b.highestScore) return 0;
+                return a.highestScore < b.highestScore ? 1 : -1;
+            });
         return orderedFields.slice(0, 2);
     }
 
-    private afterImageLoaded (image: string) {
+    private afterImageLoaded(image: string) {
         // Put icons in only the top 2 matching password and text fields
         const fieldSet1 = this.limitFields(this.passwordFields);
         const fieldSet2 = this.limitFields(this.otherFields);
@@ -96,7 +113,7 @@ export class KeeFieldIcon {
         }
     }
 
-    private overrideBoxShadows (element: HTMLElement) {
+    private overrideBoxShadows(element: HTMLElement) {
         const currentStyle = window.getComputedStyle(element);
         if (currentStyle) {
             const shadows = [];
@@ -111,20 +128,21 @@ export class KeeFieldIcon {
         }
     }
 
-    private showMatchedLoginsPanel (e) {
+    private showMatchedLoginsPanel(e) {
         const bcrect = e.target.getBoundingClientRect();
         const leftLimit = bcrect.left + bcrect.width - 22;
         if (e.clientX > leftLimit && bcrect.top <= e.clientY && e.clientY <= bcrect.bottom) {
             if (this.parentFrameId !== 0) {
-                this.myPort.postMessage({action: Action.ShowMatchedLoginsPanel} as AddonMessage);
-            } else
-            {
+                this.myPort.postMessage({
+                    action: Action.ShowMatchedLoginsPanel
+                } as AddonMessage);
+            } else {
                 this.createMatchedLoginsPanelNearNode(e.target);
             }
         }
     }
 
-    private hoverOverInput (e) {
+    private hoverOverInput(e) {
         if (e.target.disabled) return;
         const bcrect = e.target.getBoundingClientRect();
         const leftLimit = bcrect.left + bcrect.width - 22;
@@ -135,7 +153,7 @@ export class KeeFieldIcon {
         e.target.style.setProperty("cursor", "auto");
     }
 
-    private getLabelledIcon (text: string) {
+    private getLabelledIcon(text: string) {
         const canvas = document.createElement("canvas");
         canvas.height = 16;
         canvas.width = 16;
@@ -148,11 +166,12 @@ export class KeeFieldIcon {
             context.fillStyle = "red";
             context.font = "8px Arial";
             context.fillText(text, 7, 15);
-            this.afterImageLoaded( canvas.toDataURL());
+            this.afterImageLoaded(canvas.toDataURL());
         });
         img.src = this.KEEFOX_ICON_16;
     }
 
-    // eslint-disable-next-line max-len
-    readonly KEEFOX_ICON_16 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAOdEVYdFRpdGxlAEtlZSBsb2dvN59B9AAAABB0RVh0QXV0aG9yAEtlZSBWYXVsdGXwy5UAAAH8SURBVDiNhZDfS1NhGMc/z3vOEHea0lgXrkisvArWTUSlF9XFIKj/waugtP+hey/M5vpFN0Eg4UVB0WARSglC0IX2AwwtzdywppYsz862875dzLmDbfTcvd/n8/0+X16JX74Sxgt9AHrYmYhVfTbZ88Z6/SeWVEC/szF1brGvVDT2JRqzVLLUCTl28Xrbtq8LwL76JtU1axLhLTm/2A/A1JFp5txOM5RPSCBgM2ypLrWQSXkID+tqd8jljLMpjvgMRFcY2P+NsPI57WxId8gN+HmwkEl5NoBUuWUsrgIqZnu7xLXol6CBmF1mudIOUDU2aQAFsPoq/RkjGYB5L4KnFXvH04p5zwHAwNP8i/TybgAAYkYBitpieL0XP2D2geH1XorarqG6xgIEP0XiycH3wHGAU+0b3D44h6sthvIJZt3OOvYulx07WTcFuxojjeSlSq3u13KYT6VIAwowewOwttoeIRSC2sx2lIqpY5KPdhx43DLg+8yIK3A/qJ111gmJrtmNvvNx4ka5ZQCA0pIGKho0QET5AAYoVUXf+4ffK6y8HMsBEyVtuQC/dQgfMRjG17J3f/w3AEArc7Oo7fD4r0OMFI6ijShRarQZK81EgHhycBro23lO5rLpC824pg0AxEjjotD0OoDdarFaiT053Lb2VhB/uePn81bcX+xXu7resl9RAAAAAElFTkSuQmCC";
+    readonly KEEFOX_ICON_16 =
+        // eslint-disable-next-line max-len
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAOdEVYdFRpdGxlAEtlZSBsb2dvN59B9AAAABB0RVh0QXV0aG9yAEtlZSBWYXVsdGXwy5UAAAH8SURBVDiNhZDfS1NhGMc/z3vOEHea0lgXrkisvArWTUSlF9XFIKj/waugtP+hey/M5vpFN0Eg4UVB0WARSglC0IX2AwwtzdywppYsz862875dzLmDbfTcvd/n8/0+X16JX74Sxgt9AHrYmYhVfTbZ88Z6/SeWVEC/szF1brGvVDT2JRqzVLLUCTl28Xrbtq8LwL76JtU1axLhLTm/2A/A1JFp5txOM5RPSCBgM2ypLrWQSXkID+tqd8jljLMpjvgMRFcY2P+NsPI57WxId8gN+HmwkEl5NoBUuWUsrgIqZnu7xLXol6CBmF1mudIOUDU2aQAFsPoq/RkjGYB5L4KnFXvH04p5zwHAwNP8i/TybgAAYkYBitpieL0XP2D2geH1XorarqG6xgIEP0XiycH3wHGAU+0b3D44h6sthvIJZt3OOvYulx07WTcFuxojjeSlSq3u13KYT6VIAwowewOwttoeIRSC2sx2lIqpY5KPdhx43DLg+8yIK3A/qJ111gmJrtmNvvNx4ka5ZQCA0pIGKho0QET5AAYoVUXf+4ffK6y8HMsBEyVtuQC/dQgfMRjG17J3f/w3AEArc7Oo7fD4r0OMFI6ijShRarQZK81EgHhycBro23lO5rLpC824pg0AxEjjotD0OoDdarFaiT053Lb2VhB/uePn81bcX+xXu7resl9RAAAAAElFTkSuQmCC";
 }

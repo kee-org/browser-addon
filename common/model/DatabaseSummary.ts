@@ -10,7 +10,7 @@ export class DatabaseSummary {
     root: GroupSummary;
     active: boolean;
 
-    constructor (db: Partial<DatabaseSummary>) {
+    constructor(db: Partial<DatabaseSummary>) {
         this.name = db.name || "";
         this.fileName = db.fileName || "";
         this.icon = db.icon || { version: 1, iconImageData: "" };
@@ -18,7 +18,7 @@ export class DatabaseSummary {
         this.active = db.active || false;
     }
 
-    public static fromKPRPCDatabaseSummaryDTO (dto: DatabaseSummaryDto) {
+    public static fromKPRPCDatabaseSummaryDTO(dto: DatabaseSummaryDto) {
         return new DatabaseSummary({
             name: dto.name,
             fileName: dto.fileName,
@@ -28,7 +28,7 @@ export class DatabaseSummary {
         });
     }
 
-    public static fromDatabase (db: Database) {
+    public static fromDatabase(db: Database) {
         return new DatabaseSummary({
             name: db.name,
             fileName: db.fileName,

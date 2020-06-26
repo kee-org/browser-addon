@@ -9,14 +9,14 @@ export class GroupSummary {
     readonly icon: Icon;
     readonly path: string;
 
-    constructor (g: Partial<GroupSummary>) {
+    constructor(g: Partial<GroupSummary>) {
         this.title = g.title || "";
         this.uuid = g.uuid || utils.newGUID();
         this.icon = g.icon || { version: 1, iconImageData: "" };
         this.path = g.path || "UNKNOWN PATH";
     }
 
-    public static fromKPRPCGroupSummaryDTO (groupSummaryDto: GroupSummaryDto) {
+    public static fromKPRPCGroupSummaryDTO(groupSummaryDto: GroupSummaryDto) {
         return new GroupSummary({
             title: groupSummaryDto.title,
             uuid: groupSummaryDto.uniqueID,
@@ -25,7 +25,7 @@ export class GroupSummary {
         });
     }
 
-    public static fromGroup (group: Group) {
+    public static fromGroup(group: Group) {
         return new GroupSummary({
             title: group.title,
             uuid: group.uuid,
@@ -35,4 +35,5 @@ export class GroupSummary {
     }
 }
 
-export const TemporaryIDString = "TEMPORARY ID TO IDENTIFY THIS AS A DIRTY ENTRY THAT DOESN'T EXIST IN SOURCE DATABASE YET";
+export const TemporaryIDString =
+    "TEMPORARY ID TO IDENTIFY THIS AS A DIRTY ENTRY THAT DOESN'T EXIST IN SOURCE DATABASE YET";

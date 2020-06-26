@@ -1,44 +1,39 @@
 <template>
-  <v-row>
-    <v-col>
-      <v-text-field
-        v-if="field.type === 'password' || field.type === 'text'"
-        :label="label"
-        :value="field.value"
-        color="secondary"
-        dense
-        outlined
-        hide-details="auto"
-        :append-outer-icon="field.type === 'password' ? 'mdi-flash' : ''"
-        :type="renderType"
-        @input="valueChanged"
-        @click:append-outer="showPasswordGenerator = true"
-      >
-        <template slot="append">
-          <v-btn
-            v-if="resettable"
-            small
-            icon
-            @click="reset"
-          >
-            <v-icon>mdi-undo</v-icon>
-          </v-btn>
-          <v-btn
-            v-if="field.type === 'password'"
-            small
-            icon
-            @click="revealed = !revealed"
-          >
-            <v-icon>{{ revealed ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
-          </v-btn>
-        </template>
-      </v-text-field>
-      <PasswordGenerator
-        v-if="showPasswordGenerator"
-        @dialog-closed="passwordGeneratorClosed"
-      />
-    </v-col>
-  </v-row>
+    <v-row>
+        <v-col>
+            <v-text-field
+                v-if="field.type === 'password' || field.type === 'text'"
+                :label="label"
+                :value="field.value"
+                color="secondary"
+                dense
+                outlined
+                hide-details="auto"
+                :append-outer-icon="field.type === 'password' ? 'mdi-flash' : ''"
+                :type="renderType"
+                @input="valueChanged"
+                @click:append-outer="showPasswordGenerator = true"
+            >
+                <template slot="append">
+                    <v-btn v-if="resettable" small icon @click="reset">
+                        <v-icon>mdi-undo</v-icon>
+                    </v-btn>
+                    <v-btn
+                        v-if="field.type === 'password'"
+                        small
+                        icon
+                        @click="revealed = !revealed"
+                    >
+                        <v-icon>{{ revealed ? "mdi-eye" : "mdi-eye-off" }}</v-icon>
+                    </v-btn>
+                </template>
+            </v-text-field>
+            <PasswordGenerator
+                v-if="showPasswordGenerator"
+                @dialog-closed="passwordGeneratorClosed"
+            />
+        </v-col>
+    </v-row>
 </template>
 
 <script lang="ts">
@@ -72,7 +67,7 @@ export default {
         reset: function (this: any) {
             this.valueChanged(this.field.resetValue);
         },
-        valueChanged: function (this:any, value) {
+        valueChanged: function (this: any, value) {
             this.$emit("field-value-changed", { uuid: this.field.uuid, value });
         },
         passwordGeneratorClosed: function (this: any, payload) {

@@ -2,8 +2,12 @@ const INLINE_ELEMENTS = require('./node_modules/eslint-plugin-vue/lib/utils/inli
 const htmlElementContentNewlineIgnores = ["pre", "textarea", "v-icon", ...INLINE_ELEMENTS];
 
 module.exports = {
-    "extends": ["eslint:recommended",
-    'plugin:vue/recommended'],
+    root: true,
+    "extends": [
+        "eslint:recommended",
+        'plugin:vue/recommended',
+        "plugin:prettier/recommended"
+    ],
     "env": {
         "browser": true,
         "es6": true
@@ -26,9 +30,15 @@ module.exports = {
         "extraFileExtensions": [".vue"]
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "prettier"
     ],
     "rules": {
+        "prettier/prettier": "error",
+        "vue/html-indent": "off",
+        "vue/max-attributes-per-line": "off",
+        "vue/html-closing-bracket-newline": "off",
+        "vue/html-self-closing": "off",
         "vue/require-prop-types": "off",
         "vue/singleline-html-element-content-newline": ["error", {
             "ignoreWhenNoAttributes": true,
@@ -42,7 +52,6 @@ module.exports = {
         }],
         "vue/attribute-hyphenation": "off",
         "@typescript-eslint/consistent-type-assertions": "error",
-        "@typescript-eslint/indent": "error",
         "@typescript-eslint/member-delimiter-style": [
             "error",
             {
@@ -90,10 +99,6 @@ module.exports = {
         //     "undefined"
         // ],
         "id-match": "error",
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
         "max-len": [
             "error",
             {
@@ -142,27 +147,6 @@ module.exports = {
             "error",
             "never"
         ],
-        "prefer-const": "error",
-        "quote-props": [
-            "error",
-            "consistent-as-needed"
-        ],
-        "space-before-function-paren": [
-            "error",
-            "always"
-        ],
-        // "@typescript-eslint/tslint/config": [
-        //     "error",
-        //     {
-        //         "rules": {
-        //             "whitespace": [
-        //                 true,
-        //                 "check-branch",
-        //                 "check-separator",
-        //                 "check-type"
-        //             ]
-        //         }
-        //     }
-        // ]
+        "prefer-const": "error"
     }
 };

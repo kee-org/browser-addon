@@ -3,13 +3,13 @@ export class PersistentLogger {
     private entries = [];
     private enabled = true;
 
-    constructor () {
+    constructor() {
         browser.runtime.onMessage.addListener(message => {
             this.emit(message);
         });
     }
 
-    init (enabled: boolean) {
+    init(enabled: boolean) {
         this.enabled = enabled;
         if (enabled) {
             this.interval = setInterval(async () => {
@@ -24,8 +24,12 @@ export class PersistentLogger {
                     currentLogs = currentLogs.concat(newLogs);
                     const preTrimTotal = currentLogs.length;
                     currentLogs = currentLogs.slice(-5000);
-                    await browser.storage.local.set({logs: currentLogs});
-                    console.log(`${newLogs.length} new (${currentLogs.length} total) logs flushed. ${preTrimTotal-currentLogs.length} logs expired.`);
+                    await browser.storage.local.set({ logs: currentLogs });
+                    console.log(
+                        `${newLogs.length} new (${currentLogs.length} total) logs flushed. ${
+                            preTrimTotal - currentLogs.length
+                        } logs expired.`
+                    );
                 } else {
                     console.log("0 logs flushed");
                 }
@@ -35,7 +39,7 @@ export class PersistentLogger {
         }
     }
 
-    emit (logEntry) {
+    emit(logEntry) {
         if (this.enabled) {
             this.entries.push(logEntry);
         }

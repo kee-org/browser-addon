@@ -9,7 +9,6 @@ import { GroupSummary } from "./GroupSummary";
 // Although we use uuids for Fields and possibly Locators, we don't allow them to exist outside of their parent entry.
 
 export class Entry {
-
     // array of URL strings (normally just one is needed
     // but a given entry can be associated with more than one site
     // or with multiple pages on that site)
@@ -43,7 +42,7 @@ export class Entry {
     readonly neverAutoFill: boolean;
     readonly neverAutoSubmit: boolean;
 
-    readonly database : DatabaseSummary;
+    readonly database: DatabaseSummary;
 
     // How relevant this entry is to the current form in
     // the browser - transient (not stored in KeePass)
@@ -53,7 +52,7 @@ export class Entry {
     formIndex: number;
     entryIndex: number;
 
-    constructor (e: Partial<Entry>) {
+    constructor(e: Partial<Entry>) {
         this.alwaysAutoFill = e.alwaysAutoFill || false;
         this.alwaysAutoSubmit = e.alwaysAutoSubmit || false;
         this.neverAutoFill = e.neverAutoFill || false;
@@ -69,22 +68,22 @@ export class Entry {
         this.database = e.database || new Database({});
     }
 
-    public static getUsernameField (entry: Entry) {
+    public static getUsernameField(entry: Entry) {
         return entry.fields.find(f => f.type === "text");
     }
-    public static getPasswordField (entry: Entry) {
+    public static getPasswordField(entry: Entry) {
         return entry.fields.find(f => f.type === "password");
     }
 
-    public static fromKPRPCEntryDTO (entryDto: EntryDto, db: DatabaseSummary) {
+    public static fromKPRPCEntryDTO(entryDto: EntryDto, db: DatabaseSummary) {
         const sortedFields: Field[] = [];
         let maximumPage = 1;
-        const usernameIndex = entryDto.formFieldList.findIndex(f => f.type === FormFieldTypeDTO.username);
+        const usernameIndex = entryDto.formFieldList.findIndex(
+            f => f.type === FormFieldTypeDTO.username
+        );
 
         const unsortedFields = entryDto.formFieldList.map((f, i) => {
-
-            if (f.page > maximumPage)
-                maximumPage = f.page;
+            if (f.page > maximumPage) maximumPage = f.page;
 
             return Field.fromKPRPCFieldDTO(f);
         });
@@ -121,7 +120,7 @@ export class Entry {
         return entry;
     }
 
-    public static toKPRPCEntryDTO (entry: Entry) {
+    public static toKPRPCEntryDTO(entry: Entry) {
         const entryDto = new EntryDto();
         entryDto.alwaysAutoFill = entry.alwaysAutoFill;
         entryDto.alwaysAutoSubmit = entry.alwaysAutoSubmit;

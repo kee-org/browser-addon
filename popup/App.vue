@@ -1,215 +1,150 @@
 <template>
-  <v-app
-    id="inspire"
-  >
-    <v-app-bar
-      v-model="showSearchPanel"
-      app
-      style="max-width: 400px;"
-    >
-      <SearchInput />
-    </v-app-bar>
-    <v-main :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
-      <v-container
-        fluid
-      >
-        <v-alert
-          v-show="showSaveRecovery"
-          :value="true"
-          color="secondary"
-          icon="mdi-alert-circle"
-          text
-        >
-          <v-row dense>
-            <v-col>{{ $i18n('unsaved_changes') }}</v-col>
-          </v-row>
-          <v-row
-            dense
-            align="start"
-          >
-            <v-col>
-              <v-btn
-                color="primary"
-                @click="saveRecover"
-              >
-                {{ $i18n('continue_saving') }}
-              </v-btn>
-            </v-col>
-            <v-col>
-              <v-btn
-                color="tertiary"
-                @click="saveDiscard"
-              >
-                {{ $i18n('discard_changes') }}
-              </v-btn>
-            </v-col>
+    <v-app id="inspire">
+        <v-app-bar v-model="showSearchPanel" app style="max-width: 400px;">
+            <SearchInput />
+        </v-app-bar>
+        <v-main :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
+            <v-container fluid>
+                <v-alert
+                    v-show="showSaveRecovery"
+                    :value="true"
+                    color="secondary"
+                    icon="mdi-alert-circle"
+                    text
+                >
+                    <v-row dense>
+                        <v-col>{{ $i18n("unsaved_changes") }}</v-col>
+                    </v-row>
+                    <v-row dense align="start">
+                        <v-col>
+                            <v-btn color="primary" @click="saveRecover">
+                                {{ $i18n("continue_saving") }}
+                            </v-btn>
+                        </v-col>
+                        <v-col>
+                            <v-btn color="tertiary" @click="saveDiscard">
+                                {{ $i18n("discard_changes") }}
+                            </v-btn>
+                        </v-col>
+                        <v-spacer />
+                    </v-row>
+                </v-alert>
+                <div v-if="showNotifications" id="notifications" class="pt-6">
+                    <Notification v-for="n of notifications" :key="n.id" :notification="n" />
+                </div>
+                <SearchResults
+                    v-show="showSearchPanel"
+                    :matched-entries="matchedEntries"
+                    :frame-id="frameId"
+                />
+                <Save1stParty
+                    v-if="showSaveStart && !showSaveWhere"
+                    @save-where-clicked="saveWhere"
+                    @cancel-clicked="saveDiscard"
+                />
+                <SaveWhere v-if="showSaveWhere" />
+            </v-container>
+        </v-main>
+
+        <v-tooltip left :open-delay="tooltipDelay">
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-show="showSearchPanel && !showSaveRecovery"
+                    fab
+                    small
+                    absolute
+                    bottom
+                    right
+                    color="primary"
+                    style="bottom: 75px; right: 24px;"
+                    v-on="on"
+                    @click="saveStart"
+                >
+                    <v-icon>mdi-plus</v-icon>
+                </v-btn>
+            </template>
+            <span>{{ $i18n("create_new_entry") }}</span>
+        </v-tooltip>
+
+        <v-footer app height="auto">
+            <v-tooltip top :open-delay="tooltipDelay">
+                <template v-slot:activator="{ on }">
+                    <v-btn
+                        id="password-open-kee-vault"
+                        :aria-label="$i18n('Menu_Button_open_kee_vault_label')"
+                        class="ml-0 mr-2"
+                        icon
+                        v-on="on"
+                        @click="openKeeVault"
+                    >
+                        <img width="24px" height="24px" src="../common/images/48-kee-vault.png" />
+                    </v-btn>
+                </template>
+                <span>{{ $i18n("Menu_Button_open_kee_vault_label") }}</span>
+            </v-tooltip>
+            <v-tooltip top :open-delay="tooltipDelay">
+                <template v-slot:activator="{ on }">
+                    <v-btn
+                        v-show="showOpenKeePassButton"
+                        id="password-open-keepass"
+                        :aria-label="$i18n('Menu_Button_open_keepass_label')"
+                        class="mr-2 ml-n1"
+                        icon
+                        v-on="on"
+                        @click="openKeePass"
+                    >
+                        <img width="24px" height="24px" src="../common/images/48-keepass.png" />
+                    </v-btn>
+                </template>
+                <span>{{ $i18n("Menu_Button_open_keepass_label") }}</span>
+            </v-tooltip>
+            <v-divider vertical />
+            <v-icon size="20px" :color="statusIconColour" class="mx-2">
+                mdi-lock
+            </v-icon>
+            <v-tooltip top :open-delay="tooltipDelay">
+                <template v-slot:activator="{ on }">
+                    <div
+                        class="text-caption py-1 shrink"
+                        style="word-break: break-word; overflow-wrap: break-word; max-width: 210px;"
+                        v-on="on"
+                    >
+                        {{ connectionStatus }}
+                    </div>
+                </template>
+                <span>{{ connectionStatusDetail }}</span>
+            </v-tooltip>
+
             <v-spacer />
-          </v-row>
-        </v-alert>
-        <div
-          v-if="showNotifications"
-          id="notifications"
-          class="pt-6"
-        >
-          <Notification
-            v-for="n of notifications"
-            :key="n.id"
-            :notification="n"
-          />
-        </div>
-        <SearchResults
-          v-show="showSearchPanel"
-          :matched-entries="matchedEntries"
-          :frame-id="frameId"
-        />
-        <Save1stParty
-          v-if="showSaveStart && !showSaveWhere"
-          @save-where-clicked="saveWhere"
-          @cancel-clicked="saveDiscard"
-        />
-        <SaveWhere
-          v-if="showSaveWhere"
-        />
-      </v-container>
-    </v-main>
 
-    <v-tooltip
-      left
-      :open-delay="tooltipDelay"
-    >
-      <template v-slot:activator="{ on }">
-        <v-btn
-          v-show="showSearchPanel && !showSaveRecovery"
-          fab
-          small
-          absolute
-          bottom
-          right
-          color="primary"
-          style="bottom: 75px; right: 24px"
-          v-on="on"
-          @click="saveStart"
-        >
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </template>
-      <span>{{ $i18n('create_new_entry') }}</span>
-    </v-tooltip>
+            <v-menu top offset-y small>
+                <template v-slot:activator="{ on }">
+                    <v-btn icon small v-on="on">
+                        <v-icon>mdi-menu</v-icon>
+                    </v-btn>
+                </template>
 
-    <v-footer
-      app
-      height="auto"
-    >
-      <v-tooltip
-        top
-        :open-delay="tooltipDelay"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            id="password-open-kee-vault"
-            :aria-label="$i18n('Menu_Button_open_kee_vault_label')"
-            class="ml-0 mr-2"
-            icon
-            v-on="on"
-            @click="openKeeVault"
-          >
-            <img
-              width="24px"
-              height="24px"
-              src="../common/images/48-kee-vault.png"
-            >
-          </v-btn>
-        </template>
-        <span>{{ $i18n('Menu_Button_open_kee_vault_label') }}</span>
-      </v-tooltip>
-      <v-tooltip
-        top
-        :open-delay="tooltipDelay"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            v-show="showOpenKeePassButton"
-            id="password-open-keepass"
-            :aria-label="$i18n('Menu_Button_open_keepass_label')"
-            class="mr-2 ml-n1"
-            icon
-            v-on="on"
-            @click="openKeePass"
-          >
-            <img
-              width="24px"
-              height="24px"
-              src="../common/images/48-keepass.png"
-            >
-          </v-btn>
-        </template>
-        <span>{{ $i18n('Menu_Button_open_keepass_label') }}</span>
-      </v-tooltip>
-      <v-divider vertical />
-      <v-icon
-        size="20px"
-        :color="statusIconColour"
-        class="mx-2"
-      >
-        mdi-lock
-      </v-icon>
-      <v-tooltip
-        top
-        :open-delay="tooltipDelay"
-      >
-        <template v-slot:activator="{ on }">
-          <div
-            class="text-caption py-1 shrink"
-            style="word-break: break-word;overflow-wrap: break-word;max-width: 210px;"
-            v-on="on"
-          >
-            {{ connectionStatus }}
-          </div>
-        </template>
-        <span>{{ connectionStatusDetail }}</span>
-      </v-tooltip>
-
-      <v-spacer />
-
-      <v-menu
-        top
-        offset-y
-        small
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            icon
-            small
-            v-on="on"
-          >
-            <v-icon>mdi-menu</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item @click="showHelp">
-            <v-list-item-title
-              right
-              class="mr-4 text-right text-body-2"
-            >
-              {{ $i18n('Help_Centre_Button_label') }}
-            </v-list-item-title>
-            <v-icon size="20px">
-              mdi-help
-            </v-icon>
-          </v-list-item>
-          <v-list-item @click="showOptions">
-            <v-list-item-title class="mr-4 text-right body-2">
-              {{ $i18n('Menu_Button_options_label') }}
-            </v-list-item-title>
-            <v-icon size="20px">
-              mdi-settings
-            </v-icon>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-footer>
-  </v-app>
+                <v-list>
+                    <v-list-item @click="showHelp">
+                        <v-list-item-title right class="mr-4 text-right text-body-2">
+                            {{ $i18n("Help_Centre_Button_label") }}
+                        </v-list-item-title>
+                        <v-icon size="20px">
+                            mdi-help
+                        </v-icon>
+                    </v-list-item>
+                    <v-list-item @click="showOptions">
+                        <v-list-item-title class="mr-4 text-right body-2">
+                            {{ $i18n("Menu_Button_options_label") }}
+                        </v-list-item-title>
+                        <v-icon size="20px">
+                            mdi-settings
+                        </v-icon>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+        </v-footer>
+    </v-app>
 </template>
 
 <script lang="ts">
@@ -245,8 +180,8 @@ export default {
     mixins: [Port.mixin],
     props: ["matchedEntries", "frameId"],
     data: () => ({
-        // We can't use the Vuex property directly because when it changes it causes 
-        // the app to re-render from scratch, destroying the user input that triggered 
+        // We can't use the Vuex property directly because when it changes it causes
+        // the app to re-render from scratch, destroying the user input that triggered
         // the datestamp change. Instead we can watch for changes and only modify this
         // value in a set of circumstances that meet our requirements.
         // Also note that Chromium and Firefox extensions behave differently - Chrome
@@ -262,10 +197,18 @@ export default {
         autoRecoveryTimeMs
     }),
     computed: {
-        ...mapGetters(["showGeneratePasswordLink", "saveState",
-            "showMatchedLogins","showOpenKeePassButton","connectionStatus",
-            "connectionStatusDetail", "connected", "databaseIsOpen",
-            "notifications", "showNotifications"]),
+        ...mapGetters([
+            "showGeneratePasswordLink",
+            "saveState",
+            "showMatchedLogins",
+            "showOpenKeePassButton",
+            "connectionStatus",
+            "connectionStatusDetail",
+            "connected",
+            "databaseIsOpen",
+            "notifications",
+            "showNotifications"
+        ]),
         statusIconColour: function (this: any) {
             if (this.connected && this.databaseIsOpen) {
                 return "green";
@@ -275,10 +218,14 @@ export default {
             return "red";
         },
         showSaveStart: function (this: any) {
-            return new Date(this.saveLastActiveAt) > new Date(Date.now()-this.autoRecoveryTimeMs);
+            return new Date(this.saveLastActiveAt) > new Date(Date.now() - this.autoRecoveryTimeMs);
         },
         showSaveRecovery: function (this: any) {
-            return !this.showSaveStart && new Date(this.saveLastActiveAt) > new Date(Date.now()-this.manualRecoveryPromptTimeMs);
+            return (
+                !this.showSaveStart &&
+                new Date(this.saveLastActiveAt) >
+                    new Date(Date.now() - this.manualRecoveryPromptTimeMs)
+            );
         },
         showSearchPanel: function (this: any) {
             return this.databaseIsOpen && !this.showSaveStart;
@@ -291,16 +238,20 @@ export default {
             }
         }
     },
-    async mounted (this: any) {
+    async mounted(this: any) {
         this.saveLastActiveAt = this.$store.state.saveState?.lastActiveAt;
 
         const discardRequired = this.handleLastSaveResult();
 
         // Clear the newEntry if it is beyond our maximum recovery time
-        // This frees up memory but more importantly allows the watch for saveState to 
+        // This frees up memory but more importantly allows the watch for saveState to
         // set the appropriate last active datetime when the user attempts to re-edit
         // the same entry as most recently.
-        if (discardRequired || this.$store.state.saveState?.lastActiveAt <= new Date(Date.now()-this.manualRecoveryPromptTimeMs)) {
+        if (
+            discardRequired ||
+            this.$store.state.saveState?.lastActiveAt <=
+                new Date(Date.now() - this.manualRecoveryPromptTimeMs)
+        ) {
             this.saveDiscard();
         }
 
@@ -320,7 +271,7 @@ export default {
             window.close();
         },
         saveStart: async function (this: any) {
-            const currentTab = (await browser.tabs.query({ active: true, currentWindow:true }))[0];
+            const currentTab = (await browser.tabs.query({ active: true, currentWindow: true }))[0];
             if (!currentTab) return;
             const entryTemplate = {
                 URLs: [currentTab.url],
@@ -364,7 +315,13 @@ export default {
         },
         openKeeVault: async function () {
             KeeLog.debug("open Kee Vault requested");
-            const vaultTabs = await browser.tabs.query({url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]});
+            const vaultTabs = await browser.tabs.query({
+                url: [
+                    "https://keevault.pm/*",
+                    "https://app-beta.kee.pm/*",
+                    "https://app-dev.kee.pm/*"
+                ]
+            });
             if (vaultTabs && vaultTabs[0]) {
                 browser.tabs.update(vaultTabs[0].id, { active: true });
             } else {
@@ -391,10 +348,16 @@ export default {
 
             if (lastResult.result === "created" || lastResult.result === "updated") {
                 //TODO: Render info notification panel before wiping current data - see #263
-                this.$store.dispatch("updateSaveEntryResult", { result: null, receivedAt: new Date() } as SaveEntryResult);
+                this.$store.dispatch("updateSaveEntryResult", {
+                    result: null,
+                    receivedAt: new Date()
+                } as SaveEntryResult);
                 return true;
             } else {
-                this.$store.dispatch("updateSaveEntryResult", { result: null, receivedAt: new Date() } as SaveEntryResult);
+                this.$store.dispatch("updateSaveEntryResult", {
+                    result: null,
+                    receivedAt: new Date()
+                } as SaveEntryResult);
                 return false;
             }
         }
@@ -404,18 +367,18 @@ export default {
 
 <style>
 .v-main__wrap {
-  overflow-y: scroll;
+    overflow-y: scroll;
 }
 
 .app_height_medium .v-main__wrap {
-  max-height: 466px;
-  min-height: 466px;
-  height: 466px;
+    max-height: 466px;
+    min-height: 466px;
+    height: 466px;
 }
 
 .app_height_tall .v-main__wrap {
-  max-height: 522px;
-  min-height: 522px;
-  height: 522px;
+    max-height: 522px;
+    min-height: 522px;
+    height: 522px;
 }
 </style>

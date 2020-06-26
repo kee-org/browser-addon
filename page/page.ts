@@ -18,8 +18,16 @@ on all website pages except those containing a KPRPC server */
 var keeDuplicationCount;
 
 if (keeDuplicationCount) {
-    if (KeeLog && KeeLog.error) KeeLog.error("Duplicate Kee content script instance detected! Found this many other instances: " + keeDuplicationCount);
-    else console.error("Duplicate Kee content script instance detected! Found this many other instances: " + keeDuplicationCount);
+    if (KeeLog && KeeLog.error)
+        KeeLog.error(
+            "Duplicate Kee content script instance detected! Found this many other instances: " +
+                keeDuplicationCount
+        );
+    else
+        console.error(
+            "Duplicate Kee content script instance detected! Found this many other instances: " +
+                keeDuplicationCount
+        );
 } else {
     keeDuplicationCount = 0;
 }
@@ -36,35 +44,53 @@ let syncContent: SyncContent;
 let connected: boolean = false;
 let messagingPortConnectionRetryTimer: number;
 
-function matchFinder (uri: string) {
+function matchFinder(uri: string) {
     Port.postMessage({ findMatches: { uri } });
 }
 
-function tutorialIntegration () {
-    if (window.location.hostname.endsWith("tutorial-addon-1.kee.pm")
-        || window.location.hostname.endsWith("tutorial-addon.kee.pm")) {
+function tutorialIntegration() {
+    if (
+        window.location.hostname.endsWith("tutorial-addon-1.kee.pm") ||
+        window.location.hostname.endsWith("tutorial-addon.kee.pm")
+    ) {
         const transferElement = document.createElement("KeeFoxAddonStateTransferElement");
-        transferElement.setAttribute("state", JSON.stringify({
-            connected: store.state.connected,
-            version: browser.runtime.getManifest().version,
-            dbLoaded: store.state.KeePassDatabases.length > 0,
-            sessionNames: store.state.KeePassDatabases.map(db => db.sessionType.toString()).filter((v, i, a) => a.indexOf(v) === i)
-        }));
+        transferElement.setAttribute(
+            "state",
+            JSON.stringify({
+                connected: store.state.connected,
+                version: browser.runtime.getManifest().version,
+                dbLoaded: store.state.KeePassDatabases.length > 0,
+                sessionNames: store.state.KeePassDatabases.map(db =>
+                    db.sessionType.toString()
+                ).filter((v, i, a) => a.indexOf(v) === i)
+            })
+        );
         document.documentElement.appendChild(transferElement);
 
-        const event = new Event("KeeFoxAddonStateTransferEvent", { bubbles: true, cancelable: false });
+        const event = new Event("KeeFoxAddonStateTransferEvent", {
+            bubbles: true,
+            cancelable: false
+        });
         transferElement.dispatchEvent(event);
     }
 }
 
-function onFirstConnect (myTabId: number, myFrameId: number) {
+function onFirstConnect(myTabId: number, myFrameId: number) {
     tabId = myTabId;
     frameId = myFrameId;
 
     KeeLog.attachConfig(configManager.current);
     formUtils = new FormUtils(KeeLog);
     formSaving = new FormSaving(Port.raw, frameId, KeeLog, formUtils, configManager.current);
-    formFilling = new FormFilling(Port.raw, frameId, formUtils, formSaving, KeeLog, configManager.current, matchFinder);
+    formFilling = new FormFilling(
+        Port.raw,
+        frameId,
+        formUtils,
+        formSaving,
+        KeeLog,
+        configManager.current,
+        matchFinder
+    );
     passwordGenerator = new PasswordGenerator(frameId);
 
     inputsObserver.observe(document.body, { childList: true, subtree: true });
@@ -73,7 +99,6 @@ function onFirstConnect (myTabId: number, myFrameId: number) {
 }
 
 const inputsObserver = new MutationObserver(mutations => {
-
     // If we have already scheduled a rescan recently, no further action required
     if (formFilling.formFinderTimer !== null) return;
 
@@ -87,8 +112,8 @@ const inputsObserver = new MutationObserver(mutations => {
         if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
             for (const node of mutation.addedNodes) {
                 if (rescan) break;
-                for (let i=0; i<interestingNodes.length; i++) {
-                    const element = (node as Element);
+                for (let i = 0; i < interestingNodes.length; i++) {
+                    const element = node as Element;
                     if (element.querySelector && element.querySelector(interestingNodes[i])) {
                         rescan = true;
                         break;
@@ -99,10 +124,14 @@ const inputsObserver = new MutationObserver(mutations => {
     });
 
     // Schedule a rescan soon. Not immediately, in case a batch of mutations are about to be triggered.
-    if (rescan) formFilling.formFinderTimer = setTimeout(formFilling.findMatchesInThisFrame.bind(formFilling), 500);
+    if (rescan)
+        formFilling.formFinderTimer = setTimeout(
+            formFilling.findMatchesInThisFrame.bind(formFilling),
+            500
+        );
 });
 
-function startup () {
+function startup() {
     KeeLog.debug("content page starting");
 
     try {
@@ -111,7 +140,10 @@ function startup () {
             KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
         }
     } catch (ex) {
-        KeeLog.warn("Failed to connect to messaging port. We'll try again later. Exception message: " + ex.message);
+        KeeLog.warn(
+            "Failed to connect to messaging port. We'll try again later. Exception message: " +
+                ex.message
+        );
     }
 
     messagingPortConnectionRetryTimer = setInterval(() => {
@@ -123,7 +155,10 @@ function startup () {
                     KeeLog.warn("Failed to connect to messaging port. We'll try again later.");
                 }
             } catch (ex) {
-                KeeLog.warn("Failed to connect to messaging port. We'll try again later. Exception message: " + ex.message);
+                KeeLog.warn(
+                    "Failed to connect to messaging port. We'll try again later. Exception message: " +
+                        ex.message
+                );
             }
         } else {
             clearInterval(messagingPortConnectionRetryTimer);
@@ -133,8 +168,7 @@ function startup () {
     KeeLog.debug("content page ready");
 }
 
-function connectToMessagingPort () {
-
+function connectToMessagingPort() {
     if (Port.raw) {
         KeeLog.warn("port already set to: " + Port.raw.name);
     }
@@ -146,7 +180,7 @@ function connectToMessagingPort () {
 
         if (m.initialState) {
             syncContent.init(m.initialState, (mutation: MutationPayload) => {
-                Port.postMessage({mutation} as AddonMessage);
+                Port.postMessage({ mutation } as AddonMessage);
             });
         }
         if (m.mutation) {
@@ -201,13 +235,14 @@ function connectToMessagingPort () {
             passwordGenerator.closeGeneratePasswordPanel();
             formFilling.closeMatchedLoginsPanel();
             formSaving.closeSavePasswordPanel();
-            Port.postMessage({ action: Action.RemoveSubmittedData } as AddonMessage);
+            Port.postMessage({
+                action: Action.RemoveSubmittedData
+            } as AddonMessage);
         }
 
         if (m.action == Action.ShowMatchedLoginsPanel) {
             formFilling.createMatchedLoginsPanelInCenter(m.frameId);
         }
-
     });
 }
 

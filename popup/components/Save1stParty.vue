@@ -1,119 +1,100 @@
 <template>
-  <div>
-    <v-slide-y-transition>
-      <v-container
-        class="my-0 pa-0"
-      >
-        <v-row>
-          <v-col>
-            <v-text-field
-              :label="$i18n('title')"
-              color="secondary"
-              :value="saveState.newEntry.title"
-              dense
-              outlined
-              hide-details="auto"
-              :type="text"
-              autofocus
-              @input="setTitle"
-            >
-              <template slot="append">
-                <v-btn
-                  v-if="resettableTitle"
-                  small
-                  icon
-                  @click="resetTitle"
-                >
-                  <v-icon>mdi-undo</v-icon>
-                </v-btn>
-              </template>
-            </v-text-field>
-          </v-col>
-        </v-row>
+    <div>
+        <v-slide-y-transition>
+            <v-container class="my-0 pa-0">
+                <v-row>
+                    <v-col>
+                        <v-text-field
+                            :label="$i18n('title')"
+                            color="secondary"
+                            :value="saveState.newEntry.title"
+                            dense
+                            outlined
+                            hide-details="auto"
+                            :type="text"
+                            autofocus
+                            @input="setTitle"
+                        >
+                            <template slot="append">
+                                <v-btn v-if="resettableTitle" small icon @click="resetTitle">
+                                    <v-icon>mdi-undo</v-icon>
+                                </v-btn>
+                            </template>
+                        </v-text-field>
+                    </v-col>
+                </v-row>
 
-        <FieldEditor
-          v-for="f of saveState.newEntry.fields"
-          :key="f.uuid"
-          :field="f"
-          @field-value-changed="fieldValueChanged"
-        />
-      </v-container>
-    </v-slide-y-transition>
-    <v-alert
-      v-if="showURLMismatchWarning"
-      border="top"
-      colored-border
-      type="warning"
-      elevation="1"
-      class="my-3"
-    >
-      <v-row dense>
-        <v-col>
-          <p>{{ $i18n('url_mismatch_1') }}</p>
-          <p>{{ $i18n('url_mismatch_2') }}</p>
-          <p>{{ $i18n('url_mismatch_3') }}</p>
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col class="my-0 py-0">
-          <div>
-            <v-checkbox
-              v-model="differentSiteConfirmation"
-              class="my-0 py-0"
-              hide-details
-              :label="$i18n('url_mismatch_confirm', entryDomain)"
-            />
-          </div>
-        </v-col>
-      </v-row>
-    </v-alert>
-    <v-btn
-      right
-      color="tertiary"
-      @click="cancel"
-    >
-      {{ $i18n('cancel') }}
-    </v-btn>
-    <v-btn
-      v-if="!editingExisting"
-      right
-      color="primary"
-      @click="nextClicked"
-    >
-      {{ $i18n('next') }}
-    </v-btn>
-    <v-btn
-      v-if="editingExisting"
-      :disabled="showURLMismatchWarning && !differentSiteConfirmation"
-      right
-      color="primary"
-      @click="updateEntry"
-    >
-      {{ $i18n('update') }}
-    </v-btn>
-    <v-alert
-      v-if="editingExisting"
-      border="top"
-      colored-border
-      type="info"
-      elevation="1"
-      class="my-4"
-    >
-      <v-row align="center">
-        <v-col class="grow">
-          {{ $i18n('make_additional_changes_using_full_editor') }}
-        </v-col>
-        <v-col class="shrink">
-          <v-btn
-            small
-            @click="openFullEntryEditor"
-          >
-            {{ $i18n('open_full_editor') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-alert>
-  </div>
+                <FieldEditor
+                    v-for="f of saveState.newEntry.fields"
+                    :key="f.uuid"
+                    :field="f"
+                    @field-value-changed="fieldValueChanged"
+                />
+            </v-container>
+        </v-slide-y-transition>
+        <v-alert
+            v-if="showURLMismatchWarning"
+            border="top"
+            colored-border
+            type="warning"
+            elevation="1"
+            class="my-3"
+        >
+            <v-row dense>
+                <v-col>
+                    <p>{{ $i18n("url_mismatch_1") }}</p>
+                    <p>{{ $i18n("url_mismatch_2") }}</p>
+                    <p>{{ $i18n("url_mismatch_3") }}</p>
+                </v-col>
+            </v-row>
+            <v-row dense>
+                <v-col class="my-0 py-0">
+                    <div>
+                        <v-checkbox
+                            v-model="differentSiteConfirmation"
+                            class="my-0 py-0"
+                            hide-details
+                            :label="$i18n('url_mismatch_confirm', entryDomain)"
+                        />
+                    </div>
+                </v-col>
+            </v-row>
+        </v-alert>
+        <v-btn right color="tertiary" @click="cancel">
+            {{ $i18n("cancel") }}
+        </v-btn>
+        <v-btn v-if="!editingExisting" right color="primary" @click="nextClicked">
+            {{ $i18n("next") }}
+        </v-btn>
+        <v-btn
+            v-if="editingExisting"
+            :disabled="showURLMismatchWarning && !differentSiteConfirmation"
+            right
+            color="primary"
+            @click="updateEntry"
+        >
+            {{ $i18n("update") }}
+        </v-btn>
+        <v-alert
+            v-if="editingExisting"
+            border="top"
+            colored-border
+            type="info"
+            elevation="1"
+            class="my-4"
+        >
+            <v-row align="center">
+                <v-col class="grow">
+                    {{ $i18n("make_additional_changes_using_full_editor") }}
+                </v-col>
+                <v-col class="shrink">
+                    <v-btn small @click="openFullEntryEditor">
+                        {{ $i18n("open_full_editor") }}
+                    </v-btn>
+                </v-col>
+            </v-row>
+        </v-alert>
+    </div>
 </template>
 
 <script lang="ts">
@@ -139,7 +120,10 @@ export default {
     computed: {
         ...mapGetters(["saveState"]),
         resettableTitle: function (this: any) {
-            return this.$store.state.saveState.titleResetValue !== this.$store.state.saveState.newEntry.title;
+            return (
+                this.$store.state.saveState.titleResetValue !==
+                this.$store.state.saveState.newEntry.title
+            );
         },
         editingExisting: function (this: any) {
             const e = (this.$store.state.saveState as SaveState).newEntry;
@@ -169,7 +153,7 @@ export default {
             Port.postMessage({ action: Action.UpdateEntry } as AddonMessage);
             window.close();
         },
-        openFullEntryEditor (this: any) {
+        openFullEntryEditor(this: any) {
             const entry = (this.$store.state.saveState as SaveState).newEntry;
             Port.postMessage({
                 loginEditor: {
@@ -181,7 +165,10 @@ export default {
         },
         setTitle: function (this: any, value) {
             const updatedSaveState = Object.assign({}, this.$store.state.saveState) as SaveState;
-            updatedSaveState.newEntry = new Entry({...updatedSaveState.newEntry, title: value });
+            updatedSaveState.newEntry = new Entry({
+                ...updatedSaveState.newEntry,
+                title: value
+            });
             this.$store.dispatch("updateSaveState", updatedSaveState);
         },
         resetTitle: function (this: any) {
@@ -189,13 +176,24 @@ export default {
         },
         fieldValueChanged: function (this: any, change) {
             const updatedSaveState = Object.assign({}, this.$store.state.saveState) as SaveState;
-            const originalFieldIndex = (this.$store.state.saveState as SaveState).newEntry.fields.findIndex(f => f.uuid === change.uuid);
-            const originalField = (this.$store.state.saveState as SaveState).newEntry.fields[originalFieldIndex];
-            const newField = new Field({...originalField, value: change.value });
+            const originalFieldIndex = (this.$store.state
+                .saveState as SaveState).newEntry.fields.findIndex(f => f.uuid === change.uuid);
+            const originalField = (this.$store.state.saveState as SaveState).newEntry.fields[
+                originalFieldIndex
+            ];
+            const newField = new Field({
+                ...originalField,
+                value: change.value
+            });
             //TODO:4: faster deep clone
-            const newFields = JSON.parse(JSON.stringify(updatedSaveState.newEntry.fields)) as Field[];
+            const newFields = JSON.parse(
+                JSON.stringify(updatedSaveState.newEntry.fields)
+            ) as Field[];
             newFields[originalFieldIndex] = newField;
-            updatedSaveState.newEntry = new Entry({...updatedSaveState.newEntry, fields: newFields });
+            updatedSaveState.newEntry = new Entry({
+                ...updatedSaveState.newEntry,
+                fields: newFields
+            });
             this.$store.dispatch("updateSaveState", updatedSaveState);
         }
     }

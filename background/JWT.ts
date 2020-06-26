@@ -1,9 +1,7 @@
 import { Claim } from "./Claim";
 
 export class JWT {
-
-    public static async verify (sig: string): Promise<{audience: string; claim?: Claim}> {
-
+    public static async verify(sig: string): Promise<{ audience: string; claim?: Claim }> {
         const sigParts = sig.split(".");
 
         if (sigParts.length !== 3) {
@@ -30,34 +28,42 @@ export class JWT {
         let jwk;
 
         switch (claim.iss) {
-            case "idProd": jwk = {
-                kty: "EC",
-                crv: "P-256",
-                x: "O6bWMktjPnOtZAkmz9NzMTO9O2VzuECTa9Jj5g90QSA",
-                y: "aIE-8dLpJIoAnLIzH1XDCPxK_asKtIC_fVlSLJyGpcg",
-                ext: true
-            }; break;
-            case "idBeta": jwk = {
-                kty: "EC",
-                crv: "P-256",
-                x: "CinRkFHv6IGNcd52YlzD3BF_WruIMs-6Nn5oI7QmgjU",
-                y: "pJ66MRPoCC2MUBFdYyRqGPfw3pZEnPGtHVhvspLTVDA",
-                ext: true
-            }; break;
-            case "idDev": jwk = {
-                kty: "EC",
-                crv: "P-256",
-                x: "mk8--wDgrkPyHttzjQH6jxmjfZS9MaHQ5Qzj53OnNLo",
-                y: "XAFQCFwKL7qrV27vI1tug3X2v50grAk_ioieHRe8h18",
-                ext: true
-            }; break;
-            default: throw new Error("Unknown JWT issuer so cannot verify");
+            case "idProd":
+                jwk = {
+                    kty: "EC",
+                    crv: "P-256",
+                    x: "O6bWMktjPnOtZAkmz9NzMTO9O2VzuECTa9Jj5g90QSA",
+                    y: "aIE-8dLpJIoAnLIzH1XDCPxK_asKtIC_fVlSLJyGpcg",
+                    ext: true
+                };
+                break;
+            case "idBeta":
+                jwk = {
+                    kty: "EC",
+                    crv: "P-256",
+                    x: "CinRkFHv6IGNcd52YlzD3BF_WruIMs-6Nn5oI7QmgjU",
+                    y: "pJ66MRPoCC2MUBFdYyRqGPfw3pZEnPGtHVhvspLTVDA",
+                    ext: true
+                };
+                break;
+            case "idDev":
+                jwk = {
+                    kty: "EC",
+                    crv: "P-256",
+                    x: "mk8--wDgrkPyHttzjQH6jxmjfZS9MaHQ5Qzj53OnNLo",
+                    y: "XAFQCFwKL7qrV27vI1tug3X2v50grAk_ioieHRe8h18",
+                    ext: true
+                };
+                break;
+            default:
+                throw new Error("Unknown JWT issuer so cannot verify");
         }
 
         const key = await window.crypto.subtle.importKey(
             "jwk",
             jwk,
-            {   //these are the algorithm options
+            {
+                //these are the algorithm options
                 name: "ECDSA",
                 namedCurve: "P-256" //can be "P-256", "P-384", or "P-521"
             },
@@ -65,10 +71,10 @@ export class JWT {
             ["verify"] //"verify" for public key import, "sign" for private key imports
         );
 
-        const isValid = await window.crypto.subtle.verify (
+        const isValid = await window.crypto.subtle.verify(
             {
                 name: "ECDSA",
-                hash: {name: "SHA-256"} //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+                hash: { name: "SHA-256" } //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
             },
             key, //from generateKey or importKey above
             window.kee.utils.base64urltoByteArray(sigParts[2]), //ArrayBuffer of the signature

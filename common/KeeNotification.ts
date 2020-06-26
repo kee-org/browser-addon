@@ -6,7 +6,7 @@ import { Button } from "./Button";
 // look at the background/NativeNotification class
 
 export class KeeNotification {
-    constructor (
+    constructor(
         public name: string,
         public buttons: Button[],
         public id: string, //Guid

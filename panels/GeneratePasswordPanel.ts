@@ -1,10 +1,9 @@
 import { Action } from "../common/Action";
 
 export class GeneratePasswordPanel {
-    constructor (private myPort: browser.runtime.Port,
-        private closePanel: () => void) {}
+    constructor(private myPort: browser.runtime.Port, private closePanel: () => void) {}
 
-    public createNearNode (node: HTMLElement, passwordProfiles: string[]) {
+    public createNearNode(node: HTMLElement, passwordProfiles: string[]) {
         const container = document.createElement("div");
         container.id = "GeneratePasswordContainer";
         // Disabled due to https://github.com/kee-org/browser-addon/issues/68
@@ -24,32 +23,40 @@ export class GeneratePasswordPanel {
         return container;
     }
 
-    private setPasswordProfiles (list: HTMLUListElement, passwordProfiles: string[]) {
-
-        for (let i = 0; i < passwordProfiles.length; i++)
-        {
+    private setPasswordProfiles(list: HTMLUListElement, passwordProfiles: string[]) {
+        for (let i = 0; i < passwordProfiles.length; i++) {
             const displayName = passwordProfiles[i];
 
             const profileItem = document.createElement("li");
             profileItem.textContent = displayName;
             profileItem.tabIndex = i == 0 ? 0 : -1;
             profileItem.addEventListener("keydown", e => this.keyboardNavHandler(e), false);
-            profileItem.addEventListener("mouseup", function (event) {
-                if (event.button == 0 || event.button == 1)
-                {
-                    event.stopPropagation();
-                    this.dispatchEvent(new Event("keeCommand"));
-                }
-            }, false);
-            profileItem.addEventListener("keeCommand", event => {
-                this.myPort.postMessage({ action: Action.GeneratePassword, passwordProfile: (event.currentTarget as any).textContent });
-            }, false);
+            profileItem.addEventListener(
+                "mouseup",
+                function (event) {
+                    if (event.button == 0 || event.button == 1) {
+                        event.stopPropagation();
+                        this.dispatchEvent(new Event("keeCommand"));
+                    }
+                },
+                false
+            );
+            profileItem.addEventListener(
+                "keeCommand",
+                event => {
+                    this.myPort.postMessage({
+                        action: Action.GeneratePassword,
+                        passwordProfile: (event.currentTarget as any).textContent
+                    });
+                },
+                false
+            );
 
             list.appendChild(profileItem);
         }
     }
 
-    private keyboardNavHandler (event: KeyboardEvent) {
+    private keyboardNavHandler(event: KeyboardEvent) {
         const target = event.target as HTMLLIElement;
 
         switch (event.keyCode) {

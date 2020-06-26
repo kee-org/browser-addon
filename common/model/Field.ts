@@ -5,7 +5,6 @@ import { FieldDto, FormFieldTypeDTO } from "./KPRPCDTOs";
 export type FieldType = "password" | "text" | "existing" | "boolean" | "otp" | "some-chars";
 
 export class Field {
-
     // Unique ID that we can use to help UI operations and identification when there is no known name for this field.
     // Also may be useful in future for multiple-page reconfiguration or per-browser field configuration overrides?
     readonly uuid: string;
@@ -31,7 +30,7 @@ export class Field {
     // tracks the most recent value we want to reset to in cases where the user has that possibility
     readonly resetValue: string;
 
-    constructor (field: Partial<Field>) {
+    constructor(field: Partial<Field>) {
         this.name = field.name || "";
         this.value = field.value || "";
         this.resetValue = field.resetValue || "";
@@ -40,7 +39,11 @@ export class Field {
         this.locators = field.locators || [];
     }
 
-    private static getDisplayValueInternal (field: Field, revealPasswords: boolean, replacementIfProtected: string) {
+    private static getDisplayValueInternal(
+        field: Field,
+        revealPasswords: boolean,
+        replacementIfProtected: string
+    ) {
         if (field.type === "boolean") {
             return field.value === "KEEFOX_CHECKED_FLAG_TRUE" ? $STR("enabled") : $STR("disabled");
         } else {
@@ -50,42 +53,52 @@ export class Field {
         }
     }
 
-    static getDisplayValue (field: Field, revealPasswords: boolean) {
-        return Field.getDisplayValueInternal(field, revealPasswords, "*".repeat(field.value.length));
+    static getDisplayValue(field: Field, revealPasswords: boolean) {
+        return Field.getDisplayValueInternal(
+            field,
+            revealPasswords,
+            "*".repeat(field.value.length)
+        );
     }
 
-    static getDisplayName (field: Field) {
+    static getDisplayName(field: Field) {
         if (field.name === "KeePass username") {
             return $STR("username");
         } else if (field.name === "KeePass password") {
             return $STR("password");
         } else {
-            return (field.name ? field.name : "[ " + $STR("no_name") + " ]");
+            return field.name ? field.name : "[ " + $STR("no_name") + " ]";
         }
     }
 
-    static getDisplayTooltip (field: Field, revealPasswords: boolean) {
+    static getDisplayTooltip(field: Field, revealPasswords: boolean) {
         return (
-            Field.getDisplayName(field) + ": " +
+            Field.getDisplayName(field) +
+            ": " +
             Field.getDisplayValueInternal(field, revealPasswords, $STR("click_to_reveal_hide"))
         );
     }
 
-    static typeFromDOMtype (domType: string): FieldType {
+    static typeFromDOMtype(domType: string): FieldType {
         // We can't know every type that may exist in future so assume:
         // 1. unknown types must be text
         // 2. we won't be asked to handle types for irrelevant elements such as buttons
         switch (domType) {
-            case "password": return "password";
-            case "radio": return "existing";
-            case "checkbox": return "boolean";
-            case "select-one": return "existing";
-            default: return "text";
+            case "password":
+                return "password";
+            case "radio":
+                return "existing";
+            case "checkbox":
+                return "boolean";
+            case "select-one":
+                return "existing";
+            default:
+                return "text";
         }
     }
 
     // By convention the first non-password item will be the username and the password will be either 1st or 2nd in the list
-    static combineDomFieldLists (usernameIndex: number, otherFields: Field[], passwords: Field[]) {
+    static combineDomFieldLists(usernameIndex: number, otherFields: Field[], passwords: Field[]) {
         const fields: Field[] = [];
         if (usernameIndex >= 0 && otherFields[usernameIndex]) {
             fields.push(otherFields[usernameIndex]);
@@ -101,31 +114,51 @@ export class Field {
         return fields;
     }
 
-    static fromDOM (element: any, domType: string, value: string) {
+    static fromDOM(element: any, domType: string, value: string) {
         return new Field({
             uuid: utils.newGUID(),
             name: element.name, //TODO:4: try to find a more user-facing name for the field (e.g. via a label element)
-            locators: [new Locator({
-                name: element.name,
-                id: element.id,
-                type: domType
-            })],
+            locators: [
+                new Locator({
+                    name: element.name,
+                    id: element.id,
+                    type: domType
+                })
+            ],
             value,
             type: Field.typeFromDOMtype(domType)
         });
     }
 
-    static fromKPRPCFieldDTO (f: FieldDto) {
+    static fromKPRPCFieldDTO(f: FieldDto) {
         let type: FieldType = "text";
         let locatorType: string = "text";
 
         switch (f.type) {
-            case FormFieldTypeDTO.password: type = "password"; locatorType = "password"; break;
-            case FormFieldTypeDTO.radio: type = "existing"; locatorType = "radio"; break;
-            case FormFieldTypeDTO.checkbox: type = "boolean"; locatorType = "checkbox"; break;
-            case FormFieldTypeDTO.select: type = "existing"; locatorType = "select"; break;
-            case FormFieldTypeDTO.username: type = "text"; locatorType = "text"; break;
-            case FormFieldTypeDTO.text: type = "text"; locatorType = "text"; break;
+            case FormFieldTypeDTO.password:
+                type = "password";
+                locatorType = "password";
+                break;
+            case FormFieldTypeDTO.radio:
+                type = "existing";
+                locatorType = "radio";
+                break;
+            case FormFieldTypeDTO.checkbox:
+                type = "boolean";
+                locatorType = "checkbox";
+                break;
+            case FormFieldTypeDTO.select:
+                type = "existing";
+                locatorType = "select";
+                break;
+            case FormFieldTypeDTO.username:
+                type = "text";
+                locatorType = "text";
+                break;
+            case FormFieldTypeDTO.text:
+                type = "text";
+                locatorType = "text";
+                break;
         }
 
         return new Field({
@@ -134,23 +167,35 @@ export class Field {
             value: f.value,
             resetValue: f.value,
             type: type,
-            locators: [new Locator({
-                id: f.id,
-                name: f.name,
-                type: locatorType
-            })]
+            locators: [
+                new Locator({
+                    id: f.id,
+                    name: f.name,
+                    type: locatorType
+                })
+            ]
         });
     }
 
-    static toKPRPCFieldDTO (f: Field, isUsername: boolean) {
+    static toKPRPCFieldDTO(f: Field, isUsername: boolean) {
         let fft: FormFieldTypeDTO;
 
         switch (f.locators[0].type) {
-            case "password": fft = FormFieldTypeDTO.password; break;
-            case "radio": fft = FormFieldTypeDTO.radio; break;
-            case "checkbox": fft = FormFieldTypeDTO.checkbox; break;
-            case "select": fft = FormFieldTypeDTO.select; break;
-            case "text": fft = isUsername ? FormFieldTypeDTO.username : FormFieldTypeDTO.text; break;
+            case "password":
+                fft = FormFieldTypeDTO.password;
+                break;
+            case "radio":
+                fft = FormFieldTypeDTO.radio;
+                break;
+            case "checkbox":
+                fft = FormFieldTypeDTO.checkbox;
+                break;
+            case "select":
+                fft = FormFieldTypeDTO.select;
+                break;
+            case "text":
+                fft = isUsername ? FormFieldTypeDTO.username : FormFieldTypeDTO.text;
+                break;
         }
 
         return {

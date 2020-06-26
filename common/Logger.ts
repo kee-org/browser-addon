@@ -16,17 +16,15 @@
 
 export class KeeLogger {
     private outputStarted = false;
-    private config = {logLevel: 2};
+    private config = { logLevel: 2 };
 
-    attachConfig (config: {logLevel: number}) {
+    attachConfig(config: { logLevel: number }) {
         this.debug("Logging system config updated at " + Date());
         this.config = config;
     }
 
-    private formatMessage (message)
-    {
-        if (!message)
-            return "";
+    private formatMessage(message) {
+        if (!message) return "";
 
         if (!this.outputStarted) {
             message = "* " + message;
@@ -36,10 +34,8 @@ export class KeeLogger {
         return message;
     }
 
-    debug (message: string)
-    {
-        if (this.config.logLevel >= 4)
-        {
+    debug(message: string) {
+        if (this.config.logLevel >= 4) {
             message = this.formatMessage(message);
             if (message.length > 0) {
                 console.debug(message);
@@ -48,10 +44,8 @@ export class KeeLogger {
         }
     }
 
-    info (message: string)
-    {
-        if (this.config.logLevel >= 3)
-        {
+    info(message: string) {
+        if (this.config.logLevel >= 3) {
             message = this.formatMessage(message);
             if (message.length > 0) {
                 console.info(message);
@@ -60,10 +54,8 @@ export class KeeLogger {
         }
     }
 
-    warn (message: string)
-    {
-        if (this.config.logLevel >= 2)
-        {
+    warn(message: string) {
+        if (this.config.logLevel >= 2) {
             message = this.formatMessage(message);
             if (message.length > 0) {
                 console.warn(message);
@@ -72,10 +64,8 @@ export class KeeLogger {
         }
     }
 
-    error (message: string)
-    {
-        if (this.config.logLevel >= 1)
-        {
+    error(message: string) {
+        if (this.config.logLevel >= 1) {
             message = this.formatMessage(message);
             if (message.length > 0) {
                 console.error(message);
@@ -84,7 +74,7 @@ export class KeeLogger {
         }
     }
 
-    send (logLevel: 1|2|3|4, message: string) {
+    send(logLevel: 1 | 2 | 3 | 4, message: string) {
         // Do nothing.
         // For advanced debugging, especially across browser restarts,
         // enable the code below and the relevant PersistentLogger lines
@@ -98,12 +88,11 @@ export class KeeLogger {
         // }
     }
 
-    stackTrace () {
+    stackTrace() {
         console.groupCollapsed("%c Stack Trace", "color:cream; font-style: normal;");
         console.debug(new Error().stack);
         console.groupEnd();
     }
-
 }
 
 export const KeeLog = new KeeLogger();

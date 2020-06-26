@@ -38,7 +38,11 @@ export class GroupDto {
     //childEntries: EntryDto[] - this is only needed if we ever request GetAllDatabases(true) but Kee currently has no need for this KPRPC feature
 }
 
-export enum PlaceholderHandling { Default = "Default", Enabled = "Enabled", Disabled = "Disabled" }
+export enum PlaceholderHandling {
+    Default = "Default",
+    Enabled = "Enabled",
+    Disabled = "Disabled"
+}
 
 export enum MatchAccuracyEnum {
     // Best = Non-URL match (i.e. we matched by UUID instead)
@@ -94,7 +98,6 @@ export class EntrySummaryDto {
 
 // tslint:disable-next-line:class-name
 export class FieldDto {
-
     displayName: string;
 
     // "name" attribute on the HTML form element

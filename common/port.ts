@@ -12,22 +12,21 @@ class ContentPortManager {
         }
     };
 
-    public postMessage (msg: AddonMessage | VaultMessage) {
+    public postMessage(msg: AddonMessage | VaultMessage) {
         this.port.postMessage(msg);
     }
 
-    public startup (name: string) {
+    public startup(name: string) {
         this.port = browser.runtime.connect({ name });
     }
 
-    public shutdown () {
+    public shutdown() {
         this.port = null;
     }
 
-    public get raw () : browser.runtime.Port {
+    public get raw(): browser.runtime.Port {
         return this.port;
     }
-
 }
 
 export const Port = new ContentPortManager();

@@ -12,7 +12,7 @@ export class Database {
     sessionType: SessionType;
     sessionFeatures: string[];
 
-    constructor (db: Partial<Database>) {
+    constructor(db: Partial<Database>) {
         this.name = db.name || "";
         this.fileName = db.fileName || "";
         this.icon = db.icon || { version: 1, iconImageData: "" };
@@ -22,7 +22,11 @@ export class Database {
         this.sessionFeatures = db.sessionFeatures || [""];
     }
 
-    public static fromKPRPCDatabaseDTO (dto: DatabaseDto, sessionType: SessionType, sessionFeatures: string[]) {
+    public static fromKPRPCDatabaseDTO(
+        dto: DatabaseDto,
+        sessionType: SessionType,
+        sessionFeatures: string[]
+    ) {
         return new Database({
             name: dto.name,
             fileName: dto.fileName,

@@ -1,6 +1,6 @@
 import { KeeLog } from "../common/Logger";
 
-export async function copyStringToClipboard (value: string) {
+export async function copyStringToClipboard(value: string) {
     try {
         await navigator.clipboard.writeText(value);
     } catch (e) {

@@ -3,11 +3,10 @@ import { configManager } from "../common/ConfigManager";
 import { KeeLog } from "../common/Logger";
 
 export class ConfigSyncManager {
-    private lastKnownSynced: {settings: Partial<Config>; version: number};
+    private lastKnownSynced: { settings: Partial<Config>; version: number };
     private enabled: boolean = false;
 
-    public updateFromRemoteConfig (config: {settings: Partial<Config>; version: number}) {
-
+    public updateFromRemoteConfig(config: { settings: Partial<Config>; version: number }) {
         // Will be falsy if a user is not logged in to a DB in Kee Vault
         // or an add-on or page update is required
         if (!config || !config.settings || !config.version) {
@@ -28,7 +27,7 @@ export class ConfigSyncManager {
         configManager.setASAP(config.settings);
     }
 
-    public updateToRemoteConfig (settings: Config) {
+    public updateToRemoteConfig(settings: Config) {
         if (!this.enabled) return;
 
         // Other items will not be synced remotely. This minimises
@@ -57,26 +56,34 @@ export class ConfigSyncManager {
             animateWhenOfferingSave: settings.animateWhenOfferingSave,
             manualSubmitOverrideProhibited: !!settings.manualSubmitOverrideProhibited
         };
-        const syncableConfig = {settings: syncableSettings, version: settings.version};
+        const syncableConfig = {
+            settings: syncableSettings,
+            version: settings.version
+        };
 
         if (window["fast-equals"].deepEqual(syncableConfig, this.lastKnownSynced)) return;
 
         const serialisedLatest = JSON.stringify(syncableConfig);
-        KeeLog.debug(`Config different. latest: ${serialisedLatest} this.lastKnownSynced: ${JSON.stringify(this.lastKnownSynced)}`);
+        KeeLog.debug(
+            `Config different. latest: ${serialisedLatest} this.lastKnownSynced: ${JSON.stringify(
+                this.lastKnownSynced
+            )}`
+        );
 
-        try
-        {
+        try {
             window.kee.KeePassRPC.updateAddonSettings(syncableSettings, settings.version);
             // Clone so changes via references later can't affect later comparison
             this.lastKnownSynced = JSON.parse(JSON.stringify(syncableConfig));
-        } catch (e)
-        {
-            KeeLog.error("Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " + e);
+        } catch (e) {
+            KeeLog.error(
+                "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
+                    e
+            );
             throw e;
         }
     }
 
-    public reset () {
+    public reset() {
         this.enabled = false;
         this.lastKnownSynced = null;
     }

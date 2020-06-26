@@ -8,7 +8,7 @@ export class SyncContent {
     pendingMutations: any[];
     private sendMutation: (mutation: MutationPayload) => void;
 
-    constructor (private store: Store<KeeState>) {
+    constructor(private store: Store<KeeState>) {
         this.receivedMutations = [];
         this.initialized = false;
         this.pendingMutations = [];
@@ -18,7 +18,7 @@ export class SyncContent {
         });
     }
 
-    init (initialState: KeeState, sendMutation, vueInit?) {
+    init(initialState: KeeState, sendMutation, vueInit?) {
         this.sendMutation = sendMutation;
 
         this.store.replaceState(initialState);
@@ -28,11 +28,11 @@ export class SyncContent {
         if (vueInit) vueInit();
     }
 
-    reset (newState: KeeState) {
+    reset(newState: KeeState) {
         this.store.replaceState(newState);
     }
 
-    public onRemoteMutation (mutation) {
+    public onRemoteMutation(mutation) {
         if (!this.initialized) {
             return;
         }
@@ -41,7 +41,7 @@ export class SyncContent {
         this.store.commit(mutation.type, mutation.payload);
     }
 
-    hookMutation (mutation: MutationPayload) {
+    hookMutation(mutation: MutationPayload) {
         if (!this.initialized) {
             return this.pendingMutations.push(mutation);
         }
@@ -52,7 +52,10 @@ export class SyncContent {
 
         // Check if it's received mutation, if it's just ignore it, if not send to background
         for (let i = this.receivedMutations.length - 1; i >= 0; i--) {
-            if (this.receivedMutations[i].type == mutation.type && this.receivedMutations[i].payload == mutation.payload) {
+            if (
+                this.receivedMutations[i].type == mutation.type &&
+                this.receivedMutations[i].payload == mutation.payload
+            ) {
                 this.receivedMutations.splice(i, 1);
 
                 // Multiple mutations can be in the received queue so we have to break,
@@ -73,7 +76,7 @@ export class SyncContent {
         }
     }
 
-    processPendingMutations () {
+    processPendingMutations() {
         if (!this.pendingMutations.length) {
             return;
         }

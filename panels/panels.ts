@@ -13,17 +13,17 @@ import { Port } from "../common/port";
 
 let frameState: FrameState;
 
-function updateFrameState (newState: FrameState) {
+function updateFrameState(newState: FrameState) {
     const oldState = frameState;
     frameState = newState;
 }
 
-function closePanel () {
+function closePanel() {
     //TODO:4: Might want more fine-grained closing in future
-    Port.postMessage( { action: Action.CloseAllPanels } );
+    Port.postMessage({ action: Action.CloseAllPanels });
 }
 
-function startup () {
+function startup() {
     KeeLog.debug("iframe page starting");
     KeeLog.attachConfig(configManager.current);
     syncContent = new SyncContent(store);
@@ -31,8 +31,7 @@ function startup () {
 
     let cancelAutoClose: () => void;
 
-    switch (params["panel"])
-    {
+    switch (params["panel"]) {
         case "matchedLogins":
             matchedLoginsPanel = new MatchedLoginsPanel(Port.raw, closePanel, parentFrameId);
             document.getElementById("header").innerText = $STR("matched_logins_label");
@@ -41,7 +40,7 @@ function startup () {
 
                 if (m.initialState) {
                     syncContent.init(m.initialState, (mutation: MutationPayload) => {
-                        Port.postMessage({mutation} as AddonMessage);
+                        Port.postMessage({ mutation } as AddonMessage);
                     });
                 }
                 if (m.mutation) {
@@ -51,27 +50,33 @@ function startup () {
 
                 if (m.frameState) updateFrameState(m.frameState);
 
-                const mainPanel = matchedLoginsPanel.createNearNode(document.getElementById("header"), frameState.entries);
+                const mainPanel = matchedLoginsPanel.createNearNode(
+                    document.getElementById("header"),
+                    frameState.entries
+                );
 
                 // Focus the window (required in Firefox to get focus onto the new iframe)
                 // and then the first entry item (enables keyboard navigation). Combined,
                 // these operations blur focus from the text box, thereby hiding any
                 // autocomplete popup the browser has displayed)
                 window.focus();
-                (document.getElementById("Kee-MatchedLoginsList").firstChild.firstChild as any).focus();
+                (document.getElementById("Kee-MatchedLoginsList").firstChild
+                    .firstChild as any).focus();
 
                 if (cancelAutoClose) mainPanel.addEventListener("click", cancelAutoClose);
             });
             break;
         case "generatePassword":
             generatePasswordPanel = new GeneratePasswordPanel(Port.raw, closePanel);
-            document.getElementById("header").innerText = $STR("Menu_Button_copyNewPasswordToClipboard_label");
+            document.getElementById("header").innerText = $STR(
+                "Menu_Button_copyNewPasswordToClipboard_label"
+            );
             Port.raw.onMessage.addListener(function (m: AddonMessage) {
                 KeeLog.debug("In iframe script, received message from background script");
 
                 if (m.initialState) {
                     syncContent.init(m.initialState, (mutation: MutationPayload) => {
-                        Port.postMessage({mutation} as AddonMessage);
+                        Port.postMessage({ mutation } as AddonMessage);
                     });
                 }
                 if (m.mutation) {
@@ -82,12 +87,17 @@ function startup () {
                 if (m.frameState) updateFrameState(m.frameState);
 
                 if (m.passwordProfiles && m.passwordProfiles.length > 0) {
-                    const mainPanel = generatePasswordPanel.createNearNode(document.getElementById("header"), m.passwordProfiles.map(p => p.name));
+                    const mainPanel = generatePasswordPanel.createNearNode(
+                        document.getElementById("header"),
+                        m.passwordProfiles.map(p => p.name)
+                    );
 
                     // Focus the window (required in Firefox to get focus onto the new iframe)
                     // and then the first password profile (enables keyboard navigation).
                     window.focus();
-                    (document.getElementById("GeneratePasswordContainer").querySelector(".passwordProfileList").firstChild as any).focus();
+                    (document
+                        .getElementById("GeneratePasswordContainer")
+                        .querySelector(".passwordProfileList").firstChild as any).focus();
                 } else if (m.generatedPassword) {
                     copyStringToClipboard(m.generatedPassword);
 
@@ -109,14 +119,15 @@ function startup () {
                         buttonNever.style.marginTop = "20px";
                         buttonNever.innerText = $STR("dont_show_again");
                         buttonNever.addEventListener("click", () => {
-                            configManager.setASAP({notifyPasswordAvailableForPaste: false});
+                            configManager.setASAP({
+                                notifyPasswordAvailableForPaste: false
+                            });
                             closePanel();
                         });
                         container.appendChild(buttonNever);
                     } else {
                         closePanel();
                     }
-
                 } else {
                     window.focus();
                     Port.postMessage({ action: Action.GetPasswordProfiles });
@@ -135,25 +146,27 @@ function startup () {
     if (params["autoCloseTime"]) {
         const autoCloseTime = parseInt(params["autoCloseTime"]);
         if (!Number.isNaN(autoCloseTime) && autoCloseTime > 0) {
-
             cancelAutoClose = () => {
                 clearInterval(autoCloseInterval);
                 autoCloseSetting.style.display = "none";
                 autoCloseLabel.textContent = $STR("autoclose_cancelled");
             };
 
-            const autoCloseTimerEnd = Date.now() + autoCloseTime*1000;
+            const autoCloseTimerEnd = Date.now() + autoCloseTime * 1000;
             const autoCloseInterval = setInterval(() => {
                 const now = Date.now();
                 if (now >= autoCloseTimerEnd) {
                     clearInterval(autoCloseInterval);
                     closePanel();
                 }
-                const secondsRemaining = Math.ceil((autoCloseTimerEnd - now)/1000);
-                document.getElementById("autoCloseLabel").textContent = $STRF("autoclose_countdown", secondsRemaining.toString());
+                const secondsRemaining = Math.ceil((autoCloseTimerEnd - now) / 1000);
+                document.getElementById("autoCloseLabel").textContent = $STRF(
+                    "autoclose_countdown",
+                    secondsRemaining.toString()
+                );
             }, 1000);
             const autoClose = document.createElement("div");
-            autoClose.id="autoClose";
+            autoClose.id = "autoClose";
             const autoCloseSetting = document.createElement("input");
             autoCloseSetting.id = "autoCloseCheckbox";
             autoCloseSetting.type = "checkbox";
@@ -180,10 +193,13 @@ let syncContent: SyncContent;
 
 const params = {};
 
-document.location.search.substr(1).split("&").forEach(pair => {
-    const [key, value] = pair.split("=");
-    params[key] = value;
-});
+document.location.search
+    .substr(1)
+    .split("&")
+    .forEach(pair => {
+        const [key, value] = pair.split("=");
+        params[key] = value;
+    });
 
 const parentFrameId = parseInt(params["parentFrameId"]);
 

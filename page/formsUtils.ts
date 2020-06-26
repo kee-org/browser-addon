@@ -8,19 +8,16 @@ import { Locator } from "../common/model/Locator";
 */
 
 export class FormUtils {
-
     findLoginOps = [];
     matchResults = [];
     Logger: KeeLogger;
 
-    constructor (logger: KeeLogger)
-    {
+    constructor(logger: KeeLogger) {
         this.Logger = logger;
     }
 
-    countAllDocuments (frame: Window) {
-        if (!this.isUriWeCanFill(frame.location))
-            return 0;
+    countAllDocuments(frame: Window) {
+        if (!this.isUriWeCanFill(frame.location)) return 0;
 
         let localDocCount = 1;
 
@@ -32,76 +29,115 @@ export class FormUtils {
         return localDocCount;
     }
 
-    isUriWeCanFill (uri) {
+    isUriWeCanFill(uri) {
         if (uri.protocol == "http:" || uri.protocol == "https:" || uri.protocol == "file:") {
             return true;
         }
         return false;
     }
 
-    isATextFormFieldType (type)
-    {
-        if (type=="checkbox" || type=="select-one" || type=="radio" || type=="password" || type=="hidden"
-        || type=="submit" || type=="button" || type=="file" || type=="image" || type=="reset")
+    isATextFormFieldType(type) {
+        if (
+            type == "checkbox" ||
+            type == "select-one" ||
+            type == "radio" ||
+            type == "password" ||
+            type == "hidden" ||
+            type == "submit" ||
+            type == "button" ||
+            type == "file" ||
+            type == "image" ||
+            type == "reset"
+        )
             return false;
-        else
-            return true;
+        else return true;
     }
 
-    private isAKnownUsernameString (fieldNameIn) {
+    private isAKnownUsernameString(fieldNameIn) {
         const fieldName = fieldNameIn.toLowerCase();
-        if (fieldName == "username" || fieldName == "j_username" || fieldName == "user_name"
-        || fieldName == "user" || fieldName == "user-name" || fieldName == "login"
-        || fieldName == "vb_login_username" || fieldName == "name" || fieldName == "user name"
-        || fieldName == "user id" || fieldName == "user-id" || fieldName == "userid"
-        || fieldName == "email" || fieldName == "e-mail" || fieldName == "id"
-        || fieldName == "form_loginname" || fieldName == "wpname" || fieldName == "mail"
-        || fieldName == "loginid" || fieldName == "login id" || fieldName == "login_name"
-        || fieldName == "openid_identifier" || fieldName == "authentication_email" || fieldName == "openid"
-        || fieldName == "auth_email" || fieldName == "auth_id" || fieldName == "authentication_identifier"
-        || fieldName == "authentication_id" || fieldName == "customer_number" || fieldName == "customernumber"
-        || fieldName == "onlineid") // etc. etc.
+        if (
+            fieldName == "username" ||
+            fieldName == "j_username" ||
+            fieldName == "user_name" ||
+            fieldName == "user" ||
+            fieldName == "user-name" ||
+            fieldName == "login" ||
+            fieldName == "vb_login_username" ||
+            fieldName == "name" ||
+            fieldName == "user name" ||
+            fieldName == "user id" ||
+            fieldName == "user-id" ||
+            fieldName == "userid" ||
+            fieldName == "email" ||
+            fieldName == "e-mail" ||
+            fieldName == "id" ||
+            fieldName == "form_loginname" ||
+            fieldName == "wpname" ||
+            fieldName == "mail" ||
+            fieldName == "loginid" ||
+            fieldName == "login id" ||
+            fieldName == "login_name" ||
+            fieldName == "openid_identifier" ||
+            fieldName == "authentication_email" ||
+            fieldName == "openid" ||
+            fieldName == "auth_email" ||
+            fieldName == "auth_id" ||
+            fieldName == "authentication_identifier" ||
+            fieldName == "authentication_id" ||
+            fieldName == "customer_number" ||
+            fieldName == "customernumber" ||
+            fieldName == "onlineid"
+        )
+            // etc. etc.
             return true;
         return false;
     }
 
     /*
-* getFormFields
-*
-* Returns the usernameIndex and password fields found in the form.
-* Can handle complex forms by trying to figure out what the
-* relevant fields are.
-*
-* Returns: [usernameIndex, passwords, ...]
-* all arrays are standard javascript arrays
-* usernameField may be null.
-*/
-    public getFormFields (form, isSubmission, currentPage?)
-    {
+     * getFormFields
+     *
+     * Returns the usernameIndex and password fields found in the form.
+     * Can handle complex forms by trying to figure out what the
+     * relevant fields are.
+     *
+     * Returns: [usernameIndex, passwords, ...]
+     * all arrays are standard javascript arrays
+     * usernameField may be null.
+     */
+    public getFormFields(form, isSubmission, currentPage?) {
         const pwFields: MatchedField[] = [];
         const otherFields: MatchedField[] = [];
-        const allFields: { index: number; element: MatchedField; type: string }[] = [];
+        const allFields: {
+            index: number;
+            element: MatchedField;
+            type: string;
+        }[] = [];
         let firstPasswordIndex = -1;
         let firstPossibleUsernameIndex = -1;
         let usernameIndex = -1;
 
         // search the DOM for any form fields we might be interested in
-        for (let i = 0; i < form.elements.length; i++)
-        {
-            if (form.elements[i].localName.toLowerCase() == "object"
-            || form.elements[i].localName.toLowerCase() == "keygen"
-            || form.elements[i].localName.toLowerCase() == "output"
-            || (form.elements[i].localName.toLowerCase() != "input"
-            && (form.elements[i].type == undefined || form.elements[i].type == null)))
+        for (let i = 0; i < form.elements.length; i++) {
+            if (
+                form.elements[i].localName.toLowerCase() == "object" ||
+                form.elements[i].localName.toLowerCase() == "keygen" ||
+                form.elements[i].localName.toLowerCase() == "output" ||
+                (form.elements[i].localName.toLowerCase() != "input" &&
+                    (form.elements[i].type == undefined || form.elements[i].type == null))
+            )
                 continue; // maybe it's something un-interesting
 
             const domType: string = form.elements[i].type.toLowerCase();
 
-            if (domType == "fieldset")
-                continue; // not interested in fieldsets
+            if (domType == "fieldset") continue; // not interested in fieldsets
 
-            if (domType != "password" && !this.isATextFormFieldType(domType) && domType != "checkbox"
-            && domType != "radio" && domType != "select-one")
+            if (
+                domType != "password" &&
+                !this.isATextFormFieldType(domType) &&
+                domType != "checkbox" &&
+                domType != "radio" &&
+                domType != "select-one"
+            )
                 continue; // ignoring other form types
 
             if (domType == "radio" && isSubmission && form.elements[i].checked == false) continue;
@@ -109,28 +145,31 @@ export class FormUtils {
             if (domType == "select-one" && isSubmission && !form.elements[i].value) continue;
 
             this.Logger.debug(`processing field with domtype ${domType}...`);
-            allFields[allFields.length] =
-        {
-            index   : i,
-            element : new MatchedField(),
-            type    : domType
-        };
+            allFields[allFields.length] = {
+                index: i,
+                element: new MatchedField(),
+                type: domType
+            };
             let fieldValue = form.elements[i].value;
-            if (domType == "checkbox")
-            {
-                if (form.elements[i].checked)
-                    fieldValue = "KEEFOX_CHECKED_FLAG_TRUE";
-                else
-                    fieldValue = "KEEFOX_CHECKED_FLAG_FALSE";
+            if (domType == "checkbox") {
+                if (form.elements[i].checked) fieldValue = "KEEFOX_CHECKED_FLAG_TRUE";
+                else fieldValue = "KEEFOX_CHECKED_FLAG_FALSE";
             }
-            allFields[allFields.length-1].element.field = Field.fromDOM(form.elements[i], domType, fieldValue);
-            allFields[allFields.length-1].element.DOMelement = form.elements[i];
+            allFields[allFields.length - 1].element.field = Field.fromDOM(
+                form.elements[i],
+                domType,
+                fieldValue
+            );
+            allFields[allFields.length - 1].element.DOMelement = form.elements[i];
 
             if (domType == "password" && firstPasswordIndex == -1)
-                firstPasswordIndex = allFields.length-1;
-            if (this.isATextFormFieldType(domType) && firstPossibleUsernameIndex == -1
-            && this.isAKnownUsernameString(form.elements[i].name))
-                firstPossibleUsernameIndex = allFields.length-1;
+                firstPasswordIndex = allFields.length - 1;
+            if (
+                this.isATextFormFieldType(domType) &&
+                firstPossibleUsernameIndex == -1 &&
+                this.isAKnownUsernameString(form.elements[i].name)
+            )
+                firstPossibleUsernameIndex = allFields.length - 1;
 
             if (form.elements[i].keeInitialDetectedValue == null) {
                 form.elements[i].keeInitialDetectedValue = fieldValue;
@@ -142,28 +181,25 @@ export class FormUtils {
         // choice won't impact the form detection or filling behaviour.
         //TODO:4: Extend this to inspect more than just the name of the field. E.g. max length?
         //TODO:4: For form filling (not submitting) we might want to select based upon found data in KeePass?
-        if (firstPossibleUsernameIndex != -1)
-            usernameIndex = firstPossibleUsernameIndex;
-        else if (firstPasswordIndex > 0)
-            usernameIndex = firstPasswordIndex - 1;
+        if (firstPossibleUsernameIndex != -1) usernameIndex = firstPossibleUsernameIndex;
+        else if (firstPasswordIndex > 0) usernameIndex = firstPasswordIndex - 1;
         this.Logger.debug("usernameIndex: " + usernameIndex);
 
         let otherCount = 0;
         let actualUsernameIndex = 0;
 
         // separate the field data into appropriate variables
-        for (let i = 0; i < allFields.length; i++)
-        {
-            if (allFields[i].type == "password")
-                pwFields[pwFields.length] = allFields[i].element;
-            else if (this.isATextFormFieldType(allFields[i].type) || allFields[i].type == "checkbox"
-            || allFields[i].type == "radio"  || allFields[i].type == "select-one")
-            {
+        for (let i = 0; i < allFields.length; i++) {
+            if (allFields[i].type == "password") pwFields[pwFields.length] = allFields[i].element;
+            else if (
+                this.isATextFormFieldType(allFields[i].type) ||
+                allFields[i].type == "checkbox" ||
+                allFields[i].type == "radio" ||
+                allFields[i].type == "select-one"
+            ) {
                 otherFields[otherFields.length] = allFields[i].element;
-                if (i == usernameIndex)
-                    actualUsernameIndex = otherCount;
-                else
-                    otherCount++;
+                if (i == usernameIndex) actualUsernameIndex = otherCount;
+                else otherCount++;
             }
         }
 
@@ -174,7 +210,7 @@ export class FormUtils {
     }
 
     // A basic, slightly flawed but fast visibility test
-    public isDOMElementVisible (element: HTMLElement) {
+    public isDOMElementVisible(element: HTMLElement) {
         if (!element.offsetParent && element.offsetHeight === 0 && element.offsetWidth === 0) {
             return false;
         }
@@ -194,5 +230,4 @@ export class FormUtils {
     //     Logger.debug("Reset form-filling session (page = 0 and cancelled any forced autosubmit).");
     // };
     //var resetFormFillTimer = null;
-
 }

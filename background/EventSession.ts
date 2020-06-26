@@ -19,7 +19,7 @@ so the current Kee concepts of closed app vs closed db still apply.
 */
 
 export class EventSession {
-    constructor (public readonly sessionId: string, public readonly messageToWebPage) {}
+    constructor(public readonly sessionId: string, public readonly messageToWebPage) {}
 }
 
 export class EventSessionManager {
@@ -29,34 +29,35 @@ export class EventSessionManager {
     private callbacks: {};
     private _features: string[] = [];
 
-    public isActive () {
+    public isActive() {
         return !!this.latestSession;
     }
 
-    public features () {
+    public features() {
         return this.latestSession ? this._features : [];
     }
 
-    public registerCallback (requestId: number, callback: (resultWrapper: Partial<ResultWrapper>) => void) {
+    public registerCallback(
+        requestId: number,
+        callback: (resultWrapper: Partial<ResultWrapper>) => void
+    ) {
         this.callbacks[requestId] = callback;
     }
 
-    public invokeCallback (requestId: number, resultWrapper: Partial<ResultWrapper>) {
-        if (this.callbacks[requestId] != null)
-            this.callbacks[requestId](resultWrapper);
+    public invokeCallback(requestId: number, resultWrapper: Partial<ResultWrapper>) {
+        if (this.callbacks[requestId] != null) this.callbacks[requestId](resultWrapper);
     }
 
-    public unregisterCallback (requestId: number) {
+    public unregisterCallback(requestId: number) {
         delete this.callbacks[requestId];
     }
 
-    constructor (private onOpen, private onClose, private onMessage)
-    {
+    constructor(private onOpen, private onClose, private onMessage) {
         this.eventActivityTimer = null;
         this.callbacks = {};
     }
 
-    public startSession (sessionId: string, features: string[], messageToWebPage) {
+    public startSession(sessionId: string, features: string[], messageToWebPage) {
         KeeLog.debug("Event session starting");
 
         // We do basic session validation at the session layer but allow the KPRPC
@@ -75,7 +76,9 @@ export class EventSessionManager {
                 KeeLog.warn("Duplicate session start request received");
                 return;
             } else {
-                KeeLog.warn("Session start request received while session still active. Destroying old session.");
+                KeeLog.warn(
+                    "Session start request received while session still active. Destroying old session."
+                );
                 this.closeSession();
             }
         }
@@ -87,7 +90,6 @@ export class EventSessionManager {
         this.onOpen(features);
 
         if (this.isActive()) {
-
             this._features = features;
 
             clearTimeout(this.eventActivityTimer);
@@ -105,8 +107,7 @@ export class EventSessionManager {
     // After a few sanity checks relating to the low-level session maintenance
     // (the sort of stuff that the websockets Web API already handles for us with KeePass)
     // we forward the message to the same message handler that is used for the KeePass plugin.
-    public messageReciever (data: VaultMessage)
-    {
+    public messageReciever(data: VaultMessage) {
         KeeLog.debug("message received");
 
         if (!data.sessionId) {
@@ -117,8 +118,7 @@ export class EventSessionManager {
             return;
         }
 
-        if (data.protocol === VaultProtocol.Teardown)
-        {
+        if (data.protocol === VaultProtocol.Teardown) {
             // We might be told to tear down an existing session if we know that the tab
             // is being closed or refreshed or maybe if the server is being upgraded
             this.closeSession();
@@ -137,7 +137,9 @@ export class EventSessionManager {
         if (data.sessionId != this.latestSession.sessionId) {
             this.sendErrorMessage({
                 code: "SESSION_MISMATCH",
-                messageParams: ["Already attached to a session (maybe in a different tab). Reinitialisation required."]
+                messageParams: [
+                    "Already attached to a session (maybe in a different tab). Reinitialisation required."
+                ]
             });
             // Don't think this can happen but if it can, returning the error to also be sent to the page
             // attempting to create the new session is safest
@@ -145,7 +147,9 @@ export class EventSessionManager {
                 protocol: VaultProtocol.Error,
                 error: {
                     code: "SESSION_MISMATCH",
-                    messageParams: ["Already attached to a session (maybe in a different tab). Reinitialisation required."]
+                    messageParams: [
+                        "Already attached to a session (maybe in a different tab). Reinitialisation required."
+                    ]
                 }
             };
         }
@@ -157,22 +161,24 @@ export class EventSessionManager {
 
         if (data.protocol === VaultProtocol.Ping) return;
 
-        if (data.protocol === VaultProtocol.Jsonrpc)
-        {
+        if (data.protocol === VaultProtocol.Jsonrpc) {
             data.encryptionNotRequired = true;
             this.onMessage(data);
         }
     }
 
-    sendErrorMessage (error) {
+    sendErrorMessage(error) {
         if (!this.latestSession) {
             KeeLog.error("Server session went away.");
             throw new Error("Server session went away.");
         }
-        this.latestSession.messageToWebPage( { error: error, protocol: VaultProtocol.Error });
+        this.latestSession.messageToWebPage({
+            error: error,
+            protocol: VaultProtocol.Error
+        });
     }
 
-    public sendMessage (msg: VaultMessage) {
+    public sendMessage(msg: VaultMessage) {
         if (!this.latestSession) {
             KeeLog.error("Server session went away.");
             throw new Error("Server session went away.");
@@ -180,8 +186,7 @@ export class EventSessionManager {
         this.latestSession.messageToWebPage(msg);
     }
 
-    closeSession ()
-    {
+    closeSession() {
         KeeLog.debug("Closing event session");
         clearTimeout(this.eventActivityTimer);
         this.latestSession = null;

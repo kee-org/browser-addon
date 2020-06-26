@@ -6,7 +6,7 @@ import mutations from "./mutations";
 import * as actions from "./actions";
 import * as mTypes from "./mutation-types";
 import { KeeState } from "./KeeState";
-import {SaveState} from "../common/SaveState";
+import { SaveState } from "../common/SaveState";
 
 Vue.use(Vuex);
 

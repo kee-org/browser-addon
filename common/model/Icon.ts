@@ -1,5 +1,4 @@
 export class Icon {
-
     version: number = 1;
 
     // A base64 encoding of the icon for this entry. It will always be a

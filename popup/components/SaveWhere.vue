@@ -1,67 +1,55 @@
 <template>
-  <div>
-    <v-slide-y-transition>
-      <v-container
-        class="my-0 pa-0"
-      >
-        <v-row justify="center">
-          <v-col
-            style="cursor: default"
-            class="text-h6 text-center"
-          >
-            {{ $i18n('where') }}
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-card
-              class="mx-auto"
-              max-width="500"
-            >
-              <v-sheet class="pa-4">
-                <v-text-field
-                  v-model="search"
-                  :label="$i18n('Search_label')"
-                  color="secondary"
-                  outlined
-                  hide-details
-                  clearable
-                  dense
-                  clear-icon="mdi-close-circle-outline"
-                />
-              </v-sheet>
-              <v-card-text>
-                <v-treeview
-                  :items="items"
-                  :search="search"
-                  selection-type="independent"
-                  item-children="groups"
-                  item-key="uuid"
-                  item-text="title"
-                  open-all
-                  dense
-                  activatable
-                  hoverable
-                  color="secondary"
-                  style="height:250px; overflow-y: auto; cursor: pointer"
-                  return-object="true"
-                  @update:active="setGroup"
-                />
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-slide-y-transition>
+    <div>
+        <v-slide-y-transition>
+            <v-container class="my-0 pa-0">
+                <v-row justify="center">
+                    <v-col style="cursor: default;" class="text-h6 text-center">
+                        {{ $i18n("where") }}
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-card class="mx-auto" max-width="500">
+                            <v-sheet class="pa-4">
+                                <v-text-field
+                                    v-model="search"
+                                    :label="$i18n('Search_label')"
+                                    color="secondary"
+                                    outlined
+                                    hide-details
+                                    clearable
+                                    dense
+                                    clear-icon="mdi-close-circle-outline"
+                                />
+                            </v-sheet>
+                            <v-card-text>
+                                <v-treeview
+                                    :items="items"
+                                    :search="search"
+                                    selection-type="independent"
+                                    item-children="groups"
+                                    item-key="uuid"
+                                    item-text="title"
+                                    open-all
+                                    dense
+                                    activatable
+                                    hoverable
+                                    color="secondary"
+                                    style="height: 250px; overflow-y: auto; cursor: pointer;"
+                                    return-object="true"
+                                    @update:active="setGroup"
+                                />
+                            </v-card-text>
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-slide-y-transition>
 
-    <v-btn
-      right
-      color="primary"
-      @click="saveEntry"
-    >
-      {{ $i18n('save') }}
-    </v-btn>
-  </div>
+        <v-btn right color="primary" @click="saveEntry">
+            {{ $i18n("save") }}
+        </v-btn>
+    </div>
 </template>
 
 <script lang="ts">
@@ -81,15 +69,17 @@ const deepMapKeys = (obj, f) =>
     Array.isArray(obj)
         ? obj.map(val => deepMapKeys(val, f))
         : typeof obj === "object"
-            ? Object.keys(obj).reduce((acc, current) => {
-                const val = obj[current];
-                acc[f(current)] =
-          val !== null && typeof val === "object" ? deepMapKeys(val, f) : (acc[f(current)] = val);
-                return acc;
-            }, {})
-            : obj;
+        ? Object.keys(obj).reduce((acc, current) => {
+              const val = obj[current];
+              acc[f(current)] =
+                  val !== null && typeof val === "object"
+                      ? deepMapKeys(val, f)
+                      : (acc[f(current)] = val);
+              return acc;
+          }, {})
+        : obj;
 
-function groupContainsId (group: Group, id: string) {
+function groupContainsId(group: Group, id: string) {
     if (group.uuid === id) return true;
 
     if (group.groups && group.groups.some(g => groupContainsId(g, id))) return true;
@@ -97,7 +87,7 @@ function groupContainsId (group: Group, id: string) {
     return false;
 }
 
-function findDatabaseByGroup (databases: Database[], group: Group) {
+function findDatabaseByGroup(databases: Database[], group: Group) {
     return databases.find(db => groupContainsId(db.root, group.uuid));
 }
 
@@ -128,11 +118,13 @@ export default {
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
                 parentGroup: value[0],
-                database: new DatabaseSummary({ fileName: database.fileName, root: new GroupSummary({ uuid: TemporaryIDString }) })
+                database: new DatabaseSummary({
+                    fileName: database.fileName,
+                    root: new GroupSummary({ uuid: TemporaryIDString })
+                })
             });
             this.$store.dispatch("updateSaveState", updatedSaveState);
         }
     }
 };
-
 </script>

@@ -1,7 +1,5 @@
 export class FeatureFlags {
-
     public static readonly offered: string[] = [
-
         // Full feature set as of KeeFox 1.6
         "KPRPC_FEATURE_VERSION_1_6",
 
@@ -16,16 +14,13 @@ export class FeatureFlags {
 
         // in the rare event that we want to check for the absense of a feature
         // we would add a feature flag along the lines of "KPRPC_FEATURE_REMOVED_INCOMPATIBLE_THING_X"
-
     ];
 
     public static readonly required: string[] = [
-
         // Full feature set as of KeeFox 1.6
         "KPRPC_FEATURE_VERSION_1_6",
 
         // Allow clients without the name KeeFox to connect
         "KPRPC_GENERAL_CLIENTS"
-
     ];
 }

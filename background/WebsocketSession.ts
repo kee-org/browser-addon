@@ -42,33 +42,39 @@ export class WebsocketSessionManager {
 
     private callbacks: {};
 
-    public isActive () {
-        return this.webSocket !== undefined && this.webSocket !== null && this.webSocket.readyState == WebSocket.OPEN && this.isKPRPCAuthorised();
+    public isActive() {
+        return (
+            this.webSocket !== undefined &&
+            this.webSocket !== null &&
+            this.webSocket.readyState == WebSocket.OPEN &&
+            this.isKPRPCAuthorised()
+        );
     }
 
-    public features () {
+    public features() {
         return this.isActive() ? this._features : [];
     }
 
-    public setClaimedFeatures (features) {
+    public setClaimedFeatures(features) {
         this._features = features;
     }
 
-    public registerCallback (requestId: number, callback: (resultWrapper: Partial<ResultWrapper>) => void) {
+    public registerCallback(
+        requestId: number,
+        callback: (resultWrapper: Partial<ResultWrapper>) => void
+    ) {
         this.callbacks[requestId] = callback;
     }
 
-    public invokeCallback (requestId: number, resultWrapper: Partial<ResultWrapper>) {
-        if (this.callbacks[requestId] != null)
-            this.callbacks[requestId](resultWrapper);
+    public invokeCallback(requestId: number, resultWrapper: Partial<ResultWrapper>) {
+        if (this.callbacks[requestId] != null) this.callbacks[requestId](resultWrapper);
     }
 
-    public unregisterCallback (requestId: number) {
+    public unregisterCallback(requestId: number) {
         delete this.callbacks[requestId];
     }
 
-    constructor (onOpening, onOpen, onClose, onMessage, isKPRPCAuthorised)
-    {
+    constructor(onOpening, onOpen, onClose, onMessage, isKPRPCAuthorised) {
         this.onOpening = onOpening;
         this.onOpen = onOpen;
         this.onClose = onClose;
@@ -77,8 +83,8 @@ export class WebsocketSessionManager {
         this.reconnectionAttemptFrequency = 2000;
         this.connectionTimeout = 10000; // short timeout for connections
         this.activityTimeout = 3600000; // long timeout for activity
-        this.connectLock = false;       // protect the connect function so only one event thread (e.g. timer) can execute it at the same time
-        this.wasEverOpen = false;       // Allows us to only do cleanup when required
+        this.connectLock = false; // protect the connect function so only one event thread (e.g. timer) can execute it at the same time
+        this.wasEverOpen = false; // Allows us to only do cleanup when required
 
         this.webSocketHost = "127.0.0.1";
         this.webSocket = null;
@@ -98,16 +104,20 @@ export class WebsocketSessionManager {
         this.callbacks = {};
     }
 
-    startup () {
+    startup() {
         this.pendingPortChange = null;
         browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             if (request.action !== "KPRPC_Port_Change") return;
-            if (this.pendingPortChange != null){
+            if (this.pendingPortChange != null) {
                 clearTimeout(this.pendingPortChange);
             }
             this.pendingPortChange = setTimeout(() => {
                 this.configureConnectionURIs();
-                if (this.webSocket !== undefined && this.webSocket !== null && this.webSocket.readyState != WebSocket.CLOSED) {
+                if (
+                    this.webSocket !== undefined &&
+                    this.webSocket !== null &&
+                    this.webSocket.readyState != WebSocket.CLOSED
+                ) {
                     this.webSocket.close();
                 }
             }, 1000);
@@ -119,18 +129,19 @@ export class WebsocketSessionManager {
         // NB: overheads here include a test whether a socket is alive
         // and regular timer scheduling overheads - hopefully that's insignificant
         // but if not we can try more complicated connection strategies
-        this.reconnectTimer = window.setInterval(this.attemptConnection.bind(this), this.reconnectionAttemptFrequency);
+        this.reconnectTimer = window.setInterval(
+            this.attemptConnection.bind(this),
+            this.reconnectionAttemptFrequency
+        );
         KeeLog.debug("Created an HTTP/ws reconnection timer.");
     }
 
-    configureConnectionURIs () {
+    configureConnectionURIs() {
         const defaultWebSocketPort = 12546;
         this.webSocketPort = configManager.current.KeePassRPCWebSocketPort;
 
         // Don't allow user to select an invalid port
-        if (this.webSocketPort <= 0 || this.webSocketPort > 65535
-            || this.webSocketPort == 19455)
-        {
+        if (this.webSocketPort <= 0 || this.webSocketPort > 65535 || this.webSocketPort == 19455) {
             configManager.current.KeePassRPCWebSocketPort = defaultWebSocketPort;
             configManager.save();
 
@@ -140,16 +151,14 @@ export class WebsocketSessionManager {
         this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
     }
 
-    tryToconnectToWebsocket () {
+    tryToconnectToWebsocket() {
         KeeLog.debug("Attempting to connect to RPC server webSocket.");
         const connectResult = this.connect();
-        if (connectResult == "alive")
-            KeeLog.debug("Connection already established.");
-        if (connectResult == "locked")
-            KeeLog.debug("Connection attempt already underway.");
+        if (connectResult == "alive") KeeLog.debug("Connection already established.");
+        if (connectResult == "locked") KeeLog.debug("Connection attempt already underway.");
     }
 
-    httpConnectionAttemptCallback () {
+    httpConnectionAttemptCallback() {
         // We can't try to connect straight away because the old HTTP ephemeral
         // TCP port is still hanging around during this onClose callback and on some
         // machines, ephemeral ports flout IANA guidelines including using
@@ -160,29 +169,27 @@ export class WebsocketSessionManager {
     }
 
     // Initiates a connection to the KPRPC server.
-    connect ()
-    {
+    connect() {
         // closure for websocket event callbacks
         const _this = this;
 
-        if (this.connectLock)
-            return "locked";
-        if (this.webSocket !== undefined && this.webSocket !== null && this.webSocket.readyState == WebSocket.OPEN)
+        if (this.connectLock) return "locked";
+        if (
+            this.webSocket !== undefined &&
+            this.webSocket !== null &&
+            this.webSocket.readyState == WebSocket.OPEN
+        )
             return "alive";
-        if (this.connectionProhibitedUntil.getTime() > (new Date()).getTime())
-            return "locked";
-        if (!this.onOpening())
-            return "locked";
+        if (this.connectionProhibitedUntil.getTime() > new Date().getTime()) return "locked";
+        if (!this.onOpening()) return "locked";
 
         KeeLog.debug("Trying to open a webSocket connection");
 
         this.connectLock = true;
         this.wasEverOpen = false;
-        try
-        {
+        try {
             this.webSocket = new WebSocket(this.webSocketURI);
-        } catch (ex)
-        {
+        } catch (ex) {
             // This shouldn't happen much - most errors will be caught in the onerror function below
             this.connectLock = false;
             return;
@@ -203,8 +210,7 @@ export class WebsocketSessionManager {
             const obj = JSON.parse(event.data);
 
             // if we failed to parse an object from the JSON
-            if (!obj)
-            {
+            if (!obj) {
                 KeeLog.error("received bad message from web socket. Can't parse from JSON.");
                 return;
             }
@@ -226,32 +232,33 @@ export class WebsocketSessionManager {
         };
     }
 
-    closeSession () {
+    closeSession() {
         // Close the websocket connection if there is one (if it's already closed, nothing will happen)
-        if (this.webSocket)
-            this.webSocket.close();
+        if (this.webSocket) this.webSocket.close();
     }
 
-    onCloseSession () {
+    onCloseSession() {
         this.callbacks = {};
         this.onClose();
     }
 
-    attemptConnection () {
+    attemptConnection() {
         const rpc = this;
 
         // Check we're not in the middle of trying to connect to the websocket
-        if (rpc.connectLock)
-            return;
+        if (rpc.connectLock) return;
 
         // Check current websocket connection state. No point in trying
         // if we know we're already successfully connected
-        if (rpc.webSocket !== undefined && rpc.webSocket !== null && rpc.webSocket.readyState != WebSocket.CLOSED)
+        if (
+            rpc.webSocket !== undefined &&
+            rpc.webSocket !== null &&
+            rpc.webSocket.readyState != WebSocket.CLOSED
+        )
             return;
 
         // Check we are allowed to connect
-        if (rpc.connectionProhibitedUntil.getTime() > (new Date()).getTime())
-            return;
+        if (rpc.connectionProhibitedUntil.getTime() > new Date().getTime()) return;
 
         // Every 73 seconds we can try to connect to the WebSocket directly.
         // This allows for the 60 second web socket connection block timeout,
@@ -259,15 +266,14 @@ export class WebsocketSessionManager {
         // by the web socket connection block and 2 seconds for luck (we really
         // don't want this to have any chance of affecting the normal situation
         // 99.9% of users will be in).
-        if ((new Date()).getTime() > rpc.speculativeWebSocketAttemptProhibitedUntil.getTime())
-        {
+        if (new Date().getTime() > rpc.speculativeWebSocketAttemptProhibitedUntil.getTime()) {
             KeeLog.debug("Speculatively trying to open a webSocket connection");
             rpc.speculativeWebSocketAttemptProhibitedUntil = new Date();
             rpc.speculativeWebSocketAttemptProhibitedUntil.setTime(
-                rpc.speculativeWebSocketAttemptProhibitedUntil.getTime() + 73000);
+                rpc.speculativeWebSocketAttemptProhibitedUntil.getTime() + 73000
+            );
             rpc.httpConnectionAttemptCallback();
-        } else
-        {
+        } else {
             // closure for http event callbacks
             const _this = this;
 
@@ -277,7 +283,9 @@ export class WebsocketSessionManager {
             xhr.timeout = 750;
             xhr.onerror = function () {
                 // an error indicates that KeePass is running (or that it is at least worth attempting a precious websocket connection)
-                KeeLog.debug("HTTP connection did not timeout. We will now attempt a web socket connection.");
+                KeeLog.debug(
+                    "HTTP connection did not timeout. We will now attempt a web socket connection."
+                );
                 rpc.httpConnectionAttemptCallback();
             };
             xhr.ontimeout = function () {
@@ -298,11 +306,16 @@ export class WebsocketSessionManager {
         }
     }
 
-    sendMessage (data) {
+    sendMessage(data) {
         try {
             this.webSocket.send(data);
         } catch (ex) {
-            KeeLog.error("Failed to send a websocket message. Exception details: " + ex + ", stack: " + ex.stack);
+            KeeLog.error(
+                "Failed to send a websocket message. Exception details: " +
+                    ex +
+                    ", stack: " +
+                    ex.stack
+            );
         }
     }
 }
