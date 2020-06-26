@@ -89,7 +89,7 @@ export class NetworkAuth {
                         resolve({
                             authCredentials: {
                                 username: Entry.getUsernameField(entry).value,
-                                password: Entry.getUsernameField(entry).value
+                                password: Entry.getPasswordField(entry).value
                             }
                         });
                         return;
@@ -110,7 +110,7 @@ export class NetworkAuth {
                                 resolve({
                                     authCredentials: {
                                         username: Entry.getUsernameField(entry).value,
-                                        password: Entry.getUsernameField(entry).value
+                                        password: Entry.getPasswordField(entry).value
                                     }
                                 });
                                 browser.runtime.onMessage.removeListener(handleMessage);
