@@ -514,9 +514,6 @@ gulp.task(
                     )
                     .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, "$1$2 Beta$3"))
                     .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ""))
-                    // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
-                    .pipe(replace(/(.*"clipboardWrite",)(.*)/g, ""))
-                    .pipe(replace(/(.*"clipboardRead",)(.*)/g, ""))
                     .pipe(gulp.dest(buildDirDebugChrome))
             );
         } else {
@@ -542,9 +539,6 @@ gulp.task(
                         )
                     )
                     .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ""))
-                    // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
-                    .pipe(replace(/(.*"clipboardWrite",)(.*)/g, ""))
-                    .pipe(replace(/(.*"clipboardRead",)(.*)/g, ""))
                     .pipe(gulp.dest(buildDirProdChrome))
             );
         }
