@@ -200,11 +200,7 @@ gulp.task(
     gulp.series(function lint() {
         return (
             gulp
-                .src([
-                    "**/*.{vue,ts}",
-                    "!node_modules/**/*.ts",
-                    "!typedefs/**/*.ts"
-                ])
+                .src(["**/*.{vue,ts}", "!node_modules/**/*.ts", "!typedefs/**/*.ts"])
                 // eslint() attaches the lint output to the "eslint" property
                 // of the file object so it can be used by other modules.
                 .pipe(eslint())
@@ -223,11 +219,7 @@ gulp.task(
     gulp.series(function lintFix() {
         return (
             gulp
-                .src([
-                    "**/*.{vue,ts}",
-                    "!node_modules/**/*.ts",
-                    "!typedefs/**/*.ts"
-                ])
+                .src(["**/*.{vue,ts}", "!node_modules/**/*.ts", "!typedefs/**/*.ts"])
                 // eslint() attaches the lint output to the "eslint" property
                 // of the file object so it can be used by other modules.
                 .pipe(eslint({ fix: true }))
@@ -261,9 +253,7 @@ var executeRollup = function () {
         resolve(),
         commonjs(),
         rollupReplace({
-            "strict: true, //__VUEX_STRICT_CONFIG__": WATCH
-                ? "strict: true,"
-                : ""
+            "strict: true, //__VUEX_STRICT_CONFIG__": WATCH ? "strict: true," : ""
         }),
         typescript({
             clean: true,
@@ -272,9 +262,7 @@ var executeRollup = function () {
         }),
         iife(),
         rollupReplace({
-            "process.env.NODE_ENV": JSON.stringify(
-                DEBUG ? "development" : "production"
-            )
+            "process.env.NODE_ENV": JSON.stringify(DEBUG ? "development" : "production")
         }),
         vue({
             needMap: false // buggy so must be disabled to get sourcemaps to work at all
@@ -320,10 +308,7 @@ var executeRollup = function () {
         plugins,
         manualChunks(id) {
             //console.log(id);
-            if (
-                id.includes("/browser-addon/common/") ||
-                id.includes("/browser-addon/store/")
-            ) {
+            if (id.includes("/browser-addon/common/") || id.includes("/browser-addon/store/")) {
                 return "common";
             }
         },
@@ -366,26 +351,17 @@ var executeRollup = function () {
                 event.code === "ERROR" ||
                 event.code === "FATAL"
             )
-                console.info(
-                    `WATCHER: ${event.code} : ${JSON.stringify(event)}`
-                );
+                console.info(`WATCHER: ${event.code} : ${JSON.stringify(event)}`);
         });
         return watcher;
     } else {
         return rollup.rollup(input).then(bundle =>
             Promise.all([
-                bundle.write(
-                    Object.assign(
-                        { dir: DEBUG ? buildDirDebug : buildDirProd },
-                        output
-                    )
-                ),
+                bundle.write(Object.assign({ dir: DEBUG ? buildDirDebug : buildDirProd }, output)),
                 bundle.write(
                     Object.assign(
                         {
-                            dir: DEBUG
-                                ? buildDirDebugChrome
-                                : buildDirProdChrome
+                            dir: DEBUG ? buildDirDebugChrome : buildDirProdChrome
                         },
                         output
                     )
@@ -393,9 +369,7 @@ var executeRollup = function () {
                 bundle.write(
                     Object.assign(
                         {
-                            dir: DEBUG
-                                ? buildDirDebugFirefox
-                                : buildDirProdFirefox
+                            dir: DEBUG ? buildDirDebugFirefox : buildDirProdFirefox
                         },
                         output
                     )
@@ -414,9 +388,7 @@ var copyStatic = function (glob, dir) {
             .pipe(
                 replace(
                     "<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->",
-                    DEBUG
-                        ? "<script src='https://localhost:8099'></script>"
-                        : ""
+                    DEBUG ? "<script src='https://localhost:8099'></script>" : ""
                 )
             )
             .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir));
@@ -426,22 +398,12 @@ var copyStatic = function (glob, dir) {
             .pipe(
                 replace(
                     "<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->",
-                    DEBUG
-                        ? "<script src='https://localhost:8099'></script>"
-                        : ""
+                    DEBUG ? "<script src='https://localhost:8099'></script>" : ""
                 )
             )
             .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir))
-            .pipe(
-                gulp.dest(
-                    (DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + dir
-                )
-            )
-            .pipe(
-                gulp.dest(
-                    (DEBUG ? buildDirDebugChrome : buildDirProdChrome) + dir
-                )
-            );
+            .pipe(gulp.dest((DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + dir))
+            .pipe(gulp.dest((DEBUG ? buildDirDebugChrome : buildDirProdChrome) + dir));
     }
 };
 
@@ -550,15 +512,8 @@ gulp.task(
                             ""
                         )
                     )
-                    .pipe(
-                        replace(
-                            /(.*"version_name": ")(.*)(",.*)/g,
-                            "$1$2 Beta$3"
-                        )
-                    )
-                    .pipe(
-                        replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, "")
-                    )
+                    .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, "$1$2 Beta$3"))
+                    .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ""))
                     // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
                     .pipe(replace(/(.*"clipboardWrite",)(.*)/g, ""))
                     .pipe(replace(/(.*"clipboardRead",)(.*)/g, ""))
@@ -586,9 +541,7 @@ gulp.task(
                             ""
                         )
                     )
-                    .pipe(
-                        replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, "")
-                    )
+                    .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ""))
                     // hack to workaround https://github.com/mozilla/webextension-polyfill/issues/70 :
                     .pipe(replace(/(.*"clipboardWrite",)(.*)/g, ""))
                     .pipe(replace(/(.*"clipboardRead",)(.*)/g, ""))
@@ -602,11 +555,7 @@ gulp.task(
     "static:manifest",
     gulp.series("clean:static:manifest", function staticManifest(done) {
         if (WATCH) gulp.series("copyStaticManifest")();
-        else
-            gulp.series(
-                "copyStaticManifest",
-                "modifyBuildFilesForCrossBrowser"
-            )();
+        else gulp.series("copyStaticManifest", "modifyBuildFilesForCrossBrowser")();
         done();
     })
 );

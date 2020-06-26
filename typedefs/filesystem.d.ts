@@ -1,10 +1,10 @@
 // Type definitions for File System API
 // Project: http://www.w3.org/TR/file-system-api/
-// Definitions by: Kon <http://phyzkit.net/> 
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped 
+// Definitions by: Kon <http://phyzkit.net/>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 interface LocalFileSystem {
-    
+
     /**
      * Used for storage with no guarantee of persistence.
      */
@@ -23,13 +23,13 @@ interface LocalFileSystem {
      * @param errorCallback A callback that is called when errors happen, or when the request to obtain the filesystem is denied.
      */
     requestFileSystem(type:number, size:number, successCallback:FileSystemCallback, errorCallback?:ErrorCallback):void;
-    
+
     /**
      * Allows the user to look up the Entry for a file or directory referred to by a local URL.
      * @param url A URL referring to a local file in a filesystem accessable via this API.
      * @param successCallback A callback that is called to report the Entry to which the supplied URL refers.
      * @param errorCallback A callback that is called when errors happen, or when the request to obtain the Entry is denied.
-     */ 
+     */
     resolveLocalFileSystemURL(url:string, successCallback:EntryCallback, errorCallback?:ErrorCallback):void;
 
     /**
@@ -94,7 +94,7 @@ interface Flags {
     exclusive?:boolean;
 }
 
-/** 
+/**
  * This interface represents a file system.
  */
 interface FileSystem{
@@ -129,7 +129,7 @@ interface Entry {
      * @param errorCallback ErrorCallback A callback that is called when errors happen.
      */
     getMetadata(successCallback:MetadataCallback, errorCallback?:ErrorCallback):void;
-    
+
     /**
      * The name of the entry, excluding the path leading to it.
      */
@@ -147,7 +147,7 @@ interface Entry {
 
     /**
      * Move an entry to a different location on the file system. It is an error to try to:
-     * 
+     *
      * <ui>
      * <li>move a directory inside itself or to any child at any depth;</li>
      * <li>move an entry into its parent if a name different from its current one isn't provided;</li>
@@ -160,11 +160,11 @@ interface Entry {
      * A move of a directory on top of an existing empty directory must attempt to delete and replace that directory.
      */
     moveTo(parent:DirectoryEntry, newName?:string, successCallback?:EntryCallback, errorCallback?:ErrorCallback):void;
-    
+
     /**
      * Copy an entry to a different location on the file system. It is an error to try to:
-     * 
-     * <ul> 
+     *
+     * <ul>
      * <li> copy a directory inside itself or to any child at any depth;</li>
      * <li> copy an entry into its parent if a name different from its current one isn't provided;</li>
      * <li> copy a file to a path occupied by a directory;</li>
@@ -177,7 +177,7 @@ interface Entry {
      * Directory copies are always recursive--that is, they copy all contents of the directory.
      */
     copyTo(parent:DirectoryEntry, newName?:string, successCallback?:EntryCallback, errorCallback?:ErrorCallback):void;
-    
+
     /**
      * Returns a URL that can be used to identify this entry. Unlike the URN defined in [FILE-API-ED], it has no specific expiration; as it describes a location on disk, it should be valid at least as long as that location exists.
      */
@@ -189,7 +189,7 @@ interface Entry {
      * @param errorCallback A callback that is called when errors happen.
      */
     remove(successCallback:VoidCallback, errorCallback?:ErrorCallback):void;
-    
+
     /**
      * Look up the parent DirectoryEntry containing this Entry. If this Entry is the root of its filesystem, its parent is itself.
      * @param successCallback A callback that is called to return the parent Entry.
@@ -211,7 +211,7 @@ interface DirectoryEntry extends Entry {
      * Creates or looks up a file.
      * @param path Either an absolute path or a relative path from this DirectoryEntry to the file to be looked up or created. It is an error to attempt to create a file whose immediate parent does not yet exist.
      * @param options
-     *     <ul> 
+     *     <ul>
      *     <li>If create and exclusive are both true, and the path already exists, getFile must fail.</li>
      *     <li>If create is true, the path doesn't exist, and no other error occurs, getFile must create it as a zero-length file and return a corresponding FileEntry.</li>
      *     <li>If create is not true and the path doesn't exist, getFile must fail.</li>
@@ -222,11 +222,11 @@ interface DirectoryEntry extends Entry {
      * @param errorCallback A callback that is called when errors happen.
      */
     getFile(path:string, options?:Flags, successCallback?:FileEntryCallback, errorCallback?:ErrorCallback):void;
-    
+
     /**
      * Creates or looks up a directory.
      * @param path Either an absolute path or a relative path from this DirectoryEntry to the directory to be looked up or created. It is an error to attempt to create a directory whose immediate parent does not yet exist.
-     * @param options 
+     * @param options
      *     <ul>
      *     <li>If create and exclusive are both true and the path already exists, getDirectory must fail.</li>
      *     <li>If create is true, the path doesn't exist, and no other error occurs, getDirectory must create and return a corresponding DirectoryEntry.</li>
@@ -236,10 +236,10 @@ interface DirectoryEntry extends Entry {
      *     </ul>
      * @param successCallback   A callback that is called to return the DirectoryEntry selected or created.
      * @param errorCallback A callback that is called when errors happen.
-     * 
+     *
      */
     getDirectory(path:string, options?:Flags, successCallback?:DirectoryEntryCallback, errorCallback?:ErrorCallback):void;
-    
+
     /**
      * Deletes a directory and all of its contents, if any. In the event of an error [e.g. trying to delete a directory that contains a file that cannot be removed], some of the contents of the directory may be deleted. It is an error to attempt to delete the root directory of a filesystem.
      * @param successCallback A callback that is called on success.
@@ -341,7 +341,7 @@ interface MetadataCallback {
 
 /**
  * This interface is the callback used to create a FileWriter.
- */ 
+ */
 interface FileWriterCallback {
     (fileWriter:FileWriter):void;
 }
@@ -353,9 +353,9 @@ interface FileCallback {
     (file:File):void;
 }
 
-/** 
+/**
  * This interface is the generic callback used to indicate success of an asynchronous method.
- */ 
+ */
 interface VoidCallback {
     ():void;
 }
@@ -368,7 +368,7 @@ interface ErrorCallback {
 }
 
 
-/** 
+/**
  * This interface represents a file system.
  */
 interface FileSystemSync {
@@ -403,7 +403,7 @@ interface EntrySync{
      * Look up metadata about this entry.
      */
     getMetadata():Metadata;
-    
+
     /**
      * The name of the entry, excluding the path leading to it.
      */
@@ -427,7 +427,7 @@ interface EntrySync{
      * <li> move a file to a path occupied by a directory;</li>
      * <li> move a directory to a path occupied by a file;</li>
      * <li> move any element to a path occupied by a directory which is not empty.</li>
-     * </ui> 
+     * </ui>
      * A move of a file on top of an existing file must attempt to delete and replace that file. A move of a directory on top of an existing empty directory must attempt to delete and replace that directory.
      * @param parent The directory to which to move the entry.
      * @param newName The new name of the entry. Defaults to the EntrySync's current name if unspecified.
@@ -442,7 +442,7 @@ interface EntrySync{
      * <li> copy a file to a path occupied by a directory;</li>
      * <li> copy a directory to a path occupied by a file;</li>
      * <li> copy any element to a path occupied by a directory which is not empty.</li>
-     * </ui> 
+     * </ui>
      * A copy of a file on top of an existing file must attempt to delete and replace that file.
      * A copy of a directory on top of an existing empty directory must attempt to delete and replace that directory.
      * Directory copies are always recursive--that is, they copy all contents of the directory.
@@ -474,10 +474,10 @@ interface DirectoryEntrySync extends EntrySync {
      */
     createReader():DirectoryReaderSync;
 
-    /** 
+    /**
      * Creates or looks up a directory.
      * @param path Either an absolute path or a relative path from this DirectoryEntrySync to the file to be looked up or created. It is an error to attempt to create a file whose immediate parent does not yet exist.
-     * @param options 
+     * @param options
      *     <ul>
      *     <li> If create and exclusive are both true and the path already exists, getFile must fail.</li>
      *     <li> If create is true, the path doesn't exist, and no other error occurs, getFile must create it as a zero-length file and return a corresponding FileEntry.</li>
@@ -488,10 +488,10 @@ interface DirectoryEntrySync extends EntrySync {
      */
     getFile(path:string, options?:Flags):FileEntrySync;
 
-    /** 
+    /**
      * Creates or looks up a directory.
      * @param path Either an absolute path or a relative path from this DirectoryEntrySync to the directory to be looked up or created. It is an error to attempt to create a directory whose immediate parent does not yet exist.
-     * @param options 
+     * @param options
      *     <ul>
      *     <li> If create and exclusive are both true and the path already exists, getDirectory must fail.</li>
      *     <li> If create is true, the path doesn't exist, and no other error occurs, getDirectory must create and return a corresponding DirectoryEntry.</li>
