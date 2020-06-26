@@ -78,7 +78,7 @@ export class NetworkAuth {
 
                 if (matchedEntries.length === 1 && configManager.current.autoSubmitNetworkAuthWithSingleMatch) {
                     const entry = matchedEntries[0];
-                    resolve({ authCredentials: { username: Entry.getUsernameField(entry).value, password: Entry.getUsernameField(entry).value } });
+                    resolve({ authCredentials: { username: Entry.getUsernameField(entry).value, password: Entry.getPasswordField(entry).value } });
                     return;
                 }
 
@@ -88,7 +88,7 @@ export class NetworkAuth {
                     switch (request.action) {
                         case "NetworkAuth_ok": {
                             const entry = matchedEntries[request.selectedEntryIndex];
-                            resolve({ authCredentials: { username: Entry.getUsernameField(entry).value, password: Entry.getUsernameField(entry).value } });
+                            resolve({ authCredentials: { username: Entry.getUsernameField(entry).value, password: Entry.getPasswordField(entry).value } });
                             browser.runtime.onMessage.removeListener(handleMessage);
                             break;
                         }
