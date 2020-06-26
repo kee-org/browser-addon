@@ -143,10 +143,6 @@
         "message": "Заповнити й відправити форму",
         "description": ""
     },
-    "pref_FillAndSubmitPrompt_desc": {
-        "message": "Заповнити й відправити запит",
-        "description": ""
-    },
     "pref_FillForm_desc": {
         "message": "Заповнити форму",
         "description": ""
@@ -154,10 +150,6 @@
     "pref_FillingEntries_heading": {
         "message": "Заповнення записів",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
-    },
-    "pref_FillPrompt_desc": {
-        "message": "Заповнити запит",
-        "description": ""
     },
     "pref_FindingEntries_heading": {
         "message": "Пошук записів",
@@ -311,40 +303,8 @@
         "message": "Пошук...",
         "description": ""
     },
-    "Search_tip": {
-        "message": "Почніть вводити для показу відповідних записів",
-        "description": ""
-    },
     "PasswordProfilesExplanation_label": {
         "message": "Ви можете за бажанням створити інший, обравши профіль пароля внизу. Використовуйте Kee Vault або KeePass для створення нових профілів.",
-        "description": ""
-    },
-    "change_field_explanation": {
-        "message": "Kee також оновить піктограму веб-сайту (favicon) і будь-яку інформацію HTTP Auth Realm. Складніші модифікації будуть потребувати ручного редагування запису.",
-        "description": ""
-    },
-    "change_field_status": {
-        "message": "Обраний запис буде мати ім'я користувача, пароль та інші поля форми, які замінені щойно введеними вами значеннями.",
-        "description": ""
-    },
-    "change_url_status": {
-        "message": "Адреса (URL) веб-сторінки запису буде оновлена на останню відвідану.",
-        "description": ""
-    },
-    "change_url_option_1": {
-        "message": "Замінити URL-адресу запису (поля форми все одно будуть заповнюватись при відвідуванні старої адреси)",
-        "description": ""
-    },
-    "change_url_option_2": {
-        "message": "Замінити URL-адресу запису (повністю видалити стару адресу)",
-        "description": ""
-    },
-    "change_url_option_3": {
-        "message": "Зберегти стару адресу URL запису (поля форми все одно будуть заповнюватись при відвідуванні нової адреси)",
-        "description": ""
-    },
-    "change_url_option_4": {
-        "message": "Зберегти стару URL-адресу запису (не додавати нову адресу до запису)",
         "description": ""
     },
     "copy_password_label": {
@@ -374,10 +334,6 @@
     "matches_from_other_sites": {
         "message": "Збіги з інших сайтів",
         "description": "Search results section header."
-    },
-    "create": {
-        "message": "Створити",
-        "description": ""
     },
     "create_new_entry": {
         "message": "Створити новий запис",
@@ -411,10 +367,6 @@
         "message": "наприклад, www.google.com (Не вказуйте https:// чи інші протоколи)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
-    "database_label": {
-        "message": "База даних",
-        "description": ""
-    },
     "generatePassword_copied": {
         "message": "Новий пароль був скопійований до буферу.",
         "description": ""
@@ -429,14 +381,6 @@
     },
     "generatePassword_done_2": {
         "message": "Вставте його в поле нового пароля чи інше необхідне місце.",
-        "description": ""
-    },
-    "group_label": {
-        "message": "Група",
-        "description": ""
-    },
-    "entry_history_pointer": {
-        "message": "Ваш менеджер паролів має функцію відновлення. Знайдіть запис, після чого ви зможете переглянути історію змін і відновити попередню версію, якщо це необхідно.",
         "description": ""
     },
     "loggedIn_tip": {
@@ -459,14 +403,6 @@
         "message": "$1 із групи $2 ($3)",
         "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
     },
-    "more_options": {
-        "message": "Більше налаштувань",
-        "description": ""
-    },
-    "multi_page_update_warning": {
-        "message": "Багатосторінкові форми входу можуть також потребувати ручного редагування.",
-        "description": ""
-    },
     "noUsername_partial_tip": {
         "message": "немає імені користувача",
         "description": ""
@@ -483,44 +419,16 @@
         "message": "Розблокуйте свою базу паролів для активації Kee",
         "description": ""
     },
-    "notifyBarNeverForSiteButton_label": {
-        "message": "Ніколи для цього сайту",
-        "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
-    },
     "save": {
         "message": "Зберегти",
-        "description": ""
-    },
-    "password_successfully_updated": {
-        "message": "Пароль успішно оновлено.",
-        "description": ""
-    },
-    "saveMultiPagePasswordText": {
-        "message": "Ви хочете щоб Kee зберіг цей багатосторінковий пароль?",
-        "description": ""
-    },
-    "savePasswordLogin_tip": {
-        "message": "Ім'я користувача: $1. Адреса веб-сайту (URL): $2",
         "description": ""
     },
     "savePasswordText": {
         "message": "Ви хочете щоб Kee зберіг цей пароль?",
         "description": ""
     },
-    "search_again": {
-        "message": "Шукати знову",
-        "description": ""
-    },
     "update": {
         "message": "Оновити",
-        "description": ""
-    },
-    "update_existing_entry": {
-        "message": "Оновити наявний запис",
-        "description": ""
-    },
-    "whichEntry_label": {
-        "message": "Оберіть запис...",
         "description": ""
     },
     "close": {
@@ -626,14 +534,6 @@
     "network_auth_choose": {
         "message": "Оберіть запис зі списку внизу, або закрийте це вікно, щоб ввести необхідну інформацію вручну.",
         "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
-    },
-    "save_login": {
-        "message": "Зберегти запис",
-        "description": "Heading for panel that allows user to create or update a new login entry"
-    },
-    "saveLatestLogin": {
-        "message": "Зберегти останній вхід",
-        "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
     },
     "welcome_to_kee": {
         "message": "Вітаємо в Kee",
@@ -755,14 +655,6 @@
         "message": "Нова піктограма",
         "description": "Heading for text that explains we have a new icon / branding"
     },
-    "reliability_improvements_text1": {
-        "message": "Ми вдосконалили з'єднання між браузером та кожною окремою сторінкою, яку ви завантажуєте, таким чином покращивши роботу функції автозаповнення.",
-        "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
-    },
-    "reliability_improvements_text2": {
-        "message": "Ми вдосконалили виявлення кнопок відправлення форм. Це означає, що відправлення заповнених форм стало точнішим на деяких веб-сайтах, таких як сторінка входу в Google.",
-        "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-    },
     "kee_vault_announcement_1": {
         "message": "Kee Vault - це новий менеджер паролів з відкритим кодом. Він працює у вашому браузері, отже його не потрібно встановлювати.",
         "description": "Introduction to what Kee Vault is"
@@ -774,22 +666,6 @@
     "kee_vault_announcement_3": {
         "message": "Kee версії 3.0 дозволяє вам використовувати Kee Vault замість програми KeePass, з підтримкою всіх наявних функцій Kee, таких як заповнення форм, збереження, пошук та генерування паролів.",
         "description": "Explains that Kee v3 works with Kee Vault"
-    },
-    "kee_vault_announcement_4": {
-        "message": "Kee Vault майже готовий до запуску у вигляді публічної бета-версії, і я з радістю пропоную всім користувачам Kee можливість раннього доступу, до того як це станеться!",
-        "description": "Announces the pre-release availability of Kee Vault"
-    },
-    "kee_vault_announcement_5": {
-        "message": "Дізнайтеся більше та зареєструйтеся для раннього доступу",
-        "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
-    },
-    "showEntry": {
-        "message": "Показати запис",
-        "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
-    },
-    "list_version_upgrade_3_2": {
-        "message": "Перевизначення автоматичного відправлення форм для запису в Kee Vault чи KeePass тепер також впливає на поведінку Kee, коли ви обираєте вручну заповнення форм в Kee.;Перевизначено розділ \"Заповнення записів\" в налаштуваннях Kee, щоб відобразити які налаштування впливають на автоматичне та ручне заповнення форм.;Операції автоматичного заповнення тепер пропускають заповнення, якщо в полі виявлено наявний текст.;Одноразове повідомлення про запуск Kee Vault може бути додано до нижньої частини панелі Kee, коли ми готові до запуску.;Вилучено застарілі функції журналювання (початкове сповіщення про завантаження та чутливість журналювання для зневадження).",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "pref_automatic": {
         "message": "Автоматично",
@@ -806,6 +682,98 @@
     "pref_fill_override_option": {
         "message": "Зміна поведінки автоматичного відправлення запису також перевизначає цю поведінку",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
+    },
+    "next": {
+        "message": "Далі",
+        "description": "Action button for user to advance to the next step in a multi-step process. E.g. to confirm username and password for a new entry and load the panel that allows selection of where to save the new entry."
+    },
+    "title": {
+        "message": "Заголовок",
+        "description": "E.g. the title of an entry."
+    },
+    "username": {
+        "message": "Ім'я користувача",
+        "description": "Use the most generic and common term available for the primary sign-in identifier for an account. In practice may be an email address, number, surname, username, etc. but in all cases this will refer to the string the user has stored in the entry's primary Username field."
+    },
+    "enabled": {
+        "message": "Увімкнено",
+        "description": "Indicates that a boolean option such as a checkbox is in an enabled/on/true state"
+    },
+    "disabled": {
+        "message": "Вимкнено",
+        "description": "Indicates that a boolean option such as a checkbox is in an disabled/off/false state"
+    },
+    "unsaved_changes": {
+        "message": "У вас є незбережені зміни.",
+        "description": "Shown to user when the popup is opened and a new or existing entry is part-way through being edited from a recent popup session. Note that very recent popup sessions are automatically 'continued' without the user needing to consider this information."
+    },
+    "continue_saving": {
+        "message": "Продовжити збереження",
+        "description": "Action for user to continue editing the same entry that was being edited when the popup recently closed."
+    },
+    "discard_changes": {
+        "message": "Відхилити зміни",
+        "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
+    },
+    "password_profile_hint": {
+        "message": "Оберіть набір правил для нового пароля. Правила включають довжину та типи символів для використання в новому паролі. Створіть нові профілі у менеджері паролів.",
+        "description": "Explains what a password profile is and how to create new ones."
+    },
+    "password_profile": {
+        "message": "Профіль пароля",
+        "description": "Name of the profiles used by KeePass and Kee Vault to construct new random passwords."
+    },
+    "url_mismatch_1": {
+        "message": "Цей запис призначений для іншого сайту.",
+        "description": "1st sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_2": {
+        "message": "Продовжуючи оновлення, ви дозволите введення цих облікових даних також і для цього сайту.",
+        "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_3": {
+        "message": "Переконайтеся, що це не спроба шахрайства з метою викриття вашого пароля!",
+        "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_confirm": {
+        "message": "Я розумію ризик; Обмінятися обліковими даними з $1.",
+        "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
+    },
+    "make_additional_changes_using_full_editor": {
+        "message": "Інші зміни можна виконати у повноцінному редакторі.",
+        "description": "Note to user that the Kee interface does not allow every possible type of edit to an entry."
+    },
+    "open_full_editor": {
+        "message": "Відкрити розширений редактор",
+        "description": "Button action to open the full entry editor in KeePass or Kee Vault. Be sure to imply that the need to click the button is 'unusual', as I have done with the word 'advanced'"
+    },
+    "where": {
+        "message": "Де?",
+        "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
+    },
+    "will_be_copied_to_clipboard": {
+        "message": "Цей новий пароль скопіюється до буфера обміну",
+        "description": ""
+    },
+    "password_will_be_set_on_field": {
+        "message": "Поле пароля встановиться для цього пароля",
+        "description": ""
+    },
+    "also_copy_to_clipboard": {
+        "message": "Також скопіювати в буфер обміну",
+        "description": "Explains that enabling this option will copy the value to the clipboard in addition to the default behaviour"
+    },
+    "generator_action_copy": {
+        "message": "Копіювати",
+        "description": "Action button to copy to the clipboard a value such as a newly generated password"
+    },
+    "generator_action_apply": {
+        "message": "Застосувати",
+        "description": "Action button to apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
+    },
+    "generator_action_apply_and_copy": {
+        "message": "Застосувати й копіювати",
+        "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Увійти в менеджер паролів / Обрати відповідний запис / Показати список відповідних логінів",

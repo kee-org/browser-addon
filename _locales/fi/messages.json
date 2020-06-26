@@ -143,10 +143,6 @@
         "message": "Täytä ja lähetä lomake",
         "description": ""
     },
-    "pref_FillAndSubmitPrompt_desc": {
-        "message": "Täytä ja lähetä kirjautumiskehote",
-        "description": ""
-    },
     "pref_FillForm_desc": {
         "message": "Täytä lomake",
         "description": ""
@@ -154,10 +150,6 @@
     "pref_FillingEntries_heading": {
         "message": "Automaattinen täyttö",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
-    },
-    "pref_FillPrompt_desc": {
-        "message": "Täytä kirjautumiskehote",
-        "description": ""
     },
     "pref_FindingEntries_heading": {
         "message": "Lomakkeet",
@@ -311,40 +303,8 @@
         "message": "Etsi...",
         "description": ""
     },
-    "Search_tip": {
-        "message": "Etsi KeePass kirjautumistietoja",
-        "description": ""
-    },
     "PasswordProfilesExplanation_label": {
         "message": "Voit vaihtoehtoisesti luoda erilaisen valitsemalla salasanaprofiilin alta. Luo uusi profiili Kee Vault tai Keepass sovelluksessa.",
-        "description": ""
-    },
-    "change_field_explanation": {
-        "message": "Kee päivittää myös nettisivun kuvakkeen (favicon) ja HTTP Auth kirjautumiskehotteiden tiedot. Tarkemmat muutokset vaativat kohteen muokkaamista käsin.",
-        "description": ""
-    },
-    "change_field_status": {
-        "message": "Valitun kohteen kaikki tiedot, kuten käyttäjätunnus ja salasana korvataan",
-        "description": ""
-    },
-    "change_url_status": {
-        "message": "Kohteen verkko-osoite (URL) päivitetään uudempaan",
-        "description": ""
-    },
-    "change_url_option_1": {
-        "message": "Korvaa URL-osoite (mutta täytä lomakkeet myös kun käytetään aiempaa URL-osoitetta)",
-        "description": ""
-    },
-    "change_url_option_2": {
-        "message": "Korvaa URL-osoite (poista aiempi URL-osoite)",
-        "description": ""
-    },
-    "change_url_option_3": {
-        "message": "Säilytä aiempi URL-osoite (mutta täytä lomakkeet myös kun käytetään uutta URL-osoitetta)",
-        "description": ""
-    },
-    "change_url_option_4": {
-        "message": "Säilytä aiempi URL-osoite (älä lisää uutta URL-osoitetta)",
         "description": ""
     },
     "copy_password_label": {
@@ -374,10 +334,6 @@
     "matches_from_other_sites": {
         "message": "Matches from other sites",
         "description": "Search results section header."
-    },
-    "create": {
-        "message": "Tallenna",
-        "description": ""
     },
     "create_new_entry": {
         "message": "Luo uusi",
@@ -411,10 +367,6 @@
         "message": "esim. www.google.com (Älä lisää https:// tai muita protokollia alkuun)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
-    "database_label": {
-        "message": "Tietokanta",
-        "description": ""
-    },
     "generatePassword_copied": {
         "message": "Uusi salasana on kopioitu leikepöydälle.",
         "description": ""
@@ -429,14 +381,6 @@
     },
     "generatePassword_done_2": {
         "message": "Voit liittää sen \"uusi salasana\" kenttään tai muualle mihin haluat.",
-        "description": ""
-    },
-    "group_label": {
-        "message": "Ryhmä",
-        "description": ""
-    },
-    "entry_history_pointer": {
-        "message": "Salasanahallintasovelluksessasi on \"kumoa\" toiminto. Etsi kirjautumistieto jonka toimintahistoriaa haluat selata ja valitse \"Palauta\" palauttaaksesi aikaisemman version kirjautumistiedoista (jos tarpeen).",
         "description": ""
     },
     "loggedIn_tip": {
@@ -459,14 +403,6 @@
         "message": "$1 ryhmässä $2 ($3)",
         "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
     },
-    "more_options": {
-        "message": "Lisäasetukset",
-        "description": ""
-    },
-    "multi_page_update_warning": {
-        "message": "Monisivuiset kirjautumislomakkeet voivat myös vaatia käsin muokkaamista.",
-        "description": ""
-    },
     "noUsername_partial_tip": {
         "message": "ei käyttäjänimeä",
         "description": ""
@@ -483,44 +419,16 @@
         "message": "Avaa salasanahallintasovelluksesi lukitus käyttääksesi Kee:ta",
         "description": ""
     },
-    "notifyBarNeverForSiteButton_label": {
-        "message": "Ei tälle sivulle",
-        "description": "Button user can click to quickly set the configuraiton option to prevent Kee from asking if they want to save a new password on this site"
-    },
     "save": {
         "message": "Tallenna",
-        "description": ""
-    },
-    "password_successfully_updated": {
-        "message": "Salasana vaihdettu onnistuneesti",
-        "description": ""
-    },
-    "saveMultiPagePasswordText": {
-        "message": "Haluatko että Kee tallentaa monisivuisen salasanan?",
-        "description": ""
-    },
-    "savePasswordLogin_tip": {
-        "message": "Käyttäjätunnus: $1. Nettisivun osoite (URL): $2",
         "description": ""
     },
     "savePasswordText": {
         "message": "Haluatko että Kee tallentaa salasanan?",
         "description": ""
     },
-    "search_again": {
-        "message": "Etsi uudelleen",
-        "description": ""
-    },
     "update": {
         "message": "Päivitä",
-        "description": ""
-    },
-    "update_existing_entry": {
-        "message": "Muuta tietoja",
-        "description": ""
-    },
-    "whichEntry_label": {
-        "message": "Valitse",
         "description": ""
     },
     "close": {
@@ -626,14 +534,6 @@
     "network_auth_choose": {
         "message": "Valitse kirjautumistieto alla olevasta listasta tai sulje tämä ikkuna ja syötä tarvittavat tiedot itse.",
         "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
-    },
-    "save_login": {
-        "message": "Tallenna kirjautumistieto",
-        "description": "Heading for panel that allows user to create or update a new login entry"
-    },
-    "saveLatestLogin": {
-        "message": "Tallenna viimeisin kirjautumistieto",
-        "description": "Action link for user to click (e.g. from the browser popup or a context menu) when they want to save the most recently submitted data as a new entry"
     },
     "welcome_to_kee": {
         "message": "Tervetuloa käyttämään Kee:ta",
@@ -755,14 +655,6 @@
         "message": "Uusi kuvake",
         "description": "Heading for text that explains we have a new icon / branding"
     },
-    "reliability_improvements_text1": {
-        "message": "Olemme parantaneet linkkiä internetselaimen ja yksittäisen lataamasi sivun välillä, jonka ansiosta esim. kirjautumistietojen täyttö on luotettavampaa",
-        "description": "Explains we have made improvements to the reliability of the link between the main browser process and the content page processes"
-    },
-    "reliability_improvements_text2": {
-        "message": "Olemme parantaneet kirjautumisikkunoiden havaitsemista. Tämä tarkoittaa enemmän onnistuneita kirjautumisia, mm. Googlen kirjautumissivuilla",
-        "description": "Explains we have made improvements to the reliability of detection of form submit buttons"
-    },
     "kee_vault_announcement_1": {
         "message": "Kee Vault on uusi avoimen lähdekoodin salasananhallintasovellus. Se pyörii internetselaimessa, joten asennusta ei tarvita.",
         "description": "Introduction to what Kee Vault is"
@@ -774,22 +666,6 @@
     "kee_vault_announcement_3": {
         "message": "Kee versio 3.0 mahdollistaa KeePass salasananhallintasovelluksen korvaamisen Kee Vault sovelluksella, säilyttäen kaikki tärkeät toiminnot, kuten kirjautumistietojen automaattinen täyttö, etsi ja salasanojen luonti.",
         "description": "Explains that Kee v3 works with Kee Vault"
-    },
-    "kee_vault_announcement_4": {
-        "message": "Kee Vault on melkein valmis julkaistavaksi julkisena betana. OIen iloinen voidessasi tarjota Kee:n nykyisille käyttäjille mahdollisuuden päästä kokeilemaan sovellusta ennakkoon ennen julkaisua.",
-        "description": "Announces the pre-release availability of Kee Vault"
-    },
-    "kee_vault_announcement_5": {
-        "message": "Lue lisää ja rekisteröidy saadaksesi ennakkopääsyn",
-        "description": "Call To Action pointing users to the Kee Vault announcement on the forum and the subsequent registration of interest in the early access phase of the Kee Vault service"
-    },
-    "showEntry": {
-        "message": "Näytä kirjautumistieto",
-        "description": "Show the edit entry view. Same as 'Edit Entry' but used in contexts where user is not wanting/expecting to edit the entry."
-    },
-    "list_version_upgrade_3_2": {
-        "message": "Automaattisen täytön ja lähettämisen asetukset KeePassissa tai Kee Vaultissa, vaikuttavat nyt myös Kee:n toimintaan, kun valitset kirjautumistiedon itse;Uudelleenjärjestetty \"Automaattinen täyttö\" osiota Kee:n asetuksissa. Uusi järjestety selkeyttää asetuksien vaikutuksien hahmottamista automaattisen ja manuaalisen täytön toiminnassa; Automaattinen täyttö ohittaa täytön jos kentässä on jo tekstiä;Lisätty Kee:n paneeliin suljettava ilmoitus jossa kerrotaan Kee Vaultin julkaisemisesta;Poistettu vanhat lokitusominaisuudet (joitain lokitusvalintoja jätetty virheenjäljitystä varten).",
-        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "pref_automatic": {
         "message": "Automaattinen",
@@ -806,6 +682,98 @@
     "pref_fill_override_option": {
         "message": "Muokkaamalla Lähetä-automaattisesti toimintoa, ohitat myös tämän toiminnon",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
+    },
+    "next": {
+        "message": "Next",
+        "description": "Action button for user to advance to the next step in a multi-step process. E.g. to confirm username and password for a new entry and load the panel that allows selection of where to save the new entry."
+    },
+    "title": {
+        "message": "Title",
+        "description": "E.g. the title of an entry."
+    },
+    "username": {
+        "message": "Username",
+        "description": "Use the most generic and common term available for the primary sign-in identifier for an account. In practice may be an email address, number, surname, username, etc. but in all cases this will refer to the string the user has stored in the entry's primary Username field."
+    },
+    "enabled": {
+        "message": "Enabled",
+        "description": "Indicates that a boolean option such as a checkbox is in an enabled/on/true state"
+    },
+    "disabled": {
+        "message": "Disabled",
+        "description": "Indicates that a boolean option such as a checkbox is in an disabled/off/false state"
+    },
+    "unsaved_changes": {
+        "message": "You have recent unsaved changes.",
+        "description": "Shown to user when the popup is opened and a new or existing entry is part-way through being edited from a recent popup session. Note that very recent popup sessions are automatically 'continued' without the user needing to consider this information."
+    },
+    "continue_saving": {
+        "message": "Continue saving",
+        "description": "Action for user to continue editing the same entry that was being edited when the popup recently closed."
+    },
+    "discard_changes": {
+        "message": "Discard changes",
+        "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
+    },
+    "password_profile_hint": {
+        "message": "Select which set of rules the new password will follow. Rules include password length and the sort of characters that may be used. Create new profiles in your password manager.",
+        "description": "Explains what a password profile is and how to create new ones."
+    },
+    "password_profile": {
+        "message": "Password profile",
+        "description": "Name of the profiles used by KeePass and Kee Vault to construct new random passwords."
+    },
+    "url_mismatch_1": {
+        "message": "This entry is for a different site.",
+        "description": "1st sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_2": {
+        "message": "Continuing with this update will enable you to fill these credentials into this site too.",
+        "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_3": {
+        "message": "Make sure this is not an attempt to trick you into revealing your password!",
+        "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
+    },
+    "url_mismatch_confirm": {
+        "message": "I understand the risk; Share these credentials with $1.",
+        "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
+    },
+    "make_additional_changes_using_full_editor": {
+        "message": "Additional changes can be made using the full editor.",
+        "description": "Note to user that the Kee interface does not allow every possible type of edit to an entry."
+    },
+    "open_full_editor": {
+        "message": "Open advanced editor",
+        "description": "Button action to open the full entry editor in KeePass or Kee Vault. Be sure to imply that the need to click the button is 'unusual', as I have done with the word 'advanced'"
+    },
+    "where": {
+        "message": "Where?",
+        "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
+    },
+    "will_be_copied_to_clipboard": {
+        "message": "This new password will be copied to your clipboard",
+        "description": ""
+    },
+    "password_will_be_set_on_field": {
+        "message": "Your password field will be set to this password",
+        "description": ""
+    },
+    "also_copy_to_clipboard": {
+        "message": "Also copy to clipboard",
+        "description": "Explains that enabling this option will copy the value to the clipboard in addition to the default behaviour"
+    },
+    "generator_action_copy": {
+        "message": "Copy",
+        "description": "Action button to copy to the clipboard a value such as a newly generated password"
+    },
+    "generator_action_apply": {
+        "message": "Apply",
+        "description": "Action button to apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
+    },
+    "generator_action_apply_and_copy": {
+        "message": "Apply and copy",
+        "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Kirjaudu salasananhallintaan/Valitse sopiva kirjautumistieto/Näytä sopivat kirjautumistiedot",
