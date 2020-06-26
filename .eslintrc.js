@@ -84,20 +84,16 @@ module.exports = {
         "camelcase": "error",
         "comma-dangle": "error",
         "eol-last": "error",
-        // Way too buggy to use in feb 2020
-        // https://github.com/eslint/eslint/issues/12567
-        // "id-blacklist": [
-        //     "error",
-        //     "any",
-        //     "Number",
-        //     "number",
-        //     "String",
-        //     "string",
-        //     "Boolean",
-        //     "boolean",
-        //     "Undefined",
-        //     "undefined"
-        // ],
+        "id-blacklist": [
+            "error",
+            "any",
+            "Number",
+            "number",
+            "String",
+            "string",
+            "Boolean",
+            "boolean",
+        ],
         "id-match": "error",
         "max-len": [
             "error",
