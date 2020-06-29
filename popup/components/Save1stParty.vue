@@ -63,8 +63,24 @@
         <v-btn right color="tertiary" @click="cancel">
             {{ $i18n("cancel") }}
         </v-btn>
-        <v-btn v-if="!editingExisting" right color="primary" @click="nextClicked">
+        <v-btn
+            v-if="!loading && !editingExisting && !skipWhere"
+            right
+            color="primary"
+            @click="nextClicked"
+        >
             {{ $i18n("next") }}
+        </v-btn>
+        <v-btn
+            v-if="!loading && !editingExisting && skipWhere"
+            right
+            color="primary"
+            @click="saveEntry"
+        >
+            {{ $i18n("save") }}
+        </v-btn>
+        <v-btn v-if="loading" loading disabled right color="primary">
+            .........
         </v-btn>
         <v-btn
             v-if="editingExisting"
@@ -107,7 +123,11 @@ import FieldEditor from "./FieldEditor.vue";
 import { Field } from "../../common/model/Field";
 import { AddonMessage } from "../../common/AddonMessage";
 import { KeeURL } from "../../common/KeeURL";
-import { TemporaryIDString } from "../../common/model/GroupSummary";
+import { TemporaryIDString, GroupSummary } from "../../common/model/GroupSummary";
+import { configManager } from "../../common/ConfigManager";
+import { DatabaseSummary } from "../../common/model/DatabaseSummary";
+import { Database } from "../../common/model/Database";
+import { Group } from "../../common/model/Group";
 
 export default {
     components: {
@@ -115,7 +135,14 @@ export default {
     },
     data: () => ({
         originalFields: [],
-        differentSiteConfirmation: false
+        differentSiteConfirmation: false,
+        loading: true,
+        preferToSkipWhere: false,
+        skipWhere: false,
+        domainMatchesExistingEntry: false,
+        preferredGroupUuid: null,
+        preferredDb: null,
+        primaryFound: false
     }),
     computed: {
         ...mapGetters(["saveState"]),
@@ -140,14 +167,53 @@ export default {
                 return "<error>";
             }
             return kurl.domainWithPort || kurl.url.host;
+        },
+        displayWhereReason: function (this: any) {
+            if (this.loading || !this.preferToSkipWhere) return null;
+            return this.domainMatchesExistingEntry
+                ? this.$i18n("skip_where_reason_domain_entry_exists")
+                : this.primaryFound
+                ? this.$i18n("skip_where_reason_group_not_found")
+                : null;
         }
+    },
+    async mounted(this: any) {
+        this.preferToSkipWhere = configManager.current.rememberMRUGroup;
+        if (this.preferToSkipWhere) {
+            const dbs = this.$store.state.KeePassDatabases as Database[];
+            const { preferredGroupUuid, preferredDb, primaryFound } = this.getPreferredGroup(
+                configManager.current.mruGroup,
+                dbs
+            );
+            this.preferredGroupUuid = preferredGroupUuid;
+            this.preferredDb = preferredDb;
+            this.primaryFound = primaryFound;
+
+            this.domainMatchesExistingEntry = false; //TODO:* search all entries for matching domain using this.entryDomain computed property (if available at this point in the lifecycle)
+
+            if (this.preferredGroupUuid && this.preferredDb && !this.domainMatchesExistingEntry) {
+                this.skipWhere = true;
+            }
+        }
+        this.loading = false;
     },
     methods: {
         cancel: function (this: any) {
             this.$emit("cancel-clicked");
         },
         nextClicked: function (this: any) {
-            this.$emit("save-where-clicked");
+            this.$emit("save-where-clicked", this.displayWhereReason);
+        },
+        saveEntry: function (this: any) {
+            const updatedSaveState = Object.assign({}, this.$store.state.saveState) as SaveState;
+            updatedSaveState.newEntry = new Entry({
+                ...updatedSaveState.newEntry,
+                parentGroup: new GroupSummary({ uuid: this.preferredGroupUuid }),
+                database: this.preferredDb
+            });
+            this.$store.dispatch("updateSaveState", updatedSaveState);
+            Port.postMessage({ action: Action.CreateEntry } as AddonMessage);
+            window.close();
         },
         updateEntry: function (this: any) {
             Port.postMessage({ action: Action.UpdateEntry } as AddonMessage);
@@ -195,6 +261,47 @@ export default {
                 fields: newFields
             });
             this.$store.dispatch("updateSaveState", updatedSaveState);
+        },
+        getPreferredGroup: function (mruGroup: { [key: string]: string }, dbs: Database[]) {
+            let primaryFound = false;
+            const UUIDs = [];
+            const primaryUuid = mruGroup["{<{{<<kee-primary>>}}>}"];
+            if (primaryUuid) {
+                primaryFound = true;
+                UUIDs.push(primaryUuid);
+            }
+
+            // We normally expect the value in the primary key to be correct but it may not
+            // be if the user has just upgraded from Kee 3.4 or lower, or if they have a
+            // particuarlly complex set of databases with different filenames and/or duplicate
+            // UUIDs or if they constantly switch back and forth between multiple databases so
+            // we may as well try the one specific to the currently open database, although
+            // only if there is a single open database.
+            if (dbs.length === 1 && mruGroup[dbs[0].fileName]) {
+                if (mruGroup[dbs[0].fileName] !== UUIDs[0]) {
+                    UUIDs.push(mruGroup[dbs[0].fileName]);
+                }
+            }
+
+            for (const groupId of UUIDs) {
+                if (!groupId) continue;
+                const matchedDb = dbs.find(db => Group.containsId(db.root, groupId));
+                if (matchedDb) {
+                    return {
+                        preferredGroupUuid: groupId,
+                        preferredDb: new DatabaseSummary({
+                            fileName: matchedDb.fileName,
+                            root: new GroupSummary({ uuid: TemporaryIDString })
+                        }),
+                        primaryFound
+                    };
+                }
+            }
+            return {
+                preferredGroupUuid: null,
+                preferredDb: null,
+                primaryFound
+            };
         }
     }
 };

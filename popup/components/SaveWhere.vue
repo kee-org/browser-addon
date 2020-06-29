@@ -43,10 +43,23 @@
                         </v-card>
                     </v-col>
                 </v-row>
+                <v-row v-if="displayReason">
+                    <v-col>
+                        <v-card-text>{{ displayReason }}</v-card-text>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-checkbox
+                            v-model="skipInFuture"
+                            :label="$i18n('skip_where_enable_context')"
+                        ></v-checkbox>
+                    </v-col>
+                </v-row>
             </v-container>
         </v-slide-y-transition>
 
-        <v-btn right color="primary" @click="saveEntry">
+        <v-btn :disabled="!saveEnabled" right color="primary" @click="saveEntry">
             {{ $i18n("save") }}
         </v-btn>
     </div>
@@ -64,6 +77,7 @@ import { AddonMessage } from "../../common/AddonMessage";
 import { Database } from "../../common/model/Database";
 import { DatabaseSummary } from "../../common/model/DatabaseSummary";
 import { GroupSummary, TemporaryIDString } from "../../common/model/GroupSummary";
+import { configManager } from "../../common/ConfigManager";
 
 const deepMapKeys = (obj, f) =>
     Array.isArray(obj)
@@ -79,32 +93,34 @@ const deepMapKeys = (obj, f) =>
           }, {})
         : obj;
 
-function groupContainsId(group: Group, id: string) {
-    if (group.uuid === id) return true;
-
-    if (group.groups && group.groups.some(g => groupContainsId(g, id))) return true;
-
-    return false;
-}
-
 function findDatabaseByGroup(databases: Database[], group: Group) {
-    return databases.find(db => groupContainsId(db.root, group.uuid));
+    return databases.find(db => Group.containsId(db.root, group.uuid));
 }
 
 export default {
+    props: ["displayReason"],
     data: () => ({
-        search: null
+        search: null,
+        saveEnabled: true,
+        skipInFuture: configManager.current.rememberMRUGroup
     }),
     computed: {
         ...mapGetters(["saveState", "KeePassDatabases", "ActiveKeePassDatabaseIndex"]),
-        rootGroupUUID: function (this: any) {
-            return this.KeePassDatabases[this.ActiveKeePassDatabaseIndex].root.uuid;
-        },
         rootGroup: function (this: any) {
             return this.KeePassDatabases[this.ActiveKeePassDatabaseIndex].root;
         },
         items: function (this: any) {
             return this.KeePassDatabases.map(db => db.root);
+        }
+    },
+    watch: {
+        skipInFuture: async function (this: any, newValue: boolean, oldValue: boolean) {
+            if (newValue !== oldValue) {
+                this.saveEnabled = false;
+                configManager.current.rememberMRUGroup = newValue;
+                await configManager.save();
+                this.saveEnabled = true;
+            }
         }
     },
     methods: {

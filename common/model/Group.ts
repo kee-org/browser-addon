@@ -35,4 +35,10 @@ export class Group {
             )
         });
     }
+
+    public static containsId(group: Group, id: string) {
+        if (group.uuid === id) return true;
+        if (group.groups && group.groups.some(g => Group.containsId(g, id))) return true;
+        return false;
+    }
 }

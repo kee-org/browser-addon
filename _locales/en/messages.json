@@ -223,9 +223,9 @@
     "message": "Remember the most recently used Kee Vault or KeePass database",
     "description": ""
   },
-  "pref_rememberMRUGroup_label": {
-    "message": "Remember the group you most recently saved to",
-    "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
+  "pref_preferToSkipWhere_label": {
+    "message": "Automatically save new entries to the group you most recently saved to",
+    "description": "Whether Kee will save new entries to the group most recently chosen by the user without presenting them with the usual Where group chooser interface"
   },
   "pref_saveFavicons_label": {
     "message": "Save website logo/icon (favicon)",
@@ -778,5 +778,18 @@
   "generator_action_apply_and_copy": {
       "message": "Apply and copy",
       "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
+  },
+  "skip_where_reason_domain_entry_exists": {
+      "message": "You're seeing this question because an entry for this domain already exists",
+      "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
+  },
+  "skip_where_reason_group_not_found": {
+      "message": "You're seeing this question because the group you most recently saved to can not be found. This may be because it has been deleted or hidden from Kee. Or it could simply be that the required password source is not unlocked.",
+      "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
+  },
+  "skip_where_enable_context": {
+      "message": "Always save new entries here",
+      "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
   }
+
 }

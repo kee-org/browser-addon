@@ -42,7 +42,7 @@
                     @save-where-clicked="saveWhere"
                     @cancel-clicked="saveDiscard"
                 />
-                <SaveWhere v-if="showSaveWhere" />
+                <SaveWhere v-if="showSaveWhere" :display-reason="displayWhereReason" />
             </v-container>
         </v-main>
 
@@ -190,6 +190,7 @@ export default {
         // variable in a new Date(...) call before comparing against other Dates
         saveLastActiveAt: null,
         showSaveWhere: false,
+        displayWhereReason: null,
 
         // imported constants are only available in Vue if we assign them to data
         tooltipDelay,
@@ -306,7 +307,8 @@ export default {
             this.$store.dispatch("updateSaveState", updatedSaveState);
             //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
-        saveWhere: function (this: any) {
+        saveWhere: function (this: any, displayWhereReason: string) {
+            this.displayWhereReason = displayWhereReason;
             this.showSaveWhere = true;
         },
         showHelp: () => {
