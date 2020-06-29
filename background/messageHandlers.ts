@@ -78,11 +78,10 @@ export function browserPopupMessageHandler(this: browser.runtime.Port, msg: Addo
             } else {
                 window.kee.addLogin(entry, parentGroupUuid, dbFileName);
             }
-            if (configManager.current.rememberMRUGroup) {
-                if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
-                configManager.current.mruGroup[dbFileName] = parentGroupUuid;
-                configManager.save();
-            }
+            if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
+            configManager.current.mruGroup[dbFileName] = parentGroupUuid;
+            configManager.current.mruGroup["{<{{<<kee-primary>>}}>}"] = parentGroupUuid;
+            configManager.save();
 
             // Trigger the clear-out of the last submitted data if it exists
             const persistentItem = window.kee.persistentTabStates
