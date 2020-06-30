@@ -128,6 +128,7 @@ import { configManager } from "../../common/ConfigManager";
 import { DatabaseSummary } from "../../common/model/DatabaseSummary";
 import { Database } from "../../common/model/Database";
 import { Group } from "../../common/model/Group";
+import { SearcherAll } from "../../common/SearcherAll";
 
 export default {
     components: {
@@ -189,7 +190,7 @@ export default {
             this.preferredDb = preferredDb;
             this.primaryFound = primaryFound;
 
-            this.domainMatchesExistingEntry = false; //TODO:* search all entries for matching domain using this.entryDomain computed property (if available at this point in the lifecycle)
+            this.domainMatchesExistingEntry = this.anyEntryMatchesNewDomain();
 
             if (this.preferredGroupUuid && this.preferredDb && !this.domainMatchesExistingEntry) {
                 this.skipWhere = true;
@@ -302,6 +303,27 @@ export default {
                 preferredDb: null,
                 primaryFound
             };
+        },
+        anyEntryMatchesNewDomain: function (this: any) {
+            const urlStr = (this.saveState as SaveState).newEntry.URLs[0];
+            if (!urlStr || urlStr.length < 4) return false;
+            const kurl = KeeURL.fromString(urlStr);
+            if (!kurl) {
+                return false;
+            }
+            const search = new SearcherAll(
+                {
+                    KeePassDatabases: this.$store.getters.KeePassDatabases,
+                    ActiveKeePassDatabaseIndex: this.$store.getters.ActiveKeePassDatabaseIndex
+                } as any,
+                {
+                    version: 1,
+                    searchAllDatabases: configManager.current.searchAllOpenDBs,
+                    maximumResults: 1
+                }
+            );
+            const results = search.execute("", undefined, [kurl.domainOrIPAddress]);
+            return !!results?.length;
         }
     }
 };
