@@ -42,7 +42,11 @@
                     @save-where-clicked="saveWhere"
                     @cancel-clicked="saveDiscard"
                 />
-                <SaveWhere v-if="showSaveWhere" :display-reason="displayWhereReason" />
+                <SaveWhere
+                    v-if="showSaveWhere"
+                    :display-reason="displayWhereReason"
+                    :preferred-group-uuid="preferredGroupUuid"
+                />
             </v-container>
         </v-main>
 
@@ -191,6 +195,7 @@ export default {
         saveLastActiveAt: null,
         showSaveWhere: false,
         displayWhereReason: null,
+        preferredGroupUuid: "",
 
         // imported constants are only available in Vue if we assign them to data
         tooltipDelay,
@@ -307,8 +312,9 @@ export default {
             this.$store.dispatch("updateSaveState", updatedSaveState);
             //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
-        saveWhere: function (this: any, displayWhereReason: string) {
+        saveWhere: function (this: any, displayWhereReason: string, preferredGroupUuid: string) {
             this.displayWhereReason = displayWhereReason;
+            this.preferredGroupUuid = preferredGroupUuid;
             this.showSaveWhere = true;
         },
         showHelp: () => {
