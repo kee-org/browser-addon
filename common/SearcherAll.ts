@@ -1,10 +1,10 @@
 import { KeeLog } from "./Logger";
 import { KeeState } from "../store/KeeState";
 import { SearchConfig } from "./model/SearchConfig";
-import { utils } from "./utils";
 import { EntrySummary } from "./model/EntrySummary";
 import { resolveConfig, tokenise, calculateMatchScore } from "./SearchUtils";
 import { Group } from "./model/Group";
+import { KeeURL } from "./KeeURL";
 
 export class SearcherAll {
     constructor(private state: KeeState, config: Partial<SearchConfig>) {
@@ -74,36 +74,16 @@ export class SearcherAll {
                 if (!item.uRLs || item.uRLs.length <= 0) return false;
 
                 for (const filterDomain of filterDomains) {
-                    try {
-                        const filteredItems = item.uRLs.filter(itemURL => {
-                            try {
-                                let itemHostname: string;
-                                // We're only really interested in the domain so can be lax about
-                                // protocols and just prepend if necessary in order to make valid URLs
-                                if (
-                                    !itemURL.startsWith("https://") &&
-                                    !itemURL.startsWith("http://") &&
-                                    !itemURL.startsWith("file://")
-                                ) {
-                                    itemHostname = new URL("http://" + itemURL).hostname;
-                                } else {
-                                    itemHostname = new URL(itemURL).hostname;
-                                }
-                                const itemIsIPAddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/.test(
-                                    itemHostname
-                                );
-                                const itemDomain = itemIsIPAddress
-                                    ? itemHostname
-                                    : utils.psl.getDomain(itemHostname);
-                                return filterDomain === itemDomain;
-                            } catch (e) {
-                                return false;
-                            } // ignore invalid URLs
-                        });
-                        if (filteredItems.length > 0) return true;
-                    } catch (e) {
-                        // ignore invalid URLs
-                    }
+                    const filteredUrls = item.uRLs.filter(itemURL => {
+                        try {
+                            if (itemURL.indexOf(filterDomain) < 0) return false;
+                            const url = KeeURL.fromString(itemURL);
+                            return url.domainOrIPAddress === filterDomain;
+                        } catch (e) {
+                            return false;
+                        } // ignore invalid URLs
+                    });
+                    if (filteredUrls.length > 0) return true;
                 }
                 return false;
             };
@@ -119,7 +99,7 @@ export class SearcherAll {
                 const dbFileName = databases[i].fileName;
                 this.treeTraversal(root, keywords, 0, addResult.bind(this), 0, dbFileName, filter);
             }
-            onComplete(results);
+            if (onComplete) onComplete(results);
         }
 
         if (onComplete) {
