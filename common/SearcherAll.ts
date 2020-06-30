@@ -22,7 +22,7 @@ export class SearcherAll {
 
     public execute(query, onComplete, filterDomains: string[]) {
         let abort = false;
-        const filteringByURL =
+        const filteringByDomain =
             filterDomains &&
             filterDomains.length > 0 &&
             Array.isArray(filterDomains) &&
@@ -37,7 +37,7 @@ export class SearcherAll {
             abort = true;
         }
 
-        if ((!query || query.length == 0) && !filteringByURL) abort = true;
+        if ((!query || query.length == 0) && !filteringByDomain) abort = true;
 
         if (this.state.KeePassDatabases.length == 0) abort = true;
 
@@ -69,7 +69,7 @@ export class SearcherAll {
 
         let filter;
 
-        if (filteringByURL) {
+        if (filteringByDomain) {
             filter = item => {
                 if (!item.uRLs || item.uRLs.length <= 0) return false;
 
