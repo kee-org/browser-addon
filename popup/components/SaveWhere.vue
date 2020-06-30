@@ -24,6 +24,7 @@
                             </v-sheet>
                             <v-card-text>
                                 <v-treeview
+                                    :active="groupUuidArray"
                                     :items="items"
                                     :search="search"
                                     selection-type="independent"
@@ -98,11 +99,12 @@ function findDatabaseByGroup(databases: Database[], group: Group) {
 }
 
 export default {
-    props: ["displayReason"],
+    props: ["preferredGroupUuid", "displayReason"],
     data: () => ({
         search: null,
-        saveEnabled: true,
-        skipInFuture: configManager.current.rememberMRUGroup
+        saveEnabled: false,
+        skipInFuture: configManager.current.rememberMRUGroup,
+        groupUuidArray: []
     }),
     computed: {
         ...mapGetters(["saveState", "KeePassDatabases", "ActiveKeePassDatabaseIndex"]),
@@ -123,23 +125,28 @@ export default {
             }
         }
     },
+    mounted(this: any) {
+        this.groupUuidArray = [{ uuid: this.preferredGroupUuid }];
+    },
     methods: {
         saveEntry: function (this: any) {
             Port.postMessage({ action: Action.CreateEntry } as AddonMessage);
             window.close();
         },
-        setGroup: function (this: any, value) {
-            const database = findDatabaseByGroup(this.KeePassDatabases, value[0]);
+        setGroup: function (this: any, values) {
+            if (!(values?.length > 0)) return;
+            const database = findDatabaseByGroup(this.KeePassDatabases, values[0]);
             const updatedSaveState = Object.assign({}, this.$store.state.saveState) as SaveState;
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
-                parentGroup: value[0],
+                parentGroup: values[0],
                 database: new DatabaseSummary({
                     fileName: database.fileName,
                     root: new GroupSummary({ uuid: TemporaryIDString })
                 })
             });
             this.$store.dispatch("updateSaveState", updatedSaveState);
+            this.saveEnabled = true;
         }
     }
 };

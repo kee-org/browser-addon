@@ -180,13 +180,13 @@ export default {
     },
     async mounted(this: any) {
         this.preferToSkipWhere = configManager.current.rememberMRUGroup;
+        const dbs = this.$store.state.KeePassDatabases as Database[];
+        const { preferredGroupUuid, preferredDb, primaryFound } = this.getPreferredGroup(
+            configManager.current.mruGroup,
+            dbs
+        );
+        this.preferredGroupUuid = preferredGroupUuid;
         if (this.preferToSkipWhere) {
-            const dbs = this.$store.state.KeePassDatabases as Database[];
-            const { preferredGroupUuid, preferredDb, primaryFound } = this.getPreferredGroup(
-                configManager.current.mruGroup,
-                dbs
-            );
-            this.preferredGroupUuid = preferredGroupUuid;
             this.preferredDb = preferredDb;
             this.primaryFound = primaryFound;
 
@@ -203,7 +203,7 @@ export default {
             this.$emit("cancel-clicked");
         },
         nextClicked: function (this: any) {
-            this.$emit("save-where-clicked", this.displayWhereReason);
+            this.$emit("save-where-clicked", this.displayWhereReason, this.preferredGroupUuid);
         },
         saveEntry: function (this: any) {
             const updatedSaveState = Object.assign({}, this.$store.state.saveState) as SaveState;
