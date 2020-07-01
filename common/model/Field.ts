@@ -118,7 +118,7 @@ export class Field {
         const labels = collectLabels(element);
         return new Field({
             uuid: utils.newGUID(),
-            name: element.name, //TODO:4: try to find a more user-facing name for the field (e.g. via a label element)
+            name: labels && labels.length ? labels[0] : element.name,
             locators: [
                 new Locator({
                     name: element.name,
