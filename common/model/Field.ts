@@ -115,6 +115,7 @@ export class Field {
     }
 
     static fromDOM(element: any, domType: string, value: string) {
+        const labels = collectLabels(element);
         return new Field({
             uuid: utils.newGUID(),
             name: element.name, //TODO:4: try to find a more user-facing name for the field (e.g. via a label element)
@@ -122,7 +123,8 @@ export class Field {
                 new Locator({
                     name: element.name,
                     id: element.id,
-                    type: domType
+                    type: domType,
+                    labels
                 })
             ],
             value,
@@ -207,4 +209,34 @@ export class Field {
             page: -1
         } as FieldDto;
     }
+}
+
+// Might be other element types but main thing is they have the labels property
+function collectLabels(element: HTMLInputElement | HTMLSelectElement) {
+    const labels: string[] = [];
+    element.labels?.forEach(label => {
+        if (label && label.innerText) labels.push(label.innerText);
+    });
+    const ariaLabel = element.getAttribute("aria-label")?.toLowerCase();
+    if (ariaLabel) labels.push(ariaLabel);
+    const ariaLabelIds: string[] = [];
+    element
+        .getAttribute("aria-labelledby")
+        ?.trim()
+        .split(" ")
+        .forEach(id => {
+            if (id) ariaLabelIds.push(id);
+        });
+    element
+        .getAttribute("aria-describedby")
+        ?.trim()
+        .split(" ")
+        .forEach(id => {
+            if (id) ariaLabelIds.push(id);
+        });
+    ariaLabelIds.forEach(id => {
+        const labelElement = document.getElementById(id);
+        if (labelElement && labelElement.innerText) labels.push(labelElement.innerText);
+    });
+    return labels.length ? labels : undefined;
 }
