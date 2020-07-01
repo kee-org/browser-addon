@@ -159,11 +159,8 @@ export class FormUtils {
                 if (form.elements[i].checked) fieldValue = "KEEFOX_CHECKED_FLAG_TRUE";
                 else fieldValue = "KEEFOX_CHECKED_FLAG_FALSE";
             }
-            allFields[allFields.length - 1].element.field = Field.fromDOM(
-                form.elements[i],
-                domType,
-                fieldValue
-            );
+            const field = Field.fromDOM(form.elements[i], domType, fieldValue);
+            allFields[allFields.length - 1].element.field = field;
             allFields[allFields.length - 1].element.DOMelement = form.elements[i];
 
             if (domType == "password" && firstPasswordIndex == -1) {
@@ -173,7 +170,8 @@ export class FormUtils {
             if (
                 this.isATextFormFieldType(domType) &&
                 firstPossibleUsernameIndex == -1 &&
-                this.isAKnownUsernameString(form.elements[i].name)
+                (this.isAKnownUsernameString(form.elements[i].name) ||
+                    field.locators[0].labels?.some(label => this.isAKnownUsernameString(label)))
             ) {
                 firstPossibleUsernameIndex = allFields.length - 1;
             }
