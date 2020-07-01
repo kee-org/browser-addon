@@ -14,8 +14,9 @@ function fieldMatches(oldField: Field, newField: Field) {
         oldField.locators.some(locator1 =>
             newField.locators.some(locator2 => locatorMatches(locator1, locator2))
         )
-    )
+    ) {
         return true;
+    }
     return false;
 }
 

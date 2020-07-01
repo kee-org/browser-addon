@@ -55,8 +55,9 @@ export class FormSaving {
 
     public removeAllSubmitHandlers() {
         this.SubmitHandlerAttachments.forEach(attachment => {
-            if (attachment.target)
+            if (attachment.target) {
                 attachment.target.removeEventListener("click", attachment.handler);
+            }
             attachment.form.removeEventListener("submit", attachment.handler);
         });
         this.SubmitHandlerAttachments = [];
@@ -123,10 +124,13 @@ export class FormSaving {
             // could be password change form or multi-password login form or sign up form
             // naive duplicate finder - more than sufficient for the number of passwords per domain
             let twoPasswordsMatchIndex = -1;
-            for (let i = 0; i < passwords.length && twoPasswordsMatchIndex == -1; i++)
-                for (let j = i + 1; j < passwords.length && twoPasswordsMatchIndex == -1; j++)
-                    if (passwords[j].field.value == passwords[i].field.value)
+            for (let i = 0; i < passwords.length && twoPasswordsMatchIndex == -1; i++) {
+                for (let j = i + 1; j < passwords.length && twoPasswordsMatchIndex == -1; j++) {
+                    if (passwords[j].field.value == passwords[i].field.value) {
                         twoPasswordsMatchIndex = j;
+                    }
+                }
+            }
 
             if (twoPasswordsMatchIndex == -1) {
                 // either mis-typed password change form, single password change box form or multi-password login/signup, assuming latter.

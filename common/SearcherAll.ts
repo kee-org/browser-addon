@@ -222,8 +222,9 @@ export class SearcherAll {
                 });
                 if (accepted) {
                     totalResultCount++;
-                    if (totalResultCount >= this.searchConfig.maximumResults)
+                    if (totalResultCount >= this.searchConfig.maximumResults) {
                         return totalResultCount;
+                    }
                 }
             }
         }

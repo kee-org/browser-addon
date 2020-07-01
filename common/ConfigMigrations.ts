@@ -111,8 +111,9 @@ export class ConfigMigrations {
 
     private migrateIndividualSiteConfigSettingsToV2(oldConfig: any): SiteConfig {
         const sc = new SiteConfig();
-        if (oldConfig.preventSaveNotification == null)
+        if (oldConfig.preventSaveNotification == null) {
             sc.preventSaveNotification = oldConfig.preventSaveNotification;
+        }
         if (oldConfig.interestingForms) {
             if (oldConfig.interestingForms.name_w) {
                 if (!sc.whiteList) sc.whiteList = { form: { names: [] } };

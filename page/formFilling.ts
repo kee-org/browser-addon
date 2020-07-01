@@ -138,6 +138,8 @@ export class FormFilling {
         );
     }
 
+    private calculateLabelMatchScore(matchedField: MatchedField, dataField: Field) {}
+
     private calculateFieldMatchScore(
         matchedField: MatchedField,
         dataField: Field,
@@ -152,6 +154,8 @@ export class FormFilling {
 
         // Do not allow any match if field types are significantly mismatched (e.g. checkbox vs text field)
         if (formField.type !== dataField.type) return 0;
+
+        //score += this.calculateLabelMatchScore(matchedField, dataField);
 
         // If field IDs match +++++
         if (
@@ -188,11 +192,16 @@ export class FormFilling {
             formField.value != undefined &&
             formField.value != "" &&
             formField.value == dataField.value
-        )
+        ) {
             score += 30;
+        }
 
-        if (isVisible === undefined && this.formUtils.isDOMElementVisible(matchedField.DOMelement))
+        if (
+            isVisible === undefined &&
+            this.formUtils.isDOMElementVisible(matchedField.DOMelement)
+        ) {
             isVisible = true;
+        }
 
         score += isVisible ? 35 : 0;
 
@@ -349,8 +358,9 @@ export class FormFilling {
             formFields == undefined ||
             dataFields == null ||
             dataFields == undefined
-        )
+        ) {
             return;
+        }
 
         this.Logger.debug("We've received the data we need");
 
@@ -755,8 +765,9 @@ export class FormFilling {
 
             // Find the best entry for this form
             matchResult.entries[i].forEach(function (c) {
-                if (c.relevanceScore > matchResult.formRelevanceScores[i])
+                if (c.relevanceScore > matchResult.formRelevanceScores[i]) {
                     matchResult.formRelevanceScores[i] = c.relevanceScore;
+                }
             });
 
             this.Logger.debug(
@@ -775,22 +786,25 @@ export class FormFilling {
         const findMatchesResult = this.matchResult;
 
         // There may be no results for this frame (e.g. no forms found, search failed, etc.)
-        if (!findMatchesResult)
+        if (!findMatchesResult) {
             return {
                 bestFormIndex: 0,
                 bestRelevanceScore: 0,
                 bestFindMatchesResult: undefined
             };
+        }
 
         let mostRelevantFormIndex = 0;
 
         if (formIndex >= 0) mostRelevantFormIndex = formIndex;
-        else
+        else {
             findMatchesResult.formRelevanceScores.forEach((c, index) => {
                 this.Logger.debug("Relevance of form is " + c);
-                if (c > findMatchesResult.formRelevanceScores[mostRelevantFormIndex])
+                if (c > findMatchesResult.formRelevanceScores[mostRelevantFormIndex]) {
                     mostRelevantFormIndex = index;
+                }
             });
+        }
 
         this.Logger.debug("The most relevant form is #" + mostRelevantFormIndex);
         return {
@@ -870,10 +884,12 @@ export class FormFilling {
         matchResult.cannotAutoFillForm = false;
         matchResult.cannotAutoSubmitForm = false;
 
-        if (automated && matchResult.autofillOnSuccess === false)
+        if (automated && matchResult.autofillOnSuccess === false) {
             matchResult.cannotAutoFillForm = true;
-        if (automated && matchResult.autosubmitOnSuccess === false)
+        }
+        if (automated && matchResult.autosubmitOnSuccess === false) {
             matchResult.cannotAutoSubmitForm = true;
+        }
 
         // No point looking at entry specific preferences if we are not allowed to auto-fill
         if (!matchResult.cannotAutoFillForm) {
@@ -908,7 +924,7 @@ export class FormFilling {
                     let count = 0;
                     count < matchResult.entries[matchResult.mostRelevantFormIndex].length;
                     count++
-                )
+                ) {
                     if (
                         matchResult.entries[matchResult.mostRelevantFormIndex][count].uuid ==
                         matchResult.UUID
@@ -917,10 +933,12 @@ export class FormFilling {
                             matchResult.entries[matchResult.mostRelevantFormIndex][count];
                         break;
                     }
-                if (matchingLogin == null)
+                }
+                if (matchingLogin == null) {
                     this.Logger.warn(
                         "Could not find the required KeePass entry. Maybe the website redirected you to a different domain or hostname?"
                     );
+                }
             } else if (
                 matchingLogin == null &&
                 (!matchResult.entries[matchResult.mostRelevantFormIndex] ||
@@ -935,15 +953,17 @@ export class FormFilling {
                     let count = 0;
                     count < matchResult.entries[matchResult.mostRelevantFormIndex].length;
                     count++
-                )
+                ) {
                     if (
                         matchResult.entries[matchResult.mostRelevantFormIndex][count]
                             .relevanceScore >
                         matchResult.entries[matchResult.mostRelevantFormIndex][
                             mostRelevantEntryIndex
                         ].relevanceScore
-                    )
+                    ) {
                         mostRelevantEntryIndex = count;
+                    }
+                }
 
                 this.Logger.debug(
                     "We think entry " + mostRelevantEntryIndex + " is most relevant."
@@ -1280,11 +1300,13 @@ export class FormFilling {
                 if (value.title) semanticValues.push(value.title.toLowerCase());
                 if (value.innerText) semanticValues.push(value.innerText.toLowerCase());
                 if (value.dataSet && value.dataSet.length > 0) {
-                    if (value.dataSet.tooltip)
+                    if (value.dataSet.tooltip) {
                         semanticValues.push(value.dataSet.tooltip.toLowerCase());
+                    }
                 }
-                if (value.hasAttribute("aria-label"))
+                if (value.hasAttribute("aria-label")) {
                     semanticValues.push(value.getAttribute("aria-label").toLowerCase());
+                }
 
                 let score = this.scoreAdjustmentForMagicWords(
                     semanticValues,

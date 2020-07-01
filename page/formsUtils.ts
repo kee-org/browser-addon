@@ -23,8 +23,9 @@ export class FormUtils {
 
         if (frame.frames.length > 0) {
             const frames = frame.frames;
-            for (let i = 0; i < frames.length; i++)
+            for (let i = 0; i < frames.length; i++) {
                 localDocCount += this.countAllDocuments(frames[i]);
+            }
         }
         return localDocCount;
     }
@@ -48,9 +49,9 @@ export class FormUtils {
             type == "file" ||
             type == "image" ||
             type == "reset"
-        )
+        ) {
             return false;
-        else return true;
+        } else return true;
     }
 
     private isAKnownUsernameString(fieldNameIn) {
@@ -87,9 +88,10 @@ export class FormUtils {
             fieldName == "customer_number" ||
             fieldName == "customernumber" ||
             fieldName == "onlineid"
-        )
+        ) {
             // etc. etc.
             return true;
+        }
         return false;
     }
 
@@ -124,8 +126,9 @@ export class FormUtils {
                 form.elements[i].localName.toLowerCase() == "output" ||
                 (form.elements[i].localName.toLowerCase() != "input" &&
                     (form.elements[i].type == undefined || form.elements[i].type == null))
-            )
+            ) {
                 continue; // maybe it's something un-interesting
+            }
 
             const domType: string = form.elements[i].type.toLowerCase();
 
@@ -137,8 +140,9 @@ export class FormUtils {
                 domType != "checkbox" &&
                 domType != "radio" &&
                 domType != "select-one"
-            )
+            ) {
                 continue; // ignoring other form types
+            }
 
             if (domType == "radio" && isSubmission && form.elements[i].checked == false) continue;
             if (domType == "password" && isSubmission && !form.elements[i].value) continue;
@@ -162,14 +166,17 @@ export class FormUtils {
             );
             allFields[allFields.length - 1].element.DOMelement = form.elements[i];
 
-            if (domType == "password" && firstPasswordIndex == -1)
+            if (domType == "password" && firstPasswordIndex == -1) {
                 firstPasswordIndex = allFields.length - 1;
+            }
+
             if (
                 this.isATextFormFieldType(domType) &&
                 firstPossibleUsernameIndex == -1 &&
                 this.isAKnownUsernameString(form.elements[i].name)
-            )
+            ) {
                 firstPossibleUsernameIndex = allFields.length - 1;
+            }
 
             if (form.elements[i].keeInitialDetectedValue == null) {
                 form.elements[i].keeInitialDetectedValue = fieldValue;

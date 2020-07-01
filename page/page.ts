@@ -18,16 +18,17 @@ on all website pages except those containing a KPRPC server */
 var keeDuplicationCount;
 
 if (keeDuplicationCount) {
-    if (KeeLog && KeeLog.error)
+    if (KeeLog && KeeLog.error) {
         KeeLog.error(
             "Duplicate Kee content script instance detected! Found this many other instances: " +
                 keeDuplicationCount
         );
-    else
+    } else {
         console.error(
             "Duplicate Kee content script instance detected! Found this many other instances: " +
                 keeDuplicationCount
         );
+    }
 } else {
     keeDuplicationCount = 0;
 }
@@ -124,11 +125,12 @@ const inputsObserver = new MutationObserver(mutations => {
     });
 
     // Schedule a rescan soon. Not immediately, in case a batch of mutations are about to be triggered.
-    if (rescan)
+    if (rescan) {
         formFilling.formFinderTimer = setTimeout(
             formFilling.findMatchesInThisFrame.bind(formFilling),
             500
         );
+    }
 });
 
 function startup() {

@@ -196,10 +196,10 @@ export class jsonrpcClient {
         const lst = "LSTnoForms";
 
         if (dbFileName == undefined || dbFileName == null || dbFileName == "") {
-            if (!configManager.current.searchAllOpenDBs)
+            if (!configManager.current.searchAllOpenDBs) {
                 dbFileName =
                     store.state.KeePassDatabases[store.state.ActiveKeePassDatabaseIndex].fileName;
-            else dbFileName = "";
+            } else dbFileName = "";
         }
 
         // If we have been asked to search in a specific DB filename (possibly implicitly by
@@ -231,8 +231,9 @@ export class jsonrpcClient {
 
             // Google treat youtube.com and google.com as the same property when authenticating
             //TODO:v: extend to wider concept of equivelent domains (beware ownership changes)
-            if (fullURL.search(/$https:\/\/accounts\.youtube\.com\/?/) >= 0)
+            if (fullURL.search(/$https:\/\/accounts\.youtube\.com\/?/) >= 0) {
                 urls.push("https://accounts.google.com");
+            }
         }
 
         this.kprpcClient.request(

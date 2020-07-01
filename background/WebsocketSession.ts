@@ -178,8 +178,9 @@ export class WebsocketSessionManager {
             this.webSocket !== undefined &&
             this.webSocket !== null &&
             this.webSocket.readyState == WebSocket.OPEN
-        )
+        ) {
             return "alive";
+        }
         if (this.connectionProhibitedUntil.getTime() > new Date().getTime()) return "locked";
         if (!this.onOpening()) return "locked";
 
@@ -254,8 +255,9 @@ export class WebsocketSessionManager {
             rpc.webSocket !== undefined &&
             rpc.webSocket !== null &&
             rpc.webSocket.readyState != WebSocket.CLOSED
-        )
+        ) {
             return;
+        }
 
         // Check we are allowed to connect
         if (rpc.connectionProhibitedUntil.getTime() > new Date().getTime()) return;

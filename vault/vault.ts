@@ -44,16 +44,17 @@ import { Port } from "../common/port";
 var keeDuplicationCount;
 
 if (keeDuplicationCount) {
-    if (KeeLog && KeeLog.error)
+    if (KeeLog && KeeLog.error) {
         KeeLog.error(
             "Duplicate Kee content script instance detected! Found this many other instances: " +
                 keeDuplicationCount
         );
-    else
+    } else {
         console.error(
             "Duplicate Kee content script instance detected! Found this many other instances: " +
                 keeDuplicationCount
         );
+    }
 } else {
     keeDuplicationCount = 0;
 }
@@ -287,12 +288,13 @@ class Background {
 
     public static receiveError(error) {
         if (!tryHandleErrorLocally(error)) {
-            if (KeeLog && KeeLog.error)
+            if (KeeLog && KeeLog.error) {
                 KeeLog.error(
                     "Did not know how to handle this error. Errors outside of the JSONRPC protocol" +
                         " are unexpected within the context of a single browser: " +
                         error
                 );
+            }
         }
     }
 

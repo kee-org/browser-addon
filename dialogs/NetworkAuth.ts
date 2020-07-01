@@ -70,8 +70,9 @@ class NetworkAuth {
                 "click",
                 function (event) {
                     event.stopPropagation();
-                    if (event.button == 0 || event.button == 1)
+                    if (event.button == 0 || event.button == 1) {
                         this.dispatchEvent(new Event("keeCommand"));
+                    }
                 },
                 false
             );
@@ -97,8 +98,9 @@ function setupNetworkAuthDialog() {
     KeeLog.attachConfig(configManager.current);
     networkAuth = new NetworkAuth();
     browser.runtime.onMessage.addListener(message => {
-        if (message && message.action && message.action === "NetworkAuth_matchedEntries")
+        if (message && message.action && message.action === "NetworkAuth_matchedEntries") {
             networkAuth.setupPage(message.entries, message.realm, message.url, message.isProxy);
+        }
     });
     browser.runtime.sendMessage({ action: "NetworkAuth_load" });
     document.getElementById("i18n_root").style.display = "block";

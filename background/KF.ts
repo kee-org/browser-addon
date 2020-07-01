@@ -532,9 +532,9 @@ export class Kee {
             store.state.KeePassDatabases.length > 0 &&
             store.state.KeePassDatabases[index] != null &&
             store.state.KeePassDatabases[index].root != null
-        )
+        ) {
             return store.state.KeePassDatabases[index].name;
-        else return null;
+        } else return null;
     }
 
     getDatabaseFileName(index?) {
@@ -543,9 +543,9 @@ export class Kee {
             store.state.KeePassDatabases.length > 0 &&
             store.state.KeePassDatabases[index] != null &&
             store.state.KeePassDatabases[index].root != null
-        )
+        ) {
             return store.state.KeePassDatabases[index].fileName;
-        else return null;
+        } else return null;
     }
 
     selectDatabase(fileName, requestReturnFocus, sessionType?: SessionType) {

@@ -129,7 +129,8 @@ module.exports = {
         "no-undef-init": "error",
         "no-underscore-dangle": "off",
         "no-unsafe-finally": "error",
-        "no-unused-expressions": [
+        "no-unused-expressions": "off",
+        "@typescript-eslint/no-unused-expressions": [
             "error",
             {
                 "allowShortCircuit": true
@@ -143,6 +144,7 @@ module.exports = {
             "error",
             "never"
         ],
-        "prefer-const": "error"
+        "prefer-const": "error",
+        "curly": [2, "multi-line"]
     }
 };

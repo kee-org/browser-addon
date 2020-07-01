@@ -52,14 +52,16 @@ export class KeeFieldIcon {
         if (
             !this.formUtils.isATextFormFieldType(field.field.type) &&
             field.field.type != "password"
-        )
+        ) {
             return true;
+        }
         if (
             !field.DOMelement ||
             field.DOMelement instanceof HTMLSelectElement ||
             !field.DOMelement.isConnected
-        )
+        ) {
             return true;
+        }
         if (field.DOMelement.maxLength > 0 && field.DOMelement.maxLength <= 3) return true;
         if (field.DOMelement.offsetWidth < 50) return true;
         return false;

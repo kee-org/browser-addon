@@ -39,22 +39,25 @@ export function calculateMatchScore(
             searchConfig.searchTitles &&
             item.title &&
             item.title.toLowerCase().indexOf(keyword) >= 0
-        )
+        ) {
             keywordScore += searchConfig.weightTitles;
+        }
         if (
             searchConfig.searchUsernames &&
             item.usernameValue &&
             item.usernameValue.toLowerCase().indexOf(keyword) >= 0
-        )
+        ) {
             keywordScore += searchConfig.weightUsernames;
+        }
         if (
             searchConfig.searchURLs &&
             item.uRLs &&
             item.uRLs.filter(function (i) {
                 return i.toLowerCase().indexOf(keyword) >= 0;
             }).length > 0
-        )
+        ) {
             keywordScore += searchConfig.weightURLs;
+        }
 
         // Increment the relevance score proportionally to the number of keywords
         matchScore += keywordScore * (1 / keywords.length);
@@ -68,8 +71,9 @@ export function calculateMatchScore(
 export function resolveConfig(config: Partial<SearchConfig>) {
     if (!config) config = {};
     else {
-        if (config.version != 1)
+        if (config.version != 1) {
             KeeLog.warn("Unknown search config version. Will use version 1 defaults");
+        }
     }
 
     return {

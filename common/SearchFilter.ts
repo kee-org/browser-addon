@@ -37,8 +37,9 @@ export class SearchFilter {
         if (inMainPanel) searchFilterOptionAll.setAttribute("selected", "true");
         else searchFilterOptionCurrent.setAttribute("selected", "true");
 
-        if (!inMainPanel)
+        if (!inMainPanel) {
             this.updateSearchFilterStart(searchFilter, searchFilterOptionCurrent, currentURIs[0]);
+        }
 
         searchFilter.appendChild(searchFilterOptionAll);
         searchFilter.appendChild(searchFilterOptionCurrent);
@@ -91,8 +92,8 @@ export class SearchFilter {
         if (
             doc.getElementById("Kee-" + prefix + "-searchfilter").selectedOptions[0].id ==
             "Kee-" + prefix + "-searchfilter-all"
-        )
+        ) {
             return "all";
-        else return "current";
+        } else return "current";
     }
 }

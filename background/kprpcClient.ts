@@ -41,8 +41,9 @@ class SessionResponseManager {
         features: string[]
     ) {
         this.responses.push({ sessionType, resultWrapper, features });
-        if (this.responses.length === this.responsesRequired && this.onComplete)
+        if (this.responses.length === this.responsesRequired && this.onComplete) {
             this.onComplete(this.responses);
+        }
     }
 }
 
@@ -101,8 +102,9 @@ export class kprpcClient {
     getManagersForActiveSessions() {
         const activeSessions: (WebsocketSessionManager | EventSessionManager)[] = [];
         if (this.eventSessionManager.isActive()) activeSessions.push(this.eventSessionManager);
-        if (this.websocketSessionManager.isActive())
+        if (this.websocketSessionManager.isActive()) {
             activeSessions.push(this.websocketSessionManager);
+        }
         return activeSessions;
     }
 
@@ -118,8 +120,9 @@ export class kprpcClient {
         onComplete: (sessionResponses: SessionResponse[]) => void,
         requestId: number
     ) {
-        if (requestId == undefined || requestId == null || requestId < 0)
+        if (requestId == undefined || requestId == null || requestId < 0) {
             throw new Error("JSON-RPC communication requested with no requestID provided");
+        }
 
         const data = JSON.stringify({
             jsonrpc: "2.0",
@@ -262,8 +265,9 @@ export class kprpcClient {
             case "error":
                 if (data.error) {
                     const extra = [];
-                    if (data.error.messageParams && data.error.messageParams.length >= 1)
+                    if (data.error.messageParams && data.error.messageParams.length >= 1) {
                         extra[0] = data.error.messageParams[0];
+                    }
 
                     if (data.error.code == "VERSION_CLIENT_TOO_LOW") {
                         // This means that the server requires us to support a feature that we don't have
@@ -324,8 +328,9 @@ export class kprpcClient {
 
         if (data.error) {
             const extra = [];
-            if (data.error.messageParams && data.error.messageParams.length >= 1)
+            if (data.error.messageParams && data.error.messageParams.length >= 1) {
                 extra[0] = data.error.messageParams[0];
+            }
             switch (data.error.code) {
                 case "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW": {
                     KeeLog.warn($STR("conn_setup_client_sl_low"));

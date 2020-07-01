@@ -66,8 +66,9 @@ export class MatchedLoginsPanel {
                 "click",
                 function (event) {
                     event.stopPropagation();
-                    if (event.button == 0 || event.button == 1)
+                    if (event.button == 0 || event.button == 1) {
                         this.dispatchEvent(new Event("keeCommand"));
+                    }
                 },
                 false
             );
