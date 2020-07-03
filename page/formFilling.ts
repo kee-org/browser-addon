@@ -138,7 +138,37 @@ export class FormFilling {
         );
     }
 
-    private calculateLabelMatchScore(matchedField: MatchedField, dataField: Field) {}
+    private calculateLabelMatchScore(matchedField: MatchedField, dataField: Field) {
+        if (!matchedField.field.name || !dataField.name) return 0;
+
+        // We only persist a single "label" value, implicitly via the display name
+        // field. Could change this in future with additional features added to the
+        // KeePassRPC libraries.
+        if (
+            matchedField.field.locators[0].labels.some(
+                matchedFieldLabel =>
+                    matchedFieldLabel.toLowerCase() === dataField.name.toLowerCase()
+            )
+        ) {
+            return 100;
+        }
+
+        const weakMatchLabels = [dataField.name.toLowerCase()];
+        if (dataField.name !== dataField.locators[0].name) {
+            weakMatchLabels.push(dataField.locators[0].name.toLowerCase());
+        }
+
+        if (
+            matchedField.field.locators[0].labels.some(matchedFieldLabel => {
+                weakMatchLabels.some(
+                    dataLabel => matchedFieldLabel.toLowerCase().indexOf(dataLabel) >= 0
+                );
+            })
+        ) {
+            return 30;
+        }
+        return 0;
+    }
 
     private calculateFieldMatchScore(
         matchedField: MatchedField,
@@ -155,7 +185,7 @@ export class FormFilling {
         // Do not allow any match if field types are significantly mismatched (e.g. checkbox vs text field)
         if (formField.type !== dataField.type) return 0;
 
-        //score += this.calculateLabelMatchScore(matchedField, dataField);
+        score += this.calculateLabelMatchScore(matchedField, dataField);
 
         // If field IDs match +++++
         if (
