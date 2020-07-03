@@ -1337,6 +1337,18 @@ export class FormFilling {
                 if (value.hasAttribute("aria-label")) {
                     semanticValues.push(value.getAttribute("aria-label").toLowerCase());
                 }
+                value
+                    .getAttribute("aria-labelledby")
+                    ?.trim()
+                    .split(" ")
+                    .forEach(id => {
+                        if (id) {
+                            const labelElement = form.ownerDocument.getElementById(id);
+                            if (labelElement && labelElement.innerText) {
+                                semanticValues.push(labelElement.innerText);
+                            }
+                        }
+                    });
 
                 let score = this.scoreAdjustmentForMagicWords(
                     semanticValues,
