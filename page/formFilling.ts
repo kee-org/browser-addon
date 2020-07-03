@@ -1238,6 +1238,28 @@ export class FormFilling {
 
             minScoreToWin = score;
         }
+
+        function resolveAriaLabelValues(element: HTMLElement) {
+            const labels = [];
+            if (element.hasAttribute("aria-label")) {
+                labels.push(element.getAttribute("aria-label").toLowerCase());
+            }
+            element
+                .getAttribute("aria-labelledby")
+                ?.trim()
+                .split(" ")
+                .forEach(id => {
+                    if (id) {
+                        const labelElement = form.ownerDocument.getElementById(id);
+                        if (labelElement && labelElement.innerText) {
+                            labels.push(labelElement.innerText.toLowerCase());
+                        }
+                    }
+                });
+
+            return labels;
+        }
+
         /*
             In Firefox Array.from...foreach is about 50% faster than the alternative in this comment below... but 20% slower in Chrome.
             const buttons = form.ownerDocument.getElementsByTagName("button");
@@ -1252,6 +1274,7 @@ export class FormFilling {
                 if (value.name) semanticValues.push(value.name.toLowerCase());
                 if (value.textContent) semanticValues.push(value.textContent.toLowerCase());
                 if (value.value) semanticValues.push(value.value.toLowerCase());
+                semanticValues.push(...resolveAriaLabelValues(value));
 
                 let score = this.scoreAdjustmentForMagicWords(
                     semanticValues,
@@ -1285,9 +1308,14 @@ export class FormFilling {
 
                     // Names are more important but sometimes they don't exist or are random
                     // so check what is actually displayed to the user
+                    const semanticValues = [];
                     if (value.value) {
+                        semanticValues.push(value.value.toLowerCase());
+                    }
+                    semanticValues.push(...resolveAriaLabelValues(value));
+                    if (semanticValues.length > 0) {
                         semanticScore += this.scoreAdjustmentForMagicWords(
-                            [value.value.toLowerCase()],
+                            semanticValues,
                             40,
                             this.semanticWhitelistCache,
                             this.semanticBlacklistCache
@@ -1334,21 +1362,7 @@ export class FormFilling {
                         semanticValues.push(value.dataSet.tooltip.toLowerCase());
                     }
                 }
-                if (value.hasAttribute("aria-label")) {
-                    semanticValues.push(value.getAttribute("aria-label").toLowerCase());
-                }
-                value
-                    .getAttribute("aria-labelledby")
-                    ?.trim()
-                    .split(" ")
-                    .forEach(id => {
-                        if (id) {
-                            const labelElement = form.ownerDocument.getElementById(id);
-                            if (labelElement && labelElement.innerText) {
-                                semanticValues.push(labelElement.innerText);
-                            }
-                        }
-                    });
+                semanticValues.push(...resolveAriaLabelValues(value));
 
                 let score = this.scoreAdjustmentForMagicWords(
                     semanticValues,
