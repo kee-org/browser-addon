@@ -67,3 +67,7 @@ export const addNotification = ({ commit }, payload) => {
 export const updateSaveEntryResult = ({ commit }, payload) => {
     commit(types.updateSaveEntryResult, payload || null);
 };
+
+export const addFieldToActiveEntry = ({ commit }, payload) => {
+    commit(types.addFieldToActiveEntry, payload || null);
+};

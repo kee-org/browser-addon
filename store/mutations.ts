@@ -3,6 +3,7 @@ import { KeeState } from "./KeeState";
 import { SaveState } from "../common/SaveState";
 import { Entry } from "../common/model/Entry";
 import { SaveEntryResult } from "../common/SaveEntryResult";
+import { Field } from "../common/model/Field";
 
 function undefAbort(payload) {
     if (payload === undefined) {
@@ -89,5 +90,9 @@ export default {
     [types.updateSaveEntryResult](state: KeeState, payload: SaveEntryResult) {
         undefAbort(payload);
         state.saveEntryResult = payload;
+    },
+    [types.addFieldToActiveEntry](state: KeeState, payload: Field) {
+        undefAbort(payload);
+        state.saveState.newEntry.fields.push(payload);
     }
 };

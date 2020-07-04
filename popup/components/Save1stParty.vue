@@ -30,6 +30,10 @@
                     :field="f"
                     @field-value-changed="fieldValueChanged"
                 />
+                <v-btn right @click="addFieldClicked">
+                    Add field
+                </v-btn>
+                <AddField v-if="showAddField" @add-field-closed="addFieldClosed" />
             </v-container>
         </v-slide-y-transition>
         <v-alert
@@ -120,6 +124,7 @@ import { mapGetters } from "vuex";
 import { SaveState } from "../../common/SaveState";
 import { Entry } from "../../common/model/Entry";
 import FieldEditor from "./FieldEditor.vue";
+import AddField from "./AddField.vue";
 import { Field } from "../../common/model/Field";
 import { AddonMessage } from "../../common/AddonMessage";
 import { KeeURL } from "../../common/KeeURL";
@@ -132,7 +137,8 @@ import { SearcherAll } from "../../common/SearcherAll";
 
 export default {
     components: {
-        FieldEditor
+        FieldEditor,
+        AddField
     },
     data: () => ({
         originalFields: [],
@@ -143,7 +149,8 @@ export default {
         domainMatchesExistingEntry: false,
         preferredGroupUuid: null,
         preferredDb: null,
-        primaryFound: false
+        primaryFound: false,
+        showAddField: false
     }),
     computed: {
         ...mapGetters(["saveState"]),
@@ -324,6 +331,16 @@ export default {
             );
             const results = search.execute("", undefined, [kurl.domainOrIPAddress]);
             return !!results?.length;
+        },
+        addFieldClicked: function (this: any) {
+            this.showAddField = true;
+        },
+        addField: function (this: any, field: Field) {
+            this.$store.dispatch("addFieldToActiveEntry", field);
+        },
+        addFieldClosed: function (this: any, payload) {
+            if (payload?.field) this.addField(payload.field);
+            this.showAddField = false;
         }
     }
 };

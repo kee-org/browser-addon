@@ -15,3 +15,4 @@ export const updateSearchResults = "updateSearchResults";
 export const addNotification = "addNotification";
 export const updateSaveState = "updateSaveState";
 export const updateSaveEntryResult = "updateSaveEntryResult";
+export const addFieldToActiveEntry = "addFieldToActiveEntry";
