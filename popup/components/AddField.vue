@@ -69,8 +69,8 @@
 
                                 <p>
                                     Getting these settings correct requires technical knowledge and
-                                    using the wrong values can make things worse so leave them
-                                    alone unless you fully understand their meaning.
+                                    using the wrong values can make things worse so leave them alone
+                                    unless you fully understand their meaning.
                                 </p>
                                 <v-card class="my-2">
                                     <v-card-title class="text-subtitle-1">
