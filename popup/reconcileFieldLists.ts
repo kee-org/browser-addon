@@ -20,28 +20,62 @@ function fieldMatches(oldField: Field, newField: Field) {
     return false;
 }
 
+function fieldMatchesType(oldField: Field, newField: Field) {
+    if (oldField.type === newField.type) return true;
+    return false;
+}
+
 export function reconcileFieldLists(oldFields: Field[], newFields: Field[]) {
-    // If field value or location can be matched against an existing field,
-    // assume it is a new version of the same field. Otherwise we'll list
-    // all fields from both existing and newly submitted data.
-    // By convention we will treat the first field in the newFields array
-    // as the new username field, regardless of which of the oldFields it
-    // can be matched to, if any.
+    // Every new field is included but we try to only include old fields if
+    // they aren't for the same purpose as any of the new fields
 
     // Future implementations could take advantage of the new Field model
     // to establish some sort of match score but for this first version we
-    // just accept the first match that we find.
+    // just accept the first match that we find. If no good match for
+    // username or password is found, we pick the first field of the
+    // corresponding type
 
     const fields: Field[] = [];
+    const matchedNewFieldIndexes: number[] = [];
 
-    newFields.forEach(newField => {
-        const matchingIndex = oldFields.findIndex(oldField => fieldMatches(oldField, newField));
-        if (matchingIndex >= 0) {
-            oldFields.splice(matchingIndex, 1);
+    newFields.forEach((newField, newFieldIndex) => {
+        if (newField.type !== "text") return;
+        let matchingIndex = oldFields.findIndex(oldField => fieldMatches(oldField, newField));
+        if (matchingIndex === -1) {
+            matchingIndex = oldFields.findIndex(oldField => fieldMatchesType(oldField, newField));
         }
-        fields.push(newField);
+        if (matchingIndex >= 0) {
+            fields.push(new Field({ ...newField, resetValue: oldFields[matchingIndex].value }));
+            oldFields.splice(matchingIndex, 1);
+            matchedNewFieldIndexes.push(newFieldIndex);
+        }
     });
 
+    newFields.forEach((newField, newFieldIndex) => {
+        if (newField.type !== "password") return;
+        let matchingIndex = oldFields.findIndex(oldField => fieldMatches(oldField, newField));
+        if (matchingIndex === -1) {
+            matchingIndex = oldFields.findIndex(oldField => fieldMatchesType(oldField, newField));
+        }
+        if (matchingIndex >= 0) {
+            fields.push(new Field({ ...newField, resetValue: oldFields[matchingIndex].value }));
+            oldFields.splice(matchingIndex, 1);
+            matchedNewFieldIndexes.push(newFieldIndex);
+        }
+    });
+
+    newFields.forEach((newField, newFieldIndex) => {
+        if (matchedNewFieldIndexes.indexOf(newFieldIndex) >= 0) return;
+        const matchingIndex = oldFields.findIndex(oldField => fieldMatches(oldField, newField));
+        if (matchingIndex >= 0) {
+            fields.push(new Field({ ...newField, resetValue: oldFields[matchingIndex].value }));
+            oldFields.splice(matchingIndex, 1);
+        } else {
+            fields.push(newField);
+        }
+    });
+
+    // Keep any old fields we've not yet matched to a new field
     oldFields.forEach(f => fields.push(f));
 
     return fields;
