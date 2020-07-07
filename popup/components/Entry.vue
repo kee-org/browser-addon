@@ -211,7 +211,7 @@ export default {
             const updatedSaveState = Object.assign({}, ss);
             const { urls, showWarning } = await reconcileURLs(entry.URLs, ss.submittedData?.url);
             updatedSaveState.newEntry = supplementEntryState(entry, ss, urls);
-            updatedSaveState.titleResetValue = updatedSaveState.newEntry.title;
+            updatedSaveState.titleResetValue = entry.title;
             updatedSaveState.lastActiveAt = new Date();
             updatedSaveState.showURLMismatchWarning = showWarning;
             this.$store.dispatch("updateSaveState", updatedSaveState);
