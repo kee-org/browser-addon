@@ -7,10 +7,10 @@
             <v-container fluid>
                 <v-alert
                     v-show="showSaveRecovery"
-                    :value="true"
                     color="secondary"
-                    icon="mdi-alert-circle"
-                    text
+                    border="top"
+                    colored-border
+                    elevation="1"
                 >
                     <v-row dense>
                         <v-col>{{ $i18n("unsaved_changes") }}</v-col>
@@ -172,6 +172,8 @@ import { supplementEntryState } from "./supplementEntryState";
 import { fetchFavicon, getFaviconUrl } from "./favicon";
 import { autoRecoveryTimeMs, manualRecoveryPromptTimeMs, tooltipDelay } from "../common/Timings";
 import { SaveEntryResult } from "../common/SaveEntryResult";
+import { Field } from "../common/model/Field";
+import { Locator } from "../common/model/Locator";
 
 export default {
     components: {
@@ -281,7 +283,27 @@ export default {
             if (!currentTab) return;
             const entryTemplate = {
                 URLs: [currentTab.url],
-                title: currentTab.title
+                title: currentTab.title,
+                fields: [
+                    new Field({
+                        name: "KeePass username",
+                        type: "text",
+                        locators: [
+                            new Locator({
+                                type: "text"
+                            })
+                        ]
+                    }),
+                    new Field({
+                        name: "KeePass password",
+                        type: "password",
+                        locators: [
+                            new Locator({
+                                type: "password"
+                            })
+                        ]
+                    })
+                ]
             };
             const ss = this.$store.state.saveState as SaveState;
             const updatedSaveState = Object.assign({}, ss);
