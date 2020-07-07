@@ -11,11 +11,12 @@
                         color="secondary"
                         :hint="$i18n('password_profile_hint')"
                         persistent-hint
+                        class="mt-4"
                         @change="profileChanged"
                     />
                     <v-card
                         :loading="loading"
-                        class="mx-auto px-3 py-0"
+                        class="mx-auto px-3 py-0 mt-4"
                         style="font-family: monospace;"
                         max-width="300"
                     >
@@ -40,7 +41,7 @@
                         <v-checkbox
                             v-model="forceCopy"
                             :label="$i18n('also_copy_to_clipboard')"
-                            persistent-hint="auto"
+                            persistent-hint
                             :hint="forceCopyHint"
                         />
                     </div>
@@ -128,3 +129,12 @@ export default {
     }
 };
 </script>
+<style>
+.v-input--checkbox .v-messages__wrapper {
+    min-height: 32px;
+}
+.v-text-field__details .v-messages__message,
+.v-input--checkbox .v-messages__message {
+    line-height: 16px;
+}
+</style>

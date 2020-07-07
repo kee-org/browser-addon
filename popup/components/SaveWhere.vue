@@ -3,20 +3,20 @@
         <v-slide-y-transition>
             <v-container class="my-0 pa-0">
                 <v-row justify="center">
-                    <v-col style="cursor: default;" class="text-h6 text-center">
+                    <v-col style="cursor: default;" class="text-h6 text-center py-0">
                         {{ $i18n("where") }}
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col>
                         <v-card class="mx-auto" max-width="500">
-                            <v-sheet class="pa-4">
+                            <v-sheet class="pa-4 pb-1">
                                 <v-text-field
                                     v-model="search"
                                     :label="$i18n('Search_label')"
                                     color="secondary"
                                     outlined
-                                    hide-details
+                                    hide-details="auto"
                                     clearable
                                     dense
                                     clear-icon="mdi-close-circle-outline"
@@ -36,7 +36,7 @@
                                     activatable
                                     hoverable
                                     color="secondary"
-                                    style="height: 250px; overflow-y: auto; cursor: pointer;"
+                                    style="height: 240px; overflow-y: auto; cursor: pointer;"
                                     return-object="true"
                                     @update:active="setGroup"
                                 />
@@ -50,7 +50,7 @@
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col>
+                    <v-col class="py-0">
                         <v-checkbox
                             v-model="skipInFuture"
                             :label="$i18n('skip_where_enable_context')"

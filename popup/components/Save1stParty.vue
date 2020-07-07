@@ -37,6 +37,7 @@
             border="top"
             colored-border
             type="warning"
+            :icon="false"
             elevation="1"
             class="my-3"
         >
@@ -96,6 +97,7 @@
             border="top"
             colored-border
             type="info"
+            :icon="false"
             elevation="1"
             class="my-4"
         >
@@ -103,7 +105,9 @@
                 <v-col class="grow">
                     {{ $i18n("make_additional_changes_using_full_editor") }}
                 </v-col>
-                <v-col class="shrink">
+            </v-row>
+            <v-row align="center">
+                <v-col class="grow">
                     <v-btn small @click="openFullEntryEditor">
                         {{ $i18n("open_full_editor") }}
                     </v-btn>
