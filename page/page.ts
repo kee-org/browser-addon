@@ -207,10 +207,6 @@ function connectToMessagingPort() {
             formFilling.findMatchesInThisFrame();
         }
 
-        if (m.submittedData) {
-            formSaving.createSavePasswordPanel();
-        }
-
         if (m.findMatchesResult) {
             formFilling.findLoginsResultHandler(m.findMatchesResult);
         }
@@ -236,7 +232,6 @@ function connectToMessagingPort() {
         if (m.action == Action.CloseAllPanels) {
             passwordGenerator.closeGeneratePasswordPanel();
             formFilling.closeMatchedLoginsPanel();
-            formSaving.closeSavePasswordPanel();
             Port.postMessage({
                 action: Action.RemoveSubmittedData
             } as AddonMessage);

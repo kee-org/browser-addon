@@ -1,4 +1,3 @@
-import { PanelStub, PanelStubOptions } from "./PanelStub";
 import { FormUtils } from "./formsUtils";
 import { MatchResult } from "./MatchResult";
 import { FilledField } from "./FilledField";
@@ -26,8 +25,6 @@ export class FormSaving {
     private formUtils: FormUtils;
     private config: Config;
     private SubmitHandlerAttachments: SubmitHandlerAttachment[] = [];
-    private savePasswordPanelStub: PanelStub;
-    private savePasswordPanelStubRaf: number;
     private matchResult: MatchResult; //TODO:4: May be overkill to have all this data available for saving
 
     constructor(
@@ -61,29 +58,6 @@ export class FormSaving {
             attachment.form.removeEventListener("submit", attachment.handler);
         });
         this.SubmitHandlerAttachments = [];
-    }
-
-    public createSavePasswordPanel() {
-        this.closeSavePasswordPanel();
-        this.savePasswordPanelStub = new PanelStub(
-            PanelStubOptions.SavePassword,
-            null,
-            this.parentFrameId
-        );
-        this.savePasswordPanelStub.createPanel();
-    }
-
-    public closeSavePasswordPanel() {
-        if (this.savePasswordPanelStub) this.savePasswordPanelStub.closePanel();
-        this.savePasswordPanelStub = null;
-        cancelAnimationFrame(this.savePasswordPanelStubRaf);
-    }
-
-    public updateSavePasswordPanelPosition() {
-        this.savePasswordPanelStub.updateBoundingClientRect();
-        this.savePasswordPanelStubRaf = requestAnimationFrame(() =>
-            this.updateSavePasswordPanelPosition()
-        );
     }
 
     public updateMatchResult(matchResult: MatchResult) {
@@ -231,13 +205,6 @@ export class FormSaving {
             if (submittedField.field.value != filledField.value) return true;
 
             return false;
-        });
-    }
-
-    private prepareFormFieldsForSaving(fields: MatchedField[]) {
-        return fields.map(f => {
-            f.DOMelement = undefined;
-            return f;
         });
     }
 }

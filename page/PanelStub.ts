@@ -20,14 +20,6 @@ export class PanelStubOptions {
         name: "generatePassword",
         autoCloseTime: 0
     };
-
-    public static SavePassword: PanelStubOptions = {
-        id: "KeeAddonPanelSavePassword",
-        height: 300,
-        width: 400,
-        name: "savePassword",
-        autoCloseTime: 0
-    };
 }
 
 export class PanelStub {
