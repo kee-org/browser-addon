@@ -35,7 +35,6 @@ export interface AddonMessage {
     submittedData?: SubmittedData;
     saveData?: SaveData;
     loginEditor?: { uuid: string; DBfilename: string };
-    neverSave?: boolean;
     loginsFound?: boolean;
     initialState?: KeeState;
     resetState?: KeeState;

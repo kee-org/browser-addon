@@ -5,7 +5,6 @@ import { Action } from "../common/Action";
 import { configManager } from "../common/ConfigManager";
 import { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
-import { SiteConfig } from "../common/config";
 import store from "../store";
 import { Entry } from "../common/model/Entry";
 
@@ -343,27 +342,5 @@ export function iframeMessageHandler(this: browser.runtime.Port, msg: AddonMessa
 
     if (msg.loginEditor) {
         window.kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
-    }
-
-    if (msg.neverSave) {
-        const persistentItem = window.kee.persistentTabStates
-            .get(tabId)
-            .items.find(item => item.itemType == "submittedData");
-        const url = new URL(persistentItem.submittedData.url);
-        const host = url.host;
-        const configLookup = configManager.siteConfigLookupFor("Host", "Exact");
-        if (!configLookup[host]) {
-            configLookup[host] = {
-                config: new SiteConfig(),
-                source: "User",
-                matchWeight: 100
-            };
-        }
-        configLookup[host].config.preventSaveNotification = true;
-        configManager.save();
-        window.kee.tabStates
-            .get(tabId)
-            .framePorts.get(0)
-            .postMessage({ action: Action.CloseAllPanels });
     }
 }
