@@ -133,6 +133,7 @@ browser.runtime.onInstalled.addListener(async function (details) {
         });
         if (vaultTabs && vaultTabs[0]) {
             browser.tabs.update(vaultTabs[0].id, { active: true });
+            browser.windows.update(vaultTabs[0].windowId, { focused: true });
         } else {
             browser.tabs.create({
                 url: "release-notes/install-notes.html"
