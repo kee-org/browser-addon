@@ -14,7 +14,7 @@ import { Field } from "./model/Field";
 declare const chrome;
 
 // increment when changes are introduced that require data migration
-export const LATEST_VERSION: number = 6;
+export const LATEST_VERSION: number = 7;
 
 export const defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
@@ -184,6 +184,8 @@ export class ConfigManager {
                 migrations.migrateToVersion5(this.current);
             case 5:
                 migrations.migrateToVersion6(this.current);
+            case 6:
+                migrations.migrateToVersion7(this.current);
         }
         /* eslint-enable no-fallthrough */
         this.save();
@@ -192,10 +194,14 @@ export class ConfigManager {
     public migrateFromRemoteToLatestVersion() {
         if (this.current.version >= LATEST_VERSION) return;
         const migrations = new ConfigMigrations();
+        /* eslint-disable no-fallthrough */
         switch (this.current.version) {
             case 5:
                 migrations.migrateToVersion6(this.current);
+            case 6:
+                migrations.migrateToVersion7(this.current);
         }
+        /* eslint-enable no-fallthrough */
         this.save();
     }
 

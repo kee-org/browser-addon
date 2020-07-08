@@ -2,6 +2,15 @@ import { SiteConfig, Config, SiteConfigLookup, SiteConfigIndex } from "./config"
 import { defaultSiteConfig } from "./DefaultSiteConfig";
 
 export class ConfigMigrations {
+    public migrateToVersion7(current: Config) {
+        if (current.notificationCountSavePassword > 6) {
+            Object.assign(current, {
+                notificationCountSavePassword: 6,
+                version: 7
+            } as Partial<Config>);
+        }
+    }
+
     public migrateToVersion6(current: Config) {
         Object.assign(current, {
             animateWhenOfferingSave: true,
