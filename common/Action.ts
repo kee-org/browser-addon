@@ -6,7 +6,6 @@ export const enum Action {
     GeneratePassword = "generatePassword",
     ManualFill = "manualFill",
     Primary = "primary",
-    RemoveSubmittedData = "removeSubmittedData",
     ShowMatchedLoginsPanel = "showMatchedLoginsPanel",
     PageHide = "pageHide",
     OpenKeePass = "openkeepass",

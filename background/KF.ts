@@ -146,7 +146,6 @@ export class Kee {
                             .items.forEach(item => {
                                 if (item.itemType === "submittedData") {
                                     submittedData = item.submittedData;
-                                    item.accessCount++;
                                 }
                             });
                     }
@@ -173,22 +172,34 @@ export class Kee {
                 case "page": {
                     p.onMessage.addListener(pageMessageHandler.bind(p));
 
+                    const tabId = p.sender.tab.id;
+                    const frameId = p.sender.frameId;
                     const connectMessage = {
                         initialState: store.state,
-                        frameId: p.sender.frameId,
-                        tabId: p.sender.tab.id,
-                        isForegroundTab: p.sender.tab.id === window.kee.foregroundTabId
+                        frameId,
+                        tabId,
+                        isForegroundTab: tabId === window.kee.foregroundTabId
                     } as AddonMessage;
 
-                    window.kee.createTabStateIfMissing(p.sender.tab.id);
+                    window.kee.createTabStateIfMissing(tabId);
 
-                    if (p.sender.frameId === 0) {
-                        window.kee.tabStates.get(p.sender.tab.id).url = p.sender.tab.url;
+                    if (frameId === 0) {
+                        window.kee.tabStates.get(tabId).url = p.sender.tab.url;
+
+                        if (window.kee.persistentTabStates.get(tabId)?.items?.length > 0) {
+                            window.kee.persistentTabStates.get(
+                                tabId
+                            ).items = window.kee.persistentTabStates
+                                .get(tabId)
+                                .items.filter(
+                                    item =>
+                                        item.itemType !== "submittedData" ||
+                                        item.creationDate > new Date(Date.now() - 3600000)
+                                );
+                        }
                     }
-                    window.kee.tabStates
-                        .get(p.sender.tab.id)
-                        .frames.set(p.sender.frameId, new FrameState());
-                    window.kee.tabStates.get(p.sender.tab.id).framePorts.set(p.sender.frameId, p);
+                    window.kee.tabStates.get(tabId).frames.set(frameId, new FrameState());
+                    window.kee.tabStates.get(tabId).framePorts.set(frameId, p);
                     p.postMessage(connectMessage);
                     break;
                 }
@@ -513,11 +524,13 @@ export class Kee {
                 result: "error",
                 receivedAt: new Date()
             } as SaveEntryResult);
+            return false;
         } else {
             store.dispatch("updateSaveEntryResult", {
                 result: saveType,
                 receivedAt: new Date()
             } as SaveEntryResult);
+            return true;
         }
     }
 
@@ -560,11 +573,12 @@ export class Kee {
         }
     }
 
-    addLogin(entry: Entry, parentUUID: string, dbFileName: string) {
+    addLogin(entry: Entry, parentUUID: string, dbFileName: string, clearSubmittedData: () => void) {
         try {
-            return this.KeePassRPC.addLogin(entry, parentUUID, dbFileName, newEntry =>
-                this.recordEntrySaveResult("created", newEntry)
-            );
+            return this.KeePassRPC.addLogin(entry, parentUUID, dbFileName, newEntry => {
+                const success = this.recordEntrySaveResult("created", newEntry);
+                if (success) clearSubmittedData();
+            });
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
@@ -574,11 +588,17 @@ export class Kee {
         }
     }
 
-    updateLogin(entry: Entry, oldLoginUUID: string, dbFileName: string) {
+    updateLogin(
+        entry: Entry,
+        oldLoginUUID: string,
+        dbFileName: string,
+        clearSubmittedData: () => void
+    ) {
         try {
-            return this.KeePassRPC.updateLogin(entry, oldLoginUUID, dbFileName, changedEntry =>
-                this.recordEntrySaveResult("updated", changedEntry)
-            );
+            return this.KeePassRPC.updateLogin(entry, oldLoginUUID, dbFileName, changedEntry => {
+                const success = this.recordEntrySaveResult("updated", changedEntry);
+                if (success) clearSubmittedData();
+            });
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +

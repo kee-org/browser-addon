@@ -232,9 +232,6 @@ function connectToMessagingPort() {
         if (m.action == Action.CloseAllPanels) {
             passwordGenerator.closeGeneratePasswordPanel();
             formFilling.closeMatchedLoginsPanel();
-            Port.postMessage({
-                action: Action.RemoveSubmittedData
-            } as AddonMessage);
         }
 
         if (m.action == Action.ShowMatchedLoginsPanel) {

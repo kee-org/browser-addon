@@ -73,21 +73,32 @@ export function browserPopupMessageHandler(this: browser.runtime.Port, msg: Addo
                 })
             );
 
+            // Might be changed by the user before KPRPC says all worked OK
+            const tabId = window.kee.foregroundTabId;
+            const clearSubmittedData = () => {
+                if (window.kee.persistentTabStates.get(tabId)?.items?.length > 0) {
+                    window.kee.persistentTabStates.get(
+                        tabId
+                    ).items = window.kee.persistentTabStates
+                        .get(tabId)
+                        .items.filter(item => item.itemType !== "submittedData");
+                }
+            };
+
             if (msg.action === Action.UpdateEntry) {
-                window.kee.updateLogin(entry, existingOrTemporaryUuid, dbFileName);
+                window.kee.updateLogin(
+                    entry,
+                    existingOrTemporaryUuid,
+                    dbFileName,
+                    clearSubmittedData
+                );
             } else {
-                window.kee.addLogin(entry, parentGroupUuid, dbFileName);
+                window.kee.addLogin(entry, parentGroupUuid, dbFileName, clearSubmittedData);
             }
             if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
             configManager.current.mruGroup[dbFileName] = parentGroupUuid;
             configManager.current.mruGroup["{<{{<<kee-primary>>}}>}"] = parentGroupUuid;
             configManager.save();
-
-            // Trigger the clear-out of the last submitted data if it exists
-            const persistentItem = window.kee.persistentTabStates
-                .get(window.kee.foregroundTabId)
-                ?.items?.find(item => item.itemType == "submittedData");
-            if (persistentItem) persistentItem.accessCount++;
         }
     }
 
@@ -160,9 +171,7 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
         const persistentItem = {
             itemType: "submittedData" as "submittedData",
             submittedData: msg.submittedData,
-            creationDate: new Date(),
-            accessCount: 0,
-            maxAccessCount: 20
+            creationDate: new Date()
         };
 
         if (!window.kee.persistentTabStates.get(this.sender.tab.id)) {
@@ -206,15 +215,6 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
             action: Action.ShowMatchedLoginsPanel,
             frameId: this.sender.frameId
         });
-    }
-    if (msg.action === Action.RemoveSubmittedData) {
-        if (window.kee.persistentTabStates.get(this.sender.tab.id)) {
-            window.kee.persistentTabStates.get(
-                this.sender.tab.id
-            ).items = window.kee.persistentTabStates
-                .get(this.sender.tab.id)
-                .items.filter(item => item.itemType !== "submittedData");
-        }
     }
     if (msg.action === Action.PageHide) {
         try {
