@@ -36,6 +36,7 @@ export function reconcileFieldLists(oldFields: Field[], newFields: Field[]) {
     // corresponding type
 
     const fields: Field[] = [];
+    const sortedFields: Field[] = [];
     const matchedNewFieldIndexes: number[] = [];
 
     newFields.forEach((newField, newFieldIndex) => {
@@ -78,5 +79,15 @@ export function reconcileFieldLists(oldFields: Field[], newFields: Field[]) {
     // Keep any old fields we've not yet matched to a new field
     oldFields.forEach(f => fields.push(f));
 
-    return fields;
+    const firstTextFieldIndex = fields.findIndex(f => f.type === "text");
+    if (firstTextFieldIndex >= 0) {
+        sortedFields.push(fields.splice(firstTextFieldIndex, 1)[0]);
+    }
+
+    const firstPasswordFieldIndex = fields.findIndex(f => f.type === "password");
+    if (firstPasswordFieldIndex >= 0) {
+        sortedFields.push(fields.splice(firstPasswordFieldIndex, 1)[0]);
+    }
+
+    return sortedFields.concat(fields);
 }
