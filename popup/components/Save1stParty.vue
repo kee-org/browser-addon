@@ -14,9 +14,11 @@
                             :type="text"
                             autofocus
                             @input="setTitle"
+                            @focus="onTitleFocus"
+                            @blur="onTitleBlur"
                         >
                             <template slot="append">
-                                <v-btn v-if="resettableTitle" small icon @click="resetTitle">
+                                <v-btn v-if="titleFocussed && resettableTitle" small icon @click="resetTitle">
                                     <v-icon>mdi-undo</v-icon>
                                 </v-btn>
                             </template>
@@ -29,6 +31,7 @@
                     :key="f.uuid"
                     :field="f"
                     @field-value-changed="fieldValueChanged"
+                    @field-deleted="fieldDeleted"
                 />
             </v-container>
         </v-slide-y-transition>
@@ -147,7 +150,8 @@ export default {
         domainMatchesExistingEntry: false,
         preferredGroupUuid: null,
         preferredDb: null,
-        primaryFound: false
+        primaryFound: false,
+        titleFocussed: true
     }),
     computed: {
         ...mapGetters(["saveState"]),
@@ -267,7 +271,14 @@ export default {
             });
             this.$store.dispatch("updateSaveState", updatedSaveState);
         },
+        fieldDeleted: function (this: any, field: Partial<Field>) {
+            this.$store.dispatch("removeFieldFromActiveEntry", field.uuid);
+        },
         getPreferredGroup: function (mruGroup: { [key: string]: string }, dbs: Database[]) {
+            if (!mruGroup) {
+                return { preferredGroupUuid: null, preferredDb: null, primaryFound: false };
+            }
+
             let primaryFound = false;
             const UUIDs = [];
             const primaryUuid = mruGroup["{<{{<<kee-primary>>}}>}"];
@@ -328,6 +339,12 @@ export default {
             );
             const results = search.execute("", undefined, [kurl.domainOrIPAddress]);
             return !!results?.length;
+        },
+        onTitleFocus (this: any) {
+            this.titleFocussed = true;
+        },
+        onTitleBlur (this: any) {
+            this.titleFocussed = false;
         }
     }
 };

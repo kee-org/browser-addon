@@ -1,23 +1,24 @@
 <template>
-    <v-row>
+    <v-row v-if="field.type === 'password' || field.type === 'text'">
         <v-col>
             <v-text-field
-                v-if="field.type === 'password' || field.type === 'text'"
                 :label="label"
                 :value="field.value"
                 color="secondary"
                 dense
                 outlined
                 hide-details="auto"
-                :append-outer-icon="field.type === 'password' ? 'mdi-flash' : ''"
                 :type="renderType"
                 @input="valueChanged"
-                @click:append-outer="showPasswordGenerator = true"
+                @focus="onFocus"
+                @blur="onBlur"
             >
                 <template slot="append">
-                    <v-btn v-if="resettable" small icon @click="reset">
+                    <v-fade-transition>
+                              <v-btn v-if="focussed && resettable" small icon @click="reset">
                         <v-icon>mdi-undo</v-icon>
                     </v-btn>
+                    </v-fade-transition>
                     <v-btn
                         v-if="field.type === 'password'"
                         small
@@ -25,6 +26,20 @@
                         @click="revealed = !revealed"
                     >
                         <v-icon>{{ revealed ? "mdi-eye" : "mdi-eye-off" }}</v-icon>
+                    </v-btn>
+                </template>
+                <template slot="append-outer">
+                    <v-btn
+                        v-if="field.type === 'password'"
+                        small
+                        icon
+                        @click="showPasswordGenerator = true"
+                        class="mr-3"
+                    >
+                        <v-icon>mdi-flash</v-icon>
+                    </v-btn>
+                    <v-btn small icon @click="deleteClicked">
+                        <v-icon>mdi-delete</v-icon>
                     </v-btn>
                 </template>
             </v-text-field>
@@ -47,7 +62,8 @@ export default {
     props: ["field"],
     data: () => ({
         revealed: false,
-        showPasswordGenerator: false
+        showPasswordGenerator: false,
+        focussed: false
     }),
     computed: {
         renderType: function (this: any) {
@@ -70,9 +86,18 @@ export default {
         valueChanged: function (this: any, value) {
             this.$emit("field-value-changed", { uuid: this.field.uuid, value });
         },
+        deleteClicked: function (this: any) {
+            this.$emit("field-deleted", { uuid: this.field.uuid });
+        },
         passwordGeneratorClosed: function (this: any, payload) {
             if (payload?.value) this.valueChanged(payload.value);
             this.showPasswordGenerator = false;
+        },
+        onFocus (this: any) {
+            this.focussed = true;
+        },
+        onBlur (this: any) {
+            this.focussed = false;
         }
     }
 };
