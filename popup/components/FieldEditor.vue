@@ -15,9 +15,9 @@
             >
                 <template slot="append">
                     <v-fade-transition>
-                              <v-btn v-if="focussed && resettable" small icon @click="reset">
-                        <v-icon>mdi-undo</v-icon>
-                    </v-btn>
+                        <v-btn v-if="focussed && resettable" small icon @click="reset">
+                            <v-icon>mdi-undo</v-icon>
+                        </v-btn>
                     </v-fade-transition>
                     <v-btn
                         v-if="field.type === 'password'"
@@ -33,8 +33,8 @@
                         v-if="field.type === 'password'"
                         small
                         icon
-                        @click="showPasswordGenerator = true"
                         class="mr-3"
+                        @click="showPasswordGenerator = true"
                     >
                         <v-icon>mdi-flash</v-icon>
                     </v-btn>
@@ -93,10 +93,10 @@ export default {
             if (payload?.value) this.valueChanged(payload.value);
             this.showPasswordGenerator = false;
         },
-        onFocus (this: any) {
+        onFocus(this: any) {
             this.focussed = true;
         },
-        onBlur (this: any) {
+        onBlur(this: any) {
             this.focussed = false;
         }
     }

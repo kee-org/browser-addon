@@ -18,7 +18,12 @@
                             @blur="onTitleBlur"
                         >
                             <template slot="append">
-                                <v-btn v-if="titleFocussed && resettableTitle" small icon @click="resetTitle">
+                                <v-btn
+                                    v-if="titleFocussed && resettableTitle"
+                                    small
+                                    icon
+                                    @click="resetTitle"
+                                >
                                     <v-icon>mdi-undo</v-icon>
                                 </v-btn>
                             </template>
@@ -340,10 +345,10 @@ export default {
             const results = search.execute("", undefined, [kurl.domainOrIPAddress]);
             return !!results?.length;
         },
-        onTitleFocus (this: any) {
+        onTitleFocus(this: any) {
             this.titleFocussed = true;
         },
-        onTitleBlur (this: any) {
+        onTitleBlur(this: any) {
             this.titleFocussed = false;
         }
     }
