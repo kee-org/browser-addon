@@ -35,11 +35,6 @@ function loadInitialConfig() {
     ) as HTMLInputElement).checked = configManager.current.searchAllOpenDBs
         ? configManager.current.searchAllOpenDBs
         : null;
-    (document.getElementById(
-        "pref_listAllOpenDBs_label"
-    ) as HTMLInputElement).checked = configManager.current.listAllOpenDBs
-        ? configManager.current.listAllOpenDBs
-        : null;
 
     (document.getElementById(
         "pref_autoFillFormsWithMultipleMatches_label"
@@ -65,11 +60,6 @@ function loadInitialConfig() {
         "pref_rememberMRUGroup_label"
     ) as HTMLInputElement).checked = configManager.current.rememberMRUGroup
         ? configManager.current.rememberMRUGroup
-        : null;
-    (document.getElementById(
-        "pref_notifyWhenEntryUpdated_label"
-    ) as HTMLInputElement).checked = configManager.current.notifyWhenEntryUpdated
-        ? configManager.current.notifyWhenEntryUpdated
         : null;
     (document.getElementById(
         "pref_animateWhenOfferingSave_label"
@@ -120,9 +110,6 @@ function setupInputListeners() {
         .getElementById("pref_searchAllOpenDBs_label")
         .addEventListener("change", saveSearchAllOpenDBs);
     document
-        .getElementById("pref_listAllOpenDBs_label")
-        .addEventListener("change", saveListAllOpenDBs);
-    document
         .getElementById("pref_autoFillFormsWithMultipleMatches_label")
         .addEventListener("change", saveAutoFillFormsWithMultipleMatches);
     document
@@ -142,9 +129,6 @@ function setupInputListeners() {
     document
         .getElementById("pref_rememberMRUGroup_label")
         .addEventListener("change", saveRememberMRUGroup);
-    document
-        .getElementById("pref_notifyWhenEntryUpdated_label")
-        .addEventListener("change", saveNotifyWhenEntryUpdated);
     document
         .getElementById("pref_animateWhenOfferingSave_label")
         .addEventListener("change", saveAnimateWhenOfferingSaveUpdated);
@@ -933,14 +917,6 @@ function saveSearchAllOpenDBs(e) {
     });
 }
 
-function saveListAllOpenDBs(e) {
-    e.preventDefault();
-    configManager.setASAP({
-        listAllOpenDBs: (document.getElementById("pref_listAllOpenDBs_label") as HTMLInputElement)
-            .checked
-    });
-}
-
 function saveAutoFillFormsWithMultipleMatches(e) {
     e.preventDefault();
     configManager.setASAP({
@@ -1002,15 +978,6 @@ function saveRememberMRUGroup(e) {
     configManager.setASAP({
         rememberMRUGroup: (document.getElementById(
             "pref_rememberMRUGroup_label"
-        ) as HTMLInputElement).checked
-    });
-}
-
-function saveNotifyWhenEntryUpdated(e) {
-    e.preventDefault();
-    configManager.setASAP({
-        notifyWhenEntryUpdated: (document.getElementById(
-            "pref_notifyWhenEntryUpdated_label"
         ) as HTMLInputElement).checked
     });
 }

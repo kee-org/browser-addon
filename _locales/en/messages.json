@@ -183,10 +183,6 @@
     "message": "NB: change the setting in KeePass.config or else Kee will not always be able to communicate with KeePass",
     "description": "Displayed to the user near the setting for changing the KeePassRPC port"
   },
-  "pref_listAllOpenDBs_label": {
-    "message": "List logins from all open Kee Vaults and KeePass databases",
-    "description": ""
-  },
   "pref_logLevel_desc": {
     "message": "Choose how verbose you want the log to be. Each higher log level produces more output.",
     "description": ""
@@ -210,10 +206,6 @@
   "pref_notifyBarRequestPasswordSave_label": {
     "message": "Offer to save passwords",
     "description": ""
-  },
-  "pref_notifyWhenEntryUpdated_label": {
-    "message": "Display the \"Password successfully updated\" notification",
-    "description": "Option to enable or disable the information displayed when a password has been updated"
   },
   "pref_animateWhenOfferingSave_label": {
       "message": "Animate the Kee icon when offering to save",
