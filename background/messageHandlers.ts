@@ -66,10 +66,12 @@ export function browserPopupMessageHandler(this: browser.runtime.Port, msg: Addo
                     // We will rarely have access to the favicon data at the time the initial
                     // Entry is created for editing in the popup so set it at this much later
                     // point instead.
-                    icon: {
-                        version: 1,
-                        iconImageData: store.state.saveState.favicon
-                    }
+                    icon: configManager.current.saveFavicons
+                        ? {
+                              version: 1,
+                              iconImageData: store.state.saveState.favicon
+                          }
+                        : null
                 })
             );
 
