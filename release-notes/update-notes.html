@@ -5,38 +5,40 @@
     <meta charset="utf-8">
     <link href="../lib/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="release-notes.css"/>
-    <title>Kee 3.4</title>
+    <title>Kee 3.5</title>
     <link rel="icon" href="/common/images/64.png"/>
 </head>
 
 <body class="container" style="max-width: 900px;">
     <div id="i18n_root" style="align-items: stretch;">
 
-<h1 style="font-size: 42px; text-align: center;"><img src="/common/images/64.png" style="margin-bottom: 4px; margin-right: 10px;" /><span data-i18n="welcome_to_kee"></span> 3.4</h1>
+<h1 style="font-size: 42px; text-align: center;"><img src="/common/images/64.png" style="margin-bottom: 4px; margin-right: 10px;" /><span data-i18n="welcome_to_kee"></span> 3.5</h1>
 <div id="mainContent">
     <div id="updateNotesContent">
-    <h2 style="margin-left:15px"><span data-i18n="version_upgrade_heading_changes"></span> 3.4</h2>
 
-    <p><ul>
-        <li>This release is the second part of the improvements <a href="https://forum.kee.pm/t/entry-password-saving-improvements-coming-soon/2808" target="_blank">recently announced</a> on the community forum.</li>
-        <li>Improved password saving experience</li>
-        <li>New password generator experience</li>
-        <li>More modern appearance/style (partially complete)</li>
-        <li>Dark mode, matching your system preference</li>
-        <li>Sort Network Auth matches, bringing Realm matches to top</li>
-        <li>Larger site favicons in popup</li>
-    </ul></p>
+        <h3>Changes since Beta 3.4</h3>
+        <p>
+            <ul>
+                <li>Option to automatically save new passwords to the same place each time</li>
+                <li>Improved identification of primary username field and submit buttons</li>
+                <li>Minor style improvements</li>
+                <li>Improvements to default username and password values when saving new and existing entries</li>
+                <li>Recently submitted form values now get removed after first successful save operation to KeePassRPC</li>
+                <li>Can now delete unwanted fields before saving an entry</li>
+            </ul>
+        </p>
 
-    <h3>Important notices for this beta</h3>
-    <h4>Entry Priority feature removal</h4>
-    <p>This section does not apply to users of only Kee Vault.</p>
-    <p>The complicated and unreliable Priority override setting for entries has now been removed. Updating existing entries through Kee v3.4 or higher will remove the priority value from an entry. If this causes any problems, please re-configure your entries in such a way that the priority is no longer required. KeePassRPC will still show the setting for a version or two, to aid advanced users with their manual migration process.</p>
-    <h4>KeePassRPC version 1.11.0 recommended</h4>
-    <p>This section does not apply to users of only Kee Vault.</p>
-    <p>Without an upgrade to the latest version of KeePassRPC - 1.11.0 - you will experience several issues:</p>
-    <p>Some old URLs will not always be removed from edited entries.</p>
-    <p>Entry titles can't be edited.</p>
-    <p>Form field names will overwrite existing display names in an entry.</p>
+        <h2 style="margin-left:15px"><span data-i18n="version_upgrade_heading_changes"></span> 3.5</h2>
+
+    <p data-i18n="list_version_upgrade_3_5"></p>
+
+    <p data-i18n="release_details_for_keepass_available_on_forum"></p>
+    <p><a href="https://kee.pm">LINK PENDING END OF BETA TESTING PERIOD</a></p>
+
+    <hr>
+    <p id="betaTestingIntro" data-i18n="beta_testing_is_good"></p>
+    <button data-i18n="join_the_community_cta" id="betaTestingCTA"></button>
+    <hr>
 
     <h3 style="margin-left:15px" data-i18n="other_technical_improvements"></h3>
 
@@ -60,5 +62,6 @@
     <script src="../lib/tp/linkify-element.min.js"></script>
     <script src="../lib/i18n.js"></script>
     <script src="update-cta.js"></script>
+    <script src="beta-cta.js"></script>
 </body>
 </html>

@@ -27,6 +27,28 @@ div#i18n_root td:first-child, div#i18n_root th:first-child {
     width: 40%;
 }
 
+#betaTestingCTA {
+    background-color:#1a466b;
+    max-width: 80vw;
+    min-width: 80px;
+    border: 1px solid #1a466b;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.4em;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    user-select: none;
+    color: #e5e7eb;
+}
+
+#betaTestingCTA:hover {
+    background-color:#3a668b;
+}
+
 div#i18n_root > button,
 div#keeVaultContainer > button {
     background-color:#1a466b;
@@ -102,4 +124,9 @@ div#keeVaultContainer > button:hover {
 
 .vaultLogoContainer > svg {
     max-width: 200px;
+}
+
+#betaTestingIntro {
+    font-weight: 600;
+    font-size: 1.2em;
 }
