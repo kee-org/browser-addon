@@ -63,7 +63,7 @@ var deleteBuildFiles = function (includeGlobs, excludeGlobs) {
             globs.push(buildDirProdChrome + "/" + g);
         }
     }
-    if (excludeGlobs)
+    if (excludeGlobs) {
         for (const g of excludeGlobs) {
             if (DEBUG) {
                 globs.push("!" + buildDirDebug + "/" + g);
@@ -75,6 +75,7 @@ var deleteBuildFiles = function (includeGlobs, excludeGlobs) {
                 globs.push("!" + buildDirProdChrome + "/" + g);
             }
         }
+    }
     return del(globs);
 };
 
@@ -173,8 +174,9 @@ gulp.task("sign", function sign(done) {
                 console.log("The following signed files were downloaded:");
                 console.log(result.downloadedFiles);
                 console.log("Reported file name: ");
-                if (result.downloadedFiles && result.downloadedFiles.length > 0)
+                if (result.downloadedFiles && result.downloadedFiles.length > 0) {
                     console.log(result.downloadedFiles[0]);
+                }
             } else {
                 console.error("add-on could not be signed!");
                 console.error("Check the console for details.");
@@ -291,7 +293,14 @@ var executeRollup = function () {
             ]
         })
     ];
-    if (!DEBUG) plugins.push(terser());
+    if (!DEBUG) {
+        plugins.push(
+            terser({
+                compress: false,
+                mangle: false
+            })
+        );
+    }
 
     var input = {
         external: ["vue", "vueex", "vuetify"],
@@ -350,8 +359,9 @@ var executeRollup = function () {
                 event.code === "END" ||
                 event.code === "ERROR" ||
                 event.code === "FATAL"
-            )
+            ) {
                 console.info(`WATCHER: ${event.code} : ${JSON.stringify(event)}`);
+            }
         });
         return watcher;
     } else {
@@ -382,29 +392,21 @@ var executeRollup = function () {
 /********** STATIC FILE COPYING / MANIPULATION **********/
 
 var copyStatic = function (glob, dir) {
-    if (WATCH) {
-        return gulp
-            .src(glob)
-            .pipe(
-                replace(
-                    "<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->",
-                    DEBUG ? "<script src='https://localhost:8099'></script>" : ""
-                )
+    const task = gulp
+        .src(glob)
+        .pipe(
+            replace(
+                "<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->",
+                DEBUG ? '<script src="https://localhost:8099"></script>' : ""
             )
-            .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir));
-    } else {
-        return gulp
-            .src(glob)
-            .pipe(
-                replace(
-                    "<!--__VUE_DEV_TOOLS_PLACEHOLDER__-->",
-                    DEBUG ? "<script src='https://localhost:8099'></script>" : ""
-                )
-            )
-            .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir))
+        )
+        .pipe(gulp.dest((DEBUG ? buildDirDebug : buildDirProd) + dir));
+    if (!WATCH) {
+        return task
             .pipe(gulp.dest((DEBUG ? buildDirDebugFirefox : buildDirProdFirefox) + dir))
             .pipe(gulp.dest((DEBUG ? buildDirDebugChrome : buildDirProdChrome) + dir));
     }
+    return task;
 };
 
 gulp.task(
