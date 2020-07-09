@@ -192,7 +192,7 @@ export class Field {
             case "checkbox":
                 fft = FormFieldTypeDTO.checkbox;
                 break;
-            case "select":
+            case "select-one":
                 fft = FormFieldTypeDTO.select;
                 break;
             case "text":
