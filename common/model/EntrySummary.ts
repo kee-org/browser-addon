@@ -33,8 +33,8 @@ export class EntrySummary {
     public static fromEntry(entry: Entry) {
         return new EntrySummary({
             icon: entry.icon,
-            usernameValue: Entry.getUsernameField(entry).value,
-            usernameName: Entry.getUsernameField(entry).name,
+            usernameValue: Entry.getUsernameField(entry)?.value,
+            usernameName: Entry.getUsernameField(entry)?.name,
             title: entry.title,
             uRLs: entry.URLs,
             url: entry?.URLs[0],
