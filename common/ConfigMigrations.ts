@@ -8,6 +8,8 @@ export class ConfigMigrations {
                 notificationCountSavePassword: 6,
                 version: 7
             } as Partial<Config>);
+        } else {
+            Object.assign(current, { version: 7 } as Partial<Config>);
         }
     }
 
