@@ -1711,11 +1711,7 @@ export class FormFilling {
             let mostRelevantScore = 0;
             const formField = matchedFields[i].field;
 
-            if (
-                formField.locators[0].autocompleteValues?.some(
-                    v => v.toLowerCase() === "new-password"
-                )
-            ) {
+            if (formField.locators[0].autocompleteValues?.some(v => v === "new-password")) {
                 // Record as a successful match for the purposes of match ratio calculations
                 // if this is a new password field as part of a change password form. So we
                 // don't affect the selection of the form or entry to fill but when all

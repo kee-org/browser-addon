@@ -25,6 +25,13 @@ function fieldMatchesType(oldField: Field, newField: Field) {
     return false;
 }
 
+function getNewLocator(oldField: Field, newField: Field) {
+    if (newField.locators[0].autocompleteValues?.some(v => v === "new-password")) {
+        return oldField.locators[0];
+    }
+    return newField.locators[0];
+}
+
 export function reconcileFieldLists(oldFields: Field[], newFields: Field[]) {
     // Every new field is included but we try to only include old fields if
     // they aren't for the same purpose as any of the new fields
@@ -59,7 +66,13 @@ export function reconcileFieldLists(oldFields: Field[], newFields: Field[]) {
             matchingIndex = oldFields.findIndex(oldField => fieldMatchesType(oldField, newField));
         }
         if (matchingIndex >= 0) {
-            fields.push(new Field({ ...newField, resetValue: oldFields[matchingIndex].value }));
+            fields.push(
+                new Field({
+                    ...newField,
+                    resetValue: oldFields[matchingIndex].value,
+                    locators: [getNewLocator(oldFields[matchingIndex], newField)]
+                })
+            );
             oldFields.splice(matchingIndex, 1);
             matchedNewFieldIndexes.push(newFieldIndex);
         }

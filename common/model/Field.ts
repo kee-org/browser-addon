@@ -248,7 +248,7 @@ function collectAutocompleteValues(element: HTMLInputElement | HTMLSelectElement
         ?.trim()
         .split(" ")
         .forEach(v => {
-            if (v) values.push(v);
+            if (v) values.push(v.toLowerCase());
         });
     return values.length ? values : undefined;
 }
