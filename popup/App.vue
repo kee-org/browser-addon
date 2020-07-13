@@ -61,6 +61,7 @@
                     right
                     color="primary"
                     style="bottom: 75px; right: 24px;"
+                    :class="hasSubmittedData ? 'pulse-button' : ''"
                     v-on="on"
                     @click="saveStart"
                 >
@@ -237,6 +238,9 @@ export default {
         },
         showSearchPanel: function (this: any) {
             return this.databaseIsOpen && !this.showSaveStart;
+        },
+        hasSubmittedData: function (this: any) {
+            return (this.$store.state.saveState as SaveState)?.submittedData?.fields?.length > 0;
         }
     },
     watch: {
@@ -411,5 +415,32 @@ export default {
     max-height: 522px;
     min-height: 522px;
     height: 522px;
+}
+
+.pulse-button {
+    animation: pulse 0.5s 2 cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.25s reverse;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    25% {
+        opacity: 1;
+        transform: scale(1.25);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    75% {
+        opacity: 1;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 </style>
