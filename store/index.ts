@@ -29,7 +29,8 @@ export default new Vuex.Store<KeeState>({
         saveEntryResult: {
             result: null,
             receivedAt: new Date()
-        }
+        },
+        entryUpdateStartedAtTimestamp: 0
     },
     getters,
     mutations,

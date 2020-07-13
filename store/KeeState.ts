@@ -20,4 +20,5 @@ export interface KeeState {
     saveState: SaveState;
     generatedPassword: string;
     saveEntryResult: SaveEntryResult;
+    entryUpdateStartedAtTimestamp: number;
 }

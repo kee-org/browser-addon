@@ -71,3 +71,7 @@ export const updateSaveEntryResult = ({ commit }, payload) => {
 export const removeFieldFromActiveEntry = ({ commit }, payload) => {
     commit(types.removeFieldFromActiveEntry, payload || null);
 };
+
+export const updateEntryUpdateStartedAtTimestamp = ({ commit }, payload) => {
+    commit(types.updateEntryUpdateStartedAtTimestamp, payload || null);
+};

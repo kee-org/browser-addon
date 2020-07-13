@@ -88,6 +88,7 @@ export function browserPopupMessageHandler(this: browser.runtime.Port, msg: Addo
             };
 
             if (msg.action === Action.UpdateEntry) {
+                store.dispatch("updateEntryUpdateStartedAtTimestamp", Date.now());
                 window.kee.updateLogin(
                     entry,
                     existingOrTemporaryUuid,

@@ -16,3 +16,4 @@ export const addNotification = "addNotification";
 export const updateSaveState = "updateSaveState";
 export const updateSaveEntryResult = "updateSaveEntryResult";
 export const removeFieldFromActiveEntry = "removeFieldFromActiveEntry";
+export const updateEntryUpdateStartedAtTimestamp = "updateEntryUpdateStartedAtTimestamp";

@@ -462,6 +462,10 @@ export class Kee {
 
     private refreshFormStatus(action: Action) {
         window.kee.tabStates.forEach((ts, tabId) => {
+            //TODO:4: This should be equivalent but much faster than testing in the inner
+            // loop. Unless tabId does not equal port.sender.tab.id?
+            //if (tabId !== this.foregroundTabId) return;
+
             ts.framePorts.forEach((port, key, map) => {
                 try {
                     if (port.sender.tab.id === this.foregroundTabId) {

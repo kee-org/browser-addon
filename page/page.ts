@@ -204,7 +204,15 @@ function connectToMessagingPort() {
             }
             formFilling.removeKeeIconFromAllFields();
             formSaving.removeAllSubmitHandlers();
-            formFilling.findMatchesInThisFrame();
+
+            if (store.state.entryUpdateStartedAtTimestamp >= Date.now() - 20000) {
+                formFilling.findMatchesInThisFrame({
+                    autofillOnSuccess: false,
+                    autosubmitOnSuccess: false
+                });
+            } else {
+                formFilling.findMatchesInThisFrame();
+            }
         }
 
         if (m.findMatchesResult) {

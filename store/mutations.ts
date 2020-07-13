@@ -128,5 +128,9 @@ export default {
                 new Field({ ...newPassword, name: "KeePass password" })
             );
         }
+    },
+    [types.updateEntryUpdateStartedAtTimestamp](state: KeeState, payload) {
+        undefAbort(payload);
+        state.entryUpdateStartedAtTimestamp = payload;
     }
 };
