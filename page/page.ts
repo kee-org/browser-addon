@@ -52,7 +52,8 @@ function matchFinder(uri: string) {
 function tutorialIntegration() {
     if (
         window.location.hostname.endsWith("tutorial-addon-1.kee.pm") ||
-        window.location.hostname.endsWith("tutorial-addon.kee.pm")
+        window.location.hostname.endsWith("tutorial-addon.kee.pm") ||
+        window.location.hostname === "deploy-preview-3--judge-bird-25036.netlify.app"
     ) {
         const transferElement = document.createElement("KeeFoxAddonStateTransferElement");
         transferElement.setAttribute(
