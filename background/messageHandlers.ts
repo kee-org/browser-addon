@@ -149,6 +149,7 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
     }
 
     if (msg.findMatches) {
+        window.kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).entries = [];
         window.kee.findLogins(msg.findMatches.uri, null, null, null, null, null, result => {
             this.postMessage({
                 isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId,
