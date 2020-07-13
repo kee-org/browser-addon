@@ -1710,8 +1710,22 @@ export class FormFilling {
         for (let i = 0; i < matchedFields.length; i++) {
             let mostRelevantScore = 0;
             const formField = matchedFields[i].field;
+
+            if (
+                formField.locators[0].autocompleteValues?.some(
+                    v => v.toLowerCase() === "new-password"
+                )
+            ) {
+                // Record as a successful match for the purposes of match ratio calculations
+                // if this is a new password field as part of a change password form. So we
+                // don't affect the selection of the form or entry to fill but when all
+                // else is equal, we will have a higher chance of auto-filling the existing
+                // user name and password fields.
+                fieldMatchSuccesses[i] = true;
+            }
+
             for (let j = 0; j < entryFields.length; j++) {
-                const fmscore = this.calculateFieldMatchScore(
+                const fmScore = this.calculateFieldMatchScore(
                     matchedFields[i],
                     entryFields[j],
                     currentPage,
@@ -1728,14 +1742,14 @@ export class FormFilling {
                         " (id: " +
                         formField.locators[0].id +
                         ") is " +
-                        fmscore
+                        fmScore
                 );
-                if (fmscore > mostRelevantScore) {
-                    mostRelevantScore = fmscore;
+                if (fmScore > mostRelevantScore) {
+                    mostRelevantScore = fmScore;
                 }
-                const fmscoreForRatio = fmscore - (visibleFieldMap[i] ? 35 : 0);
+                const fmScoreForRatio = fmScore - (visibleFieldMap[i] ? 35 : 0);
                 if (
-                    fmscoreForRatio >= minFieldRelevance &&
+                    fmScoreForRatio >= minFieldRelevance &&
                     entryFields[j].value &&
                     !fieldMatchSuccesses[i]
                 ) {
@@ -1743,9 +1757,9 @@ export class FormFilling {
                 }
                 if (
                     matchedFields[i].highestScore == null ||
-                    fmscore > matchedFields[i].highestScore
+                    fmScore > matchedFields[i].highestScore
                 ) {
-                    matchedFields[i].highestScore = fmscore;
+                    matchedFields[i].highestScore = fmScore;
                 }
             }
             totalRelevanceScore += mostRelevantScore;

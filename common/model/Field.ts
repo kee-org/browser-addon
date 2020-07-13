@@ -124,7 +124,8 @@ export class Field {
                     name: element.name,
                     id: element.id,
                     type: domType,
-                    labels
+                    labels,
+                    autocompleteValues: collectAutocompleteValues(element)
                 })
             ],
             value,
@@ -239,4 +240,15 @@ function collectLabels(element: HTMLInputElement | HTMLSelectElement) {
         if (labelElement && labelElement.innerText) labels.push(labelElement.innerText);
     });
     return labels.length ? labels : undefined;
+}
+
+function collectAutocompleteValues(element: HTMLInputElement | HTMLSelectElement) {
+    const values: string[] = [];
+    element.autocomplete
+        ?.trim()
+        .split(" ")
+        .forEach(v => {
+            if (v) values.push(v);
+        });
+    return values.length ? values : undefined;
 }
