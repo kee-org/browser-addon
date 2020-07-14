@@ -195,6 +195,11 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
 
         window.kee.persistentTabStates.get(this.sender.tab.id).items.push(persistentItem);
 
+        // Don't alert the user if it's less than 90 seconds since they initiated an
+        // update request - highly likely that this is just the result of that
+        // operation being submitted to the website.
+        if (store.state.entryUpdateStartedAtTimestamp >= Date.now() - 90000) return;
+
         if (configManager.current.notificationCountSavePassword < 10) {
             browser.notifications.create({
                 type: "basic",
