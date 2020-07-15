@@ -179,10 +179,6 @@
         "message": "NB: altere a configuração no KeePass.config ou então Kee nem sempre poderá se comunicar com o KeePass",
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
-    "pref_listAllOpenDBs_label": {
-        "message": "Listar logins de todos os bancos de dados Kee Vaults e KeePass abertos",
-        "description": ""
-    },
     "pref_logLevel_desc": {
         "message": "Escolha o quão detalhado deseja ser o log. Cada nível maior de log produz mais saídas.",
         "description": ""
@@ -207,10 +203,6 @@
         "message": "Perguntar se quero salvar senhas",
         "description": ""
     },
-    "pref_notifyWhenEntryUpdated_label": {
-        "message": "Exibir notificação de \"Senha atualizada com sucesso\"",
-        "description": "Option to enable or disable the information displayed when a password has been updated"
-    },
     "pref_animateWhenOfferingSave_label": {
         "message": "Animar o ícone do Kee ao se oferecer para salvar",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
@@ -219,9 +211,9 @@
         "message": "Lembre-se do banco de dados Kee Vault ou KeePass usado mais recentemente",
         "description": ""
     },
-    "pref_rememberMRUGroup_label": {
-        "message": "Lembrar-se do grupo mais recente em que você salvou",
-        "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
+    "pref_preferToSkipWhere_label": {
+        "message": "Salve automaticamente novas entradas para o grupo que você mais recentemente salvou",
+        "description": "Whether Kee will save new entries to the group most recently chosen by the user without presenting them with the usual Where group chooser interface"
     },
     "pref_saveFavicons_label": {
         "message": "Salvar logotipo do site/ícone (favicon)",
@@ -628,8 +620,8 @@
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "notification_save_password_tip": {
-        "message": "Clique no botão Kee (na barra de ferramentas) e em \"Salvar o último login\"",
-        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+        "message": "Abrir Kee (Clique no ícone do Kee na barra de ferramentas) e então clique no botão +",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password"
     },
     "loading": {
         "message": "Carregando...",
@@ -774,6 +766,34 @@
     "generator_action_apply_and_copy": {
         "message": "Aplicar e copiar",
         "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
+    },
+    "skip_where_reason_domain_entry_exists": {
+        "message": "Você está vendo esta pergunta porque uma entrada para este domínio já existe",
+        "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
+    },
+    "skip_where_reason_group_not_found": {
+        "message": "Você está vendo esta pergunta porque o grupo que você mais recentemente salvou não pode ser encontrado. Isso pode ser porque foi excluído ou escondido de Kee. Ou pode ser simplesmente que a fonte de senha necessária não esteja desbloqueada.",
+        "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
+    },
+    "skip_where_enable_context": {
+        "message": "Sempre salve novas entradas aqui",
+        "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
+    },
+    "list_version_upgrade_3_5": {
+        "message": "Melhor experiência, salvamento de senhas e de geração; Aparência visual mais moderna (parcialmente completa); Modo Escuro, correspondendo à preferência do sistema; Identificação melhorada do campo principal de nome de usuário e botões de envio; As correspondências da Network Auth são classificados, trazendo resultados Reais para o topo",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
+    },
+    "release_details_for_keepass_available_on_forum": {
+        "message": "Mais detalhes, incluindo informações importantes para usuários do KeePass, podem ser encontrados no anúncio de lançamento no fórum da comunidade:",
+        "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
+    },
+    "beta_testing_is_good": {
+        "message": "Os testadores beta kee têm desfrutado de algumas dessas melhorias por muitos meses.",
+        "description": "Brief highlight of one of the benefits of being a Kee beta tester"
+    },
+    "join_the_community_cta": {
+        "message": "Junte-se a eles agora!",
+        "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Entrar no gerenciador de senhas / Selecionar login correspondente / Mostrar lista de logins correspondentes",

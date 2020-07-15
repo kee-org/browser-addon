@@ -4,7 +4,7 @@
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
-        "message": "Додаток для браузера, що дозволяє безпечно й автоматично входити на більшість веб-сайтів. Раніше відомий, як KeeFox.",
+        "message": "Додаток для браузера, що дозволяє безпечно й автоматично входити на більшість вебсайтів. Раніше відомий, як KeeFox.",
         "description": "A brief description of Kee that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
     },
     "conn_invalid_message": {
@@ -56,7 +56,7 @@
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "conn_setup_server_features_missing": {
-        "message": "Необхідно оновити ваш менеджер паролів для зв'язку з Kee. Перезавантажте веб-сайт Kee Vault та/або переконайтеся, що ви використовуєте найновішу версію плагіна KeePassRPC, скориставшись простою інструкцією $1",
+        "message": "Необхідно оновити ваш менеджер паролів для зв'язку з Kee. Перезавантажте вебсайт Kee Vault та/або переконайтеся, що ви користуєтеся найновішою версією плагіна KeePassRPC, скориставшись простою інструкцією $1",
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "conn_sl_high_label": {
@@ -179,10 +179,6 @@
         "message": "Зверніть увагу: зміна налаштувань KeePass.config або Kee може порушити зв'язок з KeePass",
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
-    "pref_listAllOpenDBs_label": {
-        "message": "Показувати записи з усіх відкритих баз даних Kee Vault і KeePass",
-        "description": ""
-    },
     "pref_logLevel_desc": {
         "message": "Налаштуйте деталізацію журналу. Кожен вищий рівень журналу містить більше подробиць.",
         "description": ""
@@ -207,10 +203,6 @@
         "message": "Пропонувати зберігати паролі",
         "description": ""
     },
-    "pref_notifyWhenEntryUpdated_label": {
-        "message": "Показувати сповіщення \"Пароль успішно оновлено\"",
-        "description": "Option to enable or disable the information displayed when a password has been updated"
-    },
     "pref_animateWhenOfferingSave_label": {
         "message": "Анімація піктограми Kee при пропозиції збереження",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
@@ -219,12 +211,12 @@
         "message": "Пам'ятати останню використану базу даних Kee Vault або KeePass",
         "description": ""
     },
-    "pref_rememberMRUGroup_label": {
-        "message": "Пам'ятати групу, в яку ви востаннє зберігали дані",
-        "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
+    "pref_preferToSkipWhere_label": {
+        "message": "Автоматично зберігати нові записи в групу, де ви найчастіше зберігаєте",
+        "description": "Whether Kee will save new entries to the group most recently chosen by the user without presenting them with the usual Where group chooser interface"
     },
     "pref_saveFavicons_label": {
-        "message": "Зберігати піктограму веб-сайту (favicon)",
+        "message": "Зберігати піктограму вебсайту (favicon)",
         "description": "Whether or not Kee will save the website's icon when a new entry is saved"
     },
     "pref_searchAllOpenDBs_label": {
@@ -344,19 +336,19 @@
         "description": "label for a group of radio buttons that allows the user to change the scope of the settings they are changing - e.g. all websites or just one specific website"
     },
     "all_websites": {
-        "message": "Всі веб-сайти",
+        "message": "Усі вебсайти",
         "description": ""
     },
     "a_specific_website": {
-        "message": "Певний веб-сайт",
+        "message": "Певний вебсайт",
         "description": ""
     },
     "current_website": {
-        "message": "Поточний веб-сайт",
+        "message": "Поточний вебсайт",
         "description": ""
     },
     "website": {
-        "message": "Веб-сайт",
+        "message": "Вебсайт",
         "description": ""
     },
     "website_options_search_placeholder": {
@@ -456,7 +448,7 @@
         "description": "Action button for user to delete an item within a collection. E.g. delete an entry within the list of site-specific settings overrides"
     },
     "site_specific_settings_checkbox_explanation": {
-        "message": "Налаштування з \"Всі веб-сайти\" застосовуються до всіх розділів внизу, якщо ви не увімкнете налаштування за допомогою прапорця навпроти нього.",
+        "message": "Налаштування з \"Усі вебсайти\" застосовуються до всіх розділів внизу, якщо ви не увімкнете налаштування за допомогою прапорця навпроти нього.",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
     "site_properties": {
@@ -492,7 +484,7 @@
         "description": "No"
     },
     "site_specific_settings_inherit": {
-        "message": "Використовувати таке саме налаштування, як і для всіх веб-сайтів",
+        "message": "Використовувати таке саме налаштування, як і для всіх вебсайтів",
         "description": "Option for user to say that they want to use whatever the setting is for the top-level settings for all websites, rather than overriding it with a setting for this specific site."
     },
     "password": {
@@ -528,7 +520,7 @@
         "description": "Instructions for popup dialog displayed when a proxy requires authentication."
     },
     "network_auth_http_auth_description": {
-        "message": "Веб-сайт вимагає про авторизацію для доступу до $1. Повідомлення сайту: $2",
+        "message": "Вебсайт вимагає пройти автентифікацію для доступу до $1. Повідомлення сайту: $2",
         "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
     },
     "network_auth_choose": {
@@ -628,8 +620,8 @@
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "notification_save_password_tip": {
-        "message": "Натисніть на піктограму Kee у вашій панелі, після чого оберіть \"Зберегти останній вхід\"",
-        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+        "message": "Відкрийте Kee (піктограма Kee в панелі інструментів), а потім клацніть кнопку +",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password"
     },
     "loading": {
         "message": "Завантаження...",
@@ -774,6 +766,34 @@
     "generator_action_apply_and_copy": {
         "message": "Застосувати й копіювати",
         "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
+    },
+    "skip_where_reason_domain_entry_exists": {
+        "message": "Ви бачите це питання, тому що запис для цього домену вже існує",
+        "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
+    },
+    "skip_where_reason_group_not_found": {
+        "message": "Ви бачите це питання, тому що групи, де ви найчастіше зберігаєте записи, не знайдено. Можливо, це тому що її було видалено чи приховано від Kee. Або ж цільове джерело просто не розблоковане.",
+        "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
+    },
+    "skip_where_enable_context": {
+        "message": "Завжди зберігати нові записи тут",
+        "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
+    },
+    "list_version_upgrade_3_5": {
+        "message": "Вдосконалене збереження та генерування паролів;Сучасніший зовнішній вигляд (частково завершено);Темний режим, що відповідає системним налаштуванням;Вдосконалено ідентифікацію полів імені користувача й пароля;Впорядковано збіги для мережевої автентифікації, надаючи перевагу збігам Realm",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
+    },
+    "release_details_for_keepass_available_on_forum": {
+        "message": "Докладніші відомості, включаючи важливу інформацію для користувачів KeePass, можна знайти в оголошенні про випуск на форумі спільноти:",
+        "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
+    },
+    "beta_testing_is_good": {
+        "message": "Бета-тестери Kee вже відчули переваги деяких поліпшень протягом кількох місяців.",
+        "description": "Brief highlight of one of the benefits of being a Kee beta tester"
+    },
+    "join_the_community_cta": {
+        "message": "Приєднуйтеся до них!",
+        "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Увійти в менеджер паролів / Обрати відповідний запис / Показати список відповідних логінів",

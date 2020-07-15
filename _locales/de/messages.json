@@ -8,11 +8,11 @@
         "description": "A brief description of Kee that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
     },
     "conn_invalid_message": {
-        "message": "Kee sendete einen ungültigen Befehl zu Ihrer Passwort-Datenbank.",
+        "message": "Kee sendete einen ungültigen Befehl zu Ihrer Passwortdatenbank.",
         "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
     },
     "conn_setup_client_sl_low": {
-        "message": "Kee bat um ein Sicherheitsniveau, dass für die Akzeptierung durch den Passwort-Server zu niedrig war. Sie müssen zur Verwendung eines höheren Sicherheitsniveaus den Authentifizierungsprozess neu starten.",
+        "message": "Kee bat um ein Sicherheitsniveau, dass für die Akzeptierung durch den Passwortserver zu niedrig war. Sie müssen zur Verwendung eines höheren Sicherheitsniveaus den Authentifizierungsprozess neu starten.",
         "description": ""
     },
     "conn_setup_enter_password_title": {
@@ -48,7 +48,7 @@
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
     },
     "conn_setup_server_sl_low": {
-        "message": "Kee hat die Verbindung zum Passwort-Server aufgrund eines zu niedrigen Sicherheitsniveaus abgelehnt. Sie müssen zur Verwendung eines höheren Sicherheitsniveaus den Authentifizierungsprozess neu starten.",
+        "message": "Kee hat die Verbindung zum Passwortserver aufgrund eines zu niedrigen Sicherheitsniveaus abgelehnt. Sie müssen zur Verwendung eines höheren Sicherheitsniveaus den Authentifizierungsprozess neu starten.",
         "description": ""
     },
     "conn_setup_client_features_missing": {
@@ -92,7 +92,7 @@
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_unknown_error": {
-        "message": "Ein unerwarteter Fehler ist beim Verbindungsversuch mit Ihrer Passwort-Datenbank aufgetreten.",
+        "message": "Ein unerwarteter Fehler ist beim Verbindungsversuch mit Ihrer Passwortdatenbank aufgetreten.",
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "conn_unknown_protocol": {
@@ -179,10 +179,6 @@
         "message": "Hinweis: Ändern Sie diese Einstellung auch in der Datei KeePass.config.xml, sonst wird Kee nicht immer mit KeePass kommunizieren können.",
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
-    "pref_listAllOpenDBs_label": {
-        "message": "Log-in-Daten aller geöffneten Kee Vault- und KeePass-Datenbanken auflisten",
-        "description": ""
-    },
     "pref_logLevel_desc": {
         "message": "Wählen Sie, wie ausführlich das Log sein soll. Ein höherer Level produziert mehr Ausgaben.",
         "description": ""
@@ -207,10 +203,6 @@
         "message": "Passwortspeicherung anbieten",
         "description": ""
     },
-    "pref_notifyWhenEntryUpdated_label": {
-        "message": "Benachrichtigung \"Passwort erfolgreich aktualisiert\" anzeigen",
-        "description": "Option to enable or disable the information displayed when a password has been updated"
-    },
     "pref_animateWhenOfferingSave_label": {
         "message": "Bei Speichermöglichkeit eines Eintrags das Kee-Icon animieren",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
@@ -219,9 +211,9 @@
         "message": "Zuletzt verwendete Kee Vault- oder KeePass-Datenbanken speichern",
         "description": ""
     },
-    "pref_rememberMRUGroup_label": {
-        "message": "Die beim Speichern am häufigsten verwendete Gruppe merken",
-        "description": "Whether Kee will remember the name of the KeePass group most recently chosen by the user"
+    "pref_preferToSkipWhere_label": {
+        "message": "Neue Einträge automatisch in der Gruppe speichern, die zuletzt verwendet wurde",
+        "description": "Whether Kee will save new entries to the group most recently chosen by the user without presenting them with the usual Where group chooser interface"
     },
     "pref_saveFavicons_label": {
         "message": "Webseiten-Symbol (Favicon) speichern",
@@ -304,7 +296,7 @@
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
-        "message": "Optional können Sie unten ein anderes Passwort-Profil erstellen. Kee Vault oder KeePass zum Speichern neuer Profile verwenden.",
+        "message": "Optional können Sie unten ein anderes Passwortprofil erstellen. Kee Vault oder KeePass zum Speichern neuer Profile verwenden.",
         "description": ""
     },
     "copy_password_label": {
@@ -392,7 +384,7 @@
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
     "multiplePasswordSourcesEnabled": {
-        "message": "$1 Passwort-Quellen aktiviert",
+        "message": "$1 Passwortquellen aktiviert",
         "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
@@ -408,7 +400,7 @@
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
-        "message": "Sie sind nicht an Ihrer Passwort-Datenbank angemeldet.",
+        "message": "Sie sind nicht an Ihrer Passwortdatenbank angemeldet.",
         "description": ""
     },
     "notifyBarLaunchKeePassButton_tip": {
@@ -456,7 +448,7 @@
         "description": "Action button for user to delete an item within a collection. E.g. delete an entry within the list of site-specific settings overrides"
     },
     "site_specific_settings_checkbox_explanation": {
-        "message": "Einstellungen von \"Alle Webseiten\" gelten für jeden unteren Abschnitt, außer Sie aktivieren die Einstellung mit dem Kontrollkästchen daneben.",
+        "message": "Einstellungen von \"Alle Webseiten\" gelten für jeden Abschnitt unten, es sei denn, Sie aktivieren die Einstellung mit dem Kontrollkästchen daneben.",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
     "site_properties": {
@@ -628,8 +620,8 @@
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "notification_save_password_tip": {
-        "message": "Klicken Sie auf die Kee-Schaltfläche (in Ihrer Symbolleiste) und anschließend auf \"Letzte Log-in-Daten speichern\"",
-        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password (especially important for those upgrading from KeeFox since the behaviour has changed)"
+        "message": "Kee öffnen (auf die Kee-Symbol Schaltfläche in Ihrer Symbolleiste klicken) und anschließend auf die +-Schaltfläche",
+        "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password"
     },
     "loading": {
         "message": "Laden...",
@@ -656,7 +648,7 @@
         "description": "Heading for text that explains we have a new icon / branding"
     },
     "kee_vault_announcement_1": {
-        "message": "Kee Vault ist ein neuer Open Source-Passwortmanager. Er wird in Ihrem Webbrowser ausgeführt, sodass keine Installation erforderlich ist.",
+        "message": "Kee Vault ist ein neuer Open-Source-Passwortmanager. Er wird in Ihrem Webbrowser ausgeführt, sodass keine Installation erforderlich ist.",
         "description": "Introduction to what Kee Vault is"
     },
     "kee_vault_announcement_2": {
@@ -716,11 +708,11 @@
         "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
     },
     "password_profile_hint": {
-        "message": "Wählen Sie aus, welchen Regeln das neue Passwort folgen soll. Zu den Regeln gehören die Kennwortlänge und die Art der Zeichen, die verwendet werden können. Erstellen Sie neue Profile in Ihrem Passwort-Manager.",
+        "message": "Wählen Sie aus, welchen Regeln das neue Passwort folgen soll. Zu den Regeln gehören die Passwortlänge und die Art der Zeichen, die verwendet werden können. Erstellen Sie neue Profile in Ihrem Passwortmanager.",
         "description": "Explains what a password profile is and how to create new ones."
     },
     "password_profile": {
-        "message": "Passwort-Profil",
+        "message": "Passwortprofil",
         "description": "Name of the profiles used by KeePass and Kee Vault to construct new random passwords."
     },
     "url_mismatch_1": {
@@ -732,11 +724,11 @@
         "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_3": {
-        "message": "Stellen Sie sicher, dass dies kein Versuch ist, Sie dazu zu bringen, Ihr Passwort preiszugeben!",
+        "message": "Stellen Sie sicher, dass dies kein Versuch ist, Sie zur Preisgabe Ihres Passworts zu bringen!",
         "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_confirm": {
-        "message": "Ich verstehe das Risiko; Diese Anmeldeinformationen mit $1 teilen.",
+        "message": "Ich verstehe das Risiko. Diese Anmeldeinformationen mit $1 teilen.",
         "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
     },
     "make_additional_changes_using_full_editor": {
@@ -774,6 +766,34 @@
     "generator_action_apply_and_copy": {
         "message": "Weiter und kopieren",
         "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
+    },
+    "skip_where_reason_domain_entry_exists": {
+        "message": "Diese Frage wird angezeigt, weil bereits ein Eintrag für diese Domain vorhanden ist",
+        "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
+    },
+    "skip_where_reason_group_not_found": {
+        "message": "Diese Frage wird angezeigt, weil die Gruppe, in der Sie zuletzt gespeichert haben, nicht gefunden werden kann. Das kann daran liegen, dass diese gelöscht oder vor Kee versteckt wurde. Oder es könnte einfach sein, dass die erforderliche Passwortquelle nicht entsperrt ist.",
+        "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
+    },
+    "skip_where_enable_context": {
+        "message": "Neue Einträge immer hier speichern",
+        "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
+    },
+    "list_version_upgrade_3_5": {
+        "message": "Verbessertes Speichern und Generieren von Passwörtern, Moderneres visuelles Erscheinungsbild (teilweise vollständig), Dunkler Modus, der Ihren Systemeinstellungen entspricht, Verbesserte Identifizierung des primären Benutzernamenfelds und der Schaltflächen zum Senden, Netzwerkauthentifizierungs-Übereinstimmungen werden sortiert, sodass Realm-Übereinstimmungen ganz oben stehen",
+        "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
+    },
+    "release_details_for_keepass_available_on_forum": {
+        "message": "Weitere Details, einschließlich wichtiger Informationen für KeePass-Benutzer, finden Sie in der Release-Ankündigung im Community-Forum:\n ",
+        "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
+    },
+    "beta_testing_is_good": {
+        "message": "Kee Beta-Tester genießen bereits seit vielen Monaten einige dieser Verbesserungen.",
+        "description": "Brief highlight of one of the benefits of being a Kee beta tester"
+    },
+    "join_the_community_cta": {
+        "message": "Machen Sie jetzt mit!",
+        "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "In KeePass anmelden / Passende Anmeldungen auswählen / Liste der passenden Anmeldungen anzeigen",
