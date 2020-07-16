@@ -196,7 +196,7 @@ export class Field {
             case "select-one":
                 fft = FormFieldTypeDTO.select;
                 break;
-            case "text":
+            default:
                 fft = isUsername ? FormFieldTypeDTO.username : FormFieldTypeDTO.text;
                 break;
         }
