@@ -136,11 +136,11 @@
         "description": "Button action to authorise the connection between Kee and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
     },
     "pref_DoNothing_desc": {
-        "message": "fare nessuna azione",
+        "message": "fare nulla",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
     },
     "pref_FillAndSubmitForm_desc": {
-        "message": "riempire il campo ed inviare",
+        "message": "riempire il campo e inviare",
         "description": ""
     },
     "pref_FillForm_desc": {
@@ -212,7 +212,7 @@
         "description": ""
     },
     "pref_preferToSkipWhere_label": {
-        "message": "Automatically save new entries to the group you most recently saved to",
+        "message": "Salva automaticamente le nuove voci nell'ultimo gruppo salvato",
         "description": "Whether Kee will save new entries to the group most recently chosen by the user without presenting them with the usual Where group chooser interface"
     },
     "pref_saveFavicons_label": {
@@ -312,19 +312,19 @@
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
     "copy_value_to_clipboard": {
-        "message": "Copy value to clipboard",
+        "message": "Copia valore negli appunti",
         "description": "Indicates to the user that when they click here the value for that field will be copied to the clipboard."
     },
     "click_to_reveal_hide": {
-        "message": "Click to reveal/hide",
+        "message": "Clicca per mostrare/nascondere",
         "description": "Indicates to the user that when they click here the value of the protected field will be displayed or hidden (toggled)."
     },
     "no_name": {
-        "message": "no name",
+        "message": "nessun nome",
         "description": "Used in place of a field name when the specific field has no name. Will be surrounded by [ square brackets ]"
     },
     "matches_from_other_sites": {
-        "message": "Matches from other sites",
+        "message": "Corrispondenze da altri siti web",
         "description": "Search results section header."
     },
     "create_new_entry": {
@@ -384,7 +384,7 @@
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
     "multiplePasswordSourcesEnabled": {
-        "message": "$1 password sources enabled",
+        "message": "$1 fonti di password abilitate ",
         "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
@@ -620,7 +620,7 @@
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "notification_save_password_tip": {
-        "message": "Open Kee (click the Kee icon button in your toolbar) and then click the + button",
+        "message": "Apri Kee (clicca sull'icona di Kee nella barra degli strumenti) e clicca sul pulsante +",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password"
     },
     "loading": {
@@ -676,123 +676,123 @@
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "next": {
-        "message": "Next",
+        "message": "Avanti",
         "description": "Action button for user to advance to the next step in a multi-step process. E.g. to confirm username and password for a new entry and load the panel that allows selection of where to save the new entry."
     },
     "title": {
-        "message": "Title",
+        "message": "Titolo",
         "description": "E.g. the title of an entry."
     },
     "username": {
-        "message": "Username",
+        "message": "Nome utente",
         "description": "Use the most generic and common term available for the primary sign-in identifier for an account. In practice may be an email address, number, surname, username, etc. but in all cases this will refer to the string the user has stored in the entry's primary Username field."
     },
     "enabled": {
-        "message": "Enabled",
+        "message": "Abilitato",
         "description": "Indicates that a boolean option such as a checkbox is in an enabled/on/true state"
     },
     "disabled": {
-        "message": "Disabled",
+        "message": "Disabilitato",
         "description": "Indicates that a boolean option such as a checkbox is in an disabled/off/false state"
     },
     "unsaved_changes": {
-        "message": "You have recent unsaved changes.",
+        "message": "Hai modifiche recenti non salvate",
         "description": "Shown to user when the popup is opened and a new or existing entry is part-way through being edited from a recent popup session. Note that very recent popup sessions are automatically 'continued' without the user needing to consider this information."
     },
     "continue_saving": {
-        "message": "Continue saving",
+        "message": "Continua salvando",
         "description": "Action for user to continue editing the same entry that was being edited when the popup recently closed."
     },
     "discard_changes": {
-        "message": "Discard changes",
+        "message": "Annulla modifiche",
         "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
     },
     "password_profile_hint": {
-        "message": "Select which set of rules the new password will follow. Rules include password length and the sort of characters that may be used. Create new profiles in your password manager.",
+        "message": "Scegli quali regole seguiranno le nuove password. Queste regole includono la lunghezza della password e il tipo di caratteri. Crea un nuovo profilo nel tuo password manager.",
         "description": "Explains what a password profile is and how to create new ones."
     },
     "password_profile": {
-        "message": "Password profile",
+        "message": "Profili di password",
         "description": "Name of the profiles used by KeePass and Kee Vault to construct new random passwords."
     },
     "url_mismatch_1": {
-        "message": "This entry is for a different site.",
+        "message": "Questa voce è per un altro sito.",
         "description": "1st sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_2": {
-        "message": "Continuing with this update will enable you to fill these credentials into this site too.",
+        "message": "Proseguendo con questa modifica abiliterai l'inserimento di queste credenziali anche in questo sito.",
         "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_3": {
-        "message": "Make sure this is not an attempt to trick you into revealing your password!",
+        "message": "Assicurati che questo non sia un tentativo per imbrogliarti a rivelare la tua password!",
         "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_confirm": {
-        "message": "I understand the risk; Share these credentials with $1.",
+        "message": "Comprendo i rischi; Condividi queste credenziali con $1.",
         "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
     },
     "make_additional_changes_using_full_editor": {
-        "message": "Additional changes can be made using the full editor.",
+        "message": "Ulteriori modifiche possono essere fatte con l'editor completo.",
         "description": "Note to user that the Kee interface does not allow every possible type of edit to an entry."
     },
     "open_full_editor": {
-        "message": "Open advanced editor",
+        "message": "Apri editor avanzato",
         "description": "Button action to open the full entry editor in KeePass or Kee Vault. Be sure to imply that the need to click the button is 'unusual', as I have done with the word 'advanced'"
     },
     "where": {
-        "message": "Where?",
+        "message": "Dove?",
         "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
     },
     "will_be_copied_to_clipboard": {
-        "message": "This new password will be copied to your clipboard",
+        "message": "Questa nuova password sarà copiata negli appunti.",
         "description": ""
     },
     "password_will_be_set_on_field": {
-        "message": "Your password field will be set to this password",
+        "message": "Il campo password sarà configurato con questa password",
         "description": ""
     },
     "also_copy_to_clipboard": {
-        "message": "Also copy to clipboard",
+        "message": "Copia anche negli appunti",
         "description": "Explains that enabling this option will copy the value to the clipboard in addition to the default behaviour"
     },
     "generator_action_copy": {
-        "message": "Copy",
+        "message": "Copia",
         "description": "Action button to copy to the clipboard a value such as a newly generated password"
     },
     "generator_action_apply": {
-        "message": "Apply",
+        "message": "Applica",
         "description": "Action button to apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "generator_action_apply_and_copy": {
-        "message": "Apply and copy",
+        "message": "Applica e copia",
         "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "skip_where_reason_domain_entry_exists": {
-        "message": "You're seeing this question because an entry for this domain already exists",
+        "message": "Stai vedendo questa domanda perché esiste già una voce per questo dominio",
         "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
     },
     "skip_where_reason_group_not_found": {
-        "message": "You're seeing this question because the group you most recently saved to can not be found. This may be because it has been deleted or hidden from Kee. Or it could simply be that the required password source is not unlocked.",
+        "message": "Stai vedendo questa domanda perchè il gruppo dove hai salvato di recente non può essere trovato. Potrebbe essere stato eliminato o nascosto da Kee. Oppure la sorgente di password potrebbe non essere sbloccata.",
         "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
     },
     "skip_where_enable_context": {
-        "message": "Always save new entries here",
+        "message": "Salva qui le nuove voci",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
     "list_version_upgrade_3_5": {
-        "message": "Improved password saving and generating experience;More modern visual appearance (partially complete);Dark mode, matching your system preference;Improved identification of the primary username field and submit buttons;Network Auth matches are sorted, bringing Realm matches to the top",
+        "message": "Migliorata l'esperienza di salvataggio e generazione di password; Stile grafico più moderno (parzialmente completato);Modalità scura, che rispetta l'impostazione di sistema; Migliorata l'identificazione del campo principale del nome utente e dei pulsanti di invio;I risultati dell'autenticazione di rete ora sono in ordine, con i Realm in alto",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
-        "message": "More details, including important information for KeePass users can be found in the release announcement on the community forum:",
+        "message": "Altri dettagli, incluse importanti informazioni per gli utenti di KeePass possono essere trovate in questo annuncio nel forum della comunità:",
         "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
     },
     "beta_testing_is_good": {
-        "message": "Kee beta testers have been enjoying some of these improvements for many months already.",
+        "message": "I beta tester di Kee hanno usato alcuni di questi miglioramenti già da molti mesi.",
         "description": "Brief highlight of one of the benefits of being a Kee beta tester"
     },
     "join_the_community_cta": {
-        "message": "Join them now!",
+        "message": "Fanne parte anche tu!",
         "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
     },
     "KB_shortcut_simple_2_desc": {
