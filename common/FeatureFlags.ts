@@ -21,6 +21,9 @@ export class FeatureFlags {
         "KPRPC_FEATURE_VERSION_1_6",
 
         // Allow clients without the name KeeFox to connect
-        "KPRPC_GENERAL_CLIENTS"
+        "KPRPC_GENERAL_CLIENTS",
+
+        // Require the security fix released on 29th July 2020
+        "KPRPC_SECURITY_FIX_20200729"
     ];
 }
