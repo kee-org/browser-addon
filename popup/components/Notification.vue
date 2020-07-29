@@ -1,13 +1,17 @@
 <template>
     <v-card color="yellow lighten-3">
         <div style="float: right;">
-            <v-btn text class="ml-4 mr-2 px-2" @click="closeNotification(notification.id)">
+            <v-btn
+                text
+                class="ml-4 mr-2 px-2 primary--text"
+                @click="closeNotification(notification.id)"
+            >
                 {{ $i18n("close") }}
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </div>
 
-        <v-card-text>
+        <v-card-text class="primary--text">
             <p v-for="(msg, index) of notification.messages" :key="index">
                 {{ msg }}
             </p>
