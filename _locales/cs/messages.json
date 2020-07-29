@@ -708,7 +708,7 @@
         "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
     },
     "password_profile_hint": {
-        "message": "Select which set of rules the new password will follow. Rules include password length and the sort of characters that may be used. Create new profiles in your password manager.",
+        "message": "Zvolte jakou sadu pravidel má nové heslo obsahovat. Pravidla zahrnují délku hesla a druh znaků, které mají být použity. Vytvořte si nové profily ve vašem správci hesel.",
         "description": "Explains what a password profile is and how to create new ones."
     },
     "password_profile": {
@@ -724,11 +724,11 @@
         "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_3": {
-        "message": "Make sure this is not an attempt to trick you into revealing your password!",
+        "message": "Vždy se ujistěte, že se nejedná o pokus, jak z vás vylákat vaše heslo!",
         "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_confirm": {
-        "message": "I understand the risk; Share these credentials with $1.",
+        "message": "Rozumím tomuto riziku; Chci sdílet tyto přihlašovací údaje s $1.",
         "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
     },
     "make_additional_changes_using_full_editor": {
@@ -788,7 +788,7 @@
         "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
     },
     "beta_testing_is_good": {
-        "message": "Kee beta testers have been enjoying some of these improvements for many months already.",
+        "message": "Beta testeři Kee si užívali některá tato vylepšení již několik měsíců.",
         "description": "Brief highlight of one of the benefits of being a Kee beta tester"
     },
     "join_the_community_cta": {

@@ -620,7 +620,7 @@
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "notification_save_password_tip": {
-        "message": "Kee öffnen (auf die Kee-Symbol Schaltfläche in Ihrer Symbolleiste klicken) und anschließend auf die +-Schaltfläche",
+        "message": "Kee öffnen (auf die Kee-Schaltfläche in Ihrer Symbolleiste klicken) und anschließend auf die Schaltfläche + klicken",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password"
     },
     "loading": {
@@ -684,7 +684,7 @@
         "description": "E.g. the title of an entry."
     },
     "username": {
-        "message": "Nutzername",
+        "message": "Benutzername",
         "description": "Use the most generic and common term available for the primary sign-in identifier for an account. In practice may be an email address, number, surname, username, etc. but in all cases this will refer to the string the user has stored in the entry's primary Username field."
     },
     "enabled": {
@@ -748,7 +748,7 @@
         "description": ""
     },
     "password_will_be_set_on_field": {
-        "message": "Ihr Passwortfeld wird auf dieses Passwort gesetzt",
+        "message": "Ihr Passwortfeld wird auf dieses Passwort gesetzt.",
         "description": ""
     },
     "also_copy_to_clipboard": {
@@ -780,7 +780,7 @@
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
     "list_version_upgrade_3_5": {
-        "message": "Verbessertes Speichern und Generieren von Passwörtern, Moderneres visuelles Erscheinungsbild (teilweise vollständig), Dunkler Modus, der Ihren Systemeinstellungen entspricht, Verbesserte Identifizierung des primären Benutzernamenfelds und der Schaltflächen zum Senden, Netzwerkauthentifizierungs-Übereinstimmungen werden sortiert, sodass Realm-Übereinstimmungen ganz oben stehen",
+        "message": "Verbessertes Speichern und Generieren von Passwörtern;Moderneres visuelles Erscheinungsbild (teilweise vollständig);Dunkler Modus, der Ihren Systemeinstellungen entspricht;Verbesserte Identifizierung des primären Benutzernamenfelds und der Schaltflächen zum Senden;Netzwerkauthentifizierungs-Übereinstimmungen werden sortiert, sodass Realm-Übereinstimmungen ganz oben stehen",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
@@ -788,7 +788,7 @@
         "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
     },
     "beta_testing_is_good": {
-        "message": "Kee Beta-Tester genießen bereits seit vielen Monaten einige dieser Verbesserungen.",
+        "message": "Kee-Betatester genießen bereits seit vielen Monaten einige dieser Verbesserungen.",
         "description": "Brief highlight of one of the benefits of being a Kee beta tester"
     },
     "join_the_community_cta": {
