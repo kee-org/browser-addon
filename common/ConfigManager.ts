@@ -438,37 +438,33 @@ export class ConfigManager {
     }
 
     public isFormInteresting(form: HTMLFormElement, conf: SiteConfig, otherFields: Field[]) {
-        const blacklisted =
-            ((conf.blackList && conf.blackList.form && conf.blackList.form.ids) || []).indexOf(
-                form.id
-            ) >= 0 ||
-            ((conf.blackList && conf.blackList.form && conf.blackList.form.names) || []).indexOf(
-                form.name
-            ) >= 0 ||
-            ((conf.blackList && conf.blackList.fields && conf.blackList.fields.ids) || []).some(
-                id => otherFields.find(field => id === field.locators[0].id) !== undefined
-            ) ||
-            ((conf.blackList && conf.blackList.fields && conf.blackList.fields.names) || []).some(
-                name => otherFields.find(field => name === field.locators[0].name) !== undefined
-            );
+        const fieldIds = otherFields.map(field => field.locators[0].id);
+        const fieldNames = otherFields.map(field => field.locators[0].name);
+        const excludeFormIds = conf?.blackList?.form?.ids || [];
+        const excludeFormNames = conf?.blackList?.form?.names || [];
+        const excludeFieldIds = conf?.blackList?.fields?.ids || [];
+        const excludeFieldNames = conf?.blackList?.fields?.names || [];
 
-        if (blacklisted) return false;
+        const excluded =
+            excludeFormIds.indexOf(form.id) >= 0 ||
+            excludeFormNames.indexOf(form.name) >= 0 ||
+            excludeFieldIds.some(id => fieldIds.find(i => id === i) !== undefined) ||
+            excludeFieldNames.some(name => fieldNames.find(n => name === n) !== undefined);
 
-        const whitelisted =
-            ((conf.whiteList && conf.whiteList.form && conf.whiteList.form.ids) || []).indexOf(
-                form.id
-            ) >= 0 ||
-            ((conf.whiteList && conf.whiteList.form && conf.whiteList.form.names) || []).indexOf(
-                form.name
-            ) >= 0 ||
-            ((conf.whiteList && conf.whiteList.fields && conf.whiteList.fields.ids) || []).some(
-                id => otherFields.find(field => id === field.locators[0].id) !== undefined
-            ) ||
-            ((conf.whiteList && conf.whiteList.fields && conf.whiteList.fields.names) || []).some(
-                name => otherFields.find(field => name === field.locators[0].name) !== undefined
-            );
+        if (excluded) return false;
 
-        if (whitelisted) return true;
+        const includeFormIds = conf?.whiteList?.form?.ids || [];
+        const includeFormNames = conf?.whiteList?.form?.names || [];
+        const includeFieldIds = conf?.whiteList?.fields?.ids || [];
+        const includeFieldNames = conf?.whiteList?.fields?.names || [];
+
+        const included =
+            includeFormIds.indexOf(form.id) >= 0 ||
+            includeFormNames.indexOf(form.name) >= 0 ||
+            includeFieldIds.some(id => fieldIds.find(i => id === i) !== undefined) ||
+            includeFieldNames.some(name => fieldNames.find(n => name === n) !== undefined);
+
+        if (included) return true;
 
         return null;
     }
