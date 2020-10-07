@@ -19,6 +19,7 @@ defaultSiteConfig.pageRegex["^.*$"] = {
             */
 
         preventSaveNotification: false,
+        listMatchingCaseSensitive: false,
 
         /*
                 Forms will be scanned iff they have a password (type) field

@@ -359,6 +359,12 @@ export class ConfigManager {
             ) {
                 derivedConfig.preventSaveNotification = node.config.preventSaveNotification;
             }
+            if (
+                node.config.listMatchingCaseSensitive !== undefined &&
+                derivedConfig.listMatchingCaseSensitive == null
+            ) {
+                derivedConfig.listMatchingCaseSensitive = node.config.listMatchingCaseSensitive;
+            }
 
             if (node.config.blackList !== undefined) {
                 if (derivedConfig.blackList === undefined) {
@@ -438,16 +444,31 @@ export class ConfigManager {
     }
 
     public isFormInteresting(form: HTMLFormElement, conf: SiteConfig, otherFields: Field[]) {
-        const fieldIds = otherFields.map(field => field.locators[0].id);
-        const fieldNames = otherFields.map(field => field.locators[0].name);
-        const excludeFormIds = conf?.blackList?.form?.ids || [];
-        const excludeFormNames = conf?.blackList?.form?.names || [];
-        const excludeFieldIds = conf?.blackList?.fields?.ids || [];
-        const excludeFieldNames = conf?.blackList?.fields?.names || [];
+        const ic = conf.listMatchingCaseSensitive !== true;
+        const fieldIds = otherFields
+            .map(field => (ic ? field.locators[0]?.id.toLowerCase() : field.locators[0]?.id))
+            .filter(Boolean);
+        const fieldNames = otherFields
+            .map(field => (ic ? field.locators[0]?.name.toLowerCase() : field.locators[0]?.name))
+            .filter(Boolean);
+        const formId = ic ? form.id?.toLowerCase() : form.id;
+        const formName = ic ? form.name?.toLowerCase() : form.name;
+        const excludeFormIds = (conf?.blackList?.form?.ids || [])
+            .map(x => (ic ? x?.toLowerCase() : x))
+            .filter(Boolean);
+        const excludeFormNames = (conf?.blackList?.form?.names || [])
+            .map(x => (ic ? x?.toLowerCase() : x))
+            .filter(Boolean);
+        const excludeFieldIds = (conf?.blackList?.fields?.ids || [])
+            .map(x => (ic ? x?.toLowerCase() : x))
+            .filter(Boolean);
+        const excludeFieldNames = (conf?.blackList?.fields?.names || [])
+            .map(x => (ic ? x?.toLowerCase() : x))
+            .filter(Boolean);
 
         const excluded =
-            excludeFormIds.indexOf(form.id) >= 0 ||
-            excludeFormNames.indexOf(form.name) >= 0 ||
+            excludeFormIds.indexOf(formId) >= 0 ||
+            excludeFormNames.indexOf(formName) >= 0 ||
             excludeFieldIds.some(id => fieldIds.find(i => id === i) !== undefined) ||
             excludeFieldNames.some(name => fieldNames.find(n => name === n) !== undefined);
 
@@ -459,8 +480,8 @@ export class ConfigManager {
         const includeFieldNames = conf?.whiteList?.fields?.names || [];
 
         const included =
-            includeFormIds.indexOf(form.id) >= 0 ||
-            includeFormNames.indexOf(form.name) >= 0 ||
+            includeFormIds.indexOf(formId) >= 0 ||
+            includeFormNames.indexOf(formName) >= 0 ||
             includeFieldIds.some(id => fieldIds.find(i => id === i) !== undefined) ||
             includeFieldNames.some(name => fieldNames.find(n => name === n) !== undefined);
 

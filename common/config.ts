@@ -18,6 +18,7 @@ export class SiteConfig {
     whiteList?: FormMatchConfig;
     blackList?: FormMatchConfig;
     preventSaveNotification?: boolean;
+    listMatchingCaseSensitive?: boolean;
 }
 
 export class SiteConfigNode {

@@ -798,6 +798,14 @@
   "join_the_community_cta": {
     "message": "Join them now!",
     "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
+  },
+  "ignore_case": {
+    "message": "Ignore case",
+    "description": "Enabling this setting will cause a case-insensitive comparison to be made (e.g. when looking for matching names and IDs of forms to fill in)"
+  },
+  "ignore_case_explanation_finding_forms": {
+    "message": "For example, 'search' in any of the include or exclude lists will match with 'search', 'Search' and 'SEARCH'. Unless you have very unusual and complex requirements, it is best to leave this option enabled.",
+    "description": "Describes the ignore case setting when used for configuring the include and exclude lists for finding forms."
   }
 
 }

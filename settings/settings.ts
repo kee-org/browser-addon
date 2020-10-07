@@ -125,6 +125,14 @@ function setupInputListeners() {
     document
         .getElementById("requestPasswordSaveSelect")
         .addEventListener("change", saveOfferToSavePasswords);
+
+    document
+        .getElementById("pref_listMatchingIgnoreCase_label")
+        .addEventListener("change", saveListMatchingIgnoreCase);
+    document
+        .getElementById("listMatchingIgnoreCaseSelect")
+        .addEventListener("change", saveListMatchingIgnoreCase);
+
     document.getElementById("pref_saveFavicons_label").addEventListener("change", saveSaveFavicons);
     document
         .getElementById("pref_rememberMRUGroup_label")
@@ -557,6 +565,8 @@ function setSiteSpecificConfigValues() {
         (document.getElementById(
             "pref_notifyBarRequestPasswordSave_label"
         ) as HTMLInputElement).checked = siteConfig.preventSaveNotification === true ? null : true;
+        (document.getElementById("pref_listMatchingIgnoreCase_label") as HTMLInputElement).checked =
+            siteConfig.listMatchingCaseSensitive === true ? null : true;
     } else {
         const save: string =
             siteConfig.preventSaveNotification === true
@@ -565,6 +575,15 @@ function setSiteSpecificConfigValues() {
                 ? "Yes"
                 : "Inherit";
         (document.getElementById("requestPasswordSaveSelect") as HTMLSelectElement).value = save;
+        const ignoreCase: string =
+            siteConfig.listMatchingCaseSensitive === true
+                ? "No"
+                : siteConfig.listMatchingCaseSensitive === false
+                ? "Yes"
+                : "Inherit";
+        (document.getElementById(
+            "listMatchingIgnoreCaseSelect"
+        ) as HTMLSelectElement).value = ignoreCase;
     }
 
     let enabled: boolean;
@@ -961,6 +980,29 @@ function saveOfferToSavePasswords(e) {
             specificSite.method
         );
         siteConfigLookup[specificSite.value].config.preventSaveNotification = preventSave;
+    }
+    configManager.save();
+}
+
+function saveListMatchingIgnoreCase(e) {
+    e.preventDefault();
+
+    if (siteModeAll) {
+        const ignoreCase = (document.getElementById(
+            "pref_listMatchingIgnoreCase_label"
+        ) as HTMLInputElement).checked;
+        configManager.current.siteConfig.pageRegex[
+            "^.*$"
+        ].config.listMatchingCaseSensitive = !ignoreCase;
+    } else {
+        const value = (document.getElementById("listMatchingIgnoreCaseSelect") as HTMLSelectElement)
+            .value;
+        const caseSensitive = value === "Inherit" ? null : value == "No" ? true : false;
+        const siteConfigLookup = configManager.siteConfigLookupFor(
+            specificSite.target,
+            specificSite.method
+        );
+        siteConfigLookup[specificSite.value].config.listMatchingCaseSensitive = caseSensitive;
     }
     configManager.save();
 }
