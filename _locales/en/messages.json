@@ -4,7 +4,7 @@
     "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
   },
   "black_list": {
-    "message": "Black List",
+    "message": "Exclude List",
     "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
   },
   "conn_display_description": {
@@ -240,7 +240,7 @@
     "description": "Explains that the configuration settings might not be what the casual user expects"
   },
   "site_options_list_explain_desc": {
-    "message": "If a form matches against one of the white lists below Kee will always try to fill it. If a form matches one of the black lists below Kee will never try to fill it. If it matches both lists Kee will not try to fill it.",
+    "message": "If a form matches against one of the include lists below Kee will always try to fill it. If a form matches one of the exclude lists below Kee will never try to fill it. If it matches both lists Kee will not try to fill it.",
     "description": "Explains how Kee chooses which forms to fill in"
   },
   "pref_Finding_forms_heading": {
@@ -260,7 +260,7 @@
     "description": ""
   },
   "white_list": {
-    "message": "White List",
+    "message": "Include List",
     "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
   },
   "Help_Centre_Button_label": {
