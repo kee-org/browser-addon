@@ -546,16 +546,20 @@ export class FormFilling {
             this.matchResult.formRelevanceScores[i] = 0;
 
             this.Logger.debug("about to get form fields");
-            const {
-                actualUsernameIndex: usernameIndex,
-                pwFields: passwordFields,
-                otherFields
-            } = this.formUtils.getFormFields(form, false);
-
-            if (otherFields.length + passwordFields.length > 50) {
-                this.Logger.debug("Lost interest in this form after finding too many fields");
+            let scanResult: {
+                otherFields: MatchedField[];
+                actualUsernameIndex?: number;
+                pwFields?: MatchedField[];
+            };
+            try {
+                scanResult = this.formUtils.getFormFields(form, false, 50);
+            } catch (e) {
+                this.Logger.debug("Lost interest in this form after finding too many fields" + e);
                 continue;
             }
+            const usernameIndex = scanResult.actualUsernameIndex;
+            const passwordFields = scanResult.pwFields;
+            const otherFields = scanResult.otherFields;
 
             // We want to fill in this form if we find a password field but first
             // we check whether any whitelist or blacklist entries must override that behaviour

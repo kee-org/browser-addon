@@ -88,11 +88,20 @@ export class FormSaving {
 
         // Get the appropriate fields from the form.
         const passwordFields: MatchedField[] = [];
-        const {
-            actualUsernameIndex: usernameIndex,
-            pwFields: passwords,
-            otherFields
-        } = this.formUtils.getFormFields(form, true);
+        let scanResult: {
+            otherFields: MatchedField[];
+            actualUsernameIndex?: number;
+            pwFields?: MatchedField[];
+        };
+        try {
+            scanResult = this.formUtils.getFormFields(form, true, 50);
+        } catch (ex) {
+            this.Logger.warn("Lost interest in this form after finding too many fields" + ex);
+            return;
+        }
+        const usernameIndex = scanResult.actualUsernameIndex;
+        const passwords = scanResult.pwFields;
+        const otherFields = scanResult.otherFields;
 
         if (passwords.length > 1) {
             // could be password change form or multi-password login form or sign up form

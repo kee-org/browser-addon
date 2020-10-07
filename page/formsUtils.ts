@@ -106,7 +106,7 @@ export class FormUtils {
      * all arrays are standard javascript arrays
      * usernameField may be null.
      */
-    public getFormFields(form, isSubmission, currentPage?) {
+    public getFormFields(form, isSubmission: boolean, maximumFieldCount: number, currentPage?) {
         const pwFields: MatchedField[] = [];
         const otherFields: MatchedField[] = [];
         const allFields: {
@@ -119,7 +119,12 @@ export class FormUtils {
         let usernameIndex = -1;
 
         // search the DOM for any form fields we might be interested in
-        for (let i = 0; i < form.elements.length; i++) {
+        const totalElements = form.elements.length;
+        const elementLimit = totalElements < 2000 ? totalElements : 2000;
+        for (let i = 0; i < elementLimit; i++) {
+            if (allFields.length > maximumFieldCount) {
+                throw new Error("Too many fields");
+            }
             if (
                 form.elements[i].localName.toLowerCase() == "object" ||
                 form.elements[i].localName.toLowerCase() == "keygen" ||
@@ -211,7 +216,11 @@ export class FormUtils {
         this.Logger.debug("actualUsernameIndex: " + actualUsernameIndex);
         this.Logger.debug("otherFields.length:" + otherFields.length);
 
-        return { actualUsernameIndex, pwFields, otherFields };
+        return {
+            actualUsernameIndex,
+            pwFields,
+            otherFields
+        };
     }
 
     // A basic, slightly flawed but fast visibility test

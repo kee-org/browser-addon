@@ -215,9 +215,11 @@ export class Field {
 // Might be other element types but main thing is they have the labels property
 function collectLabels(element: HTMLInputElement | HTMLSelectElement) {
     const labels: string[] = [];
-    element.labels?.forEach(label => {
-        if (label && label.innerText) labels.push(label.innerText);
-    });
+    const labelsCount = element.labels?.length || 0;
+    for (let i = 0; i < labelsCount; i++) {
+        const label = element.labels[i];
+        if (label?.innerText) labels.push(label.innerText);
+    }
     const ariaLabel = element.getAttribute("aria-label")?.toLowerCase();
     if (ariaLabel) labels.push(ariaLabel);
     const ariaLabelIds: string[] = [];
@@ -237,7 +239,7 @@ function collectLabels(element: HTMLInputElement | HTMLSelectElement) {
         });
     ariaLabelIds.forEach(id => {
         const labelElement = document.getElementById(id);
-        if (labelElement && labelElement.innerText) labels.push(labelElement.innerText);
+        if (labelElement?.innerText) labels.push(labelElement.innerText);
     });
     return labels.length ? labels : undefined;
 }
