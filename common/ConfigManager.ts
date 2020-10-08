@@ -290,7 +290,7 @@ export class ConfigManager {
 
     public siteConfigFor(url: string): SiteConfig {
         const matchedConfigNodes = this.findAllConfigsFor(url);
-        matchedConfigNodes.sort(node => -node.matchWeight);
+        matchedConfigNodes.sort((node1, node2) => node2.matchWeight - node1.matchWeight);
         return this.deriveConfigFromMatches(matchedConfigNodes);
     }
 
