@@ -146,9 +146,23 @@
                             mdi-settings
                         </v-icon>
                     </v-list-item>
+                    <v-list-item v-show="showSearchPanel" @click="showPasswordGenerator = true">
+                        <v-list-item-title class="mr-4 text-right body-2">
+                            {{ $i18n("Menu_Button_copyNewPasswordToClipboard_label") }}
+                        </v-list-item-title>
+                        <v-icon size="20px">
+                            mdi-flash
+                        </v-icon>
+                    </v-list-item>
                 </v-list>
             </v-menu>
         </v-footer>
+        <PasswordGenerator
+            v-if="showPasswordGenerator"
+            :standalone="true"
+            @dialog-closed="passwordGeneratorClosed"
+            @copy-to-clipboard="copyToClipboard"
+        />
     </v-app>
 </template>
 
@@ -163,11 +177,12 @@ import SearchInput from "./components/SearchInput.vue";
 import SearchResults from "./components/SearchResults.vue";
 import Save1stParty from "./components/Save1stParty.vue";
 import SaveWhere from "./components/SaveWhere.vue";
+import PasswordGenerator from "../common/components/PasswordGenerator.vue";
 import { Port } from "../common/port";
 import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
 import { SaveState } from "../common/SaveState";
-import { KeeVue } from "./KeeVue";
+import { KeeVue } from "../common/KeeVue";
 import { Entry } from "../common/model/Entry";
 import { supplementEntryState } from "./supplementEntryState";
 import { fetchFavicon, getFaviconUrl } from "./favicon";
@@ -175,6 +190,7 @@ import { autoRecoveryTimeMs, manualRecoveryPromptTimeMs, tooltipDelay } from "..
 import { SaveEntryResult } from "../common/SaveEntryResult";
 import { Field } from "../common/model/Field";
 import { Locator } from "../common/model/Locator";
+import { copyStringToClipboard } from "../common/copyStringToClipboard";
 
 export default {
     components: {
@@ -182,7 +198,8 @@ export default {
         SearchResults,
         SearchInput,
         Save1stParty,
-        SaveWhere
+        SaveWhere,
+        PasswordGenerator
     },
     mixins: [Port.mixin],
     props: ["matchedEntries", "frameId"],
@@ -203,7 +220,8 @@ export default {
         // imported constants are only available in Vue if we assign them to data
         tooltipDelay,
         manualRecoveryPromptTimeMs,
-        autoRecoveryTimeMs
+        autoRecoveryTimeMs,
+        showPasswordGenerator: false
     }),
     computed: {
         ...mapGetters([
@@ -395,6 +413,12 @@ export default {
                 } as SaveEntryResult);
                 return false;
             }
+        },
+        passwordGeneratorClosed: function (this: any) {
+            this.showPasswordGenerator = false;
+        },
+        copyToClipboard: async function (this: any, payload) {
+            if (payload?.value) await copyStringToClipboard(payload.value);
         }
     }
 };

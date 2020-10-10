@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { copyStringToClipboard } from "../copyStringToClipboard";
+import { copyStringToClipboard } from "../../common/copyStringToClipboard";
 import { Field } from "../../common/model/Field";
 import { tooltipDelay } from "../../common/Timings";
 

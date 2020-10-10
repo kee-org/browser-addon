@@ -1,5 +1,12 @@
 <template>
-    <v-dialog value="true" fullscreen hide-overlay transition="dialog-transition">
+    <v-dialog
+        value="true"
+        fullscreen
+        persistent
+        hide-overlay
+        :transition="dialogTransition"
+        @keydown.esc="cancel"
+    >
         <v-card>
             <div>
                 <v-card-text>
@@ -33,11 +40,11 @@
                             </v-col>
                         </v-row>
                     </v-card>
-                    <div>
+                    <div v-if="!standalone">
                         <br />
                         {{ $i18n("password_will_be_set_on_field") }}
                     </div>
-                    <div>
+                    <div v-if="!standalone">
                         <v-checkbox
                             v-model="forceCopy"
                             :label="$i18n('also_copy_to_clipboard')"
@@ -51,15 +58,11 @@
                 <v-spacer />
 
                 <v-btn color="tertiary" @click="cancel">
-                    {{ $i18n("cancel") }}
+                    {{ cancelButtonText }}
                 </v-btn>
 
                 <v-btn color="primary" :disabled="disabled" @click="ok">
-                    {{
-                        forceCopy
-                            ? $i18n("generator_action_apply_and_copy")
-                            : $i18n("generator_action_apply")
-                    }}
+                    {{ okButtonText }}
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -71,10 +74,9 @@ import { Port } from "../../common/port";
 import { mapGetters } from "vuex";
 import { Action } from "../../common/Action";
 import { SaveState } from "../../common/SaveState";
-import { copyStringToClipboard } from "../copyStringToClipboard";
 
 export default {
-    props: ["field"],
+    props: ["field", "standalone", "topmost"],
     data: () => ({
         selectedProfile: "",
         forceCopy: false,
@@ -97,12 +99,27 @@ export default {
             return this.revealed
                 ? this.generatedPassword
                 : "*".repeat(this.generatedPassword.length);
+        },
+        okButtonText: function (this: any) {
+            if (this.standalone) {
+                return this.$i18n("generator_action_copy");
+            } else if (this.forceCopy) {
+                return this.$i18n("generator_action_apply_and_copy");
+            } else {
+                return this.$i18n("generator_action_apply");
+            }
+        },
+        cancelButtonText: function (this: any) {
+            return this.standalone ? this.$i18n("close") : this.$i18n("cancel");
+        },
+        dialogTransition: function (this: any) {
+            return this.topmost ? "false" : "dialog-transition";
         }
     },
     methods: {
         ok: async function (this: any) {
-            if (this.forceCopy) {
-                await copyStringToClipboard(this.generatedPassword);
+            if (this.standalone || this.forceCopy) {
+                this.$emit("copy-to-clipboard", { value: this.generatedPassword });
             }
             this.$emit("dialog-closed", { value: this.generatedPassword });
         },
@@ -123,7 +140,7 @@ export default {
             Port.postMessage({
                 action: Action.GeneratePassword,
                 passwordProfile: item,
-                url: (this.saveState as SaveState).newEntry?.URLs?.[0]
+                url: (this.saveState as SaveState)?.newEntry?.URLs?.[0]
             });
         }
     }

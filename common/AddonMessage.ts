@@ -40,4 +40,5 @@ export interface AddonMessage {
     resetState?: KeeState;
     mutation?: MutationPayload;
     url?: string;
+    copyToClipboard?: string;
 }

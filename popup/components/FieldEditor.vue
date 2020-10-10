@@ -46,6 +46,7 @@
             <PasswordGenerator
                 v-if="showPasswordGenerator"
                 @dialog-closed="passwordGeneratorClosed"
+                @copy-to-clipboard="copyToClipboard"
             />
         </v-col>
     </v-row>
@@ -53,7 +54,8 @@
 
 <script lang="ts">
 import { Field } from "../../common/model/Field";
-import PasswordGenerator from "./PasswordGenerator.vue";
+import PasswordGenerator from "../../common/components/PasswordGenerator.vue";
+import { copyStringToClipboard } from "../../common/copyStringToClipboard";
 
 export default {
     components: {
@@ -98,6 +100,9 @@ export default {
         },
         onBlur(this: any) {
             this.focussed = false;
+        },
+        copyToClipboard: async function (this: any, payload) {
+            if (payload?.value) await copyStringToClipboard(payload.value);
         }
     }
 };
