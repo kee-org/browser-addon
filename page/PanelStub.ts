@@ -4,21 +4,33 @@ export class PanelStubOptions {
     width: number;
     name: string;
     autoCloseTime: number;
+    legacy: boolean;
 
     public static MatchedLogins: PanelStubOptions = {
         id: "KeeAddonPanelMatchedLogins",
         height: 300,
         width: 400,
-        name: "matchedLogins",
-        autoCloseTime: 0
+        name: "matchedLoginsLegacy",
+        autoCloseTime: 0,
+        legacy: true
+    };
+
+    public static GeneratePasswordLegacy: PanelStubOptions = {
+        id: "KeeAddonPanelGeneratePassword",
+        height: 300,
+        width: 400,
+        name: "generatePasswordLegacy",
+        autoCloseTime: 0,
+        legacy: true
     };
 
     public static GeneratePassword: PanelStubOptions = {
         id: "KeeAddonPanelGeneratePassword",
-        height: 300,
-        width: 400,
+        height: 500,
+        width: 450,
         name: "generatePassword",
-        autoCloseTime: 0
+        autoCloseTime: 0,
+        legacy: false
     };
 }
 
@@ -70,14 +82,19 @@ export class PanelStub {
         iframe.setAttribute("allow", "");
         iframe.style.setProperty("width", "100%", "important");
         iframe.style.setProperty("height", "100%", "important");
-        iframe.style.setProperty("border", "none", "important");
         iframe.style.setProperty("visibility", "visible", "important");
         iframe.style.setProperty("display", "block", "important");
         iframe.style.setProperty("position", "relative", "important");
         iframe.setAttribute("scrolling", "no");
+        if (this.options.legacy) {
+            iframe.style.setProperty("border", "none", "important");
+        } else {
+            iframe.style.setProperty("border", "2px solid #1a466b", "important");
+            iframe.style.setProperty("border-radius", "8px", "important");
+        }
 
         iframe.src =
-            browser.extension.getURL("panels/panels.html") +
+            browser.extension.getURL(`panels/panels${this.options.legacy ? "Legacy" : ""}.html`) +
             "?parentFrameId=" +
             this.parentFrameId +
             "&autoCloseTime=" +

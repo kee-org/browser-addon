@@ -7,6 +7,7 @@ import { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
 import store from "../store";
 import { Entry } from "../common/model/Entry";
+import { copyStringToClipboard } from "../common/copyStringToClipboard";
 
 // callbacks for messaging / ports
 
@@ -294,7 +295,7 @@ export function vaultMessageHandler(this: browser.runtime.Port, msg: VaultMessag
     }
 }
 
-export function iframeMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
+export async function iframeMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.mutation) {
         window.kee.syncBackground.onMessage(this, msg.mutation);
     }
@@ -325,9 +326,6 @@ export function iframeMessageHandler(this: browser.runtime.Port, msg: AddonMessa
     if (msg.action == Action.GetPasswordProfiles) {
         window.kee.getPasswordProfiles(passwordProfiles => {
             store.dispatch("updatePasswordProfiles", passwordProfiles);
-            if (passwordProfiles.length > 0) {
-                port.postMessage({ passwordProfiles } as AddonMessage);
-            }
         });
     }
 
@@ -337,6 +335,7 @@ export function iframeMessageHandler(this: browser.runtime.Port, msg: AddonMessa
             window.kee.tabStates.get(tabId).url,
             generatedPassword => {
                 if (generatedPassword) {
+                    store.dispatch("updateGeneratedPassword", generatedPassword);
                     port.postMessage({
                         generatedPassword: generatedPassword
                     } as AddonMessage);
@@ -351,5 +350,9 @@ export function iframeMessageHandler(this: browser.runtime.Port, msg: AddonMessa
 
     if (msg.loginEditor) {
         window.kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
+    }
+
+    if (msg.copyToClipboard) {
+        await copyStringToClipboard(msg.copyToClipboard);
     }
 }
