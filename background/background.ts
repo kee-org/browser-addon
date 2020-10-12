@@ -7,6 +7,9 @@ import { AddonMessage } from "../common/AddonMessage";
 import store from "../store";
 // import { PersistentLogger } from "../common/PersistentLogger";
 
+const userBusySeconds = 60 * 15;
+const maxUpdateDelaySeconds = 60 * 60 * 8;
+
 declare global {
     interface Window {
         kee: Kee;
@@ -139,6 +142,20 @@ browser.runtime.onInstalled.addListener(async function (details) {
                 url: "release-notes/install-notes.html"
             });
         }
+    }
+});
+
+browser.runtime.onUpdateAvailable.addListener(async () => {
+    if ((await browser.idle.queryState(userBusySeconds)) === "idle") {
+        browser.runtime.reload();
+    } else {
+        browser.idle.setDetectionInterval(userBusySeconds);
+        browser.idle.onStateChanged.addListener(status => {
+            if (status !== "active") {
+                browser.runtime.reload();
+            }
+        });
+        setTimeout(() => browser.runtime.reload(), maxUpdateDelaySeconds * 1000);
     }
 });
 

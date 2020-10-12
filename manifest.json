@@ -100,7 +100,8 @@
         "webRequest",
         "<all_urls>",
         "notifications",
-        "unlimitedStorage"
+        "unlimitedStorage",
+        "idle"
     ],
     "web_accessible_resources" : [
 		"panels/*"
