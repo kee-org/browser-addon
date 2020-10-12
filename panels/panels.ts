@@ -1,4 +1,3 @@
-import { copyStringToClipboard } from "../common/copyStringToClipboard";
 import { MatchedLoginsPanel } from "./MatchedLoginsPanel";
 import { FrameState } from "../common/FrameState";
 import { Action } from "../common/Action";
@@ -41,6 +40,8 @@ function startup() {
         Vue.use(Vuetify);
         Vue.prototype.$browser = browser;
     }
+
+    const darkTheme = params["theme"] === "dark";
 
     switch (params["panel"]) {
         case "matchedLoginsLegacy":
@@ -93,8 +94,7 @@ function startup() {
                                 store,
                                 vuetify: new Vuetify({
                                     theme: {
-                                        dark: window.matchMedia("(prefers-color-scheme: dark)")
-                                            .matches,
+                                        dark: darkTheme,
                                         themes: {
                                             dark: {
                                                 primary: "#1a466b",

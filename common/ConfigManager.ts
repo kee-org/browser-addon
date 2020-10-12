@@ -62,6 +62,7 @@ defaultConfig.keeVaultLaunchMessageDismissed = false;
 defaultConfig.keeVaultLaunchStart = 8640000000000000;
 defaultConfig.keeVaultLaunchEnd = 8640000000000000;
 defaultConfig.manualSubmitOverrideProhibited = false;
+defaultConfig.theme = null;
 
 export class ConfigManager {
     public current: Config;
@@ -488,6 +489,13 @@ export class ConfigManager {
         if (included) return true;
 
         return null;
+    }
+
+    public get activeTheme(): string {
+        return (
+            this.current.theme ||
+            (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        );
     }
 }
 

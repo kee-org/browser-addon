@@ -88,6 +88,9 @@ function loadInitialConfig() {
     (document.getElementById("pref_logLevel_desc") as HTMLSelectElement).value = stringFromLogLevel(
         configManager.current.logLevel
     );
+    (document.getElementById("pref_theme_desc") as HTMLSelectElement).value = stringFromTheme(
+        configManager.current.theme
+    );
 
     (document.getElementById(
         "pref_currentSearchTermTimeout_label"
@@ -208,6 +211,8 @@ function setupInputListeners() {
             changeSiteConfigItem
         );
     }
+
+    document.getElementById("pref_theme_desc").addEventListener("change", saveTheme);
 }
 
 function deleteSiteProperties(e: Event) {
@@ -680,6 +685,7 @@ function switchToAllSitesMode(e) {
         document.getElementById("panelFillingEntries").style.display = "block";
         document.getElementById("panelNetworkAuthentication").style.display = "block";
         document.getElementById("panelLogging").style.display = "block";
+        document.getElementById("panelTheme").style.display = "block";
         document.getElementById("panelAdvanced").style.display = "block";
 
         [].forEach.call(
@@ -712,6 +718,7 @@ function switchToSpecificSitesMode(e) {
         document.getElementById("panelFillingEntries").style.display = "none";
         document.getElementById("panelNetworkAuthentication").style.display = "none";
         document.getElementById("panelLogging").style.display = "none";
+        document.getElementById("panelTheme").style.display = "none";
         document.getElementById("panelAdvanced").style.display = "none";
 
         [].forEach.call(
@@ -1069,6 +1076,12 @@ function saveLogLevel(e) {
     configManager.setASAP({ logLevel: logLevelFromString(selectedValue) });
 }
 
+function saveTheme(e) {
+    e.preventDefault();
+    const selectedValue = (document.getElementById("pref_theme_desc") as HTMLSelectElement).value;
+    configManager.setASAP({ theme: themeFromString(selectedValue) });
+}
+
 function saveCurrentSearchTermTimeout(e) {
     e.preventDefault();
     configManager.setASAP({
@@ -1093,6 +1106,16 @@ function saveKPRPCDBToOpen(e) {
         keePassDBToOpen: (document.getElementById("pref_keePassDBToOpen_label") as HTMLInputElement)
             .value
     });
+}
+
+function themeFromString(theme) {
+    if (!theme) return null;
+    return theme;
+}
+
+function stringFromTheme(theme) {
+    if (!theme) return "";
+    return theme;
 }
 
 function logLevelFromString(level) {

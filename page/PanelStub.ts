@@ -1,3 +1,5 @@
+import { configManager } from "../common/ConfigManager";
+
 export class PanelStubOptions {
     id: string;
     height: number;
@@ -85,6 +87,11 @@ export class PanelStub {
         iframe.style.setProperty("visibility", "visible", "important");
         iframe.style.setProperty("display", "block", "important");
         iframe.style.setProperty("position", "relative", "important");
+        iframe.style.setProperty(
+            "background-color",
+            configManager.activeTheme === "dark" ? "#1e1e1e" : "#ffffff",
+            "important"
+        );
         iframe.setAttribute("scrolling", "no");
         if (this.options.legacy) {
             iframe.style.setProperty("border", "none", "important");
@@ -93,15 +100,11 @@ export class PanelStub {
             iframe.style.setProperty("border-radius", "8px", "important");
         }
 
-        iframe.src =
-            browser.extension.getURL(`panels/panels${this.options.legacy ? "Legacy" : ""}.html`) +
-            "?parentFrameId=" +
-            this.parentFrameId +
-            "&autoCloseTime=" +
-            this.options.autoCloseTime +
-            "&panel=" +
-            this.options.name;
         shadow.appendChild(iframe);
+        const template = browser.extension.getURL(
+            `panels/panels${this.options.legacy ? "Legacy" : ""}.html`
+        );
+        iframe.src = `${template}?parentFrameId=${this.parentFrameId}&autoCloseTime=${this.options.autoCloseTime}&panel=${this.options.name}&theme=${configManager.activeTheme}`;
 
         const bodyElements = document.getElementsByTagName("body");
         if (bodyElements && bodyElements.length > 0) {

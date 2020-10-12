@@ -91,4 +91,5 @@ export class Config {
     keeVaultLaunchStart: number;
     keeVaultLaunchEnd: number;
     manualSubmitOverrideProhibited: boolean;
+    theme: string;
 }

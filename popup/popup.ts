@@ -40,7 +40,7 @@ function startup() {
                         store,
                         vuetify: new Vuetify({
                             theme: {
-                                dark: window.matchMedia("(prefers-color-scheme: dark)").matches,
+                                dark: configManager.activeTheme === "dark",
                                 themes: {
                                     dark: {
                                         primary: "#1a466b",

@@ -806,6 +806,29 @@
   "ignore_case_explanation_finding_forms": {
     "message": "For example, 'search' in any of the include or exclude lists will match with 'search', 'Search' and 'SEARCH'. Unless you have very unusual and complex requirements, it is best to leave this option enabled.",
     "description": "Describes the ignore case setting when used for configuring the include and exclude lists for finding forms."
+  },
+  "theme": {
+    "message": "Theme",
+    "description": "The visual theme applied to the extension's user interface. As per convention, the values refer to the predominant shade - i.e. the background colour"
+  },
+  "dark": {
+    "message": "Dark",
+    "description": "Black colour or similar; Darkened visual appearance"
+  },
+  "light": {
+    "message": "Light",
+    "description": "White colour or similar; Bright visual appearance"
+  },
+  "system_preference": {
+    "message": "System Preference",
+    "description": "The user's configured preference/setting in their system. System is vague because different browsers will implement it in different ways so it could relate to either the user's operating system, their web browser or both."
+  },
+  "theme_system_preference_explanation": {
+    "message": "Not all operating systems and browsers support automatic theming of browser extensions. You can manually choose your preference above if required.",
+    "description": "Explains what the Theme preference does and why"
+  },
+  "pref_Appearance_heading": {
+    "message": "Appearance",
+    "description": "Heading for settings/options that relate to the visual appearance of the extension"
   }
-
 }

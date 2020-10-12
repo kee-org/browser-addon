@@ -1,35 +1,48 @@
 <!DOCTYPE html>
 <html style="overflow-y: hidden">
-    <head>
-        <link href="../lib/css/materialdesignicons.min.css" type="text/css" rel="stylesheet">
-        <link href="../lib/css/vuetify.min.css" type="text/css" rel="stylesheet">
-        <meta charset="utf-8"/>
-        <!--__VUE_DEV_TOOLS_PLACEHOLDER__-->
-        <style>
-            @media (prefers-color-scheme: dark) {
-                body {
-                    background-color: rgb(18, 18, 18);
-                }
-            }
-        </style>
-    </head>
-    <body style="overflow-y: hidden; font-size: 100%;"> <!-- Ubuntu injects some 75% font crap -->
-        <div id="main" style="overflow-y: hidden">
-        </div>
-        <script src="../lib/detectWebExtensions.js"></script>
-        <script src="../lib/tp/browser-polyfill.min.js"></script>
-        <script src="../lib/dollar-polyfill.js"></script>
-        <script src="../lib/i18n.js"></script>
-        <script src="../lib/moduleHack.js"></script>
-        <script src="../lib/tp/punycode.js"></script>
-        <script src="../lib/moduleUnhack.js"></script>
-        <script src="../lib/pslData.js"></script>
-        <script src="../lib/tp/publicsuffixlist.min.js"></script>
-        <script src="../lib/pkg/vue.runtime.min.js"></script>
-        <script src="../lib/pkg/vuex.min.js"></script>
-        <script src="../lib/pkg/vuetify.min.js"></script>
-        <script src="../common/common.js"></script>
-        <script src="panels.js" ></script>
-    </body>
+
+<head>
+    <style type="text/css">
+        body {
+            background-color: transparent;
+        }
+    </style>
+    <script type="text/javascript">
+        document.location.search
+            .substr(1)
+            .split("&")
+            .forEach(pair => {
+                const [key, value] = pair.split("=");
+                params[key] = value;
+            });
+        var stylesheet = document.styleSheets[0];
+        stylesheet.cssRules[0].style.backgroundColor = params["theme"] === "dark" ? "#1e1e1e" : "#ffffff";
+    </script>
+
+    <link href="../lib/css/materialdesignicons.min.css" type="text/css" rel="stylesheet">
+    <link href="../lib/css/vuetify.min.css" type="text/css" rel="stylesheet">
+    <meta charset="utf-8" />
+    <!--__VUE_DEV_TOOLS_PLACEHOLDER__-->
+</head>
+
+<body style="overflow-y: hidden; font-size: 100%;">
+    <!-- Ubuntu injects some 75% font crap -->
+    <div id="main" style="overflow-y: hidden">
+    </div>
+    <script src="../lib/detectWebExtensions.js"></script>
+    <script src="../lib/tp/browser-polyfill.min.js"></script>
+    <script src="../lib/dollar-polyfill.js"></script>
+    <script src="../lib/i18n.js"></script>
+    <script src="../lib/moduleHack.js"></script>
+    <script src="../lib/tp/punycode.js"></script>
+    <script src="../lib/moduleUnhack.js"></script>
+    <script src="../lib/pslData.js"></script>
+    <script src="../lib/tp/publicsuffixlist.min.js"></script>
+    <script src="../lib/pkg/vue.runtime.min.js"></script>
+    <script src="../lib/pkg/vuex.min.js"></script>
+    <script src="../lib/pkg/vuetify.min.js"></script>
+    <script src="../common/common.js"></script>
+    <script src="panels.js"></script>
+</body>
 
 </html>

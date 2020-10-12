@@ -54,6 +54,28 @@
         </div>
         <div id="settings" class="col-md-12">
             <form>
+
+                <div class="panel panel-default" id="panelAppearance">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-i18n="pref_Appearance_heading"></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group formSettingGroup">
+                                <div class="formSettingLabel"><span data-i18n="theme"></span></div>
+                                <div class="formSettingDropdown">
+                                    <select class="form-control" id="pref_theme_desc">
+                                        <option value="" data-i18n="system_preference"></option>
+                                        <option value="light" data-i18n="light"></option>
+                                        <option value="dark" data-i18n="dark"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div><span data-i18n="theme_system_preference_explanation"></span></div>
+                    </div>
+                </div>
+
                 <div class="panel panel-default" id="panelFindingEntries">
                     <div class="panel-heading">
                         <h3 class="panel-title" data-i18n="pref_FindingEntries_heading"></h3>
