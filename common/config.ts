@@ -19,6 +19,7 @@ export class SiteConfig {
     blackList?: FormMatchConfig;
     preventSaveNotification?: boolean;
     listMatchingCaseSensitive?: boolean;
+    preferredEntryUuid?: string;
 }
 
 export class SiteConfigNode {

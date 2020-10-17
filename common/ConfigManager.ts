@@ -1,8 +1,24 @@
-import { Config, SiteConfig, SiteConfigLookup, SiteConfigNode } from "./config";
+import {
+    Config,
+    SiteConfig,
+    SiteConfigLookup,
+    SiteConfigMethod,
+    SiteConfigNode,
+    SiteConfigNodeType,
+    SiteConfigTarget
+} from "./config";
 import { ConfigMigrations } from "./ConfigMigrations";
 import { defaultSiteConfig } from "./DefaultSiteConfig";
 import { utils } from "./utils";
 import { Field } from "./model/Field";
+import { KeeLog } from "./Logger";
+
+type SiteConfigNodeAndIndex = {
+    node: SiteConfigNode;
+    target: SiteConfigTarget;
+    method: SiteConfigMethod;
+    lookupValue: string;
+};
 
 /*
   Entry-specific configuration is stored in KeePass but in future maybe
@@ -224,10 +240,7 @@ export class ConfigManager {
         });
     }
 
-    public siteConfigLookupFor(
-        target: "Domain" | "Host" | "Page",
-        method: "Exact" | "Prefix" | "Regex"
-    ) {
+    public siteConfigLookupFor(target: SiteConfigTarget, method: SiteConfigMethod) {
         if (target == "Domain") {
             if (method == "Exact") {
                 if (!this.current.siteConfig.domainExact) {
@@ -351,6 +364,107 @@ export class ConfigManager {
         return matchedConfigNodes;
     }
 
+    private findAllConfigsAndIndexFor(urlString: string) {
+        const matchedConfigNodesAndIndexes: SiteConfigNodeAndIndex[] = [];
+        const url = new URL(urlString);
+        const host = url.host;
+        const page = host + url.pathname;
+        const domain = utils.psl.getDomain(host);
+
+        for (const value in this.current.siteConfig.domainExact) {
+            if (value === domain) {
+                matchedConfigNodesAndIndexes.push({
+                    node: this.current.siteConfig.domainExact[value],
+                    target: "Domain",
+                    method: "Exact",
+                    lookupValue: value
+                });
+            }
+        }
+        for (const value in this.current.siteConfig.hostExact) {
+            if (value === host) {
+                matchedConfigNodesAndIndexes.push({
+                    node: this.current.siteConfig.hostExact[value],
+                    target: "Host",
+                    method: "Exact",
+                    lookupValue: value
+                });
+            }
+        }
+        for (const value in this.current.siteConfig.pageExact) {
+            if (value === page) {
+                matchedConfigNodesAndIndexes.push({
+                    node: this.current.siteConfig.pageExact[value],
+                    target: "Page",
+                    method: "Exact",
+                    lookupValue: value
+                });
+            }
+        }
+        for (const value in this.current.siteConfig.domainPrefix) {
+            if (domain.startsWith(value)) {
+                matchedConfigNodesAndIndexes.push({
+                    node: this.current.siteConfig.domainPrefix[value],
+                    target: "Domain",
+                    method: "Prefix",
+                    lookupValue: value
+                });
+            }
+        }
+        for (const value in this.current.siteConfig.hostPrefix) {
+            if (host.startsWith(value)) {
+                matchedConfigNodesAndIndexes.push({
+                    node: this.current.siteConfig.hostPrefix[value],
+                    target: "Host",
+                    method: "Prefix",
+                    lookupValue: value
+                });
+            }
+        }
+        for (const value in this.current.siteConfig.pagePrefix) {
+            if (page.startsWith(value)) {
+                matchedConfigNodesAndIndexes.push({
+                    node: this.current.siteConfig.pagePrefix[value],
+                    target: "Page",
+                    method: "Prefix",
+                    lookupValue: value
+                });
+            }
+        }
+        for (const value in this.current.siteConfig.domainRegex) {
+            if (new RegExp(value).test(domain)) {
+                matchedConfigNodesAndIndexes.push({
+                    node: this.current.siteConfig.domainRegex[value],
+                    target: "Domain",
+                    method: "Regex",
+                    lookupValue: value
+                });
+            }
+        }
+        for (const value in this.current.siteConfig.hostRegex) {
+            if (new RegExp(value).test(host)) {
+                matchedConfigNodesAndIndexes.push({
+                    node: this.current.siteConfig.hostRegex[value],
+                    target: "Host",
+                    method: "Regex",
+                    lookupValue: value
+                });
+            }
+        }
+        for (const value in this.current.siteConfig.pageRegex) {
+            if (new RegExp(value).test(page)) {
+                matchedConfigNodesAndIndexes.push({
+                    node: this.current.siteConfig.pageRegex[value],
+                    target: "Page",
+                    method: "Regex",
+                    lookupValue: value
+                });
+            }
+        }
+
+        return matchedConfigNodesAndIndexes;
+    }
+
     private deriveConfigFromMatches(matchedConfigNodes: SiteConfigNode[]) {
         const derivedConfig: SiteConfig = {};
         matchedConfigNodes.forEach(node => {
@@ -440,6 +554,13 @@ export class ConfigManager {
                     }
                 }
             }
+
+            if (
+                node.config.preferredEntryUuid !== undefined &&
+                derivedConfig.preferredEntryUuid == null
+            ) {
+                derivedConfig.preferredEntryUuid = node.config.preferredEntryUuid;
+            }
         });
         return derivedConfig;
     }
@@ -496,6 +617,100 @@ export class ConfigManager {
             this.current.theme ||
             (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
         );
+    }
+
+    public togglePreferredEntryUuid(uuid: string, urlString: string) {
+        let url;
+        try {
+            url = new URL(urlString);
+        } catch (e) {
+            KeeLog.error(
+                "Invalid URL supplied to togglePreferredEntryUuid. Preferred entry will not be altered."
+            );
+            return;
+        }
+        const configuredTarget: SiteConfigTarget = "Domain";
+        const allConfigNodesAndLookups = this.findAllConfigsAndIndexFor(urlString);
+        const derivedConfig = this.siteConfigFor(urlString);
+        const currentPreferredUuid = derivedConfig.preferredEntryUuid;
+
+        if (currentPreferredUuid === uuid) {
+            allConfigNodesAndLookups.forEach(cnl => {
+                if (cnl.node.config.preferredEntryUuid === uuid) {
+                    this.removePreferredEntryUuid(cnl);
+                }
+            });
+        } else {
+            allConfigNodesAndLookups.forEach(cnl => {
+                if (
+                    cnl.node.config.preferredEntryUuid === currentPreferredUuid &&
+                    this.leastSpecificTarget(configuredTarget, cnl.target) === configuredTarget
+                ) {
+                    this.removePreferredEntryUuid(cnl);
+                }
+            });
+
+            this.addSiteConfigParameters(
+                { preferredEntryUuid: uuid } as SiteConfig,
+                url,
+                configuredTarget,
+                "Exact",
+                "Auto"
+            );
+        }
+    }
+
+    private removePreferredEntryUuid(cnl: SiteConfigNodeAndIndex) {
+        cnl.node.config.preferredEntryUuid = null;
+
+        // Unless the user has manually modified the per-site config for this site
+        // we can tidy up this unnecessary data
+        if (cnl.node.source === "Auto" && this.equalsDefaultSiteConfig(cnl.node.config)) {
+            const lookup = this.siteConfigLookupFor(cnl.target, cnl.method);
+            delete lookup[cnl.lookupValue];
+        }
+    }
+
+    private equalsDefaultSiteConfig(config: SiteConfig) {
+        if (typeof config.preferredEntryUuid === "boolean") return false;
+        if (typeof config.preventSaveNotification === "boolean") return false;
+        if (typeof config.listMatchingCaseSensitive === "boolean") return false;
+        if (config.whiteList) return false;
+        if (config.blackList) return false;
+        return true;
+    }
+
+    private leastSpecificTarget(t1: SiteConfigTarget, t2: SiteConfigTarget): SiteConfigTarget {
+        if (t1 === "Domain" || t2 === "Domain") {
+            return "Domain";
+        }
+        if (t1 === "Host" || t2 === "Host") {
+            return "Host";
+        }
+        return "Page";
+    }
+
+    public valueFromUrl(url: URL, target: SiteConfigTarget): string {
+        const host = url.host;
+        if (target === "Host") return host;
+        if (target === "Page") return host + url.pathname;
+        if (target === "Domain") return utils.psl.getDomain(host);
+    }
+
+    public addSiteConfigParameters(
+        partialConfig: Partial<SiteConfig>,
+        url: URL,
+        target: SiteConfigTarget,
+        method: SiteConfigMethod,
+        source: SiteConfigNodeType
+    ) {
+        const value = this.valueFromUrl(url, target);
+        const configLookup = configManager.siteConfigLookupFor(target, method);
+        if (!configLookup[value]) {
+            configLookup[value] = { config: new SiteConfig(), source, matchWeight: 100 };
+        }
+        Object.assign(configLookup[value].config, partialConfig);
+        this.save();
     }
 }
 

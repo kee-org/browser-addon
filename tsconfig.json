@@ -5,9 +5,11 @@
         "preserveConstEnums": true,
         "sourceMap": true,
         "target": "ES6",
-        "typeRoots" : ["./typedefs"],
+        "typeRoots" : ["./typedefs", "node_modules/@types"],
         "moduleResolution": "node",
-        "noImplicitThis": true
+        "noImplicitThis": true,
+        "types": ["jest"],
+        "module": "ESNext"
     },
     "include": [
         "**/*"
