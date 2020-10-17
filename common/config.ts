@@ -1,6 +1,6 @@
 export type SiteConfigMethod = "Exact" | "Prefix" | "Regex";
 export type SiteConfigTarget = "Domain" | "Host" | "Page";
-export type SiteConfigNodeType = "Migration" | "User" | "Default";
+export type SiteConfigNodeType = "Migration" | "User" | "Default" | "Auto";
 
 export class FormMatchConfig {
     form?: {
