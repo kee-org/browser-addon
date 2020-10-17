@@ -101,7 +101,8 @@ defaultSiteConfig.pageRegex["^.*$"] = {
                     "onlineid"
                 ]
             }
-        }
+        },
+        preferredEntryUuid: null
     },
     matchWeight: 0,
     source: "Default"

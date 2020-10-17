@@ -146,5 +146,17 @@ module.exports = {
         ],
         "prefer-const": "error",
         "curly": [2, "multi-line"]
-    }
+    },
+    overrides: [
+        {
+          files: [
+            "**/*.test.ts"
+          ],
+          env: {
+            jest: true
+          },
+          "extends": ["plugin:jest/recommended"],
+          plugins: ["jest"]
+        }
+    ]
 };
