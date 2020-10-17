@@ -830,5 +830,9 @@
   "pref_Appearance_heading": {
     "message": "Appearance",
     "description": "Heading for settings/options that relate to the visual appearance of the extension"
+  },
+  "pref_hidden_options_present_explanation": {
+    "message": "Kee is automatically managing additional options for this site so you can't delete it.",
+    "description": "Notification and explanation to user that one or more hidden settings are present for the configuration of a specific site"
   }
 }

@@ -208,7 +208,7 @@ function setupInputListeners() {
         );
         (node as HTMLElement).firstElementChild.nextElementSibling.addEventListener(
             "change",
-            changeSiteConfigItem
+            changeSiteConfigFormFindingItem
         );
     }
 
@@ -351,7 +351,7 @@ function formFindingControlGroupChange(e: Event) {
     const targetInput = targetCheckbox.parentElement.nextElementSibling as HTMLInputElement;
     targetInput.disabled = !targetCheckbox.checked;
 
-    if (targetCheckbox.checked) return changeSiteConfigItem(null, targetInput);
+    if (targetCheckbox.checked) return changeSiteConfigFormFindingItem(null, targetInput);
 
     let siteConfig: SiteConfig;
 
@@ -491,7 +491,7 @@ function formFindingControlGroupChange(e: Event) {
     configManager.save();
 }
 
-function changeSiteConfigItem(e: Event, targetInput?: HTMLInputElement) {
+function changeSiteConfigFormFindingItem(e: Event, targetInput?: HTMLInputElement) {
     if (!targetInput) targetInput = e.target as HTMLInputElement;
     const values = targetInput.value ? targetInput.value.split(",") : [];
     let siteConfig: SiteConfig;
@@ -504,6 +504,7 @@ function changeSiteConfigItem(e: Event, targetInput?: HTMLInputElement) {
             specificSite.method
         );
         siteConfig = siteConfigLookup[specificSite.value].config;
+        siteConfigLookup[specificSite.value].source = "User";
     }
 
     switch (targetInput.id) {
@@ -678,6 +679,7 @@ function switchToAllSitesMode(e) {
         document.getElementById("siteAddButton").style.display = "none";
         document.getElementById("siteEditButton").style.display = "none";
         document.getElementById("siteDeleteButton").style.display = "none";
+        document.getElementById("hiddenOptionsPresent").style.display = "none";
         document.getElementById("siteSearchClearButton").style.display = "none";
         document.getElementById("settings").style.display = "block";
 
@@ -685,7 +687,7 @@ function switchToAllSitesMode(e) {
         document.getElementById("panelFillingEntries").style.display = "block";
         document.getElementById("panelNetworkAuthentication").style.display = "block";
         document.getElementById("panelLogging").style.display = "block";
-        document.getElementById("panelTheme").style.display = "block";
+        document.getElementById("panelAppearance").style.display = "block";
         document.getElementById("panelAdvanced").style.display = "block";
 
         [].forEach.call(
@@ -718,7 +720,7 @@ function switchToSpecificSitesMode(e) {
         document.getElementById("panelFillingEntries").style.display = "none";
         document.getElementById("panelNetworkAuthentication").style.display = "none";
         document.getElementById("panelLogging").style.display = "none";
-        document.getElementById("panelTheme").style.display = "none";
+        document.getElementById("panelAppearance").style.display = "none";
         document.getElementById("panelAdvanced").style.display = "none";
 
         [].forEach.call(
@@ -774,8 +776,12 @@ function selectSite(searchResultIndex) {
 function showSpecificSite() {
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteList").style.display = "none";
-    document.getElementById("siteEditButton").style.display = "block";
-    document.getElementById("siteDeleteButton").style.display = "block";
+    document.getElementById("siteEditButton").style.display =
+        specificSite.source === "Auto" ? "none" : "block";
+    document.getElementById("siteDeleteButton").style.display =
+        specificSite.source === "Auto" ? "none" : "block";
+    document.getElementById("hiddenOptionsPresent").style.display =
+        specificSite.source === "Auto" ? "block" : "none";
     document.getElementById("siteSearchClearButton").style.display = "block";
     (document.getElementById("siteChooserSearch") as HTMLInputElement).value = specificSite.value;
     document.getElementById("settings").style.display = "block";
@@ -788,6 +794,7 @@ function siteChooserClearSearch(e) {
     document.getElementById("siteAddButton").style.display = "none";
     document.getElementById("siteEditButton").style.display = "none";
     document.getElementById("siteDeleteButton").style.display = "none";
+    document.getElementById("hiddenOptionsPresent").style.display = "none";
     document.getElementById("settings").style.display = "none";
     (document.getElementById("siteChooserSearch") as HTMLInputElement).focus();
     showSiteList("");
@@ -987,6 +994,7 @@ function saveOfferToSavePasswords(e) {
             specificSite.method
         );
         siteConfigLookup[specificSite.value].config.preventSaveNotification = preventSave;
+        siteConfigLookup[specificSite.value].source = "User";
     }
     configManager.save();
 }
@@ -1010,6 +1018,7 @@ function saveListMatchingIgnoreCase(e) {
             specificSite.method
         );
         siteConfigLookup[specificSite.value].config.listMatchingCaseSensitive = caseSensitive;
+        siteConfigLookup[specificSite.value].source = "User";
     }
     configManager.save();
 }
