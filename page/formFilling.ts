@@ -891,19 +891,24 @@ export class FormFilling {
         const usernameIndex = matchResult.usernameIndexArray[matchResult.mostRelevantFormIndex];
         const otherFields = matchResult.otherFieldsArray[matchResult.mostRelevantFormIndex];
 
+        const orderedEntries = this.sortMatchedEntries(
+            matchResult.entries[matchResult.mostRelevantFormIndex]
+        );
+        const orderedEntriesWithPreference = this.flagUserPreferredEntry(orderedEntries);
+
         if (
             !isMatchedLoginRequest &&
             matchResult.entries[matchResult.mostRelevantFormIndex].length > 0
         ) {
             this.myPort.postMessage({
-                entries: matchResult.entries[matchResult.mostRelevantFormIndex]
+                entries: orderedEntriesWithPreference
             });
 
             // Give the user a way to choose an entry interactively
             this.keeFieldIcon.addKeeIconToFields(
                 passwordFields,
                 otherFields,
-                matchResult.entries[matchResult.mostRelevantFormIndex]
+                orderedEntriesWithPreference
             );
         }
 
@@ -982,31 +987,8 @@ export class FormFilling {
                 this.Logger.debug("No entries for form.");
             } else if (matchingLogin == null) {
                 this.Logger.debug("Multiple entries for form, so estimating most relevant.");
-                let mostRelevantEntryIndex = 0;
-
-                for (
-                    let count = 0;
-                    count < matchResult.entries[matchResult.mostRelevantFormIndex].length;
-                    count++
-                ) {
-                    if (
-                        matchResult.entries[matchResult.mostRelevantFormIndex][count]
-                            .relevanceScore >
-                        matchResult.entries[matchResult.mostRelevantFormIndex][
-                            mostRelevantEntryIndex
-                        ].relevanceScore
-                    ) {
-                        mostRelevantEntryIndex = count;
-                    }
-                }
-
-                this.Logger.debug(
-                    "We think entry " + mostRelevantEntryIndex + " is most relevant."
-                );
-                matchingLogin =
-                    matchResult.entries[matchResult.mostRelevantFormIndex][mostRelevantEntryIndex];
+                matchingLogin = orderedEntriesWithPreference[0];
                 multipleMatches = true;
-
                 checkMatchingLoginRelevanceThreshold = true;
             }
 
@@ -1201,6 +1183,25 @@ export class FormFilling {
                 this.Logger.info("Nothing to fill.");
             }
         }
+    }
+
+    sortMatchedEntries(entries: Entry[]): Entry[] {
+        return entries
+            .map(e => new Entry({ ...e }))
+            .sort((a, b) => b.relevanceScore - a.relevanceScore);
+    }
+
+    flagUserPreferredEntry(orderedEntries: Entry[]): Entry[] {
+        const url = new URL(window.document.URL);
+        url.hostname = punycode.toUnicode(url.hostname);
+        const conf = configManager.siteConfigFor(url.href);
+        return orderedEntries.map(
+            e =>
+                new Entry({
+                    ...e,
+                    isPreferredMatch: conf.preferredEntryUuid === e.uuid ? true : false
+                })
+        );
     }
 
     private findSubmitButton(form: HTMLFormElement, submitTargetNeighbour: HTMLElement) {

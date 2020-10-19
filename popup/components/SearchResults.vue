@@ -85,7 +85,7 @@ export default {
     created(this: any) {
         if (this.matchedEntries) {
             for (let i = 0; i < this.matchedEntries.length; i++) {
-                this.uidMap.set(this.matchedEntries[i].uuid, i);
+                this.uidMap.set(this.matchedEntries[i].uuid, this.matchedEntries[i].entryIndex);
             }
         }
         this.searchOnlyMatches = new SearcherMatchedOnly(

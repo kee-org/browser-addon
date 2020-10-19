@@ -51,6 +51,7 @@ export class Entry {
     lowFieldMatchRatio: any;
     formIndex: number;
     entryIndex: number;
+    isPreferredMatch?: boolean;
 
     constructor(e: Partial<Entry>) {
         this.alwaysAutoFill = e.alwaysAutoFill || false;
@@ -66,6 +67,11 @@ export class Entry {
         this.matchAccuracy = e.matchAccuracy || 0;
         this.icon = e.icon || { version: 1, iconImageData: "" };
         this.database = e.database || new Database({});
+        this.relevanceScore = e.relevanceScore;
+        this.lowFieldMatchRatio = e.lowFieldMatchRatio;
+        this.formIndex = e.formIndex;
+        this.entryIndex = e.entryIndex;
+        this.isPreferredMatch = e.isPreferredMatch;
     }
 
     public static getUsernameField(entry: Entry) {

@@ -25,8 +25,6 @@ export class MatchedLoginsPanel {
     private setLogins(entries: Entry[], container) {
         KeeLog.debug("setting " + entries.length + " matched entries");
 
-        entries.sort((a, b) => b.relevanceScore - a.relevanceScore);
-
         // add every matched entry to the container(s)
         for (let i = 0; i < entries.length; i++) {
             const entry = entries[i];
