@@ -15,6 +15,7 @@ export class EntrySummary {
     dbFileName: string;
     relevanceScore: number;
     fullDetails?: Entry; //TODO:4: remove circular reference by maintaining independent Entry lookup by uuid?
+    isPreferredMatch?: boolean;
 
     constructor(e: Partial<EntrySummary>) {
         this.icon = e.icon || { version: 1, iconImageData: "" };
@@ -28,6 +29,7 @@ export class EntrySummary {
         this.dbFileName = e.dbFileName || "";
         this.relevanceScore = e.relevanceScore;
         this.fullDetails = e.fullDetails;
+        this.isPreferredMatch = e.isPreferredMatch;
     }
 
     public static fromEntry(entry: Entry) {
@@ -40,7 +42,8 @@ export class EntrySummary {
             url: entry?.URLs[0],
             uuid: entry.uuid,
             dbFileName: entry.database.fileName,
-            fullDetails: entry
+            fullDetails: entry,
+            isPreferredMatch: entry.isPreferredMatch
         });
     }
 
