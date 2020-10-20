@@ -18,6 +18,7 @@
                 prevInList(index, 'listAarray', filteredMatches.length)
             "
             @move-out-of-list="exitList"
+            v-on="$listeners"
         />
 
         <v-divider
@@ -56,6 +57,7 @@ import Entry from "./Entry.vue";
 import { mTypes } from "../../store";
 import { KeeLog } from "../../common/Logger";
 import { EntrySummary } from "../../common/model/EntrySummary";
+import { Entry as ModelEntry } from "../../common/model/Entry";
 import { SearcherMatchedOnly } from "../../common/SearcherMatchedOnly";
 
 export default {
@@ -82,19 +84,13 @@ export default {
             return null;
         }
     },
-    created(this: any) {
-        if (this.matchedEntries) {
-            for (let i = 0; i < this.matchedEntries.length; i++) {
-                this.uidMap.set(this.matchedEntries[i].uuid, this.matchedEntries[i].entryIndex);
-            }
+    watch: {
+        matchedEntries: function (this: any, newVal) {
+            this.initAndSearchMatchedEntries(newVal);
         }
-        this.searchOnlyMatches = new SearcherMatchedOnly(
-            this.matchedEntries?.map(e => EntrySummary.fromEntry(e))
-        );
-        this.searchOnlyMatches.execute(
-            this.currentSearchTerm,
-            (this as any).onSearchOnlyMatchesComplete.bind(this)
-        );
+    },
+    created(this: any) {
+        this.initAndSearchMatchedEntries(this.matchedEntries);
     },
     mounted(this: any) {
         this.$store.subscribe((mutation, state) => {
@@ -150,6 +146,20 @@ export default {
         },
         exitList(this: any) {
             (document.getElementById("searchBox") as HTMLInputElement).focus();
+        },
+        initAndSearchMatchedEntries(this: any, matchedEntries: ModelEntry[]) {
+            if (matchedEntries) {
+                for (let i = 0; i < matchedEntries.length; i++) {
+                    this.uidMap.set(matchedEntries[i].uuid, matchedEntries[i].entryIndex);
+                }
+            }
+            this.searchOnlyMatches = new SearcherMatchedOnly(
+                matchedEntries?.map(e => EntrySummary.fromEntry(e))
+            );
+            this.searchOnlyMatches.execute(
+                this.currentSearchTerm,
+                (this as any).onSearchOnlyMatchesComplete.bind(this)
+            );
         }
     }
 };

@@ -105,6 +105,16 @@
                                 </v-btn>
                             </v-col>
                         </v-row>
+                        <v-row v-if="isMatchedEntry" justify="space-between" align="center">
+                            <v-col class="text-truncate pt-0 ma-0">
+                                <v-divider></v-divider>
+                                <v-checkbox
+                                    :label="$i18n('preferred_matching_entry')"
+                                    :input-value="entrySummary.isPreferredMatch"
+                                    @change="onPreferredEntryClick"
+                                ></v-checkbox>
+                            </v-col>
+                        </v-row>
                     </v-container>
                 </v-slide-y-transition>
             </v-card-text>
@@ -180,6 +190,10 @@ export default {
         fullEntryPath: function (this: any) {
             const e = this.entrySummary.fullDetails as Entry;
             return e.database.name + " > " + e.parentGroup.path;
+        },
+        isMatchedEntry: function (this: any) {
+            const e = this.entrySummary as EntrySummary;
+            return typeof e.isPreferredMatch === "boolean";
         }
     },
     methods: {
@@ -272,6 +286,9 @@ export default {
         },
         exitList(this: any, event: Event) {
             this.$emit("move-out-of-list");
+        },
+        onPreferredEntryClick(this: any, event: Event) {
+            this.$emit("pref-entry-toggle", { uuid: this.entrySummary.uuid });
         }
     }
 };

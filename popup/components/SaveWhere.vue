@@ -99,6 +99,7 @@ function findDatabaseByGroup(databases: Database[], group: Group) {
 }
 
 export default {
+    mixins: [Port.mixin],
     props: ["preferredGroupUuid", "displayReason"],
     data: () => ({
         search: null,

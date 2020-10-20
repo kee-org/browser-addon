@@ -34,8 +34,9 @@
                 </div>
                 <SearchResults
                     v-show="showSearchPanel"
-                    :matched-entries="matchedEntries"
+                    :matched-entries="cachedMatchedEntries"
                     :frame-id="frameId"
+                    @pref-entry-toggle="prefEntryToggle"
                 />
                 <Save1stParty
                     v-if="showSaveStart && !showSaveWhere"
@@ -191,6 +192,10 @@ import { SaveEntryResult } from "../common/SaveEntryResult";
 import { Field } from "../common/model/Field";
 import { Locator } from "../common/model/Locator";
 import { copyStringToClipboard } from "../common/copyStringToClipboard";
+import { configManager } from "../common/ConfigManager";
+import { AddonMessage } from "../common/AddonMessage";
+
+declare const punycode;
 
 export default {
     components: {
@@ -203,26 +208,30 @@ export default {
     },
     mixins: [Port.mixin],
     props: ["matchedEntries", "frameId"],
-    data: () => ({
-        // We can't use the Vuex property directly because when it changes it causes
-        // the app to re-render from scratch, destroying the user input that triggered
-        // the datestamp change. Instead we can watch for changes and only modify this
-        // value in a set of circumstances that meet our requirements.
-        // Also note that Chromium and Firefox extensions behave differently - Chrome
-        // persists strings to represent the Date whereas Firefox persists a valid
-        // Date object. Hence every place where this is used, you must wrap the
-        // variable in a new Date(...) call before comparing against other Dates
-        saveLastActiveAt: null,
-        showSaveWhere: false,
-        displayWhereReason: null,
-        preferredGroupUuid: "",
+    data: function (this: any) {
+        return {
+            // We can't use the Vuex property directly because when it changes it causes
+            // the app to re-render from scratch, destroying the user input that triggered
+            // the datestamp change. Instead we can watch for changes and only modify this
+            // value in a set of circumstances that meet our requirements.
+            // Also note that Chromium and Firefox extensions behave differently - Chrome
+            // persists strings to represent the Date whereas Firefox persists a valid
+            // Date object. Hence every place where this is used, you must wrap the
+            // variable in a new Date(...) call before comparing against other Dates
+            saveLastActiveAt: null,
+            showSaveWhere: false,
+            displayWhereReason: null,
+            preferredGroupUuid: "",
 
-        // imported constants are only available in Vue if we assign them to data
-        tooltipDelay,
-        manualRecoveryPromptTimeMs,
-        autoRecoveryTimeMs,
-        showPasswordGenerator: false
-    }),
+            cachedMatchedEntries: this.matchedEntries,
+
+            // imported constants are only available in Vue if we assign them to data
+            tooltipDelay,
+            manualRecoveryPromptTimeMs,
+            autoRecoveryTimeMs,
+            showPasswordGenerator: false
+        };
+    },
     computed: {
         ...mapGetters([
             "showGeneratePasswordLink",
@@ -419,6 +428,26 @@ export default {
         },
         copyToClipboard: async function (this: any, payload) {
             if (payload?.value) await copyStringToClipboard(payload.value);
+        },
+        prefEntryToggle: async function (this: any, payload: any) {
+            if (payload?.uuid) {
+                const currentTab = (
+                    await browser.tabs.query({
+                        active: true,
+                        currentWindow: true
+                    })
+                )[0];
+                if (!currentTab) return;
+                const url = new URL(currentTab.url);
+                url.hostname = punycode.toUnicode(url.hostname);
+                configManager.togglePreferredEntryUuid(payload.uuid, url.href);
+                const conf = configManager.siteConfigFor(url.href);
+                this.cachedMatchedEntries = this.cachedMatchedEntries.map(me => {
+                    me.isPreferredMatch = conf.preferredEntryUuid === me.uuid ? true : false;
+                    return me;
+                });
+                Port.postMessage({ action: Action.DetectForms } as AddonMessage);
+            }
         }
     }
 };

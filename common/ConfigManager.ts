@@ -658,6 +658,7 @@ export class ConfigManager {
                 "Auto"
             );
         }
+        this.save();
     }
 
     private removePreferredEntryUuid(cnl: SiteConfigNodeAndIndex) {
@@ -710,7 +711,6 @@ export class ConfigManager {
             configLookup[value] = { config: new SiteConfig(), source, matchWeight: 100 };
         }
         Object.assign(configLookup[value].config, partialConfig);
-        this.save();
     }
 }
 
