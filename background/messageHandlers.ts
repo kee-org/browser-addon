@@ -138,6 +138,13 @@ export function browserPopupMessageHandler(this: browser.runtime.Port, msg: Addo
     if (msg.loginEditor) {
         window.kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
     }
+    if (msg.action === Action.DetectForms) {
+        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
+            port.postMessage({
+                action: Action.DetectForms
+            });
+        }, this);
+    }
 }
 
 export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {

@@ -76,6 +76,7 @@ import { Action } from "../../common/Action";
 import { SaveState } from "../../common/SaveState";
 
 export default {
+    mixins: [Port.mixin],
     props: ["field", "standalone", "topmost"],
     data: () => ({
         selectedProfile: "",

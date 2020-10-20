@@ -834,5 +834,9 @@
   "pref_hidden_options_present_explanation": {
     "message": "Kee is automatically managing additional options for this site so you can't delete it.",
     "description": "Notification and explanation to user that one or more hidden settings are present for the configuration of a specific site"
+  },
+  "preferred_matching_entry": {
+    "message": "Preferred matching entry",
+    "description": "Label for toggle between preferred status for the specific matched entry the toggle is displayed upon."
   }
 }

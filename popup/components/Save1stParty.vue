@@ -146,6 +146,7 @@ export default {
     components: {
         FieldEditor
     },
+    mixins: [Port.mixin],
     data: () => ({
         originalFields: [],
         differentSiteConfirmation: false,
