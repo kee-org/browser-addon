@@ -79,22 +79,46 @@ export class jsonrpcClient {
         );
     }
 
-    selectDB(fileName: string, requestFocusReturn: boolean, sessionType?: SessionType) {
-        let sessionManager = sessionType
+    selectAndFocusDatabase(vaultFileName: string, keepassFilename: string) {
+        let sessionManager: EventSessionManager | WebsocketSessionManager;
+        const smEvent = this.kprpcClient.getSessionManagerByType(SessionType.Event);
+        const smWebsocket = this.kprpcClient.getSessionManagerByType(SessionType.Websocket);
+        if (smEvent.isActive() && smWebsocket.isActive()) {
+            if (vaultFileName && !keepassFilename) {
+                sessionManager = smEvent;
+            } else if (keepassFilename && !vaultFileName) {
+                sessionManager = smWebsocket;
+            } else {
+                sessionManager = smEvent;
+            }
+        } else if (smEvent.isActive()) {
+            sessionManager = smEvent;
+        } else if (smWebsocket.isActive()) {
+            sessionManager = smWebsocket;
+        }
+        if (!sessionManager) {
+            KeeLog.info("No active session found");
+            return null;
+        }
+        if (sessionManager instanceof WebsocketSessionManager) {
+            this.kprpcClient.request(
+                [sessionManager],
+                "OpenAndFocusDatabase",
+                [keepassFilename, false],
+                null,
+                ++this.kprpcClient.requestId
+            );
+        }
+
+        return sessionManager instanceof EventSessionManager
+            ? SessionType.Event
+            : SessionType.Websocket;
+    }
+
+    selectDB(fileName: string, requestFocusReturn: boolean, sessionType: SessionType) {
+        const sessionManager = sessionType
             ? this.kprpcClient.getSessionManagerByType(sessionType)
             : null;
-        if (!sessionManager) {
-            // We should only use this branch for opening a database when no DB is opened in any session.
-            // We may have just opened the vault, or we may have an existing session open to
-            // one or more Event and/or Websocket servers.
-            // There's no logical way to decide which session to target this request at so we just go
-            // for whatever is active, preferring an Event source if multiple sessions are open
-            sessionManager = this.kprpcClient.getPrimarySessionManager();
-            if (!sessionManager) {
-                KeeLog.error("No active session found");
-                return;
-            }
-        }
 
         // Requesting return focus is default behaviour for ChangeDatabase so we know if we want to
         // suppress that behaviour we must use the OpenAndFocusDatabase feature.

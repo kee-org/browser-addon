@@ -492,10 +492,26 @@ export class Kee {
 
     // if the MRU database is known, open that but otherwise send empty string which will cause user
     // to be prompted to choose a DB to open
-    getFileNameToOpen() {
+    getKeePassFileNameToOpen() {
         let databaseFileName = configManager.current.keePassDBToOpen;
-        if (databaseFileName == "") databaseFileName = configManager.current.keePassMRUDB;
-        return databaseFileName;
+        if (databaseFileName == "" || this.isKeeVaultFileName(databaseFileName)) {
+            databaseFileName = configManager.current.keePassMRUDB;
+        }
+        return !this.isKeeVaultFileName(databaseFileName) ? databaseFileName : "";
+    }
+
+    getVaultFileNameToOpen() {
+        let databaseFileName = configManager.current.keePassDBToOpen;
+        if (databaseFileName == "" || !this.isKeeVaultFileName(databaseFileName)) {
+            databaseFileName = configManager.current.keePassMRUDB;
+        }
+        return this.isKeeVaultFileName(databaseFileName) ? databaseFileName : "";
+    }
+
+    isKeeVaultFileName(name: string) {
+        if (name.indexOf("-") === -1) return false;
+        if (name.indexOf("/") >= 0 || name.indexOf("\\") >= 0) return false;
+        return true;
     }
 
     openKeePass() {
@@ -515,11 +531,36 @@ export class Kee {
             return;
         }
 
-        this.selectDatabase(this.getFileNameToOpen(), !hasWebsocketDBs, SessionType.Websocket);
+        this.selectDatabase(
+            this.getKeePassFileNameToOpen(),
+            !hasWebsocketDBs,
+            SessionType.Websocket
+        );
     }
 
-    loginToPasswordManager() {
-        this.selectDatabase(this.getFileNameToOpen(), true);
+    async loginToPasswordManager() {
+        const sessionType = await this.selectAndFocusDatabase(
+            this.getVaultFileNameToOpen(),
+            this.getKeePassFileNameToOpen()
+        );
+        if (sessionType !== SessionType.Websocket) {
+            const vaultTabs = await browser.tabs.query({
+                url: [
+                    "https://keevault.pm/*",
+                    "https://app-beta.kee.pm/*",
+                    "https://app-dev.kee.pm/*"
+                ]
+            });
+            if (vaultTabs && vaultTabs[0]) {
+                browser.tabs.update(vaultTabs[0].id, { active: true });
+                browser.windows.update(vaultTabs[0].windowId, { focused: true });
+            } else {
+                browser.tabs.create({
+                    url: "https://keevault.pm/",
+                    active: true
+                });
+            }
+        }
     }
 
     recordEntrySaveResult(saveType: "updated" | "created", entry?: Entry) {
@@ -568,6 +609,18 @@ export class Kee {
     selectDatabase(fileName, requestReturnFocus, sessionType?: SessionType) {
         try {
             this.KeePassRPC.selectDB(fileName, requestReturnFocus, sessionType);
+        } catch (e) {
+            KeeLog.error(
+                "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
+                    e
+            );
+            throw e;
+        }
+    }
+
+    selectAndFocusDatabase(vaultFileName: string, keepassFilename: string) {
+        try {
+            return this.KeePassRPC.selectAndFocusDatabase(vaultFileName, keepassFilename);
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
