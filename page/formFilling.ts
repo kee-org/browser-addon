@@ -986,8 +986,12 @@ export class FormFilling {
             ) {
                 this.Logger.debug("No entries for form.");
             } else if (matchingLogin == null) {
-                this.Logger.debug("Multiple entries for form, so estimating most relevant.");
-                matchingLogin = orderedEntriesWithPreference[0];
+                this.Logger.debug(
+                    "Multiple entries for form, so using preferred or most relevant."
+                );
+                matchingLogin =
+                    orderedEntriesWithPreference.find(e => e.isPreferredMatch) ||
+                    orderedEntriesWithPreference[0];
                 multipleMatches = true;
                 checkMatchingLoginRelevanceThreshold = true;
             }
