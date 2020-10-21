@@ -78,14 +78,9 @@ export default {
             (this as any).search.execute(value, (this as any).onSearchComplete.bind(this), []);
         },
         focusFirstResult() {
-            const filteredMatches = document.getElementById("filteredMatches-Container");
-            if (filteredMatches && filteredMatches.firstElementChild) {
-                (filteredMatches.firstElementChild as HTMLLIElement).focus();
-                return;
-            }
-            const searchResults = document.getElementById("searchResults-Container");
-            if (searchResults && searchResults.firstElementChild) {
-                (searchResults.firstElementChild as HTMLLIElement).focus();
+            const firstCard = document.querySelector("#searchPanel > .v-card");
+            if (firstCard) {
+                (firstCard as HTMLLIElement).focus();
             }
         },
         handleEscape() {

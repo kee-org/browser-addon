@@ -11,6 +11,7 @@
             :isFirstInAList="index === 0"
             :frame-id="frame-id"
             :entry-index="match.originalIndex"
+            :data-index="index"
             @move-next-in-list="
                 nextInList(index, 'listAarray', filteredMatches.length)
             "
