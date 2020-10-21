@@ -1752,7 +1752,7 @@ export class FormFilling {
                 if (fmScore > mostRelevantScore) {
                     mostRelevantScore = fmScore;
                 }
-                const fmScoreForRatio = fmScore - (visibleFieldMap[i] ? 35 : 0);
+                const fmScoreForRatio = fmScore - (visibleFieldMap[i] ? 0 : 10);
                 if (
                     fmScoreForRatio >= minFieldRelevance &&
                     entryFields[j].value &&
