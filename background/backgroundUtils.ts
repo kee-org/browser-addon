@@ -2,8 +2,6 @@ import { KeeLog } from "../common/Logger";
 
 // constructor
 class BackgroundUtils {
-    constructor() {}
-
     /*******************************************
     / General utility functions
     /*******************************************/

@@ -135,7 +135,7 @@ export class Field {
 
     static fromKPRPCFieldDTO(f: FieldDto) {
         let type: FieldType = "text";
-        let locatorType: string = "text";
+        let locatorType = "text";
 
         switch (f.type) {
             case FormFieldTypeDTO.password:

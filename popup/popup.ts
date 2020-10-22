@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuetify from "vuetify";
-import colors from "vuetify/lib/util/colors";
 import App from "./App.vue";
 import store from "../store";
 import { KeeLog } from "../common/Logger";
@@ -32,12 +31,12 @@ function startup() {
             syncContent.init(
                 m.initialState,
                 (mutation: MutationPayload) => {
-                    Port.postMessage({ mutation } as AddonMessage);
+                    Port.postMessage({ mutation: mutation } as AddonMessage);
                 },
                 () => {
                     new Vue({
                         el: "#main",
-                        store,
+                        store: store,
                         vuetify: new Vuetify({
                             theme: {
                                 dark: configManager.activeTheme === "dark",
@@ -63,14 +62,14 @@ function startup() {
                                 }
                             }
                         }),
-                        mounted() {
+                        mounted: function () {
                             // This can wait until after the popup app has rendered, at least until there is
                             // some way to launch in password generation mode
                             Port.postMessage({
                                 action: Action.GetPasswordProfiles
                             });
                         },
-                        render(h) {
+                        render: function (h) {
                             return h(App, {
                                 props: {
                                     matchedEntries: !m.entries ? null : m.entries,

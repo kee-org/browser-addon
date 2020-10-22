@@ -88,7 +88,7 @@ export class Entry {
             f => f.type === FormFieldTypeDTO.username
         );
 
-        const unsortedFields = entryDto.formFieldList.map((f, i) => {
+        const unsortedFields = entryDto.formFieldList.map(f => {
             if (f.page > maximumPage) maximumPage = f.page;
 
             return Field.fromKPRPCFieldDTO(f);

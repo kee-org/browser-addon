@@ -12,13 +12,8 @@ export class SearcherAll {
         this.validateConfig();
     }
     private configIsValid: boolean;
-    private makeAsyncTimer;
+    private _makeAsyncTimer;
     private searchConfig: SearchConfig;
-
-    private reconfigure(config) {
-        this.searchConfig = resolveConfig(config);
-        return this.validateConfig();
-    }
 
     public execute(query, onComplete, filterDomains: string[]) {
         let abort = false;
@@ -31,9 +26,7 @@ export class SearcherAll {
                 : false;
 
         if (!this.configIsValid) {
-            KeeLog.error(
-                "You can't execute a search while the search configuration is invalid. Please fix it by calling reconfigure()."
-            );
+            KeeLog.error("You can't execute a search while the search configuration is invalid.");
             abort = true;
         }
 
@@ -104,7 +97,7 @@ export class SearcherAll {
 
         if (onComplete) {
             // Create a timer to make the search run async
-            this.makeAsyncTimer = setTimeout(actualSearch.bind(this), 1);
+            this._makeAsyncTimer = setTimeout(actualSearch.bind(this), 1);
             return;
         } else {
             actualSearch.call(this);

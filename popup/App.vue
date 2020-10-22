@@ -1,6 +1,6 @@
 <template>
     <v-app id="inspire">
-        <v-app-bar v-model="showSearchPanel" app style="max-width: 400px;">
+        <v-app-bar v-model="showSearchPanel" app style="max-width: 400px">
             <SearchInput />
         </v-app-bar>
         <v-main :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
@@ -52,7 +52,7 @@
         </v-main>
 
         <v-tooltip left :open-delay="tooltipDelay">
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
                 <v-btn
                     v-show="showSearchPanel && !showSaveRecovery"
                     fab
@@ -61,7 +61,7 @@
                     bottom
                     right
                     color="primary"
-                    style="bottom: 75px; right: 24px;"
+                    style="bottom: 75px; right: 24px"
                     :class="hasSubmittedData ? 'pulse-button' : ''"
                     v-on="on"
                     @click="saveStart"
@@ -74,7 +74,7 @@
 
         <v-footer app height="auto">
             <v-tooltip top :open-delay="tooltipDelay">
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                     <v-btn
                         id="password-open-kee-vault"
                         :aria-label="$i18n('Menu_Button_open_kee_vault_label')"
@@ -89,7 +89,7 @@
                 <span>{{ $i18n("Menu_Button_open_kee_vault_label") }}</span>
             </v-tooltip>
             <v-tooltip top :open-delay="tooltipDelay">
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                     <v-btn
                         v-show="showOpenKeePassButton"
                         id="password-open-keepass"
@@ -105,14 +105,12 @@
                 <span>{{ $i18n("Menu_Button_open_keepass_label") }}</span>
             </v-tooltip>
             <v-divider vertical />
-            <v-icon size="20px" :color="statusIconColour" class="mx-2">
-                mdi-lock
-            </v-icon>
+            <v-icon size="20px" :color="statusIconColour" class="mx-2"> mdi-lock </v-icon>
             <v-tooltip top :open-delay="tooltipDelay">
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                     <div
                         class="text-caption py-1 shrink"
-                        style="word-break: break-word; overflow-wrap: break-word; max-width: 210px;"
+                        style="word-break: break-word; overflow-wrap: break-word; max-width: 210px"
                         v-on="on"
                     >
                         {{ connectionStatus }}
@@ -124,7 +122,7 @@
             <v-spacer />
 
             <v-menu top offset-y small>
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                     <v-btn icon small v-on="on">
                         <v-icon>mdi-menu</v-icon>
                     </v-btn>
@@ -135,25 +133,19 @@
                         <v-list-item-title right class="mr-4 text-right text-body-2">
                             {{ $i18n("Help_Centre_Button_label") }}
                         </v-list-item-title>
-                        <v-icon size="20px">
-                            mdi-help
-                        </v-icon>
+                        <v-icon size="20px"> mdi-help </v-icon>
                     </v-list-item>
                     <v-list-item @click="showOptions">
                         <v-list-item-title class="mr-4 text-right body-2">
                             {{ $i18n("Menu_Button_options_label") }}
                         </v-list-item-title>
-                        <v-icon size="20px">
-                            mdi-settings
-                        </v-icon>
+                        <v-icon size="20px"> mdi-settings </v-icon>
                     </v-list-item>
                     <v-list-item v-show="showSearchPanel" @click="showPasswordGenerator = true">
                         <v-list-item-title class="mr-4 text-right body-2">
                             {{ $i18n("Menu_Button_copyNewPasswordToClipboard_label") }}
                         </v-list-item-title>
-                        <v-icon size="20px">
-                            mdi-flash
-                        </v-icon>
+                        <v-icon size="20px"> mdi-flash </v-icon>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -168,11 +160,8 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue";
-import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { names as actionNames } from "../store/action-names";
-import { SessionType } from "../common/SessionType";
-import { KeeState } from "../store/KeeState";
 import Notification from "./components/Notification.vue";
 import SearchInput from "./components/SearchInput.vue";
 import SearchResults from "./components/SearchResults.vue";
@@ -183,7 +172,6 @@ import { Port } from "../common/port";
 import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
 import { SaveState } from "../common/SaveState";
-import { KeeVue } from "../common/KeeVue";
 import { Entry } from "../common/model/Entry";
 import { supplementEntryState } from "./supplementEntryState";
 import { fetchFavicon, getFaviconUrl } from "./favicon";
@@ -199,12 +187,12 @@ declare const punycode;
 
 export default {
     components: {
-        Notification,
-        SearchResults,
-        SearchInput,
-        Save1stParty,
-        SaveWhere,
-        PasswordGenerator
+        Notification: Notification,
+        SearchResults: SearchResults,
+        SearchInput: SearchInput,
+        Save1stParty: Save1stParty,
+        SaveWhere: SaveWhere,
+        PasswordGenerator: PasswordGenerator
     },
     mixins: [Port.mixin],
     props: ["matchedEntries", "frameId"],
@@ -226,9 +214,9 @@ export default {
             cachedMatchedEntries: this.matchedEntries,
 
             // imported constants are only available in Vue if we assign them to data
-            tooltipDelay,
-            manualRecoveryPromptTimeMs,
-            autoRecoveryTimeMs,
+            tooltipDelay: tooltipDelay,
+            manualRecoveryPromptTimeMs: manualRecoveryPromptTimeMs,
+            autoRecoveryTimeMs: autoRecoveryTimeMs,
             showPasswordGenerator: false
         };
     },
@@ -277,7 +265,7 @@ export default {
             }
         }
     },
-    async mounted(this: any) {
+    mounted: async function (this: any) {
         this.saveLastActiveAt = this.$store.state.saveState?.lastActiveAt;
 
         const discardRequired = this.handleLastSaveResult();

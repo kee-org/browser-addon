@@ -30,7 +30,7 @@ type SiteConfigNodeAndIndex = {
 declare const chrome;
 
 // increment when changes are introduced that require data migration
-export const LATEST_VERSION: number = 7;
+export const LATEST_VERSION = 7;
 
 export const defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
@@ -178,7 +178,7 @@ export class ConfigManager {
     // on the user's system but whatever the reason, the items here are especially hard
     // to fix through the UI and critical to Kee functionality so we take no chances
     private fixInvalidConfigData() {
-        let saveNeeded: boolean = false;
+        let saveNeeded = false;
         if (this.current.KPRPCStoredKeys == null) {
             this.current.KPRPCStoredKeys = {};
             saveNeeded = true;

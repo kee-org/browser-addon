@@ -24,7 +24,7 @@
                     <v-card
                         :loading="loading"
                         class="mx-auto px-3 py-0 mt-4"
-                        style="font-family: monospace;"
+                        style="font-family: monospace"
                         max-width="300"
                     >
                         <v-row class="flex-nowrap" align="center">

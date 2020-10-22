@@ -9,7 +9,7 @@ export class SyncBackground {
         private store: Store<KeeState>,
         private distributeMutation: (mutation, excludedPort: browser.runtime.Port) => void
     ) {
-        store.subscribe((mutation, state) => {
+        store.subscribe(mutation => {
             KeeLog.debug("mutation type: " + mutation.type);
             // Check if it is a remotely received mutation, if it is just ignore it, if not distribute
             for (let i = 0; i < this.receivedMutations.length; i++) {

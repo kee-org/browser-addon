@@ -74,6 +74,7 @@ export class KeeLogger {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
     send(logLevel: 1 | 2 | 3 | 4, message: string) {
         // Do nothing.
         // For advanced debugging, especially across browser restarts,

@@ -1,6 +1,5 @@
 import { KeeState } from "./KeeState";
 import { Store, MutationPayload } from "vuex";
-import { KeeLog } from "../common/Logger";
 
 export class SyncContent {
     initialized: any;

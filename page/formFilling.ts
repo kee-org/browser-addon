@@ -56,8 +56,6 @@ export class FormFilling {
     // Should really make this private and call indirectly but I'm wary of all performance overheads wrt DOM mutation observers
     public formFinderTimer: number = null;
 
-    private distanceMap: Map<Node, number>;
-
     private semanticWhitelistCache;
     private semanticBlacklistCache;
 
@@ -174,7 +172,7 @@ export class FormFilling {
     private calculateFieldMatchScore(
         matchedField: MatchedField,
         dataField: Field,
-        currentPage,
+        _currentPage, //TODO:4: remove param
         config: FieldMatchScoreConfig,
         isVisible?: boolean
     ) {
@@ -314,7 +312,7 @@ export class FormFilling {
                 value: dataField.value
             });
 
-            fieldScoreMatrix = fieldScoreMatrix.filter(function (element, index, array) {
+            fieldScoreMatrix = fieldScoreMatrix.filter(function (element) {
                 return element.dataFieldIndex != dfi && element.formFieldIndex != ffi;
             });
 
@@ -678,10 +676,10 @@ export class FormFilling {
                     return;
                 }, // Not possible to submit a pseudo form unless a button with custom JS has already been found
                 offsetParent: true, // This tricks element visibility checks into treating this as visible to the user
-                addEventListener: function (name: string, handler) {
+                addEventListener: function () {
                     return;
                 }, //TODO:4: hook up to the submit function to simulate real form submission
-                removeEventListener: function (name: string, handler) {
+                removeEventListener: function () {
                     return;
                 }
             };
@@ -888,7 +886,6 @@ export class FormFilling {
         // from now on we concentrate on just the most relevant form and the fields we found earlier
         const form = matchResult.forms[matchResult.mostRelevantFormIndex];
         const passwordFields = matchResult.passwordFieldsArray[matchResult.mostRelevantFormIndex];
-        const usernameIndex = matchResult.usernameIndexArray[matchResult.mostRelevantFormIndex];
         const otherFields = matchResult.otherFieldsArray[matchResult.mostRelevantFormIndex];
 
         const orderedEntries = this.sortMatchedEntries(

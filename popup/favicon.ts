@@ -3,7 +3,7 @@ async function sleep(milliseconds: number) {
 }
 
 export function fetchFavicon(url): Promise<string> {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         if (!url) {
             resolve(undefined);
             return;

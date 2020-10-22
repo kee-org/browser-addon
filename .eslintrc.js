@@ -1,10 +1,11 @@
 const INLINE_ELEMENTS = require('./node_modules/eslint-plugin-vue/lib/utils/inline-non-void-elements.json');
-const htmlElementContentNewlineIgnores = ["pre", "textarea", "v-icon", ...INLINE_ELEMENTS];
+const htmlElementContentNewlineIgnores = ["v-btn", "pre", "textarea", "v-icon", ...INLINE_ELEMENTS];
 
 module.exports = {
     root: true,
     "extends": [
         "eslint:recommended",
+        'plugin:@typescript-eslint/recommended',
         'plugin:vue/recommended',
         "plugin:prettier/recommended"
     ],
@@ -31,7 +32,8 @@ module.exports = {
     },
     "plugins": [
         "@typescript-eslint",
-        "prettier"
+        "prettier",
+        "vue"
     ],
     "rules": {
         "prettier/prettier": "error",
@@ -113,12 +115,8 @@ module.exports = {
         "no-redeclare": "error",
         "no-return-await": "error",
         "no-sequences": "off",
-        "no-shadow": [
-            "error",
-            {
-                "hoist": "all"
-            }
-        ],
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": "error",
         "no-throw-literal": "error",
         "no-trailing-spaces": [
             "error",
@@ -136,16 +134,17 @@ module.exports = {
                 "allowShortCircuit": true
             }
         ],
-        // Doesn't work well with TypeScript
-        "no-unused-vars": "off",
-
         "no-var": "error",
         "one-var": [
             "error",
             "never"
         ],
         "prefer-const": "error",
-        "curly": [2, "multi-line"]
+        "curly": [2, "multi-line"],
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars-experimental": "error"
     },
     overrides: [
         {

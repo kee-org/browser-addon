@@ -26,7 +26,7 @@ export class EventSessionManager {
     private eventActivityTimer: number; // we only support one session
     private eventActivityTimeout = 30000;
     private latestSession: EventSession;
-    private callbacks: {};
+    private callbacks: Record<string, (resultWrapper: Partial<ResultWrapper>) => void>;
     private _features: string[] = [];
 
     public isActive() {

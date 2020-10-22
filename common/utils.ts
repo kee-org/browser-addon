@@ -5,8 +5,6 @@ declare const pslData;
 export class Utils {
     private pslInitialised = false;
 
-    constructor() {}
-
     /*******************************************
     / General utility functions
     /*******************************************/
@@ -56,11 +54,7 @@ export class Utils {
     }
 
     // input can be either UTF8 formatted string or a byte array
-    hash<T extends string | Uint8Array>(
-        data: T,
-        outFormat: string = "hex",
-        algorithm: string = "SHA-256"
-    ) {
+    hash<T extends string | Uint8Array>(data: T, outFormat = "hex", algorithm = "SHA-256") {
         let inBuffer: any;
 
         if (typeof data == "string") inBuffer = new TextEncoder().encode(data);

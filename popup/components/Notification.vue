@@ -1,6 +1,6 @@
 <template>
     <v-card color="yellow lighten-3">
-        <div style="float: right;">
+        <div style="float: right">
             <v-btn
                 text
                 class="ml-4 mr-2 px-2 primary--text"
@@ -27,7 +27,7 @@
                             :disabled="!but.tooltip"
                             :open-delay="tooltipDelay"
                         >
-                            <template v-slot:activator="{ on }">
+                            <template #activator="{ on }">
                                 <v-btn
                                     :id="but.id"
                                     class="mr-4 my-2"
@@ -53,11 +53,8 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue";
-import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import { mapActions } from "vuex";
 import { names as actionNames } from "../../store/action-names";
-import { SessionType } from "../../common/SessionType";
-import { KeeState } from "../../store/KeeState";
 import { ButtonAction } from "../../common/Button";
 import { configManager } from "../../common/ConfigManager";
 import { AddonMessage } from "../../common/AddonMessage";
@@ -68,7 +65,7 @@ export default {
     mixins: [Port.mixin],
     props: ["notification"],
     data: () => ({
-        tooltipDelay
+        tooltipDelay: tooltipDelay
     }),
     methods: {
         ...mapActions(actionNames),

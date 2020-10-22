@@ -4,7 +4,7 @@ import { KeeLog } from "../common/Logger";
 
 export class ConfigSyncManager {
     private lastKnownSynced: { settings: Partial<Config>; version: number };
-    private enabled: boolean = false;
+    private enabled = false;
 
     public updateFromRemoteConfig(config: { settings: Partial<Config>; version: number }) {
         // Will be falsy if a user is not logged in to a DB in Kee Vault

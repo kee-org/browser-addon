@@ -88,9 +88,7 @@
         >
             {{ $i18n("save") }}
         </v-btn>
-        <v-btn v-if="loading" loading disabled right color="primary">
-            .........
-        </v-btn>
+        <v-btn v-if="loading" loading disabled right color="primary"> ......... </v-btn>
         <v-btn
             v-if="editingExisting"
             :disabled="showURLMismatchWarning && !differentSiteConfirmation"

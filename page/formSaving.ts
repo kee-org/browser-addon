@@ -2,7 +2,6 @@ import { FormUtils } from "./formsUtils";
 import { MatchResult } from "./MatchResult";
 import { FilledField } from "./FilledField";
 import { KeeLogger } from "../common/Logger";
-import { Config } from "../common/config";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { MatchedField } from "./MatchedField";
@@ -23,20 +22,12 @@ interface SubmitHandlerAttachment {
 export class FormSaving {
     private Logger: KeeLogger;
     private formUtils: FormUtils;
-    private config: Config;
     private SubmitHandlerAttachments: SubmitHandlerAttachment[] = [];
     private matchResult: MatchResult; //TODO:4: May be overkill to have all this data available for saving
 
-    constructor(
-        private myPort: browser.runtime.Port,
-        private parentFrameId: number,
-        logger: KeeLogger,
-        formUtils: FormUtils,
-        config: Config
-    ) {
+    constructor(private myPort: browser.runtime.Port, logger: KeeLogger, formUtils: FormUtils) {
         this.Logger = logger;
         this.formUtils = formUtils;
-        this.config = config;
     }
 
     public addSubmitHandler(target: HTMLElement, formToSubmit: HTMLFormElement) {
@@ -69,7 +60,7 @@ export class FormSaving {
     // mangle the contents of the fields before submitting them).
     //TODO:4: Possibly could slightly reduce incidence of this problem by listening
     // to every click on the document body or tracking all input events but performance?
-    private submitHandler(e: Event, form: HTMLFormElement) {
+    private submitHandler(_e: Event, form: HTMLFormElement) {
         this.Logger.debug("submitHandler called");
 
         // Until the next time we have searched for forms in this page,

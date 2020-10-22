@@ -20,7 +20,6 @@
 import { mapActions, mapGetters } from "vuex";
 import { names as actionNames } from "../../store/action-names";
 import { configManager } from "../../common/ConfigManager";
-import { AddonMessage } from "../../common/AddonMessage";
 import { Port } from "../../common/port";
 import { SearcherAll } from "../../common/SearcherAll";
 import { mTypes } from "../../store";
@@ -52,7 +51,7 @@ export default {
         this.onDBChanged();
     },
     mounted(this: any) {
-        this.$store.subscribe((mutation, state) => {
+        this.$store.subscribe(mutation => {
             if (mutation.type === mTypes.updateKeePassDatabases) {
                 this.onDBChanged();
             }

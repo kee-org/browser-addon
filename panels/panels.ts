@@ -16,7 +16,6 @@ import Panel from "./Panel.vue";
 let frameState: FrameState;
 
 function updateFrameState(newState: FrameState) {
-    const oldState = frameState;
     frameState = newState;
 }
 
@@ -91,7 +90,7 @@ function startup() {
                         () => {
                             new Vue({
                                 el: "#main",
-                                store,
+                                store: store,
                                 vuetify: new Vuetify({
                                     theme: {
                                         dark: darkTheme,
@@ -142,7 +141,7 @@ function startup() {
     if (isLegacy) {
         const closeButton = document.createElement("button");
         closeButton.textContent = $STR("close");
-        closeButton.addEventListener("click", e => {
+        closeButton.addEventListener("click", () => {
             closePanel();
         });
         document.getElementById("closeContainer").appendChild(closeButton);

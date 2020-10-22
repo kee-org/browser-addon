@@ -160,7 +160,7 @@ export class KeeFieldIcon {
         canvas.height = 16;
         canvas.width = 16;
         const img = document.createElement("img");
-        img.addEventListener("load", e => {
+        img.addEventListener("load", () => {
             const context = canvas.getContext("2d");
             context.drawImage(img, 0, 0);
             context.fillStyle = "white";

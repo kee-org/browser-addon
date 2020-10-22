@@ -11,14 +11,13 @@ class NetworkAuth {
         this.createNearNode(document.getElementById("network_auth_choose"), entries);
     }
 
-    supplyNetworkAuth(entryIndex: number) {
-        browser.tabs.getCurrent().then(tab => {
-            browser.runtime.sendMessage({
-                action: "NetworkAuth_ok",
-                selectedEntryIndex: entryIndex
-            });
-            const removing = browser.tabs.remove(tab.id);
+    async supplyNetworkAuth(entryIndex: number) {
+        const tab = await browser.tabs.getCurrent();
+        browser.runtime.sendMessage({
+            action: "NetworkAuth_ok",
+            selectedEntryIndex: entryIndex
         });
+        await browser.tabs.remove(tab.id);
     }
 
     public createNearNode(node: HTMLElement, entries: Entry[]) {
@@ -78,7 +77,7 @@ class NetworkAuth {
             );
             loginItem.addEventListener(
                 "keeCommand",
-                function (this: HTMLElement, event) {
+                function (this: HTMLElement) {
                     networkAuth.supplyNetworkAuth(parseInt(this.dataset.entryIndex));
                 },
                 false
@@ -92,7 +91,7 @@ class NetworkAuth {
 let networkAuth: NetworkAuth;
 
 function setupNetworkAuthDialog() {
-    window.addEventListener("beforeunload", e =>
+    window.addEventListener("beforeunload", () =>
         browser.runtime.sendMessage({ action: "NetworkAuth_cancel" })
     );
     KeeLog.attachConfig(configManager.current);

@@ -14,7 +14,7 @@ class SiteSearchResult extends SiteConfigNode {
     target: SiteConfigTarget;
 }
 
-let siteModeAll: boolean = true;
+let siteModeAll = true;
 let specificSite: SiteSearchResult;
 let searchResults: SiteSearchResult[];
 
@@ -177,7 +177,7 @@ function setupInputListeners() {
         e.preventDefault();
         e.stopPropagation();
         if ((document.getElementById("siteChooserSearch") as HTMLInputElement).value.length >= 2) {
-            showSiteProperties(e);
+            showSiteProperties();
         }
     });
     document.getElementById("siteAddButton").addEventListener("click", showSiteProperties);
@@ -215,7 +215,7 @@ function setupInputListeners() {
     document.getElementById("pref_theme_desc").addEventListener("change", saveTheme);
 }
 
-function deleteSiteProperties(e: Event) {
+function deleteSiteProperties() {
     if (specificSite) {
         // remove old config entry
         const siteConfigLookup = configManager.siteConfigLookupFor(
@@ -226,11 +226,11 @@ function deleteSiteProperties(e: Event) {
 
         configManager.save();
 
-        siteChooserClearSearch(e);
+        siteChooserClearSearch();
     }
 }
 
-function showSiteProperties(e: Event) {
+function showSiteProperties() {
     const valueElem = document.getElementById("sitePropertiesValue") as HTMLInputElement;
     valueElem.value = (document.getElementById("siteChooserSearch") as HTMLInputElement).value;
 
@@ -257,13 +257,13 @@ function showSiteProperties(e: Event) {
     modal.style.opacity = "1";
 }
 
-function closeSiteProperties(e?: Event) {
+function closeSiteProperties() {
     const modal = document.getElementById("sitePropertiesModal") as HTMLElement;
     modal.style.opacity = "0";
     modal.style.display = "none";
 }
 
-function saveSiteProperties(e: Event) {
+function saveSiteProperties() {
     if (validateSitePropertiesValue()) {
         const value = (document.getElementById("sitePropertiesValue") as HTMLInputElement).value;
         const weight = parseInt(
@@ -311,11 +311,11 @@ function saveSiteProperties(e: Event) {
     }
 }
 
-function sitePropertiesValueChanged(e: Event) {
+function sitePropertiesValueChanged() {
     validateSitePropertiesValue();
 }
 
-function sitePropertiesMethodChanged(e: Event) {
+function sitePropertiesMethodChanged() {
     validateSitePropertiesValue();
 }
 
@@ -738,7 +738,7 @@ function switchToSpecificSitesMode(e) {
     }
 }
 
-function siteChooserKeyPress(e) {
+function siteChooserKeyPress() {
     const searchTerm = (document.getElementById("siteChooserSearch") as HTMLInputElement).value;
 
     document.getElementById("settings").style.display = "none";
@@ -788,7 +788,7 @@ function showSpecificSite() {
     setSiteSpecificConfigValues();
 }
 
-function siteChooserClearSearch(e) {
+function siteChooserClearSearch() {
     (document.getElementById("siteChooserSearch") as HTMLInputElement).value = "";
     document.getElementById("siteSearchClearButton").style.display = "none";
     document.getElementById("siteAddButton").style.display = "none";
@@ -832,7 +832,6 @@ function showSiteList(filterTerm) {
 function findMatchingSiteConfigValues(searchTerm: string) {
     const results: SiteSearchResult[] = [];
 
-    const lookups: SiteConfigLookup[] = [];
     if (configManager.current.siteConfig.domainExact) {
         findSiteConfigValues(
             searchTerm,

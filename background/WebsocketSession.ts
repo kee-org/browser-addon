@@ -9,8 +9,6 @@ client and an KeePassRPC server.
 
 export class WebsocketSessionManager {
     private reconnectionAttemptFrequency: number;
-    private connectionTimeout: number;
-    private activityTimeout: number;
     private connectLock: boolean;
     private wasEverOpen: boolean;
 
@@ -25,13 +23,11 @@ export class WebsocketSessionManager {
     // http://tools.ietf.org/html/rfc6455#section-7.2.3
     // See KeeFox issue #189 for connection algorithm overview:
     // https://github.com/luckyrat/KeeFox/issues/189#issuecomment-23635771
-    private httpChannel;
     private httpChannelURI: string;
-    private reconnectTimer;
-    private onConnectDelayTimer;
+    private _reconnectTimer;
     public connectionProhibitedUntil: Date;
     private speculativeWebSocketAttemptProhibitedUntil: Date;
-    private webSocketTimer;
+    private _webSocketTimer;
     private onOpening;
     private onOpen;
     private onClose;
@@ -40,7 +36,7 @@ export class WebsocketSessionManager {
     private pendingPortChange;
     private _features: string[] = [];
 
-    private callbacks: {};
+    private callbacks: Record<string, (resultWrapper: Partial<ResultWrapper>) => void>;
 
     public isActive() {
         return (
@@ -81,8 +77,6 @@ export class WebsocketSessionManager {
         this.onMessage = onMessage;
         this.isKPRPCAuthorised = isKPRPCAuthorised;
         this.reconnectionAttemptFrequency = 2000;
-        this.connectionTimeout = 10000; // short timeout for connections
-        this.activityTimeout = 3600000; // long timeout for activity
         this.connectLock = false; // protect the connect function so only one event thread (e.g. timer) can execute it at the same time
         this.wasEverOpen = false; // Allows us to only do cleanup when required
 
@@ -95,9 +89,7 @@ export class WebsocketSessionManager {
         // http://tools.ietf.org/html/rfc6455#section-7.2.3
         // See KeeFox issue #189 for connection algorithm overview:
         // https://github.com/luckyrat/KeeFox/issues/189#issuecomment-23635771
-        this.httpChannel = null;
-        this.reconnectTimer = null;
-        this.onConnectDelayTimer = null;
+        this._reconnectTimer = null;
         this.connectionProhibitedUntil = new Date(0);
         this.speculativeWebSocketAttemptProhibitedUntil = new Date(0);
 
@@ -106,7 +98,7 @@ export class WebsocketSessionManager {
 
     startup() {
         this.pendingPortChange = null;
-        browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        browser.runtime.onMessage.addListener(request => {
             if (request.action !== "KPRPC_Port_Change") return;
             if (this.pendingPortChange != null) {
                 clearTimeout(this.pendingPortChange);
@@ -129,7 +121,7 @@ export class WebsocketSessionManager {
         // NB: overheads here include a test whether a socket is alive
         // and regular timer scheduling overheads - hopefully that's insignificant
         // but if not we can try more complicated connection strategies
-        this.reconnectTimer = window.setInterval(
+        this._reconnectTimer = window.setInterval(
             this.attemptConnection.bind(this),
             this.reconnectionAttemptFrequency
         );
@@ -165,12 +157,13 @@ export class WebsocketSessionManager {
         // KeePassRPC's TCP port. If we tried to connect now, we risk connecting
         // back to the browser and causing a deadlock. A small delay gives the browser
         // a chance to cleanly close the old port
-        this.webSocketTimer = window.setTimeout(this.tryToconnectToWebsocket.bind(this), 100);
+        this._webSocketTimer = window.setTimeout(this.tryToconnectToWebsocket.bind(this), 100);
     }
 
     // Initiates a connection to the KPRPC server.
     connect() {
         // closure for websocket event callbacks
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const _this = this;
 
         if (this.connectLock) return "locked";
@@ -196,7 +189,7 @@ export class WebsocketSessionManager {
             return;
         }
 
-        this.webSocket.onopen = function (event) {
+        this.webSocket.onopen = function () {
             KeeLog.info("Websocket connection opened");
 
             _this.connectLock = false;
@@ -217,14 +210,14 @@ export class WebsocketSessionManager {
             }
             _this.onMessage(obj);
         };
-        this.webSocket.onerror = function (event) {
+        this.webSocket.onerror = function () {
             if (_this.wasEverOpen) {
                 // webSocket spec says that we can't know why there was an error
                 KeeLog.debug("Websocket connection error");
             }
             _this.connectLock = false;
         };
-        this.webSocket.onclose = function (event) {
+        this.webSocket.onclose = function () {
             if (_this.wasEverOpen) {
                 _this.wasEverOpen = false;
                 _this.onCloseSession();
@@ -244,6 +237,7 @@ export class WebsocketSessionManager {
     }
 
     attemptConnection() {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const rpc = this;
 
         // Check we're not in the middle of trying to connect to the websocket
@@ -276,9 +270,6 @@ export class WebsocketSessionManager {
             );
             rpc.httpConnectionAttemptCallback();
         } else {
-            // closure for http event callbacks
-            const _this = this;
-
             const xhr = new XMLHttpRequest();
 
             xhr.open("GET", rpc.httpChannelURI, true);
@@ -294,7 +285,7 @@ export class WebsocketSessionManager {
                 // a timeout indicates that KeePass is not running
                 KeeLog.debug("HTTP connection timed out. Will not attempt web socket connection.");
             };
-            xhr.onabort = function (x) {
+            xhr.onabort = function () {
                 KeeLog.warn("HTTP connection aborted. Will not attempt web socket connection.");
             };
 

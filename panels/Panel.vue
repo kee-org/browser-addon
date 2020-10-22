@@ -10,17 +10,11 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue";
-import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { names as actionNames } from "../store/action-names";
-import { SessionType } from "../common/SessionType";
-import { KeeState } from "../store/KeeState";
 import PasswordGenerator from "../common/components/PasswordGenerator.vue";
 import { Port } from "../common/port";
 import { Action } from "../common/Action";
-import { KeeLog } from "../common/Logger";
-import { KeeVue } from "../common/KeeVue";
-import { Entry } from "../common/model/Entry";
 import { AddonMessage } from "../common/AddonMessage";
 
 export default {

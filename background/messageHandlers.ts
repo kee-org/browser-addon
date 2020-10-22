@@ -181,7 +181,7 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
     }
     if (msg.submittedData) {
         const persistentItem = {
-            itemType: "submittedData" as "submittedData",
+            itemType: "submittedData" as const,
             submittedData: msg.submittedData,
             creationDate: new Date()
         };
@@ -312,8 +312,6 @@ export async function iframeMessageHandler(this: browser.runtime.Port, msg: Addo
     }
 
     const tabId = this.sender.tab.id;
-    const frameId = this.sender.frameId;
-    const port = this;
 
     if (msg.action == Action.ManualFill && msg.selectedEntryIndex != null) {
         window.kee.tabStates
@@ -343,7 +341,7 @@ export async function iframeMessageHandler(this: browser.runtime.Port, msg: Addo
             generatedPassword => {
                 if (generatedPassword) {
                     store.dispatch("updateGeneratedPassword", generatedPassword);
-                    port.postMessage({
+                    this.postMessage({
                         generatedPassword: generatedPassword
                     } as AddonMessage);
                 } else {

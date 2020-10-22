@@ -582,13 +582,14 @@ export class kprpcClient {
 
         const s = data.srp.s;
         const B = data.srp.B;
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const _this = this;
 
         const vaultTabs = await browser.tabs.query({
             url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]
         });
 
-        function handleMessage(request, sender, sendResponse) {
+        function handleMessage(request) {
             if (request.action !== "SRP_ok") return;
             _this.identifyToClient(request.password, s, B);
             browser.runtime.onMessage.removeListener(handleMessage);
@@ -600,7 +601,7 @@ export class kprpcClient {
             url: "/dialogs/SRP.html",
             active: !(vaultTabs && vaultTabs[0] && vaultTabs[0].active)
         };
-        const creating = browser.tabs.create(createData);
+        await browser.tabs.create(createData);
     }
 
     identifyToClient(password, s, B) {
@@ -648,7 +649,7 @@ export class kprpcClient {
         }
     }
 
-    onConnectStartup(type) {
+    onConnectStartup() {
         // if any errors were shown, they are now resolved
         window.kee.removeUserNotifications(
             (notification: KeeNotification) => notification.name != "kee-connection-message"
@@ -809,7 +810,7 @@ export class kprpcClient {
             return;
         }
 
-        this.onConnectStartup("vault");
+        this.onConnectStartup();
     }
 
     setupWebsocketSession() {
@@ -953,6 +954,7 @@ export class kprpcClient {
     encrypt(plaintext, callback) {
         KeeLog.debug("starting webcrypto encryption");
 
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const KPRPC = this;
         const wc = crypto.subtle;
         const iv: any = crypto.getRandomValues(new Uint8Array(16));
@@ -1028,6 +1030,7 @@ export class kprpcClient {
     decrypt(encryptedContainer, callback) {
         KeeLog.debug("starting webcrypto decryption");
 
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const KPRPC = this;
         let t = new Date().getTime();
         const wc = crypto.subtle;
