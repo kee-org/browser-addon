@@ -2,7 +2,7 @@
     <v-row v-if="useful" justify="center" align="center">
         <v-col class="text-truncate my-2 text-right">
             <v-tooltip bottom :open-delay="tooltipDelay">
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                     <span :style="fieldStyle" v-on="on" @click="toggleReveal">{{
                         displayValue
                     }}</span>
@@ -13,11 +13,9 @@
 
         <v-col class="my-0 shrink">
             <v-tooltip left :open-delay="tooltipDelay">
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                     <v-btn small icon class="my-0" v-on="on" @click="copyValue">
-                        <v-icon small>
-                            mdi-content-copy
-                        </v-icon>
+                        <v-icon small> mdi-content-copy </v-icon>
                     </v-btn>
                 </template>
                 <span>{{ $i18n("copy_value_to_clipboard") }}</span>
@@ -35,7 +33,7 @@ export default {
     props: ["field"],
     data: () => ({
         revealed: false,
-        tooltipDelay
+        tooltipDelay: tooltipDelay
     }),
     computed: {
         displayValue: function (this: any) {

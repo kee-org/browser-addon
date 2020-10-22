@@ -1,5 +1,5 @@
 export function waitForElementById(id) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         let element = document.getElementById(id);
         if (element) {
             resolve(element);

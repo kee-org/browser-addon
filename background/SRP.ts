@@ -41,7 +41,6 @@ export class SRPc {
         this.K = null;
         this.M = null;
         this.M2 = null;
-        const that = this;
         this.authenticated = false;
         this.I = null;
         this.p = null;

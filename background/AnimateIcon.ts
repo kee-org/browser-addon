@@ -32,7 +32,7 @@ export class AnimateIcon {
             canvas.width = this.IMG_SIZE;
             const context = canvas.getContext("2d");
             const img = document.createElement("img");
-            img.addEventListener("load", e => {
+            img.addEventListener("load", () => {
                 // Potentially could render the first frame earlier while we prep the rest, if
                 // there is actually ever an unacceptable delay in starting the animation
                 this.buildCache(context, img);

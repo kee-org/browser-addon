@@ -1,5 +1,5 @@
 export class Icon {
-    version: number = 1;
+    version = 1;
 
     // A base64 encoding of the icon for this entry. It will always be a
     // PNG when populated from KeePass but could be other formats when first

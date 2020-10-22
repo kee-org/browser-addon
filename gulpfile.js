@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 /* eslint-disable no-var */
 var gulp = require("gulp");
@@ -14,8 +15,8 @@ var resolve = require("@rollup/plugin-node-resolve").nodeResolve;
 var typescript = require("rollup-plugin-typescript2");
 var terser = require("rollup-plugin-terser").terser;
 var vue = require("rollup-plugin-vue");
-var commonjs = require("rollup-plugin-commonjs");
-var rollupReplace = require("rollup-plugin-replace");
+var commonjs = require("@rollup/plugin-commonjs");
+var rollupReplace = require("@rollup/plugin-replace");
 var iife = require("rollup-plugin-iife");
 var url = require("@rollup/plugin-url");
 var copy = require("rollup-plugin-copy");
@@ -343,7 +344,9 @@ var executeRollup = function () {
             vue: "Vue",
             vuetify: "Vuetify"
         },
-        chunkFileNames: "common/[name].js"
+        chunkFileNames: "common/[name].js",
+        externalLiveBindings: false,
+        freeze: false
     };
     if (WATCH) {
         const watcher = rollup.watch({

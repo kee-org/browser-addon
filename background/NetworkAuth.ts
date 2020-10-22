@@ -1,10 +1,7 @@
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import store from "../store";
-import { EntrySummary } from "../common/model/EntrySummary";
-import { EntrySummaryDto, EntryDto, FormFieldTypeDTO } from "../common/model/KPRPCDTOs";
 import { Entry } from "../common/model/Entry";
-import { AddonMessage } from "../common/AddonMessage";
 
 declare const punycode;
 
@@ -43,7 +40,7 @@ export class NetworkAuth {
         this.pendingRequests.push(requestDetails.requestId);
         KeeLog.debug("Providing credentials for: " + requestDetails.requestId);
 
-        return new Promise<browser.webRequest.BlockingResponse>((resolve, reject) => {
+        return new Promise<browser.webRequest.BlockingResponse>(resolve => {
             if (!store.state.connected || store.state.ActiveKeePassDatabaseIndex < 0) {
                 resolve({ cancel: false });
                 return;
@@ -99,11 +96,7 @@ export class NetworkAuth {
                         e2.httpRealm === requestDetails.realm ? 1 : 0
                     );
 
-                    function handleMessage(
-                        request,
-                        sender: browser.runtime.MessageSender,
-                        sendResponse
-                    ) {
+                    function handleMessage(request, sender: browser.runtime.MessageSender) {
                         switch (request.action) {
                             case "NetworkAuth_ok": {
                                 const entry = matchedEntries[request.selectedEntryIndex];

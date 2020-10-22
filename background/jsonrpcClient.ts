@@ -287,7 +287,7 @@ export class jsonrpcClient {
     getAllDatabases() {
         const activeSessions = this.kprpcClient.getManagersForActiveSessions();
 
-        const result = this.kprpcClient.request(
+        this.kprpcClient.request(
             activeSessions,
             "GetAllDatabases",
             null,
@@ -344,7 +344,7 @@ export class jsonrpcClient {
     getPasswordProfiles(callback: (profiles: PasswordProfile[]) => void) {
         const activeSessions = this.kprpcClient.getManagersForActiveSessions();
 
-        const result = this.kprpcClient.request(
+        this.kprpcClient.request(
             activeSessions,
             "GetPasswordProfiles",
             null,

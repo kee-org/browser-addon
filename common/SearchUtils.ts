@@ -97,7 +97,7 @@ export function resolveConfig(config: Partial<SearchConfig>) {
 
 export function tokenise(text) {
     const tokens = text.match(/'[^']*'|"[^"]*"|[^\s ]+/g) || [];
-    tokens.forEach(function (value, index, array) {
+    tokens.forEach(function (_value, index, array) {
         array[index] = array[index]
             .replace(/(^['"])|(['"]$)/g, "")
             .replace(/[\s ]+/g, " ")

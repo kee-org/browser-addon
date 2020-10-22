@@ -60,10 +60,8 @@ if (keeDuplicationCount) {
 }
 keeDuplicationCount += 1;
 
-let tabId: number;
-let frameId: number;
 let messagingPortConnectionRetryTimer: number;
-let connected: boolean = false;
+let connected = false;
 
 const customEventNameToPage = "KeeMessageToPage" + Math.random();
 const customEventNameFromPage = "KeeMessageFromPage" + Math.random();
@@ -109,9 +107,7 @@ function startup() {
     KeeLog.info("content vault ready");
 }
 
-function onFirstConnect(myTabId: number, myFrameId: number) {
-    tabId = myTabId;
-    frameId = myFrameId;
+function onFirstConnect() {
     KeeLog.attachConfig(configManager.current);
     Page.connect();
 }
@@ -239,7 +235,7 @@ class Background {
             }
 
             if (!connected) {
-                onFirstConnect(m.tabId, m.frameId);
+                onFirstConnect();
                 connected = true;
             }
 
@@ -333,14 +329,14 @@ function tryHandleErrorLocally(error) {
 //Listen for messages from the page.
 addEventListener(customEventNameFromPage, Page.receive, true);
 
-window.addEventListener("pageshow", ev => {
+window.addEventListener("pageshow", () => {
     pageShowFired = true;
     clearTimeout(missingPageShowTimer);
     if (configReady) {
         startup();
     }
 });
-window.addEventListener("pagehide", ev => {
+window.addEventListener("pagehide", () => {
     // Session may have already been invalidated in which case
     // we don't want to make things worse by telling the client
     // to teardown an unknown session
@@ -354,8 +350,6 @@ window.addEventListener("pagehide", ev => {
     sessionId = null;
     Port.shutdown();
     connected = false;
-    tabId = undefined;
-    frameId = undefined;
 });
 
 // Load our config

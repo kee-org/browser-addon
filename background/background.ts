@@ -83,7 +83,7 @@ function updateForegroundTab(tabId: number) {
 // but others don't (e.g. Chrome). To ensure every existing tab has exactly one
 // instance of this content script running in it, we programatically inject the script.
 if (!__KeeIsRunningInAWebExtensionsBrowser) {
-    browser.runtime.onInstalled.addListener(details => {
+    browser.runtime.onInstalled.addListener(() => {
         const showErrors = () => {
             if (browser.runtime.lastError) {
                 if (KeeLog && KeeLog.error) KeeLog.error(browser.runtime.lastError.message);

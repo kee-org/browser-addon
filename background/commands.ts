@@ -37,7 +37,7 @@ export class KFCommands {
             }
         });
 
-        browser.contextMenus.onClicked.addListener((info, tab) => {
+        browser.contextMenus.onClicked.addListener(info => {
             const id = info.menuItemId as string;
             switch (id) {
                 case Command.DetectForms:

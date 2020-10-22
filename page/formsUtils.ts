@@ -1,7 +1,6 @@
 import { KeeLogger } from "../common/Logger";
 import { MatchedField } from "./MatchedField";
 import { Field } from "../common/model/Field";
-import { Locator } from "../common/model/Locator";
 
 /*
   This contains code related to the management and manipulation of forms and form fields.
@@ -106,7 +105,7 @@ export class FormUtils {
      * all arrays are standard javascript arrays
      * usernameField may be null.
      */
-    public getFormFields(form, isSubmission: boolean, maximumFieldCount: number, currentPage?) {
+    public getFormFields(form, isSubmission: boolean, maximumFieldCount: number) {
         const pwFields: MatchedField[] = [];
         const otherFields: MatchedField[] = [];
         const allFields: {

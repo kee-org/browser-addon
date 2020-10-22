@@ -3,7 +3,7 @@
         <v-slide-y-transition>
             <v-container class="my-0 pa-0">
                 <v-row justify="center">
-                    <v-col style="cursor: default;" class="text-h6 text-center py-0">
+                    <v-col style="cursor: default" class="text-h6 text-center py-0">
                         {{ $i18n("where") }}
                     </v-col>
                 </v-row>
@@ -36,7 +36,7 @@
                                     activatable
                                     hoverable
                                     color="secondary"
-                                    style="height: 240px; overflow-y: auto; cursor: pointer;"
+                                    style="height: 240px; overflow-y: auto; cursor: pointer"
                                     return-object="true"
                                     @update:active="setGroup"
                                 />
@@ -73,7 +73,6 @@ import { mapGetters } from "vuex";
 import { SaveState } from "../../common/SaveState";
 import { Entry } from "../../common/model/Entry";
 import { Group } from "../../common/model/Group";
-import { Field } from "../../common/model/Field";
 import { AddonMessage } from "../../common/AddonMessage";
 import { Database } from "../../common/model/Database";
 import { DatabaseSummary } from "../../common/model/DatabaseSummary";

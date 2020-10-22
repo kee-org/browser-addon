@@ -29,7 +29,7 @@
         <v-subheader
             v-show="deduplicatedSearchResults && deduplicatedSearchResults.length > 0"
             class="text-center"
-            style="justify-content: center;"
+            style="justify-content: center"
         >
             {{ $i18n("matches_from_other_sites") }}
         </v-subheader>
@@ -49,11 +49,8 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue";
 import { mapActions, mapGetters } from "vuex";
 import { names as actionNames } from "../../store/action-names";
-import { configManager } from "../../common/ConfigManager";
-import { AddonMessage } from "../../common/AddonMessage";
 import Entry from "./Entry.vue";
 import { mTypes } from "../../store";
 import { KeeLog } from "../../common/Logger";
@@ -94,7 +91,7 @@ export default {
         this.initAndSearchMatchedEntries(this.matchedEntries);
     },
     mounted(this: any) {
-        this.$store.subscribe((mutation, state) => {
+        this.$store.subscribe(mutation => {
             if (mutation.type === mTypes.updateCurrentSearchTerm) {
                 this.searchOnlyMatches.execute(
                     this.currentSearchTerm,
@@ -130,7 +127,7 @@ export default {
                 firstBListVueNode.$el.focus();
             }
         },
-        prevInList(this: any, currentIndex: number, listName: string, listLength: any) {
+        prevInList(this: any, currentIndex: number, listName: string) {
             const currentVueNode = this.$refs[listName].find(
                 e => parseInt(e.$el.dataset.index) === currentIndex
             );

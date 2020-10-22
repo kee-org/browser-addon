@@ -87,13 +87,4 @@ export class SearchFilter {
             searchFilter.setAttribute("disabled", "true");
         }
     }
-
-    private getFilterState(doc, prefix) {
-        if (
-            doc.getElementById("Kee-" + prefix + "-searchfilter").selectedOptions[0].id ==
-            "Kee-" + prefix + "-searchfilter-all"
-        ) {
-            return "all";
-        } else return "current";
-    }
 }

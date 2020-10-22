@@ -9,18 +9,18 @@ class SrpDialog {
         (document.getElementById("pref_sl_client_high") as HTMLInputElement).checked =
             configManager.current.connSLClient === 3 ? true : null;
 
-        (document.getElementById("password") as HTMLInputElement).addEventListener("keyup", e => {
+        (document.getElementById("password") as HTMLInputElement).addEventListener("keyup", () => {
             this.updateButtonState();
         });
         (document.getElementById("pref_sl_server") as HTMLSelectElement).addEventListener(
             "change",
-            e => {
+            () => {
                 this.updateButtonState();
             }
         );
         (document.getElementById("pref_sl_client_high") as HTMLInputElement).addEventListener(
             "change",
-            e => {
+            () => {
                 this.updateButtonState();
             }
         );
@@ -36,7 +36,7 @@ class SrpDialog {
             }).bind(this)
         );
 
-        window.addEventListener("beforeunload", e =>
+        window.addEventListener("beforeunload", () =>
             browser.runtime.sendMessage({ action: "SRP_ok", password: "" })
         );
     }
@@ -83,14 +83,13 @@ class SrpDialog {
         );
     }
 
-    continueSRP(password: string) {
-        browser.tabs.getCurrent().then(tab => {
-            browser.runtime.sendMessage({
-                action: "SRP_ok",
-                password: password
-            });
-            const removing = browser.tabs.remove(tab.id);
+    async continueSRP(password: string) {
+        const tab = await browser.tabs.getCurrent();
+        browser.runtime.sendMessage({
+            action: "SRP_ok",
+            password: password
         });
+        await browser.tabs.remove(tab.id);
     }
 }
 

@@ -54,7 +54,7 @@
                     </v-col>
                 </v-row>
             </v-container>
-            <v-card-text class="py-0 text-truncate" style="cursor: default;">
+            <v-card-text class="py-0 text-truncate" style="cursor: default">
                 <v-slide-y-transition>
                     <v-container
                         v-if="expanded && !!entrySummary.fullDetails"
@@ -68,7 +68,7 @@
                                     :disabled="!entryPathIsLong"
                                     :open-delay="tooltipDelay"
                                 >
-                                    <template v-slot:activator="{ on }">
+                                    <template #activator="{ on }">
                                         <v-row
                                             class="justify-left text-truncate flex-nowrap"
                                             align="center"
@@ -83,7 +83,7 @@
                                     <span>{{ fullEntryPath }}</span>
                                 </v-tooltip>
                                 <v-tooltip top :open-delay="tooltipDelay">
-                                    <template v-slot:activator="{ on }">
+                                    <template #activator="{ on }">
                                         <v-row
                                             class="justify-left text-truncate flex-nowrap"
                                             align="center"
@@ -144,7 +144,7 @@ export default {
     data: () => ({
         expanded: false,
         focussed: false,
-        tooltipDelay
+        tooltipDelay: tooltipDelay
     }),
     computed: {
         titleStyle: function (this: any) {
@@ -278,16 +278,16 @@ export default {
             });
             window.close();
         },
-        nextInList(this: any, event: Event) {
+        nextInList(this: any) {
             this.$emit("move-next-in-list");
         },
-        prevInList(this: any, event: Event) {
+        prevInList(this: any) {
             this.$emit("move-prev-in-list");
         },
-        exitList(this: any, event: Event) {
+        exitList(this: any) {
             this.$emit("move-out-of-list");
         },
-        onPreferredEntryClick(this: any, event: Event) {
+        onPreferredEntryClick(this: any) {
             this.$emit("pref-entry-toggle", { uuid: this.entrySummary.uuid });
         }
     }

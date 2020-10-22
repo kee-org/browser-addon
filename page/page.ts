@@ -34,15 +34,13 @@ if (keeDuplicationCount) {
 }
 keeDuplicationCount += 1;
 
-const keePopupLoadTime = Date.now();
 let formUtils: FormUtils;
 let formFilling: FormFilling;
 let formSaving: FormSaving;
 let passwordGenerator: PasswordGenerator;
-let tabId: number;
 let frameId: number;
 let syncContent: SyncContent;
-let connected: boolean = false;
+let connected = false;
 let messagingPortConnectionRetryTimer: number;
 
 function matchFinder(uri: string) {
@@ -73,13 +71,12 @@ function tutorialIntegration() {
     }
 }
 
-function onFirstConnect(myTabId: number, myFrameId: number) {
-    tabId = myTabId;
+function onFirstConnect(myFrameId: number) {
     frameId = myFrameId;
 
     KeeLog.attachConfig(configManager.current);
     formUtils = new FormUtils(KeeLog);
-    formSaving = new FormSaving(Port.raw, frameId, KeeLog, formUtils, configManager.current);
+    formSaving = new FormSaving(Port.raw, KeeLog, formUtils);
     formFilling = new FormFilling(
         Port.raw,
         frameId,
@@ -188,7 +185,7 @@ function connectToMessagingPort() {
         }
 
         if (!connected) {
-            onFirstConnect(m.tabId, m.frameId);
+            onFirstConnect(m.frameId);
             formFilling.findMatchesInThisFrame();
             connected = true;
         } else if (m.action == Action.DetectForms) {
@@ -245,20 +242,19 @@ function connectToMessagingPort() {
     });
 }
 
-window.addEventListener("pageshow", ev => {
+window.addEventListener("pageshow", () => {
     pageShowFired = true;
     clearTimeout(missingPageShowTimer);
     if (configReady) {
         startup();
     }
 });
-window.addEventListener("pagehide", ev => {
+window.addEventListener("pagehide", () => {
     inputsObserver.disconnect();
     if (Port.raw) Port.postMessage({ action: Action.PageHide });
     formFilling.removeKeeIconFromAllFields();
     Port.shutdown();
     connected = false;
-    tabId = undefined;
     frameId = undefined;
     formUtils = undefined;
     formSaving = undefined;

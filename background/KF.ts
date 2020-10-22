@@ -109,8 +109,10 @@ export class Kee {
         this.networkAuth = new NetworkAuth();
         this.animateIcon = new AnimateIcon();
 
-        this.browserPopupPort = { postMessage: msg => {} };
-        this.vaultPort = { postMessage: msg => {} };
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        this.browserPopupPort = { postMessage: _msg => {} };
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        this.vaultPort = { postMessage: _msg => {} };
         this.onPortConnected = function (p: browser.runtime.Port) {
             if (KeeLog && KeeLog.debug) KeeLog.debug(p.name + " port connected");
             let name = p.name;
@@ -125,7 +127,8 @@ export class Kee {
                     p.onMessage.addListener(browserPopupMessageHandler.bind(p));
                     p.onDisconnect.addListener(() => {
                         window.kee.browserPopupPort = {
-                            postMessage: msg => {}
+                            // eslint-disable-next-line @typescript-eslint/no-empty-function
+                            postMessage: _msg => {}
                         };
                         window.kee.currentSearchTermTimer = setTimeout(() => {
                             store.dispatch("updateCurrentSearchTerm", null);
@@ -138,7 +141,7 @@ export class Kee {
                     } as AddonMessage;
 
                     let submittedData: any = null;
-                    let loginsFound: boolean = false;
+                    let loginsFound = false;
 
                     if (window.kee.persistentTabStates.get(window.kee.foregroundTabId)) {
                         window.kee.persistentTabStates
@@ -338,7 +341,7 @@ export class Kee {
         store.dispatch("updateNotifications", store.state.notifications.filter(unlessTrue));
     }
 
-    animateBrowserActionIcon(duration: number = 1200) {
+    animateBrowserActionIcon(duration = 1200) {
         // Firefox claims that a janky icon animation is less intrusive for users
         // than a smoothly animated one and therefore will not develop the smooth
         // animation support available in other browsers. Our user testing confirms
