@@ -11,7 +11,7 @@ import { copyStringToClipboard } from "../common/copyStringToClipboard";
 
 // callbacks for messaging / ports
 
-export function browserPopupMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
+export async function browserPopupMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.mutation) {
         window.kee.syncBackground.onMessage(this, msg.mutation);
     }
@@ -29,24 +29,21 @@ export function browserPopupMessageHandler(this: browser.runtime.Port, msg: Addo
         });
     }
     if (msg.action == Action.GetPasswordProfiles) {
-        window.kee.getPasswordProfiles(passwordProfiles => {
-            store.dispatch("updatePasswordProfiles", passwordProfiles);
-        });
+        const passwordProfiles = await window.kee.getPasswordProfiles();
+        store.dispatch("updatePasswordProfiles", passwordProfiles);
     }
     if (msg.action === Action.GeneratePassword) {
-        window.kee.generatePassword(
+        const generatedPassword = await window.kee.generatePassword(
             msg.passwordProfile,
-            msg.url ?? "unknown URL",
-            generatedPassword => {
-                if (generatedPassword) {
-                    store.dispatch("updateGeneratedPassword", generatedPassword);
-                } else {
-                    KeeLog.warn(
-                        "Kee received an empty/missing password. Check the configuration of your password manager."
-                    );
-                }
-            }
+            msg.url ?? "unknown URL"
         );
+        if (generatedPassword) {
+            store.dispatch("updateGeneratedPassword", generatedPassword);
+        } else {
+            KeeLog.warn(
+                "Kee received an empty/missing password. Check the configuration of your password manager."
+            );
+        }
     }
     if (msg.action === Action.CreateEntry || msg.action === Action.UpdateEntry) {
         if (store.state.connected) {
@@ -121,19 +118,17 @@ export function browserPopupMessageHandler(this: browser.runtime.Port, msg: Addo
         window.kee.openKeePass();
     }
     if (msg.findMatches) {
-        window.kee.findLogins(
+        const result = await window.kee.findLogins(
             null,
             null,
             msg.findMatches.uuid,
             msg.findMatches.DBfilename,
             null,
-            null,
-            result => {
-                window.kee.browserPopupPort.postMessage({
-                    findMatchesResult: result
-                } as AddonMessage);
-            }
+            null
         );
+        window.kee.browserPopupPort.postMessage({
+            findMatchesResult: result
+        } as AddonMessage);
     }
     if (msg.loginEditor) {
         window.kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
@@ -158,12 +153,18 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
 
     if (msg.findMatches) {
         window.kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).entries = [];
-        window.kee.findLogins(msg.findMatches.uri, null, null, null, null, null, result => {
-            this.postMessage({
-                isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId,
-                findMatchesResult: result
-            } as AddonMessage);
-        });
+        const result = await window.kee.findLogins(
+            msg.findMatches.uri,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+        this.postMessage({
+            isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId,
+            findMatchesResult: result
+        } as AddonMessage);
     }
     if (msg.removeNotification) {
         window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
@@ -329,28 +330,25 @@ export async function iframeMessageHandler(this: browser.runtime.Port, msg: Addo
     }
 
     if (msg.action == Action.GetPasswordProfiles) {
-        window.kee.getPasswordProfiles(passwordProfiles => {
-            store.dispatch("updatePasswordProfiles", passwordProfiles);
-        });
+        const passwordProfiles = await window.kee.getPasswordProfiles();
+        store.dispatch("updatePasswordProfiles", passwordProfiles);
     }
 
     if (msg.action == Action.GeneratePassword) {
-        window.kee.generatePassword(
+        const generatedPassword = await window.kee.generatePassword(
             msg.passwordProfile,
-            window.kee.tabStates.get(tabId).url,
-            generatedPassword => {
-                if (generatedPassword) {
-                    store.dispatch("updateGeneratedPassword", generatedPassword);
-                    this.postMessage({
-                        generatedPassword: generatedPassword
-                    } as AddonMessage);
-                } else {
-                    KeeLog.warn(
-                        "Kee received an empty/missing password. Check the configuration of your password manager."
-                    );
-                }
-            }
+            window.kee.tabStates.get(tabId).url
         );
+        if (generatedPassword) {
+            store.dispatch("updateGeneratedPassword", generatedPassword);
+            this.postMessage({
+                generatedPassword: generatedPassword
+            } as AddonMessage);
+        } else {
+            KeeLog.warn(
+                "Kee received an empty/missing password. Check the configuration of your password manager."
+            );
+        }
     }
 
     if (msg.loginEditor) {

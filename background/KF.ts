@@ -23,7 +23,6 @@ import { VaultMessage } from "../common/VaultMessage";
 import { KeeNotification } from "../common/KeeNotification";
 import { VaultProtocol } from "../common/VaultProtocol";
 import { SessionType } from "../common/SessionType";
-import { PasswordProfile } from "../common/model/PasswordProfile";
 import { Action } from "../common/Action";
 import store from "../store";
 import { SyncBackground } from "../store/syncBackground";
@@ -633,12 +632,16 @@ export class Kee {
         }
     }
 
-    addLogin(entry: Entry, parentUUID: string, dbFileName: string, clearSubmittedData: () => void) {
+    async addLogin(
+        entry: Entry,
+        parentUUID: string,
+        dbFileName: string,
+        clearSubmittedData: () => void
+    ) {
         try {
-            return this.KeePassRPC.addLogin(entry, parentUUID, dbFileName, newEntry => {
-                const success = this.recordEntrySaveResult("created", newEntry);
-                if (success) clearSubmittedData();
-            });
+            const newEntry = await this.KeePassRPC.addLogin(entry, parentUUID, dbFileName);
+            const success = this.recordEntrySaveResult("created", newEntry);
+            if (success) clearSubmittedData();
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
@@ -648,17 +651,16 @@ export class Kee {
         }
     }
 
-    updateLogin(
+    async updateLogin(
         entry: Entry,
         oldLoginUUID: string,
         dbFileName: string,
         clearSubmittedData: () => void
     ) {
         try {
-            return this.KeePassRPC.updateLogin(entry, oldLoginUUID, dbFileName, changedEntry => {
-                const success = this.recordEntrySaveResult("updated", changedEntry);
-                if (success) clearSubmittedData();
-            });
+            const changedEntry = await this.KeePassRPC.updateLogin(entry, oldLoginUUID, dbFileName);
+            const success = this.recordEntrySaveResult("updated", changedEntry);
+            if (success) clearSubmittedData();
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
@@ -680,15 +682,7 @@ export class Kee {
         }
     }
 
-    findLogins(
-        fullURL,
-        httpRealm,
-        uuid,
-        dbFileName,
-        freeText,
-        username,
-        callback: (result: Entry[]) => void
-    ) {
+    async findLogins(fullURL, httpRealm, uuid, dbFileName, freeText, username) {
         try {
             return this.KeePassRPC.findLogins(
                 fullURL,
@@ -696,8 +690,7 @@ export class Kee {
                 uuid,
                 dbFileName,
                 freeText,
-                username,
-                callback
+                username
             );
         } catch (e) {
             KeeLog.error(
@@ -732,9 +725,9 @@ export class Kee {
         }
     }
 
-    getPasswordProfiles(callback: (profiles: PasswordProfile[]) => void) {
+    async getPasswordProfiles() {
         try {
-            return this.KeePassRPC.getPasswordProfiles(callback);
+            return this.KeePassRPC.getPasswordProfiles();
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
@@ -744,13 +737,9 @@ export class Kee {
         }
     }
 
-    generatePassword(
-        profileName: string,
-        url: string,
-        callback: (generatedPassword: string) => void
-    ) {
+    async generatePassword(profileName: string, url: string) {
         try {
-            return this.KeePassRPC.generatePassword(profileName, url, callback);
+            return this.KeePassRPC.generatePassword(profileName, url);
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +

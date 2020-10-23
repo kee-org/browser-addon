@@ -31,24 +31,27 @@ class SessionResponse {
 // Only supports one response per session type
 class SessionResponseManager {
     private responses: SessionResponse[] = [];
-    constructor(
-        private responsesRequired: number,
-        private onComplete: (sessionResponses: SessionResponse[]) => void
-    ) {}
+    public pendingResponses: Promise<SessionResponse[]>;
+    private resolve;
+    constructor(private responsesRequired: number) {
+        this.pendingResponses = new Promise<SessionResponse[]>(resolve => {
+            this.resolve = resolve;
+        });
+    }
     public onResponse(
         sessionType: SessionType,
         resultWrapper: Partial<ResultWrapper>,
         features: string[]
     ) {
         this.responses.push({ sessionType, resultWrapper, features });
-        if (this.responses.length === this.responsesRequired && this.onComplete) {
-            this.onComplete(this.responses);
+        if (this.responses.length === this.responsesRequired) {
+            this.resolve(this.responses);
         }
     }
 }
 
 export class kprpcClient {
-    public requestId: number;
+    private nextRequestId: number;
     private clientVersion: number[];
     private srpClientInternals: SRPc;
     private secretKey;
@@ -57,7 +60,7 @@ export class kprpcClient {
     private keyChallengeParams: { sc: string; cc: string };
 
     public constructor() {
-        this.requestId = 1;
+        this.nextRequestId = 1;
         this.clientVersion = [2, 0, 0];
         this.srpClientInternals = null;
         this.secretKey = null;
@@ -116,13 +119,9 @@ export class kprpcClient {
     request(
         sessionManagers: (WebsocketSessionManager | EventSessionManager)[],
         method: string,
-        params: any[],
-        onComplete: (sessionResponses: SessionResponse[]) => void,
-        requestId: number
-    ) {
-        if (requestId == undefined || requestId == null || requestId < 0) {
-            throw new Error("JSON-RPC communication requested with no requestID provided");
-        }
+        params: any[]
+    ): Promise<SessionResponse[]> {
+        const requestId = ++this.nextRequestId;
 
         const data = JSON.stringify({
             jsonrpc: "2.0",
@@ -133,7 +132,7 @@ export class kprpcClient {
         KeeLog.debug("Sending a JSON-RPC request");
 
         // May want to generalise to more than these two servers one day but this does the job for now
-        const responseManager = new SessionResponseManager(sessionManagers.length, onComplete);
+        const responseManager = new SessionResponseManager(sessionManagers.length);
         for (const sessionManager of sessionManagers) {
             try {
                 if (sessionManager instanceof EventSessionManager) {
@@ -179,6 +178,7 @@ export class kprpcClient {
                 }, 50);
             }
         }
+        return responseManager.pendingResponses;
     }
 
     // interpret the message from the RPC server
