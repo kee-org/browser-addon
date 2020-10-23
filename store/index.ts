@@ -28,7 +28,9 @@ export default new Vuex.Store<KeeState>({
         generatedPassword: "",
         saveEntryResult: {
             result: null,
-            receivedAt: new Date()
+            receivedAt: new Date(),
+            fileName: null,
+            uuid: null
         },
         entryUpdateStartedAtTimestamp: 0
     },

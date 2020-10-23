@@ -838,5 +838,13 @@
   "preferred_matching_entry": {
     "message": "Preferred matching entry",
     "description": "Label for toggle between preferred status for the specific matched entry the toggle is displayed upon."
+  },
+  "show_confirmation_after_save": {
+    "message": "Show confirmation after entry is saved",
+    "description": "Label for option to display a confirmation message in the main popup after user has created or updated an entry."
+  },
+  "you_recently_saved": {
+    "message": "You recently saved an entry",
+    "description": "A confirmation message after user has created or updated an entry."
   }
 }

@@ -93,4 +93,5 @@ export class Config {
     keeVaultLaunchEnd: number;
     manualSubmitOverrideProhibited: boolean;
     theme: string;
+    hideConfirmationAfterSave: boolean;
 }

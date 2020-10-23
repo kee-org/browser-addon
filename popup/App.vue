@@ -29,6 +29,26 @@
                         <v-spacer />
                     </v-row>
                 </v-alert>
+                <v-alert
+                    v-show="showSaveResult"
+                    color="secondary"
+                    border="top"
+                    colored-border
+                    elevation="1"
+                >
+                    <v-row dense>
+                        <v-col>{{ $i18n("you_recently_saved") }}</v-col>
+                    </v-row>
+                    <v-row dense align="start">
+                        <v-col>
+                            <v-btn @click="openFullEntryEditor">
+                                {{ $i18n("open_full_editor") }}
+                            </v-btn>
+                        </v-col>
+                        <v-spacer />
+                    </v-row>
+                </v-alert>
+
                 <div v-if="showNotifications" id="notifications" class="pt-6">
                     <Notification v-for="n of notifications" :key="n.id" :notification="n" />
                 </div>
@@ -217,7 +237,8 @@ export default {
             tooltipDelay: tooltipDelay,
             manualRecoveryPromptTimeMs: manualRecoveryPromptTimeMs,
             autoRecoveryTimeMs: autoRecoveryTimeMs,
-            showPasswordGenerator: false
+            showPasswordGenerator: false,
+            lastSaveEntryResult: null
         };
     },
     computed: {
@@ -256,6 +277,9 @@ export default {
         },
         hasSubmittedData: function (this: any) {
             return (this.$store.state.saveState as SaveState)?.submittedData?.fields?.length > 0;
+        },
+        showSaveResult: function (this: any) {
+            return this.lastSaveEntryResult && !this.showSaveStart;
         }
     },
     watch: {
@@ -397,7 +421,9 @@ export default {
             if (!lastResult.result) return false;
 
             if (lastResult.result === "created" || lastResult.result === "updated") {
-                //TODO: Render info notification panel before wiping current data - see #263
+                if (!configManager.current.hideConfirmationAfterSave) {
+                    this.lastSaveEntryResult = lastResult;
+                }
                 this.$store.dispatch("updateSaveEntryResult", {
                     result: null,
                     receivedAt: new Date()
@@ -436,6 +462,16 @@ export default {
                 });
                 Port.postMessage({ action: Action.DetectForms } as AddonMessage);
             }
+        },
+        openFullEntryEditor: function (this: any) {
+            Port.postMessage({
+                loginEditor: {
+                    uuid: this.lastSaveEntryResult.uuid,
+                    DBfilename: this.lastSaveEntryResult.fileName
+                }
+            } as AddonMessage);
+            this.lastSaveEntryResult = null;
+            window.close();
         }
     }
 };

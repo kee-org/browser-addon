@@ -66,6 +66,9 @@ function loadInitialConfig() {
     ) as HTMLInputElement).checked = configManager.current.animateWhenOfferingSave
         ? configManager.current.animateWhenOfferingSave
         : null;
+    (document.getElementById(
+        "pref_showConfirmationAfterSave_label"
+    ) as HTMLInputElement).checked = !configManager.current.hideConfirmationAfterSave ? true : null;
 
     (document.getElementById(
         "pref_rememberMRUDB_label"
@@ -143,6 +146,9 @@ function setupInputListeners() {
     document
         .getElementById("pref_animateWhenOfferingSave_label")
         .addEventListener("change", saveAnimateWhenOfferingSaveUpdated);
+    document
+        .getElementById("pref_showConfirmationAfterSave_label")
+        .addEventListener("change", saveShowConfirmationAfterSaveUpdated);
     document
         .getElementById("pref_rememberMRUDB_label")
         .addEventListener("change", saveRememberMRUDB);
@@ -1044,6 +1050,15 @@ function saveAnimateWhenOfferingSaveUpdated(e) {
     configManager.setASAP({
         animateWhenOfferingSave: (document.getElementById(
             "pref_animateWhenOfferingSave_label"
+        ) as HTMLInputElement).checked
+    });
+}
+
+function saveShowConfirmationAfterSaveUpdated(e) {
+    e.preventDefault();
+    configManager.setASAP({
+        hideConfirmationAfterSave: !(document.getElementById(
+            "pref_showConfirmationAfterSave_label"
         ) as HTMLInputElement).checked
     });
 }

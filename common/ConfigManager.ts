@@ -79,6 +79,7 @@ defaultConfig.keeVaultLaunchStart = 8640000000000000;
 defaultConfig.keeVaultLaunchEnd = 8640000000000000;
 defaultConfig.manualSubmitOverrideProhibited = false;
 defaultConfig.theme = null;
+defaultConfig.hideConfirmationAfterSave = false;
 
 export class ConfigManager {
     public current: Config;

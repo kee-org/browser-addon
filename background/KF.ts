@@ -575,7 +575,9 @@ export class Kee {
         } else {
             store.dispatch("updateSaveEntryResult", {
                 result: saveType,
-                receivedAt: new Date()
+                receivedAt: new Date(),
+                fileName: entry.database.fileName,
+                uuid: entry.uuid
             } as SaveEntryResult);
             return true;
         }
