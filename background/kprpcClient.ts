@@ -111,10 +111,6 @@ export class kprpcClient {
         return activeSessions;
     }
 
-    // send a request to the current RPC server.
-    // calling functions MUST manage the requestID to limit thread concurrency errors
-    //TODO:4: is above still necessary after e10s refactoring and new WebExtensions arch?
-    // Each type of request may or may not invoke a callback.
     // Each request (uniquely identified by the requestId) may be distributed to one or more servers.
     request(
         sessionManagers: (WebsocketSessionManager | EventSessionManager)[],
