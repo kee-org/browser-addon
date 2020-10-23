@@ -127,9 +127,11 @@ if (!__KeeIsRunningInAWebExtensionsBrowser) {
 
 browser.runtime.onInstalled.addListener(async function (details) {
     if (details.reason === "update") {
-        browser.tabs.create({
-            url: "release-notes/update-notes.html"
+        const tab = await browser.tabs.create({
+            url: "release-notes/update-notes.html",
+            active: true
         });
+        browser.windows.update(tab.windowId, { focused: true, drawAttention: true });
     } else if (details.reason === "install") {
         const vaultTabs = await browser.tabs.query({
             url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]

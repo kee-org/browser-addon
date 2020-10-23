@@ -597,7 +597,8 @@ export class kprpcClient {
             url: "/dialogs/SRP.html",
             active: !(vaultTabs && vaultTabs[0] && vaultTabs[0].active)
         };
-        await browser.tabs.create(createData);
+        const tab = await browser.tabs.create(createData);
+        browser.windows.update(tab.windowId, { focused: true, drawAttention: true });
     }
 
     identifyToClient(password, s, B) {
