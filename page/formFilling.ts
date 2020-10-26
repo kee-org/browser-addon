@@ -1655,6 +1655,9 @@ export class FormFilling {
         // or id attributes. No idea if this will cause a problem. Seems to.
         // Mitigating by adjusting min relevancy values, etc. so can remove
         // this comment in a few versions if all is good.
+        // v3.5 still not good. Have fixed a visibility bug, which exacerbates
+        // some other bugs. Will try ignoring non-text/password fields in ratio
+        // calculation for autofill (can extend to form selection calculation later if good)
         const formFieldCount = passwordFields
             .concat(otherFields)
             .filter(f => f.field.locators[0].id || f.field.locators[0].name || f.field.value)
@@ -1662,29 +1665,49 @@ export class FormFilling {
         const loginFieldCount = entry.fields.filter(
             f => f.locators[0].id || f.locators[0].name || f.value
         ).length;
+        const formFieldCountForAutofill = passwordFields
+            .concat(otherFields)
+            .filter(
+                f =>
+                    (f.field.type === "password" || f.field.type === "text") &&
+                    (f.field.locators[0].id || f.field.locators[0].name || f.field.value)
+            ).length;
+        const loginFieldCountForAutofill = entry.fields.filter(
+            f =>
+                (f.type === "password" || f.type === "text") &&
+                (f.locators[0].id || f.locators[0].name || f.value)
+        ).length;
 
-        const formMatchedFieldCount =
+        const formMatchedFieldCountForAutofill =
             otherFieldMatchSuccesses.filter(s => s === true).length +
             passwordFieldMatchSuccesses.filter(s => s === true).length;
 
-        const fieldMatchRatio = formMatchedFieldCount / Math.max(1, formFieldCount);
+        // Limiting to number of entry fields will reduce false positives but
+        //increase chance of a valid form being missed.
+        const fieldMatchRatioForAutofill =
+            Math.min(loginFieldCountForAutofill, formMatchedFieldCountForAutofill) /
+            Math.max(1, formFieldCountForAutofill);
 
         this.Logger.debug(
             "formFieldCount: " +
                 formFieldCount +
                 ", loginFieldCount: " +
                 loginFieldCount +
-                ", formMatchedFieldCount: " +
-                formMatchedFieldCount +
+                ", loginFieldCountForAutofill: " +
+                loginFieldCountForAutofill +
+                ", formFieldCountForAutofill: " +
+                formFieldCountForAutofill +
+                ", formMatchedFieldCountForAutofill: " +
+                formMatchedFieldCountForAutofill +
                 ", fieldMatchRatio: " +
-                fieldMatchRatio
+                fieldMatchRatioForAutofill
         );
 
-        if (fieldMatchRatio < minMatchedFieldCountRatio) {
+        if (fieldMatchRatioForAutofill < minMatchedFieldCountRatio) {
             this.Logger.info(
                 entry.uuid +
                     " will be forced to not auto-fill because the form field match ratio (" +
-                    fieldMatchRatio +
+                    fieldMatchRatioForAutofill +
                     ") is not high enough."
             );
             lowFieldMatchRatio = true;
@@ -1751,6 +1774,7 @@ export class FormFilling {
                 }
                 const fmScoreForRatio = fmScore - (visibleFieldMap[i] ? 0 : 10);
                 if (
+                    (formField.type === "text" || formField.type === "password") &&
                     fmScoreForRatio >= minFieldRelevance &&
                     entryFields[j].value &&
                     !fieldMatchSuccesses[i]
