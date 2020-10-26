@@ -94,4 +94,5 @@ export class Config {
     manualSubmitOverrideProhibited: boolean;
     theme: string;
     hideConfirmationAfterSave: boolean;
+    mustShowReleaseNotesAtStartup: boolean;
 }

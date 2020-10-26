@@ -25,15 +25,30 @@ browser.browserAction.setBadgeBackgroundColor({ color: "red" });
 browser.browserAction.disable();
 
 // Assumes config and logging have been initialised before this is called.
-function startup() {
+async function startup() {
     // window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
     KeeLog.attachConfig(configManager.current);
+    await showReleaseNotesAfterUpdate();
     window.kee = new Kee();
     window.kee.init();
     configManager.addChangeListener(() =>
         window.kee.configSyncManager.updateToRemoteConfig(configManager.current)
     );
     browser.browserAction.enable();
+}
+
+async function showReleaseNotesAfterUpdate() {
+    // browser.runtime.onInstalled is not reliably called after an update. E.g.
+    // in Firefox after a browser restart. Hence we must track the recent update
+    // using our async config store rather than rely on the runtime event being fired.
+    if (configManager.current.mustShowReleaseNotesAtStartup) {
+        const tab = await browser.tabs.create({
+            url: "release-notes/update-notes.html",
+            active: true
+        });
+        browser.windows.update(tab.windowId, { focused: true, drawAttention: true });
+        configManager.setASAP({ mustShowReleaseNotesAtStartup: false });
+    }
 }
 
 browser.windows.onFocusChanged.addListener(async function (windowId) {
@@ -126,13 +141,7 @@ if (!__KeeIsRunningInAWebExtensionsBrowser) {
 }
 
 browser.runtime.onInstalled.addListener(async function (details) {
-    if (details.reason === "update") {
-        const tab = await browser.tabs.create({
-            url: "release-notes/update-notes.html",
-            active: true
-        });
-        browser.windows.update(tab.windowId, { focused: true, drawAttention: true });
-    } else if (details.reason === "install") {
+    if (details.reason === "install") {
         const vaultTabs = await browser.tabs.query({
             url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]
         });
@@ -148,6 +157,7 @@ browser.runtime.onInstalled.addListener(async function (details) {
 });
 
 browser.runtime.onUpdateAvailable.addListener(async () => {
+    await configManager.setASAP({ mustShowReleaseNotesAtStartup: true });
     if ((await browser.idle.queryState(userBusySeconds)) === "idle") {
         browser.runtime.reload();
     } else {
@@ -157,7 +167,9 @@ browser.runtime.onUpdateAvailable.addListener(async () => {
                 browser.runtime.reload();
             }
         });
-        setTimeout(() => browser.runtime.reload(), maxUpdateDelaySeconds * 1000);
+        setTimeout(() => {
+            browser.runtime.reload();
+        }, maxUpdateDelaySeconds * 1000);
     }
 });
 

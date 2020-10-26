@@ -80,6 +80,7 @@ defaultConfig.keeVaultLaunchEnd = 8640000000000000;
 defaultConfig.manualSubmitOverrideProhibited = false;
 defaultConfig.theme = null;
 defaultConfig.hideConfirmationAfterSave = false;
+defaultConfig.mustShowReleaseNotesAtStartup = false;
 
 export class ConfigManager {
     public current: Config;
@@ -111,9 +112,10 @@ export class ConfigManager {
         configManager.reload(() => this._listeners.forEach(listener => listener(changes, area)));
     }
 
-    public setASAP(values: Partial<Config>) {
+    public async setASAP(values: Partial<Config>) {
         Object.assign(this.current, values);
-        this.save();
+        await this.save();
+        return;
     }
 
     private splitStringToPages(str: string) {
