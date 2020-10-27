@@ -246,7 +246,7 @@ function collectLabels(element: HTMLInputElement | HTMLSelectElement) {
 
 function collectAutocompleteValues(element: HTMLInputElement | HTMLSelectElement) {
     const values: string[] = [];
-    element.autocomplete
+    element.attributes["autocomplete"]?.value
         ?.trim()
         .split(" ")
         .forEach(v => {

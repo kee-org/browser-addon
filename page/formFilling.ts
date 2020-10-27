@@ -1670,7 +1670,7 @@ export class FormFilling {
             .filter(
                 f =>
                     (f.field.type === "password" || f.field.type === "text") &&
-                    (f.field.locators[0].id || f.field.locators[0].name || f.field.value)
+                    (f.field.locators[0].id || f.field.locators[0].name)
             ).length;
         const loginFieldCountForAutofill = entry.fields.filter(
             f =>
@@ -1682,11 +1682,18 @@ export class FormFilling {
             otherFieldMatchSuccesses.filter(s => s === true).length +
             passwordFieldMatchSuccesses.filter(s => s === true).length;
 
+        const numberOfNewPasswordFields = passwordFields.filter(f =>
+            f.field.locators[0].autocompleteValues?.some(v => v === "new-password")
+        ).length;
+
         // Limiting to number of entry fields will reduce false positives but
         //increase chance of a valid form being missed.
+        // To help with password changing, we treat any known "new password" fields as an automatic match
         const fieldMatchRatioForAutofill =
-            Math.min(loginFieldCountForAutofill, formMatchedFieldCountForAutofill) /
-            Math.max(1, formFieldCountForAutofill);
+            Math.min(
+                loginFieldCountForAutofill + numberOfNewPasswordFields,
+                formMatchedFieldCountForAutofill
+            ) / Math.max(1, formFieldCountForAutofill);
 
         this.Logger.debug(
             "formFieldCount: " +
@@ -1699,6 +1706,8 @@ export class FormFilling {
                 formFieldCountForAutofill +
                 ", formMatchedFieldCountForAutofill: " +
                 formMatchedFieldCountForAutofill +
+                ", numberOfNewPasswordFields: " +
+                numberOfNewPasswordFields +
                 ", fieldMatchRatio: " +
                 fieldMatchRatioForAutofill
         );
