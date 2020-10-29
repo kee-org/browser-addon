@@ -519,6 +519,7 @@ gulp.task(
                     )
                     .pipe(replace(/(.*"version_name": ")(.*)(",.*)/g, "$1$2 Beta$3"))
                     .pipe(replace(/(,[\s]*?)"applications": ([\S\s]*?}){2}/g, ""))
+                    .pipe(replace(/(.*"name": "Kee - Password Manager)(",.*)/g, "$1 - Beta$2"))
                     .pipe(gulp.dest(buildDirDebugChrome))
             );
         } else {
