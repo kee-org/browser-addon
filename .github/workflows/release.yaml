@@ -1,0 +1,93 @@
+name: Release CI
+on:
+  push:
+    branches: [ release/* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+        #TODO: change to 1 and then get all tags seperately to see if that's faster. git fetch origin 'refs/tags/*:refs/tags/*'
+        
+      # Create a git tag of the new version to use
+      # If manifest.json major and minor versions match last tag, then 
+      # increment last tag. Else use manifest.json major.minor.0.
+      - name: Create git tag
+        run: "KEE_VERSION_MANIFEST=`sed -nE 's/^.*\"version\": \"([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}\"\\,/\\1/p' manifest.json | tr -d '\\040\\011\\012\\015'`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo \"${KEE_VERSION_MANIFEST} ${KEE_VERSION_TAG}\" | awk '{printf($1==$2?\"\"$2\".\"$3+1:\"\"$1\".0\")}' | xargs -I {} git tag -a {} -m \"{}\"\n"
+
+      - name: Update manifest.json based on the git tag we just created
+        run: |
+          NEW_KEE_VERSION=`git describe --abbrev=0 --tags`
+          echo "NEW_KEE_VERSION=$NEW_KEE_VERSION" >> $GITHUB_ENV
+          "sed -E 's/^(.*\"version\": \")(.*)(\"\\,.*)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
+          "sed -E 's/^(.*\"version_name\": \")(.*)(\"\\,.*)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
+
+      - name: NPM CI
+        run: npm ci
+
+      - name: Build and package
+        run: npm run package:prod && npm run package:debug
+
+      - name: Test
+        run: npm run test
+
+      - name: Push git tag
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git push --tags
+
+      - name: Checkout our beta update repo
+        uses: actions/checkout@v2.3.3
+        with:
+          # Repository name with owner. For example, actions/checkout
+          repository: 'kee-org/browser-addon-updates'
+          token: ${{ secrets.BETA_UPDATES_TOKEN }}
+          # Whether to configure the token or SSH key with the local git config
+          persist-credentials: false
+          # Relative path under $GITHUB_WORKSPACE to place the repository
+          path: browser-addon-updates
+
+      - name: Sign Firefox Beta
+        run: |
+          mkdir dist/signed
+          echo "Signing debug build..."
+          gulp sign
+          faauv --update ./browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)
+          echo "New update manifest follows"
+          cat ./browser-addon-updates/beta/update.json
+          cd $GITHUB_WORKSPACE/browser-addon-updates
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Automatic release of new beta version"
+          cd $GITHUB_WORKSPACE
+        env:
+          AMO_API_KEY: ${{ secrets.AMO_API_KEY }}
+          AMO_API_SECRET: ${{ secrets.AMO_API_SECRET }}
+
+      - name: Release
+        uses: softprops/action-gh-release@b7e450da2a4b4cb4bfbae528f788167786cfcedf
+        with:
+          name: ${{ env.NEW_KEE_VERSION }}
+          tag_name: ${{ env.NEW_KEE_VERSION }}
+          fail_on_unmatched_files: true
+          prerelease: false
+          body: "This is an automatically generated beta release. The first beta release for this major.minor version has been thoroughly tested; subsequent releases typically contain only new translations and occasional critical fixes with very limited scope. After beta testing this release may be promoted to a stable release. This message will be replaced if that happens. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550 . To install this beta version into Firefox, make sure you select the signed .xpi file - not all the listed .xpi files are signed and a typical Firefox configuration will reject the unsigned versions. The exact name may vary but will contain the word beta and the file size will be slightly larger than the other .xpi files."
+          files: |
+            dist/**/*.{xpi,zip}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish the new release to Firefox beta users
+        run: |
+          cd $GITHUB_WORKSPACE/browser-addon-updates
+          git push https://github-actions:$BETA_UPDATES_TOKEN@github.com/kee-org/browser-addon-updates.git master
+        env:
+            BETA_UPDATES_TOKEN: ${{ secrets.BETA_UPDATES_TOKEN }}
+
+        #TODO: Chrome + Edge auto-deployment
