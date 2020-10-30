@@ -60,7 +60,10 @@ jobs:
           mkdir dist/signed
           echo "Signing debug build..."
           gulp sign
-          faauv --update ./browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)
+          cat ./browser-addon-updates/beta/update.json
+          cat .downloadLinkKeeXPI
+          cat .signedKeeXPI
+          ./node_modules/.bin/faauv --update ./browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)
           echo "New update manifest follows"
           cat ./browser-addon-updates/beta/update.json
           cd $GITHUB_WORKSPACE/browser-addon-updates
