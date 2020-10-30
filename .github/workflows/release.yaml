@@ -82,7 +82,8 @@ jobs:
           prerelease: false
           body: "This is an automatically generated beta release. The first beta release for this major.minor version has been thoroughly tested; subsequent releases typically contain only new translations and occasional critical fixes with very limited scope. After beta testing this release may be promoted to a stable release. This message will be replaced if that happens. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550 . To install this beta version into Firefox, make sure you select the signed .xpi file - not all the listed .xpi files are signed and a typical Firefox configuration will reject the unsigned versions. The exact name may vary but will contain the word beta and the file size will be slightly larger than the other .xpi files."
           files: |
-            dist/**/*.{xpi,zip}
+            dist/**/*.xpi
+            dist/**/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
