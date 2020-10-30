@@ -1,6 +1,6 @@
 {
     "black_list": {
-        "message": "Čierna listina",
+        "message": "Zoznam vylúčených",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
@@ -236,7 +236,7 @@
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "site_options_list_explain_desc": {
-        "message": "Ak formulár patrí do bielej listiny, Kee sa ho vždy pokúsi vyplniť. Ak formulár patrí do čiernej listiny, Kee sa ho nikdy nebude pokúšať vyplniť. Ak sa nachádza v oboch listinách, Kee ho tiež nebude vypĺňať.",
+        "message": "Ak sa formulár zhoduje s jedným zo zoznamu zahrnutých, Kee sa ho vždy pokúsi vyplniť. Ak sa formulár zhoduje s jedným zo zoznamu vylúčených, Kee sa ho nikdy nebude snažiť vyplniť. Ak sa nachádza v oboch zoznamoch, Kee ho tiež nebude vypĺňať.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
@@ -256,7 +256,7 @@
         "description": ""
     },
     "white_list": {
-        "message": "Biela listina",
+        "message": "Zoznam zahrnutých",
         "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
     },
     "Help_Centre_Button_label": {
@@ -740,7 +740,7 @@
         "description": "Button action to open the full entry editor in KeePass or Kee Vault. Be sure to imply that the need to click the button is 'unusual', as I have done with the word 'advanced'"
     },
     "where": {
-        "message": "Wde?",
+        "message": "Kde?",
         "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
     },
     "will_be_copied_to_clipboard": {
@@ -779,8 +779,8 @@
         "message": "Vždy ukladať nové záznamy sem",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_5": {
-        "message": "Vylepšené ukladanie hesiel a vytváranie skúseností;Modernejší vizuálny vzhľad (čiastočne kompletný);Tmavý režim, zodpovedajúci preferenciám vášho systému;Vylepšená identifikácia poľa primárneho používateľského mena a tlačidiel odoslania;Network Auth zhody sú zoradené, čím sa zhody Realm dostávajú na vrchol",
+    "list_version_upgrade_3_6": {
+        "message": "Pre každú webovú stránku si môžete zvoliť preferovanú vyhovujúcu položku (pozri https://forum.kee.pm/t/preferred-entries/3313);Samostatný generátor hesiel aktualizovaný na nový štýl a zahrnutý do hlavného kontextového okna;Nová možnosť nastavenia predvoľby vašej tmavej a svetlej témy;Nová možnosť zobrazenia nenápadného potvrdenia po uložení záznamu;Klávesové skratky boli zmenené (pozri https://forum.kee.pm/t/keyboard-shortcuts/759);Horná a spodná šípka na klávesnice teraz spoľahlivo naviguje vo vyskakovacom okne medzi vyhľadávacím poľom, vyhovujúcimi položkami a výsledkami vyhľadávania;Vylepšený výkon pri vyhľadávaní formulárov;Vylepšená detekcia toho, ktoré formuláre by mal Kee automaticky vyplniť;Zmenený názov čiernej a bielej listiny na zoznam Vylúčiť a Zahrnúť;Zahrnutie a vylúčenie formulárov pomocou zhody reťazca teraz (voliteľne) ignoruje veľké a malé písmená;Opravená chyba ovplyvňujúca prioritu nastavenia jednotlivých stránok pri použití rozšírenej funkcie viacerých váh (vďaka @pragacz)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
@@ -794,6 +794,54 @@
     "join_the_community_cta": {
         "message": "Pridajte sa k nim!",
         "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
+    },
+    "ignore_case": {
+        "message": "Ignorovať veľkosť písmen",
+        "description": "Enabling this setting will cause a case-insensitive comparison to be made (e.g. when looking for matching names and IDs of forms to fill in)"
+    },
+    "ignore_case_explanation_finding_forms": {
+        "message": "Napríklad výraz „hľadať“ v ktoromkoľvek zo zoznamov zahrnutých alebo vylúčených sa bude zhodovať s výrazmi „hľadať“, „Hľadať“ a „HĽADAŤ“. Pokiaľ nemáte veľmi neobvyklé a zložité požiadavky, je najlepšie nechať túto možnosť zapnutú.",
+        "description": "Describes the ignore case setting when used for configuring the include and exclude lists for finding forms."
+    },
+    "theme": {
+        "message": "Motív",
+        "description": "The visual theme applied to the extension's user interface. As per convention, the values refer to the predominant shade - i.e. the background colour"
+    },
+    "dark": {
+        "message": "Tmavý",
+        "description": "Black colour or similar; Darkened visual appearance"
+    },
+    "light": {
+        "message": "Svetlý",
+        "description": "White colour or similar; Bright visual appearance"
+    },
+    "system_preference": {
+        "message": "Predvoľby systému",
+        "description": "The user's configured preference/setting in their system. System is vague because different browsers will implement it in different ways so it could relate to either the user's operating system, their web browser or both."
+    },
+    "theme_system_preference_explanation": {
+        "message": "Nie všetky operačné systémy a prehliadače podporujú automatické motívy svojich rozšírení. V prípade potreby môžete ručne zvoliť vyššie uvedené predvoľby.",
+        "description": "Explains what the Theme preference does and why"
+    },
+    "pref_Appearance_heading": {
+        "message": "Vzhľad",
+        "description": "Heading for settings/options that relate to the visual appearance of the extension"
+    },
+    "pref_hidden_options_present_explanation": {
+        "message": "Kee automaticky spravuje ďalšie možnosti pre túto stránku, takže ju nemôžete odstrániť.",
+        "description": "Notification and explanation to user that one or more hidden settings are present for the configuration of a specific site"
+    },
+    "preferred_matching_entry": {
+        "message": "Uprednostnený zodpovedajúci záznam",
+        "description": "Label for toggle between preferred status for the specific matched entry the toggle is displayed upon."
+    },
+    "show_confirmation_after_save": {
+        "message": "Zobraziť potvrdenie po uložení záznamu",
+        "description": "Label for option to display a confirmation message in the main popup after user has created or updated an entry."
+    },
+    "you_recently_saved": {
+        "message": "Nedávno ste uložili záznam",
+        "description": "A confirmation message after user has created or updated an entry."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Prihlásenie do správcu hesiel / Vybrať zodpovedajúci prihlasovací údaj / Zobraziť zoznam nájdených prihlasovacích údajov",

@@ -1,6 +1,6 @@
 {
     "black_list": {
-        "message": "Liste noire",
+        "message": "Exclude List",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
@@ -236,7 +236,7 @@
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "site_options_list_explain_desc": {
-        "message": "Si un formulaire correspond à une des listes blanches ci-dessous Kee essaiera toujours de le remplir. Si un formulaire correspond à une des listes noires ci-dessous Kee n'essaiera jamais de le remplir. S'il correspond aux deux listes Kee n'essaiera jamais de le remplir.",
+        "message": "If a form matches against one of the include lists below Kee will always try to fill it. If a form matches one of the exclude lists below Kee will never try to fill it. If it matches both lists Kee will not try to fill it.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
@@ -256,7 +256,7 @@
         "description": ""
     },
     "white_list": {
-        "message": "Liste blanche",
+        "message": "Include List",
         "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
     },
     "Help_Centre_Button_label": {
@@ -779,8 +779,8 @@
         "message": "Always save new entries here",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_5": {
-        "message": "Improved password saving and generating experience;More modern visual appearance (partially complete);Dark mode, matching your system preference;Improved identification of the primary username field and submit buttons;Network Auth matches are sorted, bringing Realm matches to the top",
+    "list_version_upgrade_3_6": {
+        "message": "You can choose a preferred matched entry for each website (see https://forum.kee.pm/t/preferred-entries/3313);Standalone password generator updated to new style and included in the main popup;New option to set your dark/light theme preference;New option to show an unobtrusive confirmation after an entry is saved;Keyboard shortcuts changed (see https://forum.kee.pm/t/keyboard-shortcuts/759);Keyboard arrow up and down in the popup now reliably navigates between search box, matched entries and search results;Improved form finding performance;Improved detection of which forms Kee should auto-fill;Changed name of Black and White list to Exclude and Include list;Including/excluding forms by string matching now (optionally) ignores case;Fixed a bug affecting per-site settings priority when using the advanced multiple-weights feature (thanks @pragacz)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
@@ -794,6 +794,54 @@
     "join_the_community_cta": {
         "message": "Join them now!",
         "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
+    },
+    "ignore_case": {
+        "message": "Ignore case",
+        "description": "Enabling this setting will cause a case-insensitive comparison to be made (e.g. when looking for matching names and IDs of forms to fill in)"
+    },
+    "ignore_case_explanation_finding_forms": {
+        "message": "For example, 'search' in any of the include or exclude lists will match with 'search', 'Search' and 'SEARCH'. Unless you have very unusual and complex requirements, it is best to leave this option enabled.",
+        "description": "Describes the ignore case setting when used for configuring the include and exclude lists for finding forms."
+    },
+    "theme": {
+        "message": "Theme",
+        "description": "The visual theme applied to the extension's user interface. As per convention, the values refer to the predominant shade - i.e. the background colour"
+    },
+    "dark": {
+        "message": "Dark",
+        "description": "Black colour or similar; Darkened visual appearance"
+    },
+    "light": {
+        "message": "Light",
+        "description": "White colour or similar; Bright visual appearance"
+    },
+    "system_preference": {
+        "message": "System Preference",
+        "description": "The user's configured preference/setting in their system. System is vague because different browsers will implement it in different ways so it could relate to either the user's operating system, their web browser or both."
+    },
+    "theme_system_preference_explanation": {
+        "message": "Not all operating systems and browsers support automatic theming of browser extensions. You can manually choose your preference above if required.",
+        "description": "Explains what the Theme preference does and why"
+    },
+    "pref_Appearance_heading": {
+        "message": "Appearance",
+        "description": "Heading for settings/options that relate to the visual appearance of the extension"
+    },
+    "pref_hidden_options_present_explanation": {
+        "message": "Kee is automatically managing additional options for this site so you can't delete it.",
+        "description": "Notification and explanation to user that one or more hidden settings are present for the configuration of a specific site"
+    },
+    "preferred_matching_entry": {
+        "message": "Preferred matching entry",
+        "description": "Label for toggle between preferred status for the specific matched entry the toggle is displayed upon."
+    },
+    "show_confirmation_after_save": {
+        "message": "Show confirmation after entry is saved",
+        "description": "Label for option to display a confirmation message in the main popup after user has created or updated an entry."
+    },
+    "you_recently_saved": {
+        "message": "You recently saved an entry",
+        "description": "A confirmation message after user has created or updated an entry."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Sign in to password manager / Select matched login / Show matched logins list",

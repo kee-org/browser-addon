@@ -1,6 +1,6 @@
 {
     "black_list": {
-        "message": "Černá listina",
+        "message": "Seznam vyjímek",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
@@ -236,7 +236,7 @@
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "site_options_list_explain_desc": {
-        "message": "Pokud formulář patří do níže uvedené bílé listiny, Kee se jej vždy pokusí vyplnit. Pokud formulář patří do níže uvedené černé listiny, Kee jej nikdy nebude pokoušet vyplňovat. Pokud je na obou listinách, Kee se jej nebude pokoušet vyplňovat.",
+        "message": "Pokud formulář najde shodu s položkou ze seznamu Obsahuje (viz níže), Kee se ho bude pokaždé snažit vyplnit. Pokud formulář najde shodu s položkou ze Seznamu vyjímek (viz níže), Kee se nebude pokoušet ho vyplnit. Pokud by byla shoda v obou seznamech, Kee nebude nic vyplňovat.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
@@ -256,7 +256,7 @@
         "description": ""
     },
     "white_list": {
-        "message": "Bílá listina",
+        "message": "Obsahuje",
         "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
     },
     "Help_Centre_Button_label": {
@@ -720,7 +720,7 @@
         "description": "1st sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_2": {
-        "message": "Continuing with this update will enable you to fill these credentials into this site too.",
+        "message": "Pokračováním povolíte vyplňování vašich přihlašovacích údajů také do tohoto webu.",
         "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_3": {
@@ -772,19 +772,19 @@
         "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
     },
     "skip_where_reason_group_not_found": {
-        "message": "You're seeing this question because the group you most recently saved to can not be found. This may be because it has been deleted or hidden from Kee. Or it could simply be that the required password source is not unlocked.",
+        "message": "Tuto otázku vidíte, protože posledně použitá skupina k ukládání nebyla nalezena. Mohla být smazána nebo skryta. Nebo jednoduše požadavaný zdroj hesel není odemčen.",
         "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
     },
     "skip_where_enable_context": {
         "message": "Sem vždy ukládat nové položky",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_5": {
-        "message": "Improved password saving and generating experience;More modern visual appearance (partially complete);Dark mode, matching your system preference;Improved identification of the primary username field and submit buttons;Network Auth matches are sorted, bringing Realm matches to the top",
+    "list_version_upgrade_3_6": {
+        "message": "Můžete si vybrat preferované položky pro každý web (více na https://forum.kee.pm/t/preferred-entries/3313);Samostatný generátor hesel byl aktualizován do nového vzhledu a je obsažen v hlavním vyskakujícím okně;Nová volba pro nastavení preference tmavého/světlého vzhledu;Nová volba k nastavení diskrétního potvrzení po uložení položky;Změny klávesových zkratek (více na https://forum.kee.pm/t/keyboard-shortcuts/759);Klávesami nahoru a dolů ve vyskakovacím okně lze nyní spolehlivě navigovat mezi vyhledacím polem, nalezenými položkami a výsledky vyhledávání;Vylepšený výkon hledání formulářů;Vylepšena byla detekce, které formuláře mají být automaticky vyplněny;Změna jména Černého a Bílého seznamu na Zakázané a Povolené seznamy;Povolené/zakázané formuláře podle shody v řetězci nyní (volitelně) ignorují malé a velké znaky;Opravena chyba ovlivňující prioritu nastavení pro web, když používají funkci rozšířené vícenásobné váhy (díky @pragacz)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
-        "message": "More details, including important information for KeePass users can be found in the release announcement on the community forum:",
+        "message": "Více informací pro uživatele KeePassu, včetně důležitých, lze nalézt v komunitním fóru pod oznámením o vydání:",
         "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
     },
     "beta_testing_is_good": {
@@ -794,6 +794,54 @@
     "join_the_community_cta": {
         "message": "Přidejte se k nim teď hned!",
         "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
+    },
+    "ignore_case": {
+        "message": "Nezáleží na velikosti písmen",
+        "description": "Enabling this setting will cause a case-insensitive comparison to be made (e.g. when looking for matching names and IDs of forms to fill in)"
+    },
+    "ignore_case_explanation_finding_forms": {
+        "message": "Například: 'hledat' v kterémkoliv seznamu Obsahuje nebo vyjímek bude souhlasit s 'hledat', 'Hledat' a 'HLEDAT'. Pokud tedy nemáte velmi neobvyklé a složité požadavky, je nejlepší nechat tuto možnost povolenou.",
+        "description": "Describes the ignore case setting when used for configuring the include and exclude lists for finding forms."
+    },
+    "theme": {
+        "message": "Motiv",
+        "description": "The visual theme applied to the extension's user interface. As per convention, the values refer to the predominant shade - i.e. the background colour"
+    },
+    "dark": {
+        "message": "Tmavý",
+        "description": "Black colour or similar; Darkened visual appearance"
+    },
+    "light": {
+        "message": "Světlý",
+        "description": "White colour or similar; Bright visual appearance"
+    },
+    "system_preference": {
+        "message": "Následovat nastavení systému",
+        "description": "The user's configured preference/setting in their system. System is vague because different browsers will implement it in different ways so it could relate to either the user's operating system, their web browser or both."
+    },
+    "theme_system_preference_explanation": {
+        "message": "Ne všechny operační systémy a prohlížeče podporují automatickou změnu motivu. Výše si můžete ručně zvolit vaši preferovanou volbu.",
+        "description": "Explains what the Theme preference does and why"
+    },
+    "pref_Appearance_heading": {
+        "message": "Vzhled",
+        "description": "Heading for settings/options that relate to the visual appearance of the extension"
+    },
+    "pref_hidden_options_present_explanation": {
+        "message": "Kee si automaticky udržuje rozšířená nastavení pro tento web, takže ho nemůžete smazat.",
+        "description": "Notification and explanation to user that one or more hidden settings are present for the configuration of a specific site"
+    },
+    "preferred_matching_entry": {
+        "message": "Preferovaná shodná položka",
+        "description": "Label for toggle between preferred status for the specific matched entry the toggle is displayed upon."
+    },
+    "show_confirmation_after_save": {
+        "message": "Zobrazit potvrzení po uložení položky",
+        "description": "Label for option to display a confirmation message in the main popup after user has created or updated an entry."
+    },
+    "you_recently_saved": {
+        "message": "Položka byla právě uložena",
+        "description": "A confirmation message after user has created or updated an entry."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Přihlásit se do správce hesel / Vybrat nalezené přihlášení / Zobrazit seznam nalezených přihlášení",

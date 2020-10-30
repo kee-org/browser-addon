@@ -1,6 +1,6 @@
 {
     "black_list": {
-        "message": "Чорний список",
+        "message": "Винятки",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
@@ -236,7 +236,7 @@
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "site_options_list_explain_desc": {
-        "message": "Якщо форма відповідає запису з білого списку, Kee буде завжди намагатися заповнити її. Якщо форма відповідає запису з чорного списку, Kee ніколи не буде заповнювати її. Якщо форма відповідає записам з обох списків, Kee не буде її заповнювати.",
+        "message": "Якщо форма відповідає запису зі списку дозволів, Kee завжди намагатиметься заповнити її. Якщо форма відповідає запису зі списку винятків, Kee ніколи не заповнюватиме її. Якщо форма відповідає записам з обох списків, Kee не заповнюватиме її.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
@@ -256,7 +256,7 @@
         "description": ""
     },
     "white_list": {
-        "message": "Білий список",
+        "message": "Дозволи",
         "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
     },
     "Help_Centre_Button_label": {
@@ -779,8 +779,8 @@
         "message": "Завжди зберігати нові записи тут",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_5": {
-        "message": "Вдосконалене збереження та генерування паролів;Сучасніший зовнішній вигляд (частково завершено);Темний режим, що відповідає системним налаштуванням;Вдосконалено ідентифікацію полів імені користувача й пароля;Впорядковано збіги для мережевої автентифікації, надаючи перевагу збігам Realm",
+    "list_version_upgrade_3_6": {
+        "message": "Ви можете обрати бажаний запис для кожного вебсайту (див. https://forum.kee.pm/t/preferred-entries/3313);Оновлено вигляд незалежного генератора паролів і включено в основне виринаюче вікно;Нова можливість встановлення темної чи світлої теми;Нова можливість показувати ненав'язливе підтвердження після збереження запису;Змінено комбінації клавіш (див. https://forum.kee.pm/t/keyboard-shortcuts/759);Стрілка клавіатури у виринаючому вікні тепер правильно поводиться між полем пошуку, відповідними записами та результатами пошуку;Вдосконалено швидкодію під час пошуку форм;Вдосконалене виявлення форм автозаповнення;Змінено назву Чорного та Білого списків на  Винятки та Дозволи;У формах Винятків та Дозволів за відповідними рядками тепер можливо ігнорувати регістр;Виправлено помилку, що впливає на пріоритет налаштувань для певного сайту при використанні розширеної функції multiple-weights (подяка @pragacz)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
@@ -794,6 +794,54 @@
     "join_the_community_cta": {
         "message": "Приєднуйтеся до них!",
         "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
+    },
+    "ignore_case": {
+        "message": "Ігнорувати",
+        "description": "Enabling this setting will cause a case-insensitive comparison to be made (e.g. when looking for matching names and IDs of forms to fill in)"
+    },
+    "ignore_case_explanation_finding_forms": {
+        "message": "Наприклад, \"запит\" в будь-якому зі списків Дозволи чи Винятки збігатиметься зі значенням \"запит\", \"Запит\" і \"ЗАПИТ\". Якщо у вас немає незвичних та складних вимог, найкраще лишити цю опцію увімкненою.",
+        "description": "Describes the ignore case setting when used for configuring the include and exclude lists for finding forms."
+    },
+    "theme": {
+        "message": "Тема",
+        "description": "The visual theme applied to the extension's user interface. As per convention, the values refer to the predominant shade - i.e. the background colour"
+    },
+    "dark": {
+        "message": "Темна",
+        "description": "Black colour or similar; Darkened visual appearance"
+    },
+    "light": {
+        "message": "Світла",
+        "description": "White colour or similar; Bright visual appearance"
+    },
+    "system_preference": {
+        "message": "Системна",
+        "description": "The user's configured preference/setting in their system. System is vague because different browsers will implement it in different ways so it could relate to either the user's operating system, their web browser or both."
+    },
+    "theme_system_preference_explanation": {
+        "message": "Не всі операційні системи та браузери підтримують автоматичну зміну теми в розширеннях. Ви можете вручну вибрати тему за власним бажанням.",
+        "description": "Explains what the Theme preference does and why"
+    },
+    "pref_Appearance_heading": {
+        "message": "Зовнішній вигляд",
+        "description": "Heading for settings/options that relate to the visual appearance of the extension"
+    },
+    "pref_hidden_options_present_explanation": {
+        "message": "Kee автоматично керує додатковими налаштуваннями для цього сайту, тому ви не можете його видалити.",
+        "description": "Notification and explanation to user that one or more hidden settings are present for the configuration of a specific site"
+    },
+    "preferred_matching_entry": {
+        "message": "Виявлення збігів запису",
+        "description": "Label for toggle between preferred status for the specific matched entry the toggle is displayed upon."
+    },
+    "show_confirmation_after_save": {
+        "message": "Показувати підтвердження після збереження запису",
+        "description": "Label for option to display a confirmation message in the main popup after user has created or updated an entry."
+    },
+    "you_recently_saved": {
+        "message": "Ви недавно зберегли запис",
+        "description": "A confirmation message after user has created or updated an entry."
     },
     "KB_shortcut_simple_2_desc": {
         "message": "Увійти в менеджер паролів / Обрати відповідний запис / Показати список відповідних логінів",
