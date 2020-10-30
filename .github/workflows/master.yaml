@@ -26,8 +26,8 @@ jobs:
         run: |
           NEW_KEE_VERSION=`git describe --abbrev=0 --tags`
           echo "NEW_KEE_VERSION=$NEW_KEE_VERSION" >> $GITHUB_ENV
-          "sed -E 's/^(.*\"version\": \")(.*)(\"\\,.*)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
-          "sed -E 's/^(.*\"version_name\": \")(.*)(\"\\,.*)/\\1'\"$NEW_KEE_VERSION\"'\\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
+          sed -E 's/^(.*"version": ")(.*)("\,.*)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json
+          sed -E 's/^(.*"version_name": ")(.*)("\,.*)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json"
 
       - name: NPM CI
         run: npm ci
@@ -39,7 +39,7 @@ jobs:
         run: npm run test
 
       - name: Transifex upload
-        run: virtualenv ~/env && source ~/env/bin/activate && pip install transifex-client && echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = api\ntoken = \npassword = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc && tx -d --traceback push -s;
+        run: pip install transifex-client && echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = api\ntoken = \npassword = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc && tx -d --traceback push -s;
         env:
           TRANSIFEX_API_TOKEN: ${{ secrets.TRANSIFEX_API_TOKEN }}
 
