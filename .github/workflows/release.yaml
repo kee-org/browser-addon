@@ -101,7 +101,7 @@ jobs:
         uses: trmcnvn/chrome-addon@91e2d97f66f3ad0453b5ef8396094f0b63018659
         with:
           extension: hlicbbodnlbbflfihnjjffnjeaoglici
-          zip: $GITHUB_WORKSPACE/dist/Kee.-.Password.Manager-v${{ env.NEW_KEE_VERSION }}-debug.zip
+          zip: dist/Kee.-.Password.Manager-v${{ env.NEW_KEE_VERSION }}-debug.zip
           publish-target: trustedTesters
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
