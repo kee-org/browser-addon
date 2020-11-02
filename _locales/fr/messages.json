@@ -1,6 +1,6 @@
 {
     "black_list": {
-        "message": "Exclude List",
+        "message": "Liste noire",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
@@ -52,7 +52,7 @@
         "description": ""
     },
     "conn_setup_client_features_missing": {
-        "message": "Kee must be upgraded to connect to your password manager. Ensure you are running the latest version of the browser add-on / extension.",
+        "message": "Kee doit être mise à jour pour se connecter à votre gestionnaire de mot de passe. Assurez-vous d'exécuter la dernière version de l'extension de navigateur. ",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "conn_setup_server_features_missing": {

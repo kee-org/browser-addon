@@ -1,6 +1,6 @@
 {
     "black_list": {
-        "message": "Exclude List",
+        "message": "Список исключений",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
@@ -164,7 +164,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Take this automatic action even when multiple matching entries are found",
+        "message": "Выполнять это действие автоматически даже при обнаружении нескольких совпадающих записей",
         "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_keePassDBToOpen_label": {
@@ -236,7 +236,7 @@
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "site_options_list_explain_desc": {
-        "message": "If a form matches against one of the include lists below Kee will always try to fill it. If a form matches one of the exclude lists below Kee will never try to fill it. If it matches both lists Kee will not try to fill it.",
+        "message": "Если форма содержит параметр из приведенного ниже списка совпадений, Kee всегда будет пытаться заполнить его. Если форма содержит параметр из списка исключений, приведенных ниже, Kee никогда не будет пытаться заполнить его. Если параметр формы содержится в обоих списках, Kee не будет пытаться заполнить его.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
@@ -256,7 +256,7 @@
         "description": ""
     },
     "white_list": {
-        "message": "Include List",
+        "message": "Список совпадений",
         "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
     },
     "Help_Centre_Button_label": {
