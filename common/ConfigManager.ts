@@ -576,8 +576,8 @@ export class ConfigManager {
         const fieldNames = otherFields
             .map(field => (ic ? field.locators[0]?.name.toLowerCase() : field.locators[0]?.name))
             .filter(Boolean);
-        const formId = ic ? form.id?.toLowerCase() : form.id;
-        const formName = ic ? form.name?.toLowerCase() : form.name;
+        const formId = ic ? form.getAttribute('id')?.toLowerCase() : form.getAttribute('id');
+        const formName = ic ? form.getAttribute('name')?.toLowerCase() : form.getAttribute('name');
         const excludeFormIds = (conf?.blackList?.form?.ids || [])
             .map(x => (ic ? x?.toLowerCase() : x))
             .filter(Boolean);
