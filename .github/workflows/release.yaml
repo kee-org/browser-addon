@@ -60,7 +60,10 @@ jobs:
           mkdir dist/signed
           echo "Signing debug build..."
           gulp sign
-          faauv --update ./browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)
+          cat ./browser-addon-updates/beta/update.json
+          cat .downloadLinkKeeXPI
+          cat .signedKeeXPI
+          ./node_modules/.bin/faauv --update ./browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)
           echo "New update manifest follows"
           cat ./browser-addon-updates/beta/update.json
           cd $GITHUB_WORKSPACE/browser-addon-updates
@@ -94,4 +97,14 @@ jobs:
         env:
             BETA_UPDATES_TOKEN: ${{ secrets.BETA_UPDATES_TOKEN }}
 
-        #TODO: Chrome + Edge auto-deployment
+      - name: Publish the new release to Chrome beta users
+        uses: trmcnvn/chrome-addon@91e2d97f66f3ad0453b5ef8396094f0b63018659
+        with:
+          extension: hlicbbodnlbbflfihnjjffnjeaoglici
+          zip: "dist/Kee - Password Manager-v${{ env.NEW_KEE_VERSION }}-debug.zip"
+          publish-target: trustedTesters
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
+        #TODO: Edge auto-deployment
