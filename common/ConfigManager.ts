@@ -570,7 +570,7 @@ export class ConfigManager {
 
     private normalizeFormProperty(input: unknown, ic: boolean) {
         if (typeof input !== "string") return null;
-        return ic ? stringInput.toLowerCase() : stringInput;
+        return ic ? input.toLowerCase() : input;
     }
 
     public isFormInteresting(form: HTMLFormElement, conf: SiteConfig, otherFields: Field[]) {
