@@ -568,6 +568,11 @@ export class ConfigManager {
         return derivedConfig;
     }
 
+    private normalizeFormProperty(input: unknown, ic: boolean) {
+        if (typeof input !== "string") return null;
+        return ic ? input.toLowerCase() : input;
+    }
+
     public isFormInteresting(form: HTMLFormElement, conf: SiteConfig, otherFields: Field[]) {
         const ic = conf.listMatchingCaseSensitive !== true;
         const fieldIds = otherFields
@@ -576,8 +581,8 @@ export class ConfigManager {
         const fieldNames = otherFields
             .map(field => (ic ? field.locators[0]?.name.toLowerCase() : field.locators[0]?.name))
             .filter(Boolean);
-        const formId = ic ? form.id?.toLowerCase() : form.id;
-        const formName = ic ? form.name?.toLowerCase() : form.name;
+        const formId = this.normalizeFormProperty(form.id, ic);
+        const formName = this.normalizeFormProperty(form.name, ic);
         const excludeFormIds = (conf?.blackList?.form?.ids || [])
             .map(x => (ic ? x?.toLowerCase() : x))
             .filter(Boolean);
