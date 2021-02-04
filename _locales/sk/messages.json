@@ -164,7 +164,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Vykonajte túto automatickú akciu aj vtedy, keď sa nájdu viaceré zodpovedajúce položky",
+        "message": "Vykonať túto automatickú akciu aj vtedy, keď sa nájdu viaceré zodpovedajúce položky",
         "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_keePassDBToOpen_label": {
@@ -668,11 +668,11 @@
         "description": "Group of settings that relate to the actions that Kee takes when the user explicitly asks Kee to fill an entry"
     },
     "pref_fill_override_hint": {
-        "message": "Upravte jednotlivé položky v správcovi hesiel, aby ste toto správanie nahradili.",
+        "message": "Upravte jednotlivé položky v správcovi hesiel pre zmenu tohto správania.",
         "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_fill_override_option": {
-        "message": "Toto správanie sa nahradí aj úpravou správania automatického odosielania položky",
+        "message": "Toto správanie sa zmení aj úpravou správania automatického odosielania položky",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "next": {

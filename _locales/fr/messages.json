@@ -1,6 +1,6 @@
 {
     "black_list": {
-        "message": "Exclude List",
+        "message": "Liste noire",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
@@ -52,11 +52,11 @@
         "description": ""
     },
     "conn_setup_client_features_missing": {
-        "message": "Kee must be upgraded to connect to your password manager. Ensure you are running the latest version of the browser add-on / extension.",
+        "message": "Kee doit être mise à jour pour se connecter à votre gestionnaire de mot de passe. Assurez-vous d'exécuter la dernière version de l'extension de navigateur. ",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "conn_setup_server_features_missing": {
-        "message": "Your password manager must be upgraded to allow Kee to connect to it. Reload the Kee Vault website and/or ensure you are running the latest version of the KeePassRPC plugin by following the quick and easy instructions at $1",
+        "message": "Votre gestionnaire de mots de passe a besoin d'être mise à jour pour autoriser Kee à s'y connecter. Rechargez le site web de Kee Vault et/ou vérifiez que vous utilisez la dernière version de l'extension KeePassRPC en suivant les instructions simplifiées à $1",
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "conn_sl_high_label": {
@@ -92,7 +92,7 @@
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_unknown_error": {
-        "message": "An unexpected error occurred when trying to connect to your password manager.",
+        "message": "Une erreur inattendue s'est produite en essayant de se connecter à votre gestionnaire de mots de passe.",
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "conn_unknown_protocol": {
@@ -164,7 +164,7 @@
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Take this automatic action even when multiple matching entries are found",
+        "message": "Prendre cette mesure automatique même lorsque plusieurs entrées correspondantes sont trouvées",
         "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_keePassDBToOpen_label": {
@@ -204,15 +204,15 @@
         "description": ""
     },
     "pref_animateWhenOfferingSave_label": {
-        "message": "Animate the Kee icon when offering to save",
+        "message": "Animer l'icône Kee lorsqu'il est possible de sauver",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
-        "message": "Remember the most recently used Kee Vault or KeePass database",
+        "message": "Se rappeler des bases Kee Vault (coffre-fort) ou KeePass les plus récemment utilisées",
         "description": ""
     },
     "pref_preferToSkipWhere_label": {
-        "message": "Automatically save new entries to the group you most recently saved to",
+        "message": "Enregistrer automatiquement les nouvelles entrées dans le groupe où vous avez enregistré le plus récemment",
         "description": "Whether Kee will save new entries to the group most recently chosen by the user without presenting them with the usual Where group chooser interface"
     },
     "pref_saveFavicons_label": {
@@ -220,7 +220,7 @@
         "description": "Whether or not Kee will save the website's icon when a new entry is saved"
     },
     "pref_searchAllOpenDBs_label": {
-        "message": "Search all open Kee Vaults and KeePass databases",
+        "message": "Chercher dans toutes les bases de données Kee Vaults (coffres-forts) ou KeePass ouvertes",
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
@@ -236,7 +236,7 @@
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "site_options_list_explain_desc": {
-        "message": "If a form matches against one of the include lists below Kee will always try to fill it. If a form matches one of the exclude lists below Kee will never try to fill it. If it matches both lists Kee will not try to fill it.",
+        "message": "Si un formulaire correspond à une des listes blanches ci-dessous, Kee essaiera toujours de le remplir. Si un formulaire correspond à une des listes noires ci-dessous, Kee n'essaiera jamais de le remplir. S'il correspond aux deux listes, Kee n'essaiera jamais de le remplir.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
@@ -244,7 +244,7 @@
         "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from the password manager"
     },
     "site_options_valid_form_intro_desc": {
-        "message": "Kee will try to fill matching Kee Vault and KeePass entries for all forms that have a password field (box). You can adjust this behaviour below.",
+        "message": "KeeFox essaiera de remplir les entrées de KeePass correspondantes pour tous les formulaires qui ont un champ de mots de passe. Vous pouvez ajuster ce comportement ci-dessous.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "text_field_id": {
@@ -256,7 +256,7 @@
         "description": ""
     },
     "white_list": {
-        "message": "Include List",
+        "message": "Liste blanche",
         "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
     },
     "Help_Centre_Button_label": {
@@ -284,11 +284,11 @@
         "description": "Link to the add-on's settings"
     },
     "Menu_Button_open_keepass_label": {
-        "message": "Open KeePass",
+        "message": "Lancer KeePass",
         "description": "Action button to launch, unlock and/or focus KeePass"
     },
     "Menu_Button_open_kee_vault_label": {
-        "message": "Open Kee Vault",
+        "message": "Lancer Kee Vault",
         "description": "Action button to launch, unlock and/or focus Kee Vault"
     },
     "Search_label": {
@@ -296,7 +296,7 @@
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
-        "message": "You can optionally create a different one by selecting a password profile below. Create new profiles in Kee Vault or KeePass.",
+        "message": "Vous pouvez en créer un autre en sélectionnant ci-dessous un profil de mot de passe. Créer de nouveaux profils dans Kee Vault ou KeePass.",
         "description": ""
     },
     "copy_password_label": {
@@ -312,19 +312,19 @@
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
     "copy_value_to_clipboard": {
-        "message": "Copy value to clipboard",
+        "message": "Copier la valeur dans le presse-papier",
         "description": "Indicates to the user that when they click here the value for that field will be copied to the clipboard."
     },
     "click_to_reveal_hide": {
-        "message": "Click to reveal/hide",
+        "message": "Cliquez pour montrer/cacher",
         "description": "Indicates to the user that when they click here the value of the protected field will be displayed or hidden (toggled)."
     },
     "no_name": {
-        "message": "no name",
+        "message": "sans nom",
         "description": "Used in place of a field name when the specific field has no name. Will be surrounded by [ square brackets ]"
     },
     "matches_from_other_sites": {
-        "message": "Matches from other sites",
+        "message": "Entrées correspondantes",
         "description": "Search results section header."
     },
     "create_new_entry": {
@@ -356,7 +356,7 @@
         "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "website_options_search_tooltip": {
-        "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+        "message": "e.g. www.google.com (NE PAS ajouter https:// ou autres protocoles)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "generatePassword_copied": {
@@ -364,15 +364,15 @@
         "description": ""
     },
     "generatePassword_instructions": {
-        "message": "Choose which type of password to create:",
+        "message": "Choisir le type de mot de passe à créer :",
         "description": ""
     },
     "generatePassword_done_1": {
-        "message": "Password generated.",
+        "message": "Mot de passe généré.",
         "description": ""
     },
     "generatePassword_done_2": {
-        "message": "Paste it into a \"new password\" field or wherever else you want.",
+        "message": "Coller le dans un champ \"nouveau mot de passe\" ou n'importe où ailleurs.",
         "description": ""
     },
     "loggedIn_tip": {
@@ -384,7 +384,7 @@
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
     "multiplePasswordSourcesEnabled": {
-        "message": "$1 password sources enabled",
+        "message": "$1 sources de mots de passe activées",
         "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
@@ -400,15 +400,15 @@
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
-        "message": "You are not logged in to your password manager.",
+        "message": "Vous n'êtes pas connecté à votre gestionnaire de mots de passe.",
         "description": ""
     },
     "notifyBarLaunchKeePassButton_tip": {
-        "message": "Open Kee Vault or KeePass to enable Kee",
+        "message": "Lancer Kee Vault (Coffre-fort) ou KeePass pour activer Kee",
         "description": ""
     },
     "notifyBarLoginToKeePassButton_tip": {
-        "message": "Unlock your password manager to enable Kee",
+        "message": "Déverrouillez votre gestionnaire de mot de passe pour activer Kee",
         "description": ""
     },
     "save": {
@@ -532,67 +532,67 @@
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "introduction_to_kee": {
-        "message": "Kee automatically fills login forms to save you time and protect you from security risks.",
+        "message": "Kee remplit automatiquement les formulaires de connexion pour vous faire gagner du temps et vous protéger des risques de sécurité.",
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
     "kee_works_with_a_password_manager": {
-        "message": "The credentials Kee enters for you are stored securely in a password manager behind a single \"master password\".",
+        "message": "Les informations d'identification que Kee saisit pour vous sont stockées en toute sécurité dans un gestionnaire de mots de passe derrière un seul \"mot de passe maître\".",
         "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
     "recommend_start_with_kee_vault": {
-        "message": "We recommend trying out the Kee Vault password manager 14 day free trial. It's only £2 per month after the trial and does not require payment details when you sign up so is risk free.",
+        "message": "Nous vous recommandons d'essayer gratuitement le gestionnaire de mots de passe Kee Vault pendant 14 jours. Il ne coûte que 2 £ par mois après l'essai et ne nécessite pas de détails de paiement lors de l'inscription, donc sans risque.",
         "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
     },
     "load_kee_vault_now": {
-        "message": "Load Kee Vault now",
+        "message": "Charger Kee Vault maintenant",
         "description": "Call To Action button text. On click, the Kee Vault app will load and focus in a new tab."
     },
     "you_can_use_KeePass_instead": {
-        "message": "Alternatively, you can choose to configure KeePass Password Safe 2 instead.",
+        "message": "Vous pouvez également choisir de configurer KeePass Password Safe 2 à la place.",
         "description": "Explains that Kee also works with KeePass so they can choose to configure that if they prefer to avoid all financial expenditure."
     },
     "table_summarises_differences": {
-        "message": "The table below summarises the main differences.",
+        "message": "Le tableau ci-dessous résume les principales différences.",
         "description": "Introduces the summary table that will help users choose a password manager to start with."
     },
     "installation_required": {
-        "message": "Installation required",
+        "message": "Installation nécessaire",
         "description": "States that the user will need to install components on their computer"
     },
     "access_from_multiple_devices": {
-        "message": "Access from multiple desktop and mobile devices",
+        "message": "Accéder à partir de plusieurs appareils de bureau et mobiles",
         "description": "Covers web browsers and mobiles, laptops, tablets, etc."
     },
     "shared_preferences": {
-        "message": "Shared preferences",
+        "message": "Préférences synchronisées",
         "description": "Labels the process of synchronising browser extension and password manager configuration options/preferences across multiple locations."
     },
     "yes_configure_once": {
-        "message": "Yes, configure once",
+        "message": "Oui, configurer une fois",
         "description": "Supports synchronising browser extension and password manager configuration options/preferences"
     },
     "no_configure_multiple": {
-        "message": "No, configure on every web browser or device you use",
+        "message": "Non, configurez sur chaque navigateur web ou appareil que vous utilisez",
         "description": "Does not support synchronising browser extension and password manager configuration options/preferences"
     },
     "difficulty": {
-        "message": "Difficulty",
+        "message": "Difficulté",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "difficulty_kee_vault": {
-        "message": "Easy",
+        "message": "Facile",
         "description": "Indicates that it is easy to get started with Kee Vault"
     },
     "difficulty_keepass": {
-        "message": "Medium (Hard on Mac computers)",
+        "message": "Moyen (difficile sur les ordinateurs Mac)",
         "description": "Indicates that more work is required to get started with KeePass"
     },
     "keepass_sync_config_explanation": {
-        "message": "For KeePass, a partial solution for multi-device access can be manually configured using 3rd party services, some of which charge a fee. Each device must be prepared and configured in advance.",
+        "message": "Dans KeePass, une solution partielle d'accès à plusieurs appareils peut être configurée manuellement en utilisant des services tiers (certains payants). Chaque appareil doit être préparé et configuré à l'avance.",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "point_user_to_keepass_install_instructions_start": {
-        "message": "Instructions for installing and configuring KeePass and the required KeePassRPC.plgx plugin can be found on our",
+        "message": "Les instructions pour l'installation et la configuration de KeePass et du plugin requis KeePassRPC.plgx se trouvent sur notre",
         "description": "Left part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_keepass_install_instructions_end": {
@@ -620,7 +620,7 @@
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "notification_save_password_tip": {
-        "message": "Open Kee (click the Kee icon button in your toolbar) and then click the + button",
+        "message": "Ouvrez Kee (cliquez sur l'icône Kee de votre barre d'outils) et cliquez ensuite sur le bouton +.",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password"
     },
     "loading": {
@@ -636,215 +636,215 @@
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
     "other_technical_improvements": {
-        "message": "Other technical improvements",
+        "message": "Autres améliorations techniques",
         "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
     },
     "reliability_improvements": {
-        "message": "Reliability improvements",
+        "message": "Améliorations de la fiabilité",
         "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
     },
     "new_icon": {
-        "message": "New icon",
+        "message": "Nouvelle icône",
         "description": "Heading for text that explains we have a new icon / branding"
     },
     "kee_vault_announcement_1": {
-        "message": "Kee Vault is a new open source password manager. It runs in your web browser so no installation is necessary.",
+        "message": "Kee Vault est un nouveau gestionnaire de mots de passe open source. Il fonctionne dans votre navigateur web, donc aucune installation n'est nécessaire.",
         "description": "Introduction to what Kee Vault is"
     },
     "kee_vault_announcement_2": {
-        "message": "It works on any modern device or web browser, even when offline. After importing your existing KeePass database you can access your Kee Vault from everywhere, with your changes and configuration preferences automatically sent to each of your devices and browsers.",
+        "message": "Il fonctionne sur tout appareil moderne ou navigateur web, même lorsqu'il est hors ligne. Après avoir importé votre base de données KeePass existante, vous pouvez accéder à votre coffre-fort de partout, vos modifications et préférences de configuration étant automatiquement envoyées à chacun de vos appareils et navigateurs.",
         "description": "Outlines a few benefits of Kee Vault compared to KeePass"
     },
     "kee_vault_announcement_3": {
-        "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
+        "message": "La version 3.0 de Kee vous permet d'utiliser Kee Vault à la place de l'application KeePass du bureau, en prenant en charge toutes les fonctionnalités de Kee existantes telles que le remplissage et l'enregistrement de formulaires, la recherche et la génération de mots de passe.",
         "description": "Explains that Kee v3 works with Kee Vault"
     },
     "pref_automatic": {
-        "message": "Automatic",
+        "message": "Automatique",
         "description": "Group of settings that relate to the actions that Kee can take automatically when filling entries"
     },
     "pref_manual": {
-        "message": "Manual",
+        "message": "Manuel",
         "description": "Group of settings that relate to the actions that Kee takes when the user explicitly asks Kee to fill an entry"
     },
     "pref_fill_override_hint": {
-        "message": "Edit individual entries in your password manager to override this behaviour.",
+        "message": "Modifier les entrées individuelles dans votre gestionnaire de mots de passe afin d'éviter ce comportement.",
         "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_fill_override_option": {
-        "message": "Editing the Auto-submit behaviour of an entry also overrides this behaviour",
+        "message": "La modification du comportement de soumission automatique d'une entrée modifie également ce comportement",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "next": {
-        "message": "Next",
+        "message": "Suivant",
         "description": "Action button for user to advance to the next step in a multi-step process. E.g. to confirm username and password for a new entry and load the panel that allows selection of where to save the new entry."
     },
     "title": {
-        "message": "Title",
+        "message": "Titre",
         "description": "E.g. the title of an entry."
     },
     "username": {
-        "message": "Username",
+        "message": "Nom d'utilisateur",
         "description": "Use the most generic and common term available for the primary sign-in identifier for an account. In practice may be an email address, number, surname, username, etc. but in all cases this will refer to the string the user has stored in the entry's primary Username field."
     },
     "enabled": {
-        "message": "Enabled",
+        "message": "Activé",
         "description": "Indicates that a boolean option such as a checkbox is in an enabled/on/true state"
     },
     "disabled": {
-        "message": "Disabled",
+        "message": "Désactivé",
         "description": "Indicates that a boolean option such as a checkbox is in an disabled/off/false state"
     },
     "unsaved_changes": {
-        "message": "You have recent unsaved changes.",
+        "message": "Vous avez des modifications récentes non sauvegardées.",
         "description": "Shown to user when the popup is opened and a new or existing entry is part-way through being edited from a recent popup session. Note that very recent popup sessions are automatically 'continued' without the user needing to consider this information."
     },
     "continue_saving": {
-        "message": "Continue saving",
+        "message": "Sauver quand même",
         "description": "Action for user to continue editing the same entry that was being edited when the popup recently closed."
     },
     "discard_changes": {
-        "message": "Discard changes",
+        "message": "Annuler les changements",
         "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
     },
     "password_profile_hint": {
-        "message": "Select which set of rules the new password will follow. Rules include password length and the sort of characters that may be used. Create new profiles in your password manager.",
+        "message": "Choisissez l'ensemble de règles que le nouveau mot de passe suivra. Les règles comprennent la longueur du mot de passe et le type de caractères qui peuvent être utilisés. Créez de nouveaux profils dans votre gestionnaire de mots de passe.",
         "description": "Explains what a password profile is and how to create new ones."
     },
     "password_profile": {
-        "message": "Password profile",
+        "message": "Profil du mot de passe",
         "description": "Name of the profiles used by KeePass and Kee Vault to construct new random passwords."
     },
     "url_mismatch_1": {
-        "message": "This entry is for a different site.",
+        "message": "Cette entrée correspond à un site différent.",
         "description": "1st sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_2": {
-        "message": "Continuing with this update will enable you to fill these credentials into this site too.",
+        "message": "La poursuite de cette modification vous permettra de remplir ces informations d'identification également sur ce site.",
         "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_3": {
-        "message": "Make sure this is not an attempt to trick you into revealing your password!",
+        "message": "Assurez-vous qu'il ne s'agit pas d'un piège pour vous forcer à révéler votre mot de passe !",
         "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_confirm": {
-        "message": "I understand the risk; Share these credentials with $1.",
+        "message": "Je comprends le risque. Partagez ces références avec $1.",
         "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
     },
     "make_additional_changes_using_full_editor": {
-        "message": "Additional changes can be made using the full editor.",
+        "message": "Des modifications supplémentaires peuvent être apportées en utilisant l'éditeur complet.",
         "description": "Note to user that the Kee interface does not allow every possible type of edit to an entry."
     },
     "open_full_editor": {
-        "message": "Open advanced editor",
+        "message": "Ouvrir l'éditeur avancé",
         "description": "Button action to open the full entry editor in KeePass or Kee Vault. Be sure to imply that the need to click the button is 'unusual', as I have done with the word 'advanced'"
     },
     "where": {
-        "message": "Where?",
+        "message": "Où ?",
         "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
     },
     "will_be_copied_to_clipboard": {
-        "message": "This new password will be copied to your clipboard",
+        "message": "Ce nouveau mot de passe sera copié dans votre presse-papier",
         "description": ""
     },
     "password_will_be_set_on_field": {
-        "message": "Your password field will be set to this password",
+        "message": "Votre champ de mot de passe sera réglé sur ce mot de passe",
         "description": ""
     },
     "also_copy_to_clipboard": {
-        "message": "Also copy to clipboard",
+        "message": "Copier également dans le presse-papier",
         "description": "Explains that enabling this option will copy the value to the clipboard in addition to the default behaviour"
     },
     "generator_action_copy": {
-        "message": "Copy",
+        "message": "Copier",
         "description": "Action button to copy to the clipboard a value such as a newly generated password"
     },
     "generator_action_apply": {
-        "message": "Apply",
+        "message": "Appliquer",
         "description": "Action button to apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "generator_action_apply_and_copy": {
-        "message": "Apply and copy",
+        "message": "Appliquer et copier",
         "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "skip_where_reason_domain_entry_exists": {
-        "message": "You're seeing this question because an entry for this domain already exists",
+        "message": "Vous voyez cette question parce qu'il existe déjà une entrée pour ce domaine",
         "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
     },
     "skip_where_reason_group_not_found": {
-        "message": "You're seeing this question because the group you most recently saved to can not be found. This may be because it has been deleted or hidden from Kee. Or it could simply be that the required password source is not unlocked.",
+        "message": "Vous voyez cette question parce que le groupe que vous avez sauvé le plus récemment ne peut pas être trouvé. Cela peut être dû au fait qu'il a été supprimé ou caché de Kee. Ou il se peut tout simplement que la source du mot de passe requis ne soit pas déverrouillée.",
         "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
     },
     "skip_where_enable_context": {
-        "message": "Always save new entries here",
+        "message": "Enregistrer toujours ici les nouvelles entrées",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
     "list_version_upgrade_3_6": {
-        "message": "You can choose a preferred matched entry for each website (see https://forum.kee.pm/t/preferred-entries/3313);Standalone password generator updated to new style and included in the main popup;New option to set your dark/light theme preference;New option to show an unobtrusive confirmation after an entry is saved;Keyboard shortcuts changed (see https://forum.kee.pm/t/keyboard-shortcuts/759);Keyboard arrow up and down in the popup now reliably navigates between search box, matched entries and search results;Improved form finding performance;Improved detection of which forms Kee should auto-fill;Changed name of Black and White list to Exclude and Include list;Including/excluding forms by string matching now (optionally) ignores case;Fixed a bug affecting per-site settings priority when using the advanced multiple-weights feature (thanks @pragacz)",
+        "message": "Vous pouvez choisir une entrée correspondante préférée pour chaque site web (voir https://forum.kee.pm/t/preferred-entries/3313);Générateur de mot de passe autonome mis à jour dans un nouveau style et inclus dans le popup principal;Nouvelle option pour définir vos préférences en matière de thème sombre/clair;Nouvelle option pour afficher une confirmation discrète après l'enregistrement d'une entrée;Raccourcis clavier modifiés (voir https://forum.kee. pm/t/keyboard-shortcuts/759);La flèche du clavier vers le haut et vers le bas dans le popup navigue désormais correctement entre la boîte de recherche, les entrées correspondantes et les résultats de recherche;Amélioration des performances de recherche des formulaires;Amélioration de la détection des formulaires que Kee doit remplir automatiquement;Modification du nom des listes noire et blanche pour la liste d'exclusion et d'inclusion;L'inclusion/exclusion de formulaires par correspondance de chaîne ignore maintenant la casse (en option);Correction d'un bug affectant la priorité des paramètres par site lors de l'utilisation de la fonction avancée de poids multiples (merci @pragacz)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
-        "message": "More details, including important information for KeePass users can be found in the release announcement on the community forum:",
+        "message": "De plus amples détails, y compris des informations importantes pour les utilisateurs de KeePass, peuvent être trouvés dans l'annonce du lancement sur le forum communautaire :",
         "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
     },
     "beta_testing_is_good": {
-        "message": "Kee beta testers have been enjoying some of these improvements for many months already.",
+        "message": "Les bêta-testeurs de Kee bénéficient de certaines de ces améliorations depuis plusieurs mois déjà.",
         "description": "Brief highlight of one of the benefits of being a Kee beta tester"
     },
     "join_the_community_cta": {
-        "message": "Join them now!",
+        "message": "Rejoignez-les maintenant !",
         "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
     },
     "ignore_case": {
-        "message": "Ignore case",
+        "message": "Ignorer la casse",
         "description": "Enabling this setting will cause a case-insensitive comparison to be made (e.g. when looking for matching names and IDs of forms to fill in)"
     },
     "ignore_case_explanation_finding_forms": {
-        "message": "For example, 'search' in any of the include or exclude lists will match with 'search', 'Search' and 'SEARCH'. Unless you have very unusual and complex requirements, it is best to leave this option enabled.",
+        "message": "Par exemple, la \"recherche\" dans l'une des listes d'inclusion ou d'exclusion correspondra à \"recherche\", \"Recherche\" et \"RECHERCHE\". À moins que vous n'ayez des exigences très inhabituelles et complexes, il est préférable de laisser cette option activée.",
         "description": "Describes the ignore case setting when used for configuring the include and exclude lists for finding forms."
     },
     "theme": {
-        "message": "Theme",
+        "message": "Thème",
         "description": "The visual theme applied to the extension's user interface. As per convention, the values refer to the predominant shade - i.e. the background colour"
     },
     "dark": {
-        "message": "Dark",
+        "message": "Sombre",
         "description": "Black colour or similar; Darkened visual appearance"
     },
     "light": {
-        "message": "Light",
+        "message": "Clair",
         "description": "White colour or similar; Bright visual appearance"
     },
     "system_preference": {
-        "message": "System Preference",
+        "message": "Préférence Système",
         "description": "The user's configured preference/setting in their system. System is vague because different browsers will implement it in different ways so it could relate to either the user's operating system, their web browser or both."
     },
     "theme_system_preference_explanation": {
-        "message": "Not all operating systems and browsers support automatic theming of browser extensions. You can manually choose your preference above if required.",
+        "message": "Tous les systèmes d'exploitation et les navigateurs ne prennent pas en charge la thématisation automatique des extensions de navigateur. Vous pouvez choisir manuellement votre préférence ci-dessus si nécessaire.",
         "description": "Explains what the Theme preference does and why"
     },
     "pref_Appearance_heading": {
-        "message": "Appearance",
+        "message": "Apparence",
         "description": "Heading for settings/options that relate to the visual appearance of the extension"
     },
     "pref_hidden_options_present_explanation": {
-        "message": "Kee is automatically managing additional options for this site so you can't delete it.",
+        "message": "Kee gère automatiquement des options supplémentaires pour ce site afin que vous ne puissiez pas le supprimer.",
         "description": "Notification and explanation to user that one or more hidden settings are present for the configuration of a specific site"
     },
     "preferred_matching_entry": {
-        "message": "Preferred matching entry",
+        "message": "Entrée correspondante préférée",
         "description": "Label for toggle between preferred status for the specific matched entry the toggle is displayed upon."
     },
     "show_confirmation_after_save": {
-        "message": "Show confirmation after entry is saved",
+        "message": "Afficher la confirmation après enregistrement de l'entrée",
         "description": "Label for option to display a confirmation message in the main popup after user has created or updated an entry."
     },
     "you_recently_saved": {
-        "message": "You recently saved an entry",
+        "message": "Vous avez récemment enregistré une entrée",
         "description": "A confirmation message after user has created or updated an entry."
     },
     "KB_shortcut_simple_2_desc": {
-        "message": "Sign in to password manager / Select matched login / Show matched logins list",
+        "message": "Se connecter au gestionnaire de mots de passe / Sélectionner l'entrée correspondante / Montrer la liste des entrées correspondantes",
         "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
     }
 }
