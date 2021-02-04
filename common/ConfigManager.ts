@@ -567,7 +567,7 @@ export class ConfigManager {
         });
         return derivedConfig;
     }
-    
+
     private normalizeFormProperty(input: unknown, ic: boolean) {
         if (typeof input !== "string") return null;
         return ic ? stringInput.toLowerCase() : stringInput;
@@ -581,8 +581,8 @@ export class ConfigManager {
         const fieldNames = otherFields
             .map(field => (ic ? field.locators[0]?.name.toLowerCase() : field.locators[0]?.name))
             .filter(Boolean);
-        const formId = this.normalizeStringFormProperty(form.id, ic);
-        const formName = this.normalizeStringFormProperty(form.name, ic);
+        const formId = this.normalizeFormProperty(form.id, ic);
+        const formName = this.normalizeFormProperty(form.name, ic);
         const excludeFormIds = (conf?.blackList?.form?.ids || [])
             .map(x => (ic ? x?.toLowerCase() : x))
             .filter(Boolean);
