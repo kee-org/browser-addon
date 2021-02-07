@@ -129,15 +129,15 @@ export default {
         },
         profileChanged: function (this: any, item: string) {
             this.loading = true;
-            const unwatch = this.$watch("$store.state.generatedPassword", function (
-                this: any,
-                newValue
-            ) {
-                unwatch();
-                this.$store.dispatch("updateGeneratedPassword", "");
-                this.generatedPassword = newValue;
-                this.loading = false;
-            });
+            const unwatch = this.$watch(
+                "$store.state.generatedPassword",
+                function (this: any, newValue) {
+                    unwatch();
+                    this.$store.dispatch("updateGeneratedPassword", "");
+                    this.generatedPassword = newValue;
+                    this.loading = false;
+                }
+            );
             Port.postMessage({
                 action: Action.GeneratePassword,
                 passwordProfile: item,

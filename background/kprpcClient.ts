@@ -977,9 +977,10 @@ export class kprpcClient {
                 return wc.encrypt(alg, pwKey, messageAB);
             })
             .then(function (encrypted) {
-                const typescriptHack2 = wc.digest({ name: "SHA-1" }, secretKeyAB) as Promise<
-                    ArrayBuffer
-                >;
+                const typescriptHack2 = wc.digest(
+                    { name: "SHA-1" },
+                    secretKeyAB
+                ) as Promise<ArrayBuffer>;
                 typescriptHack2
                     .then(function (secretkeyHash) {
                         const hmacData = new Uint8Array(20 + encrypted.byteLength + 16);

@@ -268,6 +268,7 @@ var executeRollup = function () {
             "process.env.NODE_ENV": JSON.stringify(DEBUG ? "development" : "production")
         }),
         vue({
+            //defaultLang: { script: "ts" }
             needMap: false // buggy so must be disabled to get sourcemaps to work at all
         }),
         // hack to allow images to load, until they don't. can't find any way to get rollup to just let images work without such hacks...
