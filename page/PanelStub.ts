@@ -42,6 +42,7 @@ export class PanelStub {
     private targetRelativeRect: ClientRect;
     private options: PanelStubOptions;
     private parentFrameId: number;
+    private elementToRefocus: Element;
 
     constructor(options: PanelStubOptions, target: HTMLElement, parentFrameId: number) {
         this.target = target;
@@ -50,6 +51,9 @@ export class PanelStub {
     }
 
     public createPanel() {
+        if (this.options.name == "generatePassword") {
+            this.elementToRefocus = document.activeElement;
+        }
         this.container = document.createElement("div");
         const shadow = this.container.attachShadow({ mode: "closed" });
         this.container.id = this.options.id;
@@ -185,5 +189,12 @@ export class PanelStub {
     public closePanel() {
         const panel = document.getElementById(this.options.id);
         if (panel) panel.parentNode.removeChild(panel);
+        if (this.elementToRefocus) {
+            try {
+                (this.elementToRefocus as HTMLElement).focus();
+            } catch {
+                // Expected if activeElement was not actually an HTMLElement
+            }
+        }
     }
 }
