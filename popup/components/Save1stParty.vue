@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-slide-y-transition>
-            <v-container class="my-0 pa-0">
+            <v-container class="my-3 pa-0">
                 <v-row>
                     <v-col>
                         <v-text-field

@@ -20,7 +20,7 @@
         >
             <v-container class="ma-0 pa-0 my-2" :style="titleStyle">
                 <v-row
-                    class="mr-3 ml-12"
+                    class="mr-3 ml-12 my-0"
                     :style="`${hover ? 'cursor: pointer' : ''}`"
                     @click.left.exact="primaryClickAction"
                     @click.middle.exact="loadInNewTab"
@@ -31,12 +31,12 @@
                     <v-col class="text-truncate">
                         <v-hover>
                             <v-container fluid class="ma-0 pa-0">
-                                <v-row no-gutters>
+                                <v-row no-gutters class="my-0">
                                     <v-col class="text-truncate">
                                         {{ entrySummary.title }}
                                     </v-col>
                                 </v-row>
-                                <v-row no-gutters>
+                                <v-row no-gutters class="my-0">
                                     <v-col
                                         :style="`${expanded ? 'visibility:hidden' : ''}`"
                                         class="text-truncate text-caption"
@@ -61,7 +61,7 @@
                         class="my-0 pa-0 mx-2"
                     >
                         <Field v-for="f of allFields" :key="f.uuid" :field="f" />
-                        <v-row justify="space-between" align="center">
+                        <v-row justify="space-between" align="center" class="my-0">
                             <v-col class="text-truncate">
                                 <v-tooltip
                                     top
@@ -70,7 +70,7 @@
                                 >
                                     <template #activator="{ on }">
                                         <v-row
-                                            class="justify-left text-truncate flex-nowrap"
+                                            class="justify-left text-truncate flex-nowrap my-0"
                                             align="center"
                                             v-on="on"
                                         >
@@ -85,7 +85,7 @@
                                 <v-tooltip top :open-delay="tooltipDelay">
                                     <template #activator="{ on }">
                                         <v-row
-                                            class="justify-left text-truncate flex-nowrap"
+                                            class="justify-left text-truncate flex-nowrap my-0"
                                             align="center"
                                             v-on="on"
                                         >

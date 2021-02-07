@@ -19,7 +19,7 @@
         <v-card-actions>
             <v-row justify="center" align="end" class="mb-1 mt-1">
                 <v-col>
-                    <v-row align="end" class="ml-2 justify-left">
+                    <v-row align="end" class="ml-2 justify-left my-0">
                         <v-tooltip
                             v-for="(but, index) of notification.buttons"
                             :key="index"
