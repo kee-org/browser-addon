@@ -1094,16 +1094,16 @@ export class FormFilling {
                         punishWrongIDAndName:
                             features.indexOf("KPRPC_FIELD_DEFAULT_NAME_AND_ID_EMPTY") >= 0
                     };
-                    const lastFilledPasswords = this.fillManyFormFields(
-                        passwordFields,
-                        matchingLogin.fields.filter(f => f.type === "password"),
+                    const lastFilledOther = this.fillManyFormFields(
+                        otherFields,
+                        matchingLogin.fields.filter(f => f.type !== "password"),
                         -1,
                         scoreConfig,
                         automated
                     );
-                    const lastFilledOther = this.fillManyFormFields(
-                        otherFields,
-                        matchingLogin.fields.filter(f => f.type !== "password"),
+                    const lastFilledPasswords = this.fillManyFormFields(
+                        passwordFields,
+                        matchingLogin.fields.filter(f => f.type === "password"),
                         -1,
                         scoreConfig,
                         automated
