@@ -7,17 +7,7 @@
             background-color: transparent;
         }
     </style>
-    <script type="text/javascript">
-        document.location.search
-            .substr(1)
-            .split("&")
-            .forEach(pair => {
-                const [key, value] = pair.split("=");
-                params[key] = value;
-            });
-        var stylesheet = document.styleSheets[0];
-        stylesheet.cssRules[0].style.backgroundColor = params["theme"] === "dark" ? "#1e1e1e" : "#ffffff";
-    </script>
+    <script src="../lib/applyPanelBackgroundColour.js"></script>
 
     <link href="../lib/css/materialdesignicons.min.css" type="text/css" rel="stylesheet">
     <link href="../lib/css/vuetify.min.css" type="text/css" rel="stylesheet">
