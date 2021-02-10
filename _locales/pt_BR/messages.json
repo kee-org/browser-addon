@@ -779,8 +779,8 @@
         "message": "Sempre salve novas entradas aqui",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_6": {
-        "message": "Você pode escolher uma entrada correspondente preferencial para cada site (veja https://forum.kee.pm/t/preferred-entries/3313);Gerador de senha autônomo atualizado para o novo estilo e incluído no pop-up principal;Nova opção para definir sua preferência de tema escuro/claro;Nova opção para mostrar uma confirmação discreta após uma entrada ser salva;Atalhos de teclado alterados (veja https://forum.kee.pm/t/keyboard-shortcuts/759);A seta do teclado para cima e para baixo no pop-up agora navega de forma confiável entre a caixa de pesquisa, entradas correspondentes e resultados de pesquisa; Desempenho de busca de formulário aprimorado; Detecção aprimorada de quais formulários Kee deve preencher automaticamente; Nome alterado da lista negra e branca para lista de exclusão e inclusão; inclusão/exclusão de formulários por correspondência da linha agora (opcionalmente) ignora maiúsculas e minúsculas; um bug que afeta a prioridade das configurações por site ao usar o recurso avançado de pesos múltiplos(thanks @pragacz)",
+    "list_version_upgrade_3_7": {
+        "message": "Correção para um erro onde formulários para alguns websites estava sendo erroneamente ignorados pelo Kee (obrigado @burtek); Após gerar uma senha usando o gerador de senha autônomo, agora retornamos o foco do teclado para qualquer campo do formulário no qual você colocou o cursor anteriormente; Solução alternativa para algumas situações raras em que a senha que o Kee preenche é excluída pelo site antes que possa ser usada para completar o processo de entrada",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {

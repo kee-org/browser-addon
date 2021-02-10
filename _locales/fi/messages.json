@@ -779,8 +779,8 @@
         "message": "Tallenna uudet kohteen automaattisesti tänne",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_6": {
-        "message": "You can choose a preferred matched entry for each website (see https://forum.kee.pm/t/preferred-entries/3313);Standalone password generator updated to new style and included in the main popup;New option to set your dark/light theme preference;New option to show an unobtrusive confirmation after an entry is saved;Keyboard shortcuts changed (see https://forum.kee.pm/t/keyboard-shortcuts/759);Keyboard arrow up and down in the popup now reliably navigates between search box, matched entries and search results;Improved form finding performance;Improved detection of which forms Kee should auto-fill;Changed name of Black and White list to Exclude and Include list;Including/excluding forms by string matching now (optionally) ignores case;Fixed a bug affecting per-site settings priority when using the advanced multiple-weights feature (thanks @pragacz)",
+    "list_version_upgrade_3_7": {
+        "message": "Fix for a bug where forms on some websites were being incorrectly ignored by Kee (thanks @burtek);After generating a password using the standalone password generator we now return keyboard focus to whichever form field you previously had your cursor in;Workaround for some rare situations where the password Kee fills in is deleted by the website before it can be used to complete the sign-in process",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {

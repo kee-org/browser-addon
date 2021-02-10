@@ -779,8 +779,8 @@
         "message": "Enregistrer toujours ici les nouvelles entrées",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_6": {
-        "message": "Vous pouvez choisir une entrée correspondante préférée pour chaque site web (voir https://forum.kee.pm/t/preferred-entries/3313);Générateur de mot de passe autonome mis à jour dans un nouveau style et inclus dans le popup principal;Nouvelle option pour définir vos préférences en matière de thème sombre/clair;Nouvelle option pour afficher une confirmation discrète après l'enregistrement d'une entrée;Raccourcis clavier modifiés (voir https://forum.kee. pm/t/keyboard-shortcuts/759);La flèche du clavier vers le haut et vers le bas dans le popup navigue désormais correctement entre la boîte de recherche, les entrées correspondantes et les résultats de recherche;Amélioration des performances de recherche des formulaires;Amélioration de la détection des formulaires que Kee doit remplir automatiquement;Modification du nom des listes noire et blanche pour la liste d'exclusion et d'inclusion;L'inclusion/exclusion de formulaires par correspondance de chaîne ignore maintenant la casse (en option);Correction d'un bug affectant la priorité des paramètres par site lors de l'utilisation de la fonction avancée de poids multiples (merci @pragacz)",
+    "list_version_upgrade_3_7": {
+        "message": "Fix for a bug where forms on some websites were being incorrectly ignored by Kee (thanks @burtek);After generating a password using the standalone password generator we now return keyboard focus to whichever form field you previously had your cursor in;Workaround for some rare situations where the password Kee fills in is deleted by the website before it can be used to complete the sign-in process",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
