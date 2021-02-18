@@ -86,7 +86,7 @@ function startup() {
     }
 
     messagingPortConnectionRetryTimer = setInterval(() => {
-        if (Port.raw == null || !connected) {
+        if (Port.raw == null) {
             KeeLog.info("Messaging port was not established at vault startup. Retrying now...");
             try {
                 Background.connect();
@@ -215,7 +215,12 @@ let syncContent: SyncContent;
 class Background {
     public static connect() {
         if (Port.raw) {
-            KeeLog.warn("port already set to: " + Port.raw.name);
+            KeeLog.warn(
+                "port already set to '" +
+                    Port.raw.name +
+                    "'. Skipping startup because it should already be underway but is taking a long time."
+            );
+            return;
         }
         syncContent = new SyncContent(store);
         Port.startup("vault");
