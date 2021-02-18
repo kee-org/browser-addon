@@ -780,7 +780,7 @@
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
     "list_version_upgrade_3_7": {
-        "message": "Fix for a bug where forms on some websites were being incorrectly ignored by Kee (thanks @burtek);After generating a password using the standalone password generator we now return keyboard focus to whichever form field you previously had your cursor in;Workaround for some rare situations where the password Kee fills in is deleted by the website before it can be used to complete the sign-in process",
+        "message": "Oprava chyby, kdy Kee nesprávně ignoroval formuláře na některých webech (děkujeme @burtek);Po vygenerování hesla pomocí generátoru hesel se nyní vrátí zaměření (focus) do stejného pole, kde byl předtím;Ošetření některých velmi vzácně se vyskytujících případů, kdy je vyplnění formuláře od Kee smazáno webem dřív než je použito pro přihlášení",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
