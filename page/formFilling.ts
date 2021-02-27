@@ -294,6 +294,14 @@ export class FormFilling {
                 this.Logger.info(
                     "Not filling field because it's not empty and was edited by user since last load/fill"
                 );
+            } else if (
+                automated &&
+                currentValue &&
+                !configManager.current.overWriteFieldsAutomatically
+            ) {
+                this.Logger.info(
+                    "Not filling field because it's not empty and user preference is to prevent automatic fill"
+                );
             } else {
                 this.Logger.info(
                     "We will populate field " + ffi + " (id:" + formField.field.locators[0].id + ")"

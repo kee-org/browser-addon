@@ -30,7 +30,7 @@ type SiteConfigNodeAndIndex = {
 declare const chrome;
 
 // increment when changes are introduced that require data migration
-export const LATEST_VERSION = 7;
+export const LATEST_VERSION = 8;
 
 export const defaultConfig = new Config();
 defaultConfig.autoFillDialogs = false;
@@ -57,7 +57,7 @@ defaultConfig.metricsUserId = "";
 defaultConfig.notifyWhenEntryUpdated = true;
 defaultConfig.notifyWhenLateDiscovery = false;
 defaultConfig.notifyWhenLoggedOut = false;
-defaultConfig.overWriteFieldsAutomatically = true;
+defaultConfig.overWriteFieldsAutomatically = false;
 defaultConfig.rememberMRUDB = true;
 defaultConfig.rememberMRUGroup = true;
 defaultConfig.saveFavicons = true;
@@ -206,6 +206,8 @@ export class ConfigManager {
                 migrations.migrateToVersion6(this.current);
             case 6:
                 migrations.migrateToVersion7(this.current);
+            case 7:
+                migrations.migrateToVersion8(this.current);
         }
         /* eslint-enable no-fallthrough */
         this.save();

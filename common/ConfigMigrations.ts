@@ -2,6 +2,13 @@ import { SiteConfig, Config, SiteConfigLookup, SiteConfigIndex } from "./config"
 import { defaultSiteConfig } from "./DefaultSiteConfig";
 
 export class ConfigMigrations {
+    public migrateToVersion8(current: Config) {
+        Object.assign(current, {
+            overWriteFieldsAutomatically: false,
+            version: 8
+        } as Partial<Config>);
+    }
+
     public migrateToVersion7(current: Config) {
         if (current.notificationCountSavePassword > 6) {
             Object.assign(current, {

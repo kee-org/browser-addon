@@ -41,6 +41,13 @@ function loadInitialConfig() {
     ) as HTMLInputElement).checked = configManager.current.autoFillFormsWithMultipleMatches
         ? configManager.current.autoFillFormsWithMultipleMatches
         : null;
+
+    (document.getElementById(
+        "pref_autoFillFieldsWithExistingValue_label"
+    ) as HTMLInputElement).checked = configManager.current.overWriteFieldsAutomatically
+        ? configManager.current.overWriteFieldsAutomatically
+        : null;
+
     (document.getElementById(
         "pref_manualFillSubmitOverridable_label"
     ) as HTMLInputElement).checked = configManager.current.manualSubmitOverrideProhibited
@@ -118,6 +125,9 @@ function setupInputListeners() {
     document
         .getElementById("pref_autoFillFormsWithMultipleMatches_label")
         .addEventListener("change", saveAutoFillFormsWithMultipleMatches);
+    document
+        .getElementById("pref_autoFillFieldsWithExistingValue_label")
+        .addEventListener("change", saveAutoFillFieldsWithExistingValue);
     document
         .getElementById("pref_manualFillSubmitOverridable_label")
         .addEventListener("change", saveManualSubmitOverrideProhibited);
@@ -960,6 +970,15 @@ function saveAutoFillFormsWithMultipleMatches(e) {
     configManager.setASAP({
         autoFillFormsWithMultipleMatches: (document.getElementById(
             "pref_autoFillFormsWithMultipleMatches_label"
+        ) as HTMLInputElement).checked
+    });
+}
+
+function saveAutoFillFieldsWithExistingValue(e) {
+    e.preventDefault();
+    configManager.setASAP({
+        overWriteFieldsAutomatically: (document.getElementById(
+            "pref_autoFillFieldsWithExistingValue_label"
         ) as HTMLInputElement).checked
     });
 }
