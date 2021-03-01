@@ -44,8 +44,8 @@ function loadInitialConfig() {
 
     (document.getElementById(
         "pref_autoFillFieldsWithExistingValue_label"
-    ) as HTMLInputElement).checked = configManager.current.overWriteFieldsAutomatically
-        ? configManager.current.overWriteFieldsAutomatically
+    ) as HTMLInputElement).checked = configManager.current.autoFillFieldsWithExistingValue
+        ? configManager.current.autoFillFieldsWithExistingValue
         : null;
 
     (document.getElementById(
@@ -977,7 +977,7 @@ function saveAutoFillFormsWithMultipleMatches(e) {
 function saveAutoFillFieldsWithExistingValue(e) {
     e.preventDefault();
     configManager.setASAP({
-        overWriteFieldsAutomatically: (document.getElementById(
+        autoFillFieldsWithExistingValue: (document.getElementById(
             "pref_autoFillFieldsWithExistingValue_label"
         ) as HTMLInputElement).checked
     });

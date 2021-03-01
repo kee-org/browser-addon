@@ -3,6 +3,8 @@ import { defaultSiteConfig } from "./DefaultSiteConfig";
 
 export class ConfigMigrations {
     public migrateToVersion8(current: Config) {
+        // This isn't reliable due to sync so we've deprecated the setting
+        // and created a new one that requires no migration
         Object.assign(current, {
             overWriteFieldsAutomatically: false,
             version: 8

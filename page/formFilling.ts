@@ -297,7 +297,7 @@ export class FormFilling {
             } else if (
                 automated &&
                 currentValue &&
-                !configManager.current.overWriteFieldsAutomatically
+                !configManager.current.autoFillFieldsWithExistingValue
             ) {
                 this.Logger.info(
                     "Not filling field because it's not empty and user preference is to prevent automatic fill"

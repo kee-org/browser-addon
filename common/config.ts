@@ -70,7 +70,7 @@ export class Config {
     notifyWhenEntryUpdated: boolean;
     notifyWhenLateDiscovery: boolean;
     notifyWhenLoggedOut: boolean;
-    overWriteFieldsAutomatically: boolean;
+    overWriteFieldsAutomatically: boolean; // deprecated
     rememberMRUDB: boolean;
     rememberMRUGroup: boolean;
     saveFavicons: boolean;
@@ -95,4 +95,5 @@ export class Config {
     theme: string;
     hideConfirmationAfterSave: boolean;
     mustShowReleaseNotesAtStartup: boolean;
+    autoFillFieldsWithExistingValue: boolean;
 }

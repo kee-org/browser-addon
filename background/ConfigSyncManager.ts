@@ -54,7 +54,8 @@ export class ConfigSyncManager {
             notificationCountSavePassword: settings.notificationCountSavePassword,
             currentSearchTermTimeout: settings.currentSearchTermTimeout,
             animateWhenOfferingSave: settings.animateWhenOfferingSave,
-            manualSubmitOverrideProhibited: !!settings.manualSubmitOverrideProhibited
+            manualSubmitOverrideProhibited: !!settings.manualSubmitOverrideProhibited,
+            autoFillFieldsWithExistingValue: settings.autoFillFieldsWithExistingValue
         };
         const syncableConfig = {
             settings: syncableSettings,
