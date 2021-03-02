@@ -87,3 +87,4 @@ sudo apt-get install libnss3-tools
 Manually load https://localhost:8099 in the browser, add self-signed cert to whitelist and export the cert to a local file (or just use the generated keys folder location above... not sure if that will work or not).
 `certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n <path to saved cert> -i <path to saved cert>`
 restart Chrome
+
