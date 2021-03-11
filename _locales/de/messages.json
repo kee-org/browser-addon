@@ -167,6 +167,10 @@
         "message": "Führen Sie diese automatische Aktion auch dann durch, wenn mehrere passende Einträge gefunden werden.",
         "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
+    "pref_autoFillFieldsWithExistingValue_label": {
+        "message": "Automatisch Felder ausfüllen, die bereits Text enthalten ",
+        "description": "This checkbox option allows the user to say whether they want fields to be auto-filled if they already have a value. It doesn't affect manual fill requests."
+    },
     "pref_keePassDBToOpen_label": {
         "message": "Beim Öffnen oder Anmelden in KeePass diese Datenbank verwenden",
         "description": ""
