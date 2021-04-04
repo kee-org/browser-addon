@@ -783,8 +783,8 @@
         "message": "Vždy ukladať nové záznamy sem",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_7": {
-        "message": "Oprava chyby, pri ktorej Kee nesprávne ignoroval formuláre na niektorých webových stránkach (ďakujeme @burtek);Po vygenerovaní hesla pomocou samostatného generátora hesiel teraz vrátime fokus klávesnice na ktorékoľvek pole formulára, v ktorom ste predtým mali kurzor;Riešenie pre niektoré zriedkavé situácie, keď heslo, ktoré Kee vyplní, webová stránka vymaže skôr, ako sa použije na dokončenie procesu prihlásenia",
+    "list_version_upgrade_3_8": {
+        "message": "Vylepšený výkon a zastavenie zlyhania prehliadača pri niektorých webových stránkach;Polia, ktoré už obsahujú text, vám už Kee neprepíše (voliteľné, aby vám to v prípade potreby umožnilo zmeniť späť na staré správanie) ",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
