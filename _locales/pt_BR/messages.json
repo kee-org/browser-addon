@@ -783,8 +783,8 @@
         "message": "Sempre salve novas entradas aqui",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_8": {
-        "message": "Desempenho aprimorado e parado o travamento do navegador com alguns sites; os campos que já contêm texto não são mais substituídos pelo Kee (opcional, para permitir que você volte ao comportamento anterior, se necessário)",
+    "list_version_upgrade_3_9": {
+        "message": "Sem mudanças. Veja https://forum.kee.pm/t/3629 para mais detalhes.",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {

@@ -1,6 +1,6 @@
 {
     "black_list": {
-        "message": "Exclude List",
+        "message": "Elenco di esclusione",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
@@ -168,7 +168,7 @@
         "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_autoFillFieldsWithExistingValue_label": {
-        "message": "Automatically fill fields that already contain text",
+        "message": "Riempi i campi che già contengono testo",
         "description": "This checkbox option allows the user to say whether they want fields to be auto-filled if they already have a value. It doesn't affect manual fill requests."
     },
     "pref_keePassDBToOpen_label": {
@@ -240,7 +240,7 @@
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "site_options_list_explain_desc": {
-        "message": "If a form matches against one of the include lists below Kee will always try to fill it. If a form matches one of the exclude lists below Kee will never try to fill it. If it matches both lists Kee will not try to fill it.",
+        "message": "Se un campo è incluso nell'elenco di inclusione, Kee proverà sempre di riempirlo. Se un campo è incluso nell'elenco di esclusione, Kee non proverà mai a riempirlo. Se è stato inserito in entrambe le liste, Kee non proverà a riempirlo.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
@@ -260,7 +260,7 @@
         "description": ""
     },
     "white_list": {
-        "message": "Include List",
+        "message": "Elenco di inclusione",
         "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
     },
     "Help_Centre_Button_label": {
@@ -676,7 +676,7 @@
         "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_fill_override_option": {
-        "message": "Si sovrascrive questa impostazione modificando il comportamento del riempimento di una voce ",
+        "message": "Questa impostazione viene sovrascritta modificando il comportamento del riempimento di una voce ",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "next": {
@@ -712,7 +712,7 @@
         "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
     },
     "password_profile_hint": {
-        "message": "Scegli quali regole seguiranno le nuove password. Queste regole includono la lunghezza della password e il tipo di caratteri. Crea un nuovo profilo nel tuo password manager.",
+        "message": "Scegli quali regole verranno usate per generare le nuove password. Queste regole includono la lunghezza della password e il tipo di caratteri. Crea un nuovo profilo nel tuo password manager.",
         "description": "Explains what a password profile is and how to create new ones."
     },
     "password_profile": {
@@ -783,8 +783,8 @@
         "message": "Salva qui le nuove voci",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_8": {
-        "message": "Improved performance and stopped the browser crashing with some websites;Fields that already contain text no longer get overwritten by Kee (optional, to allow you to change back to the old behaviour if needed)",
+    "list_version_upgrade_3_9": {
+        "message": "Nessuna novità. Per ulteriori dettagli, consulta https://forum.kee.pm/t/3629.",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
@@ -800,51 +800,51 @@
         "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
     },
     "ignore_case": {
-        "message": "Ignore case",
+        "message": "Ignora maiuscole/minuscole",
         "description": "Enabling this setting will cause a case-insensitive comparison to be made (e.g. when looking for matching names and IDs of forms to fill in)"
     },
     "ignore_case_explanation_finding_forms": {
-        "message": "For example, 'search' in any of the include or exclude lists will match with 'search', 'Search' and 'SEARCH'. Unless you have very unusual and complex requirements, it is best to leave this option enabled.",
+        "message": "Ad esempio, 'search' in una delle liste corrisponderà a 'search, 'Search' e 'SEARCH'. A meno che tu abbia necessità davvero complesse, si raccomanda di lasciare attiva questa opzione.",
         "description": "Describes the ignore case setting when used for configuring the include and exclude lists for finding forms."
     },
     "theme": {
-        "message": "Theme",
+        "message": "Tema",
         "description": "The visual theme applied to the extension's user interface. As per convention, the values refer to the predominant shade - i.e. the background colour"
     },
     "dark": {
-        "message": "Dark",
+        "message": "Scuro",
         "description": "Black colour or similar; Darkened visual appearance"
     },
     "light": {
-        "message": "Light",
+        "message": "Chiaro",
         "description": "White colour or similar; Bright visual appearance"
     },
     "system_preference": {
-        "message": "System Preference",
+        "message": "Secondo il sistema",
         "description": "The user's configured preference/setting in their system. System is vague because different browsers will implement it in different ways so it could relate to either the user's operating system, their web browser or both."
     },
     "theme_system_preference_explanation": {
-        "message": "Not all operating systems and browsers support automatic theming of browser extensions. You can manually choose your preference above if required.",
+        "message": "Non tutti i sistemi operativi e i browser supportano il cambio tema automatico per le estensioni. Puoi scegliere manualmente se necessario.",
         "description": "Explains what the Theme preference does and why"
     },
     "pref_Appearance_heading": {
-        "message": "Appearance",
+        "message": "Aspetto",
         "description": "Heading for settings/options that relate to the visual appearance of the extension"
     },
     "pref_hidden_options_present_explanation": {
-        "message": "Kee is automatically managing additional options for this site so you can't delete it.",
+        "message": "Kee sta gestendo automaticamente opzioni aggiuntive per questo sito, quindi non puoi eliminarlo.",
         "description": "Notification and explanation to user that one or more hidden settings are present for the configuration of a specific site"
     },
     "preferred_matching_entry": {
-        "message": "Preferred matching entry",
+        "message": "Voce di corrispondenza preferita",
         "description": "Label for toggle between preferred status for the specific matched entry the toggle is displayed upon."
     },
     "show_confirmation_after_save": {
-        "message": "Show confirmation after entry is saved",
+        "message": "Mostra conferma dopo aver salvato una voce",
         "description": "Label for option to display a confirmation message in the main popup after user has created or updated an entry."
     },
     "you_recently_saved": {
-        "message": "You recently saved an entry",
+        "message": "Hai salvato una voce di recente",
         "description": "A confirmation message after user has created or updated an entry."
     },
     "KB_shortcut_simple_2_desc": {
