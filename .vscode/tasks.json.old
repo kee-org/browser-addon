@@ -1,0 +1,31 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "gulp",
+    "isShellCommand": true,
+    "args": ["--no-color"],
+    "showOutput": "silent",
+    "options": {
+        "cwd": "${workspaceRoot}"
+    },
+"tasks": [
+    {
+        "taskName": "lint:ts",
+        "args": [],
+        "problemMatcher": "$eslint-stylish"
+    },
+    {
+        "isBuildCommand": true,
+        "taskName": "build",
+        "args": [],
+        "problemMatcher": "$tsc",
+        "isBackground": false
+    },
+    {
+        "taskName": "watch",
+        "args": [],
+        "isBackground": true
+    }
+]
+}
