@@ -1,1 +1,5 @@
 **/*.d.ts
+dist
+node_modules
+public
+src/lib

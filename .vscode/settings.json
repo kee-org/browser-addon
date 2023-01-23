@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
-        "syncable"
+        "syncable",
+        "vuetify"
     ],
     "files.exclude": {
         "**/.git": true,

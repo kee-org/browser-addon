@@ -1,20 +1,33 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "noImplicitAny": false,
         "removeComments": false,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "target": "ES6",
+        "target": "ES2016",
+        "lib": ["DOM", "ESNext", "DOM.Iterable"],
+        "esModuleInterop": true,
+        "incremental": false,
+        "skipLibCheck": true,
+        "jsx": "preserve",
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
         "typeRoots" : ["./typedefs", "node_modules/@types"],
         "moduleResolution": "node",
         "noImplicitThis": true,
-        "types": ["jest"],
-        "module": "ESNext"
+        "types": ["jest",
+        "vite/client"],
+        "module": "ESNext",
+          "paths": {
+            "~/*": ["src/*"]
+          }
     },
-    "include": [
-        "**/*"
-    ],
+    // "include": [
+    //     "**/*"
+    // ],
     "exclude": [
+        "dist",
         "node_modules",
         "**/*.spec.ts"
     ]

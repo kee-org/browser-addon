@@ -36,7 +36,7 @@ module.exports = {
         "vue"
     ],
     "rules": {
-        "prettier/prettier": "error",
+        "prettier/prettier": "off",
         "vue/html-indent": "off",
         "vue/max-attributes-per-line": "off",
         "vue/html-closing-bracket-newline": "off",
@@ -143,8 +143,7 @@ module.exports = {
         "curly": [2, "multi-line"],
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars-experimental": "error"
+        "@typescript-eslint/no-unused-vars": "error"
     },
     overrides: [
         {
