@@ -3,42 +3,42 @@
         <v-col>
             <v-text-field
                 :label="label"
-                :value="field.value"
+                :model-value="field.value"
                 color="secondary"
                 dense
-                outlined
+                variant="outlined"
                 hide-details="auto"
                 :type="renderType"
-                @input="valueChanged"
+                @update:model-value="valueChanged"
                 @focus="onFocus"
                 @blur="onBlur"
             >
-                <template slot="append">
+                <template #append-inner>
                     <v-fade-transition>
-                        <v-btn v-if="focussed && resettable" small icon @click="reset">
+                        <v-btn v-if="focussed && resettable" size="small" icon @click="reset">
                             <v-icon>mdi-undo</v-icon>
                         </v-btn>
                     </v-fade-transition>
                     <v-btn
                         v-if="field.type === 'password'"
-                        small
+                        size="small"
                         icon
                         @click="revealed = !revealed"
                     >
                         <v-icon>{{ revealed ? "mdi-eye" : "mdi-eye-off" }}</v-icon>
                     </v-btn>
                 </template>
-                <template slot="append-outer">
+                <template #append>
                     <v-btn
                         v-if="field.type === 'password'"
-                        small
+                        size="small"
                         icon
                         class="mr-3"
                         @click="showPasswordGenerator = true"
                     >
                         <v-icon>mdi-flash</v-icon>
                     </v-btn>
-                    <v-btn small icon @click="deleteClicked">
+                    <v-btn size="small" icon @click="deleteClicked">
                         <v-icon>mdi-delete</v-icon>
                     </v-btn>
                 </template>

@@ -7,20 +7,20 @@
                         <v-text-field
                             :label="$i18n('title')"
                             color="secondary"
-                            :value="saveState.newEntry.title"
+                            :model-value="saveState.newEntry.title"
                             dense
-                            outlined
+                            variant="outlined"
                             hide-details="auto"
                             :type="text"
                             autofocus
-                            @input="setTitle"
+                            @update:model-value="setTitle"
                             @focus="onTitleFocus"
                             @blur="onTitleBlur"
                         >
-                            <template slot="append">
+                            <template #append-inner>
                                 <v-btn
                                     v-if="titleFocussed && resettableTitle"
-                                    small
+                                    size="small"
                                     icon
                                     @click="resetTitle"
                                 >
@@ -69,12 +69,12 @@
                 </v-col>
             </v-row>
         </v-alert>
-        <v-btn right color="tertiary" @click="cancel">
+        <v-btn location="right" color="tertiary" @click="cancel">
             {{ $i18n("cancel") }}
         </v-btn>
         <v-btn
             v-if="!loading && !editingExisting && !skipWhere"
-            right
+            location="right"
             color="primary"
             @click="nextClicked"
         >
@@ -82,17 +82,17 @@
         </v-btn>
         <v-btn
             v-if="!loading && !editingExisting && skipWhere"
-            right
+            location="right"
             color="primary"
             @click="saveEntry"
         >
             {{ $i18n("save") }}
         </v-btn>
-        <v-btn v-if="loading" loading disabled right color="primary"> ......... </v-btn>
+        <v-btn v-if="loading" loading disabled location="right" color="primary"> ......... </v-btn>
         <v-btn
             v-if="editingExisting"
             :disabled="showURLMismatchWarning && !differentSiteConfirmation"
-            right
+            location="right"
             color="primary"
             @click="updateEntry"
         >
@@ -114,7 +114,7 @@
             </v-row>
             <v-row align="center">
                 <v-col class="grow">
-                    <v-btn small @click="openFullEntryEditor">
+                    <v-btn size="small" @click="openFullEntryEditor">
                         {{ $i18n("open_full_editor") }}
                     </v-btn>
                 </v-col>

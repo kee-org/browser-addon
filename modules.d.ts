@@ -2,7 +2,8 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $app: {
       context: string
-    }
+    },
+    $i18n: (key: string) => string
   }
 }
 

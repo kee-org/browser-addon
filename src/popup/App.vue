@@ -9,7 +9,7 @@
                     v-show="showSaveRecovery"
                     color="secondary"
                     border="top"
-                    colored-border
+                    border-color="primary"
                     elevation="1"
                 >
                     <v-row dense>
@@ -33,7 +33,7 @@
                     v-show="showSaveResult"
                     color="secondary"
                     border="top"
-                    colored-border
+                    border-color="primary"
                     elevation="1"
                 >
                     <v-row dense>
@@ -71,29 +71,27 @@
             </v-container>
         </v-main>
 
-        <v-tooltip left :open-delay="tooltipDelay">
+        <v-tooltip location="left" :open-delay="tooltipDelay">
             <template #activator="{ on }">
                 <v-btn
                     v-show="showSearchPanel && !showSaveRecovery"
-                    fab
-                    small
+                    size="large"
                     absolute
-                    bottom
-                    right
+                    location="bottom right"
                     color="primary"
                     style="bottom: 75px; right: 24px"
                     :class="hasSubmittedData ? 'pulse-button' : ''"
+                    icon="mdi-plus"
                     v-on="on"
                     @click="saveStart"
                 >
-                    <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </template>
             <span>{{ $i18n("create_new_entry") }}</span>
         </v-tooltip>
 
         <v-footer app height="auto">
-            <v-tooltip top :open-delay="tooltipDelay">
+            <v-tooltip location="top" :open-delay="tooltipDelay">
                 <template #activator="{ on }">
                     <v-btn
                         id="password-open-kee-vault"
@@ -108,7 +106,7 @@
                 </template>
                 <span>{{ $i18n("Menu_Button_open_kee_vault_label") }}</span>
             </v-tooltip>
-            <v-tooltip top :open-delay="tooltipDelay">
+            <v-tooltip location="top" :open-delay="tooltipDelay">
                 <template #activator="{ on }">
                     <v-btn
                         v-show="showOpenKeePassButton"
@@ -126,7 +124,7 @@
             </v-tooltip>
             <v-divider vertical />
             <v-icon size="20px" :color="statusIconColour" class="mx-2"> mdi-lock </v-icon>
-            <v-tooltip top :open-delay="tooltipDelay">
+            <v-tooltip location="top" :open-delay="tooltipDelay">
                 <template #activator="{ on }">
                     <div
                         class="text-caption py-1 shrink"
@@ -141,9 +139,9 @@
 
             <v-spacer />
 
-            <v-menu top offset-y small>
+            <v-menu location="top" offset-y small>
                 <template #activator="{ on }">
-                    <v-btn icon small v-on="on">
+                    <v-btn icon size="small" v-on="on">
                         <v-icon>mdi-menu</v-icon>
                     </v-btn>
                 </template>
@@ -156,13 +154,13 @@
                         <v-icon size="20px"> mdi-help </v-icon>
                     </v-list-item>
                     <v-list-item @click="showOptions">
-                        <v-list-item-title class="mr-4 text-right body-2">
+                        <v-list-item-title class="mr-4 text-right text-body-2">
                             {{ $i18n("Menu_Button_options_label") }}
                         </v-list-item-title>
                         <v-icon size="20px"> mdi-settings </v-icon>
                     </v-list-item>
                     <v-list-item v-show="showSearchPanel" @click="showPasswordGenerator = true">
-                        <v-list-item-title class="mr-4 text-right body-2">
+                        <v-list-item-title class="mr-4 text-right text-body-2">
                             {{ $i18n("Menu_Button_copyNewPasswordToClipboard_label") }}
                         </v-list-item-title>
                         <v-icon size="20px"> mdi-flash </v-icon>

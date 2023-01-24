@@ -2,7 +2,7 @@
     <v-hover>
         <v-card
             ref="card"
-            slot-scope="{ hover }"
+            v-slot="{ hover }"
             :tabindex="`${tabindex}`"
             :elevation="`${hover ? 12 : 3}`"
             class="my-2"
@@ -64,7 +64,7 @@
                         <v-row justify="space-between" align="center" class="my-0">
                             <v-col class="text-truncate">
                                 <v-tooltip
-                                    top
+                                    location="top"
                                     :disabled="!entryPathIsLong"
                                     :open-delay="tooltipDelay"
                                 >
@@ -74,7 +74,7 @@
                                             align="center"
                                             v-on="on"
                                         >
-                                            <v-icon small class="py-1 pl-0 pr-2">mdi-folder</v-icon>
+                                            <v-icon size="small" class="py-1 pl-0 pr-2">mdi-folder</v-icon>
                                             <span class="text-truncate text-caption py-1">{{
                                                 entryPath
                                             }}</span>
@@ -82,14 +82,14 @@
                                     </template>
                                     <span>{{ fullEntryPath }}</span>
                                 </v-tooltip>
-                                <v-tooltip top :open-delay="tooltipDelay">
+                                <v-tooltip location="top" :open-delay="tooltipDelay">
                                     <template #activator="{ on }">
                                         <v-row
                                             class="justify-left text-truncate flex-nowrap my-0"
                                             align="center"
                                             v-on="on"
                                         >
-                                            <v-icon small class="py-1 pl-0 pr-2">mdi-cloud</v-icon>
+                                            <v-icon size="small" class="py-1 pl-0 pr-2">mdi-cloud</v-icon>
                                             <span class="text-truncate text-caption py-1">{{
                                                 entryDomain
                                             }}</span>
@@ -100,8 +100,7 @@
                             </v-col>
 
                             <v-col class="ma-2 shrink">
-                                <v-btn fab small left @click="editEntry">
-                                    <v-icon>mdi-pencil</v-icon>
+                                <v-btn size="small" location="left" icon="mdi-pencil" @click="editEntry">
                                 </v-btn>
                             </v-col>
                         </v-row>
@@ -110,8 +109,8 @@
                                 <v-divider></v-divider>
                                 <v-checkbox
                                     :label="$i18n('preferred_matching_entry')"
-                                    :input-value="entrySummary.isPreferredMatch"
-                                    @change="onPreferredEntryClick"
+                                    :model-value="entrySummary.isPreferredMatch"
+                                    @update:model-value="onPreferredEntryClick"
                                 ></v-checkbox>
                             </v-col>
                         </v-row>

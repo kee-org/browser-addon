@@ -13,14 +13,23 @@ export const sharedConfig: UserConfig = {
     root: r("src"),
     resolve: {
         alias: {
-            "~/": `${r("src")}/`
-        }
+            "~/": `${r("src")}/`,
+            vue: "@vue/compat"
+          }
     },
     define: {
         __DEV__: isDev
     },
     plugins: [
-        Vue(),
+        Vue({
+            template: {
+              compilerOptions: {
+                compatConfig: {
+                  MODE: 3
+                }
+              }
+            }
+          }),
 
         AutoImport({
             imports: [

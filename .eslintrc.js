@@ -54,6 +54,7 @@ module.exports = {
             "allowEmptyLines": false
         }],
         "vue/attribute-hyphenation": "off",
+        "vue/multi-word-component-names": "off",
         "@typescript-eslint/consistent-type-assertions": "error",
         "@typescript-eslint/member-delimiter-style": [
             "error",
