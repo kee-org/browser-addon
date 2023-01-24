@@ -1,3 +1,4 @@
+<!-- eslint-disable vuetify/no-deprecated-props -->
 <template>
     <v-app id="inspire">
         <v-app-bar v-model="showSearchPanel" app style="max-width: 400px">
@@ -139,6 +140,7 @@
 
             <v-spacer />
 
+            // eslint-disable-next-line vuetify/no-deprecated-props
             <v-menu location="top" offset-y small>
                 <template #activator="{ on }">
                     <v-btn icon size="small" v-on="on">
@@ -409,7 +411,7 @@ export default {
         },
         openKeePass: function () {
             KeeLog.debug("open KeePass requested");
-            if ((this as any).$store.connectedWebsocket) {
+            if (this.connectedWebsocket) {
                 Port.postMessage({ action: Action.OpenKeePass });
             } else {
                 KeeLog.info("KeePass no longer connected so taking no action");

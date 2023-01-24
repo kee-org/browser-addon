@@ -139,6 +139,7 @@ export default {
     components: { Field },
     mixins: [Port.mixin],
     props: ["entrySummary", "isFirstInAList", "entryIndex", "frameId"],
+    emits: ["move-next-in-list", "move-prev-in-list", "move-out-of-list", "pref-entry-toggle"],
     setup () {
         const { updateSaveState } = useStore();
         return { updateSaveState };

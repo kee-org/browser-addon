@@ -1,9 +1,9 @@
 <template>
     <v-dialog
-        value="true"
+        :model-value="true"
         fullscreen
         persistent
-        hide-overlay
+        :scrim="false"
         :transition="dialogTransition"
         @keydown.esc="cancel"
     >
@@ -14,12 +14,12 @@
                         v-model="selectedProfile"
                         :items="items"
                         :label="$i18n('password_profile')"
-                        outlined
+                        variant="outlined"
                         color="secondary"
                         :hint="$i18n('password_profile_hint')"
                         persistent-hint
                         class="mt-4"
-                        @change="profileChanged"
+                        @update:model-value="profileChanged"
                     />
                     <v-card
                         :loading="loading"
@@ -32,7 +32,7 @@
                                 {{ renderedPassword }}
                             </v-col>
                             <v-col cols="2">
-                                <v-btn small icon @click="revealed = !revealed">
+                                <v-btn size="small" icon @click="revealed = !revealed">
                                     <v-icon>
                                         {{ revealed ? "mdi-eye" : "mdi-eye-off" }}
                                     </v-icon>
@@ -48,9 +48,10 @@
                         <v-checkbox
                             v-model="forceCopy"
                             :label="$i18n('also_copy_to_clipboard')"
+                        >
+                        //TODO: :hint="forceCopyHint"
                             persistent-hint
-                            :hint="forceCopyHint"
-                        />
+                    </v-checkbox>
                     </div>
                 </v-card-text>
             </div>
@@ -79,6 +80,7 @@ import { mapState } from "pinia";
 export default {
     mixins: [Port.mixin],
     props: ["field", "standalone", "topmost"],
+    emits: ["copy-to-clipboard", "dialog-closed"],
     setup () {
         const { updateGeneratedPassword } = useStore();
         return { updateGeneratedPassword };
@@ -135,8 +137,8 @@ export default {
         profileChanged: function (item: string) {
             this.loading = true;
             const unwatch = this.$watch(
-                "$store.generatedPassword",
-                function (newValue) {
+                "generatedPassword",
+                 newValue => {
                     unwatch();
                     this.updateGeneratedPassword("");
                     this.generatedPassword = newValue;

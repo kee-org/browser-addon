@@ -7,62 +7,29 @@
   "version_name": "3.10.0",
   "author": "Kee Vault Ltd",
   "background": {
-    "scripts": [
-      "lib/dollar-polyfill.js",
-      "lib/detectWebExtensions.js",
-      "lib/tp/browser-polyfill.min.js",
-      "lib/moduleHack.js",
-      "lib/tp/punycode.js",
-      "lib/moduleUnhack.js",
-      "lib/pslData.js",
-      "lib/tp/publicsuffixlist.min.js",
-      "lib/tp/fast-equals.min.js",
-      "lib/pkg/vue.runtime.min.js",
-      "lib/pkg/vuex.min.js",
-      "common/common.js",
-      "lib/tp/biginteger.js",
-      "background/background.js"
-    ],
+    "page": "./dist/background/index.html",
     "persistent": true
   },
-  "content_scripts": [
-    {
-      "all_frames": true,
-      "matches": [
-        "<all_urls>"
-      ],
-      "exclude_globs": [
-        "https://app-dev.kee.pm:8087/*",
-        "https://app-beta.kee.pm/*",
-        "https://app.kee.pm/*",
-        "https://keevault.pm/*"
-      ],
-      "js": [
-        "./dist/page/index.global.js"
-      ],
-      "run_at": "document_end"
-    }
-  ],
   "icons": {
-    "16": "common/images/16.png",
-    "32": "common/images/32.png",
-    "48": "common/images/48.png",
-    "64": "common/images/64.png",
-    "96": "common/images/96.png",
-    "128": "common/images/128.png"
+    "16": "./assets/images/16.png",
+    "32": "./assets/images/32.png",
+    "48": "./assets/images/48.png",
+    "64": "./assets/images/64.png",
+    "96": "./assets/images/96.png",
+    "128": "./assets/images/128.png"
   },
   "browser_action": {
     "default_icon": {
-      "16": "common/images/16.png",
-      "32": "common/images/32.png",
-      "48": "common/images/48.png",
-      "64": "common/images/64.png"
+      "16": "./assets/images/16.png",
+      "32": "./assets/images/32.png",
+      "48": "./assets/images/48.png",
+      "64": "./assets/images/64.png"
     },
     "default_title": "Kee",
-    "default_popup": "popup/popup.html"
+    "default_popup": "./dist/popup/index.html"
   },
   "options_ui": {
-    "page": "settings/settings.html",
+    "page": "./dist/settings/index.html",
     "open_in_tab": true
   },
   "permissions": [
@@ -79,9 +46,6 @@
     "notifications",
     "unlimitedStorage",
     "idle"
-  ],
-  "web_accessible_resources": [
-    "panels/*"
   ],
   "commands": {
     "_execute_browser_action": {
@@ -114,5 +78,6 @@
       "update_url": "https://raw.githubusercontent.com/kee-org/browser-addon-updates/master/beta/update.json",
       "strict_min_version": "78.0"
     }
-  }
+  },
+  "content_security_policy": "script-src 'self' http://localhost:3303; object-src 'self'"
 }

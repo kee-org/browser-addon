@@ -3,7 +3,7 @@ declare module '@vue/runtime-core' {
     $app: {
       context: string
     },
-    $i18n: (key: string) => string
+    $i18n: (messageName: string, substitutions?: any) => string
   }
 }
 

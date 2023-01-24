@@ -1,19 +1,9 @@
 <template>
     <v-text-field
-        id="searchBox"
-        solo
-        :placeholder="$i18n('Search_label')"
-        hide-details
-        class="search my-0"
-        style=""
-        name="cc5704978dc0411591addc66d25c325b"
-        :value="currentSearchTerm"
-        autofocus
-        @input="onSearchInput"
-        @keyup.arrow-down.stop.prevent="focusFirstResult"
-        @keyup.enter.stop.prevent="focusFirstResult"
-        @keyup.escape.stop.prevent="handleEscape"
-    />
+id="searchBox" variant="solo" :placeholder="$i18n('Search_label')" hide-details class="search my-0"
+        style="" name="cc5704978dc0411591addc66d25c325b" :model-value="currentSearchTerm" autofocus
+        @update:model-value="onSearchInput" @keyup.arrow-down.stop.prevent="focusFirstResult"
+        @keyup.enter.stop.prevent="focusFirstResult" @keyup.escape.stop.prevent="handleEscape" />
 </template>
 
 <script lang="ts">
@@ -24,21 +14,41 @@ import useStore from "../../store";
 import { KeeLog } from "../../common/Logger";
 import { EntrySummary } from "../../common/model/EntrySummary";
 import { mapState } from "pinia";
+import { Database } from "~/common/model/Database";
 
 export default {
     mixins: [Port.mixin],
-    setup () {
+    setup() {
         const { updateSearchResults, updateCurrentSearchTerm } = useStore();
         return { updateSearchResults, updateCurrentSearchTerm };
     },
     data() {
-        return {};
+        return {
+            search: null as SearcherAll
+        };
     },
     computed: {
         ...mapState(useStore, ["currentSearchTerm", "KeePassDatabases", "ActiveKeePassDatabaseIndex"])
     },
+    watch: {
+        KeePassDatabases: function (newState: Database[], oldState: Database[]) {
+            this.onDBChanged();
+        }
+    },
     created() {
-        this.onDBChanged = () => {
+        this.onDBChanged();
+    },
+    // mounted() {
+    //     //TODO: Find a way to trigger the onDBChanged function using pinia even though it no longer supplies a subscription to mutations feature.
+    //     // Probably by using onAction instead of looking for mutations
+    //     this.$store.$subscribe((mutation: Mutation) => {
+    //         if (mutation.type === mTypes.updateKeePassDatabases) {
+    //             this.onDBChanged();
+    //         }
+    //     });
+    // },
+    methods: {
+        onDBChanged() {
             this.search = new SearcherAll(
                 {
                     KeePassDatabases: this.KeePassDatabases,
@@ -50,19 +60,7 @@ export default {
                     maximumResults: 50
                 }
             );
-        };
-        this.onDBChanged();
-    },
-    mounted() {
-        //TODO: Find a way to trigger the onDBChanged function using pinia even though it no longer supplies a subscription to mutations feature.
-        // Probably by using onAction instead of looking for mutations
-        this.subscribe((mutation: Mutation) => {
-            if (mutation.type === mTypes.updateKeePassDatabases) {
-                this.onDBChanged();
-            }
-        });
-    },
-    methods: {
+        },
         onSearchComplete(entrySummaries: EntrySummary[]) {
             KeeLog.debug("onSearchComplete");
             entrySummaries = entrySummaries
@@ -78,7 +76,7 @@ export default {
             // Think this is OK but if it is actually async then user may have subsequent
             // characters deleted when the change is actually applied
             this.updateCurrentSearchTerm(value);
-            (this as any).search.execute(value, (this as any).onSearchComplete.bind(this), []);
+            this.search.execute(value, this.onSearchComplete.bind(this), []);
         },
         focusFirstResult() {
             const firstCard = document.querySelector("#searchPanel > .v-card");

@@ -1,9 +1,9 @@
 <template>
-    <v-card color="yellow lighten-3">
+    <v-card color="yellow-lighten-3">
         <div style="float: right">
             <v-btn
-                text
-                class="ml-4 mr-2 px-2 primary--text"
+                variant="text"
+                class="ml-4 mr-2 px-2 text-primary"
                 @click="closeNotification(notification.id)"
             >
                 {{ $i18n("close") }}
@@ -11,7 +11,7 @@
             </v-btn>
         </div>
 
-        <v-card-text class="primary--text">
+        <v-card-text class="text-primary">
             <p v-for="(msg, index) of notification.messages" :key="index">
                 {{ msg }}
             </p>
@@ -23,7 +23,7 @@
                         <v-tooltip
                             v-for="(but, index) of notification.buttons"
                             :key="index"
-                            top
+                            location="top"
                             :disabled="!but.tooltip"
                             :open-delay="tooltipDelay"
                         >
@@ -72,7 +72,7 @@ export default {
     }),
     methods: {
         dispatchActionResponse(id: string, action: ButtonAction, data: { [id: string]: string }) {
-            const pm = (this as any).postMessage;
+            const pm = this.postMessage;
             switch (action) {
                 case "enableHighSecurityKPRPCConnection":
                     configManager.current.connSLClient = 3;
@@ -97,7 +97,7 @@ export default {
             pm({ removeNotification: id } as AddonMessage);
         },
         closeNotification(id: string) {
-            const pm = (this as any).postMessage;
+            const pm = this.postMessage;
             pm({ removeNotification: id } as AddonMessage);
         }
     }

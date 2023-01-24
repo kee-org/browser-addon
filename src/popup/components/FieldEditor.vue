@@ -62,6 +62,7 @@ export default {
         PasswordGenerator
     },
     props: ["field"],
+    emits: ["field-value-changed", "field-deleted"],
     data: () => ({
         revealed: false,
         showPasswordGenerator: false,

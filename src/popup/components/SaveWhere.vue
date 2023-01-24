@@ -15,7 +15,7 @@
                                     v-model="search"
                                     :label="$i18n('Search_label')"
                                     color="secondary"
-                                    outlined
+                                    variant="outlined"
                                     hide-details="auto"
                                     clearable
                                     dense
@@ -23,7 +23,8 @@
                                 />
                             </v-sheet>
                             <v-card-text>
-                                <v-treeview
+                                TODO: NEW TREE VIEW SYSTEM
+                                <!-- <v-treeview
                                     :active="groupUuidArray"
                                     :items="items"
                                     :search="search"
@@ -39,7 +40,7 @@
                                     style="height: 240px; overflow-y: auto; cursor: pointer"
                                     return-object="true"
                                     @update:active="setGroup"
-                                />
+                                /> -->
                             </v-card-text>
                         </v-card>
                     </v-col>
@@ -60,7 +61,7 @@
             </v-container>
         </v-slide-y-transition>
 
-        <v-btn :disabled="!saveEnabled" right color="primary" @click="saveEntry">
+        <v-btn :disabled="!saveEnabled" location="right" color="primary" @click="saveEntry">
             {{ $i18n("save") }}
         </v-btn>
     </div>

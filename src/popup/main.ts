@@ -42,34 +42,40 @@ function startup() {
                             });
                         },
                         render: () => h(App, {
-                                props: {
-                                    matchedEntries: !m.entries ? null : m.entries,
-                                    frameId: m.frameId
-                                }
-                            })
+                            props: {
+                                matchedEntries: !m.entries ? null : m.entries,
+                                frameId: m.frameId
+                            }
+                        })
                     });
 
                     const vuetify = createVuetify({
                         theme: {
-                            dark: configManager.activeTheme === "dark",
+                            defaultTheme: configManager.activeTheme,
                             themes: {
                                 dark: {
-                                    primary: "#1a466b",
-                                    secondary: "#ABB2BF",
-                                    tertiary: "#e66a2b",
-                                    error: "#C34034",
-                                    info: "#2196F3",
-                                    success: "#4CAF50",
-                                    warning: "#FFC107"
+                                    dark: true,
+                                    colors: {
+                                        primary: "#1a466b",
+                                        secondary: "#ABB2BF",
+                                        tertiary: "#e66a2b",
+                                        error: "#C34034",
+                                        info: "#2196F3",
+                                        success: "#4CAF50",
+                                        warning: "#FFC107"
+                                    }
                                 },
                                 light: {
-                                    primary: "#1a466b",
-                                    secondary: "#13334e",
-                                    tertiary: "#e66a2b",
-                                    error: "#C34034",
-                                    info: "#2196F3",
-                                    success: "#4CAF50",
-                                    warning: "#FFC107"
+                                    dark: false,
+                                    colors: {
+                                        primary: "#1a466b",
+                                        secondary: "#13334e",
+                                        tertiary: "#e66a2b",
+                                        error: "#C34034",
+                                        info: "#2196F3",
+                                        success: "#4CAF50",
+                                        warning: "#FFC107"
+                                    }
                                 }
                             }
                         }

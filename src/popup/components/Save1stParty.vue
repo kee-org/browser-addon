@@ -1,3 +1,4 @@
+<!-- eslint-disable vuetify/no-deprecated-props -->
 <template>
     <div>
         <v-slide-y-transition>
@@ -43,7 +44,7 @@
         <v-alert
             v-if="showURLMismatchWarning"
             border="top"
-            colored-border
+            border-color="primary"
             type="warning"
             :icon="false"
             elevation="1"
@@ -101,7 +102,7 @@
         <v-alert
             v-if="editingExisting"
             border="top"
-            colored-border
+            border-color="primary"
             type="info"
             :icon="false"
             elevation="1"
@@ -146,6 +147,7 @@ export default {
         FieldEditor
     },
     mixins: [Port.mixin],
+    emits: ["cancel-clicked", "save-where-clicked"],
     setup () {
         const { updateSaveState, removeFieldFromActiveEntry } = useStore();
         return { updateSaveState, removeFieldFromActiveEntry };

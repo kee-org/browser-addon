@@ -43,22 +43,23 @@ export async function getManifest() {
     "version_name": "3.10.0",
     "author": "Kee Vault Ltd",
     "background": {
-        "scripts": [
-            "lib/dollar-polyfill.js",
-            "lib/detectWebExtensions.js",
-            "lib/tp/browser-polyfill.min.js",
-            "lib/moduleHack.js",
-            "lib/tp/punycode.js",
-            "lib/moduleUnhack.js",
-            "lib/pslData.js",
-            "lib/tp/publicsuffixlist.min.js",
-            "lib/tp/fast-equals.min.js",
-            "lib/pkg/vue.runtime.min.js",
-            "lib/pkg/vuex.min.js",
-            "common/common.js",
-            "lib/tp/biginteger.js",
-            "background/background.js"
-        ],
+        // "scripts": [
+        //     "lib/dollar-polyfill.js",
+        //     "lib/detectWebExtensions.js",
+        //     "lib/tp/browser-polyfill.min.js",
+        //     "lib/moduleHack.js",
+        //     "lib/tp/punycode.js",
+        //     "lib/moduleUnhack.js",
+        //     "lib/pslData.js",
+        //     "lib/tp/publicsuffixlist.min.js",
+        //     "lib/tp/fast-equals.min.js",
+        //     "lib/pkg/vue.runtime.min.js",
+        //     "lib/pkg/vuex.min.js",
+        //     "common/common.js",
+        //     "lib/tp/biginteger.js",
+        //     "background/background.js"
+        // ],
+        page: "./dist/background/index.html",
         "persistent": true
     },
     "content_scripts": [{
@@ -103,25 +104,27 @@ export async function getManifest() {
     }
 ],
     "icons": {
-        "16": "common/images/16.png",
-        "32": "common/images/32.png",
-        "48": "common/images/48.png",
-        "64": "common/images/64.png",
-        "96": "common/images/96.png",
-        "128": "common/images/128.png"
+        "16": "./assets/images/16.png",
+        "32": "./assets/images/32.png",
+        "48": "./assets/images/48.png",
+        "64": "./assets/images/64.png",
+        "96": "./assets/images/96.png",
+        "128": "./assets/images/128.png"
     },
     "browser_action": {
         "default_icon": {
-            "16": "common/images/16.png",
-            "32": "common/images/32.png",
-            "48": "common/images/48.png",
-            "64": "common/images/64.png"
+            "16": "./assets/images/16.png",
+            "32": "./assets/images/32.png",
+            "48": "./assets/images/48.png",
+            "64": "./assets/images/64.png"
         },
         "default_title": "Kee",
-        "default_popup": "popup/popup.html"
+        // "default_popup": "popup/popup.html"
+        default_popup: "./dist/popup/index.html"
     },
     "options_ui": {
-        "page": "settings/settings.html",
+        // "page": "settings/settings.html",
+        page: "./dist/settings/index.html",
         "open_in_tab": true
     },
     "permissions": [
@@ -139,9 +142,9 @@ export async function getManifest() {
         "unlimitedStorage",
         "idle"
     ],
-    "web_accessible_resources" : [
-		"panels/*"
-    ],
+    // "web_accessible_resources" : [
+	// 	"panels/*"
+    // ],
     "commands": {
         "_execute_browser_action": {
             "suggested_key": {
@@ -181,7 +184,7 @@ export async function getManifest() {
         // we use a background script to always inject the latest version
         // see src/background/contentScriptHMR.ts
         delete manifest.content_scripts;
-        manifest.permissions?.push("webNavigation");
+        //manifest.permissions?.push("webNavigation");
 
         // this is required on dev for Vite script to load
         // eslint-disable-next-line no-useless-escape

@@ -4,47 +4,26 @@
 
         <!-- prettier-ignore -->
         <Entry
-            v-for="(match, index) of filteredMatches"
-            :key="match.entry.uuid"
-            ref="listAarray"
-            :entrySummary="match.entry"
-            :isFirstInAList="index === 0"
-            :frame-id="frame-id"
-            :entry-index="match.originalIndex"
-            :data-index="index"
-            @move-next-in-list="
+v-for="(match, index) of filteredMatches" :key="match.entry.uuid" :ref="setNodesA"
+            :entrySummary="match.entry" :isFirstInAList="index === 0" :frame-id="frameId"
+            :entry-index="match.originalIndex" :data-index="index" @move-next-in-list="
                 nextInList(index, 'listAarray', filteredMatches.length)
-            "
-            @move-prev-in-list="
-                prevInList(index, 'listAarray', filteredMatches.length)
-            "
-            @move-out-of-list="exitList"
-            v-on="$listeners"
-        />
+            " @move-prev-in-list="
+    prevInList(index, 'listAarray')
+" @move-out-of-list="exitList" />
 
-        <v-divider
-            v-show="deduplicatedSearchResults && deduplicatedSearchResults.length > 0"
-            class="mt-2"
-        />
+        <v-divider v-show="deduplicatedSearchResults && deduplicatedSearchResults.length > 0" class="mt-2" />
         <v-subheader
-            v-show="deduplicatedSearchResults && deduplicatedSearchResults.length > 0"
-            class="text-center"
-            style="justify-content: center"
-        >
+v-show="deduplicatedSearchResults && deduplicatedSearchResults.length > 0" class="text-center"
+            style="justify-content: center">
             {{ $i18n("matches_from_other_sites") }}
         </v-subheader>
 
         <Entry
-            v-for="(entry, index) of deduplicatedSearchResults"
-            :key="entry.uuid"
-            ref="listBarray"
-            :entrySummary="entry"
-            :isFirstInAList="index === 0"
-            :data-index="index"
+v-for="(entry, index) of deduplicatedSearchResults" :key="entry.uuid" :ref="setNodesB"
+            :entrySummary="entry" :isFirstInAList="index === 0" :data-index="index"
             @move-next-in-list="nextInList(index, 'listBarray', deduplicatedSearchResults.length)"
-            @move-prev-in-list="prevInList(index, 'listBarray', deduplicatedSearchResults.length)"
-            @move-out-of-list="exitList"
-        />
+            @move-prev-in-list="prevInList(index, 'listBarray')" @move-out-of-list="exitList" />
     </div>
 </template>
 
@@ -63,7 +42,10 @@ export default {
     data() {
         return {
             filteredMatches: null,
-            uidMap: new Map<string, number>()
+            uidMap: new Map<string, number>(),
+            aNodes: [],
+            bNodes: [],
+            searchOnlyMatches: null as SearcherMatchedOnly
         };
     },
     computed: {
@@ -84,22 +66,40 @@ export default {
     watch: {
         matchedEntries: function (newVal) {
             this.initAndSearchMatchedEntries(newVal);
+        },
+        currentSearchTerm: function (newVal) {
+            this.searchOnlyMatches.execute(
+                newVal,
+                this.onSearchOnlyMatchesComplete.bind(this)
+            );
         }
+    },
+    beforeUpdate() {
+        this.aNodes = [];
+        this.bNodes = [];
     },
     created() {
         this.initAndSearchMatchedEntries(this.matchedEntries);
     },
-    mounted() {
-        this.subscribe(mutation => {
-            if (mutation.type === mTypes.updateCurrentSearchTerm) {
-                this.searchOnlyMatches.execute(
-                    this.currentSearchTerm,
-                    (this as any).onSearchOnlyMatchesComplete.bind(this)
-                );
-            }
-        });
-    },
+    //TODO: test if search term stuff works OK despite change to watches rather than vuex mutation subscribers
+    // Especially whether results are cleared if database locks due to time out while popup is open
+    // mounted() {
+    //     this.subscribe(mutation => {
+    //         if (mutation.type === mTypes.updateCurrentSearchTerm) {
+    //             this.searchOnlyMatches.execute(
+    //                 this.currentSearchTerm,
+    //                 this.onSearchOnlyMatchesComplete.bind(this)
+    //             );
+    //         }
+    //     });
+    // },
     methods: {
+        setNodesA(node) {
+            this.aNodes.push(node);
+        },
+        setNodesB(node) {
+            this.bNodes.push(node);
+        },
         onSearchOnlyMatchesComplete(entrySummaries: EntrySummary[]) {
             KeeLog.debug("onSearchOnlyMatchesComplete");
             entrySummaries = entrySummaries.sort(function (a, b) {
@@ -113,26 +113,26 @@ export default {
             }));
         },
         nextInList(currentIndex: number, listName: string, listLength: any) {
-            const currentVueNode = this.$refs[listName].find(
+            const currentVueNode = (listName === "listAarray" ? this.aNodes : this.bNodes).find(
                 e => parseInt(e.$el.dataset.index) === currentIndex
             );
             if (currentIndex < listLength - 1) {
                 currentVueNode.$el.nextElementSibling.focus();
             } else if (listName === "listAarray" && this.deduplicatedSearchResults.length > 0) {
-                const firstBListVueNode = this.$refs["listBarray"].find(
+                const firstBListVueNode = this.bNodes.find(
                     e => parseInt(e.$el.dataset.index) === 0
                 );
                 firstBListVueNode.$el.focus();
             }
         },
         prevInList(currentIndex: number, listName: string) {
-            const currentVueNode = this.$refs[listName].find(
+            const currentVueNode = (listName === "listAarray" ? this.aNodes : this.bNodes).find(
                 e => parseInt(e.$el.dataset.index) === currentIndex
             );
             if (currentIndex > 0) {
                 currentVueNode.$el.previousElementSibling.focus();
             } else if (listName === "listBarray" && this.filteredMatches.length > 0) {
-                const lastAListVueNode = this.$refs["listAarray"].find(
+                const lastAListVueNode = this.aNodes.find(
                     e => parseInt(e.$el.dataset.index) === this.filteredMatches.length - 1
                 );
                 lastAListVueNode.$el.focus();
@@ -154,7 +154,7 @@ export default {
             );
             this.searchOnlyMatches.execute(
                 this.currentSearchTerm,
-                (this as any).onSearchOnlyMatchesComplete.bind(this)
+                this.onSearchOnlyMatchesComplete.bind(this)
             );
         }
     }
