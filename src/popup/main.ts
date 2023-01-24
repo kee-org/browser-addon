@@ -1,28 +1,19 @@
-import { createApp } from "vue";
+import { App as VueApp, createApp, h } from "vue";
 import { createVuetify } from "vuetify";
 import App from "./App.vue";
 import useStore from "../store";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
-import i18n from "../common/Vuei18n";
 import { Port } from "../common/port";
 import { SyncContent } from "../store/syncContent";
 import { createPinia } from "pinia";
 import { Action } from "../common/Action";
 import { MutationPayload } from "~/store/syncBackground";
 
-
-const app = createApp(App);
-
-const vuetify = createVuetify({});
-app.use(vuetify);
-app.use(createPinia());
-app.use(i18n);
+const piniaInstance = createPinia();
 const store = useStore();
-
-Vue.prototype.$browser = browser;
-
+let vueApp: VueApp<Element>;
 let syncContent: SyncContent;
 
 function startup() {
@@ -41,34 +32,8 @@ function startup() {
                     Port.postMessage({ mutation: mutation } as AddonMessage);
                 },
                 () => {
-                    new Vue({
-                        el: "#main",
-                        store: store,
-                        vuetify: new Vuetify({
-                            theme: {
-                                dark: configManager.activeTheme === "dark",
-                                themes: {
-                                    dark: {
-                                        primary: "#1a466b",
-                                        secondary: "#ABB2BF",
-                                        tertiary: "#e66a2b",
-                                        error: "#C34034",
-                                        info: "#2196F3",
-                                        success: "#4CAF50",
-                                        warning: "#FFC107"
-                                    },
-                                    light: {
-                                        primary: "#1a466b",
-                                        secondary: "#13334e",
-                                        tertiary: "#e66a2b",
-                                        error: "#C34034",
-                                        info: "#2196F3",
-                                        success: "#4CAF50",
-                                        warning: "#FFC107"
-                                    }
-                                }
-                            }
-                        }),
+
+                    vueApp = createApp({
                         mounted: function () {
                             // This can wait until after the popup app has rendered, at least until there is
                             // some way to launch in password generation mode
@@ -76,18 +41,47 @@ function startup() {
                                 action: Action.GetPasswordProfiles
                             });
                         },
-                        render: function (h) {
-                            return h(App, {
+                        render: () => h(App, {
                                 props: {
                                     matchedEntries: !m.entries ? null : m.entries,
                                     frameId: m.frameId
                                 }
-                            });
-                        }
+                            })
                     });
 
+                    const vuetify = createVuetify({
+                        theme: {
+                            dark: configManager.activeTheme === "dark",
+                            themes: {
+                                dark: {
+                                    primary: "#1a466b",
+                                    secondary: "#ABB2BF",
+                                    tertiary: "#e66a2b",
+                                    error: "#C34034",
+                                    info: "#2196F3",
+                                    success: "#4CAF50",
+                                    warning: "#FFC107"
+                                },
+                                light: {
+                                    primary: "#1a466b",
+                                    secondary: "#13334e",
+                                    tertiary: "#e66a2b",
+                                    error: "#C34034",
+                                    info: "#2196F3",
+                                    success: "#4CAF50",
+                                    warning: "#FFC107"
+                                }
+                            }
+                        }
+                    });
+                    vueApp.use(vuetify);
+                    vueApp.use(piniaInstance);
+                    vueApp.mount("#main");
+                    vueApp.config.globalProperties.$browser = browser;
+                    vueApp.config.globalProperties.$i18n = browser.i18n.getMessage;
+
                     // This maybe could be moved to onMounted once all vuex state is changed before this popup is opened.
-                    setTimeout(() => {
+                    window.setTimeout(() => {
                         window.focus();
                         const sb = $("#searchBox");
                         if (sb) sb.focus();

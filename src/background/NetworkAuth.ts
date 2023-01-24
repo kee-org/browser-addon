@@ -1,6 +1,6 @@
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
-import store from "../store";
+import useStore, { KeeStore } from "../store";
 import { Entry } from "../common/model/Entry";
 
 declare const punycode;
@@ -11,6 +11,7 @@ declare const chrome;
 
 export class NetworkAuth {
     pendingRequests = [];
+    store: KeeStore = useStore();
 
     public completed(requestDetails) {
         const index = this.pendingRequests.indexOf(requestDetails.requestId);
@@ -40,7 +41,7 @@ export class NetworkAuth {
         this.pendingRequests.push(requestDetails.requestId);
         KeeLog.debug("Providing credentials for: " + requestDetails.requestId);
 
-        if (!store.connected || store.ActiveKeePassDatabaseIndex < 0) {
+        if (!this.store.connected || this.store.ActiveKeePassDatabaseIndex < 0) {
             return { cancel: false };
         }
 

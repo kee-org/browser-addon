@@ -10,8 +10,10 @@ import { Config } from "../common/config";
 import { configManager } from "../common/ConfigManager";
 import { MatchedField } from "./MatchedField";
 import { Field } from "../common/model/Field";
-import store from "../store";
 import { Entry } from "../common/model/Entry";
+import useStore from "~/store";
+
+const store = useStore();
 
 interface ScoreMatrix {
     score: number;

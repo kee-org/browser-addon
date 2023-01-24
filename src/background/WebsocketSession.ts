@@ -103,7 +103,7 @@ export class WebsocketSessionManager {
             if (this.pendingPortChange != null) {
                 clearTimeout(this.pendingPortChange);
             }
-            this.pendingPortChange = setTimeout(() => {
+            this.pendingPortChange = window.setTimeout(() => {
                 this.configureConnectionURIs();
                 if (
                     this.webSocket !== undefined &&

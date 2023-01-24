@@ -7,7 +7,6 @@ import { AddonMessage } from "../common/AddonMessage";
 import useStore from "../store";
 import { createApp, defineComponent } from "vue";
 import { createPinia } from "pinia";
-import i18n from "../common/Vuei18n";
 // import { PersistentLogger } from "../common/PersistentLogger";
 
 const userBusySeconds = 60 * 15;
@@ -22,9 +21,7 @@ browser.browserAction.disable();
 
 //TODO: Does this create a suitable stub Vue instance for Pinia to work with MV2?
 const app = createApp(defineComponent);
-
 app.use(createPinia());
-app.use(i18n);
 const store = useStore();
 
 // Assumes config and logging have been initialised before this is called.
@@ -170,7 +167,7 @@ browser.runtime.onUpdateAvailable.addListener(async () => {
                 browser.runtime.reload();
             }
         });
-        setTimeout(() => {
+        window.setTimeout(() => {
             browser.runtime.reload();
         }, maxUpdateDelaySeconds * 1000);
     }

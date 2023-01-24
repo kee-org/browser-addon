@@ -97,7 +97,7 @@ export class SearcherAll {
 
         if (onComplete) {
             // Create a timer to make the search run async
-            this._makeAsyncTimer = setTimeout(actualSearch.bind(this), 1);
+            this._makeAsyncTimer = window.setTimeout(actualSearch.bind(this), 1);
             return;
         } else {
             actualSearch.call(this);

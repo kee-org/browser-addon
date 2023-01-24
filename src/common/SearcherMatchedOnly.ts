@@ -43,7 +43,7 @@ export class SearcherMatchedOnly {
         else if (query.length > 0) keywords = tokenise(query);
 
         // Create a timer to make the search run async
-        setTimeout(() => {
+        window.setTimeout(() => {
             const results = this.filterExistingResults(this.matchedEntrySummaries, keywords);
             onComplete(results);
         }, 1);

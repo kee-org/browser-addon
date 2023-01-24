@@ -93,7 +93,7 @@ export class EventSessionManager {
             this._features = features;
 
             clearTimeout(this.eventActivityTimer);
-            this.eventActivityTimer = setTimeout(() => {
+            this.eventActivityTimer = window.setTimeout(() => {
                 this.closeSession();
             }, this.eventActivityTimeout);
 
@@ -155,7 +155,7 @@ export class EventSessionManager {
         }
 
         clearTimeout(this.eventActivityTimer);
-        this.eventActivityTimer = setTimeout(() => {
+        this.eventActivityTimer = window.setTimeout(() => {
             this.closeSession();
         }, this.eventActivityTimeout);
 

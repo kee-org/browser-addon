@@ -269,7 +269,7 @@ export class Kee {
 
     async init() {
         // Create a timer for KPRPC connection establishment
-        this.regularKPRPCListenerQueueHandlerTimer = setInterval(
+        this.regularKPRPCListenerQueueHandlerTimer = window.setInterval(
             this.RegularKPRPCListenerQueueHandler,
             5000
         );

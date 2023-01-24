@@ -10,9 +10,7 @@ import { Button } from "../common/Button";
 import { FeatureFlags } from "../common/FeatureFlags";
 import { KeeNotification } from "../common/KeeNotification";
 import { configManager } from "../common/ConfigManager";
-import useStore from "../store";
-
-const store = useStore();
+import useStore, { KeeStore } from "../store";
 
 /*
 kprpcClient.js provides functionality for
@@ -60,6 +58,7 @@ export class kprpcClient {
     private websocketSessionManager: WebsocketSessionManager;
     private eventSessionManager: EventSessionManager;
     private keyChallengeParams: { sc: string; cc: string };
+    private store: KeeStore;
 
     public constructor() {
         this.nextRequestId = 1;
@@ -80,6 +79,7 @@ export class kprpcClient {
             obj => this.receive(obj, this.websocketSessionManager),
             () => !!this.secretKey
         );
+        this.store = useStore();
     }
 
     startWebsocketSessionManager() {
@@ -158,11 +158,11 @@ export class kprpcClient {
             } catch (ex) {
                 KeeLog.warn(
                     "JSON-RPC request could not be sent. Expect an async error soon. Exception: " +
-                        ex.message +
-                        ":" +
-                        ex.stack
+                    ex.message +
+                    ":" +
+                    ex.stack
                 );
-                setTimeout(() => {
+                window.setTimeout(() => {
                     this.processJSONRPCresponse(
                         {
                             id: requestId,
@@ -196,7 +196,7 @@ export class kprpcClient {
 
     KPRPCListener(signal) {
         // call this async so that json reader can get back to listening ASAP and prevent deadlocks
-        setTimeout(function () {
+        window.setTimeout(function () {
             window.kee.KPRPCListener(signal);
         }, 5);
     }
@@ -272,29 +272,29 @@ export class kprpcClient {
                         KeeLog.error(
                             $STR("conn_setup_client_features_missing") + " Extra info: " + extra
                         );
-                        store.updateLatestConnectionError("VERSION_CLIENT_TOO_LOW");
+                        this.store.updateLatestConnectionError("VERSION_CLIENT_TOO_LOW");
                         this.showConnectionMessage($STR("conn_setup_client_features_missing"));
                     } else if (data.error.code == "UNRECOGNISED_PROTOCOL") {
                         KeeLog.error(
                             $STR("conn_unknown_protocol") +
-                                " " +
-                                $STRF("further_info_may_follow", extra)
+                            " " +
+                            $STRF("further_info_may_follow", extra)
                         );
-                        store.updateLatestConnectionError("UNRECOGNISED_PROTOCOL");
+                        this.store.updateLatestConnectionError("UNRECOGNISED_PROTOCOL");
                     } else if (data.error.code == "INVALID_MESSAGE") {
                         KeeLog.error(
                             $STR("conn_invalid_message") +
-                                " " +
-                                $STRF("further_info_may_follow", extra)
+                            " " +
+                            $STRF("further_info_may_follow", extra)
                         );
-                        store.updateLatestConnectionError("INVALID_MESSAGE");
+                        this.store.updateLatestConnectionError("INVALID_MESSAGE");
                     } else if (data.error.code == "AUTH_RESTART") {
                         KeeLog.error(
                             $STR("conn_setup_restart") +
-                                " " +
-                                $STRF("further_info_may_follow", extra)
+                            " " +
+                            $STRF("further_info_may_follow", extra)
                         );
-                        store.updateLatestConnectionError("AUTH_RESTART");
+                        this.store.updateLatestConnectionError("AUTH_RESTART");
                         this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                         this.showConnectionMessage(
                             $STR("conn_setup_restart") + " " + $STR("conn_setup_retype_password")
@@ -302,14 +302,14 @@ export class kprpcClient {
                     } else {
                         KeeLog.error(
                             $STR("conn_unknown_error") +
-                                " " +
-                                $STRF("further_info_may_follow", extra)
+                            " " +
+                            $STRF("further_info_may_follow", extra)
                         );
-                        store.updateLatestConnectionError("UNKNOWN_JSONRPC");
+                        this.store.updateLatestConnectionError("UNKNOWN_JSONRPC");
                         this.showConnectionMessage(
                             $STR("conn_unknown_error") +
-                                " " +
-                                $STRF("further_info_may_follow", ["See Kee log"])
+                            " " +
+                            $STRF("further_info_may_follow", ["See Kee log"])
                         );
                     }
                 }
@@ -332,7 +332,7 @@ export class kprpcClient {
             switch (data.error.code) {
                 case "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW": {
                     KeeLog.warn($STR("conn_setup_client_sl_low"));
-                    store.updateLatestConnectionError(
+                    this.store.updateLatestConnectionError(
                         "AUTH_CLIENT_SECURITY_LEVEL_TOO_LOW"
                     );
                     const button: Button = {
@@ -346,7 +346,7 @@ export class kprpcClient {
                     KeeLog.warn(
                         $STR("conn_setup_failed") + " " + $STRF("further_info_may_follow", extra)
                     );
-                    store.updateLatestConnectionError("AUTH_FAILED");
+                    this.store.updateLatestConnectionError("AUTH_FAILED");
                     this.showConnectionMessage(
                         $STR("conn_setup_failed") + " " + $STR("conn_setup_retype_password")
                     );
@@ -358,7 +358,7 @@ export class kprpcClient {
                     KeeLog.warn(
                         $STR("conn_setup_restart") + " " + $STRF("further_info_may_follow", extra)
                     );
-                    store.updateLatestConnectionError("AUTH_RESTART");
+                    this.store.updateLatestConnectionError("AUTH_RESTART");
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     this.showConnectionMessage(
                         $STR("conn_setup_restart") + " " + $STR("conn_setup_retype_password")
@@ -367,7 +367,7 @@ export class kprpcClient {
                 }
                 case "AUTH_EXPIRED": {
                     KeeLog.warn($STRF("conn_setup_expired", extra));
-                    store.updateLatestConnectionError("AUTH_EXPIRED");
+                    this.store.updateLatestConnectionError("AUTH_EXPIRED");
                     this.removeStoredKey(this.getUsername(this.getSecurityLevel()));
                     this.showConnectionMessage(
                         $STR("conn_setup_expired") + " " + $STR("conn_setup_retype_password")
@@ -376,23 +376,23 @@ export class kprpcClient {
                 }
                 case "AUTH_INVALID_PARAM": {
                     KeeLog.error($STRF("conn_setup_invalid_param", extra));
-                    store.updateLatestConnectionError("AUTH_INVALID_PARAM");
+                    this.store.updateLatestConnectionError("AUTH_INVALID_PARAM");
                     break;
                 }
                 case "AUTH_MISSING_PARAM": {
                     KeeLog.error($STRF("conn_setup_missing_param", extra));
-                    store.updateLatestConnectionError("AUTH_MISSING_PARAM");
+                    this.store.updateLatestConnectionError("AUTH_MISSING_PARAM");
                     break;
                 }
                 default: {
                     KeeLog.error(
                         $STR("conn_unknown_error") + " " + $STRF("further_info_may_follow", extra)
                     );
-                    store.updateLatestConnectionError("UNKNOWN_SETUP");
+                    this.store.updateLatestConnectionError("UNKNOWN_SETUP");
                     this.showConnectionMessage(
                         $STR("conn_unknown_error") +
-                            " " +
-                            $STRF("further_info_may_follow", ["See Kee log"])
+                        " " +
+                        $STRF("further_info_may_follow", ["See Kee log"])
                     );
                     break;
                 }
@@ -408,7 +408,7 @@ export class kprpcClient {
                         "https://www.kee.pm/upgrade-kprpc"
                     ])
                 );
-                store.updateLatestConnectionError("VERSION_CLIENT_TOO_HIGH");
+                this.store.updateLatestConnectionError("VERSION_CLIENT_TOO_HIGH");
                 const button: Button = {
                     label: $STR("upgrade_kee"),
                     action: "loadUrlUpgradeKee"
@@ -439,7 +439,7 @@ export class kprpcClient {
                         this.getSecurityLevelServerMinimum().toString()
                     ])
                 );
-                store.updateLatestConnectionError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW");
+                this.store.updateLatestConnectionError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW");
                 this.sendWebsocketsError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [
                     this.getSecurityLevelServerMinimum()
                 ]);
@@ -470,7 +470,7 @@ export class kprpcClient {
                         this.getSecurityLevelServerMinimum().toString()
                     ])
                 );
-                store.updateLatestConnectionError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW");
+                this.store.updateLatestConnectionError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW");
                 this.sendWebsocketsError("AUTH_SERVER_SECURITY_LEVEL_TOO_LOW", [
                     this.getSecurityLevelServerMinimum()
                 ]);
@@ -557,7 +557,7 @@ export class kprpcClient {
 
                 if (sr != data.key.sr) {
                     KeeLog.warn($STR("conn_setup_failed"));
-                    store.updateLatestConnectionError("CHALLENGE_RESPONSE_MISMATCH");
+                    this.store.updateLatestConnectionError("CHALLENGE_RESPONSE_MISMATCH");
                     this.showConnectionMessage(
                         $STR("conn_setup_failed") + " " + $STR("conn_setup_retype_password")
                     );
@@ -569,7 +569,7 @@ export class kprpcClient {
                     this.secretKey = this.getStoredKey();
 
                     // 0.025 second delay before we try to do the Kee connection startup stuff
-                    setTimeout(this.onConnectStartup, 50, "CR", this.onConnectStartup);
+                    window.setTimeout(this.onConnectStartup, 50, "CR", this.onConnectStartup);
                 }
             });
     }
@@ -624,7 +624,7 @@ export class kprpcClient {
 
         if (!this.srpClientInternals.authenticated) {
             KeeLog.warn($STR("conn_setup_failed"));
-            store.updateLatestConnectionError("SRP_AUTH_FAILURE");
+            this.store.updateLatestConnectionError("SRP_AUTH_FAILURE");
             this.showConnectionMessage(
                 $STR("conn_setup_failed") + " " + $STR("conn_setup_retype_password")
             );
@@ -642,7 +642,7 @@ export class kprpcClient {
                 this.setStoredKey(this.srpClientInternals.I, this.getSecurityLevel(), key);
 
                 // 0.025 second delay before we try to do the Kee connection startup stuff
-                setTimeout(this.onConnectStartup, 50, "SRP");
+                window.setTimeout(this.onConnectStartup, 50, "SRP");
             });
         }
     }
@@ -652,7 +652,7 @@ export class kprpcClient {
         window.kee.removeUserNotifications(
             (notification: KeeNotification) => notification.name != "kee-connection-message"
         );
-        store.updateLatestConnectionError("");
+        this.store.updateLatestConnectionError("");
         window.kee._refreshKPDB();
     }
 
@@ -714,26 +714,26 @@ export class kprpcClient {
                 sessionManager.unregisterCallback(obj.id);
                 KeeLog.warn(
                     "[" +
-                        sessionType +
-                        "] An error occurred when processing the result callback for JSON-RPC object id " +
-                        obj.id +
-                        ": " +
-                        e
+                    sessionType +
+                    "] An error occurred when processing the result callback for JSON-RPC object id " +
+                    obj.id +
+                    ": " +
+                    e
                 );
             }
         } else if ("error" in obj) {
             try {
                 KeeLog.error(
                     "[" +
-                        sessionType +
-                        "] An error occurred in KeePassRPC object id: " +
-                        obj.id +
-                        " with this message: " +
-                        obj.message +
-                        " and this error: " +
-                        obj.error +
-                        " and this error message: " +
-                        obj.error.message
+                    sessionType +
+                    "] An error occurred in KeePassRPC object id: " +
+                    obj.id +
+                    " with this message: " +
+                    obj.message +
+                    " and this error: " +
+                    obj.error +
+                    " and this error message: " +
+                    obj.error.message
                 );
                 sessionManager.invokeCallback(obj.id, obj);
                 sessionManager.unregisterCallback(obj.id);
@@ -741,11 +741,11 @@ export class kprpcClient {
                 sessionManager.unregisterCallback(obj.id);
                 KeeLog.warn(
                     "[" +
-                        sessionType +
-                        "] An error occurred when processing the error callback for JSON-RPC object id " +
-                        obj.id +
-                        ": " +
-                        e
+                    sessionType +
+                    "] An error occurred when processing the error callback for JSON-RPC object id " +
+                    obj.id +
+                    ": " +
+                    e
                 );
             }
         } else if ("method" in obj) {
@@ -758,9 +758,9 @@ export class kprpcClient {
                 result.error = e;
                 KeeLog.error(
                     "[" +
-                        sessionType +
-                        "] An error occurred when processing a JSON-RPC request: " +
-                        e
+                    sessionType +
+                    "] An error occurred when processing a JSON-RPC request: " +
+                    e
                 );
             }
         } else if (!("id" in obj)) {
@@ -791,11 +791,11 @@ export class kprpcClient {
         if (!this.serverHasRequiredFeatures(features)) {
             KeeLog.error(
                 "eventSession: " +
-                    $STRF("conn_setup_server_features_missing", [
-                        "https://www.kee.pm/upgrade-kprpc"
-                    ])
+                $STRF("conn_setup_server_features_missing", [
+                    "https://www.kee.pm/upgrade-kprpc"
+                ])
             );
-            store.updateLatestConnectionError("VERSION_CLIENT_TOO_HIGH");
+            this.store.updateLatestConnectionError("VERSION_CLIENT_TOO_HIGH");
             const button: Button = {
                 label: $STR("upgrade_kee"),
                 action: "loadUrlUpgradeKee"
@@ -876,8 +876,8 @@ export class kprpcClient {
             // that the application startup is progressing very slowly for some other reason
             KeeLog.warn(
                 "An attempt to setup the KPRPC secure channel has failed. It will not be retried for at least 10 seconds." +
-                    " If you see this message regularly and are not sure why, please ask on the help forum. Technical detail about the problem follows: " +
-                    ex
+                " If you see this message regularly and are not sure why, please ask on the help forum. Technical detail about the problem follows: " +
+                ex
             );
             this.websocketSessionManager.connectionProhibitedUntil = new Date();
             this.websocketSessionManager.connectionProhibitedUntil.setTime(
@@ -1011,7 +1011,7 @@ export class kprpcClient {
 
                             // Do the callback async because we don't want exceptions in
                             // JSONRPC handling being treated as encryption errors
-                            setTimeout(callbackTarget, 1, callback.bind(KPRPC), encryptedMessage);
+                            window.setTimeout(callbackTarget, 1, callback.bind(KPRPC), encryptedMessage);
                         });
                     })
                     .catch(function (e) {
@@ -1026,7 +1026,7 @@ export class kprpcClient {
     }
 
     // Decrypt incoming data from KeePassRPC using AES-CBC and a separate HMAC
-    decrypt(encryptedContainer, callback) {
+    async decrypt(encryptedContainer, callback) {
         KeeLog.debug("starting webcrypto decryption");
 
         // eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -1059,109 +1059,101 @@ export class kprpcClient {
         KeeLog.debug("decryption stage 'data prep 1' took: " + (tn - t));
         t = tn;
 
-        const typescriptHack4 = wc.digest({ name: "SHA-1" }, secretKeyAB) as Promise<ArrayBuffer>;
-        typescriptHack4
-            .then(function (secretkeyHash) {
+        try {
+            const secretkeyHash = await wc.digest({ name: "SHA-1" }, secretKeyAB);
+
+            tn = new Date().getTime();
+            KeeLog.debug("decryption stage 'key hash' took: " + (tn - t));
+            t = tn;
+
+            // fill the hmacData bytearray with the rest of the data
+            secretkeyHashAB.set(new Uint8Array(secretkeyHash));
+            utils.base64toByteArrayForHMAC(iv, 0, ivAB);
+
+            tn = new Date().getTime();
+            KeeLog.debug("decryption stage 'data prep 2' took: " + (tn - t));
+            t = tn;
+
+            // We could get a promise from crypto.subtle.digest({name: "SHA-1"}, hmacData)
+            // but that takes quite a lot longer than our existing hash utility
+            // presumably because the base64 implementation within the Firefox
+            // XPCOM hash component is native rather than running in Javascript
+            // when the promise completes
+            const digest = await utils.hash(hmacData, "base64", "SHA-1");
+            // })
+            // .then(digest => {
+            const ourHMAC = digest;
+            tn = new Date().getTime();
+            KeeLog.debug("decryption stage 'generate HMAC' took: " + (tn - t));
+            t = tn;
+
+            if (ourHMAC != hmac) return;
+            try {
+                const pwKey = await wc.importKey(
+                    "raw", // Exported key format
+                    secretKeyAB, // The exported key
+                    { name: "AES-CBC", length: 256 } as any, // Algorithm the key will be used with
+                    true, // Can extract key value to binary string
+                    ["encrypt", "decrypt"] // Use for these operations
+                );
                 tn = new Date().getTime();
-                KeeLog.debug("decryption stage 'key hash' took: " + (tn - t));
+                KeeLog.debug("decryption stage 'import key' took: " + (tn - t));
+                t = tn;
+                const alg = { name: "AES-CBC", iv: ivAB };
+                const decrypted = await wc.decrypt(alg, pwKey, messageAB);
+
+                tn = new Date().getTime();
+                KeeLog.debug("decryption stage 'aes-cbc' took: " + (tn - t));
+                t = tn;
+                const plainText = new TextDecoder("utf-8").decode(decrypted);
+                tn = new Date().getTime();
+                KeeLog.debug("decryption stage 'utf-8 conversion' took: " + (tn - t));
                 t = tn;
 
-                // fill the hmacData bytearray with the rest of the data
-                secretkeyHashAB.set(new Uint8Array(secretkeyHash));
-                utils.base64toByteArrayForHMAC(iv, 0, ivAB);
+                const callbackTarget = function (func, data) {
+                    func(data);
+                };
 
-                tn = new Date().getTime();
-                KeeLog.debug("decryption stage 'data prep 2' took: " + (tn - t));
-                t = tn;
-
-                // We could get a promise from crypto.subtle.digest({name: "SHA-1"}, hmacData)
-                // but that takes quite a lot longer than our existing hash utility
-                // presumably because the base64 implementation within the Firefox
-                // XPCOM hash component is native rather than running in Javascript
-                // when the promise completes
-                return utils.hash(hmacData, "base64", "SHA-1");
-            })
-            .then(digest => {
-                const ourHMAC = digest;
-                tn = new Date().getTime();
-                KeeLog.debug("decryption stage 'generate HMAC' took: " + (tn - t));
-                t = tn;
-
-                if (ourHMAC == hmac) {
-                    // "as any" is needed due to typescript browser API type definition bug introduced in TS 2.9
-                    // The extra typescriptHack3 const is needed so we can cast to Promise rather than
-                    // PromiseLike which is some bullshit buggy type definition
-                    const typescriptHack3 = wc.importKey(
-                        "raw", // Exported key format
-                        secretKeyAB, // The exported key
-                        { name: "AES-CBC", length: 256 } as any, // Algorithm the key will be used with
-                        true, // Can extract key value to binary string
-                        ["encrypt", "decrypt"] // Use for these operations
-                    ) as Promise<CryptoKey>;
-                    typescriptHack3
-                        .then(function (pwKey) {
-                            tn = new Date().getTime();
-                            KeeLog.debug("decryption stage 'import key' took: " + (tn - t));
-                            t = tn;
-                            const alg = { name: "AES-CBC", iv: ivAB };
-                            return wc.decrypt(alg, pwKey, messageAB);
-                        })
-                        .then(function (decrypted) {
-                            tn = new Date().getTime();
-                            KeeLog.debug("decryption stage 'aes-cbc' took: " + (tn - t));
-                            t = tn;
-                            const plainText = new TextDecoder("utf-8").decode(decrypted);
-                            tn = new Date().getTime();
-                            KeeLog.debug("decryption stage 'utf-8 conversion' took: " + (tn - t));
-                            t = tn;
-
-                            const callbackTarget = function (func, data) {
-                                func(data);
-                            };
-
-                            // Do the callback async because we don't want exceptions in
-                            // JSONRPC handling being treated as connection errors
-                            setTimeout(callbackTarget, 1, callback.bind(KPRPC), plainText);
-                        })
-                        .catch(function (e) {
-                            KeeLog.error("Failed to decrypt. Exception: " + e);
-
-                            KeeLog.warn($STR("conn_setup_restart"));
-                            store.updateLatestConnectionError("DECRYPTION_FAILED");
-                            KPRPC.showConnectionMessage(
-                                $STR("conn_setup_restart") +
-                                    " " +
-                                    $STR("conn_setup_retype_password")
-                            );
-                            KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
-                            KPRPC.websocketSessionManager.closeSession();
-                            callback(null);
-                        });
-                }
-            })
-            .catch(function (e) {
-                KeeLog.error("Failed to hash secret key. Exception: " + e);
+                // Do the callback async because we don't want exceptions in
+                // JSONRPC handling being treated as connection errors
+                window.setTimeout(callbackTarget, 1, callback.bind(KPRPC), plainText);
+            } catch (e) {
+                KeeLog.error("Failed to decrypt. Exception: " + e);
 
                 KeeLog.warn($STR("conn_setup_restart"));
-                store.updateLatestConnectionError("SECRET_KEY_HASH_FAILED");
+                this.store.updateLatestConnectionError("DECRYPTION_FAILED");
                 KPRPC.showConnectionMessage(
-                    $STR("conn_setup_restart") + " " + $STR("conn_setup_retype_password")
+                    $STR("conn_setup_restart") +
+                    " " +
+                    $STR("conn_setup_retype_password")
                 );
                 KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
                 KPRPC.websocketSessionManager.closeSession();
                 callback(null);
-            });
-    }
+            }
+        } catch(e) {
+        KeeLog.error("Failed to hash secret key. Exception: " + e);
 
-    showConnectionMessage(msg: string, buttons?: Button[]) {
-        window.kee.notifyUser(
-            new KeeNotification(
-                "kee-connection-message",
-                buttons ? buttons : [],
-                utils.newGUID(),
-                [msg],
-                "Medium"
-            )
+        KeeLog.warn($STR("conn_setup_restart"));
+        this.store.updateLatestConnectionError("SECRET_KEY_HASH_FAILED");
+        KPRPC.showConnectionMessage(
+            $STR("conn_setup_restart") + " " + $STR("conn_setup_retype_password")
         );
+        KPRPC.removeStoredKey(KPRPC.getUsername(KPRPC.getSecurityLevel()));
+        KPRPC.websocketSessionManager.closeSession();
+        callback(null);
     }
+}
+
+showConnectionMessage(msg: string, buttons ?: Button[]) {
+    window.kee.notifyUser(
+        new KeeNotification(
+            "kee-connection-message",
+            buttons ? buttons : [],
+            utils.newGUID(),
+            [msg],
+            "Medium"
+        )
+    );
+}
 }

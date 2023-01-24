@@ -1,5 +1,5 @@
 async function sleep(milliseconds: number) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
+    return new Promise(resolve => window.setTimeout(resolve, milliseconds));
 }
 
 export function fetchFavicon(url): Promise<string> {

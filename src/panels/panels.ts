@@ -5,13 +5,13 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { SyncContent } from "../store/syncContent";
-import store from "../store";
+import useStore from "../store";
 import { Port } from "../common/port";
 import { createApp } from "vue";
 import Vuetify, { createVuetify } from "vuetify";
-import i18n from "../common/Vuei18n";
 import Panel from "./Panel.vue";
 import { createPinia } from "pinia";
+import { MutationPayload } from "~/store/syncBackground";
 
 let frameState: FrameState;
 
@@ -27,6 +27,8 @@ function closePanel() {
 function startup() {
     KeeLog.debug("iframe page starting");
     KeeLog.attachConfig(configManager.current);
+    const piniaInstance = createPinia();
+    const store = useStore();
     syncContent = new SyncContent(store);
     Port.startup("iframe_" + parentFrameId);
 
@@ -40,8 +42,8 @@ function startup() {
         const vuetify = createVuetify({});
         app.use(vuetify);
         app.use(createPinia());
-        app.use(i18n);
-        Vue.prototype.$browser = browser;
+        app.config.globalProperties.$browser = browser;
+        app.config.globalProperties.$i18n = browser.i18n.getMessage;
     }
 
     const darkTheme = params["theme"] === "dark";
@@ -161,7 +163,7 @@ function startup() {
                 };
 
                 const autoCloseTimerEnd = Date.now() + autoCloseTime * 1000;
-                const autoCloseInterval = setInterval(() => {
+                const autoCloseInterval = window.setInterval(() => {
                     const now = Date.now();
                     if (now >= autoCloseTimerEnd) {
                         clearInterval(autoCloseInterval);

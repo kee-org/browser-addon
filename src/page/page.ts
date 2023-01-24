@@ -7,10 +7,11 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { Action } from "../common/Action";
-import store from "../store";
+import useStore from "../store";
 import { SyncContent } from "../store/syncContent";
-import { MutationPayload } from "vuex";
 import { Port } from "../common/port";
+import { createPinia } from "pinia";
+import { MutationPayload } from "~/store/syncBackground";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
@@ -48,6 +49,9 @@ let configReady = false;
 let missingPageShowTimer: number;
 
 let inputsObserver: MutationObserver;
+const app = createApp(defineComponent);
+app.use(createPinia());
+const store = useStore();
 
 // Content scripts are injected into non-HTML documents such as SVGs.
 // We have no interest in this document if it has no body Node
@@ -79,7 +83,7 @@ if (document.body) {
 
         // Schedule a rescan soon. Not immediately, in case a batch of mutations are about to be triggered.
         if (rescan) {
-            formFilling.formFinderTimer = setTimeout(
+            formFilling.formFinderTimer = window.setTimeout(
                 formFilling.findMatchesInThisFrame.bind(formFilling),
                 500
             );
@@ -151,7 +155,7 @@ if (document.body) {
             );
         }
 
-        messagingPortConnectionRetryTimer = setInterval(() => {
+        messagingPortConnectionRetryTimer = window.setInterval(() => {
             if (Port.raw == null) {
                 KeeLog.info("Messaging port was not established at page startup. Retrying now...");
                 try {
@@ -286,7 +290,7 @@ if (document.body) {
             // so we won't wait around forever, at the cost of occasional duplicate
             // startup code - broadly limited to discovering that the message port
             // is already established.
-            missingPageShowTimer = setTimeout(startup, 1500);
+            missingPageShowTimer = window.setTimeout(startup, 1500);
         }
     });
 }

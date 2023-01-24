@@ -19,12 +19,12 @@ export class AnimateIcon {
         this.timeStarted = Date.now();
         this.duration = smooth ? duration : 1600;
         if (!smooth) {
-            this.timer = setInterval(() => this.drawLowFramerate(), interval);
+            this.timer = window.setInterval(() => this.drawLowFramerate(), interval);
             return;
         }
         if (this.cache.length > 0) {
             // Note: requestAnimationFrame doesn't work in background pages!
-            this.timer = setInterval(() => this.draw(), interval);
+            this.timer = window.setInterval(() => this.draw(), interval);
             return;
         } else {
             const canvas = document.createElement("canvas");
@@ -37,7 +37,7 @@ export class AnimateIcon {
                 // there is actually ever an unacceptable delay in starting the animation
                 this.buildCache(context, img);
                 // Note: requestAnimationFrame doesn't work in background pages!
-                this.timer = setInterval(() => this.draw(), interval);
+                this.timer = window.setInterval(() => this.draw(), interval);
                 this.loadingImage = false;
             });
             this.loadingImage = true;

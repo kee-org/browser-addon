@@ -66,40 +66,42 @@ export async function getManifest() {
         "matches": ["<all_urls>"],
         "exclude_globs": ["https://app-dev.kee.pm:8087/*", "https://app-beta.kee.pm/*", "https://app.kee.pm/*", "https://keevault.pm/*"],
         "js": [
-                "lib/dollar-polyfill.js",
-                "lib/detectWebExtensions.js",
-                "lib/tp/browser-polyfill.min.js",
-                "lib/moduleHack.js",
-                "lib/tp/punycode.js",
-                "lib/moduleUnhack.js",
-                "lib/pslData.js",
-                "lib/tp/publicsuffixlist.min.js",
-                "lib/pkg/vue.runtime.min.js",
-                "lib/pkg/vuex.min.js",
-                "common/common.js",
-                "page/page.js"
+                // "lib/dollar-polyfill.js",
+                // "lib/detectWebExtensions.js",
+                // "lib/tp/browser-polyfill.min.js",
+                // "lib/moduleHack.js",
+                // "lib/tp/punycode.js",
+                // "lib/moduleUnhack.js",
+                // "lib/pslData.js",
+                // "lib/tp/publicsuffixlist.min.js",
+                // "lib/pkg/vue.runtime.min.js",
+                // "lib/pkg/vuex.min.js",
+                // "common/common.js",
+                // "page/page.js"
+                "./dist/page/index.global.js"
         ],
         "run_at": "document_end"
-    },{
-        "all_frames": false,
-        "matches": ["<all_urls>"],
-        "include_globs": ["https://app-dev.kee.pm:8087/*", "https://app-beta.kee.pm/*", "https://app.kee.pm/*", "https://keevault.pm/*"],
-        "js": [
-                "lib/dollar-polyfill.js",
-                "lib/detectWebExtensions.js",
-                "lib/tp/browser-polyfill.min.js",
-                "lib/moduleHack.js",
-                "lib/tp/punycode.js",
-                "lib/moduleUnhack.js",
-                "lib/pslData.js",
-                "lib/tp/publicsuffixlist.min.js",
-                "lib/pkg/vue.runtime.min.js",
-                "lib/pkg/vuex.min.js",
-                "common/common.js",
-                "vault/vault.js"
-        ],
-        "run_at": "document_end"
-    }],
+    // },{
+    //     "all_frames": false,
+    //     "matches": ["<all_urls>"],
+    //     "include_globs": ["https://app-dev.kee.pm:8087/*", "https://app-beta.kee.pm/*", "https://app.kee.pm/*", "https://keevault.pm/*"],
+    //     "js": [
+    //             "lib/dollar-polyfill.js",
+    //             "lib/detectWebExtensions.js",
+    //             "lib/tp/browser-polyfill.min.js",
+    //             "lib/moduleHack.js",
+    //             "lib/tp/punycode.js",
+    //             "lib/moduleUnhack.js",
+    //             "lib/pslData.js",
+    //             "lib/tp/publicsuffixlist.min.js",
+    //             "lib/pkg/vue.runtime.min.js",
+    //             "lib/pkg/vuex.min.js",
+    //             "common/common.js",
+    //             "vault/vault.js"
+    //     ],
+    //     "run_at": "document_end"
+    }
+],
     "icons": {
         "16": "common/images/16.png",
         "32": "common/images/32.png",

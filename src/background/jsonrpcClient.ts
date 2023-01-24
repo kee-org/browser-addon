@@ -6,7 +6,7 @@ import { PasswordProfile } from "../common/model/PasswordProfile";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Config } from "../common/config";
-import store from "../store";
+import useStore, { KeeStore } from "../store";
 import { WebsocketSessionManager } from "./WebsocketSession";
 import { DatabaseDto, EntryDto } from "../common/model/KPRPCDTOs";
 import { Database } from "../common/model/Database";
@@ -20,10 +20,12 @@ communication between Kee and a KeePassRPC server.
 
 export class jsonrpcClient {
     private kprpcClient: kprpcClient;
+    private store: KeeStore;
 
     constructor() {
         this.kprpcClient = new kprpcClient();
         this.kprpcClient.startWebsocketSessionManager();
+        this.store = useStore();
     }
 
     startEventSession(sessionId: string, features: string[], messageToWebPage) {
@@ -35,13 +37,13 @@ export class jsonrpcClient {
     }
 
     sessionManagerForFilename(dbFileName: string) {
-        const sessionType = store.KeePassDatabases.find(db => db.fileName === dbFileName)
+        const sessionType = this.store.KeePassDatabases.find(db => db.fileName === dbFileName)
             .sessionType;
         return this.kprpcClient.getSessionManagerByType(sessionType);
     }
 
     sessionManagerForPasswordProfile(profile: string) {
-        const sessionType = store.PasswordProfiles.find(p => p.name === profile).sessionType;
+        const sessionType = this.store.PasswordProfiles.find(p => p.name === profile).sessionType;
         return this.kprpcClient.getSessionManagerByType(sessionType);
     }
 
@@ -175,7 +177,7 @@ export class jsonrpcClient {
         freeText: string,
         username: string
     ) {
-        if (store.KeePassDatabases.length <= 0) {
+        if (this.store.KeePassDatabases.length <= 0) {
             return [];
         }
 
@@ -188,7 +190,7 @@ export class jsonrpcClient {
         if (dbFileName == undefined || dbFileName == null || dbFileName == "") {
             if (!configManager.current.searchAllOpenDBs) {
                 dbFileName =
-                    store.KeePassDatabases[store.ActiveKeePassDatabaseIndex].fileName;
+                    this.store.KeePassDatabases[this.store.ActiveKeePassDatabaseIndex].fileName;
             } else dbFileName = "";
         }
 
@@ -203,9 +205,9 @@ export class jsonrpcClient {
         const sessionManagers = potentialSessionManagers.filter(
             sm =>
                 (sm instanceof EventSessionManager &&
-                    store.KeePassDatabases.some(db => db.sessionType == SessionType.Event)) ||
+                    this.store.KeePassDatabases.some(db => db.sessionType == SessionType.Event)) ||
                 (sm instanceof WebsocketSessionManager &&
-                    store.KeePassDatabases.some(
+                    this.store.KeePassDatabases.some(
                         db => db.sessionType == SessionType.Websocket
                     ))
         );

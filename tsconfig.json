@@ -16,6 +16,7 @@
         "typeRoots" : ["src/typedefs", "node_modules/@types"],
         "moduleResolution": "node",
         "noImplicitThis": true,
+        "isolatedModules": true,
         "types": ["jest",
         "vite/client"],
         "module": "ESNext",
