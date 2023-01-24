@@ -36,24 +36,24 @@ export default {
         tooltipDelay: tooltipDelay
     }),
     computed: {
-        displayValue: function (this: any) {
+        displayValue: function () {
             return Field.getDisplayValue(this.field, this.revealed);
         },
-        tooltip: function (this: any) {
+        tooltip: function () {
             return Field.getDisplayTooltip(this.field, this.revealed);
         },
-        useful: function (this: any) {
+        useful: function () {
             return this.field.type !== "checkbox" && this.displayValue.length > 0;
         },
-        fieldStyle: function (this: any) {
+        fieldStyle: function () {
             return this.field.type === "password" ? "cursor: pointer" : "cursor: default";
         }
     },
     methods: {
-        toggleReveal: function (this: any) {
+        toggleReveal: function () {
             this.revealed = !this.revealed;
         },
-        copyValue: async function (this: any) {
+        copyValue: async function () {
             await copyStringToClipboard(Field.getDisplayValue(this.field, true));
         }
     }

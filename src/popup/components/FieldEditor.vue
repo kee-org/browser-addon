@@ -68,40 +68,40 @@ export default {
         focussed: false
     }),
     computed: {
-        renderType: function (this: any) {
+        renderType: function () {
             if (this.field.type === "password") {
                 return this.revealed ? "text" : "password";
             }
             return this.field.type;
         },
-        resettable: function (this: any) {
+        resettable: function () {
             return this.field.resetValue !== this.field.value;
         },
-        label: function (this: any) {
+        label: function () {
             return Field.getDisplayName(this.field);
         }
     },
     methods: {
-        reset: function (this: any) {
+        reset: function () {
             this.valueChanged(this.field.resetValue);
         },
-        valueChanged: function (this: any, value) {
+        valueChanged: function (value) {
             this.$emit("field-value-changed", { uuid: this.field.uuid, value });
         },
-        deleteClicked: function (this: any) {
+        deleteClicked: function () {
             this.$emit("field-deleted", { uuid: this.field.uuid });
         },
-        passwordGeneratorClosed: function (this: any, payload) {
+        passwordGeneratorClosed: function (payload) {
             if (payload?.value) this.valueChanged(payload.value);
             this.showPasswordGenerator = false;
         },
-        onFocus(this: any) {
+        onFocus() {
             this.focussed = true;
         },
-        onBlur(this: any) {
+        onBlur() {
             this.focussed = false;
         },
-        copyToClipboard: async function (this: any, payload) {
+        copyToClipboard: async function (payload) {
             if (payload?.value) await copyStringToClipboard(payload.value);
         }
     }

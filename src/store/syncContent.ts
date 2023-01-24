@@ -1,26 +1,32 @@
+import { MutationType } from "pinia";
+import { KeeStore } from ".";
 import { KeeState } from "./KeeState";
-import { Store, MutationPayload } from "vuex";
+import { MutationPayload } from "./syncBackground";
 
 export class SyncContent {
-    initialized: any;
-    receivedMutations: any;
-    pendingMutations: any[];
+    initialized: boolean;
+    receivedMutations: MutationPayload[];
+    pendingMutations: MutationPayload[];
     private sendMutation: (mutation: MutationPayload) => void;
 
-    constructor(private store: Store<KeeState>) {
+    constructor(private store: KeeStore) {
         this.receivedMutations = [];
         this.initialized = false;
         this.pendingMutations = [];
 
-        this.store.subscribe(mutation => {
-            this.hookMutation(mutation);
+        this.store.$subscribe(mutation => {
+            if (mutation.type == MutationType.patchObject) {
+                this.hookMutation(mutation);
+                } else {
+                    throw new Error("Pinia generated a non-object mutation. We don't think we can support this and need to know that it is possible for it to happen! Tell us now or weird things will happen.");
+                } // 'direct' | 'patch object' | 'patch function'
         });
     }
 
     init(initialState: KeeState, sendMutation, vueInit?) {
         this.sendMutation = sendMutation;
 
-        this.store.replaceState(initialState);
+        this.store.$patch(initialState);
         this.initialized = true;
         this.processPendingMutations();
 
@@ -28,16 +34,16 @@ export class SyncContent {
     }
 
     reset(newState: KeeState) {
-        this.store.replaceState(newState);
+        this.store.$patch(newState);
     }
 
-    public onRemoteMutation(mutation) {
+    public onRemoteMutation(mutation: MutationPayload) {
         if (!this.initialized) {
             return;
         }
 
         this.receivedMutations.push(mutation);
-        this.store.commit(mutation.type, mutation.payload);
+        this.store.$patch(mutation.payload);
     }
 
     hookMutation(mutation: MutationPayload) {
@@ -52,8 +58,7 @@ export class SyncContent {
         // Check if it's received mutation, if it's just ignore it, if not send to background
         for (let i = this.receivedMutations.length - 1; i >= 0; i--) {
             if (
-                this.receivedMutations[i].type == mutation.type &&
-                this.receivedMutations[i].payload == mutation.payload
+                this.receivedMutations[i] == mutation.payload
             ) {
                 this.receivedMutations.splice(i, 1);
 

@@ -17,32 +17,32 @@
 </template>
 
 <script lang="ts">
-import { names as actionNames } from "../../store/action-names";
 import { configManager } from "../../common/ConfigManager";
 import { Port } from "../../common/port";
 import { SearcherAll } from "../../common/SearcherAll";
-import store from "../../store";
+import useStore from "../../store";
 import { KeeLog } from "../../common/Logger";
 import { EntrySummary } from "../../common/model/EntrySummary";
+import { mapState } from "pinia";
 
 export default {
     mixins: [Port.mixin],
     setup () {
-        const { updateSaveState, updateCurrentSearchTerm } = store();
-        return { updateSaveState, updateCurrentSearchTerm };
+        const { updateSearchResults, updateCurrentSearchTerm } = useStore();
+        return { updateSearchResults, updateCurrentSearchTerm };
     },
     data() {
         return {};
     },
     computed: {
-        ...mapGetters(["currentSearchTerm"])
+        ...mapState(useStore, ["currentSearchTerm", "KeePassDatabases", "ActiveKeePassDatabaseIndex"])
     },
-    created(this: any) {
+    created() {
         this.onDBChanged = () => {
             this.search = new SearcherAll(
                 {
-                    KeePassDatabases: this.$store.getters.KeePassDatabases,
-                    ActiveKeePassDatabaseIndex: this.$store.getters.ActiveKeePassDatabaseIndex
+                    KeePassDatabases: this.KeePassDatabases,
+                    ActiveKeePassDatabaseIndex: this.ActiveKeePassDatabaseIndex
                 } as any,
                 {
                     version: 1,
@@ -53,17 +53,16 @@ export default {
         };
         this.onDBChanged();
     },
-    mounted(this: any) {
+    mounted() {
         //TODO: Find a way to trigger the onDBChanged function using pinia even though it no longer supplies a subscription to mutations feature.
         // Probably by using onAction instead of looking for mutations
-        this.$store.subscribe((mutation: Mutation) => {
+        this.subscribe((mutation: Mutation) => {
             if (mutation.type === mTypes.updateKeePassDatabases) {
                 this.onDBChanged();
             }
         });
     },
     methods: {
-        ...mapActions(actionNames),
         onSearchComplete(entrySummaries: EntrySummary[]) {
             KeeLog.debug("onSearchComplete");
             entrySummaries = entrySummaries

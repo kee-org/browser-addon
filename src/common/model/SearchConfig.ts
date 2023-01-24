@@ -37,5 +37,5 @@ export class SearchConfig {
 
     // A callback function to handle an individual result. Whatever is
     // returned from this optional function will be added to the list of complete results
-    onMatch: () => void;
+    onMatch: (result) => void;
 }

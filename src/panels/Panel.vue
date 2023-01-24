@@ -10,12 +10,12 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters } from "vuex";
-import { names as actionNames } from "../store/action-names";
+import { mapState } from "pinia";
 import PasswordGenerator from "../common/components/PasswordGenerator.vue";
 import { Port } from "../common/port";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
+import useStore from "../store";
 
 export default {
     components: {
@@ -26,7 +26,7 @@ export default {
         showPasswordGenerator: false
     }),
     computed: {
-        ...mapGetters([
+        ...mapState(useStore, [
             "showGeneratePasswordLink",
             "connectionStatus",
             "connectionStatusDetail",
@@ -35,11 +35,10 @@ export default {
         ])
     },
     methods: {
-        ...mapActions(actionNames),
-        passwordGeneratorClosed: function (this: any) {
+        passwordGeneratorClosed: function () {
             Port.postMessage({ action: Action.CloseAllPanels } as AddonMessage);
         },
-        copyToClipboard: function (this: any, payload) {
+        copyToClipboard: function (payload) {
             if (payload?.value) {
                 Port.postMessage({ copyToClipboard: payload.value } as AddonMessage);
             }

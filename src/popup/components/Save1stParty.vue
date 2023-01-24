@@ -126,7 +126,6 @@
 <script lang="ts">
 import { Port } from "../../common/port";
 import { Action } from "../../common/Action";
-import { mapGetters } from "vuex";
 import { SaveState } from "../../common/SaveState";
 import { Entry } from "../../common/model/Entry";
 import FieldEditor from "./FieldEditor.vue";
@@ -139,7 +138,8 @@ import { DatabaseSummary } from "../../common/model/DatabaseSummary";
 import { Database } from "../../common/model/Database";
 import { Group } from "../../common/model/Group";
 import { SearcherAll } from "../../common/SearcherAll";
-import store from "../../store";
+import useStore from "../../store";
+import { mapState } from "pinia";
 
 export default {
     components: {
@@ -147,7 +147,7 @@ export default {
     },
     mixins: [Port.mixin],
     setup () {
-        const { updateSaveState, removeFieldFromActiveEntry } = store();
+        const { updateSaveState, removeFieldFromActiveEntry } = useStore();
         return { updateSaveState, removeFieldFromActiveEntry };
     },
     data: () => ({
@@ -163,21 +163,21 @@ export default {
         titleFocussed: true
     }),
     computed: {
-        ...mapGetters(["saveState"]),
-        resettableTitle: function (this: any) {
+        ...mapState(useStore, ["saveState", "KeePassDatabases", "ActiveKeePassDatabaseIndex"]),
+        resettableTitle: function () {
             return (
-                this.$store.saveState.titleResetValue !==
-                this.$store.saveState.newEntry.title
+                this.saveState.titleResetValue !==
+                this.saveState.newEntry.title
             );
         },
-        editingExisting: function (this: any) {
-            const e = (this.$store.saveState as SaveState).newEntry;
+        editingExisting: function () {
+            const e = (this.saveState as SaveState).newEntry;
             return e.database.fileName && e.database.root.uuid !== TemporaryIDString;
         },
-        showURLMismatchWarning: function (this: any) {
+        showURLMismatchWarning: function () {
             return this.saveState.showURLMismatchWarning;
         },
-        entryDomain: function (this: any) {
+        entryDomain: function () {
             const urlStr = (this.saveState as SaveState).newEntry.URLs[0];
             if (!urlStr || urlStr.length < 4) return "<unknown>";
             const kurl = KeeURL.fromString(urlStr);
@@ -186,7 +186,7 @@ export default {
             }
             return kurl.domainWithPort || kurl.url.host;
         },
-        displayWhereReason: function (this: any) {
+        displayWhereReason: function () {
             if (this.loading || !this.preferToSkipWhere) return null;
             return this.domainMatchesExistingEntry
                 ? this.$i18n("skip_where_reason_domain_entry_exists")
@@ -195,9 +195,9 @@ export default {
                 : null;
         }
     },
-    async mounted(this: any) {
+    async mounted() {
         this.preferToSkipWhere = configManager.current.rememberMRUGroup;
-        const dbs = this.$store.KeePassDatabases as Database[];
+        const dbs = this.KeePassDatabases as Database[];
         const { preferredGroupUuid, preferredDb, primaryFound } = this.getPreferredGroup(
             configManager.current.mruGroup,
             dbs
@@ -216,14 +216,14 @@ export default {
         this.loading = false;
     },
     methods: {
-        cancel: function (this: any) {
+        cancel: function () {
             this.$emit("cancel-clicked");
         },
-        nextClicked: function (this: any) {
+        nextClicked: function () {
             this.$emit("save-where-clicked", this.displayWhereReason, this.preferredGroupUuid);
         },
-        saveEntry: function (this: any) {
-            const updatedSaveState = Object.assign({}, this.$store.saveState) as SaveState;
+        saveEntry: function () {
+            const updatedSaveState = Object.assign({}, this.saveState) as SaveState;
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
                 parentGroup: new GroupSummary({ uuid: this.preferredGroupUuid }),
@@ -233,12 +233,12 @@ export default {
             Port.postMessage({ action: Action.CreateEntry } as AddonMessage);
             window.close();
         },
-        updateEntry: function (this: any) {
+        updateEntry: function () {
             Port.postMessage({ action: Action.UpdateEntry } as AddonMessage);
             window.close();
         },
-        openFullEntryEditor(this: any) {
-            const entry = (this.$store.saveState as SaveState).newEntry;
+        openFullEntryEditor() {
+            const entry = (this.saveState as SaveState).newEntry;
             Port.postMessage({
                 loginEditor: {
                     uuid: entry.uuid,
@@ -247,22 +247,21 @@ export default {
             } as AddonMessage);
             window.close();
         },
-        setTitle: function (this: any, value) {
-            const updatedSaveState = Object.assign({}, this.$store.saveState) as SaveState;
+        setTitle: function (value) {
+            const updatedSaveState = Object.assign({}, this.saveState) as SaveState;
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
                 title: value
             });
             this.updateSaveState(updatedSaveState);
         },
-        resetTitle: function (this: any) {
-            this.setTitle(this.$store.saveState.titleResetValue);
+        resetTitle: function () {
+            this.setTitle(this.saveState.titleResetValue);
         },
-        fieldValueChanged: function (this: any, change) {
-            const updatedSaveState = Object.assign({}, this.$store.saveState) as SaveState;
-            const originalFieldIndex = (this.$store.state
-                .saveState as SaveState).newEntry.fields.findIndex(f => f.uuid === change.uuid);
-            const originalField = (this.$store.saveState as SaveState).newEntry.fields[
+        fieldValueChanged: function (change) {
+            const updatedSaveState = Object.assign({}, this.saveState) as SaveState;
+            const originalFieldIndex = (this.saveState as SaveState).newEntry.fields.findIndex(f => f.uuid === change.uuid);
+            const originalField = (this.saveState as SaveState).newEntry.fields[
                 originalFieldIndex
             ];
             const newField = new Field({
@@ -280,7 +279,7 @@ export default {
             });
             this.updateSaveState(updatedSaveState);
         },
-        fieldDeleted: function (this: any, field: Partial<Field>) {
+        fieldDeleted: function (field: Partial<Field>) {
             this.removeFieldFromActiveEntry(field.uuid);
         },
         getPreferredGroup: function (mruGroup: { [key: string]: string }, dbs: Database[]) {
@@ -328,7 +327,7 @@ export default {
                 primaryFound
             };
         },
-        anyEntryMatchesNewDomain: function (this: any) {
+        anyEntryMatchesNewDomain: function () {
             const urlStr = (this.saveState as SaveState).newEntry.URLs[0];
             if (!urlStr || urlStr.length < 4) return false;
             const kurl = KeeURL.fromString(urlStr);
@@ -337,8 +336,8 @@ export default {
             }
             const search = new SearcherAll(
                 {
-                    KeePassDatabases: this.$store.getters.KeePassDatabases,
-                    ActiveKeePassDatabaseIndex: this.$store.getters.ActiveKeePassDatabaseIndex
+                    KeePassDatabases: this.KeePassDatabases,
+                    ActiveKeePassDatabaseIndex: this.ActiveKeePassDatabaseIndex
                 } as any,
                 {
                     version: 1,
@@ -349,10 +348,10 @@ export default {
             const results = search.execute("", undefined, [kurl.domainOrIPAddress]);
             return !!results?.length;
         },
-        onTitleFocus(this: any) {
+        onTitleFocus() {
             this.titleFocussed = true;
         },
-        onTitleBlur(this: any) {
+        onTitleBlur() {
             this.titleFocussed = false;
         }
     }

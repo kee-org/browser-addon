@@ -3,7 +3,7 @@ import { VaultAction } from "./VaultAction";
 import { Tokens } from "./Tokens";
 import { VaultProtocol } from "./VaultProtocol";
 import { KeeState } from "../store/KeeState";
-import { MutationPayload } from "vuex";
+import { MutationPayload } from "~/store/syncBackground";
 
 export interface VaultMessage {
     frameState?: FrameState;

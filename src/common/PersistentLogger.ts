@@ -12,7 +12,7 @@ export class PersistentLogger {
     init(enabled: boolean) {
         this.enabled = enabled;
         if (enabled) {
-            this._interval = setInterval(async () => {
+            this._interval = window.setInterval(async () => {
                 if (this.entries.length) {
                     const newLogs = this.entries.slice();
                     let currentLogs = [];

@@ -49,14 +49,13 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters } from "vuex";
-import { names as actionNames } from "../../store/action-names";
 import Entry from "./Entry.vue";
-import { mTypes } from "../../store";
 import { KeeLog } from "../../common/Logger";
 import { EntrySummary } from "../../common/model/EntrySummary";
 import { Entry as ModelEntry } from "../../common/model/Entry";
 import { SearcherMatchedOnly } from "../../common/SearcherMatchedOnly";
+import { mapState } from "pinia";
+import useStore from "../../store";
 
 export default {
     components: { Entry },
@@ -68,8 +67,8 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["currentSearchTerm", "searchResults"]),
-        deduplicatedSearchResults: function (this: any) {
+        ...mapState(useStore, ["currentSearchTerm", "searchResults"]),
+        deduplicatedSearchResults: function () {
             if (this.searchResults) {
                 if (this.matchedEntries) {
                     return this.searchResults.filter(
@@ -83,15 +82,15 @@ export default {
         }
     },
     watch: {
-        matchedEntries: function (this: any, newVal) {
+        matchedEntries: function (newVal) {
             this.initAndSearchMatchedEntries(newVal);
         }
     },
-    created(this: any) {
+    created() {
         this.initAndSearchMatchedEntries(this.matchedEntries);
     },
-    mounted(this: any) {
-        this.$store.subscribe(mutation => {
+    mounted() {
+        this.subscribe(mutation => {
             if (mutation.type === mTypes.updateCurrentSearchTerm) {
                 this.searchOnlyMatches.execute(
                     this.currentSearchTerm,
@@ -101,8 +100,7 @@ export default {
         });
     },
     methods: {
-        ...mapActions(actionNames),
-        onSearchOnlyMatchesComplete(this: any, entrySummaries: EntrySummary[]) {
+        onSearchOnlyMatchesComplete(entrySummaries: EntrySummary[]) {
             KeeLog.debug("onSearchOnlyMatchesComplete");
             entrySummaries = entrySummaries.sort(function (a, b) {
                 if (a.relevanceScore > b.relevanceScore) return -1;
@@ -114,7 +112,7 @@ export default {
                 originalIndex: this.uidMap.get(m.uuid)
             }));
         },
-        nextInList(this: any, currentIndex: number, listName: string, listLength: any) {
+        nextInList(currentIndex: number, listName: string, listLength: any) {
             const currentVueNode = this.$refs[listName].find(
                 e => parseInt(e.$el.dataset.index) === currentIndex
             );
@@ -127,7 +125,7 @@ export default {
                 firstBListVueNode.$el.focus();
             }
         },
-        prevInList(this: any, currentIndex: number, listName: string) {
+        prevInList(currentIndex: number, listName: string) {
             const currentVueNode = this.$refs[listName].find(
                 e => parseInt(e.$el.dataset.index) === currentIndex
             );
@@ -142,10 +140,10 @@ export default {
                 (document.getElementById("searchBox") as HTMLInputElement).focus();
             }
         },
-        exitList(this: any) {
+        exitList() {
             (document.getElementById("searchBox") as HTMLInputElement).focus();
         },
-        initAndSearchMatchedEntries(this: any, matchedEntries: ModelEntry[]) {
+        initAndSearchMatchedEntries(matchedEntries: ModelEntry[]) {
             if (matchedEntries) {
                 for (let i = 0; i < matchedEntries.length; i++) {
                     this.uidMap.set(matchedEntries[i].uuid, matchedEntries[i].entryIndex);

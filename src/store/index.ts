@@ -1,33 +1,23 @@
-import { defineStore } from "pinia";
+import { defineStore, DefineStoreOptions, StateTree, StoreDefinition, _GettersTree } from "pinia";
 
-import { KeeState } from "./KeeState";
+import { KeeState, defaults } from "./KeeState";
 import { SaveState } from "../common/SaveState";
 import { SessionType } from "~/common/SessionType";
 import { Field } from "~/common/model/Field";
 
+/**
+ * A replacement for `defineStore` which makes all state properties readonly
+ * to prevent mutations outside of actions.
+ */
+// function defineImmutableStore<Id extends string, S extends StateTree = any, G extends _GettersTree<S> = any, A = any>(
+//     id: Id,
+//     options: Omit<DefineStoreOptions<Id, S, G, A>, "id">
+//   ): StoreDefinition<Id, Readonly<S>, G, A> {
+//     return defineStore(id, options);
+//   }
+
 const useStore = defineStore("kee", {
-    state: (): KeeState => ({
-        latestConnectionError: "",
-        lastKeePassRPCRefresh: 0,
-        ActiveKeePassDatabaseIndex: -1,
-        KeePassDatabases: [],
-        PasswordProfiles: [],
-        notifications: [],
-        connected: false,
-        connectedWebsocket: false,
-        currentSearchTerm: null,
-        loginsFound: false,
-        searchResults: null,
-        saveState: new SaveState(),
-        generatedPassword: "",
-        saveEntryResult: {
-            result: null,
-            receivedAt: new Date(),
-            fileName: null,
-            uuid: null
-        },
-        entryUpdateStartedAtTimestamp: 0
-    }),
+    state: (): KeeState => (defaults),
     getters: {
         showGeneratePasswordLink: (state: KeeState) => state.connected,
         showMatchedLogins: (state: KeeState) => !!state.loginsFound,
@@ -96,7 +86,6 @@ const useStore = defineStore("kee", {
         }
     },
     actions: {
-
         updateActiveKeePassDatabaseIndex(payload) {
             this.ActiveKeePassDatabaseIndex = payload;
         },
@@ -220,3 +209,8 @@ const useStore = defineStore("kee", {
 });
 
 export default useStore;
+
+export type KeeStore = Omit<
+    ReturnType<typeof useStore>,
+    keyof ReturnType<typeof defineStore>
+>;

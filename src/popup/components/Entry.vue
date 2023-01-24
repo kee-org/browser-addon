@@ -126,8 +126,7 @@
 import Field from "./Field.vue";
 import { AddonMessage } from "../../common/AddonMessage";
 import { Port } from "../../common/port";
-import store from "../../store";
-import { names as actionNames } from "../../store/action-names";
+import useStore from "../../store";
 import { KeeURL } from "../../common/KeeURL";
 import { Action } from "../../common/Action";
 import { supplementEntryState } from "../supplementEntryState";
@@ -142,7 +141,7 @@ export default {
     mixins: [Port.mixin],
     props: ["entrySummary", "isFirstInAList", "entryIndex", "frameId"],
     setup () {
-        const { updateSaveState } = store();
+        const { updateSaveState } = useStore();
         return { updateSaveState };
     },
     data: () => ({
@@ -151,7 +150,7 @@ export default {
         tooltipDelay: tooltipDelay
     }),
     computed: {
-        titleStyle: function (this: any) {
+        titleStyle: function () {
             const e = this.entrySummary as EntrySummary;
             return (
                 "background-size:32px; background-position:16px calc(50% + 1px); background-image:url(data:image/png;base64," +
@@ -159,20 +158,20 @@ export default {
                 ")"
             );
         },
-        usernameDisplayValue: function (this: any) {
+        usernameDisplayValue: function () {
             const e = this.entrySummary as EntrySummary;
             return e && e.usernameValue
                 ? e.usernameValue
                 : "[" + $STR("noUsername_partial_tip") + "]";
         },
-        tabindex: function (this: any) {
+        tabindex: function () {
             return this.isFirstInAList ? "0" : "-1";
         },
-        allFields: function (this: any) {
+        allFields: function () {
             const e = this.entrySummary.fullDetails as Entry;
             return e.fields;
         },
-        entryDomain: function (this: any) {
+        entryDomain: function () {
             const urlStr = this.entrySummary.url;
             if (!urlStr || urlStr.length < 4) return "<unknown>";
             const kurl = KeeURL.fromString(urlStr);
@@ -181,35 +180,34 @@ export default {
             }
             return kurl.domainWithPort || kurl.url.host;
         },
-        entryPath: function (this: any) {
+        entryPath: function () {
             if (!this.entryPathIsLong) {
                 return this.fullEntryPath;
             }
             const e = this.entrySummary.fullDetails as Entry;
             return "... > " + e.parentGroup.path;
         },
-        entryPathIsLong: function (this: any) {
+        entryPathIsLong: function () {
             return this.fullEntryPath.length > 35;
         },
-        fullEntryPath: function (this: any) {
+        fullEntryPath: function () {
             const e = this.entrySummary.fullDetails as Entry;
             return e.database.name + " > " + e.parentGroup.path;
         },
-        isMatchedEntry: function (this: any) {
+        isMatchedEntry: function () {
             const e = this.entrySummary as EntrySummary;
             return typeof e.isPreferredMatch === "boolean";
         }
     },
     methods: {
-        ...mapActions(actionNames),
-        toggleFullDetails(this: any) {
+        toggleFullDetails() {
             if (!this.expanded) {
                 this.showFullDetails();
             } else {
                 this.hideFullDetails();
             }
         },
-        showFullDetails(this: any) {
+        showFullDetails() {
             if (!this.expanded && !this.entrySummary.fullDetails) {
                 Port.postMessage({
                     findMatches: {
@@ -220,11 +218,11 @@ export default {
             }
             this.expanded = true;
         },
-        hideFullDetails(this: any) {
+        hideFullDetails() {
             this.expanded = false;
         },
-        async editEntry(this: any) {
-            const ss = this.$store.saveState as SaveState;
+        async editEntry() {
+            const ss = this.saveState as SaveState;
             const entry = this.entrySummary.fullDetails as Entry;
             const updatedSaveState = Object.assign({}, ss);
             const { urls, showWarning } = await reconcileURLs(entry.URLs, ss.submittedData?.url);
@@ -234,17 +232,17 @@ export default {
             updatedSaveState.showURLMismatchWarning = showWarning;
             this.updateSaveState(updatedSaveState);
         },
-        focusin: function (this: any, e) {
+        focusin: function (e) {
             if (!(this.$refs.card as any).$el.contains(e.relatedTarget)) {
                 this.focussed = true;
             }
         },
-        focusout: function (this: any, e) {
+        focusout: function (e) {
             if (!(this.$refs.card as any).$el.contains(e.relatedTarget)) {
                 this.focussed = false;
             }
         },
-        async primaryClickAction(this: any) {
+        async primaryClickAction() {
             if (this.entryIndex !== undefined) {
                 // We are expected to fill an already discovered entry
                 this.manualFill();
@@ -266,15 +264,15 @@ export default {
                 }
             }
         },
-        loadInSameTab(this: any) {
+        loadInSameTab() {
             browser.tabs.update({ url: this.entrySummary.url });
             window.close();
         },
-        loadInNewTab(this: any) {
+        loadInNewTab() {
             browser.tabs.create({ url: this.entrySummary.url });
             window.close();
         },
-        manualFill(this: any) {
+        manualFill() {
             Port.postMessage({
                 action: Action.ManualFill,
                 selectedEntryIndex: this.entryIndex,
@@ -282,16 +280,16 @@ export default {
             });
             window.close();
         },
-        nextInList(this: any) {
+        nextInList() {
             this.$emit("move-next-in-list");
         },
-        prevInList(this: any) {
+        prevInList() {
             this.$emit("move-prev-in-list");
         },
-        exitList(this: any) {
+        exitList() {
             this.$emit("move-out-of-list");
         },
-        onPreferredEntryClick(this: any) {
+        onPreferredEntryClick() {
             this.$emit("pref-entry-toggle", { uuid: this.entrySummary.uuid });
         }
     }

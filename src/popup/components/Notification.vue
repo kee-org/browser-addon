@@ -53,26 +53,24 @@
 </template>
 
 <script lang="ts">
-import { names as actionNames } from "../../store/action-names";
 import { ButtonAction } from "../../common/Button";
 import { configManager } from "../../common/ConfigManager";
 import { AddonMessage } from "../../common/AddonMessage";
 import { Port } from "../../common/port";
 import { tooltipDelay } from "../../common/Timings";
-//import store from "../../store";
+//import useStore from "../../store";
 
 export default {
     mixins: [Port.mixin],
     props: ["notification"],
     // setup () {
-    //     const { updateSaveState } = store();
+    //     const { updateSaveState } = useStore();
     //     return { updateSaveState };
     // },
     data: () => ({
         tooltipDelay: tooltipDelay
     }),
     methods: {
-        ...mapActions(actionNames),
         dispatchActionResponse(id: string, action: ButtonAction, data: { [id: string]: string }) {
             const pm = (this as any).postMessage;
             switch (action) {

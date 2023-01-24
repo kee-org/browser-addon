@@ -73,13 +73,14 @@
 import { Port } from "../../common/port";
 import { Action } from "../../common/Action";
 import { SaveState } from "../../common/SaveState";
-import store from "~/store";
+import useStore from "../../store";
+import { mapState } from "pinia";
 
 export default {
     mixins: [Port.mixin],
     props: ["field", "standalone", "topmost"],
     setup () {
-        const { updateGeneratedPassword } = store();
+        const { updateGeneratedPassword } = useStore();
         return { updateGeneratedPassword };
     },
     data: () => ({
@@ -90,22 +91,22 @@ export default {
         loading: false
     }),
     computed: {
-        ...mapGetters(["PasswordProfiles", "saveState"]),
-        items: function (this: any) {
+        ...mapState(useStore, ["PasswordProfiles", "saveState"]),
+        items: function () {
             return this.PasswordProfiles.map(p => p.name);
         },
-        disabled: function (this: any) {
+        disabled: function () {
             return !this.generatedPassword;
         },
-        forceCopyHint: function (this: any) {
+        forceCopyHint: function () {
             return this.forceCopy ? this.$i18n("generatePassword_done_2") : "";
         },
-        renderedPassword: function (this: any) {
+        renderedPassword: function () {
             return this.revealed
                 ? this.generatedPassword
                 : "*".repeat(this.generatedPassword.length);
         },
-        okButtonText: function (this: any) {
+        okButtonText: function () {
             if (this.standalone) {
                 return this.$i18n("generator_action_copy");
             } else if (this.forceCopy) {
@@ -114,28 +115,28 @@ export default {
                 return this.$i18n("generator_action_apply");
             }
         },
-        cancelButtonText: function (this: any) {
+        cancelButtonText: function () {
             return this.standalone ? this.$i18n("close") : this.$i18n("cancel");
         },
-        dialogTransition: function (this: any) {
+        dialogTransition: function () {
             return this.topmost ? "false" : "dialog-transition";
         }
     },
     methods: {
-        ok: async function (this: any) {
+        ok: async function () {
             if (this.standalone || this.forceCopy) {
                 this.$emit("copy-to-clipboard", { value: this.generatedPassword });
             }
             this.$emit("dialog-closed", { value: this.generatedPassword });
         },
-        cancel: function (this: any) {
+        cancel: function () {
             this.$emit("dialog-closed");
         },
-        profileChanged: function (this: any, item: string) {
+        profileChanged: function (item: string) {
             this.loading = true;
             const unwatch = this.$watch(
                 "$store.generatedPassword",
-                function (this: any, newValue) {
+                function (newValue) {
                     unwatch();
                     this.updateGeneratedPassword("");
                     this.generatedPassword = newValue;

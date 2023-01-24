@@ -46,14 +46,14 @@ export class SearcherAll {
         }
 
         const results = [];
-        function addResult(this: any, result) {
+        const addResult = result => {
             if (this.searchConfig.onMatch) {
                 result = this.searchConfig.onMatch(result);
                 if (result) results.push(result);
                 else return false;
             } else results.push(result);
             return true;
-        }
+        };
 
         // allow pre-tokenised search terms to be supplied
         let keywords = [];

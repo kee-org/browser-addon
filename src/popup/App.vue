@@ -180,7 +180,6 @@
 </template>
 
 <script lang="ts">
-import { names as actionNames } from "../store/action-names";
 import Notification from "./components/Notification.vue";
 import SearchInput from "./components/SearchInput.vue";
 import SearchResults from "./components/SearchResults.vue";
@@ -201,7 +200,8 @@ import { Locator } from "../common/model/Locator";
 import { copyStringToClipboard } from "../common/copyStringToClipboard";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
-import store from "../store";
+import useStore from "../store";
+import { mapActions, mapState } from "pinia";
 
 declare const punycode;
 
@@ -217,10 +217,10 @@ export default {
     mixins: [Port.mixin],
     props: ["matchedEntries", "frameId"],
     setup () {
-        const { updateSaveState, updateSaveEntryResult } = store();
+        const { updateSaveState, updateSaveEntryResult } = useStore();
         return { updateSaveState, updateSaveEntryResult };
     },
-    data: function (this: any) {
+    data: function () {
         return {
             // We can't use the Vuex property directly because when it changes it causes
             // the app to re-render from scratch, destroying the user input that triggered
@@ -246,7 +246,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters([
+        ...mapState(useStore, [
             "showGeneratePasswordLink",
             "saveState",
             "showMatchedLogins",
@@ -258,7 +258,7 @@ export default {
             "notifications",
             "showNotifications"
         ]),
-        statusIconColour: function (this: any) {
+        statusIconColour: function () {
             if (this.connected && this.databaseIsOpen) {
                 return "green";
             } else if (this.connected) {
@@ -266,35 +266,35 @@ export default {
             }
             return "red";
         },
-        showSaveStart: function (this: any) {
+        showSaveStart: function () {
             return new Date(this.saveLastActiveAt) > new Date(Date.now() - this.autoRecoveryTimeMs);
         },
-        showSaveRecovery: function (this: any) {
+        showSaveRecovery: function () {
             return (
                 !this.showSaveStart &&
                 new Date(this.saveLastActiveAt) >
                     new Date(Date.now() - this.manualRecoveryPromptTimeMs)
             );
         },
-        showSearchPanel: function (this: any) {
+        showSearchPanel: function () {
             return this.databaseIsOpen && !this.showSaveStart;
         },
-        hasSubmittedData: function (this: any) {
-            return (this.$store.saveState as SaveState)?.submittedData?.fields?.length > 0;
+        hasSubmittedData: function () {
+            return (this.saveState as SaveState)?.submittedData?.fields?.length > 0;
         },
-        showSaveResult: function (this: any) {
+        showSaveResult: function () {
             return this.lastSaveEntryResult && !this.showSaveStart;
         }
     },
     watch: {
-        saveState: function (this: any, newState: SaveState, oldState: SaveState) {
+        saveState: function (newState: SaveState, oldState: SaveState) {
             if (newState?.newEntry?.uuid !== oldState?.newEntry?.uuid) {
                 this.saveLastActiveAt = newState.lastActiveAt;
             }
         }
     },
-    mounted: async function (this: any) {
-        this.saveLastActiveAt = this.$store.saveState?.lastActiveAt;
+    mounted: async function () {
+        this.saveLastActiveAt = this.saveState?.lastActiveAt;
 
         const discardRequired = this.handleLastSaveResult();
 
@@ -304,7 +304,7 @@ export default {
         // the same entry as most recently.
         if (
             discardRequired ||
-            this.$store.saveState?.lastActiveAt <=
+            this.saveState?.lastActiveAt <=
                 new Date(Date.now() - this.manualRecoveryPromptTimeMs)
         ) {
             this.saveDiscard();
@@ -315,17 +315,16 @@ export default {
         const favicon = await fetchFavicon(favIconUrl);
         if (!favicon) return;
 
-        const updatedSaveState = Object.assign({}, this.$store.saveState);
+        const updatedSaveState = Object.assign({}, this.saveState);
         updatedSaveState.favicon = favicon;
         this.updateSaveState(updatedSaveState);
     },
     methods: {
-        ...mapActions(actionNames),
         showOptions: () => {
             browser.runtime.openOptionsPage();
             window.close();
         },
-        saveStart: async function (this: any) {
+        saveStart: async function () {
             const currentTab = (await browser.tabs.query({ active: true, currentWindow: true }))[0];
             if (!currentTab) return;
             const entryTemplate = {
@@ -352,7 +351,7 @@ export default {
                     })
                 ]
             };
-            const ss = this.$store.saveState as SaveState;
+            const ss = this.saveState as SaveState;
             const updatedSaveState = Object.assign({}, ss);
             updatedSaveState.newEntry = supplementEntryState(new Entry(entryTemplate), ss);
             updatedSaveState.titleResetValue = updatedSaveState.newEntry.title;
@@ -361,8 +360,8 @@ export default {
             this.updateSaveState(updatedSaveState);
             //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
-        saveRecover: function (this: any) {
-            const ss = this.$store.saveState as SaveState;
+        saveRecover: function () {
+            const ss = this.saveState as SaveState;
             const updatedSaveState = Object.assign({}, ss);
             updatedSaveState.lastActiveAt = new Date();
             this.updateSaveState(updatedSaveState);
@@ -370,8 +369,8 @@ export default {
             // Normally we ignore active datetime changes but user has explicitly requested this
             this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
-        saveDiscard: function (this: any) {
-            const ss = this.$store.saveState as SaveState;
+        saveDiscard: function () {
+            const ss = this.saveState as SaveState;
             const updatedSaveState = Object.assign({}, ss);
             updatedSaveState.newEntry = new Entry({});
             updatedSaveState.titleResetValue = null;
@@ -381,7 +380,7 @@ export default {
             this.updateSaveState(updatedSaveState);
             //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
-        saveWhere: function (this: any, displayWhereReason: string, preferredGroupUuid: string) {
+        saveWhere: function (displayWhereReason: string, preferredGroupUuid: string) {
             this.displayWhereReason = displayWhereReason;
             this.preferredGroupUuid = preferredGroupUuid;
             this.showSaveWhere = true;
@@ -419,8 +418,8 @@ export default {
             }
             window.close();
         },
-        handleLastSaveResult: function (this: any) {
-            const lastResult = this.$store.saveEntryResult as SaveEntryResult;
+        handleLastSaveResult: function () {
+            const lastResult = this.saveEntryResult as SaveEntryResult;
 
             if (!lastResult.result) return false;
 
@@ -441,13 +440,13 @@ export default {
                 return false;
             }
         },
-        passwordGeneratorClosed: function (this: any) {
+        passwordGeneratorClosed: function () {
             this.showPasswordGenerator = false;
         },
-        copyToClipboard: async function (this: any, payload) {
+        copyToClipboard: async function (payload) {
             if (payload?.value) await copyStringToClipboard(payload.value);
         },
-        prefEntryToggle: async function (this: any, payload: any) {
+        prefEntryToggle: async function (payload: any) {
             if (payload?.uuid) {
                 const currentTab = (
                     await browser.tabs.query({
@@ -467,7 +466,7 @@ export default {
                 Port.postMessage({ action: Action.DetectForms } as AddonMessage);
             }
         },
-        openFullEntryEditor: function (this: any) {
+        openFullEntryEditor: function () {
             Port.postMessage({
                 loginEditor: {
                     uuid: this.lastSaveEntryResult.uuid,

@@ -1,31 +1,26 @@
-import { Store, MutationPayload } from "vuex";
-import { KeeState } from "./KeeState";
+import { KeeState, defaults } from "./KeeState";
 import { KeeLog } from "../common/Logger";
+import { KeeStore } from ".";
+import { MutationType, SubscriptionCallbackMutation, SubscriptionCallbackMutationPatchObject } from "pinia";
+
+export declare type MutationPayload = SubscriptionCallbackMutationPatchObject<Readonly<KeeState>>;
 
 export class SyncBackground {
     receivedMutations: MutationPayload[] = [];
 
     constructor(
-        private store: Store<KeeState>,
+        private store: KeeStore,
         private distributeMutation: (mutation, excludedPort: browser.runtime.Port) => void
     ) {
-        //TODO: change from forwarding mutations to forwarding actions... probably.
-        const unsubscribe = someStore.$onAction(
-            ({
-              name, // name of the action
-              store, // store instance, same as `someStore`
-              args, // array of parameters passed to the action
-              after, // hook after the action returns or resolves
-              onError, // hook if the action throws or rejects
-            }) => {
+        //const store = useStore();
+        store.$subscribe((mutation: SubscriptionCallbackMutation<Readonly<KeeState>>, _state: KeeState) => {
+            // import { MutationType } from 'pinia'
+            if (mutation.type == MutationType.patchObject) {
 
-        store.subscribe(mutation => {
-            KeeLog.debug("mutation type: " + mutation.type);
             // Check if it is a remotely received mutation, if it is just ignore it, if not distribute
             for (let i = 0; i < this.receivedMutations.length; i++) {
                 if (
-                    this.receivedMutations[i].type == mutation.type &&
-                    this.receivedMutations[i].payload == mutation.payload
+                    this.receivedMutations[i] == mutation.payload
                 ) {
                     this.receivedMutations.splice(i, 1);
                     return;
@@ -33,12 +28,26 @@ export class SyncBackground {
             }
             KeeLog.debug("local mutation so distributing mutation");
             this.distributeMutation(mutation, null);
+            } else {
+                KeeLog.error("mutation type: " + mutation.type);
+                throw new Error("Pinia generated a non-object mutation. We don't think we can support this and need to know that it is possible for it to happen! Tell us now or weird things will happen.");
+            } // 'direct' | 'patch object' | 'patch function'
+            // same as cartStore.$id
+            // mutation.storeId // 'cart'
+            // only available with mutation.type === 'patch object'
+            // mutation.payload // patch object passed to cartStore.$patch()
+
+            // persist the whole state to the local storage whenever it changes
+            // localStorage.setItem('cart', JSON.stringify(state))
+
+        }, {
+            flush: "sync"
         });
     }
 
     onMessage(sourcePort: browser.runtime.Port, mutation: MutationPayload) {
         this.receivedMutations.push(mutation);
-        this.store.commit(mutation.type, mutation.payload);
+        this.store.$patch(mutation.payload);
         KeeLog.debug("SyncBackground.onMessage distributing");
         this.distributeMutation(mutation, sourcePort);
     }

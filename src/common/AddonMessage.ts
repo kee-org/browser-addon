@@ -5,8 +5,8 @@ import { PasswordProfile } from "./model/PasswordProfile";
 import { SubmittedData } from "./SubmittedData";
 import { SaveData } from "./SaveData";
 import { KeeState } from "../store/KeeState";
-import { MutationPayload } from "vuex";
 import { Entry } from "./model/Entry";
+import { MutationPayload } from "~/store/syncBackground";
 
 // Do not use classes on this interface unless they are simple data
 // objects that can be represented in JSON. This interface is used

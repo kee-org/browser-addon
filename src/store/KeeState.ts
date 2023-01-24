@@ -22,3 +22,26 @@ export interface KeeState {
     saveEntryResult: SaveEntryResult;
     entryUpdateStartedAtTimestamp: number;
 }
+
+export const defaults = {
+    latestConnectionError: "",
+    lastKeePassRPCRefresh: 0,
+    ActiveKeePassDatabaseIndex: -1,
+    KeePassDatabases: [],
+    PasswordProfiles: [],
+    notifications: [],
+    connected: false,
+    connectedWebsocket: false,
+    currentSearchTerm: null,
+    loginsFound: false,
+    searchResults: null,
+    saveState: new SaveState(),
+    generatedPassword: "",
+    saveEntryResult: {
+        result: null,
+        receivedAt: new Date(),
+        fileName: null,
+        uuid: null
+    },
+    entryUpdateStartedAtTimestamp: 0
+};

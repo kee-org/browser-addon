@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import { createVuetify } from "vuetify";
 import App from "./App.vue";
-import store from "../store";
+import useStore from "../store";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
@@ -10,6 +10,7 @@ import { Port } from "../common/port";
 import { SyncContent } from "../store/syncContent";
 import { createPinia } from "pinia";
 import { Action } from "../common/Action";
+import { MutationPayload } from "~/store/syncBackground";
 
 
 const app = createApp(App);
@@ -18,6 +19,7 @@ const vuetify = createVuetify({});
 app.use(vuetify);
 app.use(createPinia());
 app.use(i18n);
+const store = useStore();
 
 Vue.prototype.$browser = browser;
 

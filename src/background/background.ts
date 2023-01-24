@@ -4,21 +4,14 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
-import store from "../store";
-// import { PersistentLogger } from "../common/PersistentLogger";
-
+import useStore from "../store";
+import { createApp, defineComponent } from "vue";
 import { createPinia } from "pinia";
-app.use(createPinia());
+import i18n from "../common/Vuei18n";
+// import { PersistentLogger } from "../common/PersistentLogger";
 
 const userBusySeconds = 60 * 15;
 const maxUpdateDelaySeconds = 60 * 60 * 8;
-
-declare global {
-    interface Window {
-        kee: Kee;
-    }
-    // interface Window { kee: Kee; KeePersistentLogger: PersistentLogger; }
-}
 
 // window.KeePersistentLogger = new PersistentLogger();
 
@@ -26,6 +19,13 @@ declare global {
 browser.browserAction.setBadgeText({ text: "OFF" });
 browser.browserAction.setBadgeBackgroundColor({ color: "red" });
 browser.browserAction.disable();
+
+//TODO: Does this create a suitable stub Vue instance for Pinia to work with MV2?
+const app = createApp(defineComponent);
+
+app.use(createPinia());
+app.use(i18n);
+const store = useStore();
 
 // Assumes config and logging have been initialised before this is called.
 async function startup() {
@@ -90,7 +90,7 @@ function updateForegroundTab(tabId: number) {
                 port.postMessage({
                     isForegroundTab: true,
                     action: Action.DetectForms,
-                    resetState: store.state
+                    resetState: store.$state
                 } as AddonMessage);
             });
         }

@@ -25,12 +25,14 @@ import { VaultProtocol } from "../common/VaultProtocol";
 import { SessionType } from "../common/SessionType";
 import { Action } from "../common/Action";
 import useStore from "../store";
-import { SyncBackground } from "../store/syncBackground";
+import { MutationPayload, SyncBackground } from "../store/syncBackground";
 import { Database } from "../common/model/Database";
 import { Entry } from "../common/model/Entry";
 import { SaveEntryResult } from "../common/SaveEntryResult";
 
+//TODO: Allegedly this will not work (nor the other 4 locations. So would need some other way to ensure this called only from within the context of the Vue App!!!)
 const store = useStore();
+//TODO: Replace this background store with something else like a stub so we don't have to rely on pinia when executing in an MV3 environment with no window object.
 
 export class Kee {
     accountManager: AccountManager;
@@ -82,6 +84,7 @@ export class Kee {
                 for (const port of allPorts) {
                     if (port !== excludedPort) {
                         try {
+                            //TODO: Might not be able to distribute Pinia Patch objects without some additional JSON mapping / manipulation
                             port.postMessage({ mutation } as AddonMessage);
                         } catch (e) {
                             // Sometimes dead ports are left lying around by the browser (especially
@@ -101,7 +104,7 @@ export class Kee {
 
         this.utils = utils;
 
-        this.search = new SearcherAll(store.state, {
+        this.search = new SearcherAll(store.$state, {
             version: 1,
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
@@ -130,7 +133,7 @@ export class Kee {
                             // eslint-disable-next-line @typescript-eslint/no-empty-function
                             postMessage: _msg => {}
                         };
-                        window.kee.currentSearchTermTimer = setTimeout(() => {
+                        window.kee.currentSearchTermTimer = window.setTimeout(() => {
                             store.updateCurrentSearchTerm(null);
                             store.updateSearchResults(null);
                         }, configManager.current.currentSearchTermTimeout * 1000);
@@ -178,7 +181,7 @@ export class Kee {
                     const tabId = p.sender.tab.id;
                     const frameId = p.sender.frameId;
                     const connectMessage = {
-                        initialState: store.state,
+                        initialState: store.$state,
                         frameId,
                         tabId,
                         isForegroundTab: tabId === window.kee.foregroundTabId
@@ -215,7 +218,7 @@ export class Kee {
                     */
 
                     const connectMessage = {
-                        initialState: store.state,
+                        initialState: store.$state,
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
                         isForegroundTab: p.sender.tab.id === window.kee.foregroundTabId
@@ -229,7 +232,7 @@ export class Kee {
                     p.onMessage.addListener(iframeMessageHandler.bind(p));
 
                     const connectMessage = {
-                        initialState: store.state,
+                        initialState: store.$state,
                         frameState: window.kee.tabStates
                             .get(p.sender.tab.id)
                             .frames.get(parentFrameId),

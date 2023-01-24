@@ -77,21 +77,22 @@ import { Database } from "../../common/model/Database";
 import { DatabaseSummary } from "../../common/model/DatabaseSummary";
 import { GroupSummary, TemporaryIDString } from "../../common/model/GroupSummary";
 import { configManager } from "../../common/ConfigManager";
-import store from "../../store";
+import useStore from "../../store";
+import { mapState } from "pinia";
 
-const deepMapKeys = (obj, f) =>
-    Array.isArray(obj)
-        ? obj.map(val => deepMapKeys(val, f))
-        : typeof obj === "object"
-        ? Object.keys(obj).reduce((acc, current) => {
-              const val = obj[current];
-              acc[f(current)] =
-                  val !== null && typeof val === "object"
-                      ? deepMapKeys(val, f)
-                      : (acc[f(current)] = val);
-              return acc;
-          }, {})
-        : obj;
+// const deepMapKeys = (obj, f) =>
+//     Array.isArray(obj)
+//         ? obj.map(val => deepMapKeys(val, f))
+//         : typeof obj === "object"
+//         ? Object.keys(obj).reduce((acc, current) => {
+//               const val = obj[current];
+//               acc[f(current)] =
+//                   val !== null && typeof val === "object"
+//                       ? deepMapKeys(val, f)
+//                       : (acc[f(current)] = val);
+//               return acc;
+//           }, {})
+//         : obj;
 
 function findDatabaseByGroup(databases: Database[], group: Group) {
     return databases.find(db => Group.containsId(db.root, group.uuid));
@@ -101,7 +102,7 @@ export default {
     mixins: [Port.mixin],
     props: ["preferredGroupUuid", "displayReason"],
     setup () {
-        const { updateSaveState } = store();
+        const { updateSaveState } = useStore();
         return { updateSaveState };
     },
     data: () => ({
@@ -111,16 +112,16 @@ export default {
         groupUuidArray: []
     }),
     computed: {
-        ...mapGetters(["saveState", "KeePassDatabases", "ActiveKeePassDatabaseIndex"]),
-        rootGroup: function (this: any) {
+        ...mapState(useStore, ["saveState", "KeePassDatabases", "ActiveKeePassDatabaseIndex"]),
+        rootGroup: function () {
             return this.KeePassDatabases[this.ActiveKeePassDatabaseIndex].root;
         },
-        items: function (this: any) {
+        items: function () {
             return this.KeePassDatabases.map(db => db.root);
         }
     },
     watch: {
-        skipInFuture: async function (this: any, newValue: boolean, oldValue: boolean) {
+        skipInFuture: async function (newValue: boolean, oldValue: boolean) {
             if (newValue !== oldValue) {
                 this.saveEnabled = false;
                 configManager.current.rememberMRUGroup = newValue;
@@ -129,18 +130,18 @@ export default {
             }
         }
     },
-    mounted(this: any) {
+    mounted() {
         this.groupUuidArray = [{ uuid: this.preferredGroupUuid }];
     },
     methods: {
-        saveEntry: function (this: any) {
+        saveEntry: function () {
             Port.postMessage({ action: Action.CreateEntry } as AddonMessage);
             window.close();
         },
-        setGroup: function (this: any, values) {
+        setGroup: function (values) {
             if (!(values?.length > 0)) return;
             const database = findDatabaseByGroup(this.KeePassDatabases, values[0]);
-            const updatedSaveState = Object.assign({}, this.$store.saveState) as SaveState;
+            const updatedSaveState = Object.assign({}, this.saveState) as SaveState;
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
                 parentGroup: values[0],
