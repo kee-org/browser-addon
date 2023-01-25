@@ -1,5 +1,6 @@
 import { configManager } from "../common/ConfigManager";
 import { KeeLog } from "../common/Logger";
+import {setup as i18nSetup } from "../common/i18n";
 
 class SrpDialog {
     public setupPage() {
@@ -107,3 +108,5 @@ if (document.readyState === "loading") {
 } else {
     configManager.load(setupPage);
 }
+
+i18nSetup();

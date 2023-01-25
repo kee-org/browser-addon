@@ -1,6 +1,7 @@
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Entry } from "../common/model/Entry";
+import {setup as i18nSetup } from "../common/i18n";
 
 class NetworkAuth {
     public setupPage(entries: Entry[], realm: string, url: string, isProxy: boolean) {
@@ -110,3 +111,5 @@ if (document.readyState === "loading") {
 } else {
     configManager.load(setupNetworkAuthDialog);
 }
+
+i18nSetup();

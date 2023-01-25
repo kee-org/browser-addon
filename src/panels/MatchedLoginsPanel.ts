@@ -3,6 +3,7 @@ import { KeeLog } from "../common/Logger";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
 import { Entry } from "../common/model/Entry";
+import {setup as i18nSetup } from "../common/i18n";
 
 export class MatchedLoginsPanel {
     constructor(
@@ -296,3 +297,5 @@ export class MatchedLoginsPanel {
         event.target.removeChild(optionsMenuTrigger);
     }
 }
+
+i18nSetup();

@@ -12,6 +12,7 @@ import Vuetify, { createVuetify } from "vuetify";
 import Panel from "./Panel.vue";
 import { createPinia } from "pinia";
 import { MutationPayload } from "../store/syncBackground";
+import {setup as i18nSetup } from "../common/i18n";
 
 let frameState: FrameState;
 
@@ -216,3 +217,5 @@ const parentFrameId = parseInt(params["parentFrameId"]);
 
 // Load our config and start the panel once done
 configManager.load(startup);
+
+i18nSetup();

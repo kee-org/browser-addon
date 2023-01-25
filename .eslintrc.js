@@ -15,9 +15,9 @@ module.exports = {
         "es6": true
     },
     "globals": {
-        "$STR": "readonly",
-        "$STRF": "readonly",
-        "$": "readonly",
+       // "$STR": "readonly",
+       // "$STRF": "readonly",
+       // "$": "readonly",
        // "$$": "readonly",
         "browser": "readonly",
         "chrome": "readonly",

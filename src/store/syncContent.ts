@@ -4,16 +4,20 @@ import { KeeState } from "./KeeState";
 import { MutationPayload } from "./syncBackground";
 
 export class SyncContent {
+    private store: KeeStore;
     initialized: boolean;
     receivedMutations: MutationPayload[];
     pendingMutations: MutationPayload[];
     private sendMutation: (mutation: MutationPayload) => void;
 
-    constructor(private store: KeeStore) {
+    constructor() {
         this.receivedMutations = [];
         this.initialized = false;
         this.pendingMutations = [];
+    }
 
+    init(store: KeeStore, initialState: KeeState, sendMutation, vueMount?) {
+        this.store = store;
         this.store.$subscribe(mutation => {
             if (mutation.type == MutationType.patchObject) {
                 this.hookMutation(mutation);
@@ -21,16 +25,21 @@ export class SyncContent {
                     throw new Error("Pinia generated a non-object mutation. We don't think we can support this and need to know that it is possible for it to happen! Tell us now or weird things will happen.");
                 } // 'direct' | 'patch object' | 'patch function'
         });
-    }
-
-    init(initialState: KeeState, sendMutation, vueInit?) {
         this.sendMutation = sendMutation;
 
         this.store.$patch(initialState);
         this.initialized = true;
         this.processPendingMutations();
 
-        if (vueInit) vueInit();
+        if (vueMount) vueMount();
+        // move store subscription and initial state patch to here, after creating it and returning from vuewInit()
+        // will mean slower initial support for receiving mutations... which is fucked? cos we may will decide to send them before background has responded with the store initial state.
+        // Some way to use a temporary store on a temporary pinia instance on a temporary vue instance?
+        // Can add to pendingMutations no matter which store it is from
+        // could get remotemutations before we are ready but maybe OK to just ignore them like we do currently.
+        // So, therefore we have to initialise vue before we have heard back what the initial store state should be. might just work but maybe need to add a "loading" status to Vue
+        //intiailly, or maybe we can get away without calling mount() until after the state has been received.
+        // Could work... so then we don't need to supply the store or state before the store can be initialiased using the new vue instance.
     }
 
     reset(newState: KeeState) {
