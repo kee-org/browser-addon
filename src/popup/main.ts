@@ -9,7 +9,8 @@ import { Port } from "../common/port";
 import { SyncContent } from "../store/syncContent";
 import { createPinia } from "pinia";
 import { Action } from "../common/Action";
-import { MutationPayload } from "~/store/syncBackground";
+import { MutationPayload } from "../store/syncBackground";
+import "../styles";
 
 const piniaInstance = createPinia();
 const store = useStore();

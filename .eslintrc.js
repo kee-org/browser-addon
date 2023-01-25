@@ -18,7 +18,7 @@ module.exports = {
         "$STR": "readonly",
         "$STRF": "readonly",
         "$": "readonly",
-        "$$": "readonly",
+       // "$$": "readonly",
         "browser": "readonly",
         "chrome": "readonly",
         "BigInteger": "readonly",

@@ -1,4 +1,5 @@
-[].forEach.call(document.querySelectorAll("[data-i18n]"), function (el) {
+export function setup () {
+    [].forEach.call(document.querySelectorAll("[data-i18n]"), function (el) {
     const name = el.getAttribute("data-i18n");
     const value = $STR(name);
     if (name.startsWith("list_")) {
@@ -33,6 +34,7 @@
         el.setAttribute(name, value);
     }
 });
+}
 
 function createListElement(text) {
     const item = document.createElement("li");
@@ -45,7 +47,8 @@ function createListElement(text) {
             }
         }
     };
+    //TODO: new linkify library
     // eslint-disable-next-line no-undef
-    linkifyElement(item, options, document);
+    //linkifyElement(item, options, document);
     return item;
 }

@@ -14,7 +14,7 @@ import useStore from "../../store";
 import { KeeLog } from "../../common/Logger";
 import { EntrySummary } from "../../common/model/EntrySummary";
 import { mapState } from "pinia";
-import { Database } from "~/common/model/Database";
+import { Database } from "../../common/model/Database";
 
 export default {
     mixins: [Port.mixin],

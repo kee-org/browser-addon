@@ -1,18 +1,16 @@
-function $(selector, el) {
+export function $(selector: any, el?: Document) {
     if (!el) el = document;
     return el.querySelector(selector);
 }
-function $$(selector, el) {
+export function $$(selector: any, el?: Document) {
     if (!el) el = document;
     return el.querySelectorAll(selector);
 }
-
-function $STR(str) {
+export function $STR(str: string) {
     const msg = browser.i18n.getMessage(str);
     return msg || str;
 }
-
-function $STRF(str, subs) {
+export function $STRF(str: string, subs: any) {
     const msg = browser.i18n.getMessage(str, subs);
     return msg || str;
 }

@@ -5,7 +5,7 @@ import { Action } from "../common/Action";
 import { configManager } from "../common/ConfigManager";
 import { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
-import useStore from "../store";
+import useStore from "../store/index";
 import { Entry } from "../common/model/Entry";
 import { copyStringToClipboard } from "../common/copyStringToClipboard";
 

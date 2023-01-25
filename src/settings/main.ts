@@ -7,6 +7,7 @@ import {
 } from "../common/config";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
+import {setup as i18nSetup } from "../common/i18n";
 
 class SiteSearchResult extends SiteConfigNode {
     value: string;
@@ -1179,3 +1180,5 @@ if (document.readyState === "loading") {
 } else {
     configManager.load(setupPage);
 }
+
+i18nSetup();

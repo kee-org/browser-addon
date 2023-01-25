@@ -2,8 +2,8 @@ import { defineStore, DefineStoreOptions, StateTree, StoreDefinition, _GettersTr
 
 import { KeeState, defaults } from "./KeeState";
 import { SaveState } from "../common/SaveState";
-import { SessionType } from "~/common/SessionType";
-import { Field } from "~/common/model/Field";
+import { SessionType } from "../common/SessionType";
+import { Field } from "../common/model/Field";
 
 /**
  * A replacement for `defineStore` which makes all state properties readonly

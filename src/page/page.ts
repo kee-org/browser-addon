@@ -11,7 +11,7 @@ import useStore from "../store";
 import { SyncContent } from "../store/syncContent";
 import { Port } from "../common/port";
 import { createPinia } from "pinia";
-import { MutationPayload } from "~/store/syncBackground";
+import { MutationPayload } from "../store/syncBackground";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */

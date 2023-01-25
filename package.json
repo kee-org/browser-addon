@@ -36,6 +36,7 @@
     "prettier": "^2.8.3",
     "rimraf": "^4.1.1",
     "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.4",
     "unocss": "^0.48.4",
     "unplugin-auto-import": "^0.12.1",

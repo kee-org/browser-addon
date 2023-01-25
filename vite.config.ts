@@ -35,6 +35,9 @@ export const sharedConfig: UserConfig = {
             imports: [
                 "vue",
                 {
+                    "~/common/DollarPolyfills": ["$$", "$", "$STR", "$STRF"]
+                },
+                {
                     "webextension-polyfill": [["*", "browser"]]
                 }
             ],
@@ -81,6 +84,7 @@ export default defineConfig(({ command }) => ({
     base: command === "serve" ? `http://localhost:${port}/` : "/dist/",
     server: {
         port,
+        strictPort: true, // otherwise can be stuck looking at old instances
         hmr: {
             host: "localhost"
         }

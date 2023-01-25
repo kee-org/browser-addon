@@ -11,7 +11,7 @@ import { createApp } from "vue";
 import Vuetify, { createVuetify } from "vuetify";
 import Panel from "./Panel.vue";
 import { createPinia } from "pinia";
-import { MutationPayload } from "~/store/syncBackground";
+import { MutationPayload } from "../store/syncBackground";
 
 let frameState: FrameState;
 

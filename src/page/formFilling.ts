@@ -11,7 +11,7 @@ import { configManager } from "../common/ConfigManager";
 import { MatchedField } from "./MatchedField";
 import { Field } from "../common/model/Field";
 import { Entry } from "../common/model/Entry";
-import useStore from "~/store";
+import useStore from "../store";
 
 const store = useStore();
 
