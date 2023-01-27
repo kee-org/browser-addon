@@ -1,9 +1,9 @@
 import { Command } from "./Command";
 import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
-import useStore from "../store";
+import {useStubStore} from "../store";
 
-const store = useStore();
+const store = useStubStore();
 
 export class KFCommands {
     private contextMenuUpdateLock = false;

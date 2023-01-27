@@ -65,7 +65,7 @@
     "pack:crx": "crx pack extension -o ./extension.crx",
     "pack:xpi": "cross-env WEB_EXT_ARTIFACTS_DIR=./ web-ext build --source-dir ./extension --filename extension.xpi --overwrite-dest",
     "start:chromium": "web-ext run --source-dir ./extension --target=chromium",
-    "start:firefox": "TMPDIR=~/tmp-dir/ web-ext run --source-dir ./extension --target=firefox-desktop",
+    "start:firefox": "TMPDIR=~/tmp-dir/ web-ext run --source-dir ./extension --target=firefox-desktop --devtools --firefox=firefox",
     "clear": "rimraf extension/dist extension/manifest.json extension.*",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",

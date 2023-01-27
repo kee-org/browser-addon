@@ -1,12 +1,11 @@
+import RuntimeEnvironment from "../common/RuntimeEnvironment";
 import { Kee } from "./KF";
 import { commandManager } from "./commands";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
-import useStore from "../store";
-import { createApp, defineComponent } from "vue";
-import { createPinia } from "pinia";
+import { useStubStore } from "../store";
 // import { PersistentLogger } from "../common/PersistentLogger";
 
 const userBusySeconds = 60 * 15;
@@ -19,10 +18,7 @@ browser.browserAction.setBadgeText({ text: "OFF" });
 browser.browserAction.setBadgeBackgroundColor({ color: "red" });
 browser.browserAction.disable();
 
-//TODO: Does this create a suitable stub Vue instance for Pinia to work with MV2?
-const app = createApp(defineComponent);
-app.use(createPinia());
-const store = useStore();
+const store = useStubStore();
 
 // Assumes config and logging have been initialised before this is called.
 async function startup() {
@@ -97,7 +93,7 @@ function updateForegroundTab(tabId: number) {
 // Some browsers (e.g. Firefox) automatically inject content scripts on install/update
 // but others don't (e.g. Chrome). To ensure every existing tab has exactly one
 // instance of this content script running in it, we programatically inject the script.
-if (!__KeeIsRunningInAWebExtensionsBrowser) {
+if (!RuntimeEnvironment.isWebExtensionsBrowser) {
     browser.runtime.onInstalled.addListener(() => {
         const showErrors = () => {
             if (browser.runtime.lastError) {

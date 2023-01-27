@@ -1,3 +1,4 @@
+import RuntimeEnvironment from "../common/RuntimeEnvironment";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import useStore, { KeeStore } from "../store";
@@ -127,7 +128,7 @@ export class NetworkAuth {
 
             const createData = {
                 type: "popup" as browser.windows.CreateType,
-                url: "/dialogs/NetworkAuth.html",
+                url: "/dist/dialogs/NetworkAuth.html",
                 width: 600,
                 height: 300
             };
@@ -136,7 +137,7 @@ export class NetworkAuth {
     }
 
     public startListening() {
-        if (__KeeIsRunningInAWebExtensionsBrowser) {
+        if (RuntimeEnvironment.isWebExtensionsBrowser) {
             browser.webRequest.onAuthRequired.addListener(
                 requestDetails => this.provideCredentialsAsync(requestDetails),
                 { urls: ["<all_urls>"] },

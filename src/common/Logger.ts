@@ -15,8 +15,9 @@
 */
 
 export class KeeLogger {
+    public defaultLevel = 4;
     private outputStarted = false;
-    private config = { logLevel: 2 };
+    private config = { logLevel: this.defaultLevel };
 
     attachConfig(config: { logLevel: number }) {
         this.debug("Logging system config updated at " + Date());

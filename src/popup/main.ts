@@ -17,8 +17,6 @@ let vueApp: VueApp<Element>;
 let syncContent: SyncContent;
 let store: KeeStore;
 
-//TODO: find out why logging is not showing - need to change default level?
-// then check that config is loading
 // then that message is being sent to background
 // then check background receives it and tries to send initialstate
 // if not, find out why - needs a toJSON implemented somewhere maybe?
@@ -122,4 +120,5 @@ function startup() {
 }
 
 // Load our config and start the page script once done
+//TODO: Change config loading API to support Promises for MV3
 configManager.load(startup);

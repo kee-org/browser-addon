@@ -15,14 +15,9 @@ module.exports = {
         "es6": true
     },
     "globals": {
-       // "$STR": "readonly",
-       // "$STRF": "readonly",
-       // "$": "readonly",
-       // "$$": "readonly",
         "browser": "readonly",
         "chrome": "readonly",
-        "BigInteger": "readonly",
-        "__KeeIsRunningInAWebExtensionsBrowser": "readonly"
+        "BigInteger": "readonly"
     },
     "parser": "vue-eslint-parser",
     "parserOptions": {

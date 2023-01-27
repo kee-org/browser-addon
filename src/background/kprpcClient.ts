@@ -595,7 +595,7 @@ export class kprpcClient {
         browser.runtime.onMessage.addListener(handleMessage);
 
         const createData = {
-            url: "/dialogs/SRP.html",
+            url: "/dist/dialogs/SRP.html",
             active: !(vaultTabs && vaultTabs[0] && vaultTabs[0].active)
         };
         const tab = await browser.tabs.create(createData);

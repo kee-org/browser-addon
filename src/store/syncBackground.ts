@@ -28,8 +28,10 @@ export class SyncBackground {
             }
             KeeLog.debug("local mutation so distributing mutation");
             this.distributeMutation(mutation, null);
+            KeeLog.debug("distributed");
             } else {
                 KeeLog.error("mutation type: " + mutation.type);
+                KeeLog.error("mutation: " + JSON.stringify(mutation));
                 throw new Error("Pinia generated a non-object mutation. We don't think we can support this and need to know that it is possible for it to happen! Tell us now or weird things will happen.");
             } // 'direct' | 'patch object' | 'patch function'
             // same as cartStore.$id

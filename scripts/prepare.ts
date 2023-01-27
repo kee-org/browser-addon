@@ -23,6 +23,16 @@ async function stubIndexHtml() {
         await fs.writeFile(r(`extension/dist/${view}/index.html`), data, "utf-8");
         log("PRE", `stub ${view}`);
     }
+
+    for (const dialog of ["SRP", "NetworkAuth"]) {
+        await fs.ensureDir(r(`extension/dist/dialogs/${dialog}`));
+        let data = await fs.readFile(r(`src/dialogs/${dialog}.html`), "utf-8");
+        data = data
+            .replace(`"./${dialog}.ts"`, `"http://localhost:${port}/dialogs/${dialog}.ts"`)
+            .replace('<div id="app"></div>', '<div id="app">Vite server did not start</div>');
+        await fs.writeFile(r(`extension/dist/dialogs/${dialog}.html`), data, "utf-8");
+        log("PRE", `stub ${dialog}`);
+    }
 }
 
 function writeManifest() {

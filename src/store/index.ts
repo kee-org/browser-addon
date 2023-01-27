@@ -1,22 +1,23 @@
-import { defineStore, DefineStoreOptions, StateTree, StoreDefinition, _GettersTree } from "pinia";
+import { createPinia, defineStore, DefineStoreOptions, Pinia, StateTree, StoreDefinition, _GettersTree } from "pinia";
 
 import { KeeState, defaults } from "./KeeState";
 import { SaveState } from "../common/SaveState";
 import { SessionType } from "../common/SessionType";
 import { Field } from "../common/model/Field";
+import { App } from "vue";
 
 /**
  * A replacement for `defineStore` which makes all state properties readonly
  * to prevent mutations outside of actions.
  */
-// function defineImmutableStore<Id extends string, S extends StateTree = any, G extends _GettersTree<S> = any, A = any>(
-//     id: Id,
-//     options: Omit<DefineStoreOptions<Id, S, G, A>, "id">
-//   ): StoreDefinition<Id, Readonly<S>, G, A> {
-//     return defineStore(id, options);
-//   }
+function defineImmutableStore<Id extends string, S extends StateTree = any, G extends _GettersTree<S> = any, A = any>(
+    id: Id,
+    options: Omit<DefineStoreOptions<Id, S, G, A>, "id">
+  ): StoreDefinition<Id, Readonly<S>, G, A> {
+    return defineStore(id, options);
+  }
 
-const useStore = defineStore("kee", {
+const useStore = defineImmutableStore("kee", {
     state: (): KeeState => (defaults),
     getters: {
         showGeneratePasswordLink: (state: KeeState) => state.connected,
@@ -87,65 +88,66 @@ const useStore = defineStore("kee", {
     },
     actions: {
         updateActiveKeePassDatabaseIndex(payload) {
-            this.ActiveKeePassDatabaseIndex = payload;
+            this.$patch({ActiveKeePassDatabaseIndex: payload});
         },
 
         updateConnected(payload) {
-            this.connected = payload;
+            this.$patch({connected: payload});
         },
 
         updateConnectedWebsocket(payload) {
-            this.connectedWebsocket = payload;
+            this.$patch({connectedWebsocket: payload});
         },
 
         updateCurrentSearchTerm(payload) {
-            this.currentSearchTerm = payload;
+            this.$patch({currentSearchTerm: payload});
         },
 
         updateKeePassDatabases(payload) {
-            this.KeePassDatabases = payload;
+            this.$patch({KeePassDatabases: payload});
         },
 
         updateLastKeePassRPCRefresh(payload) {
-            this.lastKeePassRPCRefresh = payload;
+            this.$patch({lastKeePassRPCRefresh: payload});
         },
 
         updateLatestConnectionError(payload) {
-            this.latestConnectionError = payload;
+            this.$patch({latestConnectionError: payload});
         },
 
         updateLoginsFound(payload) {
-            this.loginsFound = payload || false;
+            this.$patch({loginsFound: payload || false});
         },
 
         updateNotifications(payload) {
-            this.notifications = payload;
+            this.$patch({notifications: payload});
         },
 
         updatePasswordProfiles(payload) {
-            this.PasswordProfiles = payload;
+            this.$patch({PasswordProfiles: payload});
         },
 
         updateGeneratedPassword(payload) {
-            this.generatedPassword = payload;
+            this.$patch({generatedPassword: payload});
         },
 
         updateSubmittedData(payload) {
-            if (!this.saveState) {
-                this.saveState = new SaveState();
-            }
-            this.saveState.submittedData = payload || null;
+            const patch = this.saveState ? {} : new SaveState();
+            this.$patch({saveState: {
+                submittedData: payload || null
+            }});
         },
 
         updateSaveState(payload) {
-            this.saveState = payload || null;
+            this.$patch({saveState: payload || null});
         },
 
         updateSearchResults(payload) {
-            this.searchResults = payload || null;
+            this.$patch({searchResults: payload || null});
         },
 
         updateSearchResultWithFullDetails(payload) {
+            //TODO: needs $patch written
             const id = payload.uuid;
             for (const s of this.searchResults) {
                 if (s.uuid === id) {
@@ -156,15 +158,17 @@ const useStore = defineStore("kee", {
         },
 
         addNotification(payload) {
+            //TODO: needs $patch?
             this.notifications.push(payload);
         },
 
         updateSaveEntryResult(payload) {
-            this.saveEntryResult = payload || null;
+            this.$patch({saveEntryResult: payload || null});
         },
 
         removeFieldFromActiveEntry(payload) {
 
+            //TODO: needs $patch written
             const firstTextFieldIndex = this.saveState.newEntry.fields.findIndex(
                 f => f.type === "text"
             );
@@ -202,7 +206,7 @@ const useStore = defineStore("kee", {
         },
 
         updateEntryUpdateStartedAtTimestamp(payload) {
-            this.entryUpdateStartedAtTimestamp = payload || null;
+            this.$patch({entryUpdateStartedAtTimestamp: payload || null});
         }
 
     }
@@ -214,3 +218,18 @@ export type KeeStore = Omit<
     ReturnType<typeof useStore>,
     keyof ReturnType<typeof defineStore>
 >;
+
+
+//TODO: Does this create a suitable stub Vue instance for Pinia to work with MV2?
+let stubVueApp: App<Element>;
+let stubPinia: Pinia;
+export function useStubStore() {
+    if (!stubPinia) {
+        stubPinia = createPinia();
+    }
+    if (!stubVueApp) {
+        stubVueApp = createApp(defineComponent);
+        stubVueApp.use(stubPinia);
+    }
+    return useStore();
+}

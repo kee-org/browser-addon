@@ -1,3 +1,4 @@
+import RuntimeEnvironment from "../common/RuntimeEnvironment";
 import { AccountManager } from "./AccountManager";
 import { PersistentTabState } from "./PersistentTabState";
 import { jsonrpcClient } from "./jsonrpcClient";
@@ -24,14 +25,14 @@ import { KeeNotification } from "../common/KeeNotification";
 import { VaultProtocol } from "../common/VaultProtocol";
 import { SessionType } from "../common/SessionType";
 import { Action } from "../common/Action";
-import useStore from "../store";
+import { useStubStore } from "../store";
 import { MutationPayload, SyncBackground } from "../store/syncBackground";
 import { Database } from "../common/model/Database";
 import { Entry } from "../common/model/Entry";
 import { SaveEntryResult } from "../common/SaveEntryResult";
 
 //TODO: Allegedly this will not work (nor the other 4 locations. So would need some other way to ensure this called only from within the context of the Vue App!!!)
-const store = useStore();
+const store = useStubStore();
 //TODO: Replace this background store with something else like a stub so we don't have to rely on pinia when executing in an MV3 environment with no window object.
 
 export class Kee {
@@ -85,8 +86,10 @@ export class Kee {
                     if (port !== excludedPort) {
                         try {
                             //TODO: Might not be able to distribute Pinia Patch objects without some additional JSON mapping / manipulation
+                            KeeLog.error(JSON.stringify(mutation));
                             port.postMessage({ mutation } as AddonMessage);
                         } catch (e) {
+                            KeeLog.error(JSON.stringify(e));
                             // Sometimes dead ports are left lying around by the browser (especially
                             // during upgrades, etc.). We can do nothing about this but must not let
                             // it cause this function to fail to execute to the end.
@@ -170,7 +173,9 @@ export class Kee {
                     store.updateSubmittedData(submittedData);
                     store.updateLoginsFound(loginsFound);
 
+                    KeeLog.error(JSON.stringify(connectMessage));
                     p.postMessage(connectMessage);
+                    KeeLog.error(JSON.stringify(connectMessage));
                     window.kee.browserPopupPort = p;
                     window.kee.resetBrowserActionColor();
                     break;
@@ -352,7 +357,7 @@ export class Kee {
         // enable a nice smooth animation to subtly hint that they might want to
         // click on the icon. We have to make the animation in Firefox much less subtle :-(
         // https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1309347
-        this.animateIcon.start(duration, !__KeeIsRunningInAWebExtensionsBrowser);
+        this.animateIcon.start(duration, !RuntimeEnvironment.isWebExtensionsBrowser);
     }
 
     resetBrowserActionColor() {

@@ -101,7 +101,9 @@ export default defineConfig(({ command }) => ({
             input: {
                 background: r("src/background/index.html"),
                 settings: r("src/settings/index.html"),
-                popup: r("src/popup/index.html")
+                popup: r("src/popup/index.html"),
+                srp: r("src/dialogs/SRP.html"),
+                networkAuth: r("src/dialogs/NetworkAuth.html")
             }
         }
     },

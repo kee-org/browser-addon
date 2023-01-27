@@ -5,7 +5,7 @@
         "removeComments": false,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "target": "ES2016",
+        "target": "ES2020",
         "lib": ["DOM", "ESNext", "DOM.Iterable"],
         "esModuleInterop": true,
         "incremental": false,
