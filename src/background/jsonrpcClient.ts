@@ -6,7 +6,7 @@ import { PasswordProfile } from "../common/model/PasswordProfile";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Config } from "../common/config";
-import useStore, { KeeStore } from "../store";
+import { KeeStore, useStubStore } from "../store";
 import { WebsocketSessionManager } from "./WebsocketSession";
 import { DatabaseDto, EntryDto } from "../common/model/KPRPCDTOs";
 import { Database } from "../common/model/Database";
@@ -25,7 +25,7 @@ export class jsonrpcClient {
     constructor() {
         this.kprpcClient = new kprpcClient();
         this.kprpcClient.startWebsocketSessionManager();
-        this.store = useStore();
+        this.store = useStubStore();
     }
 
     startEventSession(sessionId: string, features: string[], messageToWebPage) {

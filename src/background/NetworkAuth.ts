@@ -1,7 +1,7 @@
 import RuntimeEnvironment from "../common/RuntimeEnvironment";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
-import useStore, { KeeStore } from "../store";
+import { KeeStore, useStubStore } from "../store";
 import { Entry } from "../common/model/Entry";
 
 declare const punycode;
@@ -12,7 +12,7 @@ declare const chrome;
 
 export class NetworkAuth {
     pendingRequests = [];
-    store: KeeStore = useStore();
+    store: KeeStore = useStubStore();
 
     public completed(requestDetails) {
         const index = this.pendingRequests.indexOf(requestDetails.requestId);

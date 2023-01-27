@@ -83,7 +83,8 @@ function updateForegroundTab(tabId: number) {
                 port.postMessage({
                     isForegroundTab: true,
                     action: Action.DetectForms,
-                    resetState: store.$state
+                    resetState: JSON.parse(
+                        JSON.stringify(store.$state))
                 } as AddonMessage);
             });
         }

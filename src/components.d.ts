@@ -8,6 +8,10 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Logo: typeof import('./components/Logo.vue')['default']
+    MdiFlash: typeof import('~icons/mdi/flash')['default']
+    MdiHelp: typeof import('~icons/mdi/help')['default']
+    MdiLock: typeof import('~icons/mdi/lock')['default']
+    MdiMenu: typeof import('~icons/mdi/menu')['default']
     SharedSubtitle: typeof import('./components/SharedSubtitle.vue')['default']
   }
 }

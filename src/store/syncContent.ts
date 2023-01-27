@@ -1,35 +1,36 @@
 import { MutationType } from "pinia";
+import { deepEqual } from "~/common/utils";
 import { KeeStore } from ".";
 import { KeeState } from "./KeeState";
-import { MutationPayload } from "./syncBackground";
+import { Mutation, MutationPayload } from "./syncBackground";
 
 export class SyncContent {
     private store: KeeStore;
     initialized: boolean;
-    receivedMutations: MutationPayload[];
-    pendingMutations: MutationPayload[];
-    private sendMutation: (mutation: MutationPayload) => void;
+    receivedPayloads: MutationPayload[];
+    pendingMutations: Mutation[];
+    private sendMutationPayload: (mutation: MutationPayload) => void;
 
     constructor() {
-        this.receivedMutations = [];
+        this.receivedPayloads = [];
         this.initialized = false;
         this.pendingMutations = [];
     }
 
-    init(store: KeeStore, initialState: KeeState, sendMutation, vueMount?) {
+    init(store: KeeStore, initialState: KeeState, sendMutation: (mutation: MutationPayload) => void, vueMount?) {
         this.store = store;
         this.store.$subscribe(mutation => {
             if (mutation.type == MutationType.patchObject) {
-                this.hookMutation(mutation);
+                this.handleLocallyGeneratedMutation(mutation);
                 } else {
                     throw new Error("Pinia generated a non-object mutation. We don't think we can support this and need to know that it is possible for it to happen! Tell us now or weird things will happen.");
                 } // 'direct' | 'patch object' | 'patch function'
         });
-        this.sendMutation = sendMutation;
+        this.sendMutationPayload = sendMutation;
 
         this.store.$patch(initialState);
         this.initialized = true;
-        this.processPendingMutations();
+        this.processPendingLocallySourcedMutations();
 
         if (vueMount) vueMount();
         // move store subscription and initial state patch to here, after creating it and returning from vuewInit()
@@ -46,30 +47,30 @@ export class SyncContent {
         this.store.$patch(newState);
     }
 
-    public onRemoteMutation(mutation: MutationPayload) {
+    public onRemoteMutationPayload(payload: MutationPayload) {
         if (!this.initialized) {
             return;
         }
 
-        this.receivedMutations.push(mutation);
-        this.store.$patch(mutation.payload);
+        this.receivedPayloads.push(payload);
+        this.store.$patch(payload);
     }
 
-    hookMutation(mutation: MutationPayload) {
+    handleLocallyGeneratedMutation(mutation: Mutation) {
         if (!this.initialized) {
             return this.pendingMutations.push(mutation);
         }
 
-        if (!this.receivedMutations.length) {
-            return this.sendMutation(mutation);
+        if (!this.receivedPayloads.length) {
+            return this.sendMutationPayload(mutation.payload);
         }
 
         // Check if it's received mutation, if it's just ignore it, if not send to background
-        for (let i = this.receivedMutations.length - 1; i >= 0; i--) {
+        for (let i = this.receivedPayloads.length - 1; i >= 0; i--) {
             if (
-                this.receivedMutations[i] == mutation.payload
+                deepEqual(this.receivedPayloads[i], mutation.payload)
             ) {
-                this.receivedMutations.splice(i, 1);
+                this.receivedPayloads.splice(i, 1);
 
                 // Multiple mutations can be in the received queue so we have to break,
                 // otherwise duplicate received mutations will result in some being sent
@@ -84,19 +85,18 @@ export class SyncContent {
                 // loop can never end.
                 break;
             } else if (i == 0) {
-                this.sendMutation(mutation);
+                this.sendMutationPayload(mutation.payload);
             }
         }
     }
 
-    processPendingMutations() {
+    processPendingLocallySourcedMutations() {
         if (!this.pendingMutations.length) {
             return;
         }
 
         for (let i = 0; i < this.pendingMutations.length; i++) {
-            // Must be a locally committed mutation
-            this.sendMutation(this.pendingMutations[i]);
+            this.sendMutationPayload(this.pendingMutations[i].payload);
             this.pendingMutations.splice(i, 1);
         }
     }

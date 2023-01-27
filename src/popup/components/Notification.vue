@@ -61,7 +61,6 @@ import { tooltipDelay } from "../../common/Timings";
 //import useStore from "../../store";
 
 export default {
-    mixins: [Port.mixin],
     props: ["notification"],
     // setup () {
     //     const { updateSaveState } = useStore();
@@ -72,7 +71,7 @@ export default {
     }),
     methods: {
         dispatchActionResponse(id: string, action: ButtonAction, data: { [id: string]: string }) {
-            const pm = this.postMessage;
+            const pm = Port.postMessage;
             switch (action) {
                 case "enableHighSecurityKPRPCConnection":
                     configManager.current.connSLClient = 3;
@@ -97,7 +96,7 @@ export default {
             pm({ removeNotification: id } as AddonMessage);
         },
         closeNotification(id: string) {
-            const pm = this.postMessage;
+            const pm = Port.postMessage;
             pm({ removeNotification: id } as AddonMessage);
         }
     }

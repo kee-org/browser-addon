@@ -1,16 +1,18 @@
 import { KeeState, defaults } from "./KeeState";
 import { KeeLog } from "../common/Logger";
 import { KeeStore } from ".";
-import { MutationType, SubscriptionCallbackMutation, SubscriptionCallbackMutationPatchObject } from "pinia";
+import { MutationType, SubscriptionCallbackMutation, SubscriptionCallbackMutationPatchObject, _DeepPartial } from "pinia";
+import { deepEqual } from "~/common/utils";
 
-export declare type MutationPayload = SubscriptionCallbackMutationPatchObject<Readonly<KeeState>>;
+export declare type Mutation = SubscriptionCallbackMutationPatchObject<Readonly<KeeState>>;
+export declare type MutationPayload = _DeepPartial<Readonly<KeeState>>;
 
 export class SyncBackground {
-    receivedMutations: MutationPayload[] = [];
+    receivedPayloads: MutationPayload[] = [];
 
     constructor(
         private store: KeeStore,
-        private distributeMutation: (mutation, excludedPort: browser.runtime.Port) => void
+        private distributeMutationPayload: (mutation: MutationPayload, excludedPort: browser.runtime.Port) => void
     ) {
         //const store = useStore();
         store.$subscribe((mutation: SubscriptionCallbackMutation<Readonly<KeeState>>, _state: KeeState) => {
@@ -18,16 +20,16 @@ export class SyncBackground {
             if (mutation.type == MutationType.patchObject) {
 
             // Check if it is a remotely received mutation, if it is just ignore it, if not distribute
-            for (let i = 0; i < this.receivedMutations.length; i++) {
+            for (let i = 0; i < this.receivedPayloads.length; i++) {
                 if (
-                    this.receivedMutations[i] == mutation.payload
+                    deepEqual(this.receivedPayloads[i], mutation.payload)
                 ) {
-                    this.receivedMutations.splice(i, 1);
+                    this.receivedPayloads.splice(i, 1);
                     return;
                 }
             }
             KeeLog.debug("local mutation so distributing mutation");
-            this.distributeMutation(mutation, null);
+            this.distributeMutationPayload(mutation.payload, null);
             KeeLog.debug("distributed");
             } else {
                 KeeLog.error("mutation type: " + mutation.type);
@@ -47,10 +49,10 @@ export class SyncBackground {
         });
     }
 
-    onMessage(sourcePort: browser.runtime.Port, mutation: MutationPayload) {
-        this.receivedMutations.push(mutation);
+    onMessage(sourcePort: browser.runtime.Port, mutation: Mutation) {
+        this.receivedPayloads.push(mutation.payload);
         this.store.$patch(mutation.payload);
         KeeLog.debug("SyncBackground.onMessage distributing");
-        this.distributeMutation(mutation, sourcePort);
+        this.distributeMutationPayload(mutation.payload, sourcePort);
     }
 }

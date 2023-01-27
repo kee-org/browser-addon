@@ -11,7 +11,7 @@ import { createApp } from "vue";
 import Vuetify, { createVuetify } from "vuetify";
 import Panel from "./Panel.vue";
 import { createPinia } from "pinia";
-import { MutationPayload } from "../store/syncBackground";
+import { Mutation } from "../store/syncBackground";
 import {setup as i18nSetup } from "../common/i18n";
 
 let frameState: FrameState;
@@ -57,7 +57,7 @@ function startup() {
                 KeeLog.debug("In iframe script, received message from background script");
 
                 if (m.initialState) {
-                    syncContent.init(m.initialState, (mutation: MutationPayload) => {
+                    syncContent.init(m.initialState, (mutation: Mutation) => {
                         Port.postMessage({ mutation } as AddonMessage);
                     });
                 }
@@ -91,7 +91,7 @@ function startup() {
                 if (m.initialState) {
                     syncContent.init(
                         m.initialState,
-                        (mutation: MutationPayload) => {
+                        (mutation: Mutation) => {
                             Port.postMessage({ mutation } as AddonMessage);
                         },
                         () => {

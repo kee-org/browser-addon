@@ -10,7 +10,7 @@ import { Button } from "../common/Button";
 import { FeatureFlags } from "../common/FeatureFlags";
 import { KeeNotification } from "../common/KeeNotification";
 import { configManager } from "../common/ConfigManager";
-import useStore, { KeeStore } from "../store";
+import { KeeStore, useStubStore } from "../store";
 
 /*
 kprpcClient.js provides functionality for
@@ -79,7 +79,7 @@ export class kprpcClient {
             obj => this.receive(obj, this.websocketSessionManager),
             () => !!this.secretKey
         );
-        this.store = useStore();
+        this.store = useStubStore();
     }
 
     startWebsocketSessionManager() {
@@ -569,7 +569,7 @@ export class kprpcClient {
                     this.secretKey = this.getStoredKey();
 
                     // 0.025 second delay before we try to do the Kee connection startup stuff
-                    window.setTimeout(this.onConnectStartup, 50, "CR", this.onConnectStartup);
+                    window.setTimeout(this.onConnectStartup.bind(this), 50, "CR");
                 }
             });
     }
@@ -642,7 +642,7 @@ export class kprpcClient {
                 this.setStoredKey(this.srpClientInternals.I, this.getSecurityLevel(), key);
 
                 // 0.025 second delay before we try to do the Kee connection startup stuff
-                window.setTimeout(this.onConnectStartup, 50, "SRP");
+                window.setTimeout(this.onConnectStartup.bind(this), 50, "SRP");
             });
         }
     }

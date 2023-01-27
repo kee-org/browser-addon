@@ -1,6 +1,7 @@
 import { Config } from "../common/config";
 import { configManager } from "../common/ConfigManager";
 import { KeeLog } from "../common/Logger";
+import { deepEqual } from "../common/utils";
 
 export class ConfigSyncManager {
     private lastKnownSynced: { settings: Partial<Config>; version: number };
@@ -62,7 +63,7 @@ export class ConfigSyncManager {
             version: settings.version
         };
 
-        if (window["fast-equals"].deepEqual(syncableConfig, this.lastKnownSynced)) return;
+        if (deepEqual(syncableConfig, this.lastKnownSynced)) return;
 
         const serialisedLatest = JSON.stringify(syncableConfig);
         KeeLog.debug(

@@ -107,7 +107,8 @@ export class Kee {
 
         this.utils = utils;
 
-        this.search = new SearcherAll(store.$state, {
+        this.search = new SearcherAll(JSON.parse(
+            JSON.stringify(store.$state)), {
             version: 1,
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
@@ -142,8 +143,11 @@ export class Kee {
                         }, configManager.current.currentSearchTermTimeout * 1000);
                     });
 
+                    //TODO: Try structuredClone() instead when cutting off support
+                    // for pre-MV3 browser versions (OK from Firefox 94)
                     const connectMessage = {
-                        initialState: store.$state
+                        initialState: JSON.parse(
+                            JSON.stringify(store.$state))
                     } as AddonMessage;
 
                     let submittedData: any = null;
@@ -174,8 +178,11 @@ export class Kee {
                     store.updateLoginsFound(loginsFound);
 
                     KeeLog.error(JSON.stringify(connectMessage));
-                    p.postMessage(connectMessage);
-                    KeeLog.error(JSON.stringify(connectMessage));
+                    try {
+                        p.postMessage(connectMessage);
+                    } catch (e) {
+                        KeeLog.error(JSON.stringify(e));
+                    }
                     window.kee.browserPopupPort = p;
                     window.kee.resetBrowserActionColor();
                     break;
@@ -186,7 +193,8 @@ export class Kee {
                     const tabId = p.sender.tab.id;
                     const frameId = p.sender.frameId;
                     const connectMessage = {
-                        initialState: store.$state,
+                        initialState: JSON.parse(
+                            JSON.stringify(store.$state)),
                         frameId,
                         tabId,
                         isForegroundTab: tabId === window.kee.foregroundTabId
@@ -223,7 +231,8 @@ export class Kee {
                     */
 
                     const connectMessage = {
-                        initialState: store.$state,
+                        initialState: JSON.parse(
+                            JSON.stringify(store.$state)),
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
                         isForegroundTab: p.sender.tab.id === window.kee.foregroundTabId
@@ -237,7 +246,8 @@ export class Kee {
                     p.onMessage.addListener(iframeMessageHandler.bind(p));
 
                     const connectMessage = {
-                        initialState: store.$state,
+                        initialState: JSON.parse(
+                            JSON.stringify(store.$state)),
                         frameState: window.kee.tabStates
                             .get(p.sender.tab.id)
                             .frames.get(parentFrameId),

@@ -1,4 +1,4 @@
-import { App as VueApp, createApp, h } from "vue";
+import { App as VueApp, createApp, h, configureCompat } from "vue";
 import { createVuetify } from "vuetify";
 import App from "./App.vue";
 import useStore, { KeeStore } from "../store";
@@ -11,6 +11,15 @@ import { createPinia } from "pinia";
 import { Action } from "../common/Action";
 import { MutationPayload } from "../store/syncBackground";
 import "../styles";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+
+// disable compat for certain features
+configureCompat({
+    RENDER_FUNCTION: false,
+    COMPONENT_V_MODEL: false,
+    COMPONENT_ASYNC: false
+});
 
 const piniaInstance = createPinia();
 let vueApp: VueApp<Element>;
@@ -31,7 +40,7 @@ function startup() {
 
         if (m.initialState) {
 
-
+try {
             vueApp = createApp({
                 mounted: function () {
                     // This can wait until after the popup app has rendered, at least until there is
@@ -49,6 +58,8 @@ function startup() {
             });
 
             const vuetify = createVuetify({
+                components,
+                directives,
                 theme: {
                     defaultTheme: configManager.activeTheme,
                     themes: {
@@ -88,8 +99,9 @@ function startup() {
             syncContent.init(
                 store,
                 m.initialState,
-                (mutation: MutationPayload) => {
-                    Port.postMessage({ mutation: mutation } as AddonMessage);
+                (mutationPayload: MutationPayload) => {
+                    KeeLog.error(`blah : ${JSON.stringify(mutationPayload)}`);
+                    Port.postMessage({ mutation: mutationPayload } as AddonMessage);
                 },
                 () => {
                     vueApp.mount("#main");
@@ -103,9 +115,12 @@ function startup() {
                     }, 50);
                 }
             );
+        } catch (e) {
+            KeeLog.error("Failed to create user interface.", e);
+        }
         }
         if (m.mutation) {
-            syncContent.onRemoteMutation(m.mutation);
+            syncContent.onRemoteMutationPayload(m.mutation);
             return;
         }
 

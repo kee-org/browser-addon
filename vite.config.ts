@@ -14,11 +14,13 @@ export const sharedConfig: UserConfig = {
     resolve: {
         alias: {
             "~/": `${r("src")}/`,
-            vue: "@vue/compat"
+            vue: "@vue/compat/dist/vue.esm-bundler.js"
           }
     },
     define: {
-        __DEV__: isDev
+        __DEV__: isDev,
+        __VUE_OPTIONS_API__: true,
+        __VUE_PROD_DEVTOOLS__: false
     },
     plugins: [
         Vue({
@@ -58,7 +60,7 @@ export const sharedConfig: UserConfig = {
         }),
 
         // https://github.com/antfu/unplugin-icons
-        Icons(),
+        Icons({ compiler: "vue3" }),
 
         // https://github.com/unocss/unocss
         UnoCSS(),

@@ -44,10 +44,14 @@ function writeAssets() {
 function writeLocales() {
     execSync("npx esno ./scripts/locales.ts", { stdio: "inherit" });
 }
+function writeJavascriptLibs() {
+    execSync("npx esno ./scripts/jsLibs.ts", { stdio: "inherit" });
+}
 
 writeManifest();
 writeAssets();
 writeLocales();
+writeJavascriptLibs();
 
 if (isDev) {
     stubIndexHtml();
@@ -64,5 +68,8 @@ if (isDev) {
     });
     chokidar.watch(r("_locales/**/*")).on("change", () => {
         writeLocales();
+    });
+    chokidar.watch(r("lib/*")).on("change", () => {
+        writeJavascriptLibs();
     });
 }

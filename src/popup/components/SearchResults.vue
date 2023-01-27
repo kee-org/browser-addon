@@ -13,11 +13,11 @@ v-for="(match, index) of filteredMatches" :key="match.entry.uuid" :ref="setNodes
 " @move-out-of-list="exitList" />
 
         <v-divider v-show="deduplicatedSearchResults && deduplicatedSearchResults.length > 0" class="mt-2" />
-        <v-subheader
+        <v-list-subheader
 v-show="deduplicatedSearchResults && deduplicatedSearchResults.length > 0" class="text-center"
             style="justify-content: center">
             {{ $i18n("matches_from_other_sites") }}
-        </v-subheader>
+        </v-list-subheader>
 
         <Entry
 v-for="(entry, index) of deduplicatedSearchResults" :key="entry.uuid" :ref="setNodesB"

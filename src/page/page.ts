@@ -7,11 +7,11 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { Action } from "../common/Action";
-import useStore from "../store";
+import useStore, { useStubStore } from "../store";
 import { SyncContent } from "../store/syncContent";
 import { Port } from "../common/port";
 import { createPinia } from "pinia";
-import { MutationPayload } from "../store/syncBackground";
+import { Mutation } from "../store/syncBackground";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
@@ -49,9 +49,8 @@ let configReady = false;
 let missingPageShowTimer: number;
 
 let inputsObserver: MutationObserver;
-const app = createApp(defineComponent);
-app.use(createPinia());
-const store = useStore();
+
+const store = useStubStore();
 
 // Content scripts are injected into non-HTML documents such as SVGs.
 // We have no interest in this document if it has no body Node
@@ -193,7 +192,7 @@ if (document.body) {
             KeeLog.debug("In browser content page script, received message from background script");
 
             if (m.initialState) {
-                syncContent.init(m.initialState, (mutation: MutationPayload) => {
+                syncContent.init(m.initialState, (mutation: Mutation) => {
                     Port.postMessage({ mutation } as AddonMessage);
                 });
             }

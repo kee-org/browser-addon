@@ -13,6 +13,7 @@
   only if you edit the code to enable this feature because it is very resource-hungry
 
 */
+import { serializeError } from "serialize-error";
 
 export class KeeLogger {
     public defaultLevel = 4;
@@ -24,12 +25,15 @@ export class KeeLogger {
         this.config = config;
     }
 
-    private formatMessage(message) {
-        if (!message) return "";
+    private formatMessage(message, e?: Error) {
+        if (!message && !e) return "";
 
         if (!this.outputStarted) {
             message = "* " + message;
             this.outputStarted = true;
+        }
+        if (e) {
+            message += ` Error: ${JSON.stringify(serializeError(e))}`;
         }
 
         return message;
@@ -65,9 +69,9 @@ export class KeeLogger {
         }
     }
 
-    error(message: string) {
+    error(message: string, e?: Error) {
         if (this.config.logLevel >= 1) {
-            message = this.formatMessage(message);
+            message = this.formatMessage(message, e);
             if (message.length > 0) {
                 console.error(message);
                 this.config.logLevel >= 4 && this.send(1, message);

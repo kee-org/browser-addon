@@ -6,13 +6,7 @@
         </v-app-bar>
         <v-main :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
             <v-container fluid>
-                <v-alert
-                    v-show="showSaveRecovery"
-                    color="secondary"
-                    border="top"
-                    border-color="primary"
-                    elevation="1"
-                >
+                <v-alert v-show="showSaveRecovery" color="secondary" border="top" border-color="primary" elevation="1">
                     <v-row dense>
                         <v-col>{{ $i18n("unsaved_changes") }}</v-col>
                     </v-row>
@@ -30,13 +24,7 @@
                         <v-spacer />
                     </v-row>
                 </v-alert>
-                <v-alert
-                    v-show="showSaveResult"
-                    color="secondary"
-                    border="top"
-                    border-color="primary"
-                    elevation="1"
-                >
+                <v-alert v-show="showSaveResult" color="secondary" border="top" border-color="primary" elevation="1">
                     <v-row dense>
                         <v-col>{{ $i18n("you_recently_saved") }}</v-col>
                     </v-row>
@@ -54,97 +42,63 @@
                     <Notification v-for="n of notifications" :key="n.id" :notification="n" />
                 </div>
                 <SearchResults
-                    v-show="showSearchPanel"
-                    :matched-entries="cachedMatchedEntries"
-                    :frame-id="frameId"
-                    @pref-entry-toggle="prefEntryToggle"
-                />
+v-show="showSearchPanel" :matched-entries="cachedMatchedEntries" :frame-id="frameId"
+                    @pref-entry-toggle="prefEntryToggle" />
                 <Save1stParty
-                    v-if="showSaveStart && !showSaveWhere"
-                    @save-where-clicked="saveWhere"
-                    @cancel-clicked="saveDiscard"
-                />
+v-if="showSaveStart && !showSaveWhere" @save-where-clicked="saveWhere"
+                    @cancel-clicked="saveDiscard" />
                 <SaveWhere
-                    v-if="showSaveWhere"
-                    :display-reason="displayWhereReason"
-                    :preferred-group-uuid="preferredGroupUuid"
-                />
+v-if="showSaveWhere" :display-reason="displayWhereReason"
+                    :preferred-group-uuid="preferredGroupUuid" />
             </v-container>
         </v-main>
 
-        <v-tooltip location="left" :open-delay="tooltipDelay">
-            <template #activator="{ on }">
-                <v-btn
-                    v-show="showSearchPanel && !showSaveRecovery"
-                    size="large"
-                    absolute
-                    location="bottom right"
-                    color="primary"
-                    style="bottom: 75px; right: 24px"
-                    :class="hasSubmittedData ? 'pulse-button' : ''"
-                    icon="mdi-plus"
-                    v-on="on"
-                    @click="saveStart"
-                >
-                </v-btn>
-            </template>
-            <span>{{ $i18n("create_new_entry") }}</span>
-        </v-tooltip>
+
+        <v-btn
+v-show="showSearchPanel && !showSaveRecovery" size="large" absolute location="bottom right"
+            color="primary" style="bottom: 75px; right: 24px" :class="hasSubmittedData ? 'pulse-button' : ''"
+            icon="mdi-plus" @click="saveStart">
+            <v-tooltip location="left" :open-delay="tooltipDelay" activator="parent">
+                <span>{{ $i18n("create_new_entry") }}</span>
+            </v-tooltip>
+        </v-btn>
 
         <v-footer app height="auto">
-            <v-tooltip location="top" :open-delay="tooltipDelay">
-                <template #activator="{ on }">
-                    <v-btn
-                        id="password-open-kee-vault"
-                        :aria-label="$i18n('Menu_Button_open_kee_vault_label')"
-                        class="ml-0 mr-2"
-                        icon
-                        v-on="on"
-                        @click="openKeeVault"
-                    >
-                        <img width="24px" height="24px" src="../common/images/48-kee-vault.png" />
-                    </v-btn>
-                </template>
-                <span>{{ $i18n("Menu_Button_open_kee_vault_label") }}</span>
-            </v-tooltip>
-            <v-tooltip location="top" :open-delay="tooltipDelay">
-                <template #activator="{ on }">
-                    <v-btn
-                        v-show="showOpenKeePassButton"
-                        id="password-open-keepass"
-                        :aria-label="$i18n('Menu_Button_open_keepass_label')"
-                        class="mr-2 ml-n1"
-                        icon
-                        v-on="on"
-                        @click="openKeePass"
-                    >
-                        <img width="24px" height="24px" src="../common/images/48-keepass.png" />
-                    </v-btn>
-                </template>
-                <span>{{ $i18n("Menu_Button_open_keepass_label") }}</span>
-            </v-tooltip>
+            <v-btn
+id="password-open-kee-vault" :aria-label="$i18n('Menu_Button_open_kee_vault_label')"
+                class="ml-0 mr-2" icon @click="openKeeVault">
+                <img width="24px" height="24px" src="../common/images/48-kee-vault.png" />
+                <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
+                    <span>{{ $i18n("Menu_Button_open_kee_vault_label") }}</span>
+                </v-tooltip>
+            </v-btn>
+
+            <v-btn
+v-show="showOpenKeePassButton" id="password-open-keepass"
+                :aria-label="$i18n('Menu_Button_open_keepass_label')" class="mr-2 ml-n1" icon @click="openKeePass">
+                <img width="24px" height="24px" src="../common/images/48-keepass.png" />
+                <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
+                    <span>{{ $i18n("Menu_Button_open_keepass_label") }}</span></v-tooltip>
+            </v-btn>
             <v-divider vertical />
-            <v-icon size="20px" :color="statusIconColour" class="mx-2"> mdi-lock </v-icon>
-            <v-tooltip location="top" :open-delay="tooltipDelay">
-                <template #activator="{ on }">
-                    <div
-                        class="text-caption py-1 shrink"
-                        style="word-break: break-word; overflow-wrap: break-word; max-width: 210px"
-                        v-on="on"
-                    >
-                        {{ connectionStatus }}
-                    </div>
-                </template>
-                <span>{{ connectionStatusDetail }}</span>
-            </v-tooltip>
+            <mdi-lock size="20px" :color="statusIconColour" class="mx-2"/>
+
+            <div
+class="text-caption py-1 shrink"
+                style="word-break: break-word; overflow-wrap: break-word; max-width: 210px">
+                {{ connectionStatus }}
+                <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
+                    <span>{{ connectionStatusDetail }}</span>
+                </v-tooltip>
+            </div>
 
             <v-spacer />
 
-            // eslint-disable-next-line vuetify/no-deprecated-props
+            <!-- <v-menu location="top" offset-y small> -->
             <v-menu location="top" offset-y small>
-                <template #activator="{ on }">
-                    <v-btn icon size="small" v-on="on">
-                        <v-icon>mdi-menu</v-icon>
+                <template #activator="{ props }">
+                    <v-btn icon size="small" v-bind="props">
+                        <mdi-menu/>
                     </v-btn>
                 </template>
 
@@ -153,13 +107,13 @@
                         <v-list-item-title right class="mr-4 text-right text-body-2">
                             {{ $i18n("Help_Centre_Button_label") }}
                         </v-list-item-title>
-                        <v-icon size="20px"> mdi-help </v-icon>
+                        <mdi-help size="20px" />
                     </v-list-item>
                     <v-list-item @click="showOptions">
                         <v-list-item-title class="mr-4 text-right text-body-2">
                             {{ $i18n("Menu_Button_options_label") }}
                         </v-list-item-title>
-                        <v-icon size="20px"> mdi-settings </v-icon>
+                        <mdi-flash size="20px" /> <!-- mdi-settings-->
                     </v-list-item>
                     <v-list-item v-show="showSearchPanel" @click="showPasswordGenerator = true">
                         <v-list-item-title class="mr-4 text-right text-body-2">
@@ -171,11 +125,8 @@
             </v-menu>
         </v-footer>
         <PasswordGenerator
-            v-if="showPasswordGenerator"
-            :standalone="true"
-            @dialog-closed="passwordGeneratorClosed"
-            @copy-to-clipboard="copyToClipboard"
-        />
+v-if="showPasswordGenerator" :standalone="true" @dialog-closed="passwordGeneratorClosed"
+            @copy-to-clipboard="copyToClipboard" />
     </v-app>
 </template>
 
@@ -214,9 +165,8 @@ export default {
         SaveWhere: SaveWhere,
         PasswordGenerator: PasswordGenerator
     },
-    mixins: [Port.mixin],
     props: ["matchedEntries", "frameId"],
-    setup () {
+    setup() {
         const { updateSaveState, updateSaveEntryResult } = useStore();
         return { updateSaveState, updateSaveEntryResult };
     },
@@ -256,7 +206,9 @@ export default {
             "connected",
             "databaseIsOpen",
             "notifications",
-            "showNotifications"
+            "showNotifications",
+            "connectedWebsocket",
+            "saveEntryResult"
         ]),
         statusIconColour: function () {
             if (this.connected && this.databaseIsOpen) {
@@ -273,7 +225,7 @@ export default {
             return (
                 !this.showSaveStart &&
                 new Date(this.saveLastActiveAt) >
-                    new Date(Date.now() - this.manualRecoveryPromptTimeMs)
+                new Date(Date.now() - this.manualRecoveryPromptTimeMs)
             );
         },
         showSearchPanel: function () {
@@ -305,7 +257,7 @@ export default {
         if (
             discardRequired ||
             this.saveState?.lastActiveAt <=
-                new Date(Date.now() - this.manualRecoveryPromptTimeMs)
+            new Date(Date.now() - this.manualRecoveryPromptTimeMs)
         ) {
             this.saveDiscard();
         }
@@ -421,7 +373,7 @@ export default {
         handleLastSaveResult: function () {
             const lastResult = this.saveEntryResult as SaveEntryResult;
 
-            if (!lastResult.result) return false;
+            if (!lastResult?.result) return false;
 
             if (lastResult.result === "created" || lastResult.result === "updated") {
                 if (!configManager.current.hideConfirmationAfterSave) {
@@ -506,18 +458,22 @@ export default {
         opacity: 1;
         transform: scale(1);
     }
+
     25% {
         opacity: 1;
         transform: scale(1.25);
     }
+
     50% {
         opacity: 1;
         transform: scale(1);
     }
+
     75% {
         opacity: 1;
         transform: scale(0.8);
     }
+
     100% {
         opacity: 1;
         transform: scale(1);
