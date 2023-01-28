@@ -1,3 +1,5 @@
+import linkifyElement from "linkify-element";
+
 export function setup () {
     [].forEach.call(document.querySelectorAll("[data-i18n]"), function (el) {
     const name = el.getAttribute("data-i18n");
@@ -47,8 +49,6 @@ function createListElement(text) {
             }
         }
     };
-    //TODO: new linkify library
-    // eslint-disable-next-line no-undef
-    //linkifyElement(item, options, document);
+    linkifyElement(item, options, document);
     return item;
 }

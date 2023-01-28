@@ -14,11 +14,10 @@
                         v-model="selectedProfile"
                         :items="items"
                         :label="$i18n('password_profile')"
-                        variant="outlined"
                         color="secondary"
                         :hint="$i18n('password_profile_hint')"
                         persistent-hint
-                        class="mt-4"
+                        class="mt-0"
                         @update:model-value="profileChanged"
                     />
                     <v-card
@@ -28,13 +27,13 @@
                         max-width="300"
                     >
                         <v-row class="flex-nowrap" align="center">
-                            <v-col cols="10" class="text-center">
+                            <v-col cols="9" class="text-center">
                                 {{ renderedPassword }}
                             </v-col>
                             <v-col cols="2">
-                                <v-btn size="small" icon @click="revealed = !revealed">
-                                    <mdi-eye v-if="revealed"/>
-                                    <mdi-eye-off v-if="!revealed"/>
+                                <v-btn icon @click="revealed = !revealed">
+                                    <mdi-eye v-if="revealed" scale="200" />
+                                    <mdi-eye-off v-if="!revealed" scale="200" />
                                 </v-btn>
                             </v-col>
                         </v-row>
@@ -48,24 +47,29 @@
                             v-model="forceCopy"
                             :label="$i18n('also_copy_to_clipboard')"
                         >
-                        //TODO: :hint="forceCopyHint"
-                            persistent-hint
                     </v-checkbox>
+                    </div>
+                    <div v-if="!standalone">
+                        {{ forceCopyHint }}
                     </div>
                 </v-card-text>
             </div>
-            <v-card-actions>
-                <v-spacer />
-
-                <v-btn color="tertiary" @click="cancel">
+            <v-card-actions >
+        <v-list-item class="w-100">
+                <div class="justify-self-end">
+                <v-btn variant="elevated" color="tertiary" @click="cancel">
                     {{ cancelButtonText }}
                 </v-btn>
 
-                <v-btn color="primary" :disabled="disabled" @click="ok">
+                <v-btn variant="elevated" color="primary" :disabled="disabled" @click="ok">
                     {{ okButtonText }}
                 </v-btn>
+            </div>
+            </v-list-item>
             </v-card-actions>
         </v-card>
+        <MdiMenuUp v-if="false" />
+        <MdiMenuDown v-if="false" />
     </v-dialog>
 </template>
 
@@ -75,6 +79,10 @@ import { Action } from "../../common/Action";
 import { SaveState } from "../../common/SaveState";
 import useStore from "../../store";
 import { mapState } from "pinia";
+import MdiMenuUp from "~icons/mdi/menu-up";
+import MdiMenuDown from "~icons/mdi/menu-down";
+//TODO:  2 x hacks above may not be needed
+import { KeeLog } from "../Logger";
 
 export default {
     props: ["field", "standalone", "topmost"],
@@ -86,12 +94,12 @@ export default {
     data: () => ({
         selectedProfile: "",
         forceCopy: false,
-        generatedPassword: "",
+        //generatedPassword: "",
         revealed: false,
         loading: false
     }),
     computed: {
-        ...mapState(useStore, ["PasswordProfiles", "saveState"]),
+        ...mapState(useStore, ["PasswordProfiles", "saveState", "generatedPassword"]),
         items: function () {
             return this.PasswordProfiles.map(p => p.name);
         },
@@ -122,6 +130,12 @@ export default {
             return this.topmost ? "false" : "dialog-transition";
         }
     },
+    // watch: {
+    //     generatedPassword: function (newState: SaveState, oldState: SaveState) {
+    //                 KeeLog.error("watch outer fired");
+    //         this.loading = false;
+    //     }
+    // },
     methods: {
         ok: async function () {
             if (this.standalone || this.forceCopy) {
@@ -137,9 +151,10 @@ export default {
             const unwatch = this.$watch(
                 "generatedPassword",
                  newValue => {
+                    KeeLog.debug("watch inner fired");
                     unwatch();
-                    this.updateGeneratedPassword("");
-                    this.generatedPassword = newValue;
+                    // this.updateGeneratedPassword("");
+                    // this.generatedPassword = newValue;
                     this.loading = false;
                 }
             );

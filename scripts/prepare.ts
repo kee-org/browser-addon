@@ -33,6 +33,16 @@ async function stubIndexHtml() {
         await fs.writeFile(r(`extension/dist/dialogs/${dialog}.html`), data, "utf-8");
         log("PRE", `stub ${dialog}`);
     }
+
+    for (const ia of ["install", "update"]) {
+        await fs.ensureDir(r(`extension/dist/release-notes/${ia}`));
+        let data = await fs.readFile(r(`src/release-notes/${ia}-notes.html`), "utf-8");
+        data = data
+            .replace(`"./${ia}.ts"`, `"http://localhost:${port}/release-notes/${ia}.ts"`)
+            .replace('<div id="app"></div>', '<div id="app">Vite server did not start</div>');
+        await fs.writeFile(r(`extension/dist/release-notes/${ia}-notes.html`), data, "utf-8");
+        log("PRE", `stub ${ia}-notes`);
+    }
 }
 
 function writeManifest() {

@@ -21,6 +21,8 @@ declare module '@vue/runtime-core' {
     MdiHelp: typeof import('~icons/mdi/help')['default']
     MdiLock: typeof import('~icons/mdi/lock')['default']
     MdiMenu: typeof import('~icons/mdi/menu')['default']
+    MdiMenuDown: typeof import('~icons/mdi/menu-down')['default']
+    MdiMenuUp: typeof import('~icons/mdi/menu-up')['default']
     MdiPlus: typeof import('~icons/mdi/plus')['default']
     MdiUndo: typeof import('~icons/mdi/undo')['default']
     SharedSubtitle: typeof import('./components/SharedSubtitle.vue')['default']

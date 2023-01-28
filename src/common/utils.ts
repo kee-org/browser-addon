@@ -51,7 +51,7 @@ export class Utils {
         window.crypto.getRandomValues(bytes);
         const hex = Array.from(bytes).map(this.toHexString).join("");
         return BigInteger.parse(hex, 16);
-        //TODO: switch to native bigint
+        //TODO:4: switch to native bigint
         //        return BigInt(`0x${hex}`);
     }
 

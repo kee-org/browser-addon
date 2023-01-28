@@ -105,6 +105,7 @@ try {
                 },
                 () => {
                     vueApp.mount("#main");
+                    //TODO: Sometimes popup size is wrong initially. Possibly only when in dev mode and it's much slower to load everything? In any case, might be affected by timing of when we mount the main app to the popup DOM
 
                     // This maybe could be moved to onMounted once all vuex state is changed before this popup is opened.
                     window.setTimeout(() => {
@@ -135,5 +136,5 @@ try {
 }
 
 // Load our config and start the page script once done
-//TODO: Change config loading API to support Promises for MV3
+//TODO:4: Change config loading API to support Promises for MV3
 configManager.load(startup);

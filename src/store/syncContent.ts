@@ -1,4 +1,5 @@
 import { MutationType } from "pinia";
+import { KeeLog } from "~/common/Logger";
 import { deepEqual } from "~/common/utils";
 import { KeeStore } from ".";
 import { KeeState } from "./KeeState";
@@ -52,6 +53,7 @@ export class SyncContent {
             return;
         }
 
+        KeeLog.warn("processing payload: " + JSON.stringify(payload));
         this.receivedPayloads.push(payload);
         this.store.$patch(payload);
     }
@@ -70,6 +72,7 @@ export class SyncContent {
             if (
                 deepEqual(this.receivedPayloads[i], mutation.payload)
             ) {
+                KeeLog.debug("payload is deepequal");
                 this.receivedPayloads.splice(i, 1);
 
                 // Multiple mutations can be in the received queue so we have to break,
@@ -85,6 +88,7 @@ export class SyncContent {
                 // loop can never end.
                 break;
             } else if (i == 0) {
+                KeeLog.debug("payload is not deepequal to any remotely received payload so will send");
                 this.sendMutationPayload(mutation.payload);
             }
         }

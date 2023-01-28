@@ -49,10 +49,10 @@ export class SyncBackground {
         });
     }
 
-    onMessage(sourcePort: browser.runtime.Port, mutation: Mutation) {
-        this.receivedPayloads.push(mutation.payload);
-        this.store.$patch(mutation.payload);
+    onMessage(sourcePort: browser.runtime.Port, mutation: MutationPayload) {
+        this.receivedPayloads.push(mutation);
+        this.store.$patch(mutation);
         KeeLog.debug("SyncBackground.onMessage distributing");
-        this.distributeMutationPayload(mutation.payload, sourcePort);
+        this.distributeMutationPayload(mutation, sourcePort);
     }
 }

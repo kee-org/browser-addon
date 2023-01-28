@@ -39,7 +39,7 @@ async function showReleaseNotesAfterUpdate() {
     // using our async config store rather than rely on the runtime event being fired.
     if (configManager.current.mustShowReleaseNotesAtStartup) {
         const tab = await browser.tabs.create({
-            url: "release-notes/update-notes.html",
+            url: "/dist/release-notes/update-notes.html",
             active: true
         });
         browser.windows.update(tab.windowId, { focused: true, drawAttention: true });
@@ -147,7 +147,7 @@ browser.runtime.onInstalled.addListener(async function (details) {
             browser.windows.update(vaultTabs[0].windowId, { focused: true });
         } else {
             browser.tabs.create({
-                url: "release-notes/install-notes.html"
+                url: "/dist/release-notes/install-notes.html"
             });
         }
     }

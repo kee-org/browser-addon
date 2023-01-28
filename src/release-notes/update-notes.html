@@ -2,16 +2,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link href="../../assets/styles/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/styles/release-notes.css"/>
+    <link href="/assets/styles/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/styles/release-notes.css"/>
     <title>Kee 3.9</title>
-    <link rel="icon" href="/common/images/64.png"/>
+    <link rel="icon" href="/assets/images/64.png"/>
 </head>
 
 <body class="container" style="max-width: 900px;">
     <div id="i18n_root" style="align-items: stretch;">
 
-<h1 style="font-size: 42px; text-align: center;"><img src="/common/images/64.png" style="margin-bottom: 4px; margin-right: 10px;" /><span data-i18n="welcome_to_kee"></span> 3.9</h1>
+<h1 style="font-size: 42px; text-align: center;"><img src="/assets/images/64.png" style="margin-bottom: 4px; margin-right: 10px;" /><span data-i18n="welcome_to_kee"></span> 3.9</h1>
 <div id="mainContent">
     <div id="updateNotesContent">
 
@@ -35,15 +35,6 @@
     </div>
     </div>
     </div>
-    <script src="../lib/detectWebExtensions.js"></script>
-    <script src="../lib/tp/browser-polyfill.min.js"></script>
-    <script src="../lib/dollar-polyfill.js"></script>
-    <script src="../lib/tp/linkify.min.js"></script>
-    <script src="../lib/tp/linkify-element.min.js"></script>
-    <script src="../lib/i18n.js"></script>
-    <script src="update-cta.js"></script>
-    <script src="beta-cta.js"></script>
-    //TODO: convert all release notes into typescript inc.
-    i18nSetup();
+    <script type="module" src="./update.ts"></script>
 </body>
 </html>

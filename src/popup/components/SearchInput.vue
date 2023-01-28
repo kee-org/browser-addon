@@ -1,6 +1,6 @@
 <template>
     <v-text-field
-id="searchBox" variant="solo" :placeholder="$i18n('Search_label')" hide-details class="search my-0"
+id="searchBox" single-line density="compact" variant="solo" :placeholder="$i18n('Search_label')" hide-details class="search my-0 py-0"
         style="" name="cc5704978dc0411591addc66d25c325b" :model-value="currentSearchTerm" autofocus
         @update:model-value="onSearchInput" @keyup.arrow-down.stop.prevent="focusFirstResult"
         @keyup.enter.stop.prevent="focusFirstResult" @keyup.escape.stop.prevent="handleEscape" />
@@ -98,7 +98,7 @@ export default {
 </script>
 
 <style>
-.search.v-text-field.v-text-field--solo .v-input__control {
+/* .search.v-text-field.v-text-field--solo .v-input__control {
     min-height: 36px !important;
-}
+} */
 </style>

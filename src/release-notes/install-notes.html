@@ -3,8 +3,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link href="../../assets/styles/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/styles/release-notes.css"/>
+    <link href="/assets/styles/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/styles/release-notes.css"/>
     <title>Kee 3.9</title>
     <link rel="icon" href="/common/images/64.png"/>
 </head>
@@ -12,7 +12,7 @@
 <body class="container" style="text-align: center;">
     <div id="i18n_root">
 
-<h1 style="font-size: 42px;"><img src="/common/images/64.png" style="margin-bottom: 4px; margin-right: 10px;" /><span data-i18n="welcome_to_kee"></span> 3.9</h1>
+<h1 style="font-size: 42px;"><img src="/assets/images/64.png" style="margin-bottom: 4px; margin-right: 10px;" /><span data-i18n="welcome_to_kee"></span> 3.9</h1>
 
 <p style="font-weight: bold;"><span data-i18n="introduction_to_kee"></span></p>
 
@@ -57,10 +57,6 @@
 <p><span data-i18n="point_user_to_keepass_install_instructions_start"></span> <a href="https://forum.kee.pm/t/installing-kee-instructions/23" target="_blank" data-i18n="point_user_to_forum_link_text"></a><span data-i18n="point_user_to_keepass_install_instructions_end"></span></p>
 
 </div>
-    <script src="../lib/detectWebExtensions.js"></script>
-    <script src="../lib/tp/browser-polyfill.min.js"></script>
-    <script src="../lib/dollar-polyfill.js"></script>
-    <script src="../lib/i18n.js"></script>
-    <script src="install-cta.js"></script>
+<script type="module" src="./install.ts"></script>
 </body>
 </html>

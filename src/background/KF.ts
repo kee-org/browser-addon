@@ -31,9 +31,7 @@ import { Database } from "../common/model/Database";
 import { Entry } from "../common/model/Entry";
 import { SaveEntryResult } from "../common/SaveEntryResult";
 
-//TODO: Allegedly this will not work (nor the other 4 locations. So would need some other way to ensure this called only from within the context of the Vue App!!!)
 const store = useStubStore();
-//TODO: Replace this background store with something else like a stub so we don't have to rely on pinia when executing in an MV3 environment with no window object.
 
 export class Kee {
     accountManager: AccountManager;
@@ -86,7 +84,7 @@ export class Kee {
                     if (port !== excludedPort) {
                         try {
                             //TODO: Might not be able to distribute Pinia Patch objects without some additional JSON mapping / manipulation
-                            KeeLog.error(JSON.stringify(mutation));
+                            KeeLog.error("New background mutation: " + JSON.stringify(mutation));
                             port.postMessage({ mutation } as AddonMessage);
                         } catch (e) {
                             KeeLog.error(JSON.stringify(e));

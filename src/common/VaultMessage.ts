@@ -3,7 +3,7 @@ import { VaultAction } from "./VaultAction";
 import { Tokens } from "./Tokens";
 import { VaultProtocol } from "./VaultProtocol";
 import { KeeState } from "../store/KeeState";
-import { Mutation } from "../store/syncBackground";
+import { MutationPayload } from "../store/syncBackground";
 
 export interface VaultMessage {
     frameState?: FrameState;
@@ -19,5 +19,5 @@ export interface VaultMessage {
     error?: any;
     tokens?: Tokens;
     initialState?: KeeState;
-    mutation?: Mutation;
+    mutation?: MutationPayload;
 }

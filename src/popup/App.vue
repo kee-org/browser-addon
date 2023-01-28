@@ -1,7 +1,7 @@
 <!-- eslint-disable vuetify/no-deprecated-props -->
 <template>
-    <v-app id="inspire">
-        <v-app-bar v-model="showSearchPanel" app style="max-width: 400px">
+    <v-app>
+        <v-app-bar v-model="showSearchPanel" density="compact" app style="max-width: 400px">
             <SearchInput />
         </v-app-bar>
         <v-main :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
@@ -55,8 +55,8 @@ v-if="showSaveWhere" :display-reason="displayWhereReason"
 
 
         <v-btn
-v-show="showSearchPanel && !showSaveRecovery" size="large" absolute location="bottom right"
-            color="primary" style="bottom: 75px; right: 24px" :class="hasSubmittedData ? 'pulse-button' : ''"
+v-show="showSearchPanel && !showSaveRecovery" position="fixed" location="bottom right"
+            color="primary" style="bottom: 70px; right: 16px" :class="hasSubmittedData ? 'pulse-button' : ''"
             icon @click="saveStart">
             <mdi-plus/>
             <v-tooltip location="left" :open-delay="tooltipDelay" activator="parent">
@@ -249,6 +249,7 @@ export default {
         }
     },
     mounted: async function () {
+        //TODO: Sometimes this crashes. find out why
         this.saveLastActiveAt = this.saveState?.lastActiveAt;
 
         const discardRequired = this.handleLastSaveResult();

@@ -147,19 +147,21 @@ const useStore = defineImmutableStore("kee", {
         },
 
         updateSearchResultWithFullDetails(payload) {
-            //TODO: needs $patch written
+            const cloned = JSON.parse(JSON.stringify(this.searchResults));
             const id = payload.uuid;
-            for (const s of this.searchResults) {
+            for (const s of cloned) {
                 if (s.uuid === id) {
                     s.fullDetails = payload || null;
                     break;
                 }
             }
+            this.$patch({ searchResults: cloned });
         },
 
         addNotification(payload) {
-            //TODO: needs $patch?
-            this.notifications.push(payload);
+            const cloned = JSON.parse(JSON.stringify(this.notifications));
+            cloned.push(payload);
+            this.$patch({ notifications: cloned });
         },
 
         updateSaveEntryResult(payload) {
@@ -167,42 +169,42 @@ const useStore = defineImmutableStore("kee", {
         },
 
         removeFieldFromActiveEntry(payload) {
-
-            //TODO: needs $patch written
-            const firstTextFieldIndex = this.saveState.newEntry.fields.findIndex(
+            const cloned = JSON.parse(JSON.stringify(this.saveState.newEntry.fields));
+            const firstTextFieldIndex = cloned.findIndex(
                 f => f.type === "text"
             );
-            const firstPasswordFieldIndex = this.saveState.newEntry.fields.findIndex(
+            const firstPasswordFieldIndex = cloned.findIndex(
                 f => f.type === "password"
             );
-            const originalFieldIndex = this.saveState.newEntry.fields.findIndex(
+            const originalFieldIndex = cloned.findIndex(
                 f => f.uuid === (payload || null)
             );
-            this.saveState.newEntry.fields.splice(originalFieldIndex, 1);
+            cloned.splice(originalFieldIndex, 1);
 
             if (originalFieldIndex === firstTextFieldIndex) {
-                const newUsernameIndex = this.saveState.newEntry.fields.findIndex(
+                const newUsernameIndex = cloned.findIndex(
                     f => f.type === "text"
                 );
                 if (newUsernameIndex < 0) return;
-                const newUsername = this.saveState.newEntry.fields.splice(newUsernameIndex, 1)[0];
-                this.saveState.newEntry.fields.splice(
+                const newUsername = cloned.splice(newUsernameIndex, 1)[0];
+                cloned.splice(
                     originalFieldIndex,
                     0,
                     new Field({ ...newUsername, name: "KeePass username" })
                 );
             } else if (originalFieldIndex === firstPasswordFieldIndex) {
-                const newPasswordIndex = this.saveState.newEntry.fields.findIndex(
+                const newPasswordIndex = cloned.findIndex(
                     f => f.type === "password"
                 );
                 if (newPasswordIndex < 0) return;
-                const newPassword = this.saveState.newEntry.fields.splice(newPasswordIndex, 1)[0];
-                this.saveState.newEntry.fields.splice(
+                const newPassword = cloned.splice(newPasswordIndex, 1)[0];
+                cloned.splice(
                     originalFieldIndex,
                     0,
                     new Field({ ...newPassword, name: "KeePass password" })
                 );
             }
+            this.$patch({saveState: {newEntry: {fields: cloned}}});
         },
 
         updateEntryUpdateStartedAtTimestamp(payload) {
