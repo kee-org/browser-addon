@@ -33,9 +33,8 @@
                             </v-col>
                             <v-col cols="2">
                                 <v-btn size="small" icon @click="revealed = !revealed">
-                                    <v-icon>
-                                        {{ revealed ? "mdi-eye" : "mdi-eye-off" }}
-                                    </v-icon>
+                                    <mdi-eye v-if="revealed"/>
+                                    <mdi-eye-off v-if="!revealed"/>
                                 </v-btn>
                             </v-col>
                         </v-row>
@@ -78,7 +77,6 @@ import useStore from "../../store";
 import { mapState } from "pinia";
 
 export default {
-    mixins: [Port.mixin],
     props: ["field", "standalone", "topmost"],
     emits: ["copy-to-clipboard", "dialog-closed"],
     setup () {

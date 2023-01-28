@@ -16,7 +16,7 @@
                 <template #append-inner>
                     <v-fade-transition>
                         <v-btn v-if="focussed && resettable" size="small" icon @click="reset">
-                            <v-icon>mdi-undo</v-icon>
+                            <mdi-undo />
                         </v-btn>
                     </v-fade-transition>
                     <v-btn
@@ -25,7 +25,8 @@
                         icon
                         @click="revealed = !revealed"
                     >
-                        <v-icon>{{ revealed ? "mdi-eye" : "mdi-eye-off" }}</v-icon>
+                        <mdi-eye v-if="revealed"/>
+                        <mdi-eye-off v-if="!revealed"/>
                     </v-btn>
                 </template>
                 <template #append>
@@ -36,10 +37,10 @@
                         class="mr-3"
                         @click="showPasswordGenerator = true"
                     >
-                        <v-icon>mdi-flash</v-icon>
+                        <mdi-flash />
                     </v-btn>
                     <v-btn size="small" icon @click="deleteClicked">
-                        <v-icon>mdi-delete</v-icon>
+                        <mdi-delete />
                     </v-btn>
                 </template>
             </v-text-field>

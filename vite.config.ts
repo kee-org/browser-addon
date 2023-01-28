@@ -13,8 +13,8 @@ export const sharedConfig: UserConfig = {
     root: r("src"),
     resolve: {
         alias: {
-            "~/": `${r("src")}/`,
-            vue: "@vue/compat/dist/vue.esm-bundler.js"
+            "~/": `${r("src")}/`
+           // vue: "@vue/compat/dist/vue.esm-bundler.js"
           }
     },
     define: {

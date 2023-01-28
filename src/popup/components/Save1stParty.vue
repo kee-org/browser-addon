@@ -12,7 +12,7 @@
                             dense
                             variant="outlined"
                             hide-details="auto"
-                            :type="text"
+                            type="text"
                             autofocus
                             @update:model-value="setTitle"
                             @focus="onTitleFocus"
@@ -25,7 +25,7 @@
                                     icon
                                     @click="resetTitle"
                                 >
-                                    <v-icon>mdi-undo</v-icon>
+                                    <mdi-undo />
                                 </v-btn>
                             </template>
                         </v-text-field>
@@ -146,7 +146,6 @@ export default {
     components: {
         FieldEditor
     },
-    mixins: [Port.mixin],
     emits: ["cancel-clicked", "save-where-clicked"],
     setup () {
         const { updateSaveState, removeFieldFromActiveEntry } = useStore();

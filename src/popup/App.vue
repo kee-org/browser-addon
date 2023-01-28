@@ -57,17 +57,18 @@ v-if="showSaveWhere" :display-reason="displayWhereReason"
         <v-btn
 v-show="showSearchPanel && !showSaveRecovery" size="large" absolute location="bottom right"
             color="primary" style="bottom: 75px; right: 24px" :class="hasSubmittedData ? 'pulse-button' : ''"
-            icon="mdi-plus" @click="saveStart">
+            icon @click="saveStart">
+            <mdi-plus/>
             <v-tooltip location="left" :open-delay="tooltipDelay" activator="parent">
                 <span>{{ $i18n("create_new_entry") }}</span>
             </v-tooltip>
         </v-btn>
 
-        <v-footer app height="auto">
+        <v-footer app height="auto" class="px-2">
             <v-btn
 id="password-open-kee-vault" :aria-label="$i18n('Menu_Button_open_kee_vault_label')"
-                class="ml-0 mr-2" icon @click="openKeeVault">
-                <img width="24px" height="24px" src="../common/images/48-kee-vault.png" />
+                class="ml-0 mr-2" size="small" icon @click="openKeeVault">
+                <v-img width="24px" height="24px" src="/assets/images/48-kee-vault.png" />
                 <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
                     <span>{{ $i18n("Menu_Button_open_kee_vault_label") }}</span>
                 </v-tooltip>
@@ -75,16 +76,16 @@ id="password-open-kee-vault" :aria-label="$i18n('Menu_Button_open_kee_vault_labe
 
             <v-btn
 v-show="showOpenKeePassButton" id="password-open-keepass"
-                :aria-label="$i18n('Menu_Button_open_keepass_label')" class="mr-2 ml-n1" icon @click="openKeePass">
-                <img width="24px" height="24px" src="../common/images/48-keepass.png" />
+                :aria-label="$i18n('Menu_Button_open_keepass_label')" class="mr-2 ml-n1" size="small" icon @click="openKeePass">
+                <v-img width="24px" height="24px" src="/assets/images/48-keepass.png" />
                 <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
                     <span>{{ $i18n("Menu_Button_open_keepass_label") }}</span></v-tooltip>
             </v-btn>
             <v-divider vertical />
-            <mdi-lock size="20px" :color="statusIconColour" class="mx-2"/>
+            <mdi-lock :color="statusIconColour" class="mx-2"/>
 
             <div
-class="text-caption py-1 shrink"
+                class="text-caption py-1 shrink"
                 style="word-break: break-word; overflow-wrap: break-word; max-width: 210px">
                 {{ connectionStatus }}
                 <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
@@ -94,35 +95,37 @@ class="text-caption py-1 shrink"
 
             <v-spacer />
 
-            <!-- <v-menu location="top" offset-y small> -->
-            <v-menu location="top" offset-y small>
-                <template #activator="{ props }">
-                    <v-btn icon size="small" v-bind="props">
-                        <mdi-menu/>
-                    </v-btn>
-                </template>
-
-                <v-list>
-                    <v-list-item @click="showHelp">
-                        <v-list-item-title right class="mr-4 text-right text-body-2">
-                            {{ $i18n("Help_Centre_Button_label") }}
-                        </v-list-item-title>
-                        <mdi-help size="20px" />
-                    </v-list-item>
-                    <v-list-item @click="showOptions">
-                        <v-list-item-title class="mr-4 text-right text-body-2">
-                            {{ $i18n("Menu_Button_options_label") }}
-                        </v-list-item-title>
-                        <mdi-flash size="20px" /> <!-- mdi-settings-->
-                    </v-list-item>
-                    <v-list-item v-show="showSearchPanel" @click="showPasswordGenerator = true">
-                        <v-list-item-title class="mr-4 text-right text-body-2">
-                            {{ $i18n("Menu_Button_copyNewPasswordToClipboard_label") }}
-                        </v-list-item-title>
-                        <v-icon size="20px"> mdi-flash </v-icon>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
+            <v-btn icon size="small">
+                <mdi-menu scale="150"/>
+                <v-menu location="top" activator="parent">
+                    <v-list>
+                        <v-list-item @click="showHelp">
+                            <v-list-item-title class="text-right text-body-2">
+                                {{ $i18n("Help_Centre_Button_label") }}
+                            </v-list-item-title>
+                            <template #append>
+                                <mdi-help class="ml-2" />
+                            </template>
+                        </v-list-item>
+                        <v-list-item @click="showOptions">
+                            <v-list-item-title class="text-right text-body-2">
+                                {{ $i18n("Menu_Button_options_label") }}
+                            </v-list-item-title>
+                            <template #append>
+                                <mdi-cog class="ml-2"/>
+                            </template>
+                        </v-list-item>
+                        <v-list-item v-show="showSearchPanel" @click="showPasswordGenerator = true">
+                            <v-list-item-title class="text-right text-body-2">
+                                {{ $i18n("Menu_Button_copyNewPasswordToClipboard_label") }}
+                            </v-list-item-title>
+                            <template #append>
+                                <mdi-flash class="ml-2" />
+                            </template>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+            </v-btn>
         </v-footer>
         <PasswordGenerator
 v-if="showPasswordGenerator" :standalone="true" @dialog-closed="passwordGeneratorClosed"
@@ -152,7 +155,7 @@ import { copyStringToClipboard } from "../common/copyStringToClipboard";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import useStore from "../store";
-import { mapActions, mapState } from "pinia";
+import { mapState } from "pinia";
 
 declare const punycode;
 

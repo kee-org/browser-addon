@@ -1,13 +1,9 @@
 <template>
     <v-card color="yellow-lighten-3">
         <div style="float: right">
-            <v-btn
-                variant="text"
-                class="ml-4 mr-2 px-2 text-primary"
-                @click="closeNotification(notification.id)"
-            >
+            <v-btn variant="text" class="ml-4 mr-2 px-2 text-primary" @click="closeNotification(notification.id)">
                 {{ $i18n("close") }}
-                <v-icon>mdi-close</v-icon>
+                <mdi-close />
             </v-btn>
         </div>
 
@@ -20,31 +16,21 @@
             <v-row justify="center" align="end" class="mb-1 mt-1">
                 <v-col>
                     <v-row align="end" class="ml-2 justify-left my-0">
-                        <v-tooltip
-                            v-for="(but, index) of notification.buttons"
-                            :key="index"
-                            location="top"
-                            :disabled="!but.tooltip"
-                            :open-delay="tooltipDelay"
-                        >
-                            <template #activator="{ on }">
-                                <v-btn
-                                    :id="but.id"
-                                    class="mr-4 my-2"
-                                    v-on="on"
-                                    @click="
-                                        dispatchActionResponse(
-                                            notification.id,
-                                            but.action,
-                                            but.values
-                                        )
-                                    "
-                                >
-                                    {{ but.label }}
-                                </v-btn>
-                                <span>{{ but.tooltip }}</span>
-                            </template>
-                        </v-tooltip>
+                        <v-btn
+v-for="(but, index) of notification.buttons" :id="but.id" :key="index" class="mr-4 my-2"
+                            @click="
+                                dispatchActionResponse(
+                                    notification.id,
+                                    but.action,
+                                    but.values
+                                )
+                            ">
+                            <v-tooltip location="top" :disabled="!but.tooltip" :open-delay="tooltipDelay"> <span>{{
+                                but.tooltip
+                            }}</span>
+                            </v-tooltip>
+                            {{ but.label }}
+                        </v-btn>
                     </v-row>
                 </v-col>
             </v-row>

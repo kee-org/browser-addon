@@ -4,7 +4,6 @@
   "version": "3.10.0",
   "description": "Kee adds private, secure and easy password management features which save time and keep your private data more secure.",
   "default_locale": "en",
-  "version_name": "3.10.0",
   "author": "Kee Vault Ltd",
   "background": {
     "page": "./dist/background/index.html",
@@ -26,7 +25,8 @@
       "64": "./assets/images/64.png"
     },
     "default_title": "Kee",
-    "default_popup": "./dist/popup/index.html"
+    "default_popup": "./dist/popup/index.html",
+    "default_area": "navbar"
   },
   "options_ui": {
     "page": "./dist/settings/index.html",

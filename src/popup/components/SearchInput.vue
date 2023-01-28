@@ -17,7 +17,6 @@ import { mapState } from "pinia";
 import { Database } from "../../common/model/Database";
 
 export default {
-    mixins: [Port.mixin],
     setup() {
         const { updateSearchResults, updateCurrentSearchTerm } = useStore();
         return { updateSearchResults, updateCurrentSearchTerm };

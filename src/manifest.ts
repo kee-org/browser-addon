@@ -40,7 +40,7 @@ export async function getManifest() {
         //     }
         // ],
         "default_locale": "en",
-    "version_name": "3.10.0",
+    //TODO: Support Chrome version of manifest. e.g.: "version_name": "3.10.0 beta",
     "author": "Kee Vault Ltd",
     "background": {
         // "scripts": [
@@ -120,7 +120,8 @@ export async function getManifest() {
         },
         "default_title": "Kee",
         // "default_popup": "popup/popup.html"
-        default_popup: "./dist/popup/index.html"
+        default_popup: "./dist/popup/index.html",
+        "default_area": "navbar"
     },
     "options_ui": {
         // "page": "settings/settings.html",

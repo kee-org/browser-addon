@@ -1,25 +1,21 @@
 <template>
     <v-row v-if="useful" justify="center" align="center">
         <v-col class="text-truncate my-2 text-right">
-            <v-tooltip location="bottom" :open-delay="tooltipDelay">
-                <template #activator="{ on }">
-                    <span :style="fieldStyle" v-on="on" @click="toggleReveal">{{
-                        displayValue
-                    }}</span>
-                </template>
-                <span>{{ tooltip }}</span>
-            </v-tooltip>
+            <span :style="fieldStyle" @click="toggleReveal">
+                <v-tooltip location="bottom" :open-delay="tooltipDelay" activator="parent">
+                    <span>{{ tooltip }}</span>
+                </v-tooltip>
+                {{ displayValue }}
+            </span>
         </v-col>
 
         <v-col class="my-0 shrink">
-            <v-tooltip location="left" :open-delay="tooltipDelay">
-                <template #activator="{ on }">
-                    <v-btn size="small" icon class="my-0" v-on="on" @click="copyValue">
-                        <i-mdi-content-copy size="small"/>
-                    </v-btn>
-                </template>
-                <span>{{ $i18n("copy_value_to_clipboard") }}</span>
-            </v-tooltip>
+            <v-btn size="small" icon class="my-0" @click="copyValue">
+                <v-tooltip location="left" :open-delay="tooltipDelay" activator="parent">
+                    <span>{{ $i18n("copy_value_to_clipboard") }}</span>
+                </v-tooltip>
+                <i-mdi-content-copy size="small" />
+            </v-btn>
         </v-col>
     </v-row>
 </template>

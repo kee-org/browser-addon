@@ -13,7 +13,6 @@
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@unocss/reset": "^0.48.4",
     "@vitejs/plugin-vue": "^4.0.0",
-    "@vue/compat": "3.2.45",
     "@vue/compiler-sfc": "^3.2.45",
     "@vue/test-utils": "^2.2.7",
     "@vueuse/core": "^9.11.1",

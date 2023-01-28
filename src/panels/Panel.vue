@@ -21,7 +21,6 @@ export default {
     components: {
         PasswordGenerator
     },
-    mixins: [Port.mixin],
     data: () => ({
         showPasswordGenerator: false
     }),

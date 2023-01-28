@@ -1,4 +1,4 @@
-import { App as VueApp, createApp, h, configureCompat } from "vue";
+import { App as VueApp, createApp, h } from "vue";
 import { createVuetify } from "vuetify";
 import App from "./App.vue";
 import useStore, { KeeStore } from "../store";
@@ -15,11 +15,11 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
 // disable compat for certain features
-configureCompat({
-    RENDER_FUNCTION: false,
-    COMPONENT_V_MODEL: false,
-    COMPONENT_ASYNC: false
-});
+// configureCompat({
+//     RENDER_FUNCTION: false,
+//     COMPONENT_V_MODEL: false,
+//     COMPONENT_ASYNC: false
+// });
 
 const piniaInstance = createPinia();
 let vueApp: VueApp<Element>;
