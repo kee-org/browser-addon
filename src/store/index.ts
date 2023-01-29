@@ -9,6 +9,7 @@ import { App } from "vue";
 /**
  * A replacement for `defineStore` which makes all state properties readonly
  * to prevent mutations outside of actions.
+ * DOES NOT PREVENT RUNTIME MUTATIONS SO TSC MUST BE RUN AT COMPILE TIME
  */
 function defineImmutableStore<Id extends string, S extends StateTree = any, G extends _GettersTree<S> = any, A = any>(
     id: Id,

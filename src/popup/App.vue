@@ -1,11 +1,12 @@
 <!-- eslint-disable vuetify/no-deprecated-props -->
 <template>
-    <v-app>
+    <v-app class="">
         <v-app-bar v-model="showSearchPanel" density="compact" app style="max-width: 400px">
             <SearchInput />
         </v-app-bar>
-        <v-main :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
-            <v-container fluid>
+        <v-main>
+            <v-container fluid class="overflow-auto p-3">
+            <div :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
                 <v-alert v-show="showSaveRecovery" color="secondary" border="top" border-color="primary" elevation="1">
                     <v-row dense>
                         <v-col>{{ $i18n("unsaved_changes") }}</v-col>
@@ -50,6 +51,7 @@ v-if="showSaveStart && !showSaveWhere" @save-where-clicked="saveWhere"
                 <SaveWhere
 v-if="showSaveWhere" :display-reason="displayWhereReason"
                     :preferred-group-uuid="preferredGroupUuid" />
+        </div>
             </v-container>
         </v-main>
 
@@ -437,17 +439,17 @@ export default {
 </script>
 
 <style>
-.v-main__wrap {
+/* .v-main__wrap {
     overflow-y: scroll;
+} */
+
+.app_height_medium {
+    max-height: 456px;
+    min-height: 456px;
+    height: 456px;
 }
 
-.app_height_medium .v-main__wrap {
-    max-height: 466px;
-    min-height: 466px;
-    height: 466px;
-}
-
-.app_height_tall .v-main__wrap {
+.app_height_tall {
     max-height: 522px;
     min-height: 522px;
     height: 522px;

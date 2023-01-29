@@ -326,12 +326,12 @@ export class Kee {
         window.kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
         store.addNotification(notification);
         browser.browserAction.setIcon({
-            path: "common/images/highlight-48.png"
+            path: "/assets/images/highlight-48.png"
         });
         if (nativeNotification) {
             browser.notifications.create({
                 type: "basic",
-                iconUrl: browser.extension.getURL("common/images/128.png"),
+                iconUrl: browser.extension.getURL("/assets/images/128.png"),
                 title: nativeNotification.title,
                 message: nativeNotification.message
             });
@@ -339,7 +339,7 @@ export class Kee {
             if (configManager.current.notificationCountGeneric < 5) {
                 browser.notifications.create({
                     type: "basic",
-                    iconUrl: browser.extension.getURL("common/images/128.png"),
+                    iconUrl: browser.extension.getURL("/assets/images/128.png"),
                     title: $STR("notification_raised_title"),
                     message:
                         $STR("notification_yellow_background") +
@@ -369,7 +369,7 @@ export class Kee {
     }
 
     resetBrowserActionColor() {
-        browser.browserAction.setIcon({ path: "common/images/48.png" });
+        browser.browserAction.setIcon({ path: "/assets/images/48.png" });
     }
 
     shutdown() {

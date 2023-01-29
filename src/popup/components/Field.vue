@@ -14,7 +14,7 @@
                 <v-tooltip location="left" :open-delay="tooltipDelay" activator="parent">
                     <span>{{ $i18n("copy_value_to_clipboard") }}</span>
                 </v-tooltip>
-                <i-mdi-content-copy size="small" />
+                <mdi-content-copy />
             </v-btn>
         </v-col>
     </v-row>

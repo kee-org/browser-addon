@@ -13,6 +13,7 @@ declare module '@vue/runtime-core' {
     MdiClose: typeof import('~icons/mdi/close')['default']
     MdiCloud: typeof import('~icons/mdi/cloud')['default']
     MdiCog: typeof import('~icons/mdi/cog')['default']
+    MdiContentCopy: typeof import('~icons/mdi/content-copy')['default']
     MdiDelete: typeof import('~icons/mdi/delete')['default']
     MdiEye: typeof import('~icons/mdi/eye')['default']
     MdiEyeOff: typeof import('~icons/mdi/eye-off')['default']

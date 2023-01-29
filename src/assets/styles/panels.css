@@ -107,7 +107,7 @@ body {
     position:absolute;
     right: 10px;
     bottom:calc(50% - 11px);
-    background-image: url("../common/images/menu.png");
+    background-image: url("../assets/images/menu.png");
     padding:1px;
     background-repeat:no-repeat;
     background-position:1px 1px;
@@ -142,12 +142,12 @@ body {
 
 #DatabaseList > ul > li
 {
-    background-image: url("../common/images/KeeLock.png");
+    background-image: url("../assets/images/KeeLock.png");
 }
 
 #GeneratePasswordContainer > ul > li
 {
-    background-image: url("../common/images/KeeOrange.png");
+    background-image: url("../assets/images/KeeOrange.png");
 }
 
 #optionsContainer {

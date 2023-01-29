@@ -214,7 +214,7 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
         if (configManager.current.notificationCountSavePassword < 10) {
             browser.notifications.create({
                 type: "basic",
-                iconUrl: browser.extension.getURL("common/images/128.png"),
+                iconUrl: browser.extension.getURL("/assets/images/128.png"),
                 title: $STR("savePasswordText"),
                 message:
                     $STR("notification_save_password_tip") +
