@@ -7,11 +7,10 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { Action } from "../common/Action";
-import useStore, { useStubStore } from "../store";
+import { useStubStore } from "../store";
 import { SyncContent } from "../store/syncContent";
 import { Port } from "../common/port";
-import { createPinia } from "pinia";
-import { Mutation } from "../store/syncBackground";
+import { MutationPayload } from "../store/syncBackground";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
@@ -50,11 +49,11 @@ let missingPageShowTimer: number;
 
 let inputsObserver: MutationObserver;
 
-const store = useStubStore();
-
 // Content scripts are injected into non-HTML documents such as SVGs.
 // We have no interest in this document if it has no body Node
 if (document.body) {
+    const store = useStubStore();
+
     inputsObserver = new MutationObserver(mutations => {
         // If we have already scheduled a rescan recently, no further action required
         if (formFilling.formFinderTimer !== null) return;
@@ -185,19 +184,21 @@ if (document.body) {
             );
             return;
         }
-        syncContent = new SyncContent(store);
+        syncContent = new SyncContent();
         Port.startup("page");
 
         Port.raw.onMessage.addListener(function (m: AddonMessage) {
             KeeLog.debug("In browser content page script, received message from background script");
 
             if (m.initialState) {
-                syncContent.init(m.initialState, (mutation: Mutation) => {
-                    Port.postMessage({ mutation } as AddonMessage);
+                syncContent.init(store, m.initialState, (mutationPayload: MutationPayload) => {
+                    const json = JSON.stringify(mutationPayload);
+                    KeeLog.debug("New non-background page mutation: " + json);
+                    Port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
                 });
             }
             if (m.mutation) {
-                syncContent.onRemoteMutation(m.mutation);
+                syncContent.onRemoteMutationPayload(m.mutation);
                 return;
             }
 

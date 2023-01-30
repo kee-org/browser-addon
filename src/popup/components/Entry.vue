@@ -11,13 +11,13 @@ v-bind="props" ref="card" :tabindex="`${tabindex}`" :elevation="isHovering ? 12 
                 @keyup.enter.self.stop.prevent="primaryClickAction" @keyup.enter.ctrl.self.stop.prevent="loadInNewTab">
                 <v-container class="ma-0 pa-0 my-2" :style="titleStyle">
                     <v-sheet
-class="d-flex align-center justify-space-between  mr-3 ml-12 my-0"
-                        :style="`${isHovering ? 'cursor: pointer' : ''}`" @click.left.exact="primaryClickAction"
+class="mr-3 ml-12 my-0"
+                        :style="`display: flex; align-items:center; justify-content:space-between; ${isHovering ? 'cursor: pointer' : ''}`" @click.left.exact="primaryClickAction"
                         @click.middle.exact="loadInNewTab" @click.left.ctrl="loadInNewTab"
                         @click.middle.ctrl="primaryClickAction" @click.right.stop.prevent="showFullDetails">
                         <v-sheet class="text-truncate">
                             <v-hover>
-                                <v-container fluid class="ma-0 pa-0">
+                                <v-container fluid class="ma-0 pa-0" style="padding: 0px;">
                                     <v-row no-gutters class="my-0">
                                         <v-col class="text-truncate">
                                             {{ entrySummary.title }}
@@ -43,13 +43,13 @@ variant="elevated" color="secondary" size="x-small" icon
                         </v-sheet>
                     </v-sheet>
                 </v-container>
-                <v-card-text class="py-0 text-truncate" style="cursor: default">
+                <v-card-text class="text-truncate" style="cursor: default; padding: 0px;">
                     <v-slide-y-transition>
                         <v-container v-if="expanded && !!entrySummary.fullDetails" class="my-0 pa-0 mx-2">
                             <Field v-for="f of allFields" :key="f.uuid" :field="f" />
-                            <v-row justify="space-between" align="center" class="my-0">
-                                <v-col class="text-truncate">
-                                    <v-row class="justify-left text-truncate flex-nowrap my-0" align="center">
+                            <v-sheet class="my-0" style="display: flex; justify-content: space-between;">
+                                <v-sheet class="text-truncate">
+                                    <v-sheet class="text-truncate my-0" style="flex-wrap: nowrap; display: flex; align-items: center;">
                                         <v-tooltip
 location="top" :disabled="!entryPathIsLong"
                                             :open-delay="tooltipDelay" activator="parent">
@@ -59,8 +59,8 @@ location="top" :disabled="!entryPathIsLong"
                                         <span class="text-truncate text-caption py-1">{{
                                             entryPath
                                         }}</span>
-                                    </v-row>
-                                    <v-row class="justify-left text-truncate flex-nowrap my-0" align="center">
+                                    </v-sheet>
+                                    <v-sheet class="text-truncate my-0" style="flex-wrap: nowrap; display: flex; align-items: center;">
                                         <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
                                             <span>{{ entrySummary.url }}</span>
                                         </v-tooltip>
@@ -68,14 +68,14 @@ location="top" :disabled="!entryPathIsLong"
                                         <span class="text-truncate text-caption py-1">{{
                                             entryDomain
                                         }}</span>
-                                    </v-row>
-                                </v-col>
+                                    </v-sheet>
+                                </v-sheet>
 
-                                <v-col class="ma-2 shrink">
+                                <v-sheet class="ma-2 shrink">
                                     <v-btn size="small" location="bottom left" icon="mdi-pencil" @click="editEntry">
                                     </v-btn>
-                                </v-col>
-                            </v-row>
+                                </v-sheet>
+                            </v-sheet>
                             <v-row v-if="isMatchedEntry" justify="space-between" align="center">
                                 <v-col class="text-truncate pt-0 ma-0">
                                     <v-divider></v-divider>
@@ -127,7 +127,7 @@ export default {
         titleStyle: function () {
             const e = this.entrySummary as EntrySummary;
             return (
-                "background-size:32px; background-position:16px calc(50% + 1px); background-image:url(data:image/png;base64," +
+                "padding: 0px; background-size:32px; background-position:16px calc(50% + 1px); background-image:url(data:image/png;base64," +
                 e.icon.iconImageData +
                 ")"
             );

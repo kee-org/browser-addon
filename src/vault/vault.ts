@@ -6,10 +6,10 @@ import { VaultAction } from "../common/VaultAction";
 import { VaultMessage } from "../common/VaultMessage";
 import { VaultProtocol } from "../common/VaultProtocol";
 import { SyncContent } from "../store/syncContent";
-import store from "../store";
-import { MutationPayload } from "vuex";
+import { KeeStore, useStubStore } from "../store";
 import { AddonMessage } from "../common/AddonMessage";
 import { Port } from "../common/port";
+import { MutationPayload } from "~/store/syncBackground";
 
 /*
   This links Kee to an instance of Kee Vault via the KPRPC protocol.
@@ -210,6 +210,7 @@ class Page {
 }
 
 let syncContent: SyncContent;
+let store: KeeStore;
 
 // Orchestrate the link between this content script and the addon background process
 class Background {
@@ -222,7 +223,8 @@ class Background {
             );
             return;
         }
-        syncContent = new SyncContent(store);
+        syncContent = new SyncContent();
+        store = useStubStore();
         Port.startup("vault");
 
         Port.raw.onMessage.addListener(function (m: VaultMessage) {
@@ -230,12 +232,12 @@ class Background {
                 "In browser content vault script, received message from background script"
             );
             if (m.initialState) {
-                syncContent.init(m.initialState, (mutation: MutationPayload) => {
+                syncContent.init(store, m.initialState, (mutation: MutationPayload) => {
                     Port.postMessage({ mutation } as AddonMessage);
                 });
             }
             if (m.mutation) {
-                syncContent.onRemoteMutation(m.mutation);
+                syncContent.onRemoteMutationPayload(m.mutation);
                 return;
             }
 

@@ -111,6 +111,6 @@ export default defineConfig(({ command }) => ({
     },
     test: {
         globals: true,
-        environment: "jsdom"
+        environment: "node"
     }
 }));

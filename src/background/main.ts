@@ -8,6 +8,14 @@ import { AddonMessage } from "../common/AddonMessage";
 import { useStubStore } from "../store";
 // import { PersistentLogger } from "../common/PersistentLogger";
 
+// only on dev mode
+if (import.meta.hot) {
+    // @ts-expect-error for background HMR
+    import('/@vite/client')
+    // load latest content script
+    import('./contentScriptHMR')
+  }
+
 const userBusySeconds = 60 * 15;
 const maxUpdateDelaySeconds = 60 * 60 * 8;
 

@@ -1,37 +1,37 @@
 <!-- eslint-disable vuetify/no-deprecated-props -->
+<!-- above due to eslint bug incorrectly highlighting border="top" as a problem -->
 <template>
     <v-app class="">
-        <v-app-bar v-model="showSearchPanel" density="compact" app style="max-width: 400px">
+        <v-app-bar v-model="showSearchPanel" class="py-1" density="compact" app style="max-width: 400px">
             <SearchInput />
         </v-app-bar>
         <v-main>
-            <v-container fluid class="overflow-auto p-3">
+            <v-container fluid class="overflow-auto pa-0" style="padding: 8px;">
             <div :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
                 <v-alert v-show="showSaveRecovery" color="secondary" border="top" border-color="primary" elevation="1">
                     <v-row dense>
                         <v-col>{{ $i18n("unsaved_changes") }}</v-col>
                     </v-row>
-                    <v-row dense align="start">
+                    <v-row dense class="py-1" align="start">
                         <v-col>
-                            <v-btn color="primary" @click="saveRecover">
+                            <v-btn color="primary" size="small" @click="saveRecover">
                                 {{ $i18n("continue_saving") }}
                             </v-btn>
                         </v-col>
                         <v-col>
-                            <v-btn color="tertiary" @click="saveDiscard">
+                            <v-btn color="tertiary" size="small" @click="saveDiscard">
                                 {{ $i18n("discard_changes") }}
                             </v-btn>
                         </v-col>
-                        <v-spacer />
                     </v-row>
                 </v-alert>
                 <v-alert v-show="showSaveResult" color="secondary" border="top" border-color="primary" elevation="1">
                     <v-row dense>
                         <v-col>{{ $i18n("you_recently_saved") }}</v-col>
                     </v-row>
-                    <v-row dense align="start">
+                    <v-row dense class="py-1" align="start">
                         <v-col>
-                            <v-btn @click="openFullEntryEditor">
+                            <v-btn size="small" @click="openFullEntryEditor">
                                 {{ $i18n("open_full_editor") }}
                             </v-btn>
                         </v-col>
@@ -60,16 +60,16 @@ v-if="showSaveWhere" :display-reason="displayWhereReason"
 v-show="showSearchPanel && !showSaveRecovery" position="fixed" location="bottom right"
             color="primary" style="bottom: 70px; right: 16px" :class="hasSubmittedData ? 'pulse-button' : ''"
             icon @click="saveStart">
-            <mdi-plus/>
+            <mdi-plus scale="150"/>
             <v-tooltip location="left" :open-delay="tooltipDelay" activator="parent">
                 <span>{{ $i18n("create_new_entry") }}</span>
             </v-tooltip>
         </v-btn>
 
-        <v-footer app height="auto" class="px-2">
+        <v-footer app height="auto" style="padding:8px;">
             <v-btn
 id="password-open-kee-vault" :aria-label="$i18n('Menu_Button_open_kee_vault_label')"
-                class="ml-0 mr-2" size="small" icon @click="openKeeVault">
+                class="ml-0 mr-1" size="small" icon @click="openKeeVault">
                 <v-img width="24px" height="24px" src="/assets/images/48-kee-vault.png" />
                 <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
                     <span>{{ $i18n("Menu_Button_open_kee_vault_label") }}</span>
@@ -78,26 +78,26 @@ id="password-open-kee-vault" :aria-label="$i18n('Menu_Button_open_kee_vault_labe
 
             <v-btn
 v-show="showOpenKeePassButton" id="password-open-keepass"
-                :aria-label="$i18n('Menu_Button_open_keepass_label')" class="mr-2 ml-n1" size="small" icon @click="openKeePass">
+                :aria-label="$i18n('Menu_Button_open_keepass_label')" class="mr-1 ml-n1" size="small" icon @click="openKeePass">
                 <v-img width="24px" height="24px" src="/assets/images/48-keepass.png" />
                 <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
                     <span>{{ $i18n("Menu_Button_open_keepass_label") }}</span></v-tooltip>
             </v-btn>
             <v-divider vertical />
-            <mdi-lock :color="statusIconColour" class="mx-2"/>
+            <mdi-lock :color="statusIconColour" class="mx-1"/>
 
             <div
                 class="text-caption py-1 shrink"
-                style="word-break: break-word; overflow-wrap: break-word; max-width: 210px">
+                style="word-break: break-word; overflow-wrap: break-word; max-width: 210px; font-size: 0.8rem">
                 {{ connectionStatus }}
                 <v-tooltip location="top" :open-delay="tooltipDelay" activator="parent">
                     <span>{{ connectionStatusDetail }}</span>
                 </v-tooltip>
             </div>
+<!--
+            <v-spacer /> -->
 
-            <v-spacer />
-
-            <v-btn icon size="small">
+            <v-btn icon size="small" class="ms-auto">
                 <mdi-menu scale="150"/>
                 <v-menu location="top" activator="parent">
                     <v-list>
@@ -158,8 +158,7 @@ import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import useStore from "../store";
 import { mapState } from "pinia";
-
-declare const punycode;
+import punycode from "punycode/";
 
 export default {
     components: {
@@ -227,6 +226,8 @@ export default {
             return new Date(this.saveLastActiveAt) > new Date(Date.now() - this.autoRecoveryTimeMs);
         },
         showSaveRecovery: function () {
+            KeeLog.debug(`showSaveRecovery ${this.showSaveStart} : ${new Date(this.saveLastActiveAt)} ${new Date(Date.now() - this.manualRecoveryPromptTimeMs
+                )} : ${new Date(this.saveLastActiveAt) > new Date(Date.now() - this.manualRecoveryPromptTimeMs)}`);
             return (
                 !this.showSaveStart &&
                 new Date(this.saveLastActiveAt) >
@@ -243,13 +244,26 @@ export default {
             return this.lastSaveEntryResult && !this.showSaveStart;
         }
     },
-    watch: {
-        saveState: function (newState: SaveState, oldState: SaveState) {
-            if (newState?.newEntry?.uuid !== oldState?.newEntry?.uuid) {
-                this.saveLastActiveAt = newState.lastActiveAt;
-            }
-        }
-    },
+    // watch: {
+    //     saveState: function (newState: SaveState, oldState: SaveState) {
+    //         KeeLog.warn("watch ss");
+    //         //TODO: is this not working thus reason for not showing form when first clicking on + button?
+    //         if (newState?.newEntry?.uuid !== oldState?.newEntry?.uuid) {
+    //             this.saveLastActiveAt = newState.lastActiveAt;
+    //             KeeLog.debug("savestate watch modified");
+    //         } else {
+    //             KeeLog.debug("savestate watch not modified");
+    //         }
+    //     }
+    //     quantity: {
+    //   handler: function (newVal, oldVal) {
+    //     if(newVal < 1){
+    //       this.product.quantity = 1;
+    //     }
+    //   },
+    //   deep: true
+    // },
+    // },
     mounted: async function () {
         //TODO: Sometimes this crashes. find out why
         this.saveLastActiveAt = this.saveState?.lastActiveAt;
@@ -265,6 +279,7 @@ export default {
             this.saveState?.lastActiveAt <=
             new Date(Date.now() - this.manualRecoveryPromptTimeMs)
         ) {
+            KeeLog.warn("mount discarding...");
             this.saveDiscard();
         }
 
@@ -273,8 +288,10 @@ export default {
         const favicon = await fetchFavicon(favIconUrl);
         if (!favicon) return;
 
-        const updatedSaveState = Object.assign({}, this.saveState);
+        const updatedSaveState = Object.assign({}, JSON.parse(JSON.stringify(this.saveState)));
         updatedSaveState.favicon = favicon;
+        // eslint-disable-next-line no-debugger
+        //debugger;
         this.updateSaveState(updatedSaveState);
     },
     methods: {
@@ -309,17 +326,19 @@ export default {
                     })
                 ]
             };
-            const ss = this.saveState as SaveState;
+            const ss = JSON.parse(JSON.stringify(this.saveState as SaveState));
             const updatedSaveState = Object.assign({}, ss);
             updatedSaveState.newEntry = supplementEntryState(new Entry(entryTemplate), ss);
             updatedSaveState.titleResetValue = updatedSaveState.newEntry.title;
             updatedSaveState.lastActiveAt = new Date();
             updatedSaveState.showURLMismatchWarning = false;
+            KeeLog.warn("upd ss");
             this.updateSaveState(updatedSaveState);
-            //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
+            KeeLog.warn("upd ss 2");
+            this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
         saveRecover: function () {
-            const ss = this.saveState as SaveState;
+            const ss = JSON.parse(JSON.stringify(this.saveState as SaveState));
             const updatedSaveState = Object.assign({}, ss);
             updatedSaveState.lastActiveAt = new Date();
             this.updateSaveState(updatedSaveState);
@@ -328,7 +347,7 @@ export default {
             this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
         saveDiscard: function () {
-            const ss = this.saveState as SaveState;
+            const ss = JSON.parse(JSON.stringify(this.saveState as SaveState));
             const updatedSaveState = Object.assign({}, ss);
             updatedSaveState.newEntry = new Entry({});
             updatedSaveState.titleResetValue = null;
@@ -336,7 +355,7 @@ export default {
             updatedSaveState.showURLMismatchWarning = false;
             updatedSaveState.favicon = null;
             this.updateSaveState(updatedSaveState);
-            //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
+            this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
         saveWhere: function (displayWhereReason: string, preferredGroupUuid: string) {
             this.displayWhereReason = displayWhereReason;
@@ -439,10 +458,6 @@ export default {
 </script>
 
 <style>
-/* .v-main__wrap {
-    overflow-y: scroll;
-} */
-
 .app_height_medium {
     max-height: 456px;
     min-height: 456px;

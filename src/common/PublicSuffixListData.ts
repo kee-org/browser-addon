@@ -1,6 +1,5 @@
 /* eslint-disable no-var */
-var pslData = {
-    text: `// This Source Code Form is subject to the terms of the Mozilla Public
+export const pslData = `// This Source Code Form is subject to the terms of the Mozilla Public
     // License, v. 2.0. If a copy of the MPL was not distributed with this
     // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
@@ -11,7 +10,7 @@ var pslData = {
 
     // ===BEGIN ICANN DOMAINS===
 
-    // ac : https://en.wikipedia.org/wiki/.ac
+    // ac : http://nic.ac/rules.htm
     ac
     com.ac
     edu.ac
@@ -24,8 +23,7 @@ var pslData = {
     ad
     nom.ad
 
-    // ae : https://en.wikipedia.org/wiki/.ae
-    // see also: "Domain Name Eligibility Policy" at http://www.aeda.ae/eng/aepolicy.php
+    // ae : https://tdra.gov.ae/en/aeda/ae-policies
     ae
     co.ae
     net.ae
@@ -177,17 +175,21 @@ var pslData = {
     // aq : https://en.wikipedia.org/wiki/.aq
     aq
 
-    // ar : https://nic.ar/nic-argentina/normativa-vigente
+    // ar : https://nic.ar/es/nic-argentina/normativa
     ar
+    bet.ar
     com.ar
+    coop.ar
     edu.ar
     gob.ar
     gov.ar
     int.ar
     mil.ar
     musica.ar
+    mutual.ar
     net.ar
     org.ar
+    senasa.ar
     tur.ar
 
     // arpa : https://en.wikipedia.org/wiki/.arpa
@@ -736,7 +738,6 @@ var pslData = {
     // cl : https://www.nic.cl
     // Confirmed by .CL registry <hsalgado@nic.cl>
     cl
-    aprendemas.cl
     co.cl
     gob.cl
     gov.cl
@@ -841,7 +842,13 @@ var pslData = {
     inf.cu
 
     // cv : https://en.wikipedia.org/wiki/.cv
+    // cv : http://www.dns.cv/tldcv_portal/do?com=DS;5446457100;111;+PAGE(4000018)+K-CAT-CODIGO(RDOM)+RCNT(100); <- registration rules
     cv
+    com.cv
+    edu.cv
+    int.cv
+    nome.cv
+    org.cv
 
     // cw : http://www.una.cw/cw_registry/
     // Confirmed by registry <registry@una.net> 2013-03-26
@@ -858,6 +865,7 @@ var pslData = {
 
     // cy : http://www.nic.cy/
     // Submitted by registry Panayiotou Fotia <cydns@ucy.ac.cy>
+    // namespace policies URL https://www.nic.cy/portal//sites/default/files/symfonia_gia_eggrafi.pdf
     cy
     ac.cy
     biz.cy
@@ -865,10 +873,9 @@ var pslData = {
     ekloges.cy
     gov.cy
     ltd.cy
-    name.cy
+    mil.cy
     net.cy
     org.cy
-    parliament.cy
     press.cy
     pro.cy
     tm.cy
@@ -1178,6 +1185,7 @@ var pslData = {
     web.gu
 
     // gw : https://en.wikipedia.org/wiki/.gw
+    // gw : https://nic.gw/regras/
     gw
 
     // gy : https://en.wikipedia.org/wiki/.gy
@@ -1308,7 +1316,9 @@ var pslData = {
     ie
     gov.ie
 
-    // il : http://www.isoc.org.il/domains/
+    // il :         http://www.isoc.org.il/domains/
+    // see also:    https://en.isoc.org.il/il-cctld/registration-rules
+    // ISOC-IL      (operated by .il Registry)
     il
     ac.il
     co.il
@@ -1318,6 +1328,16 @@ var pslData = {
     muni.il
     net.il
     org.il
+    // xn--4dbrk0ce ("Israel", Hebrew) : IL
+    ישראל
+    // xn--4dbgdty6c.xn--4dbrk0ce.
+    אקדמיה.ישראל
+    // xn--5dbhl8d.xn--4dbrk0ce.
+    ישוב.ישראל
+    // xn--8dbq2a.xn--4dbrk0ce.
+    צהל.ישראל
+    // xn--hebda8b.xn--4dbrk0ce.
+    ממשל.ישראל
 
     // im : https://www.nic.im/
     // Submitted by registry <info@nic.im>
@@ -1333,22 +1353,51 @@ var pslData = {
     tv.im
 
     // in : https://en.wikipedia.org/wiki/.in
-    // see also: https://registry.in/Policies
+    // see also: https://registry.in/policies
     // Please note, that nic.in is not an official eTLD, but used by most
     // government institutions.
     in
-    co.in
-    firm.in
-    net.in
-    org.in
-    gen.in
-    ind.in
-    nic.in
+    5g.in
+    6g.in
     ac.in
+    ai.in
+    am.in
+    bihar.in
+    biz.in
+    business.in
+    ca.in
+    cn.in
+    co.in
+    com.in
+    coop.in
+    cs.in
+    delhi.in
+    dr.in
     edu.in
-    res.in
+    er.in
+    firm.in
+    gen.in
     gov.in
+    gujarat.in
+    ind.in
+    info.in
+    int.in
+    internet.in
+    io.in
+    me.in
     mil.in
+    net.in
+    nic.in
+    org.in
+    pg.in
+    post.in
+    pro.in
+    res.in
+    travel.in
+    tv.in
+    uk.in
+    up.in
+    us.in
 
     // info : https://en.wikipedia.org/wiki/.info
     info
@@ -1358,7 +1407,7 @@ var pslData = {
     int
     eu.int
 
-    // io : http://www.nic.io/rules.html
+    // io : http://www.nic.io/rules.htm
     // list of other 2nd level tlds ?
     io
     com.io
@@ -3757,11 +3806,10 @@ var pslData = {
     // ky : http://www.icta.ky/da_ky_reg_dom.php
     // Confirmed by registry <kysupport@perimeterusa.com> 2008-06-17
     ky
-    edu.ky
-    gov.ky
     com.ky
-    org.ky
+    edu.ky
     net.ky
+    org.ky
 
     // kz : https://en.wikipedia.org/wiki/.kz
     // see also: http://www.nic.kz/rules/index.jsp
@@ -4596,15 +4644,17 @@ var pslData = {
     edu.mx
     net.mx
 
-    // my : http://www.mynic.net.my/
+    // my : http://www.mynic.my/
+    // Available strings: https://mynic.my/resources/domains/buying-a-domain/
     my
+    biz.my
     com.my
-    net.my
-    org.my
-    gov.my
     edu.my
+    gov.my
     mil.my
     name.my
+    net.my
+    org.my
 
     // mz : http://www.uem.mz/
     // Submitted by registry <antonio@uem.mz>
@@ -5850,7 +5900,7 @@ var pslData = {
     org.ps
     net.ps
 
-    // pt : http://online.dns.pt/dns/start_dns
+    // pt : https://www.dns.pt/en/domain/pt-terms-and-conditions-registration-rules/
     pt
     net.pt
     gov.pt
@@ -6027,7 +6077,7 @@ var pslData = {
     edu.sg
     per.sg
 
-    // sh : http://www.nic.sh/registrar.html
+    // sh : http://nic.sh/rules.htm
     sh
     com.sh
     net.sh
@@ -6087,8 +6137,10 @@ var pslData = {
     com.ss
     edu.ss
     gov.ss
+    me.ss
     net.ss
     org.ss
+    sch.ss
 
     // st : http://www.nic.st/html/policyrules/
     st
@@ -6097,7 +6149,6 @@ var pslData = {
     consulado.st
     edu.st
     embaixada.st
-    gov.st
     mil.st
     net.st
     org.st
@@ -6202,29 +6253,22 @@ var pslData = {
     mil.tm
     edu.tm
 
-    // tn : https://en.wikipedia.org/wiki/.tn
-    // http://whois.ati.tn/
+    // tn : http://www.registre.tn/fr/
+    // https://whois.ati.tn/
     tn
     com.tn
     ens.tn
     fin.tn
     gov.tn
     ind.tn
+    info.tn
     intl.tn
+    mincom.tn
     nat.tn
     net.tn
     org.tn
-    info.tn
     perso.tn
     tourism.tn
-    edunet.tn
-    rnrt.tn
-    rns.tn
-    rnu.tn
-    mincom.tn
-    agrinet.tn
-    defense.tn
-    turen.tn
 
     // to : https://en.wikipedia.org/wiki/.to
     // Submitted by registry <egullich@colo.to>
@@ -6714,9 +6758,10 @@ var pslData = {
     edu.vc
 
     // ve : https://registro.nic.ve/
-    // Submitted by registry
+    // Submitted by registry nic@nic.ve and nicve@conatel.gob.ve
     ve
     arts.ve
+    bib.ve
     co.ve
     com.ve
     e12.ve
@@ -6728,7 +6773,9 @@ var pslData = {
     int.ve
     mil.ve
     net.ve
+    nom.ve
     org.ve
+    rar.ve
     rec.ve
     store.ve
     tec.ve
@@ -7125,7 +7172,7 @@ var pslData = {
 
     // newGTLDs
 
-    // List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2021-02-07T16:47:40Z
+    // List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2022-12-07T15:13:11Z
     // This list is auto-generated, don't edit it manually.
     // aaa : 2015-02-26 American Automobile Association, Inc.
     aaa
@@ -7151,7 +7198,7 @@ var pslData = {
     // able : 2015-06-25 Able Inc.
     able
 
-    // abogado : 2014-04-24 Minds + Machines Group Limited
+    // abogado : 2014-04-24 Registry Services, LLC
     abogado
 
     // abudhabi : 2015-07-30 Abu Dhabi Systems and Information Centre
@@ -7175,9 +7222,6 @@ var pslData = {
     // actor : 2013-12-12 Dog Beach, LLC
     actor
 
-    // adac : 2015-07-16 Allgemeiner Deutscher Automobil-Club e.V. (ADAC)
-    adac
-
     // ads : 2014-12-04 Charleston Road Registry Inc.
     ads
 
@@ -7189,9 +7233,6 @@ var pslData = {
 
     // aetna : 2015-05-21 Aetna Life Insurance Company
     aetna
-
-    // afamilycompany : 2015-07-23 Johnson Shareholdings, Inc.
-    afamilycompany
 
     // afl : 2014-10-02 Australian Football League
     afl
@@ -7298,7 +7339,7 @@ var pslData = {
     // aramco : 2014-11-20 Aramco Services Company
     aramco
 
-    // archi : 2014-02-06 Afilias Limited
+    // archi : 2014-02-06 Identity Digital Limited
     archi
 
     // army : 2014-03-06 Dog Beach, LLC
@@ -7331,7 +7372,7 @@ var pslData = {
     // audible : 2015-06-25 Amazon Registry Services, Inc.
     audible
 
-    // audio : 2014-03-20 UNR Corp.
+    // audio : 2014-03-20 XYZ.COM LLC
     audio
 
     // auspost : 2015-08-13 Australian Postal Corporation
@@ -7346,7 +7387,7 @@ var pslData = {
     // autos : 2014-01-09 XYZ.COM LLC
     autos
 
-    // avianca : 2015-01-08 Avianca Holdings S.A.
+    // avianca : 2015-01-08 Avianca Inc.
     avianca
 
     // aws : 2015-06-25 AWS Registry LLC
@@ -7427,7 +7468,7 @@ var pslData = {
     // beauty : 2015-12-03 XYZ.COM LLC
     beauty
 
-    // beer : 2014-01-09 Minds + Machines Group Limited
+    // beer : 2014-01-09 Registry Services, LLC
     beer
 
     // bentley : 2014-12-18 Bentley Motors Limited
@@ -7442,7 +7483,7 @@ var pslData = {
     // bestbuy : 2015-07-31 BBY Solutions, Inc.
     bestbuy
 
-    // bet : 2015-05-07 Afilias Limited
+    // bet : 2015-05-07 Identity Digital Limited
     bet
 
     // bharti : 2014-01-09 Bharti Enterprises (Holding) Private Limited
@@ -7463,13 +7504,13 @@ var pslData = {
     // bingo : 2014-12-04 Binky Moon, LLC
     bingo
 
-    // bio : 2014-03-06 Afilias Limited
+    // bio : 2014-03-06 Identity Digital Limited
     bio
 
-    // black : 2014-01-16 Afilias Limited
+    // black : 2014-01-16 Identity Digital Limited
     black
 
-    // blackfriday : 2014-01-16 UNR Corp.
+    // blackfriday : 2014-01-16 Registry Services, LLC
     blackfriday
 
     // blockbuster : 2015-07-30 Dish DBS Corporation
@@ -7481,7 +7522,7 @@ var pslData = {
     // bloomberg : 2014-07-17 Bloomberg IP Holdings LLC
     bloomberg
 
-    // blue : 2013-11-07 Afilias Limited
+    // blue : 2013-11-07 Identity Digital Limited
     blue
 
     // bms : 2014-10-30 Bristol-Myers Squibb Company
@@ -7523,7 +7564,7 @@ var pslData = {
     // bostik : 2015-05-28 Bostik SA
     bostik
 
-    // boston : 2015-12-10 Boston TLD Management, LLC
+    // boston : 2015-12-10 Registry Services, LLC
     boston
 
     // bot : 2014-12-18 Amazon Registry Services, Inc.
@@ -7544,7 +7585,7 @@ var pslData = {
     // broadway : 2014-12-22 Celebrate Broadway, Inc.
     broadway
 
-    // broker : 2014-12-11 Dotbroker Registry Limited
+    // broker : 2014-12-11 Dog Beach, LLC
     broker
 
     // brother : 2015-01-29 Brother Industries, Ltd.
@@ -7552,12 +7593,6 @@ var pslData = {
 
     // brussels : 2014-02-06 DNS.be vzw
     brussels
-
-    // budapest : 2013-11-21 Minds + Machines Group Limited
-    budapest
-
-    // bugatti : 2015-07-23 Bugatti International SA
-    bugatti
 
     // build : 2013-11-07 Plan Bee LLC
     build
@@ -7592,7 +7627,7 @@ var pslData = {
     // calvinklein : 2015-07-30 PVH gTLD Holdings LLC
     calvinklein
 
-    // cam : 2016-04-21 AC Webconnecting Holding B.V.
+    // cam : 2016-04-21 Cam Connecting SARL
     cam
 
     // camera : 2013-08-27 Binky Moon, LLC
@@ -7600,9 +7635,6 @@ var pslData = {
 
     // camp : 2013-11-07 Binky Moon, LLC
     camp
-
-    // cancerresearch : 2014-05-15 Australian Cancer Research Foundation
-    cancerresearch
 
     // canon : 2014-09-12 Canon Inc.
     canon
@@ -7637,14 +7669,11 @@ var pslData = {
     // cars : 2014-11-13 XYZ.COM LLC
     cars
 
-    // casa : 2013-11-21 Minds + Machines Group Limited
+    // casa : 2013-11-21 Registry Services, LLC
     casa
 
-    // case : 2015-09-03 CNH Industrial N.V.
+    // case : 2015-09-03 Digity, LLC
     case
-
-    // caseih : 2015-09-03 CNH Industrial N.V.
-    caseih
 
     // cash : 2014-03-06 Binky Moon, LLC
     cash
@@ -7691,7 +7720,7 @@ var pslData = {
     // channel : 2014-05-08 Charleston Road Registry Inc.
     channel
 
-    // charity : 2018-04-11 Binky Moon, LLC
+    // charity : 2018-04-11 Public Interest Registry
     charity
 
     // chase : 2015-04-30 JPMorgan Chase Bank, National Association
@@ -7706,7 +7735,7 @@ var pslData = {
     // chintai : 2015-06-11 CHINTAI Corporation
     chintai
 
-    // christmas : 2013-11-21 UNR Corp.
+    // christmas : 2013-11-21 XYZ.COM LLC
     christmas
 
     // chrome : 2014-07-24 Charleston Road Registry Inc.
@@ -7745,7 +7774,7 @@ var pslData = {
     // cleaning : 2013-12-05 Binky Moon, LLC
     cleaning
 
-    // click : 2014-06-05 UNR Corp.
+    // click : 2014-06-05 Internet Naming Company LLC
     click
 
     // clinic : 2014-03-20 Binky Moon, LLC
@@ -7760,7 +7789,7 @@ var pslData = {
     // cloud : 2015-04-16 Aruba PEC S.p.A.
     cloud
 
-    // club : 2013-11-08 .CLUB DOMAINS, LLC
+    // club : 2013-11-08 Registry Services, LLC
     club
 
     // clubmed : 2015-06-25 Club Méditerranée S.A.
@@ -7817,7 +7846,7 @@ var pslData = {
     // contractors : 2013-09-10 Binky Moon, LLC
     contractors
 
-    // cooking : 2013-11-21 Minds + Machines Group Limited
+    // cooking : 2013-11-21 Registry Services, LLC
     cooking
 
     // cookingchannel : 2015-07-02 Lifestyle Domain Holdings, Inc.
@@ -7829,7 +7858,7 @@ var pslData = {
     // corsica : 2014-09-25 Collectivité de Corse
     corsica
 
-    // country : 2013-12-19 DotCountry LLC
+    // country : 2013-12-19 Internet Naming Company LLC
     country
 
     // coupon : 2015-02-26 Amazon Registry Services, Inc.
@@ -7838,7 +7867,7 @@ var pslData = {
     // coupons : 2015-03-26 Binky Moon, LLC
     coupons
 
-    // courses : 2014-12-04 OPEN UNIVERSITIES AUSTRALIA PTY LTD
+    // courses : 2014-12-04 Registry Services, LLC
     courses
 
     // cpa : 2019-06-10 American Institute of Certified Public Accountants
@@ -7867,9 +7896,6 @@ var pslData = {
 
     // cruises : 2013-12-05 Binky Moon, LLC
     cruises
-
-    // csc : 2014-09-25 Alliance-One Services, Inc.
-    csc
 
     // cuisinella : 2014-04-03 SCHMIDT GROUPE S.A.S.
     cuisinella
@@ -7907,7 +7933,7 @@ var pslData = {
     // dclk : 2014-11-20 Charleston Road Registry Inc.
     dclk
 
-    // dds : 2015-05-07 Minds + Machines Group Limited
+    // dds : 2015-05-07 Registry Services, LLC
     dds
 
     // deal : 2015-06-25 Amazon Registry Services, Inc.
@@ -7946,7 +7972,7 @@ var pslData = {
     // desi : 2013-11-14 Desi Networks LLC
     desi
 
-    // design : 2014-11-07 Top Level Design, LLC
+    // design : 2014-11-07 Registry Services, LLC
     design
 
     // dev : 2014-10-16 Charleston Road Registry Inc.
@@ -7958,7 +7984,7 @@ var pslData = {
     // diamonds : 2013-09-22 Binky Moon, LLC
     diamonds
 
-    // diet : 2014-06-26 UNR Corp.
+    // diet : 2014-06-26 XYZ.COM LLC
     diet
 
     // digital : 2014-03-06 Binky Moon, LLC
@@ -8012,13 +8038,10 @@ var pslData = {
     // dubai : 2015-01-01 Dubai Smart Government Department
     dubai
 
-    // duck : 2015-07-23 Johnson Shareholdings, Inc.
-    duck
-
     // dunlop : 2015-07-02 The Goodyear Tire & Rubber Company
     dunlop
 
-    // dupont : 2015-06-25 E. I. du Pont de Nemours and Company
+    // dupont : 2015-06-25 DuPont Specialty Products USA, LLC
     dupont
 
     // durban : 2014-03-24 ZA Central Registry NPC trading as ZA Central Registry
@@ -8030,7 +8053,7 @@ var pslData = {
     // dvr : 2016-05-26 DISH Technologies L.L.C.
     dvr
 
-    // earth : 2014-12-04 Interlink Co., Ltd.
+    // earth : 2014-12-04 Interlink Systems Innovation Institute K.K.
     earth
 
     // eat : 2014-01-23 Charleston Road Registry Inc.
@@ -8135,7 +8158,7 @@ var pslData = {
     // farmers : 2015-07-09 Farmers Insurance Exchange
     farmers
 
-    // fashion : 2014-07-03 Minds + Machines Group Limited
+    // fashion : 2014-07-03 Registry Services, LLC
     fashion
 
     // fast : 2014-12-18 Amazon Registry Services, Inc.
@@ -8186,10 +8209,10 @@ var pslData = {
     // fish : 2013-12-12 Binky Moon, LLC
     fish
 
-    // fishing : 2013-11-21 Minds + Machines Group Limited
+    // fishing : 2013-11-21 Registry Services, LLC
     fishing
 
-    // fit : 2014-11-07 Minds + Machines Group Limited
+    // fit : 2014-11-07 Registry Services, LLC
     fit
 
     // fitness : 2014-03-06 Binky Moon, LLC
@@ -8207,7 +8230,7 @@ var pslData = {
     // florist : 2013-11-07 Binky Moon, LLC
     florist
 
-    // flowers : 2014-10-09 UNR Corp.
+    // flowers : 2014-10-09 XYZ.COM LLC
     flowers
 
     // fly : 2014-05-08 Charleston Road Registry Inc.
@@ -8228,7 +8251,7 @@ var pslData = {
     // ford : 2014-11-13 Ford Motor Company
     ford
 
-    // forex : 2014-12-11 Dotforex Registry Limited
+    // forex : 2014-12-11 Dog Beach, LLC
     forex
 
     // forsale : 2014-05-22 Dog Beach, LLC
@@ -8237,7 +8260,7 @@ var pslData = {
     // forum : 2015-04-02 Fegistry, LLC
     forum
 
-    // foundation : 2013-12-05 Binky Moon, LLC
+    // foundation : 2013-12-05 Public Interest Registry
     foundation
 
     // fox : 2015-09-11 FOX Registry, LLC
@@ -8267,10 +8290,7 @@ var pslData = {
     // fujitsu : 2015-07-30 Fujitsu Limited
     fujitsu
 
-    // fujixerox : 2015-07-23 Xerox DNHC LLC
-    fujixerox
-
-    // fun : 2016-01-14 DotSpace Inc.
+    // fun : 2016-01-14 Radix FZC
     fun
 
     // fund : 2014-03-20 Binky Moon, LLC
@@ -8297,7 +8317,7 @@ var pslData = {
     // gallup : 2015-02-19 Gallup, Inc.
     gallup
 
-    // game : 2015-05-28 UNR Corp.
+    // game : 2015-05-28 XYZ.COM LLC
     game
 
     // games : 2015-05-28 Dog Beach, LLC
@@ -8306,7 +8326,7 @@ var pslData = {
     // gap : 2015-07-31 The Gap, Inc.
     gap
 
-    // garden : 2014-06-26 Minds + Machines Group Limited
+    // garden : 2014-06-26 Registry Services, LLC
     garden
 
     // gay : 2019-05-23 Top Level Design, LLC
@@ -8321,7 +8341,7 @@ var pslData = {
     // gea : 2014-12-04 GEA Group Aktiengesellschaft
     gea
 
-    // gent : 2014-01-23 COMBELL NV
+    // gent : 2014-01-23 Easyhost BV
     gent
 
     // genting : 2015-03-12 Resorts World Inc Pte. Ltd.
@@ -8339,14 +8359,11 @@ var pslData = {
     // gifts : 2014-07-03 Binky Moon, LLC
     gifts
 
-    // gives : 2014-03-06 Dog Beach, LLC
+    // gives : 2014-03-06 Public Interest Registry
     gives
 
-    // giving : 2014-11-13 Giving Limited
+    // giving : 2014-11-13 Public Interest Registry
     giving
-
-    // glade : 2015-07-23 Johnson Shareholdings, Inc.
-    glade
 
     // glass : 2013-11-07 Binky Moon, LLC
     glass
@@ -8411,7 +8428,7 @@ var pslData = {
     // gratis : 2014-03-20 Binky Moon, LLC
     gratis
 
-    // green : 2014-05-08 Afilias Limited
+    // green : 2014-05-08 Identity Digital Limited
     green
 
     // gripe : 2014-03-06 Binky Moon, LLC
@@ -8435,7 +8452,7 @@ var pslData = {
     // guide : 2013-09-13 Binky Moon, LLC
     guide
 
-    // guitars : 2013-11-14 UNR Corp.
+    // guitars : 2013-11-14 XYZ.COM LLC
     guitars
 
     // guru : 2013-08-27 Binky Moon, LLC
@@ -8468,7 +8485,7 @@ var pslData = {
     // healthcare : 2014-06-12 Binky Moon, LLC
     healthcare
 
-    // help : 2014-06-26 UNR Corp.
+    // help : 2014-06-26 Innovation service Limited
     help
 
     // helsinki : 2015-02-05 City of Helsinki
@@ -8483,7 +8500,7 @@ var pslData = {
     // hgtv : 2015-07-02 Lifestyle Domain Holdings, Inc.
     hgtv
 
-    // hiphop : 2014-03-06 UNR Corp.
+    // hiphop : 2014-03-06 Dot Hip Hop, LLC
     hiphop
 
     // hisamitsu : 2015-07-16 Hisamitsu Pharmaceutical Co.,Inc.
@@ -8492,7 +8509,7 @@ var pslData = {
     // hitachi : 2014-10-31 Hitachi, Ltd.
     hitachi
 
-    // hiv : 2014-03-13 UNR Corp.
+    // hiv : 2014-03-13 Internet Naming Company LLC
     hiv
 
     // hkt : 2015-05-14 PCCW-HKT DataCom Services Limited
@@ -8522,16 +8539,16 @@ var pslData = {
     // honda : 2014-12-18 Honda Motor Co., Ltd.
     honda
 
-    // horse : 2013-11-21 Minds + Machines Group Limited
+    // horse : 2013-11-21 Registry Services, LLC
     horse
 
     // hospital : 2016-10-20 Binky Moon, LLC
     hospital
 
-    // host : 2014-04-17 DotHost Inc.
+    // host : 2014-04-17 Radix FZC
     host
 
-    // hosting : 2014-05-29 UNR Corp.
+    // hosting : 2014-05-29 XYZ.COM LLC
     hosting
 
     // hot : 2015-08-27 Amazon Registry Services, Inc.
@@ -8651,9 +8668,6 @@ var pslData = {
     // itv : 2015-07-09 ITV Services Limited
     itv
 
-    // iveco : 2015-09-03 CNH Industrial N.V.
-    iveco
-
     // jaguar : 2014-11-13 Jaguar Land Rover Ltd
     jaguar
 
@@ -8699,7 +8713,7 @@ var pslData = {
     // jprs : 2014-09-18 Japan Registry Services Co., Ltd.
     jprs
 
-    // juegos : 2014-03-20 UNR Corp.
+    // juegos : 2014-03-20 Internet Naming Company LLC
     juegos
 
     // juniper : 2015-07-30 JUNIPER NETWORKS, INC.
@@ -8726,7 +8740,10 @@ var pslData = {
     // kia : 2015-07-09 KIA MOTORS CORPORATION
     kia
 
-    // kim : 2013-09-23 Afilias Limited
+    // kids : 2021-08-13 DotKids Foundation Limited
+    kids
+
+    // kim : 2013-09-23 Identity Digital Limited
     kim
 
     // kinder : 2014-11-07 Ferrero Trading Lux S.A.
@@ -8795,7 +8812,7 @@ var pslData = {
     // lasalle : 2015-04-02 Jones Lang LaSalle Incorporated
     lasalle
 
-    // lat : 2014-10-16 ECOM-LAC Federaciòn de Latinoamèrica y el Caribe para Internet y el Comercio Electrònico
+    // lat : 2014-10-16 XYZ.COM LLC
     lat
 
     // latino : 2015-07-30 Dish DBS Corporation
@@ -8804,7 +8821,7 @@ var pslData = {
     // latrobe : 2014-06-16 La Trobe University
     latrobe
 
-    // law : 2015-01-22 LW TLD Limited
+    // law : 2015-01-22 Registry Services, LLC
     law
 
     // lawyer : 2014-03-20 Dog Beach, LLC
@@ -8831,7 +8848,7 @@ var pslData = {
     // lexus : 2015-04-23 TOYOTA MOTOR CORPORATION
     lexus
 
-    // lgbt : 2014-05-08 Afilias Limited
+    // lgbt : 2014-05-08 Identity Digital Limited
     lgbt
 
     // lidl : 2014-09-18 Schwarz Domains und Services GmbH & Co. KG
@@ -8867,7 +8884,7 @@ var pslData = {
     // linde : 2014-12-04 Linde Aktiengesellschaft
     linde
 
-    // link : 2013-11-14 UNR Corp.
+    // link : 2013-11-14 Nova Registry Ltd
     link
 
     // lipsy : 2015-06-25 Lipsy Ltd
@@ -8879,13 +8896,10 @@ var pslData = {
     // living : 2015-07-30 Lifestyle Domain Holdings, Inc.
     living
 
-    // lixil : 2015-03-19 LIXIL Group Corporation
-    lixil
-
-    // llc : 2017-12-14 Afilias Limited
+    // llc : 2017-12-14 Identity Digital Limited
     llc
 
-    // llp : 2019-08-26 UNR Corp.
+    // llp : 2019-08-26 Intercap Registry Inc.
     llp
 
     // loan : 2014-11-20 dot Loan Limited
@@ -8903,7 +8917,7 @@ var pslData = {
     // loft : 2015-07-30 Annco, Inc.
     loft
 
-    // lol : 2015-01-30 UNR Corp.
+    // lol : 2015-01-30 XYZ.COM LLC
     lol
 
     // london : 2013-11-14 Dot London Domains Limited
@@ -8912,7 +8926,7 @@ var pslData = {
     // lotte : 2014-11-07 Lotte Holdings Co., Ltd.
     lotte
 
-    // lotto : 2014-04-10 Afilias Limited
+    // lotto : 2014-04-10 Identity Digital Limited
     lotto
 
     // love : 2014-12-22 Merchant Law Group LLP
@@ -8933,7 +8947,7 @@ var pslData = {
     // lundbeck : 2015-08-06 H. Lundbeck A/S
     lundbeck
 
-    // luxe : 2014-01-09 Minds + Machines Group Limited
+    // luxe : 2014-01-09 Registry Services, LLC
     luxe
 
     // luxury : 2013-10-17 Luxury Partners, LLC
@@ -8972,7 +8986,7 @@ var pslData = {
     // marketing : 2013-11-07 Binky Moon, LLC
     marketing
 
-    // markets : 2014-12-11 Dotmarkets Registry Limited
+    // markets : 2014-12-11 Dog Beach, LLC
     markets
 
     // marriott : 2014-10-09 Marriott Worldwide Corporation
@@ -9020,7 +9034,7 @@ var pslData = {
     // merckmsd : 2016-07-14 MSD Registry Holdings, Inc.
     merckmsd
 
-    // miami : 2013-12-19 Minds + Machines Group Limited
+    // miami : 2013-12-19 Registry Services, LLC
     miami
 
     // microsoft : 2014-12-18 Microsoft Corporation
@@ -9053,13 +9067,13 @@ var pslData = {
     // moda : 2013-11-07 Dog Beach, LLC
     moda
 
-    // moe : 2013-11-13 Interlink Co., Ltd.
+    // moe : 2013-11-13 Interlink Systems Innovation Institute K.K.
     moe
 
     // moi : 2014-12-18 Amazon Registry Services, Inc.
     moi
 
-    // mom : 2015-04-16 UNR Corp.
+    // mom : 2015-04-16 XYZ.COM LLC
     mom
 
     // monash : 2013-09-30 Monash University
@@ -9101,6 +9115,9 @@ var pslData = {
     // mtr : 2015-03-12 MTR Corporation Limited
     mtr
 
+    // music : 2021-05-04 DotMusic Limited
+    music
+
     // mutual : 2015-04-02 Northwestern Mutual MU TLD Registry, LLC
     mutual
 
@@ -9109,9 +9126,6 @@ var pslData = {
 
     // nagoya : 2013-10-24 GMO Registry, Inc.
     nagoya
-
-    // nationwide : 2015-07-23 Nationwide Mutual Insurance Company
-    nationwide
 
     // natura : 2015-03-12 NATURA COSMÉTICOS S.A.
     natura
@@ -9139,9 +9153,6 @@ var pslData = {
 
     // new : 2014-01-30 Charleston Road Registry Inc.
     new
-
-    // newholland : 2015-09-03 CNH Industrial N.V.
-    newholland
 
     // news : 2014-12-18 Dog Beach, LLC
     news
@@ -9218,9 +9229,6 @@ var pslData = {
     // observer : 2015-04-30 Dog Beach, LLC
     observer
 
-    // off : 2015-07-23 Johnson Shareholdings, Inc.
-    off
-
     // office : 2015-03-12 Microsoft Corporation
     office
 
@@ -9251,11 +9259,8 @@ var pslData = {
     // onl : 2013-09-16 iRegistry GmbH
     onl
 
-    // online : 2015-01-15 DotOnline Inc.
+    // online : 2015-01-15 Radix FZC
     online
-
-    // onyourside : 2015-07-23 Nationwide Mutual Insurance Company
-    onyourside
 
     // ooo : 2014-01-09 INFIBEAM AVENUES LIMITED
     ooo
@@ -9269,7 +9274,7 @@ var pslData = {
     // orange : 2015-03-12 Orange Brand Services Limited
     orange
 
-    // organic : 2014-03-27 Afilias Limited
+    // organic : 2014-03-27 Identity Digital Limited
     organic
 
     // origins : 2015-10-01 The Estée Lauder Companies Inc.
@@ -9317,7 +9322,7 @@ var pslData = {
     // pccw : 2015-05-14 PCCW Enterprises Limited
     pccw
 
-    // pet : 2015-05-07 Afilias Limited
+    // pet : 2015-05-07 Identity Digital Limited
     pet
 
     // pfizer : 2015-09-11 Pfizer Inc.
@@ -9335,7 +9340,7 @@ var pslData = {
     // phone : 2016-06-02 Dish DBS Corporation
     phone
 
-    // photo : 2013-11-14 UNR Corp.
+    // photo : 2013-11-14 Registry Services, LLC
     photo
 
     // photography : 2013-09-20 Binky Moon, LLC
@@ -9347,7 +9352,7 @@ var pslData = {
     // physio : 2014-05-01 PhysBiz Pty Ltd
     physio
 
-    // pics : 2013-11-14 UNR Corp.
+    // pics : 2013-11-14 XYZ.COM LLC
     pics
 
     // pictet : 2014-06-26 Pictet Europe S.A.
@@ -9365,7 +9370,7 @@ var pslData = {
     // ping : 2015-06-11 Ping Registry Provider, Inc.
     ping
 
-    // pink : 2013-10-01 Afilias Limited
+    // pink : 2013-10-01 Identity Digital Limited
     pink
 
     // pioneer : 2015-07-16 Pioneer Corporation
@@ -9395,7 +9400,7 @@ var pslData = {
     // pohl : 2014-06-23 Deutsche Vermögensberatung Aktiengesellschaft DVAG
     pohl
 
-    // poker : 2014-07-03 Afilias Limited
+    // poker : 2014-07-03 Identity Digital Limited
     poker
 
     // politie : 2015-08-20 Politie Nederland
@@ -9410,7 +9415,7 @@ var pslData = {
     // praxi : 2013-12-05 Praxi S.p.A.
     praxi
 
-    // press : 2014-04-03 DotPress Inc.
+    // press : 2014-04-03 Radix FZC
     press
 
     // prime : 2015-06-25 Amazon Registry Services, Inc.
@@ -9428,13 +9433,13 @@ var pslData = {
     // progressive : 2015-07-23 Progressive Casualty Insurance Company
     progressive
 
-    // promo : 2014-12-18 Afilias Limited
+    // promo : 2014-12-18 Identity Digital Limited
     promo
 
     // properties : 2013-12-05 Binky Moon, LLC
     properties
 
-    // property : 2014-05-22 UNR Corp.
+    // property : 2014-05-22 Internet Naming Company LLC
     property
 
     // protection : 2015-04-23 XYZ.COM LLC
@@ -9461,17 +9466,11 @@ var pslData = {
     // quest : 2015-03-26 XYZ.COM LLC
     quest
 
-    // qvc : 2015-07-30 QVC, Inc.
-    qvc
-
     // racing : 2014-12-04 Premier Registry Limited
     racing
 
     // radio : 2016-07-21 European Broadcasting Union (EBU)
     radio
-
-    // raid : 2015-07-23 Johnson Shareholdings, Inc.
-    raid
 
     // read : 2014-12-18 Amazon Registry Services, Inc.
     read
@@ -9488,7 +9487,7 @@ var pslData = {
     // recipes : 2013-10-17 Binky Moon, LLC
     recipes
 
-    // red : 2013-11-07 Afilias Limited
+    // red : 2013-11-07 Identity Digital Limited
     red
 
     // redstone : 2014-10-31 Redstone Haute Couture Co., Ltd.
@@ -9563,16 +9562,13 @@ var pslData = {
     // rip : 2014-07-10 Dog Beach, LLC
     rip
 
-    // rmit : 2015-11-19 Royal Melbourne Institute of Technology
-    rmit
-
     // rocher : 2014-12-18 Ferrero Trading Lux S.A.
     rocher
 
     // rocks : 2013-11-14 Dog Beach, LLC
     rocks
 
-    // rodeo : 2013-12-19 Minds + Machines Group Limited
+    // rodeo : 2013-12-19 Registry Services, LLC
     rodeo
 
     // rogers : 2015-08-06 Rogers Communications Canada Inc.
@@ -9587,7 +9583,7 @@ var pslData = {
     // rugby : 2016-12-15 World Rugby Strategic Developments Limited
     rugby
 
-    // ruhr : 2013-10-02 regiodot GmbH & Co. KG
+    // ruhr : 2013-10-02 dotSaarland GmbH
     ruhr
 
     // run : 2015-03-19 Binky Moon, LLC
@@ -9650,7 +9646,7 @@ var pslData = {
     // sbi : 2015-03-12 STATE BANK OF INDIA
     sbi
 
-    // sbs : 2014-11-07 SPECIAL BROADCASTING SERVICE CORPORATION
+    // sbs : 2014-11-07 ShortDot SA
     sbs
 
     // sca : 2014-03-13 SVENSKA CELLULOSA AKTIEBOLAGET SCA (publ)
@@ -9679,9 +9675,6 @@ var pslData = {
 
     // science : 2014-09-11 dot Science Limited
     science
-
-    // scjohnson : 2015-07-23 Johnson Shareholdings, Inc.
-    scjohnson
 
     // scot : 2014-01-23 Dot Scot Registry Limited
     scot
@@ -9722,7 +9715,7 @@ var pslData = {
     // sex : 2014-11-13 ICM Registry SX LLC
     sex
 
-    // sexy : 2013-09-11 UNR Corp.
+    // sexy : 2013-09-11 Internet Naming Company LLC
     sexy
 
     // sfr : 2015-08-13 Societe Francaise du Radiotelephone - SFR
@@ -9743,7 +9736,7 @@ var pslData = {
     // shia : 2014-09-04 Asia Green IT System Bilgisayar San. ve Tic. Ltd. Sti.
     shia
 
-    // shiksha : 2013-11-14 Afilias Limited
+    // shiksha : 2013-11-14 Identity Digital Limited
     shiksha
 
     // shoes : 2013-10-02 Binky Moon, LLC
@@ -9773,10 +9766,10 @@ var pslData = {
     // singles : 2013-08-27 Binky Moon, LLC
     singles
 
-    // site : 2015-01-15 DotSite Inc.
+    // site : 2015-01-15 Radix FZC
     site
 
-    // ski : 2015-04-09 Afilias Limited
+    // ski : 2015-04-09 Identity Digital Limited
     ski
 
     // skin : 2015-01-15 XYZ.COM LLC
@@ -9833,7 +9826,7 @@ var pslData = {
     // spa : 2019-09-19 Asia Spa and Wellness Promotion Council Limited
     spa
 
-    // space : 2014-04-03 DotSpace Inc.
+    // space : 2014-04-03 Radix FZC
     space
 
     // sport : 2017-11-16 Global Association of International Sports Federations (GAISF)
@@ -9841,9 +9834,6 @@ var pslData = {
 
     // spot : 2015-02-26 Amazon Registry Services, Inc.
     spot
-
-    // spreadbetting : 2014-12-11 Dotspreadbetting Registry Limited
-    spreadbetting
 
     // srl : 2015-05-07 InterNetX, Corp
     srl
@@ -9875,7 +9865,7 @@ var pslData = {
     // storage : 2014-12-22 XYZ.COM LLC
     storage
 
-    // store : 2015-04-09 DotStore Inc.
+    // store : 2015-04-09 Radix FZC
     store
 
     // stream : 2016-01-08 dot Stream Limited
@@ -9884,7 +9874,7 @@ var pslData = {
     // studio : 2015-02-11 Dog Beach, LLC
     studio
 
-    // study : 2014-12-11 OPEN UNIVERSITIES AUSTRALIA PTY LTD
+    // study : 2014-12-11 Registry Services, LLC
     study
 
     // style : 2014-12-04 Binky Moon, LLC
@@ -9902,7 +9892,7 @@ var pslData = {
     // support : 2013-10-24 Binky Moon, LLC
     support
 
-    // surf : 2014-01-09 Minds + Machines Group Limited
+    // surf : 2014-01-09 Registry Services, LLC
     surf
 
     // surgery : 2014-03-20 Binky Moon, LLC
@@ -9913,9 +9903,6 @@ var pslData = {
 
     // swatch : 2015-01-08 The Swatch Group Ltd
     swatch
-
-    // swiftcover : 2015-07-23 Swiftcover Insurance Services Limited
-    swiftcover
 
     // swiss : 2014-10-16 Swiss Confederation
     swiss
@@ -9947,7 +9934,7 @@ var pslData = {
     // tatar : 2014-04-24 Limited Liability Company "Coordination Center of Regional Domain of Tatarstan Republic"
     tatar
 
-    // tattoo : 2013-08-30 UNR Corp.
+    // tattoo : 2013-08-30 Top Level Design, LLC
     tattoo
 
     // tax : 2014-03-20 Binky Moon, LLC
@@ -9965,7 +9952,7 @@ var pslData = {
     // team : 2015-03-05 Binky Moon, LLC
     team
 
-    // tech : 2015-01-30 Personals TLD Inc.
+    // tech : 2015-01-30 Radix FZC
     tech
 
     // technology : 2013-09-13 Binky Moon, LLC
@@ -9992,7 +9979,7 @@ var pslData = {
     // tiaa : 2015-07-23 Teachers Insurance and Annuity Association of America
     tiaa
 
-    // tickets : 2015-02-05 Accent Media Limited
+    // tickets : 2015-02-05 XYZ.COM LLC
     tickets
 
     // tienda : 2013-11-14 Binky Moon, LLC
@@ -10040,7 +10027,7 @@ var pslData = {
     // toshiba : 2014-04-10 TOSHIBA Corporation
     toshiba
 
-    // total : 2015-08-06 Total SA
+    // total : 2015-08-06 TOTAL SE
     total
 
     // tours : 2015-01-22 Binky Moon, LLC
@@ -10058,7 +10045,7 @@ var pslData = {
     // trade : 2014-01-23 Elite Registry Limited
     trade
 
-    // trading : 2014-12-11 Dottrading Registry Limited
+    // trading : 2014-12-11 Dog Beach, LLC
     trading
 
     // training : 2013-11-07 Binky Moon, LLC
@@ -10076,7 +10063,7 @@ var pslData = {
     // travelersinsurance : 2015-03-26 Travelers TLD, LLC
     travelersinsurance
 
-    // trust : 2014-10-16 UNR Corp.
+    // trust : 2014-10-16 Internet Naming Company LLC
     trust
 
     // trv : 2015-03-26 Travelers TLD, LLC
@@ -10109,7 +10096,7 @@ var pslData = {
     // university : 2014-03-06 Binky Moon, LLC
     university
 
-    // uno : 2013-09-11 DotSite Inc.
+    // uno : 2013-09-11 Radix FZC
     uno
 
     // uol : 2014-05-01 UBN INTERNET LTDA.
@@ -10160,7 +10147,7 @@ var pslData = {
     // vin : 2015-06-18 Binky Moon, LLC
     vin
 
-    // vip : 2015-01-22 Minds + Machines Group Limited
+    // vip : 2015-01-22 Registry Services, LLC
     vip
 
     // virgin : 2014-09-25 Virgin Enterprises Limited
@@ -10181,7 +10168,7 @@ var pslData = {
     // vlaanderen : 2014-02-06 DNS.be vzw
     vlaanderen
 
-    // vodka : 2013-12-19 Minds + Machines Group Limited
+    // vodka : 2013-12-19 Registry Services, LLC
     vodka
 
     // volkswagen : 2015-05-14 Volkswagen Group of America Inc.
@@ -10223,7 +10210,7 @@ var pslData = {
     // watch : 2013-11-14 Binky Moon, LLC
     watch
 
-    // watches : 2014-12-22 Richemont DNS Inc.
+    // watches : 2014-12-22 Identity Digital Limited
     watches
 
     // weather : 2015-01-08 International Business Machines Corporation
@@ -10238,10 +10225,10 @@ var pslData = {
     // weber : 2015-06-04 Saint-Gobain Weber SA
     weber
 
-    // website : 2014-04-03 DotWebsite Inc.
+    // website : 2014-04-03 Radix FZC
     website
 
-    // wedding : 2014-04-24 Minds + Machines Group Limited
+    // wedding : 2014-04-24 Registry Services, LLC
     wedding
 
     // weibo : 2015-03-05 Sina Corporation
@@ -10283,7 +10270,7 @@ var pslData = {
     // woodside : 2015-07-09 Woodside Petroleum Limited
     woodside
 
-    // work : 2013-12-19 Minds + Machines Group Limited
+    // work : 2013-12-19 Registry Services, LLC
     work
 
     // works : 2013-11-14 Binky Moon, LLC
@@ -10334,9 +10321,6 @@ var pslData = {
     // xn--3ds443g : 2013-09-08 TLD REGISTRY LIMITED OY
     在线
 
-    // xn--3oq18vl8pn36a : 2015-07-02 Volkswagen (China) Investment Co., Ltd.
-    大众汽车
-
     // xn--3pxu8k : 2015-01-15 VeriSign Sarl
     点看
 
@@ -10346,7 +10330,7 @@ var pslData = {
     // xn--45q11c : 2013-11-21 Zodiac Gemini Ltd
     八卦
 
-    // xn--4gbrim : 2013-10-04 Fans TLD Limited
+    // xn--4gbrim : 2013-10-04 Helium TLDs Ltd
     موقع
 
     // xn--55qw42g : 2013-11-08 China Organizational Name Administration Center
@@ -10361,7 +10345,7 @@ var pslData = {
     // xn--5tzm5g : 2014-12-22 Global Website TLD Asia Limited
     网站
 
-    // xn--6frz82g : 2013-09-23 Afilias Limited
+    // xn--6frz82g : 2013-09-23 Identity Digital Limited
     移动
 
     // xn--6qq986b3xl : 2013-09-13 Tycoon Treasure Limited
@@ -10477,9 +10461,6 @@ var pslData = {
 
     // xn--jlq480n2rg : 2019-12-19 Amazon Registry Services, Inc.
     亚马逊
-
-    // xn--jlq61u9w7b : 2015-01-08 Nokia Corporation
-    诺基亚
 
     // xn--jvr189m : 2015-02-26 Amazon Registry Services, Inc.
     食品
@@ -10601,7 +10582,7 @@ var pslData = {
     // yachts : 2014-01-09 XYZ.COM LLC
     yachts
 
-    // yahoo : 2015-04-02 Yahoo! Domain Services Inc.
+    // yahoo : 2015-04-02 Oath Inc.
     yahoo
 
     // yamaxun : 2014-12-18 Amazon Registry Services, Inc.
@@ -10613,7 +10594,7 @@ var pslData = {
     // yodobashi : 2014-11-20 YODOBASHI CAMERA CO.,LTD.
     yodobashi
 
-    // yoga : 2014-05-29 Minds + Machines Group Limited
+    // yoga : 2014-05-29 Registry Services, LLC
     yoga
 
     // yokohama : 2013-12-12 GMO Registry, Inc.
@@ -10660,15 +10641,44 @@ var pslData = {
     // 611coin : https://611project.org/
     611.to
 
+    // Aaron Marais' Gitlab pages: https://lab.aaronleem.co.za
+    // Submitted by Aaron Marais <its_me@aaronleem.co.za>
+    graphox.us
+
+    // accesso Technology Group, plc. : https://accesso.com/
+    // Submitted by accesso Team <accessoecommerce@accesso.com>
+    *.devcdnaccesso.com
+
+    // Acorn Labs : https://acorn.io
+    // Submitted by Craig Jellick <domains@acorn.io>
+    *.on-acorn.io
+
+    // ActiveTrail: https://www.activetrail.biz/
+    // Submitted by Ofer Kalaora <postmaster@activetrail.com>
+    activetrail.biz
+
     // Adobe : https://www.adobe.com/
-    // Submitted by Ian Boston <boston@adobe.com>
+    // Submitted by Ian Boston <boston@adobe.com> and Lars Trieloff <trieloff@adobe.com>
     adobeaemcloud.com
-    adobeaemcloud.net
     *.dev.adobeaemcloud.com
+    hlx.live
+    adobeaemcloud.net
+    hlx.page
+    hlx3.page
 
     // Agnat sp. z o.o. : https://domena.pl
     // Submitted by Przemyslaw Plewa <it-admin@domena.pl>
     beep.pl
+
+    // Airkit : https://www.airkit.com/
+    // Submitted by Grant Cooksey <security@airkit.com>
+    airkitapps.com
+    airkitapps-au.com
+    airkitapps.eu
+
+    // Aiven: https://aiven.io/
+    // Submitted by Etienne Stalmans <security@aiven.io>
+    aivencloud.com
 
     // alboto.ca : http://alboto.ca
     // Submitted by Anton Avramov <avramov@alboto.ca>
@@ -10691,19 +10701,134 @@ var pslData = {
     // Submitted by Cyril <admin@alwaysdata.com>
     alwaysdata.net
 
-    // Amazon CloudFront : https://aws.amazon.com/cloudfront/
+    // Amaze Software : https://amaze.co
+    // Submitted by Domain Admin <domainadmin@amaze.co>
+    myamaze.net
+
+    // Amazon : https://www.amazon.com/
+    // Submitted by AWS Security <psl-maintainers@amazon.com>
+    // Subsections of Amazon/subsidiaries will appear until "concludes" tag
+
+    // Amazon CloudFront
     // Submitted by Donavan Miller <donavanm@amazon.com>
+    // Reference: 54144616-fd49-4435-8535-19c6a601bdb3
     cloudfront.net
 
-    // Amazon Elastic Compute Cloud : https://aws.amazon.com/ec2/
+    // Amazon EC2
     // Submitted by Luke Wells <psl-maintainers@amazon.com>
+    // Reference: 4c38fa71-58ac-4768-99e5-689c1767e537
     *.compute.amazonaws.com
     *.compute-1.amazonaws.com
     *.compute.amazonaws.com.cn
     us-east-1.amazonaws.com
 
-    // Amazon Elastic Beanstalk : https://aws.amazon.com/elasticbeanstalk/
+    // Amazon S3
     // Submitted by Luke Wells <psl-maintainers@amazon.com>
+    // Reference: d068bd97-f0a9-4838-a6d8-954b622ef4ae
+    s3.cn-north-1.amazonaws.com.cn
+    s3.dualstack.ap-northeast-1.amazonaws.com
+    s3.dualstack.ap-northeast-2.amazonaws.com
+    s3.ap-northeast-2.amazonaws.com
+    s3-website.ap-northeast-2.amazonaws.com
+    s3.dualstack.ap-south-1.amazonaws.com
+    s3.ap-south-1.amazonaws.com
+    s3-website.ap-south-1.amazonaws.com
+    s3.dualstack.ap-southeast-1.amazonaws.com
+    s3.dualstack.ap-southeast-2.amazonaws.com
+    s3.dualstack.ca-central-1.amazonaws.com
+    s3.ca-central-1.amazonaws.com
+    s3-website.ca-central-1.amazonaws.com
+    s3.dualstack.eu-central-1.amazonaws.com
+    s3.eu-central-1.amazonaws.com
+    s3-website.eu-central-1.amazonaws.com
+    s3.dualstack.eu-west-1.amazonaws.com
+    s3.dualstack.eu-west-2.amazonaws.com
+    s3.eu-west-2.amazonaws.com
+    s3-website.eu-west-2.amazonaws.com
+    s3.dualstack.eu-west-3.amazonaws.com
+    s3.eu-west-3.amazonaws.com
+    s3-website.eu-west-3.amazonaws.com
+    s3.amazonaws.com
+    s3-ap-northeast-1.amazonaws.com
+    s3-ap-northeast-2.amazonaws.com
+    s3-ap-south-1.amazonaws.com
+    s3-ap-southeast-1.amazonaws.com
+    s3-ap-southeast-2.amazonaws.com
+    s3-ca-central-1.amazonaws.com
+    s3-eu-central-1.amazonaws.com
+    s3-eu-west-1.amazonaws.com
+    s3-eu-west-2.amazonaws.com
+    s3-eu-west-3.amazonaws.com
+    s3-external-1.amazonaws.com
+    s3-fips-us-gov-west-1.amazonaws.com
+    s3-sa-east-1.amazonaws.com
+    s3-us-east-2.amazonaws.com
+    s3-us-gov-west-1.amazonaws.com
+    s3-us-west-1.amazonaws.com
+    s3-us-west-2.amazonaws.com
+    s3-website-ap-northeast-1.amazonaws.com
+    s3-website-ap-southeast-1.amazonaws.com
+    s3-website-ap-southeast-2.amazonaws.com
+    s3-website-eu-west-1.amazonaws.com
+    s3-website-sa-east-1.amazonaws.com
+    s3-website-us-east-1.amazonaws.com
+    s3-website-us-west-1.amazonaws.com
+    s3-website-us-west-2.amazonaws.com
+    s3.dualstack.sa-east-1.amazonaws.com
+    s3.dualstack.us-east-1.amazonaws.com
+    s3.dualstack.us-east-2.amazonaws.com
+    s3.us-east-2.amazonaws.com
+    s3-website.us-east-2.amazonaws.com
+
+    // AWS Cloud9
+    // Submitted by: AWS Security <psl-maintainers@amazon.com>
+    // Reference: 2b6dfa9a-3a7f-4367-b2e7-0321e77c0d59
+    vfs.cloud9.af-south-1.amazonaws.com
+    webview-assets.cloud9.af-south-1.amazonaws.com
+    vfs.cloud9.ap-east-1.amazonaws.com
+    webview-assets.cloud9.ap-east-1.amazonaws.com
+    vfs.cloud9.ap-northeast-1.amazonaws.com
+    webview-assets.cloud9.ap-northeast-1.amazonaws.com
+    vfs.cloud9.ap-northeast-2.amazonaws.com
+    webview-assets.cloud9.ap-northeast-2.amazonaws.com
+    vfs.cloud9.ap-northeast-3.amazonaws.com
+    webview-assets.cloud9.ap-northeast-3.amazonaws.com
+    vfs.cloud9.ap-south-1.amazonaws.com
+    webview-assets.cloud9.ap-south-1.amazonaws.com
+    vfs.cloud9.ap-southeast-1.amazonaws.com
+    webview-assets.cloud9.ap-southeast-1.amazonaws.com
+    vfs.cloud9.ap-southeast-2.amazonaws.com
+    webview-assets.cloud9.ap-southeast-2.amazonaws.com
+    vfs.cloud9.ca-central-1.amazonaws.com
+    webview-assets.cloud9.ca-central-1.amazonaws.com
+    vfs.cloud9.eu-central-1.amazonaws.com
+    webview-assets.cloud9.eu-central-1.amazonaws.com
+    vfs.cloud9.eu-north-1.amazonaws.com
+    webview-assets.cloud9.eu-north-1.amazonaws.com
+    vfs.cloud9.eu-south-1.amazonaws.com
+    webview-assets.cloud9.eu-south-1.amazonaws.com
+    vfs.cloud9.eu-west-1.amazonaws.com
+    webview-assets.cloud9.eu-west-1.amazonaws.com
+    vfs.cloud9.eu-west-2.amazonaws.com
+    webview-assets.cloud9.eu-west-2.amazonaws.com
+    vfs.cloud9.eu-west-3.amazonaws.com
+    webview-assets.cloud9.eu-west-3.amazonaws.com
+    vfs.cloud9.me-south-1.amazonaws.com
+    webview-assets.cloud9.me-south-1.amazonaws.com
+    vfs.cloud9.sa-east-1.amazonaws.com
+    webview-assets.cloud9.sa-east-1.amazonaws.com
+    vfs.cloud9.us-east-1.amazonaws.com
+    webview-assets.cloud9.us-east-1.amazonaws.com
+    vfs.cloud9.us-east-2.amazonaws.com
+    webview-assets.cloud9.us-east-2.amazonaws.com
+    vfs.cloud9.us-west-1.amazonaws.com
+    webview-assets.cloud9.us-west-1.amazonaws.com
+    vfs.cloud9.us-west-2.amazonaws.com
+    webview-assets.cloud9.us-west-2.amazonaws.com
+
+    // AWS Elastic Beanstalk
+    // Submitted by Luke Wells <psl-maintainers@amazon.com>
+    // Reference: aa202394-43a0-4857-b245-8db04549137e
     cn-north-1.eb.amazonaws.com.cn
     cn-northwest-1.eb.amazonaws.com.cn
     elasticbeanstalk.com
@@ -10725,71 +10850,24 @@ var pslData = {
     us-west-1.elasticbeanstalk.com
     us-west-2.elasticbeanstalk.com
 
-    // Amazon Elastic Load Balancing : https://aws.amazon.com/elasticloadbalancing/
+    // (AWS) Elastic Load Balancing
     // Submitted by Luke Wells <psl-maintainers@amazon.com>
-    *.elb.amazonaws.com
+    // Reference: 12a3d528-1bac-4433-a359-a395867ffed2
     *.elb.amazonaws.com.cn
+    *.elb.amazonaws.com
 
-    // Amazon S3 : https://aws.amazon.com/s3/
-    // Submitted by Luke Wells <psl-maintainers@amazon.com>
-    s3.amazonaws.com
-    s3-ap-northeast-1.amazonaws.com
-    s3-ap-northeast-2.amazonaws.com
-    s3-ap-south-1.amazonaws.com
-    s3-ap-southeast-1.amazonaws.com
-    s3-ap-southeast-2.amazonaws.com
-    s3-ca-central-1.amazonaws.com
-    s3-eu-central-1.amazonaws.com
-    s3-eu-west-1.amazonaws.com
-    s3-eu-west-2.amazonaws.com
-    s3-eu-west-3.amazonaws.com
-    s3-external-1.amazonaws.com
-    s3-fips-us-gov-west-1.amazonaws.com
-    s3-sa-east-1.amazonaws.com
-    s3-us-gov-west-1.amazonaws.com
-    s3-us-east-2.amazonaws.com
-    s3-us-west-1.amazonaws.com
-    s3-us-west-2.amazonaws.com
-    s3.ap-northeast-2.amazonaws.com
-    s3.ap-south-1.amazonaws.com
-    s3.cn-north-1.amazonaws.com.cn
-    s3.ca-central-1.amazonaws.com
-    s3.eu-central-1.amazonaws.com
-    s3.eu-west-2.amazonaws.com
-    s3.eu-west-3.amazonaws.com
-    s3.us-east-2.amazonaws.com
-    s3.dualstack.ap-northeast-1.amazonaws.com
-    s3.dualstack.ap-northeast-2.amazonaws.com
-    s3.dualstack.ap-south-1.amazonaws.com
-    s3.dualstack.ap-southeast-1.amazonaws.com
-    s3.dualstack.ap-southeast-2.amazonaws.com
-    s3.dualstack.ca-central-1.amazonaws.com
-    s3.dualstack.eu-central-1.amazonaws.com
-    s3.dualstack.eu-west-1.amazonaws.com
-    s3.dualstack.eu-west-2.amazonaws.com
-    s3.dualstack.eu-west-3.amazonaws.com
-    s3.dualstack.sa-east-1.amazonaws.com
-    s3.dualstack.us-east-1.amazonaws.com
-    s3.dualstack.us-east-2.amazonaws.com
-    s3-website-us-east-1.amazonaws.com
-    s3-website-us-west-1.amazonaws.com
-    s3-website-us-west-2.amazonaws.com
-    s3-website-ap-northeast-1.amazonaws.com
-    s3-website-ap-southeast-1.amazonaws.com
-    s3-website-ap-southeast-2.amazonaws.com
-    s3-website-eu-west-1.amazonaws.com
-    s3-website-sa-east-1.amazonaws.com
-    s3-website.ap-northeast-2.amazonaws.com
-    s3-website.ap-south-1.amazonaws.com
-    s3-website.ca-central-1.amazonaws.com
-    s3-website.eu-central-1.amazonaws.com
-    s3-website.eu-west-2.amazonaws.com
-    s3-website.eu-west-3.amazonaws.com
-    s3-website.us-east-2.amazonaws.com
+    // AWS Global Accelerator
+    // Submitted by Daniel Massaguer <psl-maintainers@amazon.com>
+    // Reference: d916759d-a08b-4241-b536-4db887383a6a
+    awsglobalaccelerator.com
 
-    // Amsterdam Wireless: https://www.amsterdamwireless.nl/
-    // Submitted by Imre Jonk <hostmaster@amsterdamwireless.nl>
-    amsw.nl
+    // eero
+    // Submitted by Yue Kang <eero-dynamic-dns@amazon.com>
+    // Reference: 264afe70-f62c-4c02-8ab9-b5281ed24461
+    eero.online
+    eero-stage.online
+
+    // concludes Amazon
 
     // Amune : https://amune.org/
     // Submitted by Team Amune <cert@amune.org>
@@ -10800,10 +10878,18 @@ var pslData = {
     // Submitted by Apigee Security Team <security@apigee.com>
     apigee.io
 
+    // Apphud : https://apphud.com
+    // Submitted by Alexander Selivanov <alex@apphud.com>
+    siiites.com
+
     // Appspace : https://www.appspace.com
     // Submitted by Appspace Security Team <security@appspace.com>
     appspacehosted.com
     appspaceusercontent.com
+
+    // Appudo UG (haftungsbeschränkt) : https://www.appudo.com
+    // Submitted by Alexander Hochbaum <admin@appudo.com>
+    appudo.net
 
     // Aptible : https://www.aptible.com/
     // Submitted by Thomas Orozco <thomas@aptible.com>
@@ -10830,14 +10916,30 @@ var pslData = {
     // Submitted by Vincent Tseng <vincenttseng@asustor.com>
     myasustor.com
 
+    // Atlassian : https://atlassian.com
+    // Submitted by Sam Smyth <devloop@atlassian.com>
+    cdn.prod.atlassian-dev.net
+
+    // Authentick UG (haftungsbeschränkt) : https://authentick.net
+    // Submitted by Lukas Reschke <lukas@authentick.net>
+    translated.page
+
     // AVM : https://avm.de
     // Submitted by Andreas Weise <a.weise@avm.de>
     myfritz.net
+
+    // AVStack Pte. Ltd. : https://avstack.io
+    // Submitted by Jasper Hugo <jasper@avstack.io>
+    onavstack.net
 
     // AW AdvisorWebsites.com Software Inc : https://advisorwebsites.com
     // Submitted by James Kennedy <domains@advisorwebsites.com>
     *.awdev.ca
     *.advisor.ws
+
+    // AZ.pl sp. z.o.o: https://az.pl
+    // Submitted by Krzysztof Wolski <krzysztof.wolski@home.eu>
+    ecommerce-shop.pl
 
     // b-data GmbH : https://www.b-data.io
     // Submitted by Olivier Benz <olivier.benz@b-data.ch>
@@ -10851,12 +10953,37 @@ var pslData = {
     // Submitted by Petros Angelatos <petrosagg@balena.io>
     balena-devices.com
 
+    // University of Banja Luka : https://unibl.org
+    // Domains for Republic of Srpska administrative entity.
+    // Submitted by Marko Ivanovic <kormang@hotmail.rs>
+    rs.ba
+
     // Banzai Cloud
     // Submitted by Janos Matyas <info@banzaicloud.com>
     *.banzai.cloud
     app.banzaicloud.io
     *.backyards.banzaicloud.io
 
+    // BASE, Inc. : https://binc.jp
+    // Submitted by Yuya NAGASAWA <public-suffix-list@binc.jp>
+    base.ec
+    official.ec
+    buyshop.jp
+    fashionstore.jp
+    handcrafted.jp
+    kawaiishop.jp
+    supersale.jp
+    theshop.jp
+    shopselect.net
+    base.shop
+
+    // BeagleBoard.org Foundation : https://beagleboard.org
+    // Submitted by Jason Kridner <jkridner@beagleboard.org>
+    beagleboard.io
+
+    // Beget Ltd
+    // Submitted by Lev Nekrasov <lnekrasov@beget.com>
+    *.beget.app
 
     // BetaInABox
     // Submitted by Adrian <adrian@betainabox.com>
@@ -10866,6 +10993,10 @@ var pslData = {
     // Submitted by Nathan O'Sullivan <nathan@mammoth.com.au>
     bnr.la
 
+    // Bitbucket : http://bitbucket.org
+    // Submitted by Andy Ortlieb <aortlieb@atlassian.com>
+    bitbucket.io
+
     // Blackbaud, Inc. : https://www.blackbaud.com
     // Submitted by Paul Crowder <paul.crowder@blackbaud.com>
     blackbaudcdn.net
@@ -10874,9 +11005,17 @@ var pslData = {
     // Submitted by Luke Bratch <luke@bratch.co.uk>
     of.je
 
+    // Blue Bite, LLC : https://bluebite.com
+    // Submitted by Joshua Weiss <admin.engineering@bluebite.com>
+    bluebite.io
+
     // Boomla : https://boomla.com
     // Submitted by Tibor Halter <thalter@boomla.com>
     boomla.net
+
+    // Boutir : https://www.boutir.com
+    // Submitted by Eric Ng Ka Ka <ngkaka@boutir.com>
+    boutir.com
 
     // Boxfuse : https://boxfuse.com
     // Submitted by Axel Fontaine <axel@boxfuse.com>
@@ -10891,6 +11030,10 @@ var pslData = {
     bplaced.net
     square7.net
 
+    // Brendly : https://brendly.rs
+    // Submitted by Dusan Radovanovic <dusan.radovanovic@brendly.rs>
+    shop.brendly.rs
+
     // BrowserSafetyMark
     // Submitted by Dave Tharp <browsersafetymark.io@quicinc.com>
     browsersafetymark.io
@@ -10901,15 +11044,21 @@ var pslData = {
     dh.bytemark.co.uk
     vm.bytemark.co.uk
 
+    // Caf.js Labs LLC : https://www.cafjs.com
+    // Submitted by Antonio Lain <antlai@cafjs.com>
+    cafjs.com
+
     // callidomus : https://www.callidomus.com/
     // Submitted by Marcus Popp <admin@callidomus.com>
     mycd.eu
 
     // Carrd : https://carrd.co
     // Submitted by AJ <aj@carrd.co>
+    drr.ac
+    uwu.ai
     carrd.co
     crd.co
-    uwu.ai
+    ju.mp
 
     // CentralNic : http://www.centralnic.com/names/domains
     // Submitted by registry <gavin.brown@centralnic.com>
@@ -10937,7 +11086,6 @@ var pslData = {
     // No longer operated by CentralNic, these entries should be adopted and/or removed by current operators
     // Submitted by Gavin Brown <gavin.brown@centralnic.com>
     ar.com
-    gb.com
     hu.com
     kr.com
     no.com
@@ -10975,11 +11123,6 @@ var pslData = {
     radio.am
     radio.fm
 
-    // Globe Hosting SRL : https://www.globehosting.com/
-    // Submitted by Gavin Brown <gavin.brown@centralnic.com>
-    co.ro
-    shop.ro
-
     // c.la : http://www.c.la/
     c.la
 
@@ -10987,27 +11130,27 @@ var pslData = {
     // Submitted by B. Blechschmidt <hostmaster@certmgr.org>
     certmgr.org
 
+    // Cityhost LLC  : https://cityhost.ua
+    // Submitted by Maksym Rivtin <support@cityhost.net.ua>
+    cx.ua
+
     // Civilized Discourse Construction Kit, Inc. : https://www.discourse.org/
     // Submitted by Rishabh Nambiar & Michael Brown <team@discourse.org>
     discourse.group
     discourse.team
-
-    // ClearVox : http://www.clearvox.nl/
-    // Submitted by Leon Rowland <leon@clearvox.nl>
-    virtueeldomein.nl
 
     // Clever Cloud : https://www.clever-cloud.com/
     // Submitted by Quentin Adam <noc@clever-cloud.com>
     cleverapps.io
 
     // Clerk : https://www.clerk.dev
-    // Submitted by Colin Sidoti <colin@clerk.dev>
+    // Submitted by Colin Sidoti <systems@clerk.dev>
+    clerk.app
+    clerkstage.app
     *.lcl.dev
+    *.lclstage.dev
     *.stg.dev
-
-    // Clic2000 : https://clic2000.fr
-    // Submitted by Mathilde Blanchemanche <mathilde@clic2000.fr>
-    clic2000.net
+    *.stgstage.dev
 
     // ClickRising : https://clickrising.com/
     // Submitted by Umut Gumeli <infrastructure-publicsuffixlist@clickrising.com>
@@ -11033,13 +11176,16 @@ var pslData = {
     cloudcontrolapp.com
 
     // Cloudera, Inc. : https://www.cloudera.com/
-    // Submitted by Philip Langdale <security@cloudera.com>
-    cloudera.site
+    // Submitted by Kedarnath Waikar <security@cloudera.com>
+    *.cloudera.site
 
     // Cloudflare, Inc. : https://www.cloudflare.com/
     // Submitted by Cloudflare Team <publicsuffixlist@cloudflare.com>
-    pages.dev
+    cf-ipfs.com
+    cloudflare-ipfs.com
     trycloudflare.com
+    pages.dev
+    r2.dev
     workers.dev
 
     // Clovyr : https://clovyr.io
@@ -11082,6 +11228,10 @@ var pslData = {
     // CNPY : https://cnpy.gdn
     // Submitted by Angelo Gladding <angelo@lahacker.net>
     cnpy.gdn
+
+    // Codeberg e. V. : https://codeberg.org
+    // Submitted by Moritz Marquardt <git@momar.de>
+    codeberg.page
 
     // CoDNS B.V.
     co.nl
@@ -11183,9 +11333,18 @@ var pslData = {
     // Submitted by Paul Biggar <ops@darklang.com>
     builtwithdark.com
 
+    // DataDetect, LLC. : https://datadetect.com
+    // Submitted by Andrew Banchich <abanchich@sceven.com>
+    demo.datadetect.com
+    instance.datadetect.com
+
     // Datawire, Inc : https://www.datawire.io
     // Submitted by Richard Li <secalert@datawire.io>
     edgestack.me
+
+    // DDNS5 : https://ddns5.com
+    // Submitted by Cameron Elliott <cameron@cameronelliott.com>
+    ddns5.com
 
     // Debian : https://www.debian.org/
     // Submitted by Peter Palfrader / Debian Sysadmin Team <dsa-publicsuffixlist@debian.org>
@@ -11199,6 +11358,21 @@ var pslData = {
     // deSEC : https://desec.io/
     // Submitted by Peter Thomassen <peter@desec.io>
     dedyn.io
+
+    // Deta: https://www.deta.sh/
+    // Submitted by Aavash Shrestha <aavash@deta.sh>
+    deta.app
+    deta.dev
+
+    // Diher Solutions : https://diher.solutions
+    // Submitted by Didi Hermawan <mail@diher.solutions>
+    *.rss.my.id
+    *.diher.solutions
+
+    // Discord Inc : https://discord.com
+    // Submitted by Sahn Lam <slam@discordapp.com>
+    discordsays.com
+    discordsez.com
 
     // DNS Africa Ltd https://dns.business
     // Submitted by Calvin Browne <calvin@dns.business>
@@ -11548,9 +11722,13 @@ var pslData = {
     definima.net
     definima.io
 
-    // DigitalOcean : https://digitalocean.com/
-    // Submitted by Braxton Huggins <bhuggins@digitalocean.com>
+    // DigitalOcean App Platform : https://www.digitalocean.com/products/app-platform/
+    // Submitted by Braxton Huggins <psl-maintainers@digitalocean.com>
     ondigitalocean.app
+
+    // DigitalOcean Spaces : https://www.digitalocean.com/products/spaces/
+    // Submitted by Robin H. Johnson <psl-maintainers@digitalocean.com>
+    *.digitaloceanspaces.com
 
     // dnstrace.pro : https://dnstrace.pro/
     // Submitted by Chris Partridge <chris@partridge.tech>
@@ -11584,6 +11762,16 @@ var pslData = {
     // Submitted by Vladimir Dudr <info@e4you.cz>
     e4.cz
 
+    // Easypanel : https://easypanel.io
+    // Submitted by Andrei Canta <andrei@easypanel.io>
+    easypanel.app
+    easypanel.host
+
+    // Elementor : Elementor Ltd.
+    // Submitted by Anton Barkan <antonb@elementor.com>
+    elementor.cloud
+    elementor.cool
+
     // En root‽ : https://en-root.org
     // Submitted by Emmanuel Raviart <emmanuel@raviart.com>
     en-root.fr
@@ -11591,20 +11779,21 @@ var pslData = {
     // Enalean SAS: https://www.enalean.com
     // Submitted by Thomas Cottier <thomas.cottier@enalean.com>
     mytuleap.com
+    tuleap-partners.com
+
+    // Encoretivity AB: https://encore.dev
+    // Submitted by André Eriksson <andre@encore.dev>
+    encr.app
+    encoreapi.com
 
     // ECG Robotics, Inc: https://ecgrobotics.org
     // Submitted by <frc1533@ecgrobotics.org>
     onred.one
     staging.onred.one
 
-    // One.com: https://www.one.com/
-    // Submitted by Jacob Bunk Nielsen <jbn@one.com>
-    service.one
-
-    // Enonic : http://enonic.com/
-    // Submitted by Erik Kaareng-Sunde <esu@enonic.com>
-    enonic.io
-    customer.enonic.io
+    // encoway GmbH : https://www.encoway.de
+    // Submitted by Marcel Daus <cloudops@encoway.de>
+    eu.encoway.cloud
 
     // EU.org https://eu.org/
     // Submitted by Pierre Beyssac <hostmaster@eu.org>
@@ -11664,6 +11853,10 @@ var pslData = {
     tr.eu.org
     uk.eu.org
     us.eu.org
+
+    // Eurobyte : https://eurobyte.ru
+    // Submitted by Evgeniy Subbotin <e.subbotin@eurobyte.ru>
+    eurodir.ru
 
     // Evennode : http://www.evennode.com/
     // Submitted by Michal Kralik <support@evennode.com>
@@ -11775,6 +11968,7 @@ var pslData = {
 
     // Fastly Inc. : http://www.fastly.com/
     // Submitted by Fastly Security <security@fastly.com>
+    edgecompute.app
     fastly-terrarium.com
     fastlylb.net
     map.fastlylb.net
@@ -11785,6 +11979,10 @@ var pslData = {
     a.ssl.fastly.net
     b.ssl.fastly.net
     global.ssl.fastly.net
+
+    // Fastmail : https://www.fastmail.com/
+    // Submitted by Marc Bradshaw <marc@fastmailteam.com>
+    *.user.fm
 
     // FASTVPS EESTI OU : https://fastvps.ru/
     // Submitted by Likhachev Vasiliy <lihachev@fastvps.ru>
@@ -11806,8 +12004,7 @@ var pslData = {
     // submitted by Keith Fairley <domains@fearworksmedia.co.uk>
     conn.uk
     copro.uk
-    couk.me
-    ukco.me
+    hosp.uk
 
     // Fermax : https://fermax.com/
     // submitted by Koen Van Isterdael <k.vanisterdael@fermax.be>
@@ -11839,6 +12036,11 @@ var pslData = {
     // Submitted by Louis Chemineau <louis@chmn.me>
     flap.id
 
+    // FlashDrive : https://flashdrive.io
+    // Submitted by Eric Chan <support@flashdrive.io>
+    onflashdrive.app
+    fldrv.com
+
     // fly.io: https://fly.io
     // Submitted by Kurt Mackey <kurt@fly.io>
     fly.dev
@@ -11848,6 +12050,28 @@ var pslData = {
     // Flynn : https://flynn.io
     // Submitted by Jonathan Rudenberg <jonathan@flynn.io>
     flynnhosting.net
+
+    // Forgerock : https://www.forgerock.com
+    // Submitted by Roderick Parr <roderick.parr@forgerock.com>
+    forgeblocks.com
+    id.forgerock.io
+
+    // Framer : https://www.framer.com
+    // Submitted by Koen Rouwhorst <koenrh@framer.com>
+    framer.app
+    framercanvas.com
+    framer.media
+    framer.photos
+    framer.website
+    framer.wiki
+
+    // Frusky MEDIA&PR : https://www.frusky.de
+    // Submitted by Victor Pupynin <hallo@frusky.de>
+    *.frusky.de
+
+    // RavPage : https://www.ravpage.co.il
+    // Submitted by Roni Horowitz <roni@responder.co.il>
+    ravpage.co.il
 
     // Frederik Braun https://frederik-braun.com
     // Submitted by Frederik Braun <fb@frederik-braun.com>
@@ -11885,9 +12109,21 @@ var pslData = {
     *.kunden.ortsinfo.at
     *.statics.cloud
 
-    // GDS : https://www.gov.uk/service-manual/operations/operating-servicegovuk-subdomains
-    // Submitted by David Illsley <david.illsley@digital.cabinet-office.gov.uk>
+    // GDS : https://www.gov.uk/service-manual/technology/managing-domain-names
+    // Submitted by Stephen Ford <hostmaster@digital.cabinet-office.gov.uk>
+    independent-commission.uk
+    independent-inquest.uk
+    independent-inquiry.uk
+    independent-panel.uk
+    independent-review.uk
+    public-inquiry.uk
+    royal-commission.uk
+    campaign.gov.uk
     service.gov.uk
+
+    // CDDO : https://www.gov.uk/guidance/get-an-api-domain-on-govuk
+    // Submitted by Jamie Tanna <jamie.tanna@digital.cabinet-office.gov.uk>
+    api.gov.uk
 
     // Gehirn Inc. : https://www.gehirn.co.jp/
     // Submitted by Kohei YOSHIDA <tech@gehirn.co.jp>
@@ -11905,10 +12141,15 @@ var pslData = {
     // Submitted by Matt Hanley <security@ghost.org>
     ghost.io
 
+    // GignoSystemJapan: http://gsj.bz
+    // Submitted by GignoSystemJapan <kakutou-ec@gsj.bz>
+    gsj.bz
+
     // GitHub, Inc.
     // Submitted by Patrick Toomey <security@github.com>
-    github.io
     githubusercontent.com
+    githubpreview.dev
+    github.io
 
     // GitLab, Inc.
     // Submitted by Alex Hanselka <alex@gitlab.com>
@@ -11923,12 +12164,127 @@ var pslData = {
     // Submitted by Mads Hartmann <mads@glitch.com>
     glitch.me
 
+    // Global NOG Alliance : https://nogalliance.org/
+    // Submitted by Sander Steffann <sander@nogalliance.org>
+    nog.community
+
+    // Globe Hosting SRL : https://www.globehosting.com/
+    // Submitted by Gavin Brown <gavin.brown@centralnic.com>
+    co.ro
+    shop.ro
+
     // GMO Pepabo, Inc. : https://pepabo.com/
-    // Submitted by dojineko <admin@pepabo.com>
+    // Submitted by Hosting Div <admin@pepabo.com>
     lolipop.io
+    angry.jp
+    babyblue.jp
+    babymilk.jp
+    backdrop.jp
+    bambina.jp
+    bitter.jp
+    blush.jp
+    boo.jp
+    boy.jp
+    boyfriend.jp
+    but.jp
+    candypop.jp
+    capoo.jp
+    catfood.jp
+    cheap.jp
+    chicappa.jp
+    chillout.jp
+    chips.jp
+    chowder.jp
+    chu.jp
+    ciao.jp
+    cocotte.jp
+    coolblog.jp
+    cranky.jp
+    cutegirl.jp
+    daa.jp
+    deca.jp
+    deci.jp
+    digick.jp
+    egoism.jp
+    fakefur.jp
+    fem.jp
+    flier.jp
+    floppy.jp
+    fool.jp
+    frenchkiss.jp
+    girlfriend.jp
+    girly.jp
+    gloomy.jp
+    gonna.jp
+    greater.jp
+    hacca.jp
+    heavy.jp
+    her.jp
+    hiho.jp
+    hippy.jp
+    holy.jp
+    hungry.jp
+    icurus.jp
+    itigo.jp
+    jellybean.jp
+    kikirara.jp
+    kill.jp
+    kilo.jp
+    kuron.jp
+    littlestar.jp
+    lolipopmc.jp
+    lolitapunk.jp
+    lomo.jp
+    lovepop.jp
+    lovesick.jp
+    main.jp
+    mods.jp
+    mond.jp
+    mongolian.jp
+    moo.jp
+    namaste.jp
+    nikita.jp
+    nobushi.jp
+    noor.jp
+    oops.jp
+    parallel.jp
+    parasite.jp
+    pecori.jp
+    peewee.jp
+    penne.jp
+    pepper.jp
+    perma.jp
+    pigboat.jp
+    pinoko.jp
+    punyu.jp
+    pupu.jp
+    pussycat.jp
+    pya.jp
+    raindrop.jp
+    readymade.jp
+    sadist.jp
+    schoolbus.jp
+    secret.jp
+    staba.jp
+    stripper.jp
+    sub.jp
+    sunnyday.jp
+    thick.jp
+    tonkotsu.jp
+    under.jp
+    upper.jp
+    velvet.jp
+    verse.jp
+    versus.jp
+    vivian.jp
+    watson.jp
+    weblike.jp
+    whitesnow.jp
+    zombie.jp
+    heteml.net
 
     // GOV.UK Platform as a Service : https://www.cloud.service.gov.uk/
-    // Submitted by Tom Whitwell <tom.whitwell@digital.cabinet-office.gov.uk>
+    // Submitted by Tom Whitwell <gov-uk-paas-support@digital.cabinet-office.gov.uk>
     cloudapps.digital
     london.cloudapps.digital
 
@@ -11966,8 +12322,8 @@ var pslData = {
     *.gateway.dev
     cloud.goog
     translate.goog
+    *.usercontent.goog
     cloudfunctions.net
-
     blogspot.ae
     blogspot.al
     blogspot.am
@@ -12043,9 +12399,13 @@ var pslData = {
     blogspot.ug
     blogspot.vn
 
-    // Aaron Marais' Gitlab pages: https://lab.aaronleem.co.za
-    // Submitted by Aaron Marais <its_me@aaronleem.co.za>
-    graphox.us
+    // Goupile : https://goupile.fr
+    // Submitted by Niels Martignene <hello@goupile.fr>
+    goupile.fr
+
+    // Government of the Netherlands: https://www.government.nl
+    // Submitted by <domeinnaam@minaz.nl>
+    gov.nl
 
     // Group 53, LLC : https://www.group53.com
     // Submitted by Tyler Todd <noc@nova53.net>
@@ -12057,7 +12417,7 @@ var pslData = {
     günstigliefern.de
 
     // Hakaran group: http://hakaran.cz
-    // Submited by Arseniy Sokolov <security@hakaran.cz>
+    // Submitted by Arseniy Sokolov <security@hakaran.cz>
     fin.ci
     free.hr
     caa.li
@@ -12077,6 +12437,10 @@ var pslData = {
     hasura.app
     hasura-app.io
 
+    // Heilbronn University of Applied Sciences - Faculty Informatics (GitLab Pages): https://www.hs-heilbronn.de
+    // Submitted by Richard Zowalla <mi-admin@hs-heilbronn.de>
+    pages.it.hs-heilbronn.de
+
     // Hepforge : https://www.hepforge.org
     // Submitted by David Grellscheid <admin@hepforge.org>
     hepforge.org
@@ -12088,15 +12452,24 @@ var pslData = {
 
     // Hibernating Rhinos
     // Submitted by Oren Eini <oren@ravendb.net>
-    myravendb.com
+    ravendb.cloud
     ravendb.community
     ravendb.me
     development.run
     ravendb.run
 
+    // home.pl S.A.: https://home.pl
+    // Submitted by Krzysztof Wolski <krzysztof.wolski@home.eu>
+    homesklep.pl
+
     // Hong Kong Productivity Council: https://www.hkpc.org/
     // Submitted by SECaaS Team <summchan@hkpc.org>
     secaas.hk
+
+    // Hoplix : https://www.hoplix.com
+    // Submitted by Danilo De Franco<info@hoplix.shop>
+    hoplix.shop
+
 
     // HOSTBIP REGISTRY : https://www.hostbip.com/
     // Submitted by Atanunu Igbunuroghene <publicsuffixlist@hostbip.com>
@@ -12109,7 +12482,6 @@ var pslData = {
     ngo.ng
     edu.scot
     sch.so
-    org.yt
 
     // HostyHosting (hostyhosting.com)
     hostyhosting.io
@@ -12126,6 +12498,16 @@ var pslData = {
     // iki.fi
     // Submitted by Hannu Aronsson <haa@iki.fi>
     iki.fi
+
+    // iliad italia: https://www.iliad.it
+    // Submitted by Marios Makassikis <mmakassikis@freebox.fr>
+    ibxos.it
+    iliadboxos.it
+
+    // Impertrix Solutions : <https://impertrixcdn.com>
+    // Submitted by Zhixiang Zhao <csuite@impertrix.com>
+    impertrixcdn.com
+    impertrix.com
 
     // Incsub, LLC: https://incsub.com/
     // Submitted by Aaron Edwards <sysadmins@incsub.com>
@@ -12191,7 +12573,7 @@ var pslData = {
     pixolino.com
 
     // Internet-Pro, LLP: https://netangels.ru/
-    // Submited by Vasiliy Sheredeko <piphon@gmail.com>
+    // Submitted by Vasiliy Sheredeko <piphon@gmail.com>
     na4u.ru
 
     // iopsys software solutions AB : https://iopsys.eu/
@@ -12202,9 +12584,11 @@ var pslData = {
     // Submitted by Matthew Hardeman <mhardeman@ipifony.com>
     ipifony.net
 
-    // IServ GmbH : https://iserv.eu
-    // Submitted by Kim-Alexander Brodowski <info@iserv.eu>
+    // IServ GmbH : https://iserv.de
+    // Submitted by Mario Hoberg <info@iserv.de>
+    iservschule.de
     mein-iserv.de
+    schulplattform.de
     schulserver.de
     test-iserv.de
     iserv.dev
@@ -12214,7 +12598,7 @@ var pslData = {
     iobb.net
 
     // Jelastic, Inc. : https://jelastic.com/
-    // Submited by Ihor Kolodyuk <ik@jelastic.com>
+    // Submitted by Ihor Kolodyuk <ik@jelastic.com>
     mel.cloudlets.com.au
     cloud.interhostsolutions.be
     users.scale.virtualcloud.com.br
@@ -12227,7 +12611,8 @@ var pslData = {
     jele.cloud
     it1.eur.aruba.jenv-aruba.cloud
     it1.jenv-aruba.cloud
-    it1-eur.jenv-arubabiz.cloud
+    keliweb.cloud
+    cs.keliweb.cloud
     oxa.cloud
     tn.oxa.cloud
     uk.oxa.cloud
@@ -12239,13 +12624,9 @@ var pslData = {
     ch.trendhosting.cloud
     de.trendhosting.cloud
     jele.club
+    amscompute.com
     clicketcloud.com
-    ams.cloudswitches.com
-    au.cloudswitches.com
-    sg.cloudswitches.com
     dopaas.com
-    elastyco.com
-    nv.elastyco.com
     hidora.com
     paas.hosted-by-previder.com
     rag-cloud.hosteur.com
@@ -12260,29 +12641,26 @@ var pslData = {
     ryd.wafaicloud.com
     j.scaleforce.com.cy
     jelastic.dogado.eu
-    paas.leviracloud.eu
     fi.cloudplatform.fi
     demo.datacenter.fi
     paas.datacenter.fi
     jele.host
     mircloud.host
+    paas.beebyte.io
+    sekd1.beebyteapp.io
     jele.io
-    ocs.opusinteractive.io
-    cloud.unispace.io
-    cloud-de.unispace.io
     cloud-fr1.unispace.io
     jc.neen.it
     cloud.jelastic.open.tim.it
     jcloud.kz
     upaas.kazteleport.kz
-    jl.serv.net.mx
     cloudjiffy.net
     fra1-de.cloudjiffy.net
     west1-us.cloudjiffy.net
-    ams1.jls.docktera.net
     jls-sto1.elastx.net
     jls-sto2.elastx.net
     jls-sto3.elastx.net
+    faststacks.net
     fr-1.paas.massivegrid.net
     lon-1.paas.massivegrid.net
     lon-2.paas.massivegrid.net
@@ -12293,8 +12671,7 @@ var pslData = {
     nordeste-idc.saveincloud.net
     j.scaleforce.net
     jelastic.tsukaeru.net
-    atl.jelastic.vps-host.net
-    njs.jelastic.vps-host.net
+    sdscloud.pl
     unicloud.pl
     mircloud.ru
     jelastic.regruhosting.ru
@@ -12314,6 +12691,10 @@ var pslData = {
     *.spectrum.myjino.ru
     *.vps.myjino.ru
 
+    // Jotelulu S.L. : https://jotelulu.com
+    // Submitted by Daniel Fariña <ingenieria@jotelulu.com>
+    jotelulu.cloud
+
     // Joyent : https://www.joyent.com/
     // Submitted by Brian Bennett <brian.bennett@joyent.com>
     *.triton.zone
@@ -12328,6 +12709,14 @@ var pslData = {
     kaas.gg
     khplay.nl
 
+    // Kakao : https://www.kakaocorp.com/
+    // Submitted by JaeYoong Lee <cec@kakaocorp.com>
+    ktistory.com
+
+    // Kapsi : https://kapsi.fi
+    // Submitted by Tomi Juntunen <erani@kapsi.fi>
+    kapsi.fi
+
     // Keyweb AG : https://www.keyweb.de
     // Submitted by Martin Dannehl <postmaster@keymachine.de>
     keymachine.de
@@ -12340,6 +12729,10 @@ var pslData = {
     // KnightPoint Systems, LLC : http://www.knightpoint.com/
     // Submitted by Roy Keene <rkeene@knightpoint.com>
     knightpoint.systems
+
+    // KoobinEvent, SL: https://www.koobin.com
+    // Submitted by Iván Oliva <ivan.oliva@koobin.com>
+    koobin.events
 
     // KUROKU LTD : https://kuroku.ltd/
     // Submitted by DisposaBoy <security@oya.to>
@@ -12399,10 +12792,15 @@ var pslData = {
     members.linode.com
     *.nodebalancer.linode.com
     *.linodeobjects.com
+    ip.linodeusercontent.com
 
     // LiquidNet Ltd : http://www.liquidnetlimited.com/
     // Submitted by Victor Velchev <admin@liquidnetlimited.com>
     we.bs
+
+    // Localcert : https://localcert.dev
+    // Submitted by Lann Martin <security@localcert.dev>
+    *.user.localcert.dev
 
     // localzone.xyz
     // Submitted by Kenny Niehage <hello@yahe.sh>
@@ -12415,6 +12813,10 @@ var pslData = {
     loginline.io
     loginline.services
     loginline.site
+
+    // Lokalized : https://lokalized.nl
+    // Submitted by Noah Taheij <noah@lokalized.nl>
+    servers.run
 
     // Lõhmus Family, The
     // Submitted by Heiki Lõhmus <hostmaster at lohmus dot me>
@@ -12456,6 +12858,7 @@ var pslData = {
     barsy.org
     barsy.pro
     barsy.pub
+    barsy.ro
     barsy.shop
     barsy.site
     barsy.support
@@ -12474,19 +12877,42 @@ var pslData = {
     // Submitted by Ilya Zaretskiy <zaretskiy@corp.mail.ru>
     hb.cldmail.ru
 
+    // Mail Transfer Platform : https://www.neupeer.com
+    // Submitted by Li Hui <lihui@neupeer.com>
+    cn.vu
+
+    // Maze Play: https://www.mazeplay.com
+    // Submitted by Adam Humpherys <adam@mws.dev>
+    mazeplay.com
+
     // mcpe.me : https://mcpe.me
     // Submitted by Noa Heyl <hi@noa.dev>
     mcpe.me
 
     // McHost : https://mchost.ru
     // Submitted by Evgeniy Subbotin <e.subbotin@mchost.ru>
+    mcdir.me
     mcdir.ru
+    mcpre.ru
     vps.mcdir.ru
+
+    // Mediatech : https://mediatech.by
+    // Submitted by Evgeniy Kozhuhovskiy <ugenk@mediatech.by>
+    mediatech.by
+    mediatech.dev
+
+    // Medicom Health : https://medicomhealth.com
+    // Submitted by Michael Olson <molson@medicomhealth.com>
+    hra.health
 
     // Memset hosting : https://www.memset.com
     // Submitted by Tom Whitwell <domains@memset.com>
     miniserver.com
     memset.net
+
+    // Messerli Informatik AG : https://www.messerli.ch/
+    // Submitted by Ruben Schmidmeister <psl-maintainers@messerli.ch>
+    messerli.app
 
     // MetaCentrum, CESNET z.s.p.o. : https://www.metacentrum.cz/en/
     // Submitted by Zdeněk Šustr <zdenek.sustr@cesnet.cz>
@@ -12507,12 +12933,14 @@ var pslData = {
     co.pl
 
     // Microsoft Corporation : http://microsoft.com
-    // Submitted by Mitch Webster <miwebst@microsoft.com>
+    // Submitted by Public Suffix List Admin <msftpsladmin@microsoft.com>
     *.azurecontainer.io
     azurewebsites.net
     azure-mobile.net
     cloudapp.net
     azurestaticapps.net
+    1.azurestaticapps.net
+    2.azurestaticapps.net
     centralus.azurestaticapps.net
     eastasia.azurestaticapps.net
     eastus2.azurestaticapps.net
@@ -12522,6 +12950,10 @@ var pslData = {
     // minion.systems : http://minion.systems
     // Submitted by Robert Böttinger <r@minion.systems>
     csx.cc
+
+    // Mintere : https://mintere.com/
+    // Submitted by Ben Aubin <security@mintere.com>
+    mintere.site
 
     // MobileEducation, LLC : https://joinforte.com
     // Submitted by Grayson Martin <grayson.martin@mobileeducation.us>
@@ -12561,28 +12993,9 @@ var pslData = {
     // Submitted by Paulus Schoutsen <infra@nabucasa.com>
     ui.nabu.casa
 
-    // Names.of.London : https://names.of.london/
-    // Submitted by James Stevens <registry[at]names.of.london> or <publiclist[at]jrcs.net>
-    pony.club
-    of.fashion
-    in.london
-    of.london
-    from.marketing
-    with.marketing
-    for.men
-    repair.men
-    and.mom
-    for.mom
-    for.one
-    under.one
-    for.sale
-    that.win
-    from.work
-    to.work
-
-    // NCTU.ME : https://nctu.me/
-    // Submitted by Tocknicsu <admin@nctu.me>
-    nctu.me
+    // Net at Work Gmbh : https://www.netatwork.de
+    // Submitted by Jan Jaeschke <jan.jaeschke@netatwork.de>
+    cloud.nospamproxy.com
 
     // Netlify : https://www.netlify.com
     // Submitted by Jessica Parsons <jessica@netlify.com>
@@ -12603,6 +13016,23 @@ var pslData = {
     // NFSN, Inc. : https://www.NearlyFreeSpeech.NET/
     // Submitted by Jeff Wheelhouse <support@nearlyfreespeech.net>
     nfshost.com
+
+    // Noop : https://noop.app
+    // Submitted by Nathaniel Schweinberg <noop@rearc.io>
+    *.developer.app
+    noop.app
+
+    // Northflank Ltd. : https://northflank.com/
+    // Submitted by Marco Suter <marco@northflank.com>
+    *.northflank.app
+    *.build.run
+    *.code.run
+    *.database.run
+    *.migration.run
+
+    // Noticeable : https://noticeable.io
+    // Submitted by Laurent Pellegrino <security@noticeable.io>
+    noticeable.news
 
     // Now-DNS : https://now-dns.com
     // Submitted by Steve Russell <steve@now-dns.com>
@@ -12729,11 +13159,6 @@ var pslData = {
     // Submitted by Konstantin Nosov <Nosov@nodeart.io>
     stage.nodeart.io
 
-    // Nodum B.V. : https://nodum.io/
-    // Submitted by Wietse Wind <hello+publicsuffixlist@nodum.io>
-    nodum.co
-    nodum.io
-
     // Nucleos Inc. : https://nucleos.com
     // Submitted by Piotr Zduniak <piotr@nucleos.com>
     pcloud.host
@@ -12741,60 +13166,6 @@ var pslData = {
     // NYC.mn : http://www.information.nyc.mn
     // Submitted by Matthew Brown <mattbrown@nyc.mn>
     nyc.mn
-
-    // NymNom : https://nymnom.com/
-    // Submitted by NymNom <psl@nymnom.com>
-    nom.ae
-    nom.af
-    nom.ai
-    nom.al
-    nym.by
-    nom.bz
-    nym.bz
-    nom.cl
-    nym.ec
-    nom.gd
-    nom.ge
-    nom.gl
-    nym.gr
-    nom.gt
-    nym.gy
-    nym.hk
-    nom.hn
-    nym.ie
-    nom.im
-    nom.ke
-    nym.kz
-    nym.la
-    nym.lc
-    nom.li
-    nym.li
-    nym.lt
-    nym.lu
-    nom.lv
-    nym.me
-    nom.mk
-    nym.mn
-    nym.mx
-    nom.nu
-    nym.nz
-    nym.pe
-    nym.pt
-    nom.pw
-    nom.qa
-    nym.ro
-    nom.rs
-    nom.si
-    nym.sk
-    nom.st
-    nym.su
-    nym.sx
-    nom.tj
-    nym.tw
-    nom.ug
-    nom.uy
-    nom.vc
-    nom.vg
 
     // Observable, Inc. : https://observablehq.com
     // Submitted by Mike Bostock <dns@observablehq.com>
@@ -12816,6 +13187,29 @@ var pslData = {
     // Submitted by Vicary Archangel <vicary@omniwe.com>
     omniwe.site
 
+    // One.com: https://www.one.com/
+    // Submitted by Jacob Bunk Nielsen <jbn@one.com>
+    123hjemmeside.dk
+    123hjemmeside.no
+    123homepage.it
+    123kotisivu.fi
+    123minsida.se
+    123miweb.es
+    123paginaweb.pt
+    123sait.ru
+    123siteweb.fr
+    123webseite.at
+    123webseite.de
+    123website.be
+    123website.ch
+    123website.lu
+    123website.nl
+    service.one
+    simplesite.com
+    simplesite.com.br
+    simplesite.gr
+    simplesite.pl
+
     // One Fold Media : http://www.onefoldmedia.com/
     // Submitted by Eddie Jones <eddie@onefoldmedia.com>
     nid.io
@@ -12836,8 +13230,14 @@ var pslData = {
     // Submitted by Yngve Pettersen <yngve@opera.com>
     operaunite.com
 
-    // Oursky Limited : https://skygear.io/
-    // Submited by Skygear Developer <hello@skygear.io>
+    // Orange : https://www.orange.com
+    // Submitted by Alexandre Linte <alexandre.linte@orange.com>
+    tech.orange
+
+    // Oursky Limited : https://authgear.com/, https://skygear.io/
+    // Submitted by Authgear Team <hello@authgear.com>, Skygear Developer <hello@skygear.io>
+    authgear-staging.com
+    authgearapps.com
     skygearapp.com
 
     // OutSystems
@@ -12878,6 +13278,10 @@ var pslData = {
     // Submitted by Yann Guichard <yann@pagexl.com>
     pagexl.com
 
+    // Paywhirl, Inc : https://paywhirl.com/
+    // Submitted by Daniel Netzer <dan@paywhirl.com>
+    *.paywhirl.com
+
     // pcarrier.ca Software Inc: https://pcarrier.ca/
     // Submitted by Pierre Carrier <pc@rrier.ca>
     bar0.net
@@ -12909,8 +13313,6 @@ var pslData = {
     // PE Ulyanov Kirill Sergeevich : https://airy.host
     // Submitted by Kirill Ulyanov <k.ulyanov@airy.host>
     lk3.ru
-    ra-ru.ru
-    zsew.ru
 
     // Planet-Work : https://www.planet-work.com/
     // Submitted by Frédéric VANNIÈRE <f.vanniere@planet-work.com>
@@ -12923,6 +13325,7 @@ var pslData = {
     eu.platform.sh
     us.platform.sh
     *.platformsh.site
+    *.tst.site
 
     // Platter: https://platter.dev
     // Submitted by Patrick Flor <patrick@platter.dev>
@@ -12940,9 +13343,24 @@ var pslData = {
     // Submitted by Maximilian Schieder <maxi@zeug.co>
     dyn53.io
 
+    // Porter : https://porter.run/
+    // Submitted by Rudraksh MK <rudi@porter.run>
+    onporter.run
+
     // Positive Codes Technology Company : http://co.bn/faq.html
     // Submitted by Zulfais <pc@co.bn>
     co.bn
+
+    // Postman, Inc : https://postman.com
+    // Submitted by Rahul Dhawan <security@postman.com>
+    postman-echo.com
+    pstmn.io
+    mock.pstmn.io
+    httpbin.org
+
+    //prequalifyme.today : https://prequalifyme.today
+    //Submitted by DeepakTiwari deepak@ivylead.io
+    prequalifyme.today
 
     // prgmr.com : https://prgmr.com/
     // Submitted by Sarah Newman <owner@prgmr.com>
@@ -12973,6 +13391,11 @@ var pslData = {
     // Submitted by Kor Nielsen <kor@pubtls.org>
     pubtls.org
 
+    // PythonAnywhere LLP: https://www.pythonanywhere.com
+    // Submitted by Giles Thomas <giles@pythonanywhere.com>
+    pythonanywhere.com
+    eu.pythonanywhere.com
+
     // QOTO, Org.
     // Submitted by Jeffrey Phillips Freeman <jeffrey.freeman@qoto.org>
     qoto.io
@@ -12984,6 +13407,14 @@ var pslData = {
     // QuickBackend: https://www.quickbackend.com
     // Submitted by Dani Biro <dani@pymet.com>
     qbuser.com
+
+    // Rad Web Hosting: https://radwebhosting.com
+    // Submitted by Scott Claeys <s.claeys@radwebhosting.com>
+    cloudsite.builders
+
+    // Redgate Software: https://red-gate.com
+    // Submitted by Andrew Farries <andrew.farries@red-gate.com>
+    instances.spawn.cc
 
     // Redstar Consultants : https://www.redstarconsultants.com/
     // Submitted by Jons Slemmer <jons@redstarconsultants.com>
@@ -13046,8 +13477,11 @@ var pslData = {
     onrender.com
 
     // Repl.it : https://repl.it
-    // Submitted by Mason Clayton <mason@repl.it>
+    // Submitted by Lincoln Bergeson <lincoln@replit.com>
+    firewalledreplit.co
+    id.firewalledreplit.co
     repl.co
+    id.repl.co
     repl.run
 
     // Resin.io : https://resin.io
@@ -13064,9 +13498,40 @@ var pslData = {
     wellbeingzone.eu
     wellbeingzone.co.uk
 
+    // Rico Developments Limited : https://adimo.co
+    // Submitted by Colin Brown <hello@adimo.co>
+    adimo.co.uk
+
+    // Riseup Networks : https://riseup.net
+    // Submitted by Micah Anderson <micah@riseup.net>
+    itcouldbewor.se
+
     // Rochester Institute of Technology : http://www.rit.edu/
     // Submitted by Jennifer Herting <jchits@rit.edu>
     git-pages.rit.edu
+
+    // Rocky Enterprise Software Foundation : https://resf.org
+    // Submitted by Neil Hanlon <neil@resf.org>
+    rocky.page
+
+    // Rusnames Limited: http://rusnames.ru/
+    // Submitted by Sergey Zotov <admin@rusnames.ru>
+    биз.рус
+    ком.рус
+    крым.рус
+    мир.рус
+    мск.рус
+    орг.рус
+    самара.рус
+    сочи.рус
+    спб.рус
+    я.рус
+
+    // Salesforce.com, Inc. https://salesforce.com/
+    // Submitted by Michael Biven <mbiven@salesforce.com>
+    *.builder.code.com
+    *.dev-builder.code.com
+    *.stg-builder.code.com
 
     // Sandstorm Development Group, Inc. : https://sandcats.io/
     // Submitted by Asheesh Laroia <asheesh@sandstorm.io>
@@ -13077,6 +13542,34 @@ var pslData = {
     logoip.de
     logoip.com
 
+    // Scaleway : https://www.scaleway.com/
+    // Submitted by Rémy Léone <rleone@scaleway.com>
+    fr-par-1.baremetal.scw.cloud
+    fr-par-2.baremetal.scw.cloud
+    nl-ams-1.baremetal.scw.cloud
+    fnc.fr-par.scw.cloud
+    functions.fnc.fr-par.scw.cloud
+    k8s.fr-par.scw.cloud
+    nodes.k8s.fr-par.scw.cloud
+    s3.fr-par.scw.cloud
+    s3-website.fr-par.scw.cloud
+    whm.fr-par.scw.cloud
+    priv.instances.scw.cloud
+    pub.instances.scw.cloud
+    k8s.scw.cloud
+    k8s.nl-ams.scw.cloud
+    nodes.k8s.nl-ams.scw.cloud
+    s3.nl-ams.scw.cloud
+    s3-website.nl-ams.scw.cloud
+    whm.nl-ams.scw.cloud
+    k8s.pl-waw.scw.cloud
+    nodes.k8s.pl-waw.scw.cloud
+    s3.pl-waw.scw.cloud
+    s3-website.pl-waw.scw.cloud
+    scalebook.scw.cloud
+    smartlabeling.scw.cloud
+    dedibox.fr
+
     // schokokeks.org GbR : https://schokokeks.org/
     // Submitted by Hanno Böck <hanno@schokokeks.org>
     schokokeks.net
@@ -13084,6 +13577,7 @@ var pslData = {
     // Scottish Government: https://www.gov.scot
     // Submitted by Martin Ellis <martin.ellis@gov.scot>
     gov.scot
+    service.gov.scot
 
     // Scry Security : http://www.scrysec.com
     // Submitted by Shante Adam <shante@skyhat.io>
@@ -13106,15 +13600,32 @@ var pslData = {
     // Submitted by Artem Kondratev <accounts@seidat.com>
     seidat.net
 
+    // Sellfy : https://sellfy.com
+    // Submitted by Yuriy Romadin <contact@sellfy.com>
+    sellfy.store
+
     // Senseering GmbH : https://www.senseering.de
     // Submitted by Felix Mönckemeyer <f.moenckemeyer@senseering.de>
     senseering.net
+
+    // Sendmsg: https://www.sendmsg.co.il
+    // Submitted by Assaf Stern <domains@comstar.co.il>
+    minisite.ms
+
+    // Service Magnet : https://myservicemagnet.com
+    // Submitted by Dave Sanders <dave@myservicemagnet.com>
+    magnet.page
 
     // Service Online LLC : http://drs.ua/
     // Submitted by Serhii Bulakh <support@drs.ua>
     biz.ua
     co.ua
     pp.ua
+
+    // Shift Crypto AG : https://shiftcrypto.ch
+    // Submitted by alex <alex@shiftcrypto.ch>
+    shiftcrypto.dev
+    shiftcrypto.io
 
     // ShiftEdit : https://shiftedit.net/
     // Submitted by Adam Jimenez <adam@shiftcreate.com>
@@ -13162,19 +13673,48 @@ var pslData = {
     // Submitted by Aral Balkan <aral@small-tech.org>
     small-web.org
 
+    // Smoove.io : https://www.smoove.io/
+    // Submitted by Dan Kozak <dan@smoove.io>
+    vp4.me
+
+    // Snowflake Inc : https://www.snowflake.com/
+    // Submitted by Faith Olapade <faith.olapade@snowflake.com>
+    streamlitapp.com
+
     // Snowplow Analytics : https://snowplowanalytics.com/
     // Submitted by Ian Streeter <ian@snowplowanalytics.com>
     try-snowplow.com
 
+    // SourceHut : https://sourcehut.org
+    // Submitted by Drew DeVault <sir@cmpwn.com>
+    srht.site
+
     // Stackhero : https://www.stackhero.io
     // Submitted by Adrien Gillon <adrien+public-suffix-list@stackhero.io>
     stackhero-network.com
+
+    // Staclar : https://staclar.com
+    // Submitted by Q Misell <q@staclar.com>
+    musician.io
+    // Submitted by Matthias Merkel <matthias.merkel@staclar.com>
+    novecore.site
 
     // staticland : https://static.land
     // Submitted by Seth Vincent <sethvincent@gmail.com>
     static.land
     dev.static.land
     sites.static.land
+
+    // Storebase : https://www.storebase.io
+    // Submitted by Tony Schirmer <tony@storebase.io>
+    storebase.store
+
+    // Strategic System Consulting (eApps Hosting): https://www.eapps.com/
+    // Submitted by Alex Oancea <aoancea@cloudscale365.com>
+    vps-host.net
+    atl.jelastic.vps-host.net
+    njs.jelastic.vps-host.net
+    ric.jelastic.vps-host.net
 
     // Sony Interactive Entertainment LLC : https://sie.com/
     // Submitted by David Coles <david.coles@sony.com>
@@ -13192,6 +13732,28 @@ var pslData = {
     // SpeedPartner GmbH: https://www.speedpartner.de/
     // Submitted by Stefan Neufeind <info@speedpartner.de>
     customer.speedpartner.de
+
+    // Spreadshop (sprd.net AG) : https://www.spreadshop.com/
+    // Submitted by Martin Breest <security@spreadshop.com>
+    myspreadshop.at
+    myspreadshop.com.au
+    myspreadshop.be
+    myspreadshop.ca
+    myspreadshop.ch
+    myspreadshop.com
+    myspreadshop.de
+    myspreadshop.dk
+    myspreadshop.es
+    myspreadshop.fi
+    myspreadshop.fr
+    myspreadshop.ie
+    myspreadshop.it
+    myspreadshop.net
+    myspreadshop.nl
+    myspreadshop.no
+    myspreadshop.pl
+    myspreadshop.se
+    myspreadshop.co.uk
 
     // Standard Library : https://stdlib.com
     // Submitted by Jacob Lee <jacob@stdlib.com>
@@ -13214,6 +13776,13 @@ var pslData = {
     // Submitted by Dan Miller <dm@sub6.com>
     temp-dns.com
 
+    // Supabase : https://supabase.io
+    // Submitted by Inian Parameshwaran <security@supabase.io>
+    supabase.co
+    supabase.in
+    supabase.net
+    su.paba.se
+
     // Symfony, SAS : https://symfony.com/
     // Submitted by Fabien Potencier <fabien@symfony.com>
     *.s5y.io
@@ -13225,25 +13794,37 @@ var pslData = {
 
     // Synology, Inc. : https://www.synology.com/
     // Submitted by Rony Weng <ronyweng@synology.com>
-    diskstation.me
     dscloud.biz
-    dscloud.me
-    dscloud.mobi
+    direct.quickconnect.cn
     dsmynas.com
-    dsmynas.net
-    dsmynas.org
     familyds.com
-    familyds.net
-    familyds.org
+    diskstation.me
+    dscloud.me
     i234.me
     myds.me
     synology.me
+    dscloud.mobi
+    dsmynas.net
+    familyds.net
+    dsmynas.org
+    familyds.org
     vpnplus.to
     direct.quickconnect.to
+
+    // Tabit Technologies Ltd. : https://tabit.cloud/
+    // Submitted by Oren Agiv <oren@tabit.cloud>
+    tabitorder.co.il
+    mytabit.co.il
+    mytabit.com
 
     // TAIFUN Software AG : http://taifun-software.de
     // Submitted by Bjoern Henke <dev-server@taifun-software.de>
     taifun-dns.de
+
+    // Tailscale Inc. : https://www.tailscale.com
+    // Submitted by David Anderson <danderson@tailscale.com>
+    beta.tailscale.net
+    ts.net
 
     // TASK geographical domains (www.task.gda.pl/uslugi/dns)
     gda.pl
@@ -13252,9 +13833,14 @@ var pslData = {
     med.pl
     sopot.pl
 
+    // team.blue https://team.blue
+    // Submitted by Cedric Dubois <cedric.dubois@team.blue>
+    site.tb-hosting.com
+
     // Teckids e.V. : https://www.teckids.org
     // Submitted by Dominik George <dominik.george@teckids.org>
-    edugit.org
+    edugit.io
+    s3.teckids.org
 
     // Telebit : https://telebit.cloud
     // Submitted by AJ ONeal <aj@telebit.cloud>
@@ -13262,19 +13848,23 @@ var pslData = {
     telebit.io
     *.telebit.xyz
 
-    // The Gwiddle Foundation : https://gwiddlefoundation.org.uk
-    // Submitted by Joshua Bayfield <joshua.bayfield@gwiddlefoundation.org.uk>
-    gwiddle.co.uk
-
     // Thingdust AG : https://thingdust.com/
     // Submitted by Adrian Imboden <adi@thingdust.com>
+    *.firenet.ch
+    *.svc.firenet.ch
+    reservd.com
     thingdustdata.com
     cust.dev.thingdust.io
     cust.disrec.thingdust.io
     cust.prod.thingdust.io
     cust.testing.thingdust.io
-    *.firenet.ch
-    *.svc.firenet.ch
+    reservd.dev.thingdust.io
+    reservd.disrec.thingdust.io
+    reservd.testing.thingdust.io
+
+    // ticket i/O GmbH : https://ticket.io
+    // Submitted by Christian Franke <it@ticket.io>
+    tickets.io
 
     // Tlon.io : https://tlon.io
     // Submitted by Mark Staarink <mark@tlon.io>
@@ -13320,6 +13910,10 @@ var pslData = {
     *.transurl.eu
     *.transurl.nl
 
+    // TransIP: https://www.transip.nl
+    // Submitted by Cedric Dubois <cedric.dubois@team.blue>
+    site.transip.me
+
     // TuxFamily : http://tuxfamily.org
     // Submitted by TuxFamily administrators <adm@staff.tuxfamily.org>
     tuxfamily.org
@@ -13340,6 +13934,14 @@ var pslData = {
     synology-diskstation.de
     synology-ds.de
 
+    // Typedream : https://typedream.com
+    // Submitted by Putri Karunia <putri@typedream.com>
+    typedream.app
+
+    // Typeform : https://www.typeform.com
+    // Submitted by Sergi Ferriz <sergi.ferriz@typeform.com>
+    pro.typeform.com
+
     // Uberspace : https://uberspace.de
     // Submitted by Moritz Werner <mwerner@jonaspasche.com>
     uber.space
@@ -13352,10 +13954,23 @@ var pslData = {
     ltd.hk
     inc.hk
 
+    // UNIVERSAL DOMAIN REGISTRY : https://www.udr.org.yt/
+    // see also: whois -h whois.udr.org.yt help
+    // Submitted by Atanunu Igbunuroghene <publicsuffixlist@udr.org.yt>
+    name.pm
+    sch.tf
+    biz.wf
+    sch.wf
+    org.yt
+
     // United Gameserver GmbH : https://united-gameserver.de
     // Submitted by Stefan Schwarz <sysadm@united-gameserver.de>
     virtualuser.de
     virtual-user.de
+
+    // Upli : https://upli.io
+    // Submitted by Lenny Bakkalian <lenny.bakkalian@gmail.com>
+    upli.io
 
     // urown.net : https://urown.net
     // Submitted by Hostmaster <hostmaster@urown.net>
@@ -13419,7 +14034,6 @@ var pslData = {
     de.md
     jp.md
     to.md
-    uwu.nu
     indie.porn
     vxl.sh
     ch.tc
@@ -13435,22 +14049,24 @@ var pslData = {
     // Submitted by Serhii Rostilo <sergey@rostilo.kiev.ua>
     v.ua
 
+    // Vultr Objects : https://www.vultr.com/products/object-storage/
+    // Submitted by Niels Maumenee <storage@vultr.com>
+    *.vultrobjects.com
+
     // Waffle Computer Inc., Ltd. : https://docs.waffleinfo.com
     // Submitted by Masayuki Note <masa@blade.wafflecell.com>
     wafflecell.com
 
-    // WapBlog.ID : https://www.wapblog.id
-    // Submitted by Fajar Sodik <official@wapblog.id>
-    idnblogger.com
-    indowapblog.com
-    bloger.id
-    wblog.id
-    wbq.me
-    fastblog.net
-
     // WebHare bv: https://www.webhare.com/
     // Submitted by Arnold Hendriks <info@webhare.com>
     *.webhare.dev
+
+    // WebHotelier Technologies Ltd: https://www.webhotelier.net/
+    // Submitted by Apostolos Tsakpinis <apostolos.tsakpinis@gmail.com>
+    reserve-online.net
+    reserve-online.com
+    bookonline.app
+    hotelwithflight.com
 
     // WeDeploy by Liferay, Inc. : https://www.wedeploy.com
     // Submitted by Henrique Vicente <security@wedeploy.com>
@@ -13477,6 +14093,10 @@ var pslData = {
     panel.gg
     daemon.panel.gg
 
+    // Wizard Zines : https://wizardzines.com
+    // Submitted by Julia Evans <julia@wizardzines.com>
+    messwithdns.com
+
     // WoltLab GmbH : https://www.woltlab.com
     // Submitted by Tim Düsterhus <security@woltlab.cloud>
     woltlab-demo.com
@@ -13486,9 +14106,22 @@ var pslData = {
     community-pro.net
     meinforum.net
 
-    // www.com.vc : http://www.com.vc
-    // Submitted by Li Hui <lihui@sinopub.com>
-    cn.vu
+    // Woods Valldata : https://www.woodsvalldata.co.uk/
+    // Submitted by Chris Whittle <chris.whittle@woodsvalldata.co.uk>
+    affinitylottery.org.uk
+    raffleentry.org.uk
+    weeklylottery.org.uk
+
+    // WP Engine : https://wpengine.com/
+    // Submitted by Michael Smith <michael.smith@wpengine.com>
+    // Submitted by Brandon DuRette <brandon.durette@wpengine.com>
+    wpenginepowered.com
+    js.wpenginepowered.com
+
+    // Wix.com, Inc. : https://www.wix.com
+    // Submitted by Shahar Talmi <shahar@wix.com>
+    wixsite.com
+    editorx.io
 
     // XenonCloud GbR: https://xenoncloud.net
     // Submitted by Julian Uphoff <publicsuffixlist@xenoncloud.net>
@@ -13532,6 +14165,7 @@ var pslData = {
 
     // Yunohost : https://yunohost.org
     // Submitted by Valentin Grimaud <security@yunohost.org>
+    ynh.fr
     nohost.me
     noho.st
 
@@ -13550,41 +14184,6 @@ var pslData = {
     virtualserver.io
     enterprisecloud.nu
 
-    // Mintere : https://mintere.com/
-    // Submitted by Ben Aubin <security@mintere.com>
-    mintere.site
-
-    // Cityhost LLC  : https://cityhost.ua
-    // Submitted by Maksym Rivtin <support@cityhost.net.ua>
-    cx.ua
-
-    // WP Engine : https://wpengine.com/
-    // Submitted by Michael Smith <michael.smith@wpengine.com>
-    // Submitted by Brandon DuRette <brandon.durette@wpengine.com>
-    wpenginepowered.com
-    js.wpenginepowered.com
-
-    // Impertrix Solutions : <https://impertrixcdn.com>
-    // Submitted by Zhixiang Zhao <csuite@impertrix.com>
-    impertrixcdn.com
-    impertrix.com
-
-    // GignoSystemJapan: http://gsj.bz
-    // Submitted by GignoSystemJapan <kakutou-ec@gsj.bz>
-    gsj.bz
-
-    // Rusnames Limited: http://rusnames.ru/
-    // Submitted by Sergey Zotov <admin@rusnames.ru>
-    биз.рус
-    ком.рус
-    крым.рус
-    мир.рус
-    мск.рус
-    орг.рус
-    самара.рус
-    сочи.рус
-    спб.рус
-    я.рус
     // ===END PRIVATE DOMAINS===
-`
-};
+
+`;

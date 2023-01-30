@@ -47,6 +47,9 @@
     "unlimitedStorage",
     "idle"
   ],
+  "web_accessible_resources": [
+    "dist/panels/*"
+  ],
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {

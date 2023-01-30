@@ -3,8 +3,7 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { KeeStore, useStubStore } from "../store";
 import { Entry } from "../common/model/Entry";
-
-declare const punycode;
+import punycode from "punycode/";
 
 // Pretend browser (WebExtensions) is chrome (we include a
 // polyfill from Mozilla but it doesn't work in some cases)

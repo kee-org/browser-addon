@@ -1,5 +1,5 @@
 <template>
-    <v-app id="inspire">
+    <v-app>
         <PasswordGenerator
             :standalone="true"
             :topmost="true"

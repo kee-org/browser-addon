@@ -5,42 +5,41 @@
                 :label="label"
                 :model-value="field.value"
                 color="secondary"
-                dense
-                variant="outlined"
+                variant="filled"
+                density="comfortable"
                 hide-details="auto"
                 :type="renderType"
                 @update:model-value="valueChanged"
                 @focus="onFocus"
                 @blur="onBlur"
             >
-                <template #append-inner>
-                    <v-fade-transition>
-                        <v-btn v-if="focussed && resettable" size="small" icon @click="reset">
-                            <mdi-undo />
+                <template #append>
+                    <v-slide-x-transition>
+                        <v-btn v-if="focussed && resettable" size="x-small" icon class="ml-1" @click="reset">
+                            <mdi-undo scale="175"/>
                         </v-btn>
-                    </v-fade-transition>
+                    </v-slide-x-transition>
                     <v-btn
                         v-if="field.type === 'password'"
-                        size="small"
+                        size="x-small"
                         icon
+                        class="ml-1"
                         @click="revealed = !revealed"
                     >
-                        <mdi-eye v-if="revealed"/>
-                        <mdi-eye-off v-if="!revealed"/>
+                        <mdi-eye v-if="revealed" scale="175"/>
+                        <mdi-eye-off v-if="!revealed" scale="175"/>
                     </v-btn>
-                </template>
-                <template #append>
                     <v-btn
                         v-if="field.type === 'password'"
-                        size="small"
+                        size="x-small"
                         icon
-                        class="mr-3"
+                        class="ml-1"
                         @click="showPasswordGenerator = true"
                     >
-                        <mdi-flash />
+                        <mdi-flash  scale="175"/>
                     </v-btn>
-                    <v-btn size="small" icon @click="deleteClicked">
-                        <mdi-delete />
+                    <v-btn size="x-small" icon class="ml-1" @click="deleteClicked">
+                        <mdi-delete scale="175" />
                     </v-btn>
                 </template>
             </v-text-field>
@@ -57,6 +56,7 @@
 import { Field } from "../../common/model/Field";
 import PasswordGenerator from "../../common/components/PasswordGenerator.vue";
 import { copyStringToClipboard } from "../../common/copyStringToClipboard";
+import { KeeLog } from "~/common/Logger";
 
 export default {
     components: {

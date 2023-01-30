@@ -18,7 +18,6 @@
         "noImplicitThis": true,
         "isolatedModules": true,
         "types": [
-            "jest",
             "vite/client",
             "unplugin-icons/types/vue"
         ],

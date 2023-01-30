@@ -83,9 +83,10 @@ export class Kee {
                 for (const port of allPorts) {
                     if (port !== excludedPort) {
                         try {
-                            //TODO: Might not be able to distribute Pinia Patch objects without some additional JSON mapping / manipulation
-                            KeeLog.error("New background mutation: " + JSON.stringify(mutation));
-                            port.postMessage({ mutation } as AddonMessage);
+                            //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
+                            const json = JSON.stringify(mutation);
+                            KeeLog.debug("New background mutation: " + json);
+                            port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
                         } catch (e) {
                             KeeLog.error(JSON.stringify(e));
                             // Sometimes dead ports are left lying around by the browser (especially

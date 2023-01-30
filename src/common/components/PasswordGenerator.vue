@@ -1,71 +1,54 @@
 <template>
     <v-dialog
-        :model-value="true"
-        fullscreen
-        persistent
-        :scrim="false"
-        :transition="dialogTransition"
-        @keydown.esc="cancel"
-    >
+:model-value="true" fullscreen persistent :scrim="false" :transition="dialogTransition"
+        @keydown.esc="cancel">
         <v-card>
             <div>
                 <v-card-text>
                     <v-select
-                        v-model="selectedProfile"
-                        :items="items"
-                        :label="$i18n('password_profile')"
-                        color="secondary"
-                        :hint="$i18n('password_profile_hint')"
-                        persistent-hint
-                        class="mt-0"
-                        @update:model-value="profileChanged"
-                    />
+v-model="selectedProfile" :items="items" :label="$i18n('password_profile')"
+                        color="secondary" :hint="$i18n('password_profile_hint')" persistent-hint class="mt-0"
+                        @update:model-value="profileChanged" />
                     <v-card
-                        :loading="loading"
-                        class="mx-auto px-3 py-0 mt-4"
-                        style="font-family: monospace"
-                        max-width="300"
-                    >
-                        <v-row class="flex-nowrap" align="center">
-                            <v-col cols="9" class="text-center">
+:loading="loading" class="mx-auto px-3 py-0 mt-4" style="font-family: monospace"
+                        max-width="300">
+                        <v-container class="justify-space-between" style="display: flex;">
+                            <v-sheet class="text-truncate flex-grow-1" style="align-self: center;">
                                 {{ renderedPassword }}
-                            </v-col>
-                            <v-col cols="2">
-                                <v-btn icon @click="revealed = !revealed">
-                                    <mdi-eye v-if="revealed" scale="200" />
-                                    <mdi-eye-off v-if="!revealed" scale="200" />
+                            </v-sheet>
+                            <v-sheet style="align-self: center;">
+                                <v-btn size="small" icon @click="revealed = !revealed">
+                                    <mdi-eye v-if="revealed" scale="150" />
+                                    <mdi-eye-off v-if="!revealed" scale="150" />
                                 </v-btn>
-                            </v-col>
-                        </v-row>
+                            </v-sheet>
+                    </v-container>
                     </v-card>
                     <div v-if="!standalone">
                         <br />
                         {{ $i18n("password_will_be_set_on_field") }}
                     </div>
                     <div v-if="!standalone">
-                        <v-checkbox
-                            v-model="forceCopy"
-                            :label="$i18n('also_copy_to_clipboard')"
-                        >
-                    </v-checkbox>
+                        <v-checkbox v-model="forceCopy" :label="$i18n('also_copy_to_clipboard')">
+                        </v-checkbox>
                     </div>
                     <div v-if="!standalone">
                         {{ forceCopyHint }}
                     </div>
                 </v-card-text>
             </div>
-            <v-card-actions >
-        <v-list-item class="w-100">
-                <div class="justify-self-end">
-                <v-btn variant="elevated" color="tertiary" @click="cancel">
-                    {{ cancelButtonText }}
-                </v-btn>
+            <v-card-actions>
+                <v-list-item class="w-100">
+                    <div class="justify-self-end">
+                        <v-btn variant="elevated" color="tertiary" @click="cancel">
+                            {{ cancelButtonText }}
+                        </v-btn>
 
-                <v-btn variant="elevated" color="primary" :disabled="disabled" @click="ok">
-                    {{ okButtonText }}
-                </v-btn>
-            </div>
-            </v-list-item>
+                        <v-btn variant="elevated" color="primary" :disabled="disabled" @click="ok">
+                            {{ okButtonText }}
+                        </v-btn>
+                    </div>
+                </v-list-item>
             </v-card-actions>
         </v-card>
         <MdiMenuUp v-if="false" />
@@ -87,7 +70,7 @@ import { KeeLog } from "../Logger";
 export default {
     props: ["field", "standalone", "topmost"],
     emits: ["copy-to-clipboard", "dialog-closed"],
-    setup () {
+    setup() {
         const { updateGeneratedPassword } = useStore();
         return { updateGeneratedPassword };
     },
@@ -150,7 +133,7 @@ export default {
             this.loading = true;
             const unwatch = this.$watch(
                 "generatedPassword",
-                 newValue => {
+                newValue => {
                     KeeLog.debug("watch inner fired");
                     unwatch();
                     // this.updateGeneratedPassword("");
@@ -171,6 +154,7 @@ export default {
 .v-input--checkbox .v-messages__wrapper {
     min-height: 32px;
 }
+
 .v-text-field__details .v-messages__message,
 .v-input--checkbox .v-messages__message {
     line-height: 16px;

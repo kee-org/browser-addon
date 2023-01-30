@@ -2,54 +2,30 @@
 <template>
     <div>
         <v-slide-y-transition>
-            <v-container class="my-3 pa-0">
+            <v-container class="my-3 pa-0" style="padding: 0px;">
                 <v-row>
                     <v-col>
                         <v-text-field
-                            :label="$i18n('title')"
-                            color="secondary"
-                            :model-value="saveState.newEntry.title"
-                            dense
-                            variant="outlined"
-                            hide-details="auto"
-                            type="text"
-                            autofocus
-                            @update:model-value="setTitle"
-                            @focus="onTitleFocus"
-                            @blur="onTitleBlur"
-                        >
-                            <template #append-inner>
-                                <v-btn
-                                    v-if="titleFocussed && resettableTitle"
-                                    size="small"
-                                    icon
-                                    @click="resetTitle"
-                                >
-                                    <mdi-undo />
-                                </v-btn>
+:label="$i18n('title')" :model-value="saveState.newEntry.title" variant="filled"
+                            density="comfortable" hide-details="auto" type="text" autofocus
+                            @update:model-value="setTitle" @focus="onTitleFocus" @blur="onTitleBlur">
+                            <template v-if="titleFocussed && resettableTitle" #append>
+                                    <v-btn size="x-small" icon class="ml-1" @click="resetTitle">
+                                        <mdi-undo scale="175" />
+                                    </v-btn>
                             </template>
                         </v-text-field>
                     </v-col>
                 </v-row>
 
                 <FieldEditor
-                    v-for="f of saveState.newEntry.fields"
-                    :key="f.uuid"
-                    :field="f"
-                    @field-value-changed="fieldValueChanged"
-                    @field-deleted="fieldDeleted"
-                />
+v-for="f of saveState.newEntry.fields" :key="f.uuid" :field="f"
+                    @field-value-changed="fieldValueChanged" @field-deleted="fieldDeleted" />
             </v-container>
         </v-slide-y-transition>
         <v-alert
-            v-if="showURLMismatchWarning"
-            border="top"
-            border-color="primary"
-            type="warning"
-            :icon="false"
-            elevation="1"
-            class="my-3"
-        >
+v-if="showURLMismatchWarning" border="top" border-color="primary" type="warning" :icon="false"
+            elevation="1" class="my-3">
             <v-row dense>
                 <v-col>
                     <p>{{ $i18n("url_mismatch_1") }}</p>
@@ -61,53 +37,34 @@
                 <v-col class="my-0 py-0">
                     <div>
                         <v-checkbox
-                            v-model="differentSiteConfirmation"
-                            class="my-0 py-0"
-                            hide-details
-                            :label="$i18n('url_mismatch_confirm', entryDomain)"
-                        />
+v-model="differentSiteConfirmation" class="my-0 py-0" hide-details
+                            :label="$i18n('url_mismatch_confirm', entryDomain)" />
                     </div>
                 </v-col>
             </v-row>
         </v-alert>
-        <v-btn location="right" color="tertiary" @click="cancel">
-            {{ $i18n("cancel") }}
-        </v-btn>
-        <v-btn
-            v-if="!loading && !editingExisting && !skipWhere"
-            location="right"
-            color="primary"
-            @click="nextClicked"
-        >
-            {{ $i18n("next") }}
-        </v-btn>
-        <v-btn
-            v-if="!loading && !editingExisting && skipWhere"
-            location="right"
-            color="primary"
-            @click="saveEntry"
-        >
-            {{ $i18n("save") }}
-        </v-btn>
-        <v-btn v-if="loading" loading disabled location="right" color="primary"> ......... </v-btn>
-        <v-btn
-            v-if="editingExisting"
-            :disabled="showURLMismatchWarning && !differentSiteConfirmation"
-            location="right"
-            color="primary"
-            @click="updateEntry"
-        >
-            {{ $i18n("update") }}
-        </v-btn>
+        <v-container style="display: flex; width: 100%; justify-content: space-between;">
+            <v-btn color="tertiary" @click="cancel">
+                {{ $i18n("cancel") }}
+            </v-btn>
+            <v-btn
+v-if="!loading && !editingExisting && !skipWhere" color="primary"
+                @click="nextClicked">
+                {{ $i18n("next") }}
+            </v-btn>
+            <v-btn v-if="!loading && !editingExisting && skipWhere" color="primary" @click="saveEntry">
+                {{ $i18n("save") }}
+            </v-btn>
+            <v-btn v-if="loading" loading disabledcolor="primary"> ......... </v-btn>
+            <v-btn
+v-if="editingExisting" :disabled="showURLMismatchWarning && !differentSiteConfirmation"
+                color="primary" @click="updateEntry">
+                {{ $i18n("update") }}
+            </v-btn>
+        </v-container>
         <v-alert
-            v-if="editingExisting"
-            border="top"
-            border-color="primary"
-            type="info"
-            :icon="false"
-            elevation="1"
-            class="my-4"
-        >
+v-if="editingExisting" border="top" border-color="primary" type="info" :icon="false" elevation="1"
+            class="my-4">
             <v-row align="center">
                 <v-col class="grow">
                     {{ $i18n("make_additional_changes_using_full_editor") }}
@@ -141,13 +98,14 @@ import { Group } from "../../common/model/Group";
 import { SearcherAll } from "../../common/SearcherAll";
 import useStore from "../../store";
 import { mapState } from "pinia";
+import { KeeLog } from "~/common/Logger";
 
 export default {
     components: {
         FieldEditor
     },
     emits: ["cancel-clicked", "save-where-clicked"],
-    setup () {
+    setup() {
         const { updateSaveState, removeFieldFromActiveEntry } = useStore();
         return { updateSaveState, removeFieldFromActiveEntry };
     },
@@ -192,11 +150,12 @@ export default {
             return this.domainMatchesExistingEntry
                 ? this.$i18n("skip_where_reason_domain_entry_exists")
                 : this.primaryFound
-                ? this.$i18n("skip_where_reason_group_not_found")
-                : null;
+                    ? this.$i18n("skip_where_reason_group_not_found")
+                    : null;
         }
     },
     async mounted() {
+        KeeLog.warn("s1p mounted");
         this.preferToSkipWhere = configManager.current.rememberMRUGroup;
         const dbs = this.KeePassDatabases as Database[];
         const { preferredGroupUuid, preferredDb, primaryFound } = this.getPreferredGroup(
@@ -215,6 +174,7 @@ export default {
             }
         }
         this.loading = false;
+        KeeLog.warn("s1p mounted done");
     },
     methods: {
         cancel: function () {
@@ -224,7 +184,7 @@ export default {
             this.$emit("save-where-clicked", this.displayWhereReason, this.preferredGroupUuid);
         },
         saveEntry: function () {
-            const updatedSaveState = Object.assign({}, this.saveState) as SaveState;
+            const updatedSaveState = Object.assign({}, JSON.parse(JSON.stringify(this.saveState))) as SaveState;
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
                 parentGroup: new GroupSummary({ uuid: this.preferredGroupUuid }),
@@ -239,7 +199,7 @@ export default {
             window.close();
         },
         openFullEntryEditor() {
-            const entry = (this.saveState as SaveState).newEntry;
+            const entry = (JSON.parse(JSON.stringify(this.saveState)) as SaveState).newEntry;
             Port.postMessage({
                 loginEditor: {
                     uuid: entry.uuid,
@@ -249,7 +209,7 @@ export default {
             window.close();
         },
         setTitle: function (value) {
-            const updatedSaveState = Object.assign({}, this.saveState) as SaveState;
+            const updatedSaveState = Object.assign({}, JSON.parse(JSON.stringify(this.saveState))) as SaveState;
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
                 title: value
@@ -257,12 +217,12 @@ export default {
             this.updateSaveState(updatedSaveState);
         },
         resetTitle: function () {
-            this.setTitle(this.saveState.titleResetValue);
+            this.setTitle(JSON.parse(JSON.stringify(this.saveState.titleResetValue)));
         },
         fieldValueChanged: function (change) {
-            const updatedSaveState = Object.assign({}, this.saveState) as SaveState;
-            const originalFieldIndex = (this.saveState as SaveState).newEntry.fields.findIndex(f => f.uuid === change.uuid);
-            const originalField = (this.saveState as SaveState).newEntry.fields[
+            const updatedSaveState = Object.assign({}, JSON.parse(JSON.stringify(this.saveState))) as SaveState;
+            const originalFieldIndex = (JSON.parse(JSON.stringify(this.saveState)) as SaveState).newEntry.fields.findIndex(f => f.uuid === change.uuid);
+            const originalField = (JSON.parse(JSON.stringify(this.saveState)) as SaveState).newEntry.fields[
                 originalFieldIndex
             ];
             const newField = new Field({
@@ -329,7 +289,7 @@ export default {
             };
         },
         anyEntryMatchesNewDomain: function () {
-            const urlStr = (this.saveState as SaveState).newEntry.URLs[0];
+            const urlStr = JSON.parse(JSON.stringify((this.saveState as SaveState).newEntry.URLs[0]));
             if (!urlStr || urlStr.length < 4) return false;
             const kurl = KeeURL.fromString(urlStr);
             if (!kurl) {

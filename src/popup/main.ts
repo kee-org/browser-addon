@@ -14,13 +14,6 @@ import "../styles";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
-// disable compat for certain features
-// configureCompat({
-//     RENDER_FUNCTION: false,
-//     COMPONENT_V_MODEL: false,
-//     COMPONENT_ASYNC: false
-// });
-
 const piniaInstance = createPinia();
 let vueApp: VueApp<Element>;
 let syncContent: SyncContent;
@@ -100,8 +93,10 @@ try {
                 store,
                 m.initialState,
                 (mutationPayload: MutationPayload) => {
-                    KeeLog.error(`blah : ${JSON.stringify(mutationPayload)}`);
-                    Port.postMessage({ mutation: mutationPayload } as AddonMessage);
+                    //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
+                    const json = JSON.stringify(mutationPayload);
+                    KeeLog.debug("New non-background mutation: " + json);
+                    Port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
                 },
                 () => {
                     vueApp.mount("#main");

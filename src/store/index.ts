@@ -5,6 +5,7 @@ import { SaveState } from "../common/SaveState";
 import { SessionType } from "../common/SessionType";
 import { Field } from "../common/model/Field";
 import { App } from "vue";
+import { KeeLog } from "~/common/Logger";
 
 /**
  * A replacement for `defineStore` which makes all state properties readonly
@@ -14,9 +15,9 @@ import { App } from "vue";
 function defineImmutableStore<Id extends string, S extends StateTree = any, G extends _GettersTree<S> = any, A = any>(
     id: Id,
     options: Omit<DefineStoreOptions<Id, S, G, A>, "id">
-  ): StoreDefinition<Id, Readonly<S>, G, A> {
+): StoreDefinition<Id, Readonly<S>, G, A> {
     return defineStore(id, options);
-  }
+}
 
 const useStore = defineImmutableStore("kee", {
     state: (): KeeState => (defaults),
@@ -89,62 +90,64 @@ const useStore = defineImmutableStore("kee", {
     },
     actions: {
         updateActiveKeePassDatabaseIndex(payload) {
-            this.$patch({ActiveKeePassDatabaseIndex: payload});
+            this.$patch({ ActiveKeePassDatabaseIndex: payload });
         },
 
         updateConnected(payload) {
-            this.$patch({connected: payload});
+            this.$patch({ connected: payload });
         },
 
         updateConnectedWebsocket(payload) {
-            this.$patch({connectedWebsocket: payload});
+            this.$patch({ connectedWebsocket: payload });
         },
 
         updateCurrentSearchTerm(payload) {
-            this.$patch({currentSearchTerm: payload});
+            this.$patch({ currentSearchTerm: payload });
         },
 
         updateKeePassDatabases(payload) {
-            this.$patch({KeePassDatabases: payload});
+            this.$patch({ KeePassDatabases: payload });
         },
 
         updateLastKeePassRPCRefresh(payload) {
-            this.$patch({lastKeePassRPCRefresh: payload});
+            this.$patch({ lastKeePassRPCRefresh: payload });
         },
 
         updateLatestConnectionError(payload) {
-            this.$patch({latestConnectionError: payload});
+            this.$patch({ latestConnectionError: payload });
         },
 
         updateLoginsFound(payload) {
-            this.$patch({loginsFound: payload || false});
+            this.$patch({ loginsFound: payload || false });
         },
 
         updateNotifications(payload) {
-            this.$patch({notifications: payload});
+            this.$patch({ notifications: payload });
         },
 
         updatePasswordProfiles(payload) {
-            this.$patch({PasswordProfiles: payload});
+            this.$patch({ PasswordProfiles: payload });
         },
 
         updateGeneratedPassword(payload) {
-            this.$patch({generatedPassword: payload});
+            this.$patch({ generatedPassword: payload });
         },
 
         updateSubmittedData(payload) {
-            const patch = this.saveState ? {} : new SaveState();
-            this.$patch({saveState: {
-                submittedData: payload || null
-            }});
+            //const patch = this.saveState ? {} : new SaveState();
+            this.$patch({
+                saveState: {
+                    submittedData: payload || null
+                }
+            });
         },
 
         updateSaveState(payload) {
-            this.$patch({saveState: payload || null});
+            this.$patch({ saveState: payload || null });
         },
 
         updateSearchResults(payload) {
-            this.$patch({searchResults: payload || null});
+            this.$patch({ searchResults: payload || null });
         },
 
         updateSearchResultWithFullDetails(payload) {
@@ -166,7 +169,7 @@ const useStore = defineImmutableStore("kee", {
         },
 
         updateSaveEntryResult(payload) {
-            this.$patch({saveEntryResult: payload || null});
+            this.$patch({ saveEntryResult: payload || null });
         },
 
         removeFieldFromActiveEntry(payload) {
@@ -186,30 +189,34 @@ const useStore = defineImmutableStore("kee", {
                 const newUsernameIndex = cloned.findIndex(
                     f => f.type === "text"
                 );
-                if (newUsernameIndex < 0) return;
-                const newUsername = cloned.splice(newUsernameIndex, 1)[0];
-                cloned.splice(
-                    originalFieldIndex,
-                    0,
-                    new Field({ ...newUsername, name: "KeePass username" })
-                );
+                if (newUsernameIndex >= 0) {
+                    const newUsername = cloned.splice(newUsernameIndex, 1)[0];
+                    cloned.splice(
+                        originalFieldIndex,
+                        0,
+                        new Field({ ...newUsername, name: "KeePass username" })
+                    );
+                }
             } else if (originalFieldIndex === firstPasswordFieldIndex) {
                 const newPasswordIndex = cloned.findIndex(
                     f => f.type === "password"
                 );
-                if (newPasswordIndex < 0) return;
-                const newPassword = cloned.splice(newPasswordIndex, 1)[0];
-                cloned.splice(
-                    originalFieldIndex,
-                    0,
-                    new Field({ ...newPassword, name: "KeePass password" })
-                );
+                if (newPasswordIndex >= 0) {
+                    const newPassword = cloned.splice(newPasswordIndex, 1)[0];
+                    cloned.splice(
+                        originalFieldIndex,
+                        0,
+                        new Field({ ...newPassword, name: "KeePass password" })
+                    );
+                }
             }
-            this.$patch({saveState: {newEntry: {fields: cloned}}});
+            KeeLog.debug(`before ${JSON.stringify(this.saveState)}`);
+            this.$patch({ saveState: { newEntry: { fields: cloned } } });
+            KeeLog.debug(`after ${JSON.stringify(this.saveState)}`);
         },
 
         updateEntryUpdateStartedAtTimestamp(payload) {
-            this.$patch({entryUpdateStartedAtTimestamp: payload || null});
+            this.$patch({ entryUpdateStartedAtTimestamp: payload || null });
         }
 
     }

@@ -12,6 +12,7 @@ import { MatchedField } from "./MatchedField";
 import { Field } from "../common/model/Field";
 import { Entry } from "../common/model/Entry";
 import useStore from "../store";
+import punycode from "punycode/";
 
 const store = useStore();
 
@@ -20,8 +21,6 @@ interface ScoreMatrix {
     formFieldIndex: number;
     dataFieldIndex: number;
 }
-
-declare const punycode;
 
 class FillAndSubmitAction {
     fill: boolean;

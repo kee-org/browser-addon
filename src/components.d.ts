@@ -8,24 +8,6 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Logo: typeof import('./components/Logo.vue')['default']
-    MdiChevronDown: typeof import('~icons/mdi/chevron-down')['default']
-    MdiChevronUp: typeof import('~icons/mdi/chevron-up')['default']
-    MdiClose: typeof import('~icons/mdi/close')['default']
-    MdiCloud: typeof import('~icons/mdi/cloud')['default']
-    MdiCog: typeof import('~icons/mdi/cog')['default']
-    MdiContentCopy: typeof import('~icons/mdi/content-copy')['default']
-    MdiDelete: typeof import('~icons/mdi/delete')['default']
-    MdiEye: typeof import('~icons/mdi/eye')['default']
-    MdiEyeOff: typeof import('~icons/mdi/eye-off')['default']
-    MdiFlash: typeof import('~icons/mdi/flash')['default']
-    MdiFolder: typeof import('~icons/mdi/folder')['default']
-    MdiHelp: typeof import('~icons/mdi/help')['default']
-    MdiLock: typeof import('~icons/mdi/lock')['default']
-    MdiMenu: typeof import('~icons/mdi/menu')['default']
-    MdiMenuDown: typeof import('~icons/mdi/menu-down')['default']
-    MdiMenuUp: typeof import('~icons/mdi/menu-up')['default']
-    MdiPlus: typeof import('~icons/mdi/plus')['default']
-    MdiUndo: typeof import('~icons/mdi/undo')['default']
     SharedSubtitle: typeof import('./components/SharedSubtitle.vue')['default']
   }
 }

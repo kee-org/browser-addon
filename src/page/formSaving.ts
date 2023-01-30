@@ -6,8 +6,7 @@ import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { MatchedField } from "./MatchedField";
 import { Field } from "../common/model/Field";
-
-declare const punycode;
+import punycode from "punycode/";
 
 interface SubmitHandlerAttachment {
     target: HTMLElement;

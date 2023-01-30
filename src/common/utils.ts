@@ -1,6 +1,6 @@
-declare const publicSuffixList;
-declare const punycode;
-declare const pslData;
+import punycode from "punycode/";
+import publicSuffixList from "@gorhill/publicsuffixlist";
+import { pslData } from "./PublicSuffixListData";
 
 export class Utils {
     private pslInitialised = false;
@@ -255,7 +255,7 @@ export class Utils {
     public get psl() {
         if (!publicSuffixList) throw new Error("publicSuffixList library not present");
         if (!this.pslInitialised) {
-            publicSuffixList.parse(pslData.text, punycode.toASCII);
+            publicSuffixList.parse(pslData, punycode.toASCII);
             this.pslInitialised = true;
         }
         return publicSuffixList;

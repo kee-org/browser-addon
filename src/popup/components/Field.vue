@@ -1,23 +1,23 @@
 <template>
-    <v-row v-if="useful" justify="center" align="center">
-        <v-col class="text-truncate my-2 text-right">
+        <v-sheet v-if="useful" class="my-0" style="display: flex; align-items: center;">
+<v-sheet class="text-truncate my-2 text-right flex-grow-1">
             <span :style="fieldStyle" @click="toggleReveal">
                 <v-tooltip location="bottom" :open-delay="tooltipDelay" activator="parent">
                     <span>{{ tooltip }}</span>
                 </v-tooltip>
                 {{ displayValue }}
             </span>
-        </v-col>
+        </v-sheet>
 
-        <v-col class="my-0 shrink">
+        <v-sheet class="my-1 mx-2 shrink">
             <v-btn size="small" icon class="my-0" @click="copyValue">
                 <v-tooltip location="left" :open-delay="tooltipDelay" activator="parent">
                     <span>{{ $i18n("copy_value_to_clipboard") }}</span>
                 </v-tooltip>
                 <mdi-content-copy />
             </v-btn>
-        </v-col>
-    </v-row>
+        </v-sheet>
+    </v-sheet>
 </template>
 
 <script lang="ts">

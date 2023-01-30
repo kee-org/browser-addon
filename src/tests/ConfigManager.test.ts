@@ -1,3 +1,8 @@
+// 2023: All tests fail because we can't run them in vite or jest.
+import { beforeEach, describe, expect, it, vi } from "vitest";
+globalThis.jest = vi;
+import "jest-webextension-mock";
+
 import { SiteConfig } from "../common/config";
 
 const urlStringPage1 = "https://www.kee.pm/examplePage?param=whatever";
@@ -10,7 +15,7 @@ const exampleEntryUUID1 = "1111";
 const exampleEntryUUID2 = "2222";
 
 beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
 });
 
 it("resolved site config returns matching uuid with Domain preference set", async () => {
