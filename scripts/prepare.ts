@@ -34,6 +34,16 @@ async function stubIndexHtml() {
         log("PRE", `stub ${dialog}`);
     }
 
+    for (const panel of ["panels", "panelsLegacy"]) {
+        await fs.ensureDir(r(`extension/dist/panels/${panel}`));
+        let data = await fs.readFile(r(`src/panels/${panel}.html`), "utf-8");
+        data = data
+            .replace(`"./main.ts"`, `"http://localhost:${port}/panels/main.ts"`)
+            .replace('<div id="app"></div>', '<div id="app">Vite server did not start</div>');
+        await fs.writeFile(r(`extension/dist/panels/${panel}.html`), data, "utf-8");
+        log("PRE", `stub ${panel}`);
+    }
+
     for (const ia of ["install", "update"]) {
         await fs.ensureDir(r(`extension/dist/release-notes/${ia}`));
         let data = await fs.readFile(r(`src/release-notes/${ia}-notes.html`), "utf-8");

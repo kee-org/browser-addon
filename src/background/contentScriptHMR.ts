@@ -1,6 +1,7 @@
+import { KeeLog } from '~/common/Logger';
 import { isFirefox, isForbiddenUrl } from '~/env'
 
-const vaultURLs = ["https://app-dev.kee.pm:8087/", "https://app-beta.kee.pm/", "https://app.kee.pm/", "https://keevault.pm/"];
+const vaultURLs = ["https://app-dev.kee.pm:8087", "https://app-beta.kee.pm", "https://app.kee.pm", "https://keevault.pm"];
 
 // Firefox fetch files from cache instead of reloading changes from disk,
 // hmr will not work as Chromium based browser
@@ -15,5 +16,5 @@ const scriptType = vaultURLs.some(v => url.startsWith(v)) ? "vault" : "page";
   browser.tabs.executeScript(tabId, {
     file: `${isFirefox ? '' : '.'}/dist/${scriptType}/index.global.js`,
     runAt: 'document_end',
-  }).catch(error => console.error(error))
+  }).catch(error => KeeLog.error("Failed to inject content script", error))
 })

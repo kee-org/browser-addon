@@ -5,31 +5,41 @@ import packageJson from "./package.json";
 
 // bundling the content script using Vite
 export default defineConfig({
-  ...sharedConfig,
-  define: {
-    "__DEV__": isDev,
-    // https://github.com/vitejs/vite/issues/9320
-    // https://github.com/vitejs/vite/issues/9186
-    "process.env.NODE_ENV": JSON.stringify(isDev ? "development" : "production")
-  },
-  build: {
-    watch: isDev
-      ? {}
-      : undefined,
-    outDir: r("extension/dist/vault"),
-    cssCodeSplit: false,
-    emptyOutDir: false,
-    sourcemap: isDev ? "inline" : false,
-    lib: {
-      entry: r("src/vault/vault.ts"),
-      name: packageJson.name,
-      formats: ["iife"]
+    ...sharedConfig,
+    define: {
+        "__DEV__": isDev,
+        // https://github.com/vitejs/vite/issues/9320
+        // https://github.com/vitejs/vite/issues/9186
+        "process.env.NODE_ENV": JSON.stringify(isDev ? "development" : "production")
     },
-    rollupOptions: {
-      output: {
-        entryFileNames: "index.global.js",
-        extend: true
-      }
+    esbuild: {
+        //treeShaking: true,
+        minifyIdentifiers: false,
+        minifySyntax: false,
+        minifyWhitespace: true,
+        //sourcemap: "inline",
+    },
+    build: {
+        watch: isDev
+            ? {}
+            : undefined,
+        outDir: r("extension/dist/vault"),
+        cssCodeSplit: false,
+        emptyOutDir: false,
+        sourcemap: isDev ? "inline" : false,
+        lib: {
+            entry: r("src/vault/vault.ts"),
+            name: packageJson.name,
+            formats: ["iife"]
+        },
+        rollupOptions: {
+            output: {
+                entryFileNames: "index.global.js",
+                extend: true,
+                sourcemap: "inline",
+            }
+        },
+        reportCompressedSize: false,
+        minify: !isDev,
     }
-  }
 });

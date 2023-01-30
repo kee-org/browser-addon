@@ -14,8 +14,8 @@ export const sharedConfig: UserConfig = {
     resolve: {
         alias: {
             "~/": `${r("src")}/`
-           // vue: "@vue/compat/dist/vue.esm-bundler.js"
-          }
+            // vue: "@vue/compat/dist/vue.esm-bundler.js"
+        }
     },
     define: {
         __DEV__: isDev,
@@ -25,13 +25,11 @@ export const sharedConfig: UserConfig = {
     plugins: [
         Vue({
             template: {
-              compilerOptions: {
-                compatConfig: {
-                  MODE: 3
+                compilerOptions: {
+
                 }
-              }
             }
-          }),
+        }),
 
         AutoImport({
             imports: [
@@ -78,7 +76,7 @@ export const sharedConfig: UserConfig = {
     optimizeDeps: {
         include: ["vue", "@vueuse/core", "webextension-polyfill"],
         exclude: ["vue-demi"]
-    }
+    },
 };
 
 export default defineConfig(({ command }) => ({
@@ -91,23 +89,30 @@ export default defineConfig(({ command }) => ({
             host: "localhost"
         }
     },
+    esbuild: {
+        treeShaking: false,
+        minifyIdentifiers: false,
+        minifySyntax: false,
+        minifyWhitespace: true,
+        sourcemap: "inline",
+    },
     build: {
         outDir: r("extension/dist"),
         emptyOutDir: false,
         sourcemap: isDev ? "inline" : false,
-        // https://developer.chrome.com/docs/webstore/program_policies/#:~:text=Code%20Readability%20Requirements
-        terserOptions: {
-            mangle: false
-        },
         rollupOptions: {
             input: {
                 background: r("src/background/index.html"),
                 settings: r("src/settings/index.html"),
                 popup: r("src/popup/index.html"),
                 srp: r("src/dialogs/SRP.html"),
-                networkAuth: r("src/dialogs/NetworkAuth.html")
+                networkAuth: r("src/dialogs/NetworkAuth.html"),
+                vuePanels: r("src/panels/panels.html"),
+                legacyPanels: r("src/panels/panelsLegacy.html")
             }
-        }
+        },
+        reportCompressedSize: false,
+        minify: !isDev,
     },
     test: {
         globals: true,
