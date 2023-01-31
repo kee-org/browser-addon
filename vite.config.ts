@@ -7,14 +7,13 @@ import IconsResolver from "unplugin-icons/resolver";
 import Components from "unplugin-vue-components/vite";
 import AutoImport from "unplugin-auto-import/vite";
 import UnoCSS from "unocss/vite";
-import { isDev, port, r } from "./scripts/utils";
+import { isBeta, isDev, port, r } from "./scripts/utils";
 
 export const sharedConfig: UserConfig = {
     root: r("src"),
     resolve: {
         alias: {
             "~/": `${r("src")}/`
-            // vue: "@vue/compat/dist/vue.esm-bundler.js"
         }
     },
     define: {
@@ -90,16 +89,14 @@ export default defineConfig(({ command }) => ({
         }
     },
     esbuild: {
-        treeShaking: false,
         minifyIdentifiers: false,
         minifySyntax: false,
         minifyWhitespace: true,
-        sourcemap: "inline",
     },
     build: {
         outDir: r("extension/dist"),
         emptyOutDir: false,
-        sourcemap: isDev ? "inline" : false,
+        sourcemap: isDev ? "inline" : isBeta ? true : false,
         rollupOptions: {
             input: {
                 background: r("src/background/index.html"),

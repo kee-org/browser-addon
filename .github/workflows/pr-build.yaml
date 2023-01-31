@@ -6,15 +6,47 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+        #TODO: change to 1 and then get all tags seperately to see if that's faster. git fetch origin 'refs/tags/*:refs/tags/*'
+        
+      # Create a git tag of the new version to use
+      # If package.json major and minor versions match last tag, then 
+      # increment last tag. Else use package.json major.minor.0.
+      - name: Create git tag
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          KEE_VERSION_MANIFEST=`sed -nE 's/^.*"version": "([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}"\\,/\\1/p' package.json | tr -d '\\040\\011\\012\\015'`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo "${KEE_VERSION_MANIFEST} ${KEE_VERSION_TAG}" | awk '{printf($1==$2?""$2"."$3+1:""$1".0")}' | xargs -I {} git tag -a {} -m "{}"
+
+      - name: Update package.json based on the git tag we just created
+        run: |
+          NEW_KEE_VERSION=`git describe --abbrev=0 --tags`
+          echo "NEW_KEE_VERSION=$NEW_KEE_VERSION" >> $GITHUB_ENV
+          sed -E 's/^(.*"version": ")(.*)("\,.*)/\1'"$NEW_KEE_VERSION"'\3/' package.json > package.json.tmp && mv package.json.tmp package.json
 
       - name: NPM CI
         run: npm ci
 
-      - name: Build and package
-        run: npm run package:prod && npm run package:debug
+      - name: Build and package beta
+        run: npm run build:beta && npm run pack:beta
 
-      - name: Test
-        run: npm run test
+      - name: Build and package production
+        run: npm run build:prod && npm run pack:prod
+
+
+
+        
+
+      # - name: NPM CI
+      #   run: npm ci
+
+      # - name: Build and package
+      #   run: npm run package:prod && npm run package:debug
+
+      # - name: Test
+      #   run: npm run test

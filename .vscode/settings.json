@@ -9,10 +9,7 @@
         "**/.svn": true,
         "**/.hg": true,
         "**/.DS_Store": true,
-        "out/**/*": true,
-        "**/*.js.map": true,
-        "build/**/*": true,
-        "dist/**/*": true
+        "build/**/*": true
     },
     "typescript.tsdk": "node_modules/typescript/lib",
     "eslint.enable": true,

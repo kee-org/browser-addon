@@ -2,7 +2,7 @@
 import fs from "fs-extra";
 import type { Manifest } from "webextension-polyfill";
 import type PkgType from "../package.json";
-import { isDev, port, r } from "../scripts/utils";
+import { isBeta, isDev, port, r } from "../scripts/utils";
 
 export async function getManifest() {
     const pkg = (await fs.readJSON(r("package.json"))) as typeof PkgType;
@@ -113,6 +113,16 @@ export async function getManifest() {
             }
         }
     };
+
+    if (!isBeta) {
+        delete manifest.applications.gecko.update_url;
+    } else {
+        //TODO: Firefox will warn about this version scheme but they previously
+        // prevented signing a beta version of the same version number so we
+        // have to stick with this deprecated approach until we've confirmed
+        // they have removed that restriction from the AMO backend
+        manifest.version += "beta";
+    }
 
     if (isDev) {
         // for content script, as browsers will cache them for each reload,

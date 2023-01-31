@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import { sharedConfig } from "./vite.config";
-import { isDev, r } from "./scripts/utils";
+import { isBeta, isDev, r } from "./scripts/utils";
 import packageJson from "./package.json";
 
 // bundling the content script using Vite
@@ -13,11 +13,9 @@ export default defineConfig({
         "process.env.NODE_ENV": JSON.stringify(isDev ? "development" : "production")
     },
     esbuild: {
-        //treeShaking: true,
         minifyIdentifiers: false,
         minifySyntax: false,
         minifyWhitespace: true,
-        //sourcemap: "inline",
     },
     build: {
         watch: isDev
@@ -26,7 +24,7 @@ export default defineConfig({
         outDir: r("extension/dist/vault"),
         cssCodeSplit: false,
         emptyOutDir: false,
-        sourcemap: isDev ? "inline" : false,
+        sourcemap: isDev ? "inline" : isBeta ? true : false,
         lib: {
             entry: r("src/vault/vault.ts"),
             name: packageJson.name,
@@ -36,7 +34,6 @@ export default defineConfig({
             output: {
                 entryFileNames: "index.global.js",
                 extend: true,
-                sourcemap: "inline",
             }
         },
         reportCompressedSize: false,

@@ -5,11 +5,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
-      - name: Prepare system path for running python
-        run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
-
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
@@ -17,29 +14,31 @@ jobs:
         #TODO: change to 1 and then get all tags seperately to see if that's faster. git fetch origin 'refs/tags/*:refs/tags/*'
         
       # Create a git tag of the new version to use
-      # If manifest.json major and minor versions match last tag, then 
-      # increment last tag. Else use manifest.json major.minor.0.
+      # If package.json major and minor versions match last tag, then 
+      # increment last tag. Else use package.json major.minor.0.
       - name: Create git tag
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          KEE_VERSION_MANIFEST=`sed -nE 's/^.*"version": "([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}"\\,/\\1/p' manifest.json | tr -d '\\040\\011\\012\\015'`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo "${KEE_VERSION_MANIFEST} ${KEE_VERSION_TAG}" | awk '{printf($1==$2?""$2"."$3+1:""$1".0")}' | xargs -I {} git tag -a {} -m "{}"
+          KEE_VERSION_MANIFEST=`sed -nE 's/^.*"version": "([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}"\\,/\\1/p' package.json | tr -d '\\040\\011\\012\\015'`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo "${KEE_VERSION_MANIFEST} ${KEE_VERSION_TAG}" | awk '{printf($1==$2?""$2"."$3+1:""$1".0")}' | xargs -I {} git tag -a {} -m "{}"
 
-      - name: Update manifest.json based on the git tag we just created
+      - name: Update package.json based on the git tag we just created
         run: |
           NEW_KEE_VERSION=`git describe --abbrev=0 --tags`
           echo "NEW_KEE_VERSION=$NEW_KEE_VERSION" >> $GITHUB_ENV
-          sed -E 's/^(.*"version": ")(.*)("\,.*)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json
-          sed -E 's/^(.*"version_name": ")(.*)("\,.*)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json
+          sed -E 's/^(.*"version": ")(.*)("\,.*)/\1'"$NEW_KEE_VERSION"'\3/' package.json > package.json.tmp && mv package.json.tmp package.json
 
       - name: NPM CI
         run: npm ci
 
-      - name: Build and package
-        run: npm run package:prod && npm run package:debug
+      - name: Build and package beta
+        run: npm run build:beta && npm run pack:beta
 
-      - name: Test
-        run: npm run test
+      - name: Build and package production
+        run: npm run build:prod && npm run pack:prod
+
+      # - name: Test
+      #   run: npm run test
 
       - name: Push git tag
         run: git push --tags
@@ -59,7 +58,9 @@ jobs:
         run: |
           mkdir dist/signed
           echo "Signing debug build..."
-          gulp sign
+          npm run sign:xpi:beta
+          echo "https://github.com/kee-org/browser-addon/releases/download/${NEW_KEE_VERSION}/kee_password_manager-${NEW_KEE_VERSION}beta-an+fx.xpi" > .downloadLinkKeeXPI
+          echo "kee_password_manager-${NEW_KEE_VERSION}beta-an+fx.xpi" > .signedKeeXPI
           cat ./browser-addon-updates/beta/update.json
           cat .downloadLinkKeeXPI
           cat .signedKeeXPI
@@ -73,8 +74,9 @@ jobs:
           git commit -m "Automatic release of new beta version"
           cd $GITHUB_WORKSPACE
         env:
-          AMO_API_KEY: ${{ secrets.AMO_API_KEY }}
-          AMO_API_SECRET: ${{ secrets.AMO_API_SECRET }}
+          WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
+          NEW_KEE_VERSION: ${{ env.NEW_KEE_VERSION }}
 
       - name: Release
         uses: softprops/action-gh-release@4fb86a77e0bdae30e0be92b2280501c24bd1bb01
@@ -90,21 +92,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish the new release to Firefox beta users
-        run: |
-          cd $GITHUB_WORKSPACE/browser-addon-updates
-          git push https://github-actions:$BETA_UPDATES_TOKEN@github.com/kee-org/browser-addon-updates.git master
-        env:
-            BETA_UPDATES_TOKEN: ${{ secrets.BETA_UPDATES_TOKEN }}
+#TODO: re-enable beta releases after testing
+      # - name: Publish the new release to Firefox beta users
+      #   run: |
+      #     cd $GITHUB_WORKSPACE/browser-addon-updates
+      #     git push https://github-actions:$BETA_UPDATES_TOKEN@github.com/kee-org/browser-addon-updates.git master
+      #   env:
+      #       BETA_UPDATES_TOKEN: ${{ secrets.BETA_UPDATES_TOKEN }}
 
-      - name: Publish the new release to Chrome beta users
-        uses: trmcnvn/chrome-addon@91e2d97f66f3ad0453b5ef8396094f0b63018659
-        with:
-          extension: hlicbbodnlbbflfihnjjffnjeaoglici
-          zip: "dist/Kee - Password Manager-v${{ env.NEW_KEE_VERSION }}-debug.zip"
-          publish-target: trustedTesters
-          client-id: ${{ secrets.CHROME_CLIENT_ID }}
-          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
-          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+      #TODO: re-enable Chrome
+      
+      # - name: Publish the new release to Chrome beta users
+      #   uses: trmcnvn/chrome-addon@91e2d97f66f3ad0453b5ef8396094f0b63018659
+      #   with:
+      #     extension: hlicbbodnlbbflfihnjjffnjeaoglici
+      #     zip: "dist/Kee - Password Manager-v${{ env.NEW_KEE_VERSION }}-debug.zip"
+      #     publish-target: trustedTesters
+      #     client-id: ${{ secrets.CHROME_CLIENT_ID }}
+      #     client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+      #     refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
         #TODO: Edge auto-deployment
