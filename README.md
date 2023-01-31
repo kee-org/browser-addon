@@ -10,19 +10,23 @@ Support forum: https://forum.kee.pm
 
 # Build
 
+**Warning:** An urgent request from Mozilla in Janurary 2023 has, through a complex web of old dependencies, forced a significant restructure of the build system and some production code.
+
+Only Firefox is supported at this time so Chrome users will remain on version 3.9 until the new architecture can be finalised and tested for other browsers. You're not missing much but we'll try to get this discrepency resolved soon.
+
 ## Requirements
 
 * node
-* npm or yarn
+* npm (tested) or another package manager
 * a web browser
-* a Supporter's subscription to [Kee Vault](https://keevault.pm) OR KeePass 2.x (+ .NET/Mono)
+* a Supporter's subscription to [Kee Vault](https://keevault.pm) OR KeePass 2.x (+ .NET/Mono) + KeePassRPC.plgx
 
 It's all set up for Visual Studio Code but it shouldn't be too hard to work out how to develop using other IDEs.
 
 ## Instructions
 
 1. clone the repo
-1. `npm install`
+1. `npm install` (occasionally broken dependencies might cause a build failure so start again with `npm ci` in that situation in order to focus on the features or fixes that interest you)
 1. Development:
    1. `npm start`
    1. then load the relevant folder into your development browser
@@ -69,6 +73,8 @@ You can then:
 ## Vue devtools
 
 It's likely that the below does not work. It might though, at least on one or two devices in the world when the stars are aligned.
+
+We'll take a fresh look at this challenge when working on the migration to MV3.
 
 ### One time:
 ````

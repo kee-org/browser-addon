@@ -17,7 +17,8 @@
     "typescript.tsdk": "node_modules/typescript/lib",
     "eslint.enable": true,
     "editor.formatOnSave": false,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true,
-    }
+    // "editor.codeActionsOnSave": {
+
+    //     "source.fixAll.eslint": true,
+    // }
 }
