@@ -17,7 +17,7 @@
                                     clear-icon="mdi-close-circle-outline" />
                             </v-sheet> -->
                             <v-card-text>
-                                <tree-view id="my-tree" :initial-model="filteredItems"
+                                <tree-view ref="treeViewRef" id="my-tree" :initial-model="filteredItems"
                                     selectionMode="single" :modelDefaults="{
                                         selectable: true,
                                         idProperty: 'uuid',
@@ -116,9 +116,8 @@ export default {
     data: function() {
         return {
         search: null,
-        saveEnabled: this.preferredGroupUuid?.length > 0,
-        skipInFuture: configManager.current.rememberMRUGroup,
-        groupUuidArray: []
+        saveEnabled: false,
+        skipInFuture: configManager.current.rememberMRUGroup
         };
     },
     computed: {
@@ -164,7 +163,14 @@ export default {
         }
     },
     mounted() {
-        this.groupUuidArray = [{ uuid: this.preferredGroupUuid }];
+        // Not certain that mounted is the right place for this but maybe it's fine
+        if (this.preferredGroupUuid?.length > 0) {
+            const selected = (this.$refs.treeViewRef as any).getSelected();
+            const selectedGroup = selected?.[0];
+            if (selectedGroup) {
+                this.setGroup(selectedGroup);
+            }
+        }
     },
     methods: {
         blah: function (el: any) {

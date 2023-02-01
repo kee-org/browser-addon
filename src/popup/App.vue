@@ -6,10 +6,10 @@
             <SearchInput />
         </v-app-bar>
         <v-main>
-            <v-container fluid class="overflow-auto pa-0" style="padding: 8px;">
-                <div :class="`${showSearchPanel ? 'app_height_medium' : 'app_height_tall'}`">
+            <v-container fluid class="overflow-auto app_height" style="padding: 8px 12px">
+                <div>
                     <v-alert v-show="showSaveRecovery" color="secondary" border="top" border-color="primary"
-                        elevation="1">
+                        elevation="1" class="mt-2">
                         <v-row dense>
                             <v-col>{{ $i18n("unsaved_changes") }}</v-col>
                         </v-row>
@@ -27,7 +27,7 @@
                         </v-row>
                     </v-alert>
                     <v-alert v-show="showSaveResult" color="secondary" border="top" border-color="primary"
-                        elevation="1">
+                        elevation="1" class="mt-2">
                         <v-row dense>
                             <v-col>{{ $i18n("you_recently_saved") }}</v-col>
                         </v-row>
@@ -41,7 +41,7 @@
                         </v-row>
                     </v-alert>
 
-                    <div v-if="showNotifications" id="notifications" class="pt-6">
+                    <div v-if="showNotifications" id="notifications" class="pt-4 mt-2">
                         <Notification v-for="n of notifications" :key="n.id" :notification="n" />
                     </div>
                     <SearchResults v-show="showSearchPanel" :matched-entries-in="cachedMatchedEntries" :frame-id="frameId"
@@ -448,16 +448,10 @@ export default {
 <style>
 .text-truncate{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 
-.app_height_medium {
-    max-height: 456px;
-    min-height: 456px;
-    height: 456px;
-}
-
-.app_height_tall {
-    max-height: 522px;
-    min-height: 522px;
-    height: 522px;
+.app_height {
+    max-height: calc(570px - var(--v-layout-bottom) - var(--v-layout-top));
+    min-height: calc(570px - var(--v-layout-bottom) - var(--v-layout-top));
+    height: calc(570px - var(--v-layout-bottom) - var(--v-layout-top));
 }
 
 .pulse-button {

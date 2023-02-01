@@ -33,7 +33,7 @@ export class KeeLogger {
             this.outputStarted = true;
         }
         if (e) {
-            const error = isErrorLike(e) ? serializeError(e) : e;
+            const error = isErrorLike(e) ? serializeError(e, {maxDepth: 20}) : e;
             let json: String;
             try {
                 json = JSON.stringify(error);
