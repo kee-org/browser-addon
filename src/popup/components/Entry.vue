@@ -1,8 +1,8 @@
 <template>
     <v-hover>
         <template #default="{ isHovering, props }">
-            <!--  -->
             <v-card
+            :data-index="dataIndex"
 v-bind="props" ref="card" :tabindex="`${tabindex}`" :elevation="isHovering ? 12 : 3" class="my-2"
                 :ripple="false" @focusin="focusin" @focusout="focusout"
                 @keyup.context-menu.stop.prevent="showFullDetails" @keyup.arrow-down.stop.prevent="nextInList"
@@ -10,13 +10,13 @@ v-bind="props" ref="card" :tabindex="`${tabindex}`" :elevation="isHovering ? 12 
                 @keyup.arrow-left.stop.prevent="hideFullDetails" @keyup.escape.stop.prevent="exitList"
                 @keyup.enter.self.stop.prevent="primaryClickAction" @keyup.enter.ctrl.self.stop.prevent="loadInNewTab">
                 <v-container class="ma-0 pa-0 my-2" :style="titleStyle">
+                            <v-hover>
                     <v-sheet
 class="mr-3 ml-12 my-0"
-                        :style="`display: flex; align-items:center; justify-content:space-between; ${isHovering ? 'cursor: pointer' : ''}`" @click.left.exact="primaryClickAction"
+                        :style="`display: flex; align-items:center; justify-content:space-between; ${isHovering ? 'cursor: pointer' : ''}; column-gap:0.5rem;`" @click.left.exact="primaryClickAction"
                         @click.middle.exact="loadInNewTab" @click.left.ctrl="loadInNewTab"
                         @click.middle.ctrl="primaryClickAction" @click.right.stop.prevent="showFullDetails">
                         <v-sheet class="text-truncate">
-                            <v-hover>
                                 <v-container fluid class="ma-0 pa-0" style="padding: 0px;">
                                     <v-row no-gutters class="my-0">
                                         <v-col class="text-truncate">
@@ -31,7 +31,6 @@ class="mr-3 ml-12 my-0"
                                         </v-col>
                                     </v-row>
                                 </v-container>
-                            </v-hover>
                         </v-sheet>
                         <v-sheet v-if="isHovering || focussed" class="text-truncate align-self-center">
                             <v-btn
@@ -42,6 +41,7 @@ variant="elevated" color="secondary" size="x-small" icon
                             </v-btn>
                         </v-sheet>
                     </v-sheet>
+                            </v-hover>
                 </v-container>
                 <v-card-text class="text-truncate" style="cursor: default; padding: 0px;">
                     <v-slide-y-transition>
@@ -111,7 +111,7 @@ import { $STR } from "~/common/DollarPolyfills";
 
 export default {
     components: { Field },
-    props: ["entrySummary", "isFirstInAList", "entryIndex", "frameId"],
+    props: ["entrySummary", "isFirstInAList", "entryIndex", "frameId", "dataIndex"],
     emits: ["move-next-in-list", "move-prev-in-list", "move-out-of-list", "pref-entry-toggle"],
     setup() {
         const { updateSaveState } = useStore();
@@ -127,7 +127,7 @@ export default {
         titleStyle: function () {
             const e = this.entrySummary as EntrySummary;
             return (
-                "padding: 0px; background-size:32px; background-position:16px calc(50% + 1px); background-image:url(data:image/png;base64," +
+                "padding: 0px; background-size:32px; background-position: 8px calc(50% + 0px); background-repeat: no-repeat; background-image:url(data:image/png;base64," +
                 e.icon.iconImageData +
                 ")"
             );
@@ -139,7 +139,7 @@ export default {
                 : "[" + $STR("noUsername_partial_tip") + "]";
         },
         tabindex: function () {
-            return this.isFirstInAList ? "0" : "-1";
+            return "0"; //this.isFirstInAList ? "0" : "-1"; // new treeview component needs this to be 0 for everything
         },
         allFields: function () {
             const e = this.entrySummary.fullDetails as Entry;

@@ -11,7 +11,7 @@
 
         <v-sheet class="my-1 mx-2 shrink">
             <v-btn size="small" icon class="my-0" @click="copyValue">
-                <v-tooltip location="left" :open-delay="tooltipDelay" activator="parent">
+                <v-tooltip location="start" :open-delay="tooltipDelay" activator="parent">
                     <span>{{ $i18n("copy_value_to_clipboard") }}</span>
                 </v-tooltip>
                 <mdi-content-copy />

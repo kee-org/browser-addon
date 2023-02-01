@@ -1,12 +1,10 @@
 <template>
     <div id="searchPanel" class="pb-6 pt-0 pr-0">
         <v-divider v-show="filteredMatches && filteredMatches.length > 0" />
-
-        <!-- prettier-ignore -->
         <Entry
 v-for="(match, index) of filteredMatches" :key="match.entry.uuid" :ref="setNodesA"
             :entrySummary="match.entry" :isFirstInAList="index === 0" :frame-id="frameId"
-            :entry-index="match.originalIndex" :data-index="index" @move-next-in-list="
+            :entry-index="match.originalIndex" :dataIndex="index" @move-next-in-list="
                 nextInList(index, 'listAarray', filteredMatches.length)
             " @move-prev-in-list="
     prevInList(index, 'listAarray')
@@ -21,7 +19,7 @@ v-show="deduplicatedSearchResults && deduplicatedSearchResults.length > 0" class
 
         <Entry
 v-for="(entry, index) of deduplicatedSearchResults" :key="entry.uuid" :ref="setNodesB"
-            :entrySummary="entry" :isFirstInAList="index === 0" :data-index="index"
+            :entrySummary="entry" :isFirstInAList="index === 0" :dataIndex="index"
             @move-next-in-list="nextInList(index, 'listBarray', deduplicatedSearchResults.length)"
             @move-prev-in-list="prevInList(index, 'listBarray')" @move-out-of-list="exitList" />
     </div>
@@ -38,14 +36,15 @@ import useStore from "../../store";
 
 export default {
     components: { Entry },
-    props: ["matchedEntries", "frameId"],
+    props: ["matchedEntriesIn", "frameId"],
     data() {
         return {
             filteredMatches: null,
             uidMap: new Map<string, number>(),
             aNodes: [],
             bNodes: [],
-            searchOnlyMatches: null as SearcherMatchedOnly
+            searchOnlyMatches: null as SearcherMatchedOnly,
+            matchedEntries: this.$props.matchedEntriesIn
         };
     },
     computed: {
@@ -65,9 +64,11 @@ export default {
     },
     watch: {
         matchedEntries: function (newVal) {
+            KeeLog.debug("about to reinit");
             this.initAndSearchMatchedEntries(newVal);
         },
         currentSearchTerm: function (newVal) {
+            KeeLog.debug("about to reexecute");
             this.searchOnlyMatches.execute(
                 newVal,
                 this.onSearchOnlyMatchesComplete.bind(this)
@@ -79,20 +80,9 @@ export default {
         this.bNodes = [];
     },
     created() {
+        KeeLog.debug("created. about to init");
         this.initAndSearchMatchedEntries(this.matchedEntries);
     },
-    //TODO: test if search term stuff works OK despite change to watches rather than vuex mutation subscribers
-    // Especially whether results are cleared if database locks due to time out while popup is open
-    // mounted() {
-    //     this.subscribe(mutation => {
-    //         if (mutation.type === mTypes.updateCurrentSearchTerm) {
-    //             this.searchOnlyMatches.execute(
-    //                 this.currentSearchTerm,
-    //                 this.onSearchOnlyMatchesComplete.bind(this)
-    //             );
-    //         }
-    //     });
-    // },
     methods: {
         setNodesA(node) {
             this.aNodes.push(node);
@@ -114,28 +104,32 @@ export default {
         },
         nextInList(currentIndex: number, listName: string, listLength: any) {
             const currentVueNode = (listName === "listAarray" ? this.aNodes : this.bNodes).find(
-                e => parseInt(e.$el.dataset.index) === currentIndex
+                e => {
+            return parseInt(e.dataIndex) === currentIndex;
+                }
             );
             if (currentIndex < listLength - 1) {
-                currentVueNode.$el.nextElementSibling.focus();
+                // Current treeview implementation seems to have some text node get
+                // focus even after we ask the div to get focus. So we have to skip forward 2 and back 1
+                currentVueNode.$el.nextElementSibling.nextElementSibling.focus();
             } else if (listName === "listAarray" && this.deduplicatedSearchResults.length > 0) {
                 const firstBListVueNode = this.bNodes.find(
-                    e => parseInt(e.$el.dataset.index) === 0
+                    e => parseInt(e.dataIndex) === 0
                 );
-                firstBListVueNode.$el.focus();
+                firstBListVueNode.$el.nextElementSibling.focus();
             }
         },
         prevInList(currentIndex: number, listName: string) {
             const currentVueNode = (listName === "listAarray" ? this.aNodes : this.bNodes).find(
-                e => parseInt(e.$el.dataset.index) === currentIndex
+                e => parseInt(e.dataIndex) === currentIndex
             );
             if (currentIndex > 0) {
                 currentVueNode.$el.previousElementSibling.focus();
             } else if (listName === "listBarray" && this.filteredMatches.length > 0) {
                 const lastAListVueNode = this.aNodes.find(
-                    e => parseInt(e.$el.dataset.index) === this.filteredMatches.length - 1
+                    e => parseInt(e.dataIndex) === this.filteredMatches.length - 1
                 );
-                lastAListVueNode.$el.focus();
+                lastAListVueNode.$el.nextElementSibling.focus();
             } else {
                 (document.getElementById("searchBox") as HTMLInputElement).focus();
             }
@@ -152,6 +146,7 @@ export default {
             this.searchOnlyMatches = new SearcherMatchedOnly(
                 matchedEntries?.map(e => EntrySummary.fromEntry(e))
             );
+            KeeLog.debug("about to execute");
             this.searchOnlyMatches.execute(
                 this.currentSearchTerm,
                 this.onSearchOnlyMatchesComplete.bind(this)

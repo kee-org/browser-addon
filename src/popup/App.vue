@@ -44,7 +44,7 @@
                     <div v-if="showNotifications" id="notifications" class="pt-6">
                         <Notification v-for="n of notifications" :key="n.id" :notification="n" />
                     </div>
-                    <SearchResults v-show="showSearchPanel" :matched-entries="cachedMatchedEntries" :frame-id="frameId"
+                    <SearchResults v-show="showSearchPanel" :matched-entries-in="cachedMatchedEntries" :frame-id="frameId"
                         @pref-entry-toggle="prefEntryToggle" />
                     <Save1stParty v-if="showSaveStart && !showSaveWhere" @save-where-clicked="saveWhere"
                         @cancel-clicked="saveDiscard" />
@@ -257,7 +257,6 @@ export default {
         },
     },
     mounted: async function () {
-        //TODO: Sometimes this crashes. find out why
         this.saveLastActiveAt = this.saveState?.lastActiveAt;
 
         const discardRequired = this.handleLastSaveResult();
@@ -282,8 +281,6 @@ export default {
 
         const updatedSaveState = Object.assign({}, JSON.parse(JSON.stringify(this.saveState)));
         updatedSaveState.favicon = favicon;
-        // eslint-disable-next-line no-debugger
-        //debugger;
         this.updateSaveState(updatedSaveState);
     },
     methods: {
@@ -450,6 +447,8 @@ export default {
 </script>
 
 <style>
+.text-truncate{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+
 .app_height_medium {
     max-height: 456px;
     min-height: 456px;

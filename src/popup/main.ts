@@ -42,12 +42,11 @@ try {
                         action: Action.GetPasswordProfiles
                     });
                 },
-                render: () => h(App, {
-                    props: {
+                render: () => {
+                    return h(App, {
                         matchedEntries: !m.entries ? null : m.entries,
                         frameId: m.frameId
-                    }
-                })
+                })}
             });
 
             const vuetify = createVuetify({
