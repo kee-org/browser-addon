@@ -11,10 +11,10 @@ import { configManager } from "../common/ConfigManager";
 import { MatchedField } from "./MatchedField";
 import { Field } from "../common/model/Field";
 import { Entry } from "../common/model/Entry";
-import useStore from "../store";
+import { useStubStore } from "../store";
 import punycode from "punycode/";
 
-const store = useStore();
+const store = useStubStore();
 
 interface ScoreMatrix {
     score: number;

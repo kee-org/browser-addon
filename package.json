@@ -6,6 +6,7 @@
   "devDependencies": {
     "@ffflorian/jszip-cli": "^3.1.6",
     "@gorhill/publicsuffixlist": "^3.0.1",
+    "@grapoza/vue-tree": "^5.0.0",
     "@iconify-json/mdi": "^1.1.44",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.11.18",
