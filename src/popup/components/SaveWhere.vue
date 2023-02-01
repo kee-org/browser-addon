@@ -155,7 +155,8 @@ export default {
                     return grp.title.toLowerCase().includes(s);
                 },
                 // hackity hack
-                // We have to assign to a new object becauase otherwise vue triggers pinia to change the objects directly and we can't handle that cross-process yet.
+                // We have to assign to a new object because otherwise vue triggers pinia to
+                // change the objects directly and we can't handle that cross-process yet.
                 // Also we have to do that at the end for every item, and also hack in a workaround for the treeview bug that prevents uuid being used as the id parameter
                 (grp) => grp.uuid === this.preferredGroupUuid ? Object.assign({}, grp, selectionObj,  {id: grp.uuid}) : Object.assign({}, grp, {id: grp.uuid}) )
             ).filter(i => i);
@@ -165,7 +166,6 @@ export default {
     },
     watch: {
         skipInFuture: async function (newValue: boolean, oldValue: boolean) {
-            KeeLog.warn(`${newValue} ${oldValue}`);
             if (newValue !== oldValue) {
                 this.saveEnabled = false;
                 configManager.current.rememberMRUGroup = newValue;
@@ -188,24 +188,22 @@ export default {
         setGroup: function (group: Group) {
             if (!group?.uuid) return;
 
-            // We are sent the deselection event too (assuming they arrive in order)
-            //TODO: They do not!!!
-            // POS. Will have to skip form validation as well as searching!!
-            //TODO: Also have to find some way to stop the pinia mutations since above JSON round trip is not working.
-            // Maybe this function is somehow reenabling the link.
+            // We are sent the deselection event too (but often (always?) after the selection event so it is impossible to re-disable the Save button safely)
+
+            // Maybe object assign isn't actually removing the proxy objects?
             if (!(group as any).treeNodeSpec?.state?.selected) {
             KeeLog.warn(`desel`);
-                this.saveEnabled = false;
+                //this.saveEnabled = false;
                 return;
             }
-            KeeLog.warn(`sel`);
             const database = findDatabaseByGroup(this.KeePassDatabases, group);
             const updatedSaveState = Object.assign({}, this.saveState) as SaveState;
+            //const updatedSaveState = JSON.parse(JSON.stringify(this.saveState)) as SaveState;
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
-                parentGroup: group,
+                parentGroup: JSON.parse(JSON.stringify(group)),
                 database: new DatabaseSummary({
-                    fileName: database.fileName,
+                    fileName: JSON.parse(JSON.stringify(database.fileName)),
                     root: new GroupSummary({ uuid: TemporaryIDString })
                 })
             });

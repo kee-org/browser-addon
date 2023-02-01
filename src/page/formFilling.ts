@@ -114,6 +114,7 @@ export class FormFilling {
             target,
             this.parentFrameId
         );
+        KeeLog.debug("Creating panel...");
         this.matchedLoginsPanelStub.createPanel();
         this.matchedLoginsPanelStubRaf = requestAnimationFrame(() =>
             this.updateMatchedLoginsPanelPosition()

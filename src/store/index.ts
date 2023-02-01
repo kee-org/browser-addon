@@ -12,14 +12,14 @@ import { KeeLog } from "~/common/Logger";
  * to prevent mutations outside of actions.
  * DOES NOT PREVENT RUNTIME MUTATIONS SO TSC MUST BE RUN AT COMPILE TIME
  */
-function defineImmutableStore<Id extends string, S extends StateTree = any, G extends _GettersTree<S> = any, A = any>(
-    id: Id,
-    options: Omit<DefineStoreOptions<Id, S, G, A>, "id">
-): StoreDefinition<Id, Readonly<S>, G, A> {
-    return defineStore(id, options);
-}
+// function defineImmutableStore<Id extends string, S extends StateTree = any, G extends _GettersTree<S> = any, A = any>(
+//     id: Id,
+//     options: Omit<DefineStoreOptions<Id, S, G, A>, "id">
+// ): StoreDefinition<Id, Readonly<S>, G, A> {
+//     return defineStore(id, options);
+// }
 
-const useStore = defineImmutableStore("kee", {
+const useStore = defineStore("kee", {
     state: (): KeeState => (defaults),
     getters: {
         showGeneratePasswordLink: (state: KeeState) => state.connected,

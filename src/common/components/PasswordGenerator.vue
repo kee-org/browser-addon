@@ -12,8 +12,8 @@ v-model="selectedProfile" :items="items" :label="$i18n('password_profile')"
                     <v-card
 :loading="loading" class="mx-auto px-3 py-0 mt-4" style="font-family: monospace"
                         max-width="300">
-                        <v-container class="justify-space-between" style="display: flex;">
-                            <v-sheet class="text-truncate flex-grow-1" style="align-self: center;">
+                        <v-container class="justify-space-between" style="display: flex; column-gap: 1rem;">
+                            <v-sheet class="flex-grow-1" style="align-self: center; flex-shrink: 1; overflow-wrap: anywhere; text-align: center;">
                                 {{ renderedPassword }}
                             </v-sheet>
                             <v-sheet style="align-self: center;">

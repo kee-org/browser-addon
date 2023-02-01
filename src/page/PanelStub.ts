@@ -106,7 +106,7 @@ export class PanelStub {
 
         shadow.appendChild(iframe);
         const template = browser.extension.getURL(
-            `panels/panels${this.options.legacy ? "Legacy" : ""}.html`
+            `dist/panels/panels${this.options.legacy ? "Legacy" : ""}.html`
         );
         iframe.src = `${template}?parentFrameId=${this.parentFrameId}&autoCloseTime=${this.options.autoCloseTime}&panel=${this.options.name}&theme=${configManager.activeTheme}`;
 

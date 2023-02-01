@@ -204,6 +204,8 @@ export default {
             updatedSaveState.titleResetValue = entry.title;
             updatedSaveState.lastActiveAt = new Date();
             updatedSaveState.showURLMismatchWarning = showWarning;
+            //TODO: Confirm that we don't have to roundtrip JSON here too
+//            this.updateSaveState(JSON.parse(JSON.stringify(updatedSaveState)));
             this.updateSaveState(updatedSaveState);
         },
         focusin: function (e) {

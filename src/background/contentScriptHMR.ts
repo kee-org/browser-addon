@@ -7,6 +7,8 @@ const vaultURLs = ["https://app-dev.kee.pm:8087", "https://app-beta.kee.pm", "ht
 // hmr will not work as Chromium based browser
 browser.webNavigation.onCommitted.addListener(({ tabId, frameId, url }) => {
 
+    if (frameId !== 0) { return }
+
   if (isForbiddenUrl(url))
     return
 
@@ -15,6 +17,7 @@ const scriptType = vaultURLs.some(v => url.startsWith(v)) ? "vault" : "page";
   // inject the latest scripts
   browser.tabs.executeScript(tabId, {
     file: `${isFirefox ? '' : '.'}/dist/${scriptType}/index.global.js`,
+    allFrames: scriptType == "page",
     runAt: 'document_end',
   }).catch(error => KeeLog.error("Failed to inject content script", error))
 })

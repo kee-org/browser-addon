@@ -16,6 +16,7 @@ import { Port } from "../common/port";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
 import useStore from "../store";
+import "../styles";
 
 export default {
     components: {
