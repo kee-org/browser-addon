@@ -113,12 +113,6 @@ export default {
             return this.topmost ? "false" : "dialog-transition";
         }
     },
-    // watch: {
-    //     generatedPassword: function (newState: SaveState, oldState: SaveState) {
-    //                 KeeLog.error("watch outer fired");
-    //         this.loading = false;
-    //     }
-    // },
     methods: {
         ok: async function () {
             if (this.standalone || this.forceCopy) {
@@ -136,8 +130,6 @@ export default {
                 newValue => {
                     KeeLog.debug("watch inner fired");
                     unwatch();
-                    // this.updateGeneratedPassword("");
-                    // this.generatedPassword = newValue;
                     this.loading = false;
                 }
             );

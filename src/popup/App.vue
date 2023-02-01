@@ -270,7 +270,7 @@ export default {
             this.saveState?.lastActiveAt <=
             new Date(Date.now() - this.manualRecoveryPromptTimeMs)
         ) {
-            KeeLog.warn("mount discarding...");
+            KeeLog.debug("discarding upon mount");
             this.saveDiscard();
         }
 
@@ -321,9 +321,8 @@ export default {
             updatedSaveState.titleResetValue = updatedSaveState.newEntry.title;
             updatedSaveState.lastActiveAt = new Date();
             updatedSaveState.showURLMismatchWarning = false;
-            KeeLog.warn("upd ss");
+            KeeLog.debug("updating saveState");
             this.updateSaveState(updatedSaveState);
-            KeeLog.warn("upd ss 2");
             //this.saveLastActiveAt = updatedSaveState.lastActiveAt;
         },
         saveRecover: function () {

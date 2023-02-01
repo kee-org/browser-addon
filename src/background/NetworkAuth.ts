@@ -30,7 +30,7 @@ export class NetworkAuth {
         this.provideCredentialsAsync(requestDetails)
             .then(result => callback(result))
             .catch(reason => {
-                KeeLog.error("AsyncBlockingCallback promise failed: " + reason);
+                KeeLog.error("AsyncBlockingCallback promise failed", reason);
                 callback({ cancel: false });
             });
     }

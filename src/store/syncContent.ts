@@ -52,8 +52,8 @@ export class SyncContent {
         if (!this.initialized) {
             return;
         }
-
-        KeeLog.warn("processing payload: " + JSON.stringify(payload));
+        //TODO: Stop logging the payload
+        KeeLog.info("processing payload: " + JSON.stringify(payload));
         this.receivedPayloads.push(payload);
         this.store.$patch(payload);
     }

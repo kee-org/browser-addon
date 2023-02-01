@@ -84,17 +84,6 @@ import { mapState } from "pinia";
 import { TreeView } from "@grapoza/vue-tree"
 import { KeeLog } from "~/common/Logger";
 
-// const foreachrecursivefiltermap = (groups: Group[], include: (grp: Group) => boolean, activateOrNot: (grp: Group) => Group): Group[] => {
-//     const chosenGroups: Group[] = [];
-//     for (const group of groups) {
-//         if (include(group)) {
-//             chosenGroups.push(activateOrNot(group));
-//         }
-//         chosenGroups.push(...foreachrecursivefiltermap(group.groups, include, activateOrNot));
-//     }
-//     return chosenGroups;
-// }
-
 const recursivefiltermap = (group: Group, include: (grp: Group) => boolean, activateOrNot: (grp: Group) => Group): Group => {
     const chosenChildGroups: Group[] = [];
 
@@ -109,8 +98,6 @@ const recursivefiltermap = (group: Group, include: (grp: Group) => boolean, acti
         return activateOrNot(g);
     }
     return null;
-
-
 }
 
 function findDatabaseByGroup(databases: Database[], group: Group) {
@@ -126,12 +113,14 @@ export default {
         const { updateSaveState } = useStore();
         return { updateSaveState };
     },
-    data: () => ({
+    data: function() {
+        return {
         search: null,
-        saveEnabled: false,
+        saveEnabled: this.preferredGroupUuid?.length > 0,
         skipInFuture: configManager.current.rememberMRUGroup,
         groupUuidArray: []
-    }),
+        };
+    },
     computed: {
         ...mapState(useStore, ["saveState", "KeePassDatabases", "ActiveKeePassDatabaseIndex"]),
         rootGroup: function () {
@@ -190,15 +179,16 @@ export default {
 
             // We are sent the deselection event too (but often (always?) after the selection event so it is impossible to re-disable the Save button safely)
 
-            // Maybe object assign isn't actually removing the proxy objects?
             if (!(group as any).treeNodeSpec?.state?.selected) {
-            KeeLog.warn(`desel`);
                 //this.saveEnabled = false;
                 return;
             }
             const database = findDatabaseByGroup(this.KeePassDatabases, group);
+
+            // Maybe object assign isn't actually removing the proxy objects?
             const updatedSaveState = Object.assign({}, this.saveState) as SaveState;
             //const updatedSaveState = JSON.parse(JSON.stringify(this.saveState)) as SaveState;
+
             updatedSaveState.newEntry = new Entry({
                 ...updatedSaveState.newEntry,
                 parentGroup: JSON.parse(JSON.stringify(group)),

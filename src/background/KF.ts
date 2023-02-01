@@ -85,10 +85,10 @@ export class Kee {
                         try {
                             //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
                             const json = JSON.stringify(mutation);
-                            KeeLog.debug("New background mutation: " + json);
+                            KeeLog.debug("New background mutation for distribution");
                             port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
                         } catch (e) {
-                            KeeLog.error(JSON.stringify(e));
+                            KeeLog.warn("Dead port found", e);
                             // Sometimes dead ports are left lying around by the browser (especially
                             // during upgrades, etc.). We can do nothing about this but must not let
                             // it cause this function to fail to execute to the end.
@@ -176,11 +176,10 @@ export class Kee {
                     store.updateSubmittedData(submittedData);
                     store.updateLoginsFound(loginsFound);
 
-                    KeeLog.error(JSON.stringify(connectMessage));
                     try {
                         p.postMessage(connectMessage);
                     } catch (e) {
-                        KeeLog.error(JSON.stringify(e));
+                        KeeLog.error("postMessage error", e);
                     }
                     window.kee.browserPopupPort = p;
                     window.kee.resetBrowserActionColor();

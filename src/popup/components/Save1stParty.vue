@@ -155,7 +155,6 @@ export default {
         }
     },
     async mounted() {
-        KeeLog.warn("s1p mounted");
         this.preferToSkipWhere = configManager.current.rememberMRUGroup;
         const dbs = this.KeePassDatabases as Database[];
         const { preferredGroupUuid, preferredDb, primaryFound } = this.getPreferredGroup(
@@ -174,7 +173,6 @@ export default {
             }
         }
         this.loading = false;
-        KeeLog.warn("s1p mounted done");
     },
     methods: {
         cancel: function () {

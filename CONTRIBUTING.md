@@ -45,10 +45,12 @@ To ensure your work can quickly be released to improve Kee for many users, pleas
 * Base your development off the master branch
 * Rebase onto master periodically and especially during the Pull Request review procedure
 * Do not change any localisation files except for the source (English). `_locales/en/messages.json` should be changed as needed, but no other files in the `_locales` folder. Ensure you understand the rules of the [stabilisation period](#stabilisation-period)
-* Follow the style configuration in the `.editorconfig` file. Most modern editors will automatically do this for you. Some, but not all, of this configuration can be enforced by tslint at build time.
+* Follow the style configuration in the `.editorconfig` file. Most modern editors will automatically do this for you. Some, but not all, of this configuration can be enforced by tslint at build time. \*
 * Read the information about branches below before creating a Pull Request
 * Create separate PRs for unrelated changes
-* Look at the result of the TravisCI build which will run after you create the PR and address any errors that cause the check to fail.
+* Look at the result of the GitHub Actions build which will run after you create the PR and address any errors that cause the check to fail.
+
+\* **EXCEPTION:** As of Feb 2023, we don't have consistent styling, with eslint, editorconfig, prettifier and various VScode extensions all conflicting with each other. We'll try to reset and come up with an improved automated style soon but in the meant time, please at least try to follow the style of code near that which you touch.
 
 ## Branches
 
