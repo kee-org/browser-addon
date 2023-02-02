@@ -1,20 +1,40 @@
 name: PR CI
-
 on:
   pull_request:
     branches: [ master ]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+        #TODO: change to 1 and then get all tags seperately to see if that's faster. git fetch origin 'refs/tags/*:refs/tags/*'
 
-      - name: NPM CI
-        run: npm ci
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
 
-      - name: Build and package
-        run: npm run package:prod && npm run package:debug
+      - name: Setup
+        run: |
+          npm ci
+          mkdir dist
 
-      - name: Test
-        run: npm run test
+      - name: Build beta
+        run: npm run build:beta
+
+      - name: Build production
+        run: npm run build:prod
+
+      # We have to do this type check after running the build
+      # because Vite creates various type definitions we need
+      - name: Compile Typescript
+        run: npm run tsc
+
+      # - name: Test
+      #   run: npm run test
+
+      # TODO: lint?

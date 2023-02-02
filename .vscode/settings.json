@@ -1,21 +1,21 @@
 {
     "cSpell.words": [
-        "syncable"
+        "pinia",
+        "syncable",
+        "vuetify"
     ],
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
         "**/.hg": true,
         "**/.DS_Store": true,
-        "out/**/*": true,
-        "**/*.js.map": true,
-        "build/**/*": true,
-        "dist/**/*": true
+        "build/**/*": true
     },
     "typescript.tsdk": "node_modules/typescript/lib",
     "eslint.enable": true,
     "editor.formatOnSave": false,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true,
-    }
+    // "editor.codeActionsOnSave": {
+
+    //     "source.fixAll.eslint": true,
+    // }
 }

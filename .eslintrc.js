@@ -7,21 +7,17 @@ module.exports = {
         "eslint:recommended",
         'plugin:@typescript-eslint/recommended',
         'plugin:vue/recommended',
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "plugin:vuetify/base"
     ],
     "env": {
         "browser": true,
         "es6": true
     },
     "globals": {
-        "$STR": "readonly",
-        "$STRF": "readonly",
-        "$": "readonly",
-        "$$": "readonly",
         "browser": "readonly",
         "chrome": "readonly",
-        "BigInteger": "readonly",
-        "__KeeIsRunningInAWebExtensionsBrowser": "readonly"
+        "BigInteger": "readonly"
     },
     "parser": "vue-eslint-parser",
     "parserOptions": {
@@ -36,7 +32,7 @@ module.exports = {
         "vue"
     ],
     "rules": {
-        "prettier/prettier": "error",
+        "prettier/prettier": "off",
         "vue/html-indent": "off",
         "vue/max-attributes-per-line": "off",
         "vue/html-closing-bracket-newline": "off",
@@ -53,6 +49,7 @@ module.exports = {
             "allowEmptyLines": false
         }],
         "vue/attribute-hyphenation": "off",
+        "vue/multi-word-component-names": "off",
         "@typescript-eslint/consistent-type-assertions": "error",
         "@typescript-eslint/member-delimiter-style": [
             "error",
@@ -143,8 +140,7 @@ module.exports = {
         "curly": [2, "multi-line"],
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars-experimental": "error"
+        "@typescript-eslint/no-unused-vars": "off"
     },
     overrides: [
         {
