@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="../../assets/styles/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/styles/SRP.css"/>
+    <title>KeePass &lt;==&gt; Kee</title>
+    <link rel="icon" href="/assets/images/64.png"/>
+</head>
+<body class="container">
+    <div id="i18n_root" style="display:none">
+        <form id="form">
+            <div class="panel panel-primary panel-short" id="panelAuth">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-i18n="conn_setup_enter_password_title"></h3>
+                </div>
+                <div class="panel-body">
+                    <div><span class="span-short" data-i18n="conn_setup_enter_password"></span></div>
+                    <div class="form-horizontal">
+                        <div class="form-group formSettingGroup">
+                            <div class="formSettingLabel"><span data-i18n="password"></span></div>
+                            <div class="formSettingInput" style="max-width: 150px;">
+                                <input type="text" name="password" id="password" class="form-control" />
+                            </div>
+                            <button class="btn btn-primary" type="button" id="ok" data-i18n="srp_connect" disabled></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default panel-short" id="panelSettings">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-i18n="pref_ConnectionSecurity_heading"></h3>
+                </div>
+                <div class="panel-body">
+                    <div><span data-i18n="conn_sl_desc"></span></div>
+                    <div><span data-i18n="pref_ConnectionSecurity_explain_change"></span></div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="pref_sl_client_high" /><span data-i18n="conn_sl_high_label"></span></label>
+                    </div>
+                    <div class="form-horizontal grid">
+                        <div class="formSettingLabel"><span data-i18n="conn_sl_server_min"></span></div>
+                        <div class="formSettingDropdown">
+                            <select class="form-control" id="pref_sl_server">
+                                <option value="1" data-i18n="conn_sl_low"></option>
+                                <option value="2" data-i18n="conn_sl_medium"></option>
+                                <option value="3" data-i18n="conn_sl_high"></option>
+                            </select>
+                        </div>
+                        <div class="formSettingDescription"><span data-i18n="conn_sl_server_min_desc"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- We might have already connected at a lower security level but changing to a higher level here will cause the SRP negotiation to fail before the end -->
+
+            <div><a id="conn_sl_link" href="https://github.com/kee-org/KeeFox/wiki/en-%7C-Technical-%7C-KeePassRPC-%7C-Security-levels" target="_blank" data-i18n="conn_sl_link"></a></div>
+    </form>
+    </div>
+    <script type="module" src="./SRP.ts" ></script>
+</body>
+
+</html>

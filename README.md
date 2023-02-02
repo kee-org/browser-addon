@@ -10,43 +10,35 @@ Support forum: https://forum.kee.pm
 
 # Build
 
+**Warning:** An urgent request from Mozilla in January 2023 has, through a complex web of old dependencies, forced a significant restructure of the build system and some production code. Only Firefox is supported at this time so Chrome users will remain on version 3.9 until the new architecture can be finalised and tested for other browsers. You're not missing a lot but we'll try to get this discrepancy resolved soon.
+
 ## Requirements
 
-* node
-* npm or yarn
-* a web browser
-* a Supporter's subscription to [Kee Vault](https://keevault.pm) OR KeePass 2.x (+ .NET/Mono)
+* node (16 should work but only tested with 18)
+* a node package manager (tested with npm 8 and 9)
+* a web browser (tested with Firefox 109)
+* a Supporter's subscription to [Kee Vault](https://keevault.pm) OR KeePass 2.x (+ .NET/Mono) + KeePassRPC.plgx
 
-It's all set up for Visual Studio Code but it shouldn't be too hard to work out how to develop using other IDEs.
+It's set up for Visual Studio Code but it shouldn't be too hard to work out how to develop using other IDEs.
 
 ## Instructions
 
 1. clone the repo
-1. `npm install`
+1. `npm ci` (or `npm install` to get any newer library dependencies than those we used in official builds)
 1. Development:
-   1. `npm start`
-   1. then load the relevant folder into your development browser
-      1. Chrome:
-         1. chrome://extensions/
-         1. Load unpacked extension...
-         1. `'build/debug/chrome/'`
-      1. Firefox:
-         1. about:debugging#addons
-         1. Load temporary add-on
-         1. `'build/debug/firefox/'`
-   1. Make your changes to the source code; the file watcher will recompile necessary parts of the addon
-   1. When you're ready to test your changes, reload the extension/addon from the browser interface (this is only necessary sometimes; a lot of changes will apply automatically but it may not be obvious when a reload operation is required so play it safe until you understand the add-on architecture)
-   1. NB: source maps are included only in the debug folders
-1. Packaging for distribution
-   1. Historically this has been done manually but we think that TravisCI should now handle this for us
-   1. Manipulate manifest.json as required
-   1. `npm run package:debug` and/or `npm run package:prod`
-   1. XPIs and ZIPs of each version are put into the `dist` folder
-   1. NB: source maps are included only in the debug package
+   1. Open two terminals/consoles
+      1. In the 1st: `npm run dev`
+      1. In the 2nd: `npm run start:firefox`
+   1. the task in the 1st terminal will recompile and reload necessary parts of the addon each time you change a file but in some circumstances you'll need to press 'r' in the 2nd terminal to force a complete reload.
+1. Preparing for release or Pull Request:
+   1. `npm run tsc` to verify that no type errors have been introduced during recent development changes
+   1. `npm run lint`
 
-`gulp` comes with various other tasks but you shouldn't need to worry about those unless you are adding new modules/folders to the addon.
+You may need to modify the vite config files or some of the build scripts if you add significant new sections to the WebExtension structure but it's unlikely and we can help you with that if necessary.
 
 ## Reproducing a build
+
+### Introduction
 
 Exactly reproducing the files delivered from the Firefox add-on website or Chrome extension store is not possible because the websites modify the file that we build in order to attach a digital signature. One can get very close though, to the point where a diff of the files from a given release on GitHub varies from your own local build in only three ways:
 
@@ -54,21 +46,42 @@ Exactly reproducing the files delivered from the Firefox add-on website or Chrom
 2. Version number - the CI build system holds credentials that allow it to manipulate git tags on the GitHub repository and in doing so allows for automatic incrementing of build numbers, which in turn will result in a unique version number being calculated. This can only be reproduced if you download the git repo to your local system (including all tags) and develop a custom build script or modify the source files as needed - it's most likely not worth the effort but can be done if it is important to you.
 3. File dates - the build output is essentially a zip file so when the newly downloaded and built files on your system are added to the zip file, they will have different dates than those that were built on the CI platform and automatically added to a GitHub Release. For this reason, even if you were to end up with the same line endings and version number, it is not possible to compare a digest (hash) of your built file and expect it to match the file built by anyone else (unless you build it at exactly the same time!)
 
-Reproducible builds rely upon npm version 5.7 or higher (released end of Feb 2018) so ensure you have the latest update first.
+### Requirements
 
-You can then:
+Reproducible builds rely upon npm version 7 or higher.
+
+Our builds are created by GitHub Actions using the following configuration:
+
+* Ubuntu 22.04
+* Node 18
+* npm 8
+
+### Instructions
 
 1. download the source code (e.g. from the relevant GitHub Release page) or clone the repo for the latest (often pre-release) version
-1. `npm ci`
+1. `npm ci && mkdir dist`
 1. manipulate manifest.json if you want to adjust version numbers
-1. `npm run package:debug` (for beta releases) and/or `npm run package:prod` (for stable releases)
-   1. XPIs and ZIPs of each version are put into the `dist` folder
-   1. NB: source maps are included only in the debug package
+1. `npm run build:prod && npm run pack:prod` (for stable releases) and/or `npm run build:beta && npm run pack:beta` (for beta releases) 
+   * XPIs and ZIPs of each version are put into the `dist` folder
+
+## Repo/project structure
+
+* `/_locales` Localisation data (language translations).
+* `.tx` Used by Transifex localisation scripts to help manage multiple language translation.
+* `dist` Output folder for build packages (e.g. an XPI file for installation in Firefox). Created automatically by development scripts or manually if you're only building for packaging/release.
+* `extension` Output folder for compiled files when developing or building for packaging/release.
+* `lib` Javascript files that are directly included in the resulting extension, undergoing no further adjustment or compilation.
+* `scripts` The scripts within help prepare the `extension` file structure for hot module reloading during development, as well as ensuring that various categories of files end up in the right place, with appropriate references updated.
+* `src` 
+   * `manifest.ts` Outputs a manifest.json file appropriate to the current build / development environment
+   * `assets` ... TODO: finish docs
 
 
 ## Vue devtools
 
 It's likely that the below does not work. It might though, at least on one or two devices in the world when the stars are aligned.
+
+We'll take a fresh look at this challenge when working on the migration to MV3.
 
 ### One time:
 ````

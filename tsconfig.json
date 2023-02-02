@@ -1,20 +1,36 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "noImplicitAny": false,
         "removeComments": false,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "target": "ES6",
-        "typeRoots" : ["./typedefs", "node_modules/@types"],
+        "target": "ES2016",
+        "lib": ["DOM", "ESNext", "DOM.Iterable"],
+        "esModuleInterop": true,
+        "incremental": false,
+        "skipLibCheck": true,
+        "jsx": "preserve",
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
+        "typeRoots" : ["src/typedefs", "node_modules/@types"],
         "moduleResolution": "node",
         "noImplicitThis": true,
-        "types": ["jest"],
-        "module": "ESNext"
+        "isolatedModules": true,
+        "types": [
+            "vite/client",
+            "unplugin-icons/types/vue"
+        ],
+        "module": "ESNext",
+        "paths": {
+        "~/*": ["src/*"]
+        }
     },
-    "include": [
-        "**/*"
-    ],
+    // "include": [
+    //     "**/*"
+    // ],
     "exclude": [
+        "dist",
         "node_modules",
         "**/*.spec.ts"
     ]

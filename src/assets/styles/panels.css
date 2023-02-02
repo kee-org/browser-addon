@@ -1,0 +1,468 @@
+html,
+body {
+  font: caption;
+  font-size:14px;
+  line-height: 1.4;
+}
+
+body {
+    background-color: white;
+    color: #000000;
+    padding: 0px;
+    margin: 0px;
+    height: 100vh;
+}
+
+#MainContainer {
+    border-style: outset;
+    border-width: 2px;
+    border-color:grey;
+    padding: 4px;
+    margin: 0px;
+    display: flex;
+    flex-direction:column;
+    justify-content:space-between;
+    height:calc(100% - 12px);
+}
+
+#MainContainer > div#closeContainer {
+    margin-left: 5px;
+}
+
+#MainContainer > div#GeneratePasswordContainer > div {
+    margin: 0px 5px 5px 5px;
+}
+
+#MainContainer > #header {
+    flex-shrink: 0;
+    font-weight: bold;
+    margin: 2px 0px 5px 5px;
+}
+
+#GeneratePasswordContainer,
+#Kee-MatchedLoginsList {
+    flex-grow:1000;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+/* Default login list item and group style */
+#Kee-MatchedLoginsList li,
+#GeneratePasswordContainer li,
+#Kee-SaveLogin-SearchResults-Container li,
+#Kee-SaveLogin-selectedEntryList li
+{
+    min-height:26px;
+    padding:0px 5px 0px 22px;
+    margin:0px;
+    background-repeat:no-repeat;
+    background-position:2px 4px;
+    cursor:default;
+    line-height:26px;
+    position:relative;
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    background-size: 16px;
+}
+
+#Kee-MatchedLoginsList li:active,
+#GeneratePasswordContainer li:active
+{
+    background-color: #E3E3E3;
+    border: 1px solid #C6C6C7;
+    border-radius: 3px;
+}
+
+#Kee-MatchedLoginsList li:hover,
+#GeneratePasswordContainer li:hover
+{
+    background-color: #EAEAEA;
+    border: 1px solid #D6D6D6;
+    border-radius: 3px;
+}
+
+/* Shade the item that has keyboard focus */
+#Kee-MatchedLoginsList li:focus,
+#GeneratePasswordContainer li:focus
+{
+    background-color: #DDDDDD;
+}
+
+/* Basic login list styles */
+#Kee-MatchedLoginsList ul {
+    margin:0 0 0 0px;
+    padding:0px 0px 0px 4px;
+    list-style:none;
+}
+
+#Kee-optionsMenuTrigger
+{
+    width:18px;
+    min-width:18px;
+    height:18px;
+    min-height:18px;
+    background-color: #F4F4F4;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    position:absolute;
+    right: 10px;
+    bottom:calc(50% - 11px);
+    background-image: url("../../assets/images/menu.png");
+    padding:1px;
+    background-repeat:no-repeat;
+    background-position:1px 1px;
+    cursor: pointer;
+}
+
+#Kee-optionsMenuTrigger:hover
+{
+    background-color: #fff;
+}
+
+#DatabaseList > ul,
+#GeneratePasswordContainer > ul {
+    margin:0 0 0 0px;
+    padding:0px 0px 0px 0px;
+    list-style:none;
+    background:none;
+}
+
+
+#DatabaseList > ul > li,
+#GeneratePasswordContainer > ul > li
+{
+    min-height:26px;
+    padding:0px 5px 0px 26px;
+    margin:0px;
+    background-repeat:no-repeat;
+    background-position:6px 5px;
+    cursor:default;
+    line-height:26px;
+}
+
+#DatabaseList > ul > li
+{
+    background-image: url("../../assets/images/KeeLock.png");
+}
+
+#GeneratePasswordContainer > ul > li
+{
+    background-image: url("../../assets/images/KeeOrange.png");
+}
+
+#optionsContainer {
+    flex-shrink: 0;
+}
+
+#closeContainer {
+    display: flex;
+    justify-content:space-between;
+    flex-direction:row-reverse;
+    flex-shrink: 0;
+    margin-top: 10px;
+}
+
+
+
+.xulvbox,
+.xulhbox {
+    display: flex;
+}
+
+.xulvbox {
+flex-direction:column;
+}
+
+.xulhbox {
+flex-direction:row;
+}
+
+.xulspacer,
+.xulvboxflex {
+flex: 1;
+}
+
+.xulpackend {
+    justify-content: flex-end;
+}
+
+
+.disabled
+{
+    display:none;
+}
+
+.enabled
+{
+    display:block;
+}
+
+
+
+/* search box */
+#Kee-PanelSection-searchbox
+{
+    width: calc(100% - 12px);
+    padding: 3px 5px;
+    margin:5px 0px 5px 0px;
+    -moz-box-flex: 1;
+}
+
+.kee-searchFields {
+    width:100%;
+}
+
+/* default appearence of list items to match australis look and feel */
+#kee-panelview li,
+#Kee-SaveLogin-SearchResults-Container li
+{
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    margin: 0px 0px;
+}
+
+#Kee-PanelSection-search li
+{
+    margin: 0px 0px !important;
+}
+
+#kee-panelview li:active,
+#Kee-SaveLogin-SearchResults-Container li:active
+{
+    background-color: #E3E3E3;
+    border: 1px solid #C6C6C7;
+    border-radius: 3px;
+}
+
+#kee-panelview li:hover,
+#Kee-SaveLogin-SearchResults-Container li:hover
+{
+    background-color: #EAEAEA;
+    border: 1px solid #D6D6D6;
+    border-radius: 3px;
+}
+
+ul#Kee-SaveLogin-selectedEntryList li:hover
+{
+    background-color: #FFFFFF;
+}
+
+
+#Kee-SaveLogin-SearchResults-Container,
+#Kee-SaveLogin-selectedEntryList {
+display: block;
+}
+
+#kee-save-password-db-select,
+#kee-save-password-group-select
+{
+    background-repeat: no-repeat;
+    border: 1px solid #D6D6D6;
+    margin: 5px;
+    min-width: 300px;
+    display:inline-block;
+    background-color: #FFFFFF;
+}
+
+#kee-save-password-db-select
+{
+    padding-left: 20px;
+    background-position: 5px 5px;
+}
+
+#Kee-PanelSection-searchfilter,
+#Kee-SaveLogin-searchfilter {
+    display:inline-block;
+    border: 1px solid #D6D6D6;
+    padding: 3px 5px;
+    background-color: #FFFFFF;
+}
+#Kee-PanelSection-searchfilter {
+    margin:5px 0px 5px 0px;
+}
+
+#Kee-SaveLogin-searchfilter {
+    margin:5px 5px 0px 0px;
+}
+
+.kee-save-password label {
+    white-space:nowrap;
+    margin-left: 5px;
+}
+
+.kee-save-password {
+    white-space:nowrap;
+}
+
+#kee-save-password-db-select option{
+padding: 3px 0 3px 25px;
+    background-repeat: no-repeat;
+    background-position: 5px 5px;
+}
+
+#kee-save-password-group-select option {
+background-repeat: no-repeat;
+    padding: 3px 0px 3px 20px;
+
+}
+
+#kee-save-password-new-button,
+#kee-save-password-update-button {
+    line-height:1;
+    margin: 0px !important;
+    margin-top: 5px !important;
+    padding: 5px;
+    border-radius: 0px !important;
+    border-top-left-radius: 5px !important;
+    border-top-right-radius: 5px !important;
+    flex: 1;
+}
+
+#kee-save-password-new-button {
+    border-style: solid;
+    border-width: 1px;
+    margin-left: 5px !important;
+}
+
+#kee-save-password-update-button {
+    border-style: solid;
+    border-width: 1px;
+    margin-right: 5px !important;
+}
+
+#kee-save-password-new-button.unselected,
+#kee-save-password-update-button.unselected {
+    border-bottom-color: #D6D6D6;
+}
+
+#kee-save-password-new-button.selected,
+#kee-save-password-update-button.selected {
+    border-bottom-color: white !important;
+    background-color: white !important;
+}
+
+#kee-save-password-new-panel,
+#kee-save-password-update-panel1,
+#kee-save-password-update-panel2 {
+    border: #D6D6D6 solid 1px;
+    border-top-width: 0px;
+    margin: 0px 5px;
+    padding: 5px;
+}
+
+#kee-save-password-update-panel2 label.Kee-message,
+#kee-password-updated-notification label.Kee-message {
+    width:500px;
+}
+
+#kee-save-password-update-panel2 > .xulhbox {
+    text-align:center;
+}
+
+#kee-save-password-update-panel2 > div.xulhbox:nth-child(1) {
+    padding-top:0px;
+}
+
+#kee-save-password-update-panel2 > div.xulhbox:nth-child(2) {
+    padding-top:10px;
+    margin-top:10px;
+    border-top:1px solid #D6D6D6;
+}
+
+#kee-save-password-update-panel2 > div.xulhbox#Kee-loginURLsUpdateStatusContainer {
+    padding-top:5px;
+    margin-top:0px;
+    margin-bottom:0px;
+    border-top:1px solid #D6D6D6;
+}
+
+#Kee-SaveLogin-searchbox
+{
+    width: calc(100% - 12px);
+    padding: 3px 5px;
+    margin:5px 0px 0px 5px;
+    -moz-box-flex: 1;
+}
+
+#Kee-SaveLogin-SearchResults {
+    overflow-y:scroll;
+    margin: 5px 5px 5px 5px;
+    margin-top: 0px;
+    border: #D6D6D6 solid 1px;
+    border-top-width: 0px;
+    height:100px;
+    min-height:100px;
+    width:350px;
+}
+
+ul#Kee-SaveLogin-SearchResults-Container,
+ul#Kee-SaveLogin-selectedEntryList {
+    padding:0px;
+    list-style:none;
+    background:none;
+    margin:0px 5px;
+}
+
+button.Kee-SaveLogin-Change-Setting {
+    font-size: 0.8em;
+}
+
+button.Kee-SaveLogin-Change-Setting > div.xulhbox {
+    padding:0px !important;
+    margin: 0px !important;
+
+}
+button.Kee-SaveLogin-Change-Setting label {
+    padding:0px !important;
+    margin: 0px !important;
+
+}
+
+button.Kee-SaveLogin-Abort {
+    margin-bottom:10px !important;
+}
+
+#kee-save-password-saveTypeContainer button {
+    margin: 5px;
+    padding: 3px 7px;
+}
+
+#Kee-loginURLsUpdateRadioGroup {
+    margin:0px;
+    padding-top:5px;
+    border-top:1px solid #D6D6D6;
+    min-height: 80px;
+    height: 80px;
+    overflow-y: auto;
+    font-size: 0.8em;
+}
+
+.Kee-message {
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+#Kee-SaveLogin-SearchResults-Container li.login-item
+{
+    display:list-item;
+    border-left-width:0px;
+    border-right-width:0px;
+    cursor: default;
+}
+
+#Kee-SaveLogin-searchfilter {
+    margin-right: 9px;
+}
+
+#SavePasswordContainer {
+    flex: 1;
+}
+
+.xulradiogroup label {
+    display:block;
+}
+
+#neverForThisSiteButton {
+    margin: 5px;
+    padding: 3px 7px;
+}

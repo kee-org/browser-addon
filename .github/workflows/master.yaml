@@ -5,41 +5,57 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Prepare system path for running python
         run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
         #TODO: change to 1 and then get all tags seperately to see if that's faster. git fetch origin 'refs/tags/*:refs/tags/*'
-        
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
       # Create a git tag of the new version to use
-      # If manifest.json major and minor versions match last tag, then 
-      # increment last tag. Else use manifest.json major.minor.0.
+      # If package.json major and minor versions match last tag, then 
+      # increment last tag. Else use package.json major.minor.0.
       - name: Create git tag
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          KEE_VERSION_MANIFEST=`sed -nE 's/^.*"version": "([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}"\\,/\\1/p' manifest.json | tr -d '\\040\\011\\012\\015'`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo "${KEE_VERSION_MANIFEST} ${KEE_VERSION_TAG}" | awk '{printf($1==$2?""$2"."$3+1:""$1".0")}' | xargs -I {} git tag -a {} -m "{}"
+          KEE_VERSION_MANIFEST=`sed -nE 's/^.*"version": "([0-9]{1,}\\.[0-9]{1,})\\.[0-9x]{1,}"\\,/\\1/p' package.json | tr -d '\\040\\011\\012\\015'`; KEE_VERSION_TAG=`git describe --abbrev=0 --tags | sed -E 's/^([0-9]{1,}\\.[0-9]{1,})\\.([0-9]{1,})$/\\1 \\2/g'`; echo "${KEE_VERSION_MANIFEST} ${KEE_VERSION_TAG}" | awk '{printf($1==$2?""$2"."$3+1:""$1".0")}' | xargs -I {} git tag -a {} -m "{}"
 
-      - name: Update manifest.json based on the git tag we just created
+      - name: Update package.json based on the git tag we just created
         run: |
           NEW_KEE_VERSION=`git describe --abbrev=0 --tags`
           echo "NEW_KEE_VERSION=$NEW_KEE_VERSION" >> $GITHUB_ENV
-          sed -E 's/^(.*"version": ")(.*)("\,.*)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json
-          sed -E 's/^(.*"version_name": ")(.*)("\,.*)/\1'"$NEW_KEE_VERSION"'\3/' manifest.json > manifest.json.tmp && mv manifest.json.tmp manifest.json
+          sed -E 's/^(.*"version": ")(.*)("\,.*)/\1'"$NEW_KEE_VERSION"'\3/' package.json > package.json.tmp && mv package.json.tmp package.json
 
-      - name: NPM CI
-        run: npm ci
+      - name: Setup
+        run: |
+          npm ci
+          mkdir dist
 
-      - name: Build and package
-        run: npm run package:prod && npm run package:debug
+      - name: Build and package beta
+        run: npm run build:beta && npm run pack:beta
 
-      - name: Test
-        run: npm run test
+      - name: Build and package production
+        run: npm run build:prod && npm run pack:prod
+
+      # We have to do this type check after running the build
+      # because Vite creates various type definitions we need
+      - name: Compile Typescript
+        run: npm run tsc
+
+      # - name: Test
+      #   run: npm run test
+      
+      # TODO: lint? Maybe not here. No new code is being merged while releasing.
 
       - name: Transifex upload
         run: pip install transifex-client && echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = api\ntoken = \npassword = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc && tx -d --traceback push -s;
@@ -50,7 +66,7 @@ jobs:
         run: git push --tags
 
       - name: Release
-        uses: softprops/action-gh-release@4fb86a77e0bdae30e0be92b2280501c24bd1bb01
+        uses: softprops/action-gh-release@d4e8205d7e959a9107da6396278b2f1f07af0f9b
         with:
           name: ${{ env.NEW_KEE_VERSION }}
           tag_name: ${{ env.NEW_KEE_VERSION }}
@@ -59,5 +75,3 @@ jobs:
           body: "This is an automatically generated pre-release. Some releases will be thoroughly tested and their derivatives marked as ready for beta and eventually stable release. If the status of this version changes, this message will be replaced. You may want to install the files in this release if you wish to test a specific change that is included within this version. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550"
           files: |
             dist/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
