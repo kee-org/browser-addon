@@ -64,6 +64,7 @@
         </v-btn>
 
         <v-footer app height="auto" style="padding:8px;">
+            <!-- <v-container style="padding:8px;"></v-container> -->
             <v-btn id="password-open-kee-vault" :aria-label="$i18n('Menu_Button_open_kee_vault_label')"
                 class="ml-0 mr-1" size="small" icon @click="openKeeVault">
                 <v-img width="24px" height="24px" src="/assets/images/48-kee-vault.png" />

@@ -8,7 +8,8 @@ v-for="(match, index) of filteredMatches" :key="match.entry.uuid" :ref="setNodes
                 nextInList(index, 'listAarray', filteredMatches.length)
             " @move-prev-in-list="
     prevInList(index, 'listAarray')
-" @move-out-of-list="exitList" />
+" @move-out-of-list="exitList"
+@pref-entry-toggle="onPreferredEntryClick"  />
 
         <v-divider v-show="deduplicatedSearchResults && deduplicatedSearchResults.length > 0" class="mt-2" />
         <v-list-subheader
@@ -37,6 +38,7 @@ import useStore from "../../store";
 export default {
     components: { Entry },
     props: ["matchedEntriesIn", "frameId"],
+    emits: ["pref-entry-toggle"],
     data() {
         return {
             filteredMatches: null,
@@ -151,6 +153,10 @@ export default {
                 this.currentSearchTerm,
                 this.onSearchOnlyMatchesComplete.bind(this)
             );
+        },
+        onPreferredEntryClick(payload: any) {
+            //TODO: find out if we really have to do this boilerplate re-emitting in v3
+            this.$emit("pref-entry-toggle", payload);
         }
     }
 };

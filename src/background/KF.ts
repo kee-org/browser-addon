@@ -142,13 +142,6 @@ export class Kee {
                         }, configManager.current.currentSearchTermTimeout * 1000);
                     });
 
-                    //TODO: Try structuredClone() instead when cutting off support
-                    // for pre-MV3 browser versions (OK from Firefox 94)
-                    const connectMessage = {
-                        initialState: JSON.parse(
-                            JSON.stringify(store.$state))
-                    } as AddonMessage;
-
                     let submittedData: any = null;
                     let loginsFound = false;
 
@@ -162,19 +155,37 @@ export class Kee {
                             });
                     }
 
+                    const matchedLogins: any = {};
                     if (window.kee.tabStates.has(window.kee.foregroundTabId)) {
                         const frames = window.kee.tabStates.get(window.kee.foregroundTabId).frames;
                         const matchedFrameID = window.kee.frameIdWithMatchedLogins(frames);
                         if (matchedFrameID >= 0) {
                             loginsFound = true;
-                            connectMessage.entries = frames.get(matchedFrameID).entries;
-                            connectMessage.frameId = matchedFrameID;
-                            connectMessage.tabId = window.kee.foregroundTabId;
+                            matchedLogins.entries = frames.get(matchedFrameID).entries;
+                            matchedLogins.frameId = matchedFrameID;
+                            matchedLogins.tabId = window.kee.foregroundTabId;
                         }
                     }
 
+                    KeeLog.error("subData before update call: " + JSON.stringify(submittedData));
+
+                    // Unlike Vuex, Pinia applies changes synchronously so we must now ensure they happen after the port has been assigned otherwise the newly opened popup will never receive the information. The popup will deal with receiving mutations before the initial state has been received but for clarity we'll try sending them afterwards from now on
+                    // In future, I'd like to understand why we don't just apply these updates to the store immediately and send that as the initial message. I'll try that approach first...
                     store.updateSubmittedData(submittedData);
                     store.updateLoginsFound(loginsFound);
+
+                    KeeLog.error("store after updates: " + JSON.stringify(store));
+
+                    //TODO: Try structuredClone() instead when cutting off support
+                    // for pre-MV3 browser versions (OK from Firefox 94)
+                    const connectMessage = {
+                        initialState: JSON.parse(
+                            JSON.stringify(store.$state))
+                    } as AddonMessage;
+
+                    connectMessage.entries = matchedLogins.entries;
+                    connectMessage.frameId = matchedLogins.frameId;
+                    connectMessage.tabId = matchedLogins.tabId;
 
                     try {
                         p.postMessage(connectMessage);
@@ -182,6 +193,8 @@ export class Kee {
                         KeeLog.error("postMessage error", e);
                     }
                     window.kee.browserPopupPort = p;
+
+
                     window.kee.resetBrowserActionColor();
                     break;
                 }

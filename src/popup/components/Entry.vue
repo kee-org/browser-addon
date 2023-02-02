@@ -266,7 +266,8 @@ export default {
             this.$emit("move-out-of-list");
         },
         onPreferredEntryClick() {
-            this.$emit("pref-entry-toggle", { uuid: this.entrySummary.uuid });
+            // json may be unncessary
+            this.$emit("pref-entry-toggle", { uuid: JSON.parse(JSON.stringify(this.entrySummary.uuid)) });
         }
     }
 };
