@@ -38,12 +38,15 @@ jobs:
           npm ci
           mkdir dist
 
-      - name: Build and package beta
-        run: npm run build:beta && npm run pack:beta
-
+      # We make sure that this version can build for production and we attach the
+      # resulting artifacts to the GitHub release but we have to do the beta
+      # version last because we can't force web-ext to sign a specific XPI file
+      # - it has to run the whole build again from scratch for some reason.
       - name: Build and package production
         run: npm run build:prod && npm run pack:prod
 
+      - name: Build and package beta
+        run: npm run build:beta && npm run pack:beta
 
 #       - name: Temp debug
 #         run: |
