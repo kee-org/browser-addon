@@ -7,7 +7,7 @@
                         {{ $i18n("where") }}
                     </v-col>
                 </v-row>
-                <v-row>
+                <v-row style="margin-top: 0px;">
                     <v-col>
                         <v-card class="mx-auto" max-width="500">
                             <!-- TODO: restore search feature when we have time to setup a new/improved treeview component that supports it -->
