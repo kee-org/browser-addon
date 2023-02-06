@@ -1,4 +1,4 @@
-import RuntimeEnvironment from "../common/RuntimeEnvironment";
+import { isFirefox } from "webext-detect-page";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { KeeStore, useStubStore } from "../store";
@@ -6,7 +6,7 @@ import { Entry } from "../common/model/Entry";
 import punycode from "punycode/";
 
 // Pretend browser (WebExtensions) is chrome (we include a
-// polyfill from Mozilla but it doesn't work in some cases)
+// polyfill from Mozilla but it doesn't work for onAuthRequired)
 declare const chrome;
 
 export class NetworkAuth {
@@ -136,7 +136,7 @@ export class NetworkAuth {
     }
 
     public startListening() {
-        if (RuntimeEnvironment.isWebExtensionsBrowser) {
+        if (isFirefox()) {
             browser.webRequest.onAuthRequired.addListener(
                 requestDetails => this.provideCredentialsAsync(requestDetails),
                 { urls: ["<all_urls>"] },

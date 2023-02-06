@@ -1,4 +1,4 @@
-import RuntimeEnvironment from "../common/RuntimeEnvironment";
+import { isFirefox } from "webext-detect-page";
 import { AccountManager } from "./AccountManager";
 import { PersistentTabState } from "./PersistentTabState";
 import { jsonrpcClient } from "./jsonrpcClient";
@@ -375,7 +375,7 @@ export class Kee {
         // enable a nice smooth animation to subtly hint that they might want to
         // click on the icon. We have to make the animation in Firefox much less subtle :-(
         // https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1309347
-        this.animateIcon.start(duration, !RuntimeEnvironment.isWebExtensionsBrowser);
+        this.animateIcon.start(duration, !isFirefox());
     }
 
     resetBrowserActionColor() {

@@ -1,4 +1,4 @@
-import RuntimeEnvironment from "../common/RuntimeEnvironment";
+import { isFirefox } from "webext-detect-page";
 import { Kee } from "./KF";
 import { commandManager } from "./commands";
 import { KeeLog } from "../common/Logger";
@@ -102,7 +102,7 @@ function updateForegroundTab(tabId: number) {
 // Some browsers (e.g. Firefox) automatically inject content scripts on install/update
 // but others don't (e.g. Chrome). To ensure every existing tab has exactly one
 // instance of this content script running in it, we programatically inject the script.
-if (!RuntimeEnvironment.isWebExtensionsBrowser) {
+if (!isFirefox()) {
     browser.runtime.onInstalled.addListener(() => {
         const showErrors = () => {
             if (browser.runtime.lastError) {
