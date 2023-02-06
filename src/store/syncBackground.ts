@@ -30,8 +30,8 @@ export class SyncBackground {
                 this.distributeMutationPayload(mutation.payload, null);
                 KeeLog.debug("distributed");
             } else {
-                KeeLog.error("Pinia generated a non-object mutation. We don't think we can support this and need to know that it is possible for it to happen! Tell us now or weird things will happen.: " + JSON.stringify(mutation));
-                //TODO: Stop throwing too after beta testing
+                KeeLog.error("Pinia generated a non-object mutation. We don't think we can support this and need to know that it is possible for it to happen! Tell us now or weird things will happen.");
+                //TODO: Stop throwing after beta testing
                 throw new Error("Pinia generated a non-object mutation. We don't think we can support this and need to know that it is possible for it to happen! Tell us now or weird things will happen.");
             } // 'direct' | 'patch object' | 'patch function'
         }, {

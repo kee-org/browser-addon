@@ -146,7 +146,7 @@ export async function browserPopupMessageHandler(this: browser.runtime.Port, msg
 
 export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
     if (KeeLog && KeeLog.debug) {
-        KeeLog.warn("In background script, received message from page script.", msg);
+        KeeLog.debug("In background script, received message from page script.");
     }
 
     if (msg.mutation) {
@@ -205,8 +205,6 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
         }
 
         window.kee.persistentTabStates.get(this.sender.tab.id).items.push(persistentItem);
-
-        KeeLog.error("pers tab state: " + JSON.stringify(window.kee.persistentTabStates.get(this.sender.tab.id)));
 
         // Don't alert the user if it's less than 90 seconds since they initiated an
         // update request - highly likely that this is just the result of that

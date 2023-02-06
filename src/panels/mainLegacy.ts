@@ -46,7 +46,7 @@ function startup() {
                 if (m.initialState) {
                     syncContent.init(store, m.initialState, (mutationPayload: MutationPayload) => {
                         const json = JSON.stringify(mutationPayload);
-                        KeeLog.debug("New non-background panel mutation: " + json);
+                        KeeLog.debug("New non-background panel mutation.");
                         Port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
                     });
                 }

@@ -175,7 +175,7 @@ export default {
             }));
             //const groups = this.KeePassDatabases.map(db => db.root);
             const json = JSON.stringify(groups);
-            //KeeLog.error("items: ", groups);
+            //KeeLog.debug("items: ", groups);
             return JSON.parse(json) as Group[];
         },
         // filteredItems: function () {
@@ -208,7 +208,7 @@ export default {
         //         })
         //     ).filter(i => i); // filtering removes any nulls if entire top level objects have been filtered away
         //     const jsoned = JSON.stringify(result);
-        //     KeeLog.error("jsoned", jsoned);
+        //     KeeLog.debug("jsoned", jsoned);
         //     treeArray.length = 0;
         //     treeArray.push(...result);
         //     return treeArray;
