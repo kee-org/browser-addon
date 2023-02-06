@@ -32,7 +32,7 @@ class="mr-3 ml-12 my-0"
                                     </v-row>
                                 </v-container>
                         </v-sheet>
-                        <v-sheet v-if="isHovering || focussed" class="text-truncate align-self-center">
+                        <v-sheet v-if="isHovering || focussed" class="align-self-center">
                             <v-btn
 variant="elevated" color="secondary" size="x-small" icon
                                 @click.stop.prevent="toggleFullDetails">
