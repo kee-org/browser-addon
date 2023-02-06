@@ -87,10 +87,10 @@ export default {
     },
     methods: {
         setNodesA(node) {
-            this.aNodes.push(node);
+            if (node) this.aNodes.push(node);
         },
         setNodesB(node) {
-            this.bNodes.push(node);
+            if (node) this.bNodes.push(node);
         },
         onSearchOnlyMatchesComplete(entrySummaries: EntrySummary[]) {
             KeeLog.debug("onSearchOnlyMatchesComplete");
