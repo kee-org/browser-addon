@@ -119,13 +119,12 @@ jobs:
             dist/**/*.xpi
             dist/**/*.zip
 
-#TODO: re-enable beta releases after testing
-      # - name: Publish the new release to Firefox beta users
-      #   run: |
-      #     cd $GITHUB_WORKSPACE/browser-addon-updates
-      #     git push https://github-actions:$BETA_UPDATES_TOKEN@github.com/kee-org/browser-addon-updates.git master
-      #   env:
-      #       BETA_UPDATES_TOKEN: ${{ secrets.BETA_UPDATES_TOKEN }}
+      - name: Publish the new release to Firefox beta users
+        run: |
+          cd $GITHUB_WORKSPACE/browser-addon-updates
+          git push https://github-actions:$BETA_UPDATES_TOKEN@github.com/kee-org/browser-addon-updates.git master
+        env:
+            BETA_UPDATES_TOKEN: ${{ secrets.BETA_UPDATES_TOKEN }}
 
       #TODO: re-enable Chrome
       
