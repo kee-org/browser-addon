@@ -87,7 +87,6 @@ jobs:
           npm run sign:xpi:beta
           echo "https://github.com/kee-org/browser-addon/releases/download/${NEW_KEE_VERSION}/kee_password_manager-${NEW_KEE_VERSION}beta-an+fx.xpi" > .downloadLinkKeeXPI
           echo "kee_password_manager-${NEW_KEE_VERSION}beta-an+fx.xpi" > .signedKeeXPI
-          cat ./browser-addon-updates/beta/update.json
           cat .downloadLinkKeeXPI
           cat .signedKeeXPI
           # Rename whatever file Mozilla download for us to match our expected format.
@@ -95,7 +94,6 @@ jobs:
           mv dist/signed/*.xpi "dist/signed/kee_password_manager-${NEW_KEE_VERSION}beta-an+fx.xpi"
           ./node_modules/.bin/faauv --update ./browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)
           echo "New update manifest follows"
-          cat ./browser-addon-updates/beta/update.json
           cd $GITHUB_WORKSPACE/browser-addon-updates
           git config user.name github-actions
           git config user.email github-actions@github.com
