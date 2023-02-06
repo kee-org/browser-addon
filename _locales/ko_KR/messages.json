@@ -1,394 +1,394 @@
 {
     "black_list": {
-        "message": "Exclude List",
+        "message": "제외 목록",
         "description": "List of items that cause behaviour to be disabled if they match. For example, the list of names of form fields that prevent Kee from searching for logins for the form containing that field."
     },
     "conn_display_description": {
-        "message": "Uma extensão do navegador de internet que permite a autenticação (login) automática na maioria dos sites. Anteriormente conhecido como KeeFox.",
+        "message": "대부분의 웹 사이트에서 안전하게 자동 로그인을 가능하게 하는 브라우저 추가 기능. KeeFox로 알려져 있습니다.",
         "description": "A brief description of Kee that gets presented to users to help them decide if they want to allow the connection to KeePass to be permitted."
     },
     "conn_invalid_message": {
-        "message": "O Kee enviou um comando inválido para a base de dados de palavras-passe.",
+        "message": "Kee가 암호 데이터베이스에 유효하지 않은 명령을 보냈습니다.",
         "description": "A form of internal technical error. This can help user's to identify the type of problem they are experiencing."
     },
     "conn_setup_client_sl_low": {
-        "message": "O Kee pediu um nível de segurança muito baixo para ser aceite pelo servidor de palavras-passe. Deve reiniciar o processo de autenticação usando uma segurança maior.",
+        "message": "Kee는 비밀번호 서버가 수용하기엔 너무 낮은 보안 수준을 요구했습니다. 고급 보안을 사용하여 인증 프로세스를 다시 시작해야 합니다.",
         "description": ""
     },
     "conn_setup_enter_password_title": {
-        "message": "Autorização do Kee",
+        "message": "키 권한 부여",
         "description": "Heading of the popup that asks the user to authorise the connection to KeePass by typing in a password."
     },
     "conn_setup_enter_password": {
-        "message": "Por favor introduza a palavra-passe mostrada na janela do KeePass \"Autorizar uma nova conexão\". Não tem de se lembrar desta palavra-passe. Se se enganar, poderá tentar novamente em breve.",
+        "message": "KeePass \"Authorizate a new connection\" 창에 표시된 암호를 입력하십시오. 이 암호는 기억할 필요가 없습니다. 틀려도 금방 다시 시도할 수 있습니다.",
         "description": ""
     },
     "conn_setup_expired": {
-        "message": "Tem utilizado a mesma chave secreta por demasiado tempo.",
+        "message": "같은 비밀키를 너무 오랫동안 사용하셨습니다.",
         "description": "The KeePassRPC server has detected that the secret key used for communication has expired and the user must therefore re-authenticate."
     },
     "conn_setup_failed": {
-        "message": "O Kee não tem permissão para se conectar, provavelmente porque inseriu a palavra-passe de conexão incorretamente.",
+        "message": "연결 비밀번호를 잘못 입력해서 Kee 연결이 허용되지 않습니다.",
         "description": "The most likely cause for this error is that the user typed in the wrong password. Otherwise it's likely to be a bug in the KPRPC protocol, which we would have expected to see some evidence of over the past 5 years."
     },
     "conn_setup_invalid_param": {
-        "message": "O Kee forneceu um parâmetro inválido. Mais informações: $1",
+        "message": "Kee가 유효하지 않은 매개 변수를 제공했습니다. 자세한 내용은 다음과 같습니다: $1",
         "description": "This probably indicates a bug in Kee - we sent something to KeePassRPC that it wasn't expecting."
     },
     "conn_setup_missing_param": {
-        "message": "O Kee falhou no fornecimento do parâmetro necessário. Mais informações: $1",
+        "message": "Kee에 필요한 매개 변수를 제공하지 못했습니다. 자세한 내용은 다음과 같습니다:$1",
         "description": "This probably indicates a bug in Kee - we failed to send some information to KeePassRPC that it required."
     },
     "conn_setup_restart": {
-        "message": "O Kee tem de reiniciar o processo de autorização.",
+        "message": "Kee의 인증 과정을 다시 시작해야 합니다.",
         "description": "A technical error occurred during the attempt to authorise the link between Kee and KeePassRPC so we need to notify the user that they will need to re-authenticate"
     },
     "conn_setup_retype_password": {
-        "message": "Introduza a nova palavra-passe quando for solicitado.",
+        "message": "메시지가 표시되면 새 암호를 입력하십시오.",
         "description": "The user needs to re-authorise the connection to KeePass by typing in the new KeePassRPC password they're being shown by KeePass."
     },
     "conn_setup_server_sl_low": {
-        "message": "O Kee rejeitou a conexão com o servidor de palavras-passe porque o seu nível de segurança é muito baixo. Tem de reiniciar o processo de autenticação usando uma segurança maior.",
+        "message": "Kee의 보안 수준이 너무 낮아 암호 서버에 대한 연결을 거부했습니다. 고급 보안을 사용하여 인증 프로세스를 다시 시작해야 합니다.",
         "description": ""
     },
     "conn_setup_client_features_missing": {
-        "message": "Kee must be upgraded to connect to your password manager. Ensure you are running the latest version of the browser add-on / extension.",
+        "message": "암호 관리자에 연결하려면 Kee를 업그레이드해야 합니다. 브라우저 추가/확장 기능의 최신 버전을 실행하고 있는지 확인하세요.",
         "description": "The KeePassRPC server requires features from Kee that this version does not contain."
     },
     "conn_setup_server_features_missing": {
-        "message": "Your password manager must be upgraded to allow Kee to connect to it. Reload the Kee Vault website and/or ensure you are running the latest version of the KeePassRPC plugin by following the quick and easy instructions at $1",
+        "message": "Kee가 암호 관리자에 연결할 수 있도록 암호 관리자를 업그레이드 해야합니다. Kee Vault 웹사이트를 리로드 하거나 $1에서 빠르고 쉬운 지침에 따라 최신 버전의 KeePassRPC 플러그인이 실행 중인지 확인합니다.",
         "description": "The KeePassRPC server does not offer some features that this version of Kee requires."
     },
     "conn_sl_high_label": {
-        "message": "Perguntar por uma nova conexão de palavra-passe de cada vez que iniciar o meu navegador ou o KeePass.",
+        "message": "웹 브라우저 또는 KeePass를 시작할 때마다 새로운 연결 비밀번호를 요청합니다.",
         "description": "Checkbox label to enable high security connection mode when authorising a connection to KeePassRPC"
     },
     "conn_sl_high": {
-        "message": "Alto",
+        "message": "높음",
         "description": ""
     },
     "conn_sl_low": {
-        "message": "Baixo",
+        "message": "낮음",
         "description": ""
     },
     "conn_sl_medium": {
-        "message": "Médio",
+        "message": "중간",
         "description": ""
     },
     "conn_sl_server_min_desc": {
-        "message": "Isto permite evitar que o Kee se conecte ao KeePass se o seu nível de segurança estiver muito baixo. Veja as opções dentro do KeePass para definir o nível de segurança atual usado pelo KeePass.",
+        "message": "보안 수준이 너무 낮게 설정된 경우 Kee가 KeePass에 연결하지 못하도록 할 수 있습니다. KeePass에서 실제 보안 수준을 설정하려면 KeePass 내의 옵션을 보십시오.",
         "description": ""
     },
     "conn_sl_server_min": {
-        "message": "Nível de segurança mínimo aceitável para o KeePass",
+        "message": "최소 허용가능한 KeePass 보안 수준",
         "description": ""
     },
     "conn_sl_desc": {
-        "message": "Altere as configurações abaixo para controlar o quão seguro é a comunicação entre o seu navegador de Internet e o KeePass. Provavelmente não precisa de ajustar estas configurações, mas se as ajustar, certifique-se primeiro que leu as páginas relevantes do manual.",
+        "message": "웹 브라우저와 KeePass 사이의 통신 링크가 얼마나 안전한지를 제어하려면 아래 설정을 변경하십시오. 해당 사항을 조정할 필요 없겠지만, 조정이 필요할 경우 관련된 매뉴얼을 먼저 읽었는지 확인하십시오.",
         "description": ""
     },
     "conn_sl_link": {
-        "message": "Aprender mais sobre essas configurações e a comunicação entre o seu navegador e o KeePass no manual",
+        "message": "매뉴얼에서 해당 설정과 웹 브라우저와 KeePass간의 통신에 대해 자세히 알아보십시오.",
         "description": "Link text to guide user to the manual to get more information about the security of the link to KeePass."
     },
     "conn_unknown_error": {
-        "message": "An unexpected error occurred when trying to connect to your password manager.",
+        "message": "암호 관리자에 연결하는 동안 예기치 않은 오류가 발생했습니다.",
         "description": "Something went wrong with the KeePassRPC link but we have no idea what."
     },
     "conn_unknown_protocol": {
-        "message": "O Kee forneceu um protocolo inválido.",
+        "message": "Kee가 유효하지 않은 프로토콜을 제공했습니다.",
         "description": "Technical error in the communication between Kee and KeePassRPC. Not clear how user could resolve this or if they'll ever see it but it might happen."
     },
     "form_id": {
-        "message": "Identificador do formulário",
+        "message": "ID 양식",
         "description": ""
     },
     "form_name": {
-        "message": "Nome do formulário",
+        "message": "이름 양식",
         "description": ""
     },
     "further_info_may_follow": {
-        "message": "Mais informações: $1",
+        "message": "자세한 내용은 다음과 같습니다: $1",
         "description": "Phrase used to prefix extra information about a variety of different messages that may or may not be available in the replacement string, usually relating to technical errors and often rendered in the Kee log rather than in a user-facing place."
     },
     "matched_logins_label": {
-        "message": "Entradas de autenticação coincidentes",
+        "message": "일치하는 로그인 항목",
         "description": "Header for panels/sections that contain the logins which Kee matched for this page/form"
     },
     "pref_Advanced_heading": {
-        "message": "Avançado",
+        "message": "고급",
         "description": ""
     },
     "pref_ConnectionSecurity_heading": {
-        "message": "Segurança da conexão",
+        "message": "보안 연결",
         "description": "Heading for panel that contains settings for the security of the connection between Kee and KeePass."
     },
     "pref_ConnectionSecurity_explain_change": {
-        "message": "Por vezes, fazer uma alteração nas configurações abaixo fará com que o Kee lhe pergunte por uma nova palavra-passe aleatória. Não tem de inserir a palavra-passe correta acima para alterar essas configurações, basta ajustá-las e pressionar o botão acima.",
+        "message": "가끔 아래의 설정을 변경할 경우 Kee가 새로운 임의의 비밀번호를 요구하게 됩니다. 해당 설정을 변경하기 위해서 위의 올바른 암호를 입력할 필요는 없으며, 설정을 조정한 후 위의 버튼을 누르기만 하면 됩니다.",
         "description": "Explains what happens if user changes settings for the security of the connection between Kee and KeePass."
     },
     "srp_connect": {
-        "message": "Conectar",
+        "message": "연결",
         "description": "Button action to authorise the connection between Kee and KeePassRPC. Displayed when the user has entered a password and not changed any connection security settings."
     },
     "srp_save_connect": {
-        "message": "Guardar e conectar",
+        "message": "저장 후 연결",
         "description": "Button action to authorise the connection between Kee and KeePassRPC and save new connection options. Displayed when the user has entered a password and changed connection security settings."
     },
     "pref_DoNothing_desc": {
-        "message": "Não fazer nada",
+        "message": "아무것도 하지 않음",
         "description": "Label for configuring Kee to take no action. Specific context may vary but will relate to auto filling and/or submitting"
     },
     "pref_FillAndSubmitForm_desc": {
-        "message": "Preencher e enviar o formulário",
+        "message": "양식을 작성하여 제출합니다",
         "description": ""
     },
     "pref_FillForm_desc": {
-        "message": "Preencher o formulário",
+        "message": "양식을 채우시오",
         "description": ""
     },
     "pref_FillingEntries_heading": {
-        "message": "Preencher entradas",
+        "message": "항목 채우기",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when filling entries into forms"
     },
     "pref_FindingEntries_heading": {
-        "message": "Procurando entradas",
+        "message": "항목 찾기",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when finding entries for a website"
     },
     "pref_Logging_heading": {
-        "message": "A autenticar",
+        "message": "로깅중",
         "description": "The output of text information that reports on the inner-workings of Kee."
     },
     "pref_SavingEntries_heading": {
-        "message": "Guardando entradas",
+        "message": "항목 저장 중",
         "description": "Heading for section of options panel which contains settings relating to how Kee behaves when saving new entries"
     },
     "pref_autoFillFormsWithMultipleMatches_label": {
-        "message": "Take this automatic action even when multiple matching entries are found",
+        "message": "일치하는 항목이 여러 개 발견된 경우에도 이 자동 작업을 수행합니다",
         "description": "In reference to the Automatic form filling option, this checkbox option allows the user to say whether they want their selected action to be taken even when there is more than one matching entry."
     },
     "pref_autoFillFieldsWithExistingValue_label": {
-        "message": "Automatically fill fields that already contain text",
+        "message": "텍스트가 이미 포함된 필드 자동 채우기",
         "description": "This checkbox option allows the user to say whether they want fields to be auto-filled if they already have a value. It doesn't affect manual fill requests."
     },
     "pref_keePassDBToOpen_label": {
-        "message": "Ao abrir ou autenticar no KeePass, use este ficheiro de base de dados",
+        "message": "KeePass를 열거나 로깅할 때 이 데이터베이스 파일을 사용합니다.",
         "description": ""
     },
     "pref_keePassRPCPort_label": {
-        "message": "Comunicar com o KeePass usando esta porta TCP/IP",
+        "message": "해당 TCP/IP 포트를 사용하여 KeePass와 통신",
         "description": ""
     },
     "pref_keePassRPCPortWarning_label": {
-        "message": "NB: altere a configuração no KeePass.config caso contrário o Kee nem sempre poderá comunicar com o KeePass",
+        "message": "NB: KeePass.config에서 설정을 변경하지 않으면 KeePass와 지속적으로 통신할 수 없습니다",
         "description": "Displayed to the user near the setting for changing the KeePassRPC port"
     },
     "pref_logLevel_desc": {
-        "message": "Escolha o quão detalhado deseja que o registo seja. Quanto mais alto o nível, mais informações regista.",
+        "message": "로그 상세도를 선택합니다. 로그 수준이 높을수록 더 많은 출력이 생성됩니다.",
         "description": ""
     },
     "pref_logLevelDebugging_label": {
-        "message": "Depuração de erros",
+        "message": "디버깅",
         "description": "Logging level for the most verbose information about Kee's operation"
     },
     "pref_logLevelInformation_label": {
-        "message": "Informação",
+        "message": "정보",
         "description": "Logging level for important information about Kee's operation"
     },
     "pref_logLevelWarnings_label": {
-        "message": "Alertas",
+        "message": "경고",
         "description": "Logging level for potential problems"
     },
     "pref_logLevelErrors_label": {
-        "message": "Erros",
+        "message": "오류",
         "description": "Logging level for problems"
     },
     "pref_notifyBarRequestPasswordSave_label": {
-        "message": "Perguntar se quero guardar as palavras-passe",
+        "message": "암호 저장을 제공합니다",
         "description": ""
     },
     "pref_animateWhenOfferingSave_label": {
-        "message": "Animate the Kee icon when offering to save",
+        "message": "저장을 권할 때 Kee 아이콘 애니메이션화",
         "description": "Option to enable or disable the animation of the Kee icon that displays when an entry is available for saving from the main popup panel"
     },
     "pref_rememberMRUDB_label": {
-        "message": "Remember the most recently used Kee Vault or KeePass database",
+        "message": "가장 최근에 사용한 Kee Vault 또는 KeePass는 데이터베이스에 저장됩니다",
         "description": ""
     },
     "pref_preferToSkipWhere_label": {
-        "message": "Automatically save new entries to the group you most recently saved to",
+        "message": "가장  최근에 저장한 그룹에 새 항목 자동 저장",
         "description": "Whether Kee will save new entries to the group most recently chosen by the user without presenting them with the usual Where group chooser interface"
     },
     "pref_saveFavicons_label": {
-        "message": "Guardar o logotipo/ícone do site (favicon)",
+        "message": "웹 사이트 로고/아이콘 저장(favicon)",
         "description": "Whether or not Kee will save the website's icon when a new entry is saved"
     },
     "pref_searchAllOpenDBs_label": {
-        "message": "Search all open Kee Vaults and KeePass databases",
+        "message": "열려 있는 모든 Kee Vaults와 KeePass 데이터베이스 검색",
         "description": ""
     },
     "pref_when_kee_chooses_standard_form_desc": {
-        "message": "Quando o Kee escolhe uma autenticação correspondente para um formulário padrão, o Kee deve",
+        "message": "Kee가 표준 양식에 일치하는 로그인을 선택할 때, Kee는 다음을 수행해야 합니다",
         "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "pref_when_user_chooses_desc": {
-        "message": "Quando você escolher uma autenticação correspondente, o Kee deve",
+        "message": "일치하는 로그인을 선택할 경우, Kee를 해야합니다",
         "description": "Context/label for user when changing setting relating to manual fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."
     },
     "site_options_invisible_tip_desc": {
-        "message": "NB: os nomes e identificadores (IDs) podem não ser iguais aos rótulos visíveis na página (eles são definidos no código-fonte da página)",
+        "message": "NB: 이름과 ID는 페이지에 보여지는 레이블과 동일하지 않을 수 있습니다(페이지의 소스 코드에 설정됩니다)",
         "description": "Explains that the configuration settings might not be what the casual user expects"
     },
     "site_options_list_explain_desc": {
-        "message": "If a form matches against one of the include lists below Kee will always try to fill it. If a form matches one of the exclude lists below Kee will never try to fill it. If it matches both lists Kee will not try to fill it.",
+        "message": "아래 포함 목록 중 하나와 일치하는 양식이 있으면 Kee는 항상 충족할려고 합니다. 양식이 아래의 제외 목록 중 하나와 일치한다면, Kee는 절대 그것을 충족시키지 않을 것입니다. 만약 두 목록이 모두 일치한다면 Kee는 충족시키지 않을 것입니다.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "pref_Finding_forms_heading": {
-        "message": "Procurando formulários",
+        "message": "양식 찾기",
         "description": "Settings heading for how Kee finds forms it is (or isn't) interested in filling in with entries from the password manager"
     },
     "site_options_valid_form_intro_desc": {
-        "message": "Kee will try to fill matching Kee Vault and KeePass entries for all forms that have a password field (box). You can adjust this behaviour below.",
+        "message": "Kee는 암호 필드(상자)가 있는 모든 양식에 대해 일치하는 Kee Vault와 KeePass를 채우려고 시도할 것입니다. 아래에서 이 동작을 조정할 수 있습니다.",
         "description": "Explains how Kee chooses which forms to fill in"
     },
     "text_field_id": {
-        "message": "Identificador do campo de texto",
+        "message": "텍스트 필드 ID",
         "description": ""
     },
     "text_field_name": {
-        "message": "Nome do campo de texto",
+        "message": "텍스트 필드 이름",
         "description": ""
     },
     "white_list": {
-        "message": "Include List",
+        "message": "포함 목록",
         "description": "List of items that cause behaviour to be enabled if they match. For example, the list of names of form fields that force Kee to search for logins for the form containing that field."
     },
     "Help_Centre_Button_label": {
-        "message": "Central de ajuda",
+        "message": "도움말 센터",
         "description": ""
     },
     "cancel": {
-        "message": "Cancelar",
+        "message": "취소",
         "description": ""
     },
     "Logins_Context_Edit_Login_label": {
-        "message": "Editar autenticação",
+        "message": "로그인 편집",
         "description": ""
     },
     "Menu_Button_copyNewPasswordToClipboard_label": {
-        "message": "Gerar nova palavra-passe",
+        "message": "새 암호 생성",
         "description": ""
     },
     "Menu_Button_fillCurrentDocument_label": {
-        "message": "Procurar autenticações correspondentes",
+        "message": "일치하는 로그인 찾기",
         "description": ""
     },
     "Menu_Button_options_label": {
-        "message": "Opções",
+        "message": "옵션",
         "description": "Link to the add-on's settings"
     },
     "Menu_Button_open_keepass_label": {
-        "message": "Open KeePass",
+        "message": "KeePass 열기",
         "description": "Action button to launch, unlock and/or focus KeePass"
     },
     "Menu_Button_open_kee_vault_label": {
-        "message": "Open Kee Vault",
+        "message": "Kee Vault 열기",
         "description": "Action button to launch, unlock and/or focus Kee Vault"
     },
     "Search_label": {
-        "message": "Pesquisar...",
+        "message": "검색...",
         "description": ""
     },
     "PasswordProfilesExplanation_label": {
-        "message": "You can optionally create a different one by selecting a password profile below. Create new profiles in Kee Vault or KeePass.",
+        "message": "선택적으로 아래의 암호 프로파일을 선택함으로써 다른 암호를 만들 수 있습니다. Kee Vault 또는 KeePass에서 새 프로파일을 작성합니다.",
         "description": ""
     },
     "copy_password_label": {
-        "message": "Copiar palavra-passe",
+        "message": "비밀번호 복사",
         "description": ""
     },
     "copy_username_label": {
-        "message": "Copiar nome de utilizador",
+        "message": "사용자이름 복사",
         "description": ""
     },
     "copy": {
-        "message": "Copiar",
+        "message": "복사",
         "description": "Prefixed before a field name and id to indicate to the user that when they click here the value for that field will be copied to the clipboard. Displayed before (left) of the field name with a space between this string and the field name."
     },
     "copy_value_to_clipboard": {
-        "message": "Copy value to clipboard",
+        "message": "값을 클립보드에 복사",
         "description": "Indicates to the user that when they click here the value for that field will be copied to the clipboard."
     },
     "click_to_reveal_hide": {
-        "message": "Click to reveal/hide",
+        "message": "표시하거나 숨기려면 클릭하시오.",
         "description": "Indicates to the user that when they click here the value of the protected field will be displayed or hidden (toggled)."
     },
     "no_name": {
-        "message": "no name",
+        "message": "이름 없음",
         "description": "Used in place of a field name when the specific field has no name. Will be surrounded by [ square brackets ]"
     },
     "matches_from_other_sites": {
-        "message": "Matches from other sites",
+        "message": "다른 사이트의 일치 항목",
         "description": "Search results section header."
     },
     "create_new_entry": {
-        "message": "Criar nova entrada",
+        "message": "새 항목 만들기",
         "description": "Create new entry"
     },
     "showing_options_for": {
-        "message": "A mostrar opções para",
+        "message": "옵션 표시",
         "description": "label for a group of radio buttons that allows the user to change the scope of the settings they are changing - e.g. all websites or just one specific website"
     },
     "all_websites": {
-        "message": "Todos os sites",
+        "message": "모든 웹 사이트",
         "description": ""
     },
     "a_specific_website": {
-        "message": "Um site específico",
+        "message": "특정 웹 사이트",
         "description": ""
     },
     "current_website": {
-        "message": "Site atual",
+        "message": "현재 웹 사이트",
         "description": ""
     },
     "website": {
-        "message": "Website",
+        "message": "웹 사이트",
         "description": ""
     },
     "website_options_search_placeholder": {
-        "message": "e.g. www.google.com",
+        "message": "예시: www.google.com",
         "description": "A placeholder for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "website_options_search_tooltip": {
-        "message": "e.g. www.google.com (Do NOT include https:// or other protocols)",
+        "message": "예시: www.google.com (https:// 또는 기타 프로토콜은 포함하지 않음)",
         "description": "Tooltip/title for the search box where the user searches for the settings that apply to a specific website (per-site settings)"
     },
     "generatePassword_copied": {
-        "message": "Foi copiada uma nova palavra-passe para a área de transferência.",
+        "message": "새 암호가 클립보드에 복사되었습니다.",
         "description": ""
     },
     "generatePassword_instructions": {
-        "message": "Choose which type of password to create:",
+        "message": "생성할 암호 유형 선택:",
         "description": ""
     },
     "generatePassword_done_1": {
-        "message": "Password generated.",
+        "message": "암호가 생성되었습니다.",
         "description": ""
     },
     "generatePassword_done_2": {
-        "message": "Paste it into a \"new password\" field or wherever else you want.",
+        "message": "\"new password\" 필드 또는 원하는 곳에 붙여넣으십시오.",
         "description": ""
     },
     "loggedIn_tip": {
-        "message": "Você está autenticado na sua base de dados de palavras-passe '$1'",
+        "message": "'$1' 암호 데이터베이스에 로그인했습니다",
         "description": "Tells the user they are logged into a Kee Vault or KeePass database (and gives its name, if any)"
     },
     "loggedInMultiple_tip": {
-        "message": "Está autenticado em $1 base de dados de palavras-passe. '$2' está ativa.",
+        "message": "$1 암호 데이터베이스에 로그인했습니다. '$2'가 활성화 되었습니다.",
         "description": "Tells the user they have more than one KeePass database open and tells them which one is active/selected"
     },
     "multiplePasswordSourcesEnabled": {
-        "message": "$1 password sources enabled",
+        "message": "$1 암호 원본이 활성화되었습니다",
         "description": "Tells the user how many password databases they have open and unlocked"
     },
     "matchedLogin_label": {
@@ -396,207 +396,207 @@
         "description": "<username> <seperator> <entry title>"
     },
     "matchedLogin_tip": {
-        "message": "$1 no $2 grupo ($3)",
+        "message": "$2그룹 안의 $1($3)",
         "description": "Tooltip displayed over a matched login in the list of matched logins. Params: 1: entry title, 2: group name, 3: username"
     },
     "noUsername_partial_tip": {
-        "message": "sem nome de utilizador",
+        "message": "사용자이름 없음",
         "description": ""
     },
     "notifyBarLaunchKeePass_label": {
-        "message": "You are not logged in to your password manager.",
+        "message": "암호 관리자에 로그인되어 있지 않습니다.",
         "description": ""
     },
     "notifyBarLaunchKeePassButton_tip": {
-        "message": "Open Kee Vault or KeePass to enable Kee",
+        "message": "Kee를 활성화하기 위해 Kee Vault 또는 KeePass를 여십시오",
         "description": ""
     },
     "notifyBarLoginToKeePassButton_tip": {
-        "message": "Unlock your password manager to enable Kee",
+        "message": "Kee를 활성화하려면 암호 관리자를 해제하십시오. ",
         "description": ""
     },
     "save": {
-        "message": "Guardar",
+        "message": "저장",
         "description": ""
     },
     "savePasswordText": {
-        "message": "Quer que o Kee guarde esta palavra-passe?",
+        "message": "Kee에서 이 암호를 저장하시겠습니까?",
         "description": ""
     },
     "update": {
-        "message": "Atualizar",
+        "message": "업데이트",
         "description": ""
     },
     "close": {
-        "message": "Fechar",
+        "message": "닫기",
         "description": "Action user can click on to close/dismiss a panel or other user interface element"
     },
     "autoclose_countdown": {
-        "message": "Fechar automaticamente em $1 segundos",
+        "message": "$1초 후 자동 닫기",
         "description": "Label for a user interface element which allows the user to disable the auto-close functionality. Also tells the user how many seconds are remaining before the auto-close functionality triggers."
     },
     "autoclose_cancelled": {
-        "message": "Fechar automaticamente cancelado",
+        "message": "자동 닫기가 취소되었습니다",
         "description": "Tells the user that the panel auto-close functionality has been disabled for this panel."
     },
     "add": {
-        "message": "Adicionar",
+        "message": "추가",
         "description": "Action button for user to add an item to a collection. E.g. add an entry to the list of site-specific settings overrides"
     },
     "edit": {
-        "message": "Editar",
+        "message": "수정",
         "description": "Action button for user to edit an item within a collection. E.g. edit an entry within the list of site-specific settings overrides"
     },
     "delete": {
-        "message": "Eliminar",
+        "message": "삭제",
         "description": "Action button for user to delete an item within a collection. E.g. delete an entry within the list of site-specific settings overrides"
     },
     "site_specific_settings_checkbox_explanation": {
-        "message": "As configurações de \"Todos os sites\" serão aplicadas a cada seção abaixo, a não ser que ative a configuração usando a caixa de seleção ao lado.",
+        "message": "옆에 있는 체크박스를 사용하여 설정을 활성화하지 않는 한 \"All Websites\"의 설정이 아래 각 세션에 적용됩니다.",
         "description": "Explains to the user how the site-specific settings can be enabled and what happens in the default situation"
     },
     "site_properties": {
-        "message": "Propriedades do site",
+        "message": "사이트 속성",
         "description": "Site properties"
     },
     "enter_valid_regex": {
-        "message": "Digite uma expressão regular válida ou selecione um tipo diferente",
+        "message": "유효한 정규식을 입력하거나 다른 유형을 선택하십시오",
         "description": "Validation error message displayed to user when they have configured the properties of a site specific configuration to be a regular expression (Regex) but supplied a website value that is not a valid regex"
     },
     "site_properties_weight_warning": {
-        "message": "Vai precisar de verificar cuidadosamente os pesos de outras configurações se optar por usar esse recurso avançado.",
+        "message": "해당 고급 기능을 사용하려면 다른 구성들의 가중치를 주의 깊게 확인해야 합니다.",
         "description": "Warning to users that the match weighting feature of site-specific config is an advanced feature"
     },
     "target": {
-        "message": "Alvo",
+        "message": "대상",
         "description": "For differentiating which part of a URL will be matched - e.g domain, hostname or complete page address"
     },
     "method": {
-        "message": "Método",
+        "message": "방법",
         "description": "For differentiating how a text string will be matched - e.g exact, prefix or regex"
     },
     "weight": {
-        "message": "Peso ponderado",
+        "message": "가중치",
         "description": "A number that can be compared to others in order to decide which associated configuration takes precendence."
     },
     "yes": {
-        "message": "Sim",
+        "message": "예",
         "description": "Yes"
     },
     "no": {
-        "message": "Não",
+        "message": "아니요",
         "description": "No"
     },
     "site_specific_settings_inherit": {
-        "message": "Usar a mesma configuração que todos os sites",
+        "message": "모든 웹 사이트와 동일한 설정을 사용",
         "description": "Option for user to say that they want to use whatever the setting is for the top-level settings for all websites, rather than overriding it with a setting for this specific site."
     },
     "password": {
-        "message": "Palavra-passe",
+        "message": "비밀번호",
         "description": "Amazingly, didn't have a need for this translation until v2.0 ;-)"
     },
     "conn_setup_client_sl_low_resolution": {
-        "message": "Conectar utilizando segurança alta",
+        "message": "고급 보안을 사용한 연결",
         "description": "Button that will change the security level Kee attempts to use when connecting to the KeePassRPC server."
     },
     "learn_more": {
-        "message": "Saber mais",
+        "message": "더 알아보기",
         "description": "Action/button/link to send the user to somewhere that they can read more about a topic/concept"
     },
     "dont_show_again": {
-        "message": "Não mostrar esta mensagem novamente",
+        "message": "다시 메시지를 표시하지 마십시오",
         "description": "Button user can click on to cause a message to hide and not reappear"
     },
     "upgrade_kee": {
-        "message": "Atualizar o Kee",
+        "message": "Kee 업그레이드",
         "description": "Button user can click on to load a web page with instructions on how to upgrade Kee"
     },
     "pref_when_one_matching_network_login": {
-        "message": "Quando Kee encontrar só uma autenticação correspondente (por exemplo HTTP Auth), fazer a autenticação automaticamente",
+        "message": "일치하는 네트워크 로그인(예: HTTP Auth)을 하나라도 찾을 경우, 자동 로그인",
         "description": "When the user selects this option, they will be shown the popup dialog with all matching entries for network authentication, unless there is only one match. If not enabled, the user will always see the list of matching logins."
     },
     "network_authentication": {
-        "message": "Autenticação de rede",
+        "message": "네트워크 인증",
         "description": "Heading for popup dialog displayed when HTTP Auth or a proxy requires authentication."
     },
     "network_auth_proxy_description": {
-        "message": "Um proxy necessita que se autentique com ele antes de poder aceder a $1",
+        "message": "$1에 접근하기 위해서는 프록시를 사용하여 인증해야 합니다.",
         "description": "Instructions for popup dialog displayed when a proxy requires authentication."
     },
     "network_auth_http_auth_description": {
-        "message": "Um site requer que se autentique com isto antes que possa aceder a $1. O site diz: $2",
+        "message": "$1에 접근하려면 먼저 웹 사이트에서 인증해야 합니다. 홈페이지는:$2",
         "description": "Instructions for popup dialog displayed when a site requires authentication using HTTP Auth."
     },
     "network_auth_choose": {
-        "message": "Escolha uma autenticação da lista abaixo ou feche esta janela para inserir manualmente as informações de autenticação necessárias.",
+        "message": "필요한 로그인 정보를 수동으로 입력하려면 아래 목록에서 로그인을 선택하거나 이 창을 닫으십시오.",
         "description": "Instructions for popup dialog displayed when a site or proxy requires network authentication."
     },
     "welcome_to_kee": {
-        "message": "Bem-vindo ao Kee",
+        "message": "Kee에 오신 것을 환영합니다",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "introduction_to_kee": {
-        "message": "Kee automatically fills login forms to save you time and protect you from security risks.",
+        "message": "Kee는 사용자의 시간을 절약하기 위해 로그인 양식을 자동으로 채워주고, 보안 위협으로부터 보호해줍니다.",
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
     "kee_works_with_a_password_manager": {
-        "message": "The credentials Kee enters for you are stored securely in a password manager behind a single \"master password\".",
+        "message": "Kee가 입력하는 자격 인증서는 하나의 \"master password\" 뒤에 있는 암호 관리자에 안전하게 저장됩니다.",
         "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
     "recommend_start_with_kee_vault": {
-        "message": "We recommend trying out the Kee Vault password manager 14 day free trial. It's only £2 per month after the trial and does not require payment details when you sign up so is risk free.",
+        "message": "Kee Vault 암호 관리자를 14일 무료 평가판으로 사용해보는 것을 추천합니다. 평가판 사용 후에는 한 달에 2 파운드이며 가입 시 결제 세부 정보가 필요하지 않으므로 위험이 없습니다.",
         "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
     },
     "load_kee_vault_now": {
-        "message": "Load Kee Vault now",
+        "message": "즉시 Kee Vault 로드",
         "description": "Call To Action button text. On click, the Kee Vault app will load and focus in a new tab."
     },
     "you_can_use_KeePass_instead": {
-        "message": "Alternatively, you can choose to configure KeePass Password Safe 2 instead.",
+        "message": "대안으로, KeePass Password Safe 2를 구성하도록 선택할 수 있습니다.",
         "description": "Explains that Kee also works with KeePass so they can choose to configure that if they prefer to avoid all financial expenditure."
     },
     "table_summarises_differences": {
-        "message": "The table below summarises the main differences.",
+        "message": "아래 표에는 주요 차이점이 요약되어 있습니다.",
         "description": "Introduces the summary table that will help users choose a password manager to start with."
     },
     "installation_required": {
-        "message": "Installation required",
+        "message": "설치 필요",
         "description": "States that the user will need to install components on their computer"
     },
     "access_from_multiple_devices": {
-        "message": "Access from multiple desktop and mobile devices",
+        "message": "여러 데스크탑 및 모바일 장치에서 접근",
         "description": "Covers web browsers and mobiles, laptops, tablets, etc."
     },
     "shared_preferences": {
-        "message": "Shared preferences",
+        "message": "공유 환경설정",
         "description": "Labels the process of synchronising browser extension and password manager configuration options/preferences across multiple locations."
     },
     "yes_configure_once": {
-        "message": "Yes, configure once",
+        "message": "예, 한 번 구성합니다.",
         "description": "Supports synchronising browser extension and password manager configuration options/preferences"
     },
     "no_configure_multiple": {
-        "message": "No, configure on every web browser or device you use",
+        "message": "아니요, 사용하는 모든 웹 브라우저 또는 장치에서 구성합니다.",
         "description": "Does not support synchronising browser extension and password manager configuration options/preferences"
     },
     "difficulty": {
-        "message": "Difficulty",
+        "message": "난이도",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "difficulty_kee_vault": {
-        "message": "Easy",
+        "message": "쉬움",
         "description": "Indicates that it is easy to get started with Kee Vault"
     },
     "difficulty_keepass": {
-        "message": "Medium (Hard on Mac computers)",
+        "message": "보통 (Mac 컴퓨터에서는 어려움)",
         "description": "Indicates that more work is required to get started with KeePass"
     },
     "keepass_sync_config_explanation": {
-        "message": "For KeePass, a partial solution for multi-device access can be manually configured using 3rd party services, some of which charge a fee. Each device must be prepared and configured in advance.",
+        "message": "KeePass의 경우, 다중 기기 접근을 위한 부분 솔루션은 3rd party services를 사용하여 수동으로 구성할 수 있으며, 그 중 일부는 수수료를 부과합니다. 각 장치는 미리 준비하고 구성해야 합니다.",
         "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "point_user_to_keepass_install_instructions_start": {
-        "message": "Instructions for installing and configuring KeePass and the required KeePassRPC.plgx plugin can be found on our",
+        "message": "KeePass 및 필수 KeePassRPC.plgx 플러그인의 설치 및 구성에 대한 지침은 다음 웹 사이트에서 확인할 수 있습니다. ",
         "description": "Left part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_keepass_install_instructions_end": {
@@ -604,183 +604,183 @@
         "description": "Right part of a sentence that contains a link to the community forum in the middle. For new installations"
     },
     "point_user_to_tutorial_link_text": {
-        "message": "tutorial interativo",
+        "message": "대화형 튜토리얼",
         "description": "Name of the link to the interactive tutorial page"
     },
     "point_user_to_forum_link_text": {
-        "message": "fórum da comunidade",
+        "message": "커뮤니티 포럼",
         "description": "Name of the link to the community forum"
     },
     "notification_raised_title": {
-        "message": "O Kee tem uma notificação para lhe mostrar",
+        "message": "Kee에 표시할 알림이 있습니다",
         "description": "Title of a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "notification_yellow_background": {
-        "message": "O botão Kee tem um fundo amarelo quando aparece uma nova notificação.",
+        "message": "Kee 버튼은 새 알림이 나타날 때 노란색 배경이 됩니다.",
         "description": "Part of the message within a transient native notification displayed on the user's screen to alert them to a notification in the Kee browser action popup."
     },
     "notification_only_shown_some_times": {
-        "message": "Esta notificação adicional só será mostrada algumas vezes.",
+        "message": "해당 추가 팝업 알림은 적은 횟수만 표시됩니다.",
         "description": "Appended to the message of a transient native notification displayed on the user's screen when we show the message only a handful of times before assuming they have learnt the contents of the message."
     },
     "notification_save_password_tip": {
-        "message": "Open Kee (click the Kee icon button in your toolbar) and then click the + button",
+        "message": "Kee(도구 모음에서 Kee 아이콘 버튼 클릭)를 열고 + 버튼을 클릭합니다.",
         "description": "Part of the message within a transient native notification displayed on the user's screen to tell them how to save a password"
     },
     "loading": {
-        "message": "A carregar...",
+        "message": "로딩중...",
         "description": "Holding message to be displayed when Kee has to display something to the user to indicate that the requested information or interface element will be displayed shortly."
     },
     "version_upgrade_heading_changes": {
-        "message": "Alterações na versão",
+        "message": "버전 변경사항",
         "description": "Heading for the list of changes in a version of Kee. A space and the current version number will be suffixed at the end of this string."
     },
     "pref_currentSearchTermTimeout_label": {
-        "message": "Limpar resultados de pesquisa após (segundos)",
+        "message": "다음 시간 후 검색 결과 지우기 (초)",
         "description": "Setting label to adjust how long the search text a user typed will remain cached, essentially persisting the popup search results for a short time."
     },
     "other_technical_improvements": {
-        "message": "Other technical improvements",
+        "message": "기타 기술 개선 사항",
         "description": "Heading for the list of additional technical changes in a version of Kee. The changes themselves may be too technical to be worth translating but it's useful if the user knows what the section of the page is about."
     },
     "reliability_improvements": {
-        "message": "Reliability improvements",
+        "message": "안정성 향상",
         "description": "Heading for text that explains we have made improvements to the reliability of some aspect of Kee"
     },
     "new_icon": {
-        "message": "New icon",
+        "message": "새 아이콘",
         "description": "Heading for text that explains we have a new icon / branding"
     },
     "kee_vault_announcement_1": {
-        "message": "Kee Vault is a new open source password manager. It runs in your web browser so no installation is necessary.",
+        "message": "Kee Vault는 새로운 오픈 소스 암호 관리자입니다. 웹 브라우저에서 실행되므로 설치할 필요가 없습니다.",
         "description": "Introduction to what Kee Vault is"
     },
     "kee_vault_announcement_2": {
-        "message": "It works on any modern device or web browser, even when offline. After importing your existing KeePass database you can access your Kee Vault from everywhere, with your changes and configuration preferences automatically sent to each of your devices and browsers.",
+        "message": "오프라인 상태에서도 어떤 최신 장치나 웹 브라우저에서 작동합니다. 기존의 KeePass 데이터베이스가 존재하면 어디에서도 Kee Vault에 접근할 수 있으며, 변경사항 및 기본 구성 설정이 각 장치와 브라우저에 자동으로 전송됩니다.",
         "description": "Outlines a few benefits of Kee Vault compared to KeePass"
     },
     "kee_vault_announcement_3": {
-        "message": "Kee version 3.0 lets you use Kee Vault in place of the desktop KeePass application, with support for all the existing Kee features such as form filling and saving, searching and password generation.",
+        "message": "Kee 버전 3.0에서 데스크탑 KeePass 어플리케이션 대신 Kee Vault를 사용할 수 있으며, 양식 채우기 및 저장, 검색 및 암호 생성과 같은 기존의 모든 Kee 기능을 지원합니다.",
         "description": "Explains that Kee v3 works with Kee Vault"
     },
     "pref_automatic": {
-        "message": "Automatic",
+        "message": "자동",
         "description": "Group of settings that relate to the actions that Kee can take automatically when filling entries"
     },
     "pref_manual": {
-        "message": "Manual",
+        "message": "수동",
         "description": "Group of settings that relate to the actions that Kee takes when the user explicitly asks Kee to fill an entry"
     },
     "pref_fill_override_hint": {
-        "message": "Edit individual entries in your password manager to override this behaviour.",
+        "message": "이 동작을 무시하려면 암호 관리자에서 개별 항목을 수정하십시오.",
         "description": "Statement to inform the user that they are able to override the associated (automatic) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "pref_fill_override_option": {
-        "message": "Editing the Auto-submit behaviour of an entry also overrides this behaviour",
+        "message": "항목의 자동 제출 동작을 편집하더라도 이 동작은 무시됩니다.",
         "description": "Checkbox option to allow the user to override the associated (manual) behaviour on a per-entry basis via Kee Vault or KeePass."
     },
     "next": {
-        "message": "Next",
+        "message": "다음",
         "description": "Action button for user to advance to the next step in a multi-step process. E.g. to confirm username and password for a new entry and load the panel that allows selection of where to save the new entry."
     },
     "title": {
-        "message": "Title",
+        "message": "제목",
         "description": "E.g. the title of an entry."
     },
     "username": {
-        "message": "Username",
+        "message": "사용자 이름",
         "description": "Use the most generic and common term available for the primary sign-in identifier for an account. In practice may be an email address, number, surname, username, etc. but in all cases this will refer to the string the user has stored in the entry's primary Username field."
     },
     "enabled": {
-        "message": "Enabled",
+        "message": "활성화",
         "description": "Indicates that a boolean option such as a checkbox is in an enabled/on/true state"
     },
     "disabled": {
-        "message": "Disabled",
+        "message": "사용 안 함",
         "description": "Indicates that a boolean option such as a checkbox is in an disabled/off/false state"
     },
     "unsaved_changes": {
-        "message": "You have recent unsaved changes.",
+        "message": "최근에 저장하지 않은 변경사항이 있습니다.",
         "description": "Shown to user when the popup is opened and a new or existing entry is part-way through being edited from a recent popup session. Note that very recent popup sessions are automatically 'continued' without the user needing to consider this information."
     },
     "continue_saving": {
-        "message": "Continue saving",
+        "message": "계속 저장",
         "description": "Action for user to continue editing the same entry that was being edited when the popup recently closed."
     },
     "discard_changes": {
-        "message": "Discard changes",
+        "message": "변경 내용 취소",
         "description": "Action for user to abandon the changes to the entry that were in progress when the popup recently closed."
     },
     "password_profile_hint": {
-        "message": "Select which set of rules the new password will follow. Rules include password length and the sort of characters that may be used. Create new profiles in your password manager.",
+        "message": "새 암호가 따를 규칙들을 선택합니다. 규칙에는 암호 길이와 사용할 수 있는 문자 종류가 포함됩니다. 암호 관리자에서 새 프로파일을 만듭니다.",
         "description": "Explains what a password profile is and how to create new ones."
     },
     "password_profile": {
-        "message": "Password profile",
+        "message": "암호 프로파일",
         "description": "Name of the profiles used by KeePass and Kee Vault to construct new random passwords."
     },
     "url_mismatch_1": {
-        "message": "This entry is for a different site.",
+        "message": "해당 항목은 다른 사이트에 대한 것입니다.",
         "description": "1st sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_2": {
-        "message": "Continuing with this update will enable you to fill these credentials into this site too.",
+        "message": "이 업데이트를 계속할 경우 이 사이트에도 이러한 자격 인증을 입력할 수 있습니다.",
         "description": "2nd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_3": {
-        "message": "Make sure this is not an attempt to trick you into revealing your password!",
+        "message": "암호를 공개하도록 속이는 시도가 아닌지 확인하십시오!",
         "description": "3rd sentence of a warning message to notify the user that updating the entry will enable its use on a new website."
     },
     "url_mismatch_confirm": {
-        "message": "I understand the risk; Share these credentials with $1.",
+        "message": "위험 요소를 이해합니다; 이러한 자격 인증을 $1와 공유하십시오.",
         "description": "Label for a confirmation checkbox for the user to affirm that they want to enable the use of an entry on a new website."
     },
     "make_additional_changes_using_full_editor": {
-        "message": "Additional changes can be made using the full editor.",
+        "message": "전체 편집기를 사용하여 추가적인 변경을 할 수 있습니다.",
         "description": "Note to user that the Kee interface does not allow every possible type of edit to an entry."
     },
     "open_full_editor": {
-        "message": "Open advanced editor",
+        "message": "고급 편집기 열기",
         "description": "Button action to open the full entry editor in KeePass or Kee Vault. Be sure to imply that the need to click the button is 'unusual', as I have done with the word 'advanced'"
     },
     "where": {
-        "message": "Where?",
+        "message": "어디에?",
         "description": "Brief question to the user to introduce the section in the popup where they can select where their entry will be saved (which database, group, etc.)"
     },
     "will_be_copied_to_clipboard": {
-        "message": "This new password will be copied to your clipboard",
+        "message": "이 새 암호는 클립보드에 복사됩니다.",
         "description": ""
     },
     "password_will_be_set_on_field": {
-        "message": "Your password field will be set to this password",
+        "message": "암호 필드가 이 암호로 설정됩니다.",
         "description": ""
     },
     "also_copy_to_clipboard": {
-        "message": "Also copy to clipboard",
+        "message": "클립보드에 복사",
         "description": "Explains that enabling this option will copy the value to the clipboard in addition to the default behaviour"
     },
     "generator_action_copy": {
-        "message": "Copy",
+        "message": "복사",
         "description": "Action button to copy to the clipboard a value such as a newly generated password"
     },
     "generator_action_apply": {
-        "message": "Apply",
+        "message": "적용",
         "description": "Action button to apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "generator_action_apply_and_copy": {
-        "message": "Apply and copy",
+        "message": "적용 및 복사",
         "description": "Action button to both copy and apply a change such as a newly generated password. Resulting alterations are not persisted immediately."
     },
     "skip_where_reason_domain_entry_exists": {
-        "message": "You're seeing this question because an entry for this domain already exists",
+        "message": "해당 도메인에 이미 항목이 존재하기 때문에 이 질문을 보고 있습니다.",
         "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
     },
     "skip_where_reason_group_not_found": {
-        "message": "You're seeing this question because the group you most recently saved to can not be found. This may be because it has been deleted or hidden from Kee. Or it could simply be that the required password source is not unlocked.",
+        "message": "가장 최근에 저장한 그룹을 찾을 수 없어 이 질문이 표시됩니다. Kee에 의해 삭제되었거나 숨겨졌을 수 있습니다. 또는 단순히 필요한 암호 소스가 잠금 해제되지 않았을 수 있습니다.",
         "description": "Explains why user is being asked where to save a new entry despite having previously requested to not be asked."
     },
     "skip_where_enable_context": {
-        "message": "Always save new entries here",
+        "message": "항상 여기에 새 항목 저장",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
     "list_version_upgrade_3_10": {
@@ -788,67 +788,67 @@
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
-        "message": "More details, including important information for KeePass users can be found in the release announcement on the community forum:",
+        "message": "KeePass 사용자를 위한 중요한 정보를 포함한 자세한 내용은 커뮤니티 포럼의 릴리즈 발표에서 확인할 수 있습니다:",
         "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
     },
     "beta_testing_is_good": {
-        "message": "Kee beta testers have been enjoying some of these improvements for many months already.",
+        "message": "Kee 베타 테스터는 이미 여러 달 동안 이러한 개선 사항들 중 일부를 향유하고 있었습니다. ",
         "description": "Brief highlight of one of the benefits of being a Kee beta tester"
     },
     "join_the_community_cta": {
-        "message": "Join them now!",
+        "message": "당장 가입하십시오!",
         "description": "Call to action to join a community. Initially for beta testing but could be reused for other purposes such as the community forum in future."
     },
     "ignore_case": {
-        "message": "Ignore case",
+        "message": "대/소문자 무시",
         "description": "Enabling this setting will cause a case-insensitive comparison to be made (e.g. when looking for matching names and IDs of forms to fill in)"
     },
     "ignore_case_explanation_finding_forms": {
-        "message": "For example, 'search' in any of the include or exclude lists will match with 'search', 'Search' and 'SEARCH'. Unless you have very unusual and complex requirements, it is best to leave this option enabled.",
+        "message": "예를 들어, 포함 또는 제외 목록의 'search'는 'search', 'Search' 및 'SEARCH'와 일치합니다. 매우 특이하고 복잡한 요구 사항이 아닐 경우 이 옵션을 활성화하도록 설정하는 것이 좋을 것입니다.",
         "description": "Describes the ignore case setting when used for configuring the include and exclude lists for finding forms."
     },
     "theme": {
-        "message": "Theme",
+        "message": "테마",
         "description": "The visual theme applied to the extension's user interface. As per convention, the values refer to the predominant shade - i.e. the background colour"
     },
     "dark": {
-        "message": "Dark",
+        "message": "어두운",
         "description": "Black colour or similar; Darkened visual appearance"
     },
     "light": {
-        "message": "Light",
+        "message": "밝은",
         "description": "White colour or similar; Bright visual appearance"
     },
     "system_preference": {
-        "message": "System Preference",
+        "message": "시스템 기본 설정",
         "description": "The user's configured preference/setting in their system. System is vague because different browsers will implement it in different ways so it could relate to either the user's operating system, their web browser or both."
     },
     "theme_system_preference_explanation": {
-        "message": "Not all operating systems and browsers support automatic theming of browser extensions. You can manually choose your preference above if required.",
+        "message": "모든 운영 체제와 브라우저가 브라우저 확장의 자동 테마를 지원하는 것은 아닙니다. 필요할 경우 위에서 원하는 설정을 수동으로 선택할 수 있습니다.",
         "description": "Explains what the Theme preference does and why"
     },
     "pref_Appearance_heading": {
-        "message": "Appearance",
+        "message": "나타남",
         "description": "Heading for settings/options that relate to the visual appearance of the extension"
     },
     "pref_hidden_options_present_explanation": {
-        "message": "Kee is automatically managing additional options for this site so you can't delete it.",
+        "message": "Kee가 자동으로 해당 사이트에 대한 추가 옵션을 관리하므로 삭제할 수 없습니다.",
         "description": "Notification and explanation to user that one or more hidden settings are present for the configuration of a specific site"
     },
     "preferred_matching_entry": {
-        "message": "Preferred matching entry",
+        "message": "기본 일치 항목",
         "description": "Label for toggle between preferred status for the specific matched entry the toggle is displayed upon."
     },
     "show_confirmation_after_save": {
-        "message": "Show confirmation after entry is saved",
+        "message": "항목이 저장된 후 확인 표시",
         "description": "Label for option to display a confirmation message in the main popup after user has created or updated an entry."
     },
     "you_recently_saved": {
-        "message": "You recently saved an entry",
+        "message": "최근에 항목을 저장했습니다",
         "description": "A confirmation message after user has created or updated an entry."
     },
     "KB_shortcut_simple_2_desc": {
-        "message": "Sign in to password manager / Select matched login / Show matched logins list",
+        "message": "암호 관리자에 로그인 / 일치하는 로그인 선택 / 일치하는 로그인 목록 표시",
         "description": "Description of keyboard shortcut setting for the primary action - exact behaviour depends on state when executed"
     }
 }
