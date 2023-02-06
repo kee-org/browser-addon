@@ -16,7 +16,7 @@
 import { isErrorLike, serializeError } from "serialize-error";
 
 export class KeeLogger {
-    public defaultLevel = 4;
+    public defaultLevel = 2;
     private outputStarted = false;
     private config = { logLevel: this.defaultLevel };
 

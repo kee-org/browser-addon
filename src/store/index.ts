@@ -210,9 +210,7 @@ const useStore = defineStore("kee", {
                     );
                 }
             }
-            KeeLog.debug(`before ${JSON.stringify(this.saveState)}`);
             this.$patch({ saveState: { newEntry: { fields: cloned } } });
-            KeeLog.debug(`after ${JSON.stringify(this.saveState)}`);
         },
 
         updateEntryUpdateStartedAtTimestamp(payload) {

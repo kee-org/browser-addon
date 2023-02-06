@@ -127,7 +127,6 @@ export default {
             const unwatch = this.$watch(
                 "generatedPassword",
                 newValue => {
-                    KeeLog.debug("watch inner fired");
                     unwatch();
                     this.loading = false;
                 }

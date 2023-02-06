@@ -193,7 +193,7 @@ if (document.body) {
             if (m.initialState) {
                 syncContent.init(store, m.initialState, (mutationPayload: MutationPayload) => {
                     const json = JSON.stringify(mutationPayload);
-                    KeeLog.debug("New non-background page mutation: " + json);
+                    KeeLog.debug("New non-background page mutation.");
                     Port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
                 });
             }
