@@ -5,17 +5,15 @@ import { Action } from "../common/Action";
 import { configManager } from "../common/ConfigManager";
 import { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
-import { useStubStore } from "../store/index";
 import { Entry } from "../common/model/Entry";
 import { copyStringToClipboard } from "../common/copyStringToClipboard";
 
-const store = useStubStore();
 
 // callbacks for messaging / ports
 
 export async function browserPopupMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.mutation) {
-        window.kee.syncBackground.onMessage(this, msg.mutation);
+        window.kee.store.onRemoteMessage(this, msg.mutation);
     }
 
     if (KeeLog && KeeLog.debug) {
@@ -32,7 +30,7 @@ export async function browserPopupMessageHandler(this: browser.runtime.Port, msg
     }
     if (msg.action == Action.GetPasswordProfiles) {
         const passwordProfiles = await window.kee.getPasswordProfiles();
-        store.updatePasswordProfiles(passwordProfiles);
+        window.kee.store.updatePasswordProfiles(passwordProfiles);
     }
     if (msg.action === Action.GeneratePassword) {
         const generatedPassword = await window.kee.generatePassword(
@@ -40,7 +38,7 @@ export async function browserPopupMessageHandler(this: browser.runtime.Port, msg
             msg.url ?? "unknown URL"
         );
         if (generatedPassword) {
-            store.updateGeneratedPassword(generatedPassword);
+            window.kee.store.updateGeneratedPassword(generatedPassword);
         } else {
             KeeLog.warn(
                 "Kee received an empty/missing password. Check the configuration of your password manager."
@@ -48,8 +46,8 @@ export async function browserPopupMessageHandler(this: browser.runtime.Port, msg
         }
     }
     if (msg.action === Action.CreateEntry || msg.action === Action.UpdateEntry) {
-        if (store.connected) {
-            const sourceEntry = store.saveState.newEntry;
+        if (window.kee.store.state.connected) {
+            const sourceEntry = window.kee.store.state.saveState.newEntry;
             const existingOrTemporaryUuid = sourceEntry.uuid;
             const dbFileName = sourceEntry.database.fileName;
             const parentGroupUuid: string = sourceEntry.parentGroup.uuid;
@@ -69,7 +67,7 @@ export async function browserPopupMessageHandler(this: browser.runtime.Port, msg
                     icon: configManager.current.saveFavicons
                         ? {
                               version: 1,
-                              iconImageData: store.saveState.favicon
+                              iconImageData: window.kee.store.state.saveState.favicon
                           }
                         : null
                 })
@@ -88,7 +86,7 @@ export async function browserPopupMessageHandler(this: browser.runtime.Port, msg
             };
 
             if (msg.action === Action.UpdateEntry) {
-                store.updateEntryUpdateStartedAtTimestamp(Date.now());
+                window.kee.store.updateEntryUpdateStartedAtTimestamp(Date.now());
                 window.kee.updateLogin(
                     entry,
                     existingOrTemporaryUuid,
@@ -150,7 +148,7 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
     }
 
     if (msg.mutation) {
-        window.kee.syncBackground.onMessage(this, msg.mutation);
+        window.kee.store.onRemoteMessage(this, msg.mutation);
     }
 
     if (msg.findMatches) {
@@ -209,7 +207,7 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
         // Don't alert the user if it's less than 90 seconds since they initiated an
         // update request - highly likely that this is just the result of that
         // operation being submitted to the website.
-        if (store.entryUpdateStartedAtTimestamp >= Date.now() - 90000) return;
+        if (window.kee.store.state.entryUpdateStartedAtTimestamp >= Date.now() - 90000) return;
 
         if (configManager.current.notificationCountSavePassword < 10) {
             browser.notifications.create({
@@ -271,7 +269,7 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
 
 export function vaultMessageHandler(this: browser.runtime.Port, msg: VaultMessage) {
     if (msg.mutation) {
-        window.kee.syncBackground.onMessage(this, msg.mutation);
+        window.kee.store.onRemoteMessage(this, msg.mutation);
     }
 
     let result;
@@ -307,7 +305,7 @@ export function vaultMessageHandler(this: browser.runtime.Port, msg: VaultMessag
 
 export async function iframeMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
     if (msg.mutation) {
-        window.kee.syncBackground.onMessage(this, msg.mutation);
+        window.kee.store.onRemoteMessage(this, msg.mutation);
     }
 
     if (KeeLog && KeeLog.debug) {
@@ -333,7 +331,7 @@ export async function iframeMessageHandler(this: browser.runtime.Port, msg: Addo
 
     if (msg.action == Action.GetPasswordProfiles) {
         const passwordProfiles = await window.kee.getPasswordProfiles();
-        store.updatePasswordProfiles(passwordProfiles);
+        window.kee.store.updatePasswordProfiles(passwordProfiles);
     }
 
     if (msg.action == Action.GeneratePassword) {
@@ -342,7 +340,7 @@ export async function iframeMessageHandler(this: browser.runtime.Port, msg: Addo
             window.kee.tabStates.get(tabId).url
         );
         if (generatedPassword) {
-            store.updateGeneratedPassword(generatedPassword);
+            window.kee.store.updateGeneratedPassword(generatedPassword);
             this.postMessage({
                 generatedPassword: generatedPassword
             } as AddonMessage);

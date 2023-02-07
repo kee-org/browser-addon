@@ -10,7 +10,7 @@ import { Button } from "../common/Button";
 import { FeatureFlags } from "../common/FeatureFlags";
 import { KeeNotification } from "../common/KeeNotification";
 import { configManager } from "../common/ConfigManager";
-import { KeeStore, useStubStore } from "../store";
+import BackgroundStore from "~/store/BackgroundStore";
 
 /*
 kprpcClient.js provides functionality for
@@ -58,9 +58,9 @@ export class kprpcClient {
     private websocketSessionManager: WebsocketSessionManager;
     private eventSessionManager: EventSessionManager;
     private keyChallengeParams: { sc: string; cc: string };
-    private store: KeeStore;
+    private store: BackgroundStore;
 
-    public constructor() {
+    public constructor(store: BackgroundStore) {
         this.nextRequestId = 1;
         this.clientVersion = [2, 0, 0];
         this.srpClientInternals = null;
@@ -79,7 +79,7 @@ export class kprpcClient {
             obj => this.receive(obj, this.websocketSessionManager),
             () => !!this.secretKey
         );
-        this.store = useStubStore();
+        this.store = store;
     }
 
     startWebsocketSessionManager() {

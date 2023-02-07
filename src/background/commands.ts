@@ -1,18 +1,17 @@
 import { Command } from "./Command";
 import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
-import {useStubStore} from "../store";
 
-const store = useStubStore();
 
 export class KFCommands {
     private contextMenuUpdateLock = false;
 
     public init() {
         browser.commands.onCommand.addListener(command => {
+            const store = window.kee.store;
             switch (command) {
                 case Command.DetectForms:
-                    if (store.connected && store.ActiveKeePassDatabaseIndex >= 0) {
+                    if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
                         window.kee.tabStates
                             .get(window.kee.foregroundTabId)
                             .framePorts.forEach(port => {
@@ -23,7 +22,7 @@ export class KFCommands {
                     }
                     break;
                 case Command.PrimaryAction:
-                    if (store.ActiveKeePassDatabaseIndex < 0) {
+                    if (store.state.ActiveKeePassDatabaseIndex < 0) {
                         window.kee.loginToPasswordManager();
                     } else {
                         window.kee.tabStates
@@ -41,9 +40,10 @@ export class KFCommands {
 
         browser.contextMenus.onClicked.addListener(info => {
             const id = info.menuItemId as string;
+            const store = window.kee.store;
             switch (id) {
                 case Command.DetectForms:
-                    if (store.connected && store.ActiveKeePassDatabaseIndex >= 0) {
+                    if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
                         window.kee.tabStates
                             .get(window.kee.foregroundTabId)
                             .framePorts.forEach(port => {
@@ -88,12 +88,13 @@ export class KFCommands {
             );
             return;
         }
+        const store = window.kee.store;
 
         commandManager.contextMenuUpdateLock = true;
         try {
             await browser.contextMenus.removeAll();
 
-            if (store.connected && store.ActiveKeePassDatabaseIndex >= 0) {
+            if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
                 try {
                     browser.contextMenus.create({
                         id: Command.DetectForms,
@@ -120,7 +121,7 @@ export class KFCommands {
                 }
             }
 
-            if (store.connected) {
+            if (store.state.connected) {
                 try {
                     browser.contextMenus.create({
                         id: Command.GeneratePassword,

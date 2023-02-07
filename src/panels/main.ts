@@ -4,17 +4,16 @@ import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
-import { SyncContent } from "../store/syncContent";
 import useStore, { KeeStore } from "../store";
 import { Port } from "../common/port";
 import { App, createApp } from "vue";
 import { createVuetify } from "vuetify";
 import Panel from "./Panel.vue";
 import { createPinia } from "pinia";
-import { MutationPayload } from "../store/syncBackground";
-import {setup as i18nSetup } from "../common/i18n";
+import { setup as i18nSetup } from "../common/i18n";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import { IPCPiniaPlugin } from "../common/IPCPiniaPlugin";
 
 let frameState: FrameState;
 
@@ -23,13 +22,11 @@ function updateFrameState(newState: FrameState) {
 }
 
 let vueApp: App<Element>;
-let syncContent: SyncContent;
 let store: KeeStore;
 
 function startup() {
     KeeLog.debug("iframe page starting");
     KeeLog.attachConfig(configManager.current);
-    syncContent = new SyncContent();
     Port.startup("iframe_" + parentFrameId);
 
     const darkTheme = params["theme"] === "dark";
@@ -79,36 +76,26 @@ function startup() {
                                 }
                             }
                         });
+                        piniaInstance.use(IPCPiniaPlugin);
                         vueApp.use(vuetify);
                         vueApp.use(piniaInstance);
                         vueApp.config.globalProperties.$browser = browser;
                         vueApp.config.globalProperties.$i18n = browser.i18n.getMessage;
                         store = useStore();
 
-                        syncContent.init(
-                            store,
-                            m.initialState,
-                            (mutationPayload: MutationPayload) => {
-                                //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
-                                const json = JSON.stringify(mutationPayload);
-                                KeeLog.debug("New non-background panel mutation.");
-                                Port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
-                            },
-                            () => {
-                                vueApp.mount("#main");
+                        store.$patch(m.initialState);
+                        vueApp.mount("#main");
 
-                                //TODO:4: Could be done earlier to speed up initial rendering?
-                                Port.postMessage({
-                                    action: Action.GetPasswordProfiles
-                                });
-                            }
-                        );
+                        //TODO:4: Could be done earlier to speed up initial rendering?
+                        Port.postMessage({
+                            action: Action.GetPasswordProfiles
+                        });
                     } catch (e) {
                         KeeLog.error("Failed to create user interface.", e);
                     }
                 }
                 if (m.mutation) {
-                    syncContent.onRemoteMutationPayload(m.mutation);
+                    store.onRemoteMessage(Port.raw, m.mutation);
                     return;
                 }
                 if (m.frameState) updateFrameState(m.frameState);

@@ -11,10 +11,8 @@ import { configManager } from "../common/ConfigManager";
 import { MatchedField } from "./MatchedField";
 import { Field } from "../common/model/Field";
 import { Entry } from "../common/model/Entry";
-import { useStubStore } from "../store";
 import punycode from "punycode/";
-
-const store = useStubStore();
+import NonReactiveStore from "../store/NonReactiveStore";
 
 interface ScoreMatrix {
     score: number;
@@ -57,6 +55,7 @@ export class FormFilling {
     private semanticBlacklistCache;
 
     constructor(
+        private store: NonReactiveStore,
         private myPort: browser.runtime.Port,
         private parentFrameId: number,
         private formUtils: FormUtils,
@@ -754,7 +753,7 @@ export class FormFilling {
             // and we also now consider the totality of possible matches against a field in order
             // to limit which fields we shove a Kee icon into.
             for (let v = 0; v < matchResult.entries[i].length; v++) {
-                const features = store.KeePassDatabases.find(
+                const features = this.store.state.KeePassDatabases.find(
                     db => db.fileName === matchResult.entries[i][v].database.fileName
                 ).sessionFeatures;
                 const fieldMatchScoreConfig: FieldMatchScoreConfig = {
@@ -1093,7 +1092,7 @@ export class FormFilling {
                 if (action.fill || matchResult.mustAutoFillForm) {
                     this.Logger.debug("Going to auto-fill a form");
 
-                    const features = store.KeePassDatabases.find(
+                    const features = this.store.state.KeePassDatabases.find(
                         db => db.fileName === matchingLogin.database.fileName
                     ).sessionFeatures;
                     const scoreConfig: FieldMatchScoreConfig = {

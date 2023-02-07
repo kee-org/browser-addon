@@ -54,7 +54,7 @@
     "vue": "^3.2.47",
     "vue-demi": "^0.13.11",
     "vue-tsc": "^1.0.24",
-    "vuetify": "^3.0.0",
+    "vuetify": "^3.1.4",
     "web-ext": "^7.5.0",
     "webext-detect-page": "^4.0.1",
     "webextension-polyfill": "^0.10.0"
