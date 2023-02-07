@@ -5,7 +5,6 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
-import { useStubStore } from "../store";
 // import { PersistentLogger } from "../common/PersistentLogger";
 
 // only on dev mode
@@ -25,8 +24,6 @@ const maxUpdateDelaySeconds = 60 * 60 * 8;
 browser.browserAction.setBadgeText({ text: "OFF" });
 browser.browserAction.setBadgeBackgroundColor({ color: "red" });
 browser.browserAction.disable();
-
-const store = useStubStore();
 
 // Assumes config and logging have been initialised before this is called.
 async function startup() {
@@ -91,8 +88,7 @@ function updateForegroundTab(tabId: number) {
                 port.postMessage({
                     isForegroundTab: true,
                     action: Action.DetectForms,
-                    resetState: JSON.parse(
-                        JSON.stringify(store.$state))
+                    resetState: window.kee.store.state
                 } as AddonMessage);
             });
         }

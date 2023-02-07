@@ -25,13 +25,12 @@ import { KeeNotification } from "../common/KeeNotification";
 import { VaultProtocol } from "../common/VaultProtocol";
 import { SessionType } from "../common/SessionType";
 import { Action } from "../common/Action";
-import { useStubStore } from "../store";
-import { MutationPayload, SyncBackground } from "../store/syncBackground";
 import { Database } from "../common/model/Database";
 import { Entry } from "../common/model/Entry";
 import { SaveEntryResult } from "../common/SaveEntryResult";
+import BackgroundStore from "~/store/BackgroundStore";
+import { Mutation } from "~/store/Mutation";
 
-const store = useStubStore();
 
 export class Kee {
     accountManager: AccountManager;
@@ -60,43 +59,40 @@ export class Kee {
 
     networkAuth: NetworkAuth;
     animateIcon: AnimateIcon;
-    syncBackground: SyncBackground;
+    store: BackgroundStore;
 
     constructor() {
-        this.syncBackground = new SyncBackground(
-            store,
-            (mutation: MutationPayload, excludedPort: browser.runtime.Port) => {
-                const allPorts: Partial<browser.runtime.Port>[] = [];
-                allPorts.push(this.browserPopupPort);
-                allPorts.push(this.vaultPort);
+        this.store = new BackgroundStore((mutation: Mutation, excludedPort: browser.runtime.Port) => {
+            const allPorts: Partial<browser.runtime.Port>[] = [];
+            allPorts.push(this.browserPopupPort);
+            allPorts.push(this.vaultPort);
 
-                const ts = window.kee.tabStates.get(window.kee.foregroundTabId);
-                if (ts) {
-                    ts.framePorts.forEach(port => {
-                        allPorts.push(port);
-                    });
-                    ts.ourIframePorts.forEach(port => {
-                        allPorts.push(port);
-                    });
-                }
+            const ts = window.kee.tabStates.get(window.kee.foregroundTabId);
+            if (ts) {
+                ts.framePorts.forEach(port => {
+                    allPorts.push(port);
+                });
+                ts.ourIframePorts.forEach(port => {
+                    allPorts.push(port);
+                });
+            }
 
-                for (const port of allPorts) {
-                    if (port !== excludedPort) {
-                        try {
-                            //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
-                            const json = JSON.stringify(mutation);
-                            KeeLog.debug("New background mutation for distribution");
-                            port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
-                        } catch (e) {
-                            KeeLog.warn("Dead port found", e);
-                            // Sometimes dead ports are left lying around by the browser (especially
-                            // during upgrades, etc.). We can do nothing about this but must not let
-                            // it cause this function to fail to execute to the end.
-                        }
+            for (const port of allPorts) {
+                if (port !== excludedPort) {
+                    try {
+                        //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
+                        const json = JSON.stringify(mutation);
+                        KeeLog.debug("New background mutation for distribution");
+                        port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
+                    } catch (e) {
+                        KeeLog.warn("Dead port found", e);
+                        // Sometimes dead ports are left lying around by the browser (especially
+                        // during upgrades, etc.). We can do nothing about this but must not let
+                        // it cause this function to fail to execute to the end.
                     }
                 }
             }
-        );
+        });
         this.accountManager = new AccountManager();
 
         this.tabStates = new Map<number, TabState>();
@@ -106,13 +102,12 @@ export class Kee {
 
         this.utils = utils;
 
-        this.search = new SearcherAll(JSON.parse(
-            JSON.stringify(store.$state)), {
+        this.search = new SearcherAll(this.store.state, {
             version: 1,
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
 
-        this.networkAuth = new NetworkAuth();
+        this.networkAuth = new NetworkAuth(this.store);
         this.animateIcon = new AnimateIcon();
 
         // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -137,8 +132,8 @@ export class Kee {
                             postMessage: _msg => {}
                         };
                         window.kee.currentSearchTermTimer = window.setTimeout(() => {
-                            store.updateCurrentSearchTerm(null);
-                            store.updateSearchResults(null);
+                            window.kee?.store?.updateCurrentSearchTerm(null);
+                            window.kee?.store?.updateSearchResults(null);
                         }, configManager.current.currentSearchTermTimeout * 1000);
                     });
 
@@ -167,16 +162,11 @@ export class Kee {
                         }
                     }
 
-                    // Unlike Vuex, Pinia applies changes synchronously so we must now ensure they happen after the port has been assigned otherwise the newly opened popup will never receive the information. The popup will deal with receiving mutations before the initial state has been received but for clarity we'll try sending them afterwards from now on
-                    // In future, I'd like to understand why we don't just apply these updates to the store immediately and send that as the initial message. I'll try that approach first...
-                    store.updateSubmittedData(submittedData);
-                    store.updateLoginsFound(loginsFound);
+                    window.kee.store.updateSubmittedData(submittedData);
+                    window.kee.store.updateLoginsFound(loginsFound);
 
-                    //TODO: Try structuredClone() instead when cutting off support
-                    // for pre-MV3 browser versions (OK from Firefox 94)
                     const connectMessage = {
-                        initialState: JSON.parse(
-                            JSON.stringify(store.$state))
+                        initialState: window.kee.store.state
                     } as AddonMessage;
 
                     if (matchedLogins.entries) {
@@ -201,8 +191,7 @@ export class Kee {
                     const tabId = p.sender.tab.id;
                     const frameId = p.sender.frameId;
                     const connectMessage = {
-                        initialState: JSON.parse(
-                            JSON.stringify(store.$state)),
+                        initialState: window.kee.store.state,
                         frameId,
                         tabId,
                         isForegroundTab: tabId === window.kee.foregroundTabId
@@ -239,8 +228,7 @@ export class Kee {
                     */
 
                     const connectMessage = {
-                        initialState: JSON.parse(
-                            JSON.stringify(store.$state)),
+                        initialState: window.kee.store.state,
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
                         isForegroundTab: p.sender.tab.id === window.kee.foregroundTabId
@@ -254,8 +242,7 @@ export class Kee {
                     p.onMessage.addListener(iframeMessageHandler.bind(p));
 
                     const connectMessage = {
-                        initialState: JSON.parse(
-                            JSON.stringify(store.$state)),
+                        initialState: window.kee.store.state,
                         frameState: window.kee.tabStates
                             .get(p.sender.tab.id)
                             .frames.get(parentFrameId),
@@ -334,7 +321,7 @@ export class Kee {
 
     notifyUser(notification: KeeNotification, nativeNotification?: NativeNotification) {
         window.kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
-        store.addNotification(notification);
+        window.kee.store.addNotification(notification);
         browser.browserAction.setIcon({
             path: "/assets/images/highlight-48.png"
         });
@@ -364,7 +351,7 @@ export class Kee {
     }
 
     removeUserNotifications(unlessTrue: (notification: KeeNotification) => boolean) {
-        store.updateNotifications(store.notifications.filter(unlessTrue));
+        this.store.updateNotifications(this.store.state.notifications.filter(unlessTrue));
     }
 
     animateBrowserActionIcon(duration = 1200) {
@@ -396,7 +383,7 @@ export class Kee {
 
     _keeBrowserStartup() {
         KeeLog.debug("Kee initialising");
-        this.KeePassRPC = new jsonrpcClient();
+        this.KeePassRPC = new jsonrpcClient(this.store);
         KeeLog.info(
             "Kee initialised OK although the connection to a KeePassRPC server is probably not established just yet..."
         );
@@ -405,12 +392,12 @@ export class Kee {
     // Temporarily disable Kee. Used (for e.g.) when KeePass is shut down.
     _pauseKee() {
         KeeLog.debug("Pausing Kee.");
-        store.updateKeePassDatabases([]);
-        store.updateActiveKeePassDatabaseIndex(-1);
-        store.updateConnected(false);
-        store.updateConnectedWebsocket(false);
-        store.updateCurrentSearchTerm(null);
-        store.updateSearchResults(null);
+        this.store.updateKeePassDatabases([]);
+        this.store.updateActiveKeePassDatabaseIndex(-1);
+        this.store.updateConnected(false);
+        this.store.updateConnectedWebsocket(false);
+        this.store.updateCurrentSearchTerm(null);
+        this.store.updateSearchResults(null);
 
         try {
             this.refreshFormStatus(Action.ResetForms);
@@ -452,12 +439,12 @@ export class Kee {
                 break;
             }
         }
-        store.updateConnected(true);
-        store.updateConnectedWebsocket(this.KeePassRPC.websocketSessionManagerIsActive);
-        store.updateKeePassDatabases(newDatabases);
-        store.updateActiveKeePassDatabaseIndex(newDatabaseActiveIndex);
-        store.updateSearchResults(null);
-        store.updateCurrentSearchTerm(null);
+        this.store.updateConnected(true);
+        this.store.updateConnectedWebsocket(this.KeePassRPC.websocketSessionManagerIsActive);
+        this.store.updateKeePassDatabases(newDatabases);
+        this.store.updateActiveKeePassDatabaseIndex(newDatabaseActiveIndex);
+        this.store.updateSearchResults(null);
+        this.store.updateCurrentSearchTerm(null);
 
         KeeLog.info("Number of databases open: " + newDatabases.length);
 
@@ -544,10 +531,10 @@ export class Kee {
     }
 
     openKeePass() {
-        const hasWebsocketDBs = store.KeePassDatabases.some(
+        const hasWebsocketDBs = this.store.state.KeePassDatabases.some(
             db => db.sessionType === SessionType.Websocket
         );
-        const supportsWebsocketFocus = store.KeePassDatabases.some(
+        const supportsWebsocketFocus = this.store.state.KeePassDatabases.some(
             db =>
                 db.sessionType === SessionType.Websocket &&
                 db.sessionFeatures.indexOf("KPRPC_OPEN_AND_FOCUS_DATABASE") >= 0
@@ -594,13 +581,13 @@ export class Kee {
 
     recordEntrySaveResult(saveType: "updated" | "created", entry?: Entry) {
         if (!entry) {
-            store.updateSaveEntryResult({
+            this.store.updateSaveEntryResult({
                 result: "error",
                 receivedAt: new Date()
             } as SaveEntryResult);
             return false;
         } else {
-            store.updateSaveEntryResult({
+            this.store.updateSaveEntryResult({
                 result: saveType,
                 receivedAt: new Date(),
                 fileName: entry.database.fileName,
@@ -616,24 +603,24 @@ export class Kee {
     /*******************************************/
 
     getDatabaseName(index) {
-        if (index == undefined) index = store.ActiveKeePassDatabaseIndex;
+        if (index == undefined) index = this.store.state.ActiveKeePassDatabaseIndex;
         if (
-            store.KeePassDatabases.length > 0 &&
-            store.KeePassDatabases[index] != null &&
-            store.KeePassDatabases[index].root != null
+            this.store.state.KeePassDatabases.length > 0 &&
+            this.store.state.KeePassDatabases[index] != null &&
+            this.store.state.KeePassDatabases[index].root != null
         ) {
-            return store.KeePassDatabases[index].name;
+            return this.store.state.KeePassDatabases[index].name;
         } else return null;
     }
 
     getDatabaseFileName(index?) {
-        if (index == undefined) index = store.ActiveKeePassDatabaseIndex;
+        if (index == undefined) index = this.store.state.ActiveKeePassDatabaseIndex;
         if (
-            store.KeePassDatabases.length > 0 &&
-            store.KeePassDatabases[index] != null &&
-            store.KeePassDatabases[index].root != null
+            this.store.state.KeePassDatabases.length > 0 &&
+            this.store.state.KeePassDatabases[index] != null &&
+            this.store.state.KeePassDatabases[index].root != null
         ) {
-            return store.KeePassDatabases[index].fileName;
+            return this.store.state.KeePassDatabases[index].fileName;
         } else return null;
     }
 
@@ -850,7 +837,7 @@ export class Kee {
 
         if (refresh) {
             if (executeNow) {
-                store.updateLastKeePassRPCRefresh(now);
+                window.kee.store.updateLastKeePassRPCRefresh(now);
                 window.kee._refreshKPDB();
             } else {
                 window.kee.pendingCallback = "_refreshKPDB";
@@ -897,7 +884,7 @@ export class Kee {
     }
 
     initiatePasswordGeneration() {
-        if (store.connected) {
+        if (window.kee.store.state.connected) {
             const tabState = window.kee.tabStates.get(window.kee.foregroundTabId);
             if (tabState) {
                 const framePort = tabState.framePorts.get(0);

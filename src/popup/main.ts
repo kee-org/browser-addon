@@ -6,23 +6,20 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { Port } from "../common/port";
-import { SyncContent } from "../store/syncContent";
 import { createPinia } from "pinia";
 import { Action } from "../common/Action";
-import { MutationPayload } from "../store/syncBackground";
 import "../styles";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import { IPCPiniaPlugin } from "../common/IPCPiniaPlugin";
 
 const piniaInstance = createPinia();
 let vueApp: VueApp<Element>;
-let syncContent: SyncContent;
 let store: KeeStore;
 
 function startup() {
     KeeLog.debug("popup started");
     KeeLog.attachConfig(configManager.current);
-    syncContent = new SyncContent();
     Port.startup("browserPopup");
 
     Port.raw.onMessage.addListener(function (m: AddonMessage) {
@@ -79,45 +76,36 @@ function startup() {
                     }
                 }
             });
+            piniaInstance.use(IPCPiniaPlugin);
             vueApp.use(vuetify);
             vueApp.use(piniaInstance);
             vueApp.config.globalProperties.$browser = browser;
             vueApp.config.globalProperties.$i18n = browser.i18n.getMessage;
             store = useStore();
 
-            syncContent.init(
-                store,
-                m.initialState,
-                (mutationPayload: MutationPayload) => {
-                    //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
-                    const json = JSON.stringify(mutationPayload);
-                    KeeLog.debug("New non-background mutation.");
-                    Port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
-                },
-                () => {
-                    vueApp.mount("#main");
-                    //TODO: Sometimes popup size is wrong initially. Possibly only when in dev
-                    // mode and it's much slower to load everything? In any case, might be
-                    // affected by timing of when we mount the main app to the popup DOM
-                    // Each time I've seen it, it's an extra 16px right and bottom.
-                    // (footer padding = 8px each side; extra width and height = 16px.
-                    // I changed default from 16px 8px so height is unchanged.)
+            store.$patch(m.initialState);
 
-                    // This maybe could be moved to onMounted once all vuex state is changed before this popup is opened.
-                    window.setTimeout(() => {
-                        window.focus();
-                        const sb = $("#searchBox");
-                        if (sb) sb.focus();
-                        window.scrollTo(0, 0);
-                    }, 50);
-                }
-            );
+            vueApp.mount("#main");
+            //TODO: Sometimes popup size is wrong initially. Possibly only when in dev
+            // mode and it's much slower to load everything? In any case, might be
+            // affected by timing of when we mount the main app to the popup DOM
+            // Each time I've seen it, it's an extra 16px right and bottom.
+            // (footer padding = 8px each side; extra width and height = 16px.
+            // I changed default from 16px 8px so height is unchanged.)
+
+            // This maybe could be moved to onMounted once all vuex state is changed before this popup is opened.
+            window.setTimeout(() => {
+                window.focus();
+                const sb = $("#searchBox");
+                if (sb) sb.focus();
+                window.scrollTo(0, 0);
+            }, 50);
         } catch (e) {
             KeeLog.error("Failed to create user interface.", e);
         }
         }
         if (m.mutation) {
-            syncContent.onRemoteMutationPayload(m.mutation);
+            store.onRemoteMessage(Port.raw, m.mutation);
             return;
         }
 

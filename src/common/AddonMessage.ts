@@ -3,10 +3,9 @@ import { FrameState } from "./FrameState";
 import { KeeNotification } from "./KeeNotification";
 import { PasswordProfile } from "./model/PasswordProfile";
 import { SubmittedData } from "./SubmittedData";
-import { SaveData } from "./SaveData";
 import { KeeState } from "../store/KeeState";
 import { Entry } from "./model/Entry";
-import { MutationPayload } from "../store/syncBackground";
+import { Mutation } from "../store/Mutation";
 
 // Do not use classes on this interface unless they are simple data
 // objects that can be represented in JSON. This interface is used
@@ -33,12 +32,11 @@ export interface AddonMessage {
     generatedPassword?: string;
     passwordProfile?: string;
     submittedData?: SubmittedData;
-    saveData?: SaveData;
     loginEditor?: { uuid: string; DBfilename: string };
     loginsFound?: boolean;
     initialState?: KeeState;
     resetState?: KeeState;
-    mutation?: MutationPayload;
+    mutation?: Mutation;
     url?: string;
     copyToClipboard?: string;
 }

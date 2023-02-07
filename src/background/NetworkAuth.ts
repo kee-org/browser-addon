@@ -1,17 +1,18 @@
 import { isFirefox } from "webext-detect-page";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
-import { KeeStore, useStubStore } from "../store";
 import { Entry } from "../common/model/Entry";
 import punycode from "punycode/";
+import BackgroundStore from "~/store/BackgroundStore";
 
 // Pretend browser (WebExtensions) is chrome (we include a
 // polyfill from Mozilla but it doesn't work for onAuthRequired)
 declare const chrome;
 
 export class NetworkAuth {
+    constructor(private store: BackgroundStore) {}
+
     pendingRequests = [];
-    store: KeeStore = useStubStore();
 
     public completed(requestDetails) {
         const index = this.pendingRequests.indexOf(requestDetails.requestId);
@@ -41,7 +42,7 @@ export class NetworkAuth {
         this.pendingRequests.push(requestDetails.requestId);
         KeeLog.debug("Providing credentials for: " + requestDetails.requestId);
 
-        if (!this.store.connected || this.store.ActiveKeePassDatabaseIndex < 0) {
+        if (!this.store.state.connected || this.store.state.ActiveKeePassDatabaseIndex < 0) {
             return { cancel: false };
         }
 

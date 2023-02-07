@@ -4,11 +4,10 @@ import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
-import { SyncContent } from "../store/syncContent";
-import { KeeStore, useStubStore } from "../store";
 import { Port } from "../common/port";
-import { MutationPayload } from "../store/syncBackground";
 import { setup as i18nSetup } from "../common/i18n";
+import NonReactiveStore from "../store/NonReactiveStore";
+import { Mutation } from "../store/Mutation";
 
 let frameState: FrameState;
 
@@ -21,13 +20,11 @@ function closePanel() {
     Port.postMessage({ action: Action.CloseAllPanels });
 }
 
-let syncContent: SyncContent;
-let store: KeeStore;
+let store: NonReactiveStore;
 
 function startup() {
     KeeLog.debug("iframe page starting");
     KeeLog.attachConfig(configManager.current);
-    syncContent = new SyncContent();
     Port.startup("iframe_" + parentFrameId);
 
     let cancelAutoClose: () => void;
@@ -38,20 +35,19 @@ function startup() {
     switch (params["panel"]) {
         case "matchedLoginsLegacy":
             matchedLoginsPanel = new MatchedLoginsPanel(Port.raw, closePanel, parentFrameId);
-            store = useStubStore();
+            store = new NonReactiveStore((mutationPayload: Mutation, _excludedPort) => {
+                KeeLog.debug("New legacy panel mutation being distributed.");
+                Port.postMessage({ mutation: mutationPayload } as AddonMessage);
+            });
             document.getElementById("header").innerText = $STR("matched_logins_label");
             Port.raw.onMessage.addListener(function (m: AddonMessage) {
                 KeeLog.debug("In iframe script, received message from background script");
 
                 if (m.initialState) {
-                    syncContent.init(store, m.initialState, (mutationPayload: MutationPayload) => {
-                        const json = JSON.stringify(mutationPayload);
-                        KeeLog.debug("New non-background panel mutation.");
-                        Port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
-                    });
+                    store.resetTo(m.initialState);
                 }
                 if (m.mutation) {
-                    syncContent.onRemoteMutationPayload(m.mutation);
+                    store.onRemoteMessage(Port.raw, m.mutation);
                     return;
                 }
 

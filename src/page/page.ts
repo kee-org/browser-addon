@@ -7,10 +7,9 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { AddonMessage } from "../common/AddonMessage";
 import { Action } from "../common/Action";
-import { useStubStore } from "../store";
-import { SyncContent } from "../store/syncContent";
 import { Port } from "../common/port";
-import { MutationPayload } from "../store/syncBackground";
+import NonReactiveStore from "../store/NonReactiveStore";
+import { Mutation } from "../store/Mutation";
 
 /* This orchestrates the main functions of the add-on
 on all website pages except those containing a KPRPC server */
@@ -40,26 +39,24 @@ let formFilling: FormFilling;
 let formSaving: FormSaving;
 let passwordGenerator: PasswordGenerator;
 let frameId: number;
-let syncContent: SyncContent;
 let connected = false;
 let messagingPortConnectionRetryTimer: number;
 let pageShowFired = false;
 let configReady = false;
 let missingPageShowTimer: number;
-
+let store: NonReactiveStore;
 let inputsObserver: MutationObserver;
 
 // Content scripts are injected into non-HTML documents such as SVGs.
 // We have no interest in this document if it has no body Node
 if (document.body) {
-    const store = useStubStore();
 
     inputsObserver = new MutationObserver(mutations => {
         // If we have already scheduled a rescan recently, no further action required
         if (formFilling.formFinderTimer !== null) return;
 
         // Only proceed if we have a DB to search
-        if (!store.connected || store.ActiveKeePassDatabaseIndex < 0) return;
+        if (!store?.state.connected || store?.state.ActiveKeePassDatabaseIndex < 0) return;
 
         let rescan = false;
         const interestingNodes = ["form", "input", "select"];
@@ -98,10 +95,10 @@ if (document.body) {
             transferElement.setAttribute(
                 "state",
                 JSON.stringify({
-                    connected: store.connected,
+                    connected: store?.state?.connected || false,
                     version: browser.runtime.getManifest().version,
-                    dbLoaded: store.KeePassDatabases.length > 0,
-                    sessionNames: store.KeePassDatabases.map(db =>
+                    dbLoaded: store?.state?.KeePassDatabases?.length > 0,
+                    sessionNames: store?.state?.KeePassDatabases?.map?.(db =>
                         db.sessionType.toString()
                     ).filter((v, i, a) => a.indexOf(v) === i)
                 })
@@ -123,6 +120,7 @@ if (document.body) {
         formUtils = new FormUtils(KeeLog);
         formSaving = new FormSaving(Port.raw, KeeLog, formUtils);
         formFilling = new FormFilling(
+            store,
             Port.raw,
             frameId,
             formUtils,
@@ -184,21 +182,20 @@ if (document.body) {
             );
             return;
         }
-        syncContent = new SyncContent();
         Port.startup("page");
 
+        store = new NonReactiveStore((mutationPayload: Mutation, _excludedPort) => {
+            KeeLog.debug("New page mutation/action being distributed.");
+            Port.postMessage({ mutation: mutationPayload } as AddonMessage);
+        });
         Port.raw.onMessage.addListener(function (m: AddonMessage) {
             KeeLog.debug("In browser content page script, received message from background script");
 
             if (m.initialState) {
-                syncContent.init(store, m.initialState, (mutationPayload: MutationPayload) => {
-                    const json = JSON.stringify(mutationPayload);
-                    KeeLog.debug("New non-background page mutation.");
-                    Port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
-                });
+                store.resetTo(m.initialState);
             }
             if (m.mutation) {
-                syncContent.onRemoteMutationPayload(m.mutation);
+                store.onRemoteMessage(Port.raw, m.mutation);
                 return;
             }
 
@@ -208,16 +205,16 @@ if (document.body) {
                 connected = true;
             } else if (m.action == Action.DetectForms) {
                 if (m.resetState) {
-                    // Sometimes the page's Vuex state can be out of sync with the
+                    // Sometimes the page's store state can be out of sync with the
                     // background - e.g. when the tab has been inactive for some
                     // time. In these cases, we must supply the full state again
                     // before looking for matching entries.
-                    syncContent.reset(m.resetState);
+                    store.resetTo(m.resetState);
                 }
                 formFilling.removeKeeIconFromAllFields();
                 formSaving.removeAllSubmitHandlers();
 
-                if (store.entryUpdateStartedAtTimestamp >= Date.now() - 20000) {
+                if (store.state.entryUpdateStartedAtTimestamp >= Date.now() - 20000) {
                     formFilling.findMatchesInThisFrame({
                         autofillOnSuccess: false,
                         autosubmitOnSuccess: false

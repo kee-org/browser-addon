@@ -1,11 +1,18 @@
-import { createPinia, defineStore, DefineStoreOptions, Pinia, StateTree, StoreDefinition, _GettersTree } from "pinia";
+import { defineStore, _GettersTree } from "pinia";
 
 import { KeeState, defaults } from "./KeeState";
 import { SaveState } from "../common/SaveState";
 import { SessionType } from "../common/SessionType";
 import { Field } from "../common/model/Field";
-import { App } from "vue";
-import { KeeLog } from "~/common/Logger";
+import { Mutation } from "./Mutation";
+import * as types from "./mutation-types";
+import { SaveEntryResult } from "~/common/SaveEntryResult";
+import { KeeNotification } from "~/common/KeeNotification";
+import { Database } from "~/common/model/Database";
+import { Entry } from "~/common/model/Entry";
+import { EntrySummary } from "~/common/model/EntrySummary";
+import { PasswordProfile } from "~/common/model/PasswordProfile";
+import { SubmittedData } from "~/common/SubmittedData";
 
 /**
  * A replacement for `defineStore` which makes all state properties readonly
@@ -88,135 +95,174 @@ const useStore = defineStore("kee", {
             }
         }
     },
+
+    // by default, all actions distribute their activity to other parts of the webextension.
+    // The notable time we want to avoid this is when we have received a notification of
+    // some activity in another part of the addon that we need to apply here.
+    //TODO: Find some way to remove duplicate code in a typesafe manner for NonReactiveStore equivalents
     actions: {
-        updateActiveKeePassDatabaseIndex(payload) {
-            this.$patch({ ActiveKeePassDatabaseIndex: payload });
+        onRemoteMessage(sourcePort: browser.runtime.Port, mutation: Mutation) {
+            if (mutation.type === types.addNotification) {
+                this.addNotification(mutation.payload, false);
+            } else if (mutation.type === types.removeFieldFromActiveEntry) {
+                this.removeFieldFromActiveEntry(mutation.payload, false);
+            } else if (mutation.type === types.updateActiveKeePassDatabaseIndex) {
+                this.updateActiveKeePassDatabaseIndex(mutation.payload, false);
+            } else if (mutation.type === types.updateConnected) {
+                this.updateConnected(mutation.payload, false);
+            } else if (mutation.type === types.updateConnectedWebsocket) {
+                this.updateConnectedWebsocket(mutation.payload, false);
+            } else if (mutation.type === types.updateCurrentSearchTerm) {
+                this.updateCurrentSearchTerm(mutation.payload, false);
+            } else if (mutation.type === types.updateEntryUpdateStartedAtTimestamp) {
+                this.updateEntryUpdateStartedAtTimestamp(mutation.payload, false);
+            } else if (mutation.type === types.updateGeneratedPassword) {
+                this.updateGeneratedPassword(mutation.payload, false);
+            } else if (mutation.type === types.updateKeePassDatabases) {
+                this.updateKeePassDatabases(mutation.payload, false);
+            } else if (mutation.type === types.updateLastKeePassRPCRefresh) {
+                this.updateLastKeePassRPCRefresh(mutation.payload, false);
+            } else if (mutation.type === types.updateLatestConnectionError) {
+                this.updateLatestConnectionError(mutation.payload, false);
+            } else if (mutation.type === types.updateLoginsFound) {
+                this.updateLoginsFound(mutation.payload, false);
+            } else if (mutation.type === types.updateNotifications) {
+                this.updateNotifications(mutation.payload, false);
+            } else if (mutation.type === types.updatePasswordProfiles) {
+                this.updatePasswordProfiles(mutation.payload, false);
+            } else if (mutation.type === types.updateSaveEntryResult) {
+                this.updateSaveEntryResult(mutation.payload, false);
+            } else if (mutation.type === types.updateSaveState) {
+                this.updateSaveState(mutation.payload, false);
+            } else if (mutation.type === types.updateSearchResultWithFullDetails) {
+                this.updateSearchResultWithFullDetails(mutation.payload, false);
+            } else if (mutation.type === types.updateSearchResults) {
+                this.updateSearchResults(mutation.payload, false);
+            } else if (mutation.type === types.updateSubmittedData) {
+                this.updateSubmittedData(mutation.payload, false);
+            }
         },
-
-        updateConnected(payload) {
-            this.$patch({ connected: payload });
+        updateActiveKeePassDatabaseIndex(payload: number, distribute: boolean = true) {
+            this.ActiveKeePassDatabaseIndex = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateActiveKeePassDatabaseIndex, payload));
         },
-
-        updateConnectedWebsocket(payload) {
-            this.$patch({ connectedWebsocket: payload });
+        updateConnected(payload: boolean, distribute: boolean = true) {
+            this.connected = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateConnected, payload));
         },
-
-        updateCurrentSearchTerm(payload) {
-            this.$patch({ currentSearchTerm: payload });
+        updateConnectedWebsocket(payload: boolean, distribute: boolean = true) {
+            this.connectedWebsocket = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateConnectedWebsocket, payload));
         },
-
-        updateKeePassDatabases(payload) {
-            this.$patch({ KeePassDatabases: payload });
+        updateCurrentSearchTerm(payload: string, distribute: boolean = true) {
+            this.currentSearchTerm = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateCurrentSearchTerm, payload));
         },
-
-        updateLastKeePassRPCRefresh(payload) {
-            this.$patch({ lastKeePassRPCRefresh: payload });
+        updateKeePassDatabases(payload: Database[], distribute: boolean = true) {
+            this.KeePassDatabases = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateKeePassDatabases, payload));
         },
-
-        updateLatestConnectionError(payload) {
-            this.$patch({ latestConnectionError: payload });
+        updateLastKeePassRPCRefresh(payload: number, distribute: boolean = true) {
+            this.lastKeePassRPCRefresh = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateLastKeePassRPCRefresh, payload));
         },
-
-        updateLoginsFound(payload) {
-            this.$patch({ loginsFound: payload || false });
+        updateLatestConnectionError(payload: string, distribute: boolean = true) {
+            this.latestConnectionError = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateLatestConnectionError, payload));
         },
-
-        updateNotifications(payload) {
-            this.$patch({ notifications: payload });
+        updateLoginsFound(payload: boolean, distribute: boolean = true) {
+            this.loginsFound = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateLoginsFound, payload));
         },
-
-        updatePasswordProfiles(payload) {
-            this.$patch({ PasswordProfiles: payload });
+        updateNotifications(payload: KeeNotification[], distribute: boolean = true) {
+            this.notifications = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateNotifications, payload));
         },
-
-        updateGeneratedPassword(payload) {
-            this.$patch({ generatedPassword: payload });
+        updatePasswordProfiles(payload: PasswordProfile[], distribute: boolean = true) {
+            this.PasswordProfiles = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updatePasswordProfiles, payload));
         },
-
-        updateSubmittedData(payload) {
-            //const patch = this.saveState ? {} : new SaveState();
-            this.$patch({
-                saveState: {
-                    submittedData: payload || null
-                }
-            });
+        updateGeneratedPassword(payload: string, distribute: boolean = true) {
+            this.generatedPassword = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateGeneratedPassword, payload));
         },
-
-        updateSaveState(payload) {
-            this.$patch({ saveState: payload || null });
+        updateSubmittedData(payload: SubmittedData, distribute: boolean = true) {
+            if (!this.saveState) {
+                this.saveState = new SaveState();
+            }
+            this.saveState.submittedData = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateSubmittedData, payload));
         },
-
-        updateSearchResults(payload) {
-            this.$patch({ searchResults: payload || null });
+        updateSaveState(payload: SaveState, distribute: boolean = true) {
+            this.saveState = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateSaveState, payload));
         },
-
-        updateSearchResultWithFullDetails(payload) {
-            const cloned = JSON.parse(JSON.stringify(this.searchResults));
+        updateSearchResults(payload: EntrySummary[], distribute: boolean = true) {
+            this.searchResults = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateSearchResults, payload));
+        },
+        updateSearchResultWithFullDetails(payload: Entry, distribute: boolean = true) {
             const id = payload.uuid;
-            for (const s of cloned) {
+            for (const s of this.searchResults) {
                 if (s.uuid === id) {
-                    s.fullDetails = payload || null;
+                    s.fullDetails = payload;
                     break;
                 }
             }
-            this.$patch({ searchResults: cloned });
+            if (distribute) this.distributeAction?.(new Mutation(types.updateSearchResultWithFullDetails, payload));
         },
-
-        addNotification(payload) {
-            const cloned = JSON.parse(JSON.stringify(this.notifications));
-            cloned.push(payload);
-            this.$patch({ notifications: cloned });
+        addNotification(payload: KeeNotification, distribute: boolean = true) {
+            this.notifications.push(payload);
+            if (distribute) this.distributeAction?.(new Mutation(types.addNotification, payload));
         },
-
-        updateSaveEntryResult(payload) {
-            this.$patch({ saveEntryResult: payload || null });
+        updateSaveEntryResult(payload: SaveEntryResult, distribute: boolean = true) {
+            this.saveEntryResult = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateSaveEntryResult, payload));
         },
+        removeFieldFromActiveEntry(payload: string, distribute: boolean = true) {
 
-        removeFieldFromActiveEntry(payload) {
-            const cloned = JSON.parse(JSON.stringify(this.saveState.newEntry.fields));
-            const firstTextFieldIndex = cloned.findIndex(
+            const firstTextFieldIndex = this.saveState.newEntry.fields.findIndex(
                 f => f.type === "text"
             );
-            const firstPasswordFieldIndex = cloned.findIndex(
+            const firstPasswordFieldIndex = this.saveState.newEntry.fields.findIndex(
                 f => f.type === "password"
             );
-            const originalFieldIndex = cloned.findIndex(
-                f => f.uuid === (payload || null)
+            const originalFieldIndex = this.saveState.newEntry.fields.findIndex(
+                f => f.uuid === payload
             );
-            cloned.splice(originalFieldIndex, 1);
+            this.saveState.newEntry.fields.splice(originalFieldIndex, 1);
 
             if (originalFieldIndex === firstTextFieldIndex) {
-                const newUsernameIndex = cloned.findIndex(
+                const newUsernameIndex = this.saveState.newEntry.fields.findIndex(
                     f => f.type === "text"
                 );
                 if (newUsernameIndex >= 0) {
-                    const newUsername = cloned.splice(newUsernameIndex, 1)[0];
-                    cloned.splice(
+                    const newUsername = this.saveState.newEntry.fields.splice(newUsernameIndex, 1)[0];
+                    this.saveState.newEntry.fields.splice(
                         originalFieldIndex,
                         0,
                         new Field({ ...newUsername, name: "KeePass username" })
                     );
                 }
             } else if (originalFieldIndex === firstPasswordFieldIndex) {
-                const newPasswordIndex = cloned.findIndex(
+                const newPasswordIndex = this.saveState.newEntry.fields.findIndex(
                     f => f.type === "password"
                 );
                 if (newPasswordIndex >= 0) {
-                    const newPassword = cloned.splice(newPasswordIndex, 1)[0];
-                    cloned.splice(
+                    const newPassword = this.saveState.newEntry.fields.splice(newPasswordIndex, 1)[0];
+                    this.saveState.newEntry.fields.splice(
                         originalFieldIndex,
                         0,
                         new Field({ ...newPassword, name: "KeePass password" })
                     );
                 }
             }
-            this.$patch({ saveState: { newEntry: { fields: cloned } } });
+            if (distribute) this.distributeAction?.(new Mutation(types.removeFieldFromActiveEntry, payload));
         },
-
-        updateEntryUpdateStartedAtTimestamp(payload) {
-            this.$patch({ entryUpdateStartedAtTimestamp: payload || null });
+        updateEntryUpdateStartedAtTimestamp(payload: number, distribute: boolean = true) {
+            this.entryUpdateStartedAtTimestamp = payload;
+            if (distribute) this.distributeAction?.(new Mutation(types.updateEntryUpdateStartedAtTimestamp, payload));
         }
-
     }
 });
 
@@ -227,19 +273,19 @@ export type KeeStore = Omit<
     keyof ReturnType<typeof defineStore>
 >;
 
-// We use Pinia's store and reactivity all across the extension
-// but in many scopes we won't ever want to render a real Vue
-// instance. However, Pinia requires one to exist before it
-// will dish out our store.
-let stubVueApp: App<Element>;
-let stubPinia: Pinia;
-export function useStubStore() {
-    if (!stubPinia) {
-        stubPinia = createPinia();
-    }
-    if (!stubVueApp) {
-        stubVueApp = createApp(defineComponent);
-        stubVueApp.use(stubPinia);
-    }
-    return useStore();
-}
+// // We use Pinia's store and reactivity all across the extension
+// // but in many scopes we won't ever want to render a real Vue
+// // instance. However, Pinia requires one to exist before it
+// // will dish out our store.
+// let stubVueApp: App<Element>;
+// let stubPinia: Pinia;
+// export function useStubStore() {
+//     if (!stubPinia) {
+//         stubPinia = createPinia();
+//     }
+//     if (!stubVueApp) {
+//         stubVueApp = createApp(defineComponent);
+//         stubVueApp.use(stubPinia);
+//     }
+//     return useStore();
+// }
