@@ -62,10 +62,6 @@ import { Action } from "../../common/Action";
 import { SaveState } from "../../common/SaveState";
 import useStore from "../../store";
 import { mapState } from "pinia";
-import MdiMenuUp from "~icons/mdi/menu-up";
-import MdiMenuDown from "~icons/mdi/menu-down";
-//TODO:  2 x hacks above may not be needed
-import { KeeLog } from "../Logger";
 
 export default {
     props: ["field", "standalone", "topmost"],
@@ -78,7 +74,8 @@ export default {
         selectedProfile: "",
         forceCopy: false,
         revealed: false,
-        loading: false
+        loading: false,
+        cachedGeneratedPassword: ""
     }),
     computed: {
         ...mapState(useStore, ["PasswordProfiles", "saveState", "generatedPassword"]),
@@ -86,15 +83,15 @@ export default {
             return this.PasswordProfiles.map(p => p.name);
         },
         disabled: function () {
-            return !this.generatedPassword;
+            return !this.cachedGeneratedPassword;
         },
         forceCopyHint: function () {
             return this.forceCopy ? this.$i18n("generatePassword_done_2") : "";
         },
         renderedPassword: function () {
             return this.revealed
-                ? this.generatedPassword
-                : "*".repeat(this.generatedPassword.length);
+                ? this.cachedGeneratedPassword
+                : "*".repeat(this.cachedGeneratedPassword.length);
         },
         okButtonText: function () {
             if (this.standalone) {
@@ -115,9 +112,9 @@ export default {
     methods: {
         ok: async function () {
             if (this.standalone || this.forceCopy) {
-                this.$emit("copy-to-clipboard", { value: this.generatedPassword });
+                this.$emit("copy-to-clipboard", { value: this.cachedGeneratedPassword });
             }
-            this.$emit("dialog-closed", { value: this.generatedPassword });
+            this.$emit("dialog-closed", { value: this.cachedGeneratedPassword });
         },
         cancel: function () {
             this.$emit("dialog-closed");
@@ -128,6 +125,7 @@ export default {
                 "generatedPassword",
                 newValue => {
                     unwatch();
+                    this.cachedGeneratedPassword = newValue ?? "";
                     this.loading = false;
                 }
             );
