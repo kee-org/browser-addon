@@ -60,7 +60,7 @@ Our builds are created by GitHub Actions using the following configuration:
 
 1. download the source code (e.g. from the relevant GitHub Release page) or clone the repo for the latest (often pre-release) version
 1. `npm ci && mkdir dist`
-1. manipulate manifest.json if you want to adjust version numbers
+1. manipulate package.json if you want to adjust version numbers
 1. `npm run build:prod && npm run pack:prod` (for stable releases) and/or `npm run build:beta && npm run pack:beta` (for beta releases) 
    * XPIs and ZIPs of each version are put into the `dist` folder
 
