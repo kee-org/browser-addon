@@ -9,7 +9,7 @@
   "devDependencies": {
     "@ffflorian/jszip-cli": "^3.1.7",
     "@gorhill/publicsuffixlist": "^3.0.1",
-    "@grapoza/vue-tree": "^5.1.0",
+    "@grapoza/vue-tree": "5.2.0",
     "@iconify-json/mdi": "^1.1.45",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.11.19",
@@ -89,5 +89,8 @@
     "lint:xpi": "web-ext lint --source-dir ./extension",
     "sign:xpi:beta": "cross-env WEB_EXT_ARTIFACTS_DIR=./dist/signed web-ext sign --source-dir ./extension --channel=unlisted",
     "tsc": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "vue3-treeview": "^0.4.1"
   }
 }
