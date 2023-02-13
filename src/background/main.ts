@@ -97,7 +97,7 @@ function updateForegroundTab(tabId: number) {
 
 // Some browsers (e.g. Firefox) automatically inject content scripts on install/update
 // but others don't (e.g. Chrome). To ensure every existing tab has exactly one
-// instance of this content script running in it, we programatically inject the script.
+// instance of this content script running in it, we programmatically inject the script.
 if (!isFirefox()) {
     browser.runtime.onInstalled.addListener(() => {
         const showErrors = () => {

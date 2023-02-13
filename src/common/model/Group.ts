@@ -41,4 +41,19 @@ export class Group {
         if (group.groups && group.groups.some(g => Group.containsId(g, id))) return true;
         return false;
     }
+    public static matchingId(group: Group, id: string): Group | null {
+        if (group.uuid === id) {
+            return group;
+        }
+
+        for (const childGroup of group.groups) {
+            const matchingChildGroup = Group.matchingId(childGroup, id);
+            if (matchingChildGroup) {
+                return matchingChildGroup;
+            }
+        }
+
+        return null;
+    }
+
 }
