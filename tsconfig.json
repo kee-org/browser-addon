@@ -13,7 +13,7 @@
         "jsx": "preserve",
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
-        "typeRoots" : ["src/typedefs", "node_modules/@types"],
+        "typeRoots" : ["src/typedefs", "node_modules/@types", "./node_modules"],
         "moduleResolution": "node",
         "noImplicitThis": true,
         "isolatedModules": true,

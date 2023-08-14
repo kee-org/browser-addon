@@ -76,7 +76,7 @@ export const sharedConfig: UserConfig = {
     optimizeDeps: {
         include: ["vue", "@vueuse/core", "webextension-polyfill"],
         exclude: ["vue-demi"]
-    },
+    }
 };
 
 export default defineConfig(({ command }) => ({
@@ -118,7 +118,7 @@ export default defineConfig(({ command }) => ({
                 legacyPanels: r("src/panels/panelsLegacy.html"),
                 installNotes: r("src/release-notes/install-notes.html"),
                 updateNotes: r("src/release-notes/update-notes.html")
-            },
+            }
             // This needs an absolute URL so is unlikely to be much
             // use within an extension
             // output: {
@@ -131,6 +131,14 @@ export default defineConfig(({ command }) => ({
     },
     test: {
         globals: true,
-        environment: "node"
+        environment: "node",
+        cache: false,
+		// setupFiles: [
+		// 	"../vitest.setup.js",
+		// 	"jest-webextension-mock"
+		// ],
+        // sequence: {
+        //     setupFiles: "list"
+        // }
     }
 }));
