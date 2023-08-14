@@ -147,11 +147,11 @@ module.exports = {
           files: [
             "**/*.test.ts"
           ],
-          env: {
-            jest: true
-          },
-          "extends": ["plugin:jest/recommended"],
-          plugins: ["jest"]
+        //   env: {
+        //     jest: true
+        //   },
+        //   "extends": ["plugin:jest/recommended"],
+        //   plugins: ["jest"]
         }
     ]
 };

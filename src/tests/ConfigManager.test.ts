@@ -1,7 +1,14 @@
 // 2023: All tests fail because we can't run them in vite or jest.
+// Probably impossible to make them work again now so abandoning them until MV3 rewrite. Just in case
+// though, some comments like the ones below are the closest we got to any feasible workaround for the bugs.
+// vi.hoisted(() => {
+//     globalThis.jest = vi;
+// global.chrome = {runtime:{id: "test id"}};
+// globalThis.chrome = {runtime:{id: "test id"}};
+// });
 import { beforeEach, describe, expect, it, vi } from "vitest";
-globalThis.jest = vi;
-import "jest-webextension-mock";
+//globalThis.jest = vi;
+//import "jest-webextension-mock";
 
 import { SiteConfig } from "../common/config";
 
