@@ -134,7 +134,7 @@ export async function getManifest() {
         // this is required on dev for Vite script to load
         // eslint-disable-next-line no-useless-escape
         //TODO: Also support https://localhost:8099; for Vue devtools connection
-        manifest.content_security_policy = `script-src \'self\' http://localhost:${port}; object-src \'self\'`;
+        manifest.content_security_policy = `script-src 'self' http://localhost:${port}; object-src 'self'`;
     }
 
     return manifest;

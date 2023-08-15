@@ -33,10 +33,10 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 entryFileNames: "index.global.js",
-                extend: true,
+                extend: true
             }
         },
         reportCompressedSize: false,
-        minify: false,
+        minify: false
     }
 });

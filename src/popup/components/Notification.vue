@@ -53,7 +53,7 @@ export default {
     //     return { updateSaveState };
     // },
     data: () => ({
-        tooltipDelay: tooltipDelay
+        tooltipDelay
     }),
     methods: {
         dispatchActionResponse(id: string, action: ButtonAction, data: { [id: string]: string }) {

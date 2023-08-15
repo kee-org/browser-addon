@@ -36,11 +36,10 @@ function startup() {
                         action: Action.GetPasswordProfiles
                     });
                 },
-                render: () => {
-                    return h(App, {
+                render: () => h(App, {
                         matchedEntries: !m.entries ? null : m.entries,
                         frameId: m.frameId
-                })}
+                })
             });
 
             const vuetify = createVuetify({

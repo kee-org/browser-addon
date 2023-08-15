@@ -34,10 +34,10 @@ export class KeeLogger {
         }
         if (e) {
             const error = isErrorLike(e) ? serializeError(e, {maxDepth: 20}) : e;
-            let json: String;
+            let json: string;
             try {
                 json = JSON.stringify(error);
-            } catch (e) {
+            } catch (ex) {
                 json = "[not serialisable]";
             }
             message += ` Error: ${json}`;
