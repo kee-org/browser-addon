@@ -10,9 +10,9 @@ import { AddonMessage } from "../common/AddonMessage";
 // only on dev mode
 if (import.meta.hot) {
     // @ts-expect-error for background HMR
-    import('/@vite/client')
+    import("/@vite/client");
     // load latest content script
-    import('./contentScriptHMR')
+    import("./contentScriptHMR");
   }
 
 const userBusySeconds = 60 * 15;

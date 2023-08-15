@@ -86,8 +86,5 @@
     "lint:xpi": "web-ext lint --source-dir ./extension",
     "sign:xpi:beta": "cross-env WEB_EXT_ARTIFACTS_DIR=./dist/signed web-ext sign --source-dir ./extension --channel=unlisted",
     "tsc": "vue-tsc --noEmit"
-  },
-  "dependencies": {
-    "vue3-treeview": "^0.4.1"
   }
 }
