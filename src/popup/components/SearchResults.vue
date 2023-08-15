@@ -1,6 +1,6 @@
 <template>
     <div id="searchPanel" class="pb-6 pt-0 pr-0">
-        <v-divider v-show="filteredMatches && filteredMatches.length > 0" />
+        <v-divider v-show="filteredMatches && filteredMatches.length > 0" class="mt-2" />
         <Entry
 v-for="(match, index) of filteredMatches" :key="match.entry.uuid" :ref="setNodesA"
             :entrySummary="match.entry" :isFirstInAList="index === 0" :frame-id="frameId"

@@ -78,7 +78,7 @@ location="top" :disabled="!entryPathIsLong"
                             </v-sheet>
                             <v-row v-if="isMatchedEntry" justify="space-between" align="center">
                                 <v-col class="text-truncate pt-0 ma-0">
-                                    <v-divider></v-divider>
+                                    <v-divider class="mt-4 mx-5"></v-divider>
                                     <v-checkbox
 :label="$i18n('preferred_matching_entry')"
                                         :model-value="entrySummary.isPreferredMatch"
