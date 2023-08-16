@@ -795,6 +795,10 @@
     "message": "More details, including important information for KeePass users can be found in the release announcement on the community forum:",
     "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
   },
+  "thanks_for_beta_testing": {
+    "message": "Thanks for beta testing Kee! You are helping us to make Kee better for everyone. If you have any feedback or find new issues with this release, please join those on the community forum and let us know.",
+    "description": "Message thanking the user for being a Kee beta tester"
+  },
   "beta_testing_is_good": {
     "message": "Kee beta testers have been enjoying some of these improvements for many months already.",
     "description": "Brief highlight of one of the benefits of being a Kee beta tester"

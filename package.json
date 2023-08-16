@@ -65,7 +65,7 @@
     "dev:vault": "npm run build:vault -- --mode development",
     "build": "npm run build:beta",
     "build:prod": "npm run clean && mkdir extension && cross-env NODE_ENV=production run-s build:web build:prepare build:page build:vault",
-    "build:beta": "npm run clean && mkdir extension && cross-env NODE_ENV=production KEE_CHANNEL=beta run-s build:web build:prepare build:page build:vault",
+    "build:beta": "npm run clean && mkdir extension && cross-env NODE_ENV=production VITE_KEE_CHANNEL=beta run-s build:web build:prepare build:page build:vault",
     "build:prepare": "esno scripts/prepare.ts",
     "build:web": "vite build",
     "build:page": "vite build --config vite.config.page.ts",
