@@ -106,7 +106,7 @@ if (!isFirefox()) {
                 else console.error(browser.runtime.lastError);
             }
         };
-        browser.runtime.getManifest().content_scripts.forEach(script => {
+        browser.runtime.getManifest().content_scripts?.forEach(script => {
             const allFrames = script.all_frames;
             const url = script.matches;
 
