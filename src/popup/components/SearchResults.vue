@@ -155,7 +155,6 @@ export default {
             );
         },
         onPreferredEntryClick(payload: any) {
-            //TODO: find out if we really have to do this boilerplate re-emitting in v3
             this.$emit("pref-entry-toggle", payload);
         }
     }

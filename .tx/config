@@ -1,9 +1,11 @@
 [main]
 host = https://www.transifex.com
 
-[keefox.kee]
-file_filter = _locales/<lang>/messages.json
-source_file = _locales/en/messages.json
-source_lang = en
-type = CHROME
+[o:keefox:p:keefox:r:kee]
+file_filter            = _locales/<lang>/messages.json
+source_file            = _locales/en/messages.json
+source_lang            = en
+type                   = CHROME
+replace_edited_strings = false
+keep_translations      = false
 

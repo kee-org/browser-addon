@@ -61,11 +61,10 @@ jobs:
       - name: Compile Typescript
         run: npm run tsc
 
+      # Disabled until MV3 rewrite
       # - name: Test
       #   run: npm run test
       
-      # TODO: lint? Maybe not here. No new code is being merged while releasing.
-
       - name: Push git tag
         run: git push --tags
 
@@ -123,17 +122,15 @@ jobs:
           git push https://github-actions:$BETA_UPDATES_TOKEN@github.com/kee-org/browser-addon-updates.git master
         env:
             BETA_UPDATES_TOKEN: ${{ secrets.BETA_UPDATES_TOKEN }}
-
-      #TODO: re-enable Chrome
       
-      # - name: Publish the new release to Chrome beta users
-      #   uses: trmcnvn/chrome-addon@91e2d97f66f3ad0453b5ef8396094f0b63018659
-      #   with:
-      #     extension: hlicbbodnlbbflfihnjjffnjeaoglici
-      #     zip: "dist/Kee - Password Manager-v${{ env.NEW_KEE_VERSION }}-debug.zip"
-      #     publish-target: trustedTesters
-      #     client-id: ${{ secrets.CHROME_CLIENT_ID }}
-      #     client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
-      #     refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+      - name: Publish the new release to Chrome beta users
+        uses: trmcnvn/chrome-addon@91e2d97f66f3ad0453b5ef8396094f0b63018659
+        with:
+          extension: hlicbbodnlbbflfihnjjffnjeaoglici
+          zip: "dist/extension-beta.zip"
+          publish-target: trustedTesters
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
         #TODO: Edge auto-deployment

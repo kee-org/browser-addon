@@ -52,15 +52,22 @@ jobs:
       - name: Compile Typescript
         run: npm run tsc
 
+      # Disabled until MV3 rewrite
       # - name: Test
       #   run: npm run test
-      
-      # TODO: lint? Maybe not here. No new code is being merged while releasing.
+
+      - name: Lint
+        run: npm run lint
+
+      # - name: Transifex upload
+      #   run: pip install transifex-client && echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = api\ntoken = \npassword = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc && tx -d --traceback push -s;
+      #   env:
+      #     TRANSIFEX_API_TOKEN: ${{ secrets.TRANSIFEX_API_TOKEN }}
 
       - name: Transifex upload
-        run: pip install transifex-client && echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = api\ntoken = \npassword = '"$TRANSIFEX_API_TOKEN"$'\n' > .transifexrc && tx -d --traceback push -s;
-        env:
-          TRANSIFEX_API_TOKEN: ${{ secrets.TRANSIFEX_API_TOKEN }}
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TRANSIFEX_API_TOKEN }}
 
       - name: Push git tag
         run: git push --tags
