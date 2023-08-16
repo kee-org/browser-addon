@@ -27,7 +27,8 @@ div#i18n_root td:first-child, div#i18n_root th:first-child {
     width: 40%;
 }
 
-#betaTestingCTA {
+#betaTestingCTA,
+#betaTestingFeedbackCTA {
     background-color:#1a466b;
     max-width: 80vw;
     min-width: 80px;
@@ -45,7 +46,8 @@ div#i18n_root td:first-child, div#i18n_root th:first-child {
     color: #e5e7eb;
 }
 
-#betaTestingCTA:hover {
+#betaTestingCTA:hover,
+#betaTestingFeedbackCTA:hover {
     background-color:#3a668b;
 }
 

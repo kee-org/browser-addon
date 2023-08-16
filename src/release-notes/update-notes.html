@@ -6,6 +6,14 @@
     <link rel="stylesheet" href="/assets/styles/release-notes.css"/>
     <title>Kee 3.10</title>
     <link rel="icon" href="/assets/images/64.png"/>
+    <style>
+        .showIfBeta {
+            display: var(--display-none-when-not-beta, 'block');
+        }
+        .showIfNotBeta {
+            display: var(--display-none-when-beta, 'block');
+        }
+    </style>
 </head>
 
 <body class="container" style="max-width: 900px;">
@@ -20,8 +28,15 @@
     <p data-i18n="list_version_upgrade_3_10"></p>
 
     <hr>
-    <p id="betaTestingIntro" data-i18n="beta_testing_is_good"></p>
-    <button data-i18n="join_the_community_cta" id="betaTestingCTA"></button>
+
+    <hr>
+    <div class="showIfNotBeta">
+        <p id="betaTestingIntro" data-i18n="beta_testing_is_good"></p>
+        <button data-i18n="join_the_community_cta" id="betaTestingCTA"></button>
+    </div>
+    <div class="showIfBeta"><p id="betaTestingThanks" data-i18n="thanks_for_beta_testing"></p>
+        <button data-i18n="join_the_community_cta" id="betaTestingFeedbackCTA"></button>
+    </div>
     <hr>
     </div>
     <div id="keeVaultContainer">
