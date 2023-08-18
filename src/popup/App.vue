@@ -2,7 +2,7 @@
 <!-- above due to eslint bug incorrectly highlighting border="top" as a problem -->
 <template>
     <v-app class="">
-        <v-app-bar v-model="showSearchPanel" class="py-1" density="compact" app style="max-width: 400px">
+        <v-app-bar v-model="showSearchPanel" class="py-1" density="compact" style="max-width: 400px">
             <SearchInput />
         </v-app-bar>
         <v-main>
@@ -255,7 +255,7 @@ export default {
                 this.saveLastActiveAt = newState.lastActiveAt;
             },
             deep: true
-        },
+        }
     },
     mounted: async function () {
         this.saveLastActiveAt = this.saveState?.lastActiveAt;
