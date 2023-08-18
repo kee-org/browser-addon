@@ -1,3 +1,12 @@
+---
+name: Valid, actionable issue
+about: All issues go here after discussion on forum.kee.pm
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 Thanks for your interest in helping to improve Kee.
 
 GitHub issues are for clear and well defined changes to project behaviour, appearance and code.
@@ -19,4 +28,4 @@ The full contribution and support guidelines can be found at: https://github.com
 
 Thank you for following these guidelines - it will help us to keep each discussion focussed in a single place and improve the project more quickly.
 
-(*) Note that sensitive issues should always be addressed via a private contact - see https://forum.kee.pm for how to do this.
+(*) Note that sensitive issues should always be addressed via a private contact - e.g. using the Security tab on GitHub.
