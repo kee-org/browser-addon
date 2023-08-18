@@ -544,12 +544,20 @@
       "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
   },
   "kee_works_with_a_password_manager": {
-      "message": "The credentials Kee enters for you are stored securely in a password manager behind a single \"master password\".",
+      "message": "The credentials Kee enters for you are stored securely in a password manager behind a single \"main password\".",
       "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
   },
   "recommend_start_with_kee_vault": {
-      "message": "We recommend trying out the Kee Vault password manager 14 day free trial. It's only £2 per month after the trial and does not require payment details when you sign up so is risk free.",
+      "message": "We recommend trying out our Kee Vault password manager. It only costs around £20 per year after a free trial, seamlessly synchronises and backs up your passwords across all of your devices and is Open Source, just like Kee.",
       "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
+  },
+  "recommend_start_with_kee_vault2": {
+      "message": "We also have apps to help you sign into other apps and websites on your iOS and Android devices.",
+      "description": "Further details about the Kee Vault service."
+  },
+  "kee_still_supports_keepass": {
+    "message": "Kee still fully supports using KeePass as your password manager so you don't have to do anything but we would really appreciate your support to keep Kee going for many years to come.",
+    "description": "Reassures users that nothing has changed regarding the support of KeePass as a password management source."
   },
   "load_kee_vault_now": {
       "message": "Load Kee Vault now",
