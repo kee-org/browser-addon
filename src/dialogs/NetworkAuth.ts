@@ -28,6 +28,7 @@ class NetworkAuth {
         this.setLogins(entries, list);
         container.appendChild(list);
         node.parentNode.insertBefore(container, node.nextSibling);
+        (list.firstChild as HTMLElement).focus();
     }
 
     private setLogins(entries: Entry[], container) {
@@ -57,15 +58,14 @@ class NetworkAuth {
                 displayGroupPath,
                 usernameDisplayValue
             ]);
-            loginItem.tabIndex = -1;
+            loginItem.tabIndex = i == 0 ? 0 : -1;
 
             loginItem.textContent = $STRF("matchedLogin_label", [
                 usernameDisplayValue,
                 entry.title
             ]);
 
-            //TODO:4: keyboard nav
-            //loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
+            loginItem.addEventListener("keydown", this.keyboardNavHandler, false);
             loginItem.addEventListener(
                 "click",
                 function (event) {
@@ -85,6 +85,37 @@ class NetworkAuth {
             );
 
             container.appendChild(loginItem);
+        }
+    }
+
+    private keyboardNavHandler(event: KeyboardEvent) {
+        const target = event.target as HTMLLIElement;
+
+        switch (event.keyCode) {
+            case 13: // enter
+                event.preventDefault();
+                event.stopPropagation();
+                target.dispatchEvent(new Event("keeCommand"));
+                break;
+            case 40: // down
+                event.preventDefault();
+                event.stopPropagation();
+                if (target.nextElementSibling) {
+                    (target.nextElementSibling as HTMLLIElement).focus();
+                }
+                break;
+            case 38: // up
+                event.preventDefault();
+                event.stopPropagation();
+                if (target.previousElementSibling) {
+                    (target.previousElementSibling as HTMLLIElement).focus();
+                }
+                break;
+            case 27: // esc
+                event.preventDefault();
+                event.stopPropagation();
+                window.close();
+                break;
         }
     }
 }

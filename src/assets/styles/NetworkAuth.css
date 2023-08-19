@@ -53,3 +53,8 @@ body {
     padding:0px 0px 0px 4px;
     list-style:none;
 }
+
+li:focus-visible {
+    outline: none !important;
+    border-left: 2px #1a466b solid !important;
+}
