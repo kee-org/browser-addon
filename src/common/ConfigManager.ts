@@ -577,6 +577,13 @@ export class ConfigManager {
     }
 
     public isFormInteresting(form: HTMLFormElement, conf: SiteConfig, otherFields: Field[]) {
+
+        function caseAwareMatch(values: string[]) {
+            return (values || [])
+                .map(x => (ic ? x?.toLowerCase() : x))
+                .filter(Boolean);
+        }
+
         const ic = conf.listMatchingCaseSensitive !== true;
         const fieldIds = otherFields
             .map(field => (ic ? field.locators[0]?.id.toLowerCase() : field.locators[0]?.id))
@@ -586,18 +593,10 @@ export class ConfigManager {
             .filter(Boolean);
         const formId = this.normalizeFormProperty(form.id, ic);
         const formName = this.normalizeFormProperty(form.name, ic);
-        const excludeFormIds = (conf?.blackList?.form?.ids || [])
-            .map(x => (ic ? x?.toLowerCase() : x))
-            .filter(Boolean);
-        const excludeFormNames = (conf?.blackList?.form?.names || [])
-            .map(x => (ic ? x?.toLowerCase() : x))
-            .filter(Boolean);
-        const excludeFieldIds = (conf?.blackList?.fields?.ids || [])
-            .map(x => (ic ? x?.toLowerCase() : x))
-            .filter(Boolean);
-        const excludeFieldNames = (conf?.blackList?.fields?.names || [])
-            .map(x => (ic ? x?.toLowerCase() : x))
-            .filter(Boolean);
+        const excludeFormIds = caseAwareMatch(conf?.blackList?.form?.ids);
+        const excludeFormNames = caseAwareMatch(conf?.blackList?.form?.names);
+        const excludeFieldIds = caseAwareMatch(conf?.blackList?.fields?.ids);
+        const excludeFieldNames = caseAwareMatch(conf?.blackList?.fields?.names);
 
         const excluded =
             excludeFormIds.indexOf(formId) >= 0 ||
@@ -607,10 +606,10 @@ export class ConfigManager {
 
         if (excluded) return false;
 
-        const includeFormIds = conf?.whiteList?.form?.ids || [];
-        const includeFormNames = conf?.whiteList?.form?.names || [];
-        const includeFieldIds = conf?.whiteList?.fields?.ids || [];
-        const includeFieldNames = conf?.whiteList?.fields?.names || [];
+        const includeFormIds = caseAwareMatch(conf?.whiteList?.form?.ids);
+        const includeFormNames = caseAwareMatch(conf?.whiteList?.form?.names);
+        const includeFieldIds = caseAwareMatch(conf?.whiteList?.fields?.ids);
+        const includeFieldNames = caseAwareMatch(conf?.whiteList?.fields?.names);
 
         const included =
             includeFormIds.indexOf(formId) >= 0 ||
