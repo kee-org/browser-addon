@@ -28,6 +28,12 @@ jobs:
 
       - name: Build production
         run: npm run build:prod
+      
+      - name: Build Chrome beta
+        run: npm run build-chrome:beta
+
+      - name: Build Chrome production
+        run: npm run build-chrome:prod
 
       # We have to do this type check after running the build
       # because Vite creates various type definitions we need

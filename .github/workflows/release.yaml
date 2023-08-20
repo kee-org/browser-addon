@@ -40,8 +40,15 @@ jobs:
 
       # We make sure that this version can build for production and we attach the
       # resulting artifacts to the GitHub release but we have to do the beta
-      # version last because we can't force web-ext to sign a specific XPI file
+      # version of Firefox last because we can't force web-ext to sign a specific XPI file
       # - it has to run the whole build again from scratch for some reason.
+
+      - name: Build and package Chrome beta
+        run: npm run build-chrome:beta && npm run pack-chrome:beta
+
+      - name: Build and package Chrome production
+        run: npm run build-chrome:prod && npm run pack-chrome:prod
+
       - name: Build and package production
         run: npm run build:prod && npm run pack:prod
 

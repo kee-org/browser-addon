@@ -47,6 +47,12 @@ jobs:
       - name: Build and package production
         run: npm run build:prod && npm run pack:prod
 
+      - name: Build and package Chrome beta
+        run: npm run build-chrome:beta && npm run pack-chrome:beta
+
+      - name: Build and package Chrome production
+        run: npm run build-chrome:prod && npm run pack-chrome:prod
+
       # We have to do this type check after running the build
       # because Vite creates various type definitions we need
       - name: Compile Typescript
