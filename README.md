@@ -10,13 +10,11 @@ Support forum: https://forum.kee.pm
 
 # Build
 
-**Warning:** An urgent request from Mozilla in January 2023 has, through a complex web of old dependencies, forced a significant restructure of the build system and some production code. Only Firefox is supported at this time so Chrome users will remain on version 3.9 until the new architecture can be finalised and tested for other browsers. You're not missing a lot but we'll try to get this discrepancy resolved soon.
-
 ## Requirements
 
 * node (16 should work but only tested with 18)
 * a node package manager (tested with npm 8 and 9)
-* a web browser (tested with Firefox 109)
+* a web browser (tested with Firefox 117)
 * a Supporter's subscription to [Kee Vault](https://keevault.pm) OR KeePass 2.x (+ .NET/Mono) + KeePassRPC.plgx
 
 It's set up for Visual Studio Code but it shouldn't be too hard to work out how to develop using other IDEs.
@@ -27,9 +25,10 @@ It's set up for Visual Studio Code but it shouldn't be too hard to work out how 
 1. `npm ci` (or `npm install` to get any newer library dependencies than those we used in official builds)
 1. Development:
    1. Open two terminals/consoles
-      1. In the 1st: `npm run dev`
-      1. In the 2nd: `npm run start:firefox`
+      1. In the 1st: `npm run dev` OR `npm run dev-chrome`
+      1. In the 2nd: `npm run start:firefox` OR `npm run start:chrome`
    1. the task in the 1st terminal will recompile and reload necessary parts of the addon each time you change a file but in some circumstances you'll need to press 'r' in the 2nd terminal to force a complete reload.
+   1. If you mismatch the Firefox/Chrome commands most parts of the development process should be unaffected but you'll see some console warnings so try to keep them aligned when switching between browsers.
 1. Preparing for release or Pull Request:
    1. `npm run tsc` to verify that no type errors have been introduced during recent development changes
    1. `npm run lint`
@@ -61,8 +60,9 @@ Our builds are created by GitHub Actions using the following configuration:
 1. download the source code (e.g. from the relevant GitHub Release page) or clone the repo for the latest (often pre-release) version
 1. `npm ci && mkdir dist`
 1. manipulate package.json if you want to adjust version numbers
-1. `npm run build:prod && npm run pack:prod` (for stable releases) and/or `npm run build:beta && npm run pack:beta` (for beta releases) 
-   * XPIs and ZIPs of each version are put into the `dist` folder
+1. For a Firefox release: `npm run build:prod && npm run pack:prod` (for stable releases) and/or `npm run build:beta && npm run pack:beta` (for beta releases) 
+1. For a Chromium release: `npm run build-chrome:prod && npm run pack-chrome:prod` (for stable releases) and/or `npm run build-chrome:beta && npm run pack-chrome:beta` (for beta releases) 
+1. XPIs and ZIPs of each variant are put into the `dist` folder
 
 ## Repo/project structure
 
