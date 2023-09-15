@@ -87,25 +87,25 @@ jobs:
             dist/**/*.xpi
             dist/**/*.zip
 
-      #TODO: avoid waiting for this to finish since we know it will take hours-days!
-      #TODO: Upload the current git archive as source code (verify version numbers, firefox variant manifest, etc.) once AMO API supports this
-      - name: Request Firefox beta signing start
-        id: firefoxsign
-        run: |
-          mkdir dist/signed
-          echo "Signing debug build..."
-          npm run sign:xpi:beta
-        env:
-          WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
-          WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
-          NEW_KEE_VERSION: ${{ env.NEW_KEE_VERSION }}
+      # #TODO: avoid waiting for this to finish since we know it will take hours-days!
+      # #TODO: Upload the current git archive as source code (verify version numbers, firefox variant manifest, etc.) once AMO API supports this
+      # - name: Request Firefox beta signing start
+      #   id: firefoxsign
+      #   run: |
+      #     mkdir dist/signed
+      #     echo "Signing debug build..."
+      #     npm run sign:xpi:beta
+      #   env:
+      #     WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
+      #     WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
+      #     NEW_KEE_VERSION: ${{ env.NEW_KEE_VERSION }}
       
       - name: Publish the new release to Chrome beta users
         if: ${{ success() || ( failure() && steps.firefoxsign.conclusion == 'failure' ) }}
-        uses: trmcnvn/chrome-addon@91e2d97f66f3ad0453b5ef8396094f0b63018659
+        uses: mnao305/chrome-extension-upload@v4.0.1
         with:
-          extension: hlicbbodnlbbflfihnjjffnjeaoglici
-          zip: "dist/extension-beta.zip"
+          extension-id: hlicbbodnlbbflfihnjjffnjeaoglici
+          file-path: "dist/extension-beta.zip"
           publish-target: trustedTesters
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
