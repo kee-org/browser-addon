@@ -540,12 +540,20 @@
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
     "kee_works_with_a_password_manager": {
-        "message": "Облікові дані, які вводить Kee, надійно зберігаються в менеджері паролів під захистом головного пароля.",
+        "message": "The credentials Kee enters for you are stored securely in a password manager behind a single \"main password\".",
         "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
     "recommend_start_with_kee_vault": {
-        "message": "Ми рекомендуємо спробувати менеджер паролів Kee Vault безкоштовно протягом 14 днів. Після завершення пробного періоду він коштуватиме лише £2 на місяць і не вимагає платіжної інформації під час реєстрації, отже жодних ризиків.",
+        "message": "We recommend trying out our Kee Vault password manager. It only costs around £20 per year after a free trial, seamlessly synchronises and backs up your passwords across all of your devices and is Open Source, just like Kee.",
         "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
+    },
+    "recommend_start_with_kee_vault2": {
+        "message": "We also have apps to help you sign into other apps and websites on your iOS and Android devices.",
+        "description": "Further details about the Kee Vault service."
+    },
+    "kee_still_supports_keepass": {
+        "message": "Kee still fully supports using KeePass as your password manager so you don't have to do anything but we would really appreciate your support to keep Kee going for many years to come.",
+        "description": "Reassures users that nothing has changed regarding the support of KeePass as a password management source."
     },
     "load_kee_vault_now": {
         "message": "Завантажити Kee Vault",
@@ -783,13 +791,17 @@
         "message": "Завжди зберігати нові записи тут",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_10": {
-        "message": "Вдосконалення користувацького інтерфейсу;Якщо ви виявите помилки під час роботи, повідомте нас про це, а також запропонуйте, що ви бажаєте вдосконалити.;Відома помилка: Фільтрування списку груп для збереження нового запису більше неможливе.;99% змін ви не помітите, оскільки вони здебільшого зроблені на вимогу Mozilla й призначені для користувачів Firefox.;Якщо ви знайдете значні помилки, будь ласка, повідомте про це на форумі спільноти, встановіть старішу бета-версію (Kee v3.9.5beta) і вимкніть автоматичне оновлення на деякий час, доки ми не визначимо причину помилки.;Форум спільноти знаходиться за адресою https://forum.kee.pm;Примітка: Якщо ви користуєтеся Kee в Google Chrome, то версія 3.5.9.5 поки що не оновлюватиметься.",
+    "list_version_upgrade_3_11": {
+        "message": "User interface improvements;Keyboard navigation improvements, including in the Network Auth list of entries and when selecting a group to save a new entry into;Fixes the \"ignore case\" option which did not work for include IDs and Names. You may therefore find that Kee offers to fill in some forms it previously ignored;Re-enables filtering of group names when selecting where to save a new entry (this was disabled only on Firefox in the previous version of Kee)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
         "message": "Докладніші відомості, включаючи важливу інформацію для користувачів KeePass, можна знайти в оголошенні про випуск на форумі спільноти:",
         "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
+    },
+    "thanks_for_beta_testing": {
+        "message": "Thanks for beta testing Kee! You are helping us to make Kee better for everyone. If you have any feedback or find new issues with this release, please join those on the community forum and let us know.",
+        "description": "Message thanking the user for being a Kee beta tester"
     },
     "beta_testing_is_good": {
         "message": "Бета-тестери Kee вже відчули переваги деяких поліпшень протягом кількох місяців.",

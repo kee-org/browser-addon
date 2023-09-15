@@ -540,12 +540,20 @@
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
     "kee_works_with_a_password_manager": {
-        "message": "Die Zugangsdaten, die Kee für Sie eingibt, werden sicher in einem Passwortmanager hinter einem einzigen \"Masterpasswort\" gespeichert.",
+        "message": "Die Zugangsdaten, die Kee für Sie eingibt, werden sicher in einem Passwortmanager hinter einem einzigen \"Hauptpasswort\" gespeichert.",
         "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
     "recommend_start_with_kee_vault": {
-        "message": "Wir empfehlen die für 14 Tage kostenlose Testversion des Passwortmanagers Kee Vault. Es kostet nach der Testphase nur £2 pro Monat und erfordert keine Zahlungsdetails, wenn Sie sich anmelden. Dies ist risikofrei.",
+        "message": "Wir empfehlen Ihnen, unseren Passwort-Manager Kee Vault auszuprobieren. Es kostet nach einer kostenlosen Testversion nur etwa 20£ pro Jahr, synchronisiert und sichert Ihre Passwörter nahtlos auf allen Ihren Geräten und ist Open Source, genau wie Kee.",
         "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
+    },
+    "recommend_start_with_kee_vault2": {
+        "message": "Wir bieten auch Apps an, mit denen Sie sich auf Ihren iOS- und Android-Geräten bei anderen Apps und Websites anmelden können.",
+        "description": "Further details about the Kee Vault service."
+    },
+    "kee_still_supports_keepass": {
+        "message": "Kee unterstützt weiterhin uneingeschränkt die Verwendung von KeePass als Passwort-Manager, sodass Sie nichts tun müssen, aber wir würden uns sehr über Ihre Unterstützung freuen, damit Kee noch viele Jahre am Laufen bleibt.",
+        "description": "Reassures users that nothing has changed regarding the support of KeePass as a password management source."
     },
     "load_kee_vault_now": {
         "message": "Kee Vault jetzt laden",
@@ -783,13 +791,17 @@
         "message": "Neue Einträge immer hier speichern",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_10": {
-        "message": "Einige Verbesserungen am Erscheinungsbild der Benutzeroberfläche.;Leider wird es auch einige Fehler geben, also teilen Sie uns bitte mit, was Sie verbessert sehen möchten.;Bekanntes Problem: Das Filtern der Liste der Gruppen, in denen ein neuer Eintrag gespeichert werden soll, ist nicht mehr möglich.;99 % der Änderungen sind unsichtbar und wurden nur auf Anfrage von Mozilla an Firefox-Benutzer weitergegeben. Wenn Sie schwerwiegende Fehler finden, teilen Sie uns dies bitte im Community-Forum mit, installieren Sie die alte Beta-Version (Kee v3.9.5beta ) und deaktivieren Sie dann für kurze Zeit automatische Updates, während wir nachforschen.;Das Community-Forum ist weiterhin unter https://forum.kee.pm zu finden;Hinweis: Wenn Sie Kee auch in Google Chrome verwenden, bleiben Sie auf Version 3.9.5 im Moment.",
+    "list_version_upgrade_3_11": {
+        "message": "Verbesserungen der Benutzeroberfläche;Verbesserungen der Tastaturnavigation, einschließlich in der Netzwerkauthentifizierungsliste der Einträge und bei der Auswahl einer Gruppe, in der ein neuer Eintrag gespeichert werden soll;Behebt die Option „Groß-/Kleinschreibung ignorieren“, die bei Include-IDs und Namen nicht funktionierte. Sie werden daher möglicherweise feststellen, dass Kee das Ausfüllen einiger Formulare anbietet, die zuvor ignoriert wurden. Aktiviert die Filterung von Gruppennamen erneut, wenn ausgewählt wird, wo ein neuer Eintrag gespeichert werden soll (dies war in der vorherigen Version von Kee nur in Firefox deaktiviert).\n ",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
         "message": "Weitere Details, einschließlich wichtiger Informationen für KeePass-Benutzer, finden Sie in der Release-Ankündigung im Community-Forum:",
         "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
+    },
+    "thanks_for_beta_testing": {
+        "message": "Vielen Dank für den Betatest von Kee! Sie helfen uns, Kee für alle besser zu machen. Wenn Sie Feedback haben oder neue Probleme mit dieser Version feststellen, schließen Sie sich bitte dem Community-Forum an und teilen Sie uns dies mit.",
+        "description": "Message thanking the user for being a Kee beta tester"
     },
     "beta_testing_is_good": {
         "message": "Kee-Betatester genießen bereits seit vielen Monaten einige dieser Verbesserungen.",

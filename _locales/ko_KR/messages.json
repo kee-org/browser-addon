@@ -540,12 +540,20 @@
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
     "kee_works_with_a_password_manager": {
-        "message": "Kee가 입력하는 자격 인증서는 하나의 \"master password\" 뒤에 있는 암호 관리자에 안전하게 저장됩니다.",
+        "message": "The credentials Kee enters for you are stored securely in a password manager behind a single \"main password\".",
         "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
     },
     "recommend_start_with_kee_vault": {
-        "message": "Kee Vault 암호 관리자를 14일 무료 평가판으로 사용해보는 것을 추천합니다. 평가판 사용 후에는 한 달에 2 파운드이며 가입 시 결제 세부 정보가 필요하지 않으므로 위험이 없습니다.",
+        "message": "We recommend trying out our Kee Vault password manager. It only costs around £20 per year after a free trial, seamlessly synchronises and backs up your passwords across all of your devices and is Open Source, just like Kee.",
         "description": "Recommend the quick and easy option for new users to increase likelihood of long-term usage of a password manager."
+    },
+    "recommend_start_with_kee_vault2": {
+        "message": "We also have apps to help you sign into other apps and websites on your iOS and Android devices.",
+        "description": "Further details about the Kee Vault service."
+    },
+    "kee_still_supports_keepass": {
+        "message": "Kee still fully supports using KeePass as your password manager so you don't have to do anything but we would really appreciate your support to keep Kee going for many years to come.",
+        "description": "Reassures users that nothing has changed regarding the support of KeePass as a password management source."
     },
     "load_kee_vault_now": {
         "message": "즉시 Kee Vault 로드",
@@ -783,13 +791,17 @@
         "message": "항상 여기에 새 항목 저장",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_10": {
-        "message": "Some improvements to user interface appearance.;Unfortunately, there will be some bugs too so please let us know what you want to see improved.;Known issue: Filtering the list of groups to save a new entry into is no longer possible.;99% of changes are invisible, and rushed out to Firefox users only as a result of a demand from Mozilla.;If you find any serious bugs, please let us know on the community forum, install the old beta version (Kee v3.9.5beta) and then disable automatic updates for a short time while we investigate.;The Community Forum can still be found at https://forum.kee.pm;Note: If you have Kee in Google Chrome too, you'll stay on version 3.9.5 for the moment.",
+    "list_version_upgrade_3_11": {
+        "message": "User interface improvements;Keyboard navigation improvements, including in the Network Auth list of entries and when selecting a group to save a new entry into;Fixes the \"ignore case\" option which did not work for include IDs and Names. You may therefore find that Kee offers to fill in some forms it previously ignored;Re-enables filtering of group names when selecting where to save a new entry (this was disabled only on Firefox in the previous version of Kee)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
         "message": "KeePass 사용자를 위한 중요한 정보를 포함한 자세한 내용은 커뮤니티 포럼의 릴리즈 발표에서 확인할 수 있습니다:",
         "description": "Statement - preceding a link - to notify users that there is a corresponding topic on the community forum that was posted just before this version was submitted to the web browser extension stores for review. Specifically this one calls out that it affects KeePass users (due to KeePassRPC.plgx related information)"
+    },
+    "thanks_for_beta_testing": {
+        "message": "Thanks for beta testing Kee! You are helping us to make Kee better for everyone. If you have any feedback or find new issues with this release, please join those on the community forum and let us know.",
+        "description": "Message thanking the user for being a Kee beta tester"
     },
     "beta_testing_is_good": {
         "message": "Kee 베타 테스터는 이미 여러 달 동안 이러한 개선 사항들 중 일부를 향유하고 있었습니다. ",
