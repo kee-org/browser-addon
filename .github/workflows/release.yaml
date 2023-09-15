@@ -75,42 +75,6 @@ jobs:
       - name: Push git tag
         run: git push --tags
 
-      - name: Checkout our beta update repo
-        uses: actions/checkout@v3
-        with:
-          # Repository name with owner. For example, actions/checkout
-          repository: 'kee-org/browser-addon-updates'
-          token: ${{ secrets.BETA_UPDATES_TOKEN }}
-          # Whether to configure the token or SSH key with the local git config
-          persist-credentials: false
-          # Relative path under $GITHUB_WORKSPACE to place the repository
-          path: browser-addon-updates
-
-      - name: Sign Firefox Beta
-        run: |
-          mkdir dist/signed
-          echo "Signing debug build..."
-          npm run sign:xpi:beta
-          echo "https://github.com/kee-org/browser-addon/releases/download/${NEW_KEE_VERSION}/kee_password_manager-${NEW_KEE_VERSION}beta-an+fx.xpi" > .downloadLinkKeeXPI
-          echo "kee_password_manager-${NEW_KEE_VERSION}beta-an+fx.xpi" > .signedKeeXPI
-          cat .downloadLinkKeeXPI
-          cat .signedKeeXPI
-          # Rename whatever file Mozilla download for us to match our expected format.
-          # Will fail if they download more than one xpi file but we probably need to be aware of that change anyway!
-          mv dist/signed/*.xpi "dist/signed/kee_password_manager-${NEW_KEE_VERSION}beta-an+fx.xpi"
-          ./node_modules/.bin/faauv --update ./browser-addon-updates/beta/update.json --update-link $(cat .downloadLinkKeeXPI) dist/signed/$(cat .signedKeeXPI)
-          echo "New update manifest follows"
-          cd $GITHUB_WORKSPACE/browser-addon-updates
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "Automatic release of new beta version"
-          cd $GITHUB_WORKSPACE
-        env:
-          WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
-          WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
-          NEW_KEE_VERSION: ${{ env.NEW_KEE_VERSION }}
-
       - name: Release
         uses: softprops/action-gh-release@d4e8205d7e959a9107da6396278b2f1f07af0f9b
         with:
@@ -118,19 +82,26 @@ jobs:
           tag_name: ${{ env.NEW_KEE_VERSION }}
           fail_on_unmatched_files: true
           prerelease: false
-          body: "This is an automatically generated beta release. The first beta release for this major.minor version has been thoroughly tested; subsequent releases typically contain only new translations and occasional critical fixes with very limited scope. After beta testing this release may be promoted to a stable release. This message will be replaced if that happens. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550 . To install this beta version into Firefox, make sure you select the signed .xpi file - not all the listed .xpi files are signed and a typical Firefox configuration will reject the unsigned versions. The exact name may vary but will contain the word beta and the file size will be slightly larger than the other .xpi files."
+          body: "This is an automatically generated beta release. The first beta release for this major.minor version has been thoroughly tested; subsequent releases typically contain only new translations and occasional critical fixes with very limited scope. After beta testing this release may be promoted to a stable release. This message will be replaced if that happens. More information can be found at https://forum.kee.pm/t/versioning-and-releases/550 . To install this beta version into Firefox, make sure you select the signed .xpi file - not all the listed .xpi files are signed and a typical Firefox configuration will reject the unsigned versions. The exact name may vary but will contain the word beta and the file size will be slightly larger than the other .xpi files. The signed XPI may not be available yet. When Mozilla provide us with the signed XPI, we will add it to this release and enable automatic updates to that version if you already have an earlier beta release installed in your Firefox."
           files: |
             dist/**/*.xpi
             dist/**/*.zip
 
-      - name: Publish the new release to Firefox beta users
+      #TODO: avoid waiting for this to finish since we know it will take hours-days!
+      #TODO: Upload the current git archive as source code (verify version numbers, firefox variant manifest, etc.) once AMO API supports this
+      - name: Request Firefox beta signing start
+        id: firefoxsign
         run: |
-          cd $GITHUB_WORKSPACE/browser-addon-updates
-          git push https://github-actions:$BETA_UPDATES_TOKEN@github.com/kee-org/browser-addon-updates.git master
+          mkdir dist/signed
+          echo "Signing debug build..."
+          npm run sign:xpi:beta
         env:
-            BETA_UPDATES_TOKEN: ${{ secrets.BETA_UPDATES_TOKEN }}
+          WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
+          NEW_KEE_VERSION: ${{ env.NEW_KEE_VERSION }}
       
       - name: Publish the new release to Chrome beta users
+        if: ${{ success() || ( failure() && steps.firefoxsign.conclusion == 'failure' ) }}
         uses: trmcnvn/chrome-addon@91e2d97f66f3ad0453b5ef8396094f0b63018659
         with:
           extension: hlicbbodnlbbflfihnjjffnjeaoglici
