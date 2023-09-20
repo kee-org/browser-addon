@@ -602,7 +602,7 @@ export class kprpcClient {
         browser.windows.update(tab.windowId, { focused: true, drawAttention: true });
     }
 
-    identifyToClient(password, s, B) {
+    identifyToClient(password: string, s: string, B: string) {
         this.srpClientInternals.p = password;
         this.srpClientInternals.receiveSalts(s, B).then(() => {
             const data2server = {

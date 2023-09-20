@@ -16,8 +16,7 @@ module.exports = {
     },
     "globals": {
         "browser": "readonly",
-        "chrome": "readonly",
-        "BigInteger": "readonly"
+        "chrome": "readonly"
     },
     "parser": "vue-eslint-parser",
     "parserOptions": {

@@ -50,9 +50,7 @@ export class Utils {
         const bytes = new Uint8Array(byteCount);
         window.crypto.getRandomValues(bytes);
         const hex = Array.from(bytes).map(this.toHexString).join("");
-        return BigInteger.parse(hex, 16);
-        //TODO:4: switch to native bigint
-        //        return BigInt(`0x${hex}`);
+        return BigInt(`0x${hex}`);
     }
 
     // input can be either UTF8 formatted string or a byte array
