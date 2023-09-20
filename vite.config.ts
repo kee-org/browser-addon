@@ -51,7 +51,7 @@ export const sharedConfig: UserConfig = {
             resolvers: [
                 // auto import icons
                 IconsResolver({
-                    componentPrefix: ""
+                    prefix: ""
                 })
             ]
         }),
@@ -95,7 +95,9 @@ export default defineConfig(({ command }) => ({
     //     minifyWhitespace: true,
     // },
     build: {
-
+        watch: isDev
+        ? {}
+        : undefined,
         outDir: r("extension/dist"),
         emptyOutDir: false,
         // Ideally we'd package the sourcemaps alongside rather than
@@ -109,7 +111,6 @@ export default defineConfig(({ command }) => ({
         rollupOptions: {
             //treeshake: false,
             input: {
-                background: r("src/background/index.html"),
                 settings: r("src/settings/index.html"),
                 popup: r("src/popup/index.html"),
                 srp: r("src/dialogs/SRP.html"),
