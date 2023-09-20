@@ -126,7 +126,8 @@ export async function getManifest() {
                 "update_url": "https://raw.githubusercontent.com/kee-org/browser-addon-updates/master/beta/update.json",
                 "strict_min_version": "116.0"
             }
-        }
+        },
+        minimum_chrome_version: "116"
     };
 
     if (!isBeta) {
