@@ -7,7 +7,7 @@ import BackgroundStore from "~/store/BackgroundStore";
 
 // Pretend browser (WebExtensions) is chrome (we include a
 // polyfill from Mozilla but it doesn't work for onAuthRequired)
-declare const chrome;
+//declare const chrome;
 
 export class NetworkAuth {
     constructor(private store: BackgroundStore) {}

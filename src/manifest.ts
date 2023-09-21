@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import fs from "fs-extra";
-import type { Manifest } from "webextension-polyfill";
+//import { Manifest } from "@types/chrome";
 import type PkgType from "../package.json";
 import { isBeta, isDev, isChrome, port, r } from "../scripts/utils";
 

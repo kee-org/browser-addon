@@ -121,7 +121,7 @@ if (!isFirefox()) {
                 "https://keevault.pm/"
             ];
 
-            const loadContentScripts = (tab: browser.tabs.Tab) => {
+            const loadContentScripts = (tab: chrome.tabs.Tab) => {
                 if (tab.url && tab.url.startsWith("chrome://")) return;
                 if (script.exclude_globs && script.exclude_globs.length > 0) {
                     if (vaultURLs.some(excludedURL => tab.url.startsWith(excludedURL))) return;

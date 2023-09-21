@@ -35,9 +35,9 @@ export const sharedConfig: UserConfig = {
                 "vue",
                 {
                     "~/common/DollarPolyfills": ["$$", "$", "$STR", "$STRF"]
-                },
-                {
-                    "webextension-polyfill": [["*", "browser"]]
+                // },
+                // {
+                //     "webextension-polyfill": [["*", "browser"]]
                 }
             ],
             dts: r("src/auto-imports.d.ts")
@@ -74,7 +74,7 @@ export const sharedConfig: UserConfig = {
     ],
     // Only used in development (esbuild)
     optimizeDeps: {
-        include: ["vue", "@vueuse/core", "webextension-polyfill"],
+        include: ["vue", "@vueuse/core"],
         exclude: ["vue-demi"]
     }
 };
