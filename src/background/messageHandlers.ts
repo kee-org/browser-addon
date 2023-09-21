@@ -11,7 +11,7 @@ import { copyStringToClipboard } from "../common/copyStringToClipboard";
 
 // callbacks for messaging / ports
 
-export async function browserPopupMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
+export async function browserPopupMessageHandler(this: chrome.runtime.Port, msg: AddonMessage) {
     if (msg.mutation) {
         window.kee.store.onRemoteMessage(this, msg.mutation);
     }
@@ -24,7 +24,7 @@ export async function browserPopupMessageHandler(this: browser.runtime.Port, msg
         window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
     }
     if (msg.loadUrlUpgradeKee) {
-        browser.tabs.create({
+        chrome.tabs.create({
             url: "https://www.kee.pm/upgrade-kprpc"
         });
     }
@@ -142,7 +142,7 @@ export async function browserPopupMessageHandler(this: browser.runtime.Port, msg
     }
 }
 
-export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
+export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMessage) {
     if (KeeLog && KeeLog.debug) {
         KeeLog.debug("In background script, received message from page script.");
     }
@@ -210,9 +210,9 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
         if (window.kee.store.state.entryUpdateStartedAtTimestamp >= Date.now() - 90000) return;
 
         if (configManager.current.notificationCountSavePassword < 10) {
-            browser.notifications.create({
+            chrome.notifications.create({
                 type: "basic",
-                iconUrl: browser.extension.getURL("/assets/images/128.png"),
+                iconUrl: chrome.extension.getURL("/assets/images/128.png"),
                 title: $STR("savePasswordText"),
                 message:
                     $STR("notification_save_password_tip") +
@@ -267,7 +267,7 @@ export async function pageMessageHandler(this: browser.runtime.Port, msg: AddonM
     }
 }
 
-export function vaultMessageHandler(this: browser.runtime.Port, msg: VaultMessage) {
+export function vaultMessageHandler(this: chrome.runtime.Port, msg: VaultMessage) {
     if (msg.mutation) {
         window.kee.store.onRemoteMessage(this, msg.mutation);
     }
@@ -294,8 +294,8 @@ export function vaultMessageHandler(this: browser.runtime.Port, msg: VaultMessag
             }
             return;
         case VaultAction.FocusRequired:
-            browser.tabs.update(this.sender.tab.id, { active: true });
-            browser.windows.update(this.sender.tab.windowId, { focused: true });
+            chrome.tabs.update(this.sender.tab.id, { active: true });
+            chrome.windows.update(this.sender.tab.windowId, { focused: true });
             return;
         case VaultAction.AccountChanged:
             window.kee.accountManager.processNewTokens(msg.tokens);
@@ -303,7 +303,7 @@ export function vaultMessageHandler(this: browser.runtime.Port, msg: VaultMessag
     }
 }
 
-export async function iframeMessageHandler(this: browser.runtime.Port, msg: AddonMessage) {
+export async function iframeMessageHandler(this: chrome.runtime.Port, msg: AddonMessage) {
     if (msg.mutation) {
         window.kee.store.onRemoteMessage(this, msg.mutation);
     }

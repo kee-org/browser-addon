@@ -96,7 +96,7 @@ if (document.body) {
                 "state",
                 JSON.stringify({
                     connected: store?.state?.connected || false,
-                    version: browser.runtime.getManifest().version,
+                    version: chrome.runtime.getManifest().version,
                     dbLoaded: store?.state?.KeePassDatabases?.length > 0,
                     sessionNames: store?.state?.KeePassDatabases?.map?.(db =>
                         db.sessionType.toString()

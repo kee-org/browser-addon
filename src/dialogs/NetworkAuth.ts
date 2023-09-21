@@ -13,12 +13,12 @@ class NetworkAuth {
     }
 
     async supplyNetworkAuth(entryIndex: number) {
-        const tab = await browser.tabs.getCurrent();
-        browser.runtime.sendMessage({
+        const tab = await chrome.tabs.getCurrent();
+        chrome.runtime.sendMessage({
             action: "NetworkAuth_ok",
             selectedEntryIndex: entryIndex
         });
-        await browser.tabs.remove(tab.id);
+        await chrome.tabs.remove(tab.id);
     }
 
     public createNearNode(node: HTMLElement, entries: Entry[]) {
@@ -124,16 +124,16 @@ let networkAuth: NetworkAuth;
 
 function setupNetworkAuthDialog() {
     window.addEventListener("beforeunload", () =>
-        browser.runtime.sendMessage({ action: "NetworkAuth_cancel" })
+        chrome.runtime.sendMessage({ action: "NetworkAuth_cancel" })
     );
     KeeLog.attachConfig(configManager.current);
     networkAuth = new NetworkAuth();
-    browser.runtime.onMessage.addListener(message => {
+    chrome.runtime.onMessage.addListener(message => {
         if (message && message.action && message.action === "NetworkAuth_matchedEntries") {
             networkAuth.setupPage(message.entries, message.realm, message.url, message.isProxy);
         }
     });
-    browser.runtime.sendMessage({ action: "NetworkAuth_load" });
+    chrome.runtime.sendMessage({ action: "NetworkAuth_load" });
     document.getElementById("i18n_root").style.display = "block";
 }
 

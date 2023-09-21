@@ -38,7 +38,7 @@ class SrpDialog {
         );
 
         window.addEventListener("beforeunload", () =>
-            browser.runtime.sendMessage({ action: "SRP_ok", password: "" })
+            chrome.runtime.sendMessage({ action: "SRP_ok", password: "" })
         );
     }
 
@@ -85,12 +85,12 @@ class SrpDialog {
     }
 
     async continueSRP(password: string) {
-        const tab = await browser.tabs.getCurrent();
-        browser.runtime.sendMessage({
+        const tab = await chrome.tabs.getCurrent();
+        chrome.runtime.sendMessage({
             action: "SRP_ok",
             password: password
         });
-        await browser.tabs.remove(tab.id);
+        await chrome.tabs.remove(tab.id);
     }
 }
 

@@ -5,7 +5,7 @@ const vaultURLs = ["https://app-dev.kee.pm:8087", "https://app-beta.kee.pm", "ht
 
 // Firefox fetch files from cache instead of reloading changes from disk,
 // hmr will not work as Chromium based browser
-browser.webNavigation.onCommitted.addListener(({ tabId, frameId, url }) => {
+chrome.webNavigation.onCommitted.addListener(({ tabId, frameId, url }) => {
 
     if (frameId !== 0) { return; }
 
@@ -15,7 +15,7 @@ browser.webNavigation.onCommitted.addListener(({ tabId, frameId, url }) => {
 const scriptType = vaultURLs.some(v => url.startsWith(v)) ? "vault" : "page";
 
   // inject the latest scripts
-  browser.tabs.executeScript(tabId, {
+  chrome.tabs.executeScript(tabId, {
     file: `${isFirefox ? "" : "."}/dist/${scriptType}/index.global.js`,
     allFrames: scriptType == "page",
     runAt: "document_end"

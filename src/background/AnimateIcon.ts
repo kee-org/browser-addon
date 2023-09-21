@@ -79,16 +79,16 @@ export class AnimateIcon {
         if (timeElapsed > this.duration) {
             clearInterval(this.timer);
             this.timer = null;
-            browser.browserAction.setIcon({ path: "/assets/images/48.png" });
+            chrome.action.setIcon({ path: "/assets/images/48.png" });
             return;
         }
         const cycleProgress = timeElapsed / this.duration;
         if ((cycleProgress * 16) % 4 < 2) {
-            browser.browserAction.setIcon({
+            chrome.action.setIcon({
                 path: "/assets/images/highlight-48.png"
             });
         } else {
-            browser.browserAction.setIcon({ path: "/assets/images/48.png" });
+            chrome.action.setIcon({ path: "/assets/images/48.png" });
         }
     }
 
@@ -97,13 +97,13 @@ export class AnimateIcon {
         if (timeElapsed > this.duration) {
             clearInterval(this.timer);
             this.timer = null;
-            browser.browserAction.setIcon({ path: "/assets/images/48.png" });
+            chrome.action.setIcon({ path: "/assets/images/48.png" });
             return;
         }
         const cycleProgress = timeElapsed / this.duration;
         const width = Math.abs(this.IMG_SIZE * Math.cos(Math.PI * 2 * cycleProgress));
         const imageData = this.cache[Math.round(width)];
-        browser.browserAction.setIcon({
+        chrome.action.setIcon({
             imageData: imageData
         });
     }

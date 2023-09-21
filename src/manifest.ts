@@ -1,15 +1,16 @@
 /* eslint-disable camelcase */
 import fs from "fs-extra";
-//import { Manifest } from "@types/chrome";
 import type PkgType from "../package.json";
 import { isBeta, isDev, isChrome, port, r } from "../scripts/utils";
 
+type Manifest = chrome.runtime.Manifest;
+
 export async function getManifest() {
     const pkg = (await fs.readJSON(r("package.json"))) as typeof PkgType;
-
+//chrome.runtime.connect(port);
     // update this file to update this manifest.json
     // can also be conditional based on your need
-    const manifest: Manifest.WebExtensionManifest = {
+    const manifest: Manifest = {
         manifest_version: 3,
         name: pkg.displayName || pkg.name,
         version: pkg.version,
@@ -17,12 +18,7 @@ export async function getManifest() {
         default_locale: "en",
         version_name: pkg.version,
         author: "Kee Vault Ltd",
-        background: !isChrome
-        ? {
-            scripts: ["dist/background/index.js"],
-            type: "module"
-          }
-        : {
+        background: {
             service_worker: "./dist/background/index.js"
           },
         content_scripts: [{
@@ -59,8 +55,7 @@ export async function getManifest() {
                 "64": "./assets/images/64.png"
             },
             "default_title": "Kee",
-            default_popup: "./dist/popup/index.html",
-            "default_area": "navbar"
+            default_popup: "./dist/popup/index.html"
         },
         options_ui: {
             page: "./dist/settings/index.html",
@@ -76,11 +71,11 @@ export async function getManifest() {
             "privacy",
             "webRequestBlocking",
             "webRequest",
-            "<all_urls>",
             "notifications",
             "unlimitedStorage",
             "idle"
         ],
+        //TODO: Find out about equiveleant for permissions - "<all_urls>",
         host_permissions: ["*://*/*"],
         web_accessible_resources: [
             {
@@ -140,6 +135,11 @@ export async function getManifest() {
         delete manifest.applications;
     } else {
         delete manifest.version_name;
+        (manifest as any).background = {
+            scripts: ["dist/background/index.js"],
+            type: "module"
+          };
+        (manifest as any).action.default_area = "navbar";
     }
 
     if (isDev) {

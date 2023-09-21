@@ -80,7 +80,7 @@ function startup() {
                         vueApp.use(vuetify);
                         vueApp.use(piniaInstance);
                         vueApp.config.globalProperties.$browser = browser;
-                        vueApp.config.globalProperties.$i18n = browser.i18n.getMessage;
+                        vueApp.config.globalProperties.$i18n = chrome.i18n.getMessage;
                         store = useStore();
 
                         store.$patch(m.initialState);

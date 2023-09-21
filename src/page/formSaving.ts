@@ -20,7 +20,7 @@ export class FormSaving {
     private SubmitHandlerAttachments: SubmitHandlerAttachment[] = [];
     private matchResult: MatchResult; //TODO:4: May be overkill to have all this data available for saving
 
-    constructor(private myPort: browser.runtime.Port, logger: KeeLogger, formUtils: FormUtils) {
+    constructor(private myPort: chrome.runtime.Port, logger: KeeLogger, formUtils: FormUtils) {
         this.Logger = logger;
         this.formUtils = formUtils;
     }

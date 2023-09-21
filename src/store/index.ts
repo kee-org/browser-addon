@@ -101,7 +101,7 @@ const useStore = defineStore("kee", {
     // some activity in another part of the addon that we need to apply here.
     //TODO: Find some way to remove duplicate code in a typesafe manner for NonReactiveStore equivalents
     actions: {
-        onRemoteMessage(sourcePort: browser.runtime.Port, mutation: Mutation) {
+        onRemoteMessage(sourcePort: chrome.runtime.Port, mutation: Mutation) {
             if (mutation.type === types.addNotification) {
                 this.addNotification(mutation.payload, false);
             } else if (mutation.type === types.removeFieldFromActiveEntry) {

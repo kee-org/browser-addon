@@ -4,7 +4,7 @@ export class PersistentLogger {
     private enabled = true;
 
     constructor() {
-        browser.runtime.onMessage.addListener(message => {
+        chrome.runtime.onMessage.addListener(message => {
             this.emit(message);
         });
     }
@@ -17,14 +17,14 @@ export class PersistentLogger {
                     const newLogs = this.entries.slice();
                     let currentLogs = [];
                     this.entries = [];
-                    const result = await browser.storage.local.get("logs");
+                    const result = await chrome.storage.local.get("logs");
                     if (result && result["logs"] && result["logs"].length > 0) {
                         currentLogs = result["logs"];
                     }
                     currentLogs = currentLogs.concat(newLogs);
                     const preTrimTotal = currentLogs.length;
                     currentLogs = currentLogs.slice(-5000);
-                    await browser.storage.local.set({ logs: currentLogs });
+                    await chrome.storage.local.set({ logs: currentLogs });
                     console.log(
                         `${newLogs.length} new (${currentLogs.length} total) logs flushed. ${
                             preTrimTotal - currentLogs.length

@@ -286,11 +286,11 @@ export default {
     },
     methods: {
         showOptions: () => {
-            browser.runtime.openOptionsPage();
+            chrome.runtime.openOptionsPage();
             window.close();
         },
         saveStart: async function () {
-            const currentTab = (await browser.tabs.query({ active: true, currentWindow: true }))[0];
+            const currentTab = (await chrome.tabs.query({ active: true, currentWindow: true }))[0];
             if (!currentTab) return;
             const entryTemplate = {
                 URLs: [currentTab.url],
@@ -352,12 +352,12 @@ export default {
             this.showSaveWhere = true;
         },
         showHelp: () => {
-            browser.tabs.create({ url: "https://www.kee.pm/help" });
+            chrome.tabs.create({ url: "https://www.kee.pm/help" });
             window.close();
         },
         openKeeVault: async function () {
             KeeLog.debug("open Kee Vault requested");
-            const vaultTabs = await browser.tabs.query({
+            const vaultTabs = await chrome.tabs.query({
                 url: [
                     "https://keevault.pm/*",
                     "https://app-beta.kee.pm/*",
@@ -365,10 +365,10 @@ export default {
                 ]
             });
             if (vaultTabs && vaultTabs[0]) {
-                browser.tabs.update(vaultTabs[0].id, { active: true });
-                browser.windows.update(vaultTabs[0].windowId, { focused: true });
+                chrome.tabs.update(vaultTabs[0].id, { active: true });
+                chrome.windows.update(vaultTabs[0].windowId, { focused: true });
             } else {
-                browser.tabs.create({
+                chrome.tabs.create({
                     url: "https://keevault.pm/",
                     active: true
                 });
@@ -415,7 +415,7 @@ export default {
         prefEntryToggle: async function (payload: any) {
             if (payload?.uuid) {
                 const currentTab = (
-                    await browser.tabs.query({
+                    await chrome.tabs.query({
                         active: true,
                         currentWindow: true
                     })

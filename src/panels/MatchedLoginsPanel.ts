@@ -7,7 +7,7 @@ import {setup as i18nSetup } from "../common/i18n";
 
 export class MatchedLoginsPanel {
     constructor(
-        private myPort: browser.runtime.Port,
+        private myPort: chrome.runtime.Port,
         private closePanel: () => void,
         private parentFrameId: number
     ) {}

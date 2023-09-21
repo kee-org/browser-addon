@@ -4,7 +4,7 @@ import NonReactiveStore from "./NonReactiveStore";
 
 export default class BackgroundStore extends NonReactiveStore {
 
-    onRemoteMessage(sourcePort: browser.runtime.Port, mutation: Mutation) {
+    onRemoteMessage(sourcePort: chrome.runtime.Port, mutation: Mutation) {
         super.onRemoteMessage(sourcePort, mutation);
 
         KeeLog.debug("BackgroundStore.onRemoteMessage distributing");

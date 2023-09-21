@@ -21,9 +21,9 @@ const maxUpdateDelaySeconds = 60 * 60 * 8;
 // window.KeePersistentLogger = new PersistentLogger();
 
 // Make sure user knows we're not ready yet
-browser.browserAction.setBadgeText({ text: "OFF" });
-browser.browserAction.setBadgeBackgroundColor({ color: "red" });
-browser.browserAction.disable();
+chrome.action.setBadgeText({ text: "OFF" });
+chrome.action.setBadgeBackgroundColor({ color: "red" });
+chrome.action.disable();
 
 // Assumes config and logging have been initialised before this is called.
 async function startup() {
@@ -35,27 +35,27 @@ async function startup() {
     configManager.addChangeListener(() =>
         window.kee.configSyncManager.updateToRemoteConfig(configManager.current)
     );
-    browser.browserAction.enable();
+    chrome.action.enable();
 }
 
 async function showReleaseNotesAfterUpdate() {
-    // browser.runtime.onInstalled is not reliably called after an update. E.g.
+    // chrome.runtime.onInstalled is not reliably called after an update. E.g.
     // in Firefox after a browser restart. Hence we must track the recent update
     // using our async config store rather than rely on the runtime event being fired.
     if (configManager.current.mustShowReleaseNotesAtStartup) {
-        const tab = await browser.tabs.create({
+        const tab = await chrome.tabs.create({
             url: "/dist/release-notes/update-notes.html",
             active: true
         });
-        browser.windows.update(tab.windowId, { focused: true, drawAttention: true });
+        chrome.windows.update(tab.windowId, { focused: true, drawAttention: true });
         configManager.setASAP({ mustShowReleaseNotesAtStartup: false });
     }
 }
 
-browser.windows.onFocusChanged.addListener(async function (windowId) {
+chrome.windows.onFocusChanged.addListener(async function (windowId) {
     if (KeeLog && KeeLog.debug) KeeLog.debug("Focus changed for id: " + windowId);
-    if (windowId !== browser.windows.WINDOW_ID_NONE) {
-        const tabs = await browser.tabs.query({
+    if (windowId !== chrome.windows.WINDOW_ID_NONE) {
+        const tabs = await chrome.tabs.query({
             active: true,
             windowId: windowId
         });
@@ -63,7 +63,7 @@ browser.windows.onFocusChanged.addListener(async function (windowId) {
     }
 });
 
-browser.tabs.onActivated.addListener(event => {
+chrome.tabs.onActivated.addListener(event => {
     if (KeeLog && KeeLog.debug) KeeLog.debug("Tab activated with id: " + event.tabId);
     onTabActivated(event.tabId);
 });
@@ -99,14 +99,14 @@ function updateForegroundTab(tabId: number) {
 // but others don't (e.g. Chrome). To ensure every existing tab has exactly one
 // instance of this content script running in it, we programmatically inject the script.
 if (!isFirefox()) {
-    browser.runtime.onInstalled.addListener(() => {
+    chrome.runtime.onInstalled.addListener(() => {
         const showErrors = () => {
-            if (browser.runtime.lastError) {
-                if (KeeLog && KeeLog.error) KeeLog.error(browser.runtime.lastError.message);
-                else console.error(browser.runtime.lastError);
+            if (chrome.runtime.lastError) {
+                if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError.message);
+                else console.error(chrome.runtime.lastError);
             }
         };
-        browser.runtime.getManifest().content_scripts?.forEach(script => {
+        chrome.runtime.getManifest().content_scripts?.forEach(script => {
             const allFrames = script.all_frames;
             const url = script.matches;
 
@@ -130,49 +130,50 @@ if (!isFirefox()) {
                     if (!vaultURLs.some(includedURL => tab.url.startsWith(includedURL))) return;
                 }
                 (script.js || []).forEach(file => {
-                    browser.tabs.executeScript(tab.id, { allFrames, file }).then(showErrors);
+                    chrome.tabs.executeScript(tab.id, { allFrames, file }).then(showErrors);
                 });
                 (script.css || []).forEach(file => {
-                    browser.tabs.insertCSS(tab.id, { allFrames, file }).then(showErrors);
+                    chrome.tabs.insertCSS(tab.id, { allFrames, file }).then(showErrors);
                 });
             };
-            browser.tabs.query({ url }).then(tabs => tabs.forEach(loadContentScripts));
+            chrome.tabs.query({ url }).then(tabs => tabs.forEach(loadContentScripts));
         });
     });
 }
 
-browser.runtime.onInstalled.addListener(async function (details) {
+chrome.runtime.onInstalled.addListener(async function (details) {
     if (details.reason === "install") {
-        const vaultTabs = await browser.tabs.query({
+        const vaultTabs = await chrome.tabs.query({
             url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]
         });
         if (vaultTabs && vaultTabs[0]) {
-            browser.tabs.update(vaultTabs[0].id, { active: true });
-            browser.windows.update(vaultTabs[0].windowId, { focused: true });
+            chrome.tabs.update(vaultTabs[0].id, { active: true });
+            chrome.windows.update(vaultTabs[0].windowId, { focused: true });
         } else {
-            browser.tabs.create({
+            chrome.tabs.create({
                 url: "/dist/release-notes/install-notes.html"
             });
         }
     }
 });
 
-browser.runtime.onUpdateAvailable.addListener(async () => {
-    await configManager.setASAP({ mustShowReleaseNotesAtStartup: true });
-    if ((await browser.idle.queryState(userBusySeconds)) === "idle") {
-        browser.runtime.reload();
-    } else {
-        browser.idle.setDetectionInterval(userBusySeconds);
-        browser.idle.onStateChanged.addListener(status => {
-            if (status !== "active") {
-                browser.runtime.reload();
-            }
-        });
-        window.setTimeout(() => {
-            browser.runtime.reload();
-        }, maxUpdateDelaySeconds * 1000);
-    }
-});
+//TODO: re-enable update idle delay feature
+// chrome.runtime.onUpdateAvailable.addListener(async () => {
+//     await configManager.setASAP({ mustShowReleaseNotesAtStartup: true });
+//     if ((await chrome.idle.queryState(userBusySeconds)) === "idle") {
+//         chrome.runtime.reload();
+//     } else {
+//         chrome.idle.setDetectionInterval(userBusySeconds);
+//         chrome.idle.onStateChanged.addListener(status => {
+//             if (status !== "active") {
+//                 chrome.runtime.reload();
+//             }
+//         });
+//         window.setTimeout(() => {
+//             chrome.runtime.reload();
+//         }, maxUpdateDelaySeconds * 1000);
+//     }
+// });
 
 // Load our config and start the addon once done
 configManager.load(startup);

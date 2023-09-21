@@ -98,7 +98,7 @@ export class WebsocketSessionManager {
 
     startup() {
         this.pendingPortChange = null;
-        browser.runtime.onMessage.addListener(request => {
+        chrome.runtime.onMessage.addListener(request => {
             if (request.action !== "KPRPC_Port_Change") return;
             if (this.pendingPortChange != null) {
                 clearTimeout(this.pendingPortChange);

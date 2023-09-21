@@ -29,7 +29,6 @@
     "esno": "^0.17.0",
     "firefox-addons-add-update-version": "^1.0.1",
     "fs-extra": "^11.1.1",
-    "jest-webextension-mock": "^3.8.9",
     "jsdom": "^22.1.0",
     "kolorist": "^1.8.0",
     "linkify-element": "^4.1.1",

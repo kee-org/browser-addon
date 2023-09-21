@@ -1124,7 +1124,7 @@ function saveKPRPCPort(e) {
     configManager.current.KeePassRPCWebSocketPort = parseInt(
         (document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value
     );
-    configManager.save().then(() => browser.runtime.sendMessage({ action: "KPRPC_Port_Change" }));
+    configManager.save().then(() => chrome.runtime.sendMessage({ action: "KPRPC_Port_Change" }));
 }
 
 function saveKPRPCDBToOpen(e) {

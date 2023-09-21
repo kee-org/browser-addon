@@ -2,7 +2,7 @@ import { AddonMessage } from "./AddonMessage";
 import { VaultMessage } from "./VaultMessage";
 
 class ContentPortManager {
-    private port: browser.runtime.Port;
+    private port: chrome.runtime.Port;
 
     // public mixin = {
     //     methods: {
@@ -17,14 +17,14 @@ class ContentPortManager {
     }
 
     public startup(name: string) {
-        this.port = browser.runtime.connect({ name });
+        this.port = chrome.runtime.connect({ name });
     }
 
     public shutdown() {
         this.port = null;
     }
 
-    public get raw(): browser.runtime.Port {
+    public get raw(): chrome.runtime.Port {
         return this.port;
     }
 }

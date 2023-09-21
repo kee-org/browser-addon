@@ -53,8 +53,8 @@ export class Kee {
     pendingCallback: string;
     urlToOpenOnStartup: string;
 
-    browserPopupPort: Partial<browser.runtime.Port>;
-    vaultPort: Partial<browser.runtime.Port>;
+    browserPopupPort: Partial<chrome.runtime.Port>;
+    vaultPort: Partial<chrome.runtime.Port>;
     onPortConnected: any;
 
     networkAuth: NetworkAuth;
@@ -62,8 +62,8 @@ export class Kee {
     store: BackgroundStore;
 
     constructor() {
-        this.store = new BackgroundStore((mutation: Mutation, excludedPort: browser.runtime.Port) => {
-            const allPorts: Partial<browser.runtime.Port>[] = [];
+        this.store = new BackgroundStore((mutation: Mutation, excludedPort: chrome.runtime.Port) => {
+            const allPorts: Partial<chrome.runtime.Port>[] = [];
             allPorts.push(this.browserPopupPort);
             allPorts.push(this.vaultPort);
 
@@ -114,7 +114,7 @@ export class Kee {
         this.browserPopupPort = { postMessage: _msg => {} };
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         this.vaultPort = { postMessage: _msg => {} };
-        this.onPortConnected = function (p: browser.runtime.Port) {
+        this.onPortConnected = function (p: chrome.runtime.Port) {
             if (KeeLog && KeeLog.debug) KeeLog.debug(p.name + " port connected");
             let name = p.name;
             let parentFrameId: number;
@@ -303,18 +303,18 @@ export class Kee {
             }
         });
 
-        browser.runtime.onConnect.addListener(this.onPortConnected);
+        chrome.runtime.onConnect.addListener(this.onPortConnected);
 
         this.networkAuth.startListening();
 
-        await browser.privacy.services.passwordSavingEnabled.set({
+        await chrome.privacy.services.passwordSavingEnabled.set({
             value: false
         });
 
-        if (browser.runtime.lastError != null) {
+        if (chrome.runtime.lastError != null) {
             KeeLog.warn(
                 "KeeFox was unable to disable built-in password manager saving - confusion may ensue! " +
-                    browser.runtime.lastError.message
+                    chrome.runtime.lastError.message
             );
         }
     }
@@ -322,21 +322,21 @@ export class Kee {
     notifyUser(notification: KeeNotification, nativeNotification?: NativeNotification) {
         window.kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
         window.kee.store.addNotification(notification);
-        browser.browserAction.setIcon({
+        chrome.action.setIcon({
             path: "/assets/images/highlight-48.png"
         });
         if (nativeNotification) {
-            browser.notifications.create({
+            chrome.notifications.create({
                 type: "basic",
-                iconUrl: browser.extension.getURL("/assets/images/128.png"),
+                iconUrl: chrome.extension.getURL("/assets/images/128.png"),
                 title: nativeNotification.title,
                 message: nativeNotification.message
             });
         } else {
             if (configManager.current.notificationCountGeneric < 5) {
-                browser.notifications.create({
+                chrome.notifications.create({
                     type: "basic",
-                    iconUrl: browser.extension.getURL("/assets/images/128.png"),
+                    iconUrl: chrome.extension.getURL("/assets/images/128.png"),
                     title: $STR("notification_raised_title"),
                     message:
                         $STR("notification_yellow_background") +
@@ -366,7 +366,7 @@ export class Kee {
     }
 
     resetBrowserActionColor() {
-        browser.browserAction.setIcon({ path: "/assets/images/48.png" });
+        chrome.action.setIcon({ path: "/assets/images/48.png" });
     }
 
     shutdown() {
@@ -407,8 +407,8 @@ export class Kee {
             );
         }
 
-        browser.browserAction.setBadgeText({ text: "OFF" });
-        browser.browserAction.setBadgeBackgroundColor({ color: "red" });
+        chrome.action.setBadgeText({ text: "OFF" });
+        chrome.action.setBadgeBackgroundColor({ color: "red" });
 
         commandManager.setupContextMenuItems();
 
@@ -449,11 +449,11 @@ export class Kee {
         KeeLog.info("Number of databases open: " + newDatabases.length);
 
         if (newDatabases.length > 0) {
-            browser.browserAction.setBadgeText({ text: "" });
-            browser.browserAction.setBadgeBackgroundColor({ color: "blue" });
+            chrome.action.setBadgeText({ text: "" });
+            chrome.action.setBadgeBackgroundColor({ color: "blue" });
         } else {
-            browser.browserAction.setBadgeText({ text: "OFF" });
-            browser.browserAction.setBadgeBackgroundColor({ color: "orange" });
+            chrome.action.setBadgeText({ text: "OFF" });
+            chrome.action.setBadgeBackgroundColor({ color: "orange" });
         }
 
         if (configManager.current.rememberMRUDB) {
@@ -560,7 +560,7 @@ export class Kee {
             this.getKeePassFileNameToOpen()
         );
         if (sessionType !== SessionType.Websocket) {
-            const vaultTabs = await browser.tabs.query({
+            const vaultTabs = await chrome.tabs.query({
                 url: [
                     "https://keevault.pm/*",
                     "https://app-beta.kee.pm/*",
@@ -568,10 +568,10 @@ export class Kee {
                 ]
             });
             if (vaultTabs && vaultTabs[0]) {
-                browser.tabs.update(vaultTabs[0].id, { active: true });
-                browser.windows.update(vaultTabs[0].windowId, { focused: true });
+                chrome.tabs.update(vaultTabs[0].id, { active: true });
+                chrome.windows.update(vaultTabs[0].windowId, { focused: true });
             } else {
-                browser.tabs.create({
+                chrome.tabs.create({
                     url: "https://keevault.pm/",
                     active: true
                 });
@@ -898,10 +898,10 @@ export class Kee {
                 window.kee.vaultPort.postMessage({
                     protocol: VaultProtocol.ShowGenerator
                 } as VaultMessage);
-                browser.tabs.update(window.kee.vaultPort.sender.tab.id, {
+                chrome.tabs.update(window.kee.vaultPort.sender.tab.id, {
                     active: true
                 });
-                browser.windows.update(window.kee.vaultPort.sender.tab.windowId, { focused: true });
+                chrome.windows.update(window.kee.vaultPort.sender.tab.windowId, { focused: true });
             }
         }
     }

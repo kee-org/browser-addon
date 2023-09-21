@@ -19,7 +19,7 @@ function undefAbort(payload) {
     }
 }
 
-declare type BackgroundDistributor = (mutation: Mutation, excludedPort?: browser.runtime.Port) => void;
+declare type BackgroundDistributor = (mutation: Mutation, excludedPort?: chrome.runtime.Port) => void;
 
 export default class NonReactiveStore {
 
@@ -33,7 +33,7 @@ export default class NonReactiveStore {
 
     }
 
-    public onRemoteMessage(sourcePort: browser.runtime.Port, mutation: Mutation) {
+    public onRemoteMessage(sourcePort: chrome.runtime.Port, mutation: Mutation) {
         if (mutation.type === types.addNotification) {
             this.addNotification(mutation.payload, false);
         } else if (mutation.type === types.removeFieldFromActiveEntry) {

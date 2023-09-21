@@ -582,24 +582,24 @@ export class kprpcClient {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const _this = this;
 
-        const vaultTabs = await browser.tabs.query({
+        const vaultTabs = await chrome.tabs.query({
             url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]
         });
 
         function handleMessage(request) {
             if (request.action !== "SRP_ok") return;
             _this.identifyToClient(request.password, s, B);
-            browser.runtime.onMessage.removeListener(handleMessage);
+            chrome.runtime.onMessage.removeListener(handleMessage);
         }
 
-        browser.runtime.onMessage.addListener(handleMessage);
+        chrome.runtime.onMessage.addListener(handleMessage);
 
         const createData = {
             url: "/dist/dialogs/SRP.html",
             active: !(vaultTabs && vaultTabs[0] && vaultTabs[0].active)
         };
-        const tab = await browser.tabs.create(createData);
-        browser.windows.update(tab.windowId, { focused: true, drawAttention: true });
+        const tab = await chrome.tabs.create(createData);
+        chrome.windows.update(tab.windowId, { focused: true, drawAttention: true });
     }
 
     identifyToClient(password: string, s: string, B: string) {

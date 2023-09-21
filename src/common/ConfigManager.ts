@@ -25,10 +25,6 @@ type SiteConfigNodeAndIndex = {
   we'll still make it available from this interface.
 */
 
-// Pretend browser (WebExtensions) is chrome (we include a
-// polyfill from Mozilla but it doesn't work in some cases)
-declare const chrome;
-
 // increment when changes are introduced that require data migration
 export const LATEST_VERSION = 8;
 
@@ -90,17 +86,17 @@ export class ConfigManager {
 
     public constructor() {
         this.current = defaultConfig;
-        browser.storage.onChanged.addListener((a, b) => this.reloadOnStorageChange(a, b));
+        chrome.storage.onChanged.addListener((a, b) => this.reloadOnStorageChange(a, b));
     }
 
     // Some processes may want to take action when settings are changed (e.g. the background
-    // process to notify the KPRPC server). Using this rather than browser.storage.onChanged.addListener
+    // process to notify the KPRPC server). Using this rather than chrome.storage.onChanged.addListener
     // ensures that our configManager data is consistent with the underlying storage
     public addChangeListener(listener) {
         this._listeners.push(listener);
     }
 
-    private reloadOnStorageChange(changes: browser.storage.StorageChange, area: string) {
+    private reloadOnStorageChange(changes: chrome.storage.StorageChange, area: string) {
         // We assume every change requires a reload of the config data. Since we batch and
         // page the data to enable enough storage space this is likley safe for the
         // long-term but perhaps performance gains could be found around here one day.
@@ -139,7 +135,7 @@ export class ConfigManager {
         for (let i = 0; i < pages.length; i++) {
             configValues["keeConfigPage" + i] = pages[i];
         }
-        await browser.storage.local.set(configValues);
+        await chrome.storage.local.set(configValues);
     }
 
     public load(onLoaded) {
@@ -149,7 +145,7 @@ export class ConfigManager {
         // fine but might require version comparisons... in which case we might
         // as well just increment the version number and run a migration once
         // rather than incur increased ongoing load costs.
-        browser.storage.local.get().then(config => {
+        chrome.storage.local.get().then(config => {
             const pageCount = config["keeConfigPageCount"];
 
             if (pageCount) {
@@ -229,7 +225,7 @@ export class ConfigManager {
     }
 
     private reload(onLoaded?) {
-        browser.storage.local.get().then(config => {
+        chrome.storage.local.get().then(config => {
             const pageCount = config["keeConfigPageCount"];
 
             if (pageCount) {

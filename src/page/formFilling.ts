@@ -56,7 +56,7 @@ export class FormFilling {
 
     constructor(
         private store: NonReactiveStore,
-        private myPort: browser.runtime.Port,
+        private myPort: chrome.runtime.Port,
         private parentFrameId: number,
         private formUtils: FormUtils,
         private formSaving: FormSaving,

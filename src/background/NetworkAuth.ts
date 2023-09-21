@@ -5,10 +5,6 @@ import { Entry } from "../common/model/Entry";
 import punycode from "punycode/";
 import BackgroundStore from "~/store/BackgroundStore";
 
-// Pretend browser (WebExtensions) is chrome (we include a
-// polyfill from Mozilla but it doesn't work for onAuthRequired)
-//declare const chrome;
-
 export class NetworkAuth {
     constructor(private store: BackgroundStore) {}
 
@@ -23,7 +19,7 @@ export class NetworkAuth {
 
     public provideCredentialsAsyncBlockingCallback(
         requestDetails: any,
-        callback: (response: browser.webRequest.BlockingResponse) => void
+        callback: (response: chrome.webRequest.BlockingResponse) => void
     ) {
         // Firefox fails to register the event listener so this function
         // only executes in other browsers
@@ -38,7 +34,7 @@ export class NetworkAuth {
 
     public async provideCredentialsAsync(
         requestDetails: any
-    ): Promise<browser.webRequest.BlockingResponse> {
+    ): Promise<chrome.webRequest.BlockingResponse> {
         this.pendingRequests.push(requestDetails.requestId);
         KeeLog.debug("Providing credentials for: " + requestDetails.requestId);
 
@@ -91,8 +87,8 @@ export class NetworkAuth {
 
         matchedEntries.sort((_e1, e2) => (e2.httpRealm === requestDetails.realm ? 1 : 0));
 
-        return new Promise<browser.webRequest.BlockingResponse>(resolve => {
-            function handleMessage(request, sender: browser.runtime.MessageSender) {
+        return new Promise<chrome.webRequest.BlockingResponse>(resolve => {
+            function handleMessage(request, sender: chrome.runtime.MessageSender) {
                 switch (request.action) {
                     case "NetworkAuth_ok": {
                         const entry = matchedEntries[request.selectedEntryIndex];
@@ -102,17 +98,17 @@ export class NetworkAuth {
                                 password: Entry.getPasswordField(entry).value
                             }
                         });
-                        browser.runtime.onMessage.removeListener(handleMessage);
+                        chrome.runtime.onMessage.removeListener(handleMessage);
                         break;
                     }
                     case "NetworkAuth_cancel": {
                         resolve({ cancel: false });
-                        browser.runtime.onMessage.removeListener(handleMessage);
+                        chrome.runtime.onMessage.removeListener(handleMessage);
                         break;
                     }
                     case "NetworkAuth_load": {
                         // Can't use sendResponse() because Mozilla chose to not implement it, contrary to the MDN docs
-                        browser.tabs.sendMessage(sender.tab.id, {
+                        chrome.tabs.sendMessage(sender.tab.id, {
                             action: "NetworkAuth_matchedEntries",
                             entries: matchedEntries,
                             realm: requestDetails.realm,
@@ -124,21 +120,21 @@ export class NetworkAuth {
                 }
             }
 
-            browser.runtime.onMessage.addListener(handleMessage);
+            chrome.runtime.onMessage.addListener(handleMessage);
 
             const createData = {
-                type: "popup" as browser.windows.CreateType,
+                type: "popup",
                 url: "/dist/dialogs/NetworkAuth.html",
                 width: 600,
                 height: 300
-            };
-            browser.windows.create(createData);
+            } as chrome.windows.CreateData;
+            chrome.windows.create(createData);
         });
     }
 
     public startListening() {
         if (isFirefox()) {
-            browser.webRequest.onAuthRequired.addListener(
+            chrome.webRequest.onAuthRequired.addListener(
                 requestDetails => this.provideCredentialsAsync(requestDetails),
                 { urls: ["<all_urls>"] },
                 ["blocking"]
@@ -153,14 +149,14 @@ export class NetworkAuth {
             );
         }
 
-        browser.webRequest.onCompleted.addListener(
+        chrome.webRequest.onCompleted.addListener(
             requestDetails => {
                 this.completed(requestDetails);
             },
             { urls: ["<all_urls>"] }
         );
 
-        browser.webRequest.onErrorOccurred.addListener(
+        chrome.webRequest.onErrorOccurred.addListener(
             requestDetails => {
                 this.completed(requestDetails);
             },

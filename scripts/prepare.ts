@@ -10,8 +10,7 @@ import { isDev, log, port, r } from "./utils";
 async function stubIndexHtml() {
     const views = [
         "settings",
-        "popup",
-        "background"
+        "popup"
     ];
 
     for (const view of views) {

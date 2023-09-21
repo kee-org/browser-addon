@@ -19,7 +19,8 @@
         "isolatedModules": true,
         "types": [
             "vite/client",
-            "unplugin-icons/types/vue"
+            "unplugin-icons/types/vue",
+            "chrome"
         ],
         "module": "ESNext",
         "paths": {

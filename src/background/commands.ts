@@ -7,7 +7,7 @@ export class KFCommands {
     private contextMenuUpdateLock = false;
 
     public init() {
-        browser.commands.onCommand.addListener(command => {
+        chrome.commands.onCommand.addListener(command => {
             const store = window.kee.store;
             switch (command) {
                 case Command.DetectForms:
@@ -38,7 +38,7 @@ export class KFCommands {
             }
         });
 
-        browser.contextMenus.onClicked.addListener(info => {
+        chrome.contextMenus.onClicked.addListener(info => {
             const id = info.menuItemId as string;
             const store = window.kee.store;
             switch (id) {
@@ -92,11 +92,11 @@ export class KFCommands {
 
         commandManager.contextMenuUpdateLock = true;
         try {
-            await browser.contextMenus.removeAll();
+            await chrome.contextMenus.removeAll();
 
             if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
                 try {
-                    browser.contextMenus.create({
+                    chrome.contextMenus.create({
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
@@ -112,7 +112,7 @@ export class KFCommands {
                     });
                 } catch (e) {
                     // try again with Chrome-supported contexts
-                    browser.contextMenus.create({
+                    chrome.contextMenus.create({
                         id: Command.DetectForms,
                         title: $STR("Menu_Button_fillCurrentDocument_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
@@ -123,7 +123,7 @@ export class KFCommands {
 
             if (store.state.connected) {
                 try {
-                    browser.contextMenus.create({
+                    chrome.contextMenus.create({
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
@@ -139,7 +139,7 @@ export class KFCommands {
                     });
                 } catch (e) {
                     // try again with Chrome-supported contexts
-                    browser.contextMenus.create({
+                    chrome.contextMenus.create({
                         id: Command.GeneratePassword,
                         title: $STR("Menu_Button_copyNewPasswordToClipboard_label"),
                         documentUrlPatterns: ["http://*/*", "https://*/*"],
@@ -157,7 +157,7 @@ export class KFCommands {
                     for (let j = 0; j < frame.entries.length; j++) {
                         const entry = frame.entries[j];
                         try {
-                            browser.contextMenus.create({
+                            chrome.contextMenus.create({
                                 id: "matchedLogin-" + j,
                                 title: entry.title,
                                 documentUrlPatterns: ["http://*/*", "https://*/*"],
@@ -173,7 +173,7 @@ export class KFCommands {
                             });
                         } catch (e) {
                             // try again with Chrome-supported contexts
-                            browser.contextMenus.create({
+                            chrome.contextMenus.create({
                                 id: "matchedLogin-" + j,
                                 title: entry.title,
                                 documentUrlPatterns: ["http://*/*", "https://*/*"],

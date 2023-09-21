@@ -6,7 +6,7 @@ import { Entry } from "../common/model/Entry";
 
 export class KeeFieldIcon {
     constructor(
-        private myPort: browser.runtime.Port,
+        private myPort: chrome.runtime.Port,
         private parentFrameId: number,
         private formUtils: FormUtils,
         private createMatchedLoginsPanelNearNode: (e: HTMLElement) => void
