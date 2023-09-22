@@ -3,9 +3,21 @@ import { configManager } from "../common/ConfigManager";
 import { KeeLog } from "../common/Logger";
 import { deepEqual } from "../common/utils";
 
-export class ConfigSyncManager {
+class ConfigSyncManager {
+    private static instance: ConfigSyncManager;
     private lastKnownSynced: { settings: Partial<Config>; version: number };
     private enabled = false;
+
+    private constructor() {
+        // private constructor to prevent direct instantiation
+      }
+
+      public static getInstance(): ConfigSyncManager {
+        if (!ConfigSyncManager.instance) {
+          ConfigSyncManager.instance = new ConfigSyncManager();
+        }
+        return ConfigSyncManager.instance;
+      }
 
     public updateFromRemoteConfig(config: { settings: Partial<Config>; version: number }) {
         // Will be falsy if a user is not logged in to a DB in Kee Vault
@@ -73,7 +85,7 @@ export class ConfigSyncManager {
         );
 
         try {
-            window.kee.KeePassRPC.updateAddonSettings(syncableSettings, settings.version);
+            kee.KeePassRPC.updateAddonSettings(syncableSettings, settings.version);
             // Clone so changes via references later can't affect later comparison
             this.lastKnownSynced = JSON.parse(JSON.stringify(syncableConfig));
         } catch (e) {
@@ -90,3 +102,5 @@ export class ConfigSyncManager {
         this.lastKnownSynced = null;
     }
 }
+
+export const configSyncManager = ConfigSyncManager.getInstance();

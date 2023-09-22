@@ -12,6 +12,7 @@ import { Database } from "../common/model/Database";
 import { Entry } from "../common/model/Entry";
 import { DatabaseSummary } from "../common/model/DatabaseSummary";
 import BackgroundStore from "../store/BackgroundStore";
+import { configSyncManager } from "./ConfigSyncManager";
 
 /*
 jsonrpcClient provides a JSON-RPC client and method proxies for
@@ -283,13 +284,13 @@ export class jsonrpcClient {
                     }
                 }
                 if (sessionResponse.sessionType === SessionType.Event) {
-                    window.kee.configSyncManager.updateFromRemoteConfig(
+                    configSyncManager.updateFromRemoteConfig(
                         sessionResponse.resultWrapper.result.config
                     );
                 }
             }
         }
-        window.kee.updateKeePassDatabases(dbs);
+        kee.updateKeePassDatabases(dbs);
     }
 
     updateAddonSettings(settings: Partial<Config>, version: number) {

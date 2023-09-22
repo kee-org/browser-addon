@@ -1,10 +1,12 @@
 import { isFirefox } from "webext-detect-page";
-import { Kee } from "./KF";
+import { kee } from "./KF";
 import { commandManager } from "./commands";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Action } from "../common/Action";
 import { AddonMessage } from "../common/AddonMessage";
+import { configSyncManager } from "./ConfigSyncManager";
+import { NetworkAuth } from "./NetworkAuth";
 // import { PersistentLogger } from "../common/PersistentLogger";
 
 // only on dev mode
@@ -20,25 +22,29 @@ const maxUpdateDelaySeconds = 60 * 60 * 8;
 
 // window.KeePersistentLogger = new PersistentLogger();
 
+const networkAuth = new NetworkAuth();
+//TODO: start listening for network auth requests in this top level synchronous module
+
 // Make sure user knows we're not ready yet
 chrome.action.setBadgeText({ text: "OFF" });
 chrome.action.setBadgeBackgroundColor({ color: "red" });
 chrome.action.disable();
 
+//TODO: Split creation of Kee object from connection attempts, if not already done. Probably put the init stuff somewhere else in startup lifecycle?
 // Assumes config and logging have been initialised before this is called.
 async function startup() {
     // window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
     KeeLog.attachConfig(configManager.current);
     await showReleaseNotesAfterUpdate();
-    window.kee = new Kee();
-    window.kee.init();
+    kee.init();
     configManager.addChangeListener(() =>
-        window.kee.configSyncManager.updateToRemoteConfig(configManager.current)
+        configSyncManager.updateToRemoteConfig(configManager.current)
     );
     chrome.action.enable();
 }
 
 async function showReleaseNotesAfterUpdate() {
+    //TODO: Retest and try to use onInstalled or similar if now possible.
     // chrome.runtime.onInstalled is not reliably called after an update. E.g.
     // in Firefox after a browser restart. Hence we must track the recent update
     // using our async config store rather than rely on the runtime event being fired.
@@ -71,24 +77,24 @@ chrome.tabs.onActivated.addListener(event => {
 function onTabActivated(tabId) {
     updateForegroundTab(tabId);
 
-    if (window.kee) {
+    if (kee) {
         // May not have set up kee yet
         commandManager.setupContextMenuItems();
     }
 }
 
 function updateForegroundTab(tabId: number) {
-    if (window.kee && window.kee.foregroundTabId !== tabId) {
+    if (kee && kee.foregroundTabId !== tabId) {
         // May not have set up kee yet
-        window.kee.foregroundTabId = tabId;
-        if (window.kee.tabStates.has(tabId) && window.kee.tabStates.get(tabId).framePorts) {
+        kee.foregroundTabId = tabId;
+        if (kee.tabStates.has(tabId) && kee.tabStates.get(tabId).framePorts) {
             // May not have set up port yet
             if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
-            window.kee.tabStates.get(tabId).framePorts.forEach(port => {
+            kee.tabStates.get(tabId).framePorts.forEach(port => {
                 port.postMessage({
                     isForegroundTab: true,
                     action: Action.DetectForms,
-                    resetState: window.kee.store.state
+                    resetState: kee.store.state
                 } as AddonMessage);
             });
         }
@@ -172,7 +178,7 @@ chrome.runtime.onInstalled.addListener(async function (details) {
 //                 chrome.runtime.reload();
 //             }
 //         });
-//         window.setTimeout(() => {
+//         self.setTimeout(() => {
 //             chrome.runtime.reload();
 //         }, maxUpdateDelaySeconds * 1000);
 //     }

@@ -2,6 +2,7 @@ import { ResultWrapper } from "./kprpcClient";
 import { KeeLog } from "../common/Logger";
 import { VaultProtocol } from "../common/VaultProtocol";
 import { VaultMessage } from "../common/VaultMessage";
+import { configSyncManager } from "./ConfigSyncManager";
 
 /*
 EventSession.js manages the low-level transport connection between this
@@ -93,7 +94,7 @@ export class EventSessionManager {
             this._features = features;
 
             clearTimeout(this.eventActivityTimer);
-            this.eventActivityTimer = window.setTimeout(() => {
+            this.eventActivityTimer = self.setTimeout(() => {
                 this.closeSession();
             }, this.eventActivityTimeout);
 
@@ -155,7 +156,7 @@ export class EventSessionManager {
         }
 
         clearTimeout(this.eventActivityTimer);
-        this.eventActivityTimer = window.setTimeout(() => {
+        this.eventActivityTimer = self.setTimeout(() => {
             this.closeSession();
         }, this.eventActivityTimeout);
 
@@ -192,7 +193,7 @@ export class EventSessionManager {
         this.latestSession = null;
         this._features = [];
         this.callbacks = {};
-        window.kee.configSyncManager.reset();
+        configSyncManager.reset();
         this.onClose();
     }
 }

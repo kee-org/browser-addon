@@ -7,13 +7,15 @@ import { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
 import { Entry } from "../common/model/Entry";
 import { copyStringToClipboard } from "../common/copyStringToClipboard";
+import { kee } from "./KF";
+import { accountManager } from "./AccountManager";
 
 
 // callbacks for messaging / ports
 
 export async function browserPopupMessageHandler(this: chrome.runtime.Port, msg: AddonMessage) {
     if (msg.mutation) {
-        window.kee.store.onRemoteMessage(this, msg.mutation);
+        kee.store.onRemoteMessage(this, msg.mutation);
     }
 
     if (KeeLog && KeeLog.debug) {
@@ -21,7 +23,7 @@ export async function browserPopupMessageHandler(this: chrome.runtime.Port, msg:
     }
 
     if (msg.removeNotification) {
-        window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
+        kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
     }
     if (msg.loadUrlUpgradeKee) {
         chrome.tabs.create({
@@ -29,16 +31,16 @@ export async function browserPopupMessageHandler(this: chrome.runtime.Port, msg:
         });
     }
     if (msg.action == Action.GetPasswordProfiles) {
-        const passwordProfiles = await window.kee.getPasswordProfiles();
-        window.kee.store.updatePasswordProfiles(passwordProfiles);
+        const passwordProfiles = await kee.getPasswordProfiles();
+        kee.store.updatePasswordProfiles(passwordProfiles);
     }
     if (msg.action === Action.GeneratePassword) {
-        const generatedPassword = await window.kee.generatePassword(
+        const generatedPassword = await kee.generatePassword(
             msg.passwordProfile,
             msg.url ?? "unknown URL"
         );
         if (generatedPassword) {
-            window.kee.store.updateGeneratedPassword(generatedPassword);
+            kee.store.updateGeneratedPassword(generatedPassword);
         } else {
             KeeLog.warn(
                 "Kee received an empty/missing password. Check the configuration of your password manager."
@@ -46,8 +48,8 @@ export async function browserPopupMessageHandler(this: chrome.runtime.Port, msg:
         }
     }
     if (msg.action === Action.CreateEntry || msg.action === Action.UpdateEntry) {
-        if (window.kee.store.state.connected) {
-            const sourceEntry = window.kee.store.state.saveState.newEntry;
+        if (kee.store.state.connected) {
+            const sourceEntry = kee.store.state.saveState.newEntry;
             const existingOrTemporaryUuid = sourceEntry.uuid;
             const dbFileName = sourceEntry.database.fileName;
             const parentGroupUuid: string = sourceEntry.parentGroup.uuid;
@@ -67,34 +69,34 @@ export async function browserPopupMessageHandler(this: chrome.runtime.Port, msg:
                     icon: configManager.current.saveFavicons
                         ? {
                               version: 1,
-                              iconImageData: window.kee.store.state.saveState.favicon
+                              iconImageData: kee.store.state.saveState.favicon
                           }
                         : null
                 })
             );
 
             // Might be changed by the user before KPRPC says all worked OK
-            const tabId = window.kee.foregroundTabId;
+            const tabId = kee.foregroundTabId;
             const clearSubmittedData = () => {
-                if (window.kee.persistentTabStates.get(tabId)?.items?.length > 0) {
-                    window.kee.persistentTabStates.get(
+                if (kee.persistentTabStates.get(tabId)?.items?.length > 0) {
+                    kee.persistentTabStates.get(
                         tabId
-                    ).items = window.kee.persistentTabStates
+                    ).items = kee.persistentTabStates
                         .get(tabId)
                         .items.filter(item => item.itemType !== "submittedData");
                 }
             };
 
             if (msg.action === Action.UpdateEntry) {
-                window.kee.store.updateEntryUpdateStartedAtTimestamp(Date.now());
-                window.kee.updateLogin(
+                kee.store.updateEntryUpdateStartedAtTimestamp(Date.now());
+                kee.updateLogin(
                     entry,
                     existingOrTemporaryUuid,
                     dbFileName,
                     clearSubmittedData
                 );
             } else {
-                window.kee.addLogin(entry, parentGroupUuid, dbFileName, clearSubmittedData);
+                kee.addLogin(entry, parentGroupUuid, dbFileName, clearSubmittedData);
             }
             if (!configManager.current.mruGroup) configManager.current.mruGroup = {};
             configManager.current.mruGroup[dbFileName] = parentGroupUuid;
@@ -104,21 +106,21 @@ export async function browserPopupMessageHandler(this: chrome.runtime.Port, msg:
     }
 
     if (msg.action == Action.ManualFill && msg.selectedEntryIndex != null) {
-        window.kee.tabStates
-            .get(window.kee.foregroundTabId)
+        kee.tabStates
+            .get(kee.foregroundTabId)
             .framePorts.get(msg.frameId || 0)
             .postMessage(msg);
-        window.kee.tabStates
-            .get(window.kee.foregroundTabId)
+        kee.tabStates
+            .get(kee.foregroundTabId)
             .framePorts.get(0)
             .postMessage({ action: Action.CloseAllPanels });
     }
 
     if (msg.action === Action.OpenKeePass) {
-        window.kee.openKeePass();
+        kee.openKeePass();
     }
     if (msg.findMatches) {
-        const result = await window.kee.findLogins(
+        const result = await kee.findLogins(
             null,
             null,
             msg.findMatches.uuid,
@@ -126,15 +128,15 @@ export async function browserPopupMessageHandler(this: chrome.runtime.Port, msg:
             null,
             null
         );
-        window.kee.browserPopupPort.postMessage({
+        kee.browserPopupPort.postMessage({
             findMatchesResult: result
         } as AddonMessage);
     }
     if (msg.loginEditor) {
-        window.kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
+        kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
     }
     if (msg.action === Action.DetectForms) {
-        window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
+        kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
             port.postMessage({
                 action: Action.DetectForms
             });
@@ -148,12 +150,12 @@ export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMe
     }
 
     if (msg.mutation) {
-        window.kee.store.onRemoteMessage(this, msg.mutation);
+        kee.store.onRemoteMessage(this, msg.mutation);
     }
 
     if (msg.findMatches) {
-        window.kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).entries = [];
-        const result = await window.kee.findLogins(
+        kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).entries = [];
+        const result = await kee.findLogins(
             msg.findMatches.uri,
             null,
             null,
@@ -162,22 +164,22 @@ export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMe
             null
         );
         this.postMessage({
-            isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId,
+            isForegroundTab: this.sender.tab.id === kee.foregroundTabId,
             findMatchesResult: result
         } as AddonMessage);
     }
     if (msg.removeNotification) {
-        window.kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
+        kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
         try {
-            window.kee.browserPopupPort.postMessage({
-                isForegroundTab: this.sender.tab.id === window.kee.foregroundTabId
+            kee.browserPopupPort.postMessage({
+                isForegroundTab: this.sender.tab.id === kee.foregroundTabId
             } as AddonMessage);
         } catch (e) {
             /* whatever */
         }
     }
     if (msg.entries) {
-        window.kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).entries =
+        kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).entries =
             msg.entries;
     }
     if (msg.submittedData) {
@@ -187,27 +189,27 @@ export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMe
             creationDate: new Date()
         };
 
-        if (!window.kee.persistentTabStates.get(this.sender.tab.id)) {
-            window.kee.persistentTabStates.set(this.sender.tab.id, {
+        if (!kee.persistentTabStates.get(this.sender.tab.id)) {
+            kee.persistentTabStates.set(this.sender.tab.id, {
                 items: []
             });
         }
 
         // Don't allow more than one entry to be tracked for this tab
-        if (window.kee.persistentTabStates.get(this.sender.tab.id)) {
-            window.kee.persistentTabStates.get(
+        if (kee.persistentTabStates.get(this.sender.tab.id)) {
+            kee.persistentTabStates.get(
                 this.sender.tab.id
-            ).items = window.kee.persistentTabStates
+            ).items = kee.persistentTabStates
                 .get(this.sender.tab.id)
                 .items.filter(item => item.itemType !== "submittedData");
         }
 
-        window.kee.persistentTabStates.get(this.sender.tab.id).items.push(persistentItem);
+        kee.persistentTabStates.get(this.sender.tab.id).items.push(persistentItem);
 
         // Don't alert the user if it's less than 90 seconds since they initiated an
         // update request - highly likely that this is just the result of that
         // operation being submitted to the website.
-        if (window.kee.store.state.entryUpdateStartedAtTimestamp >= Date.now() - 90000) return;
+        if (kee.store.state.entryUpdateStartedAtTimestamp >= Date.now() - 90000) return;
 
         if (configManager.current.notificationCountSavePassword < 10) {
             chrome.notifications.create({
@@ -225,18 +227,18 @@ export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMe
             });
         }
         if (configManager.current.animateWhenOfferingSave) {
-            window.kee.animateBrowserActionIcon();
+            kee.animateBrowserActionIcon();
         }
     }
     if (msg.action === Action.ShowMatchedLoginsPanel) {
-        window.kee.tabStates.get(this.sender.tab.id).framePorts.get(0).postMessage({
+        kee.tabStates.get(this.sender.tab.id).framePorts.get(0).postMessage({
             action: Action.ShowMatchedLoginsPanel,
             frameId: this.sender.frameId
         });
     }
     if (msg.action === Action.PageHide) {
         try {
-            window.kee.tabStates.get(this.sender.frameId).framePorts.forEach((port, key, map) => {
+            kee.tabStates.get(this.sender.frameId).framePorts.forEach((port, key, map) => {
                 try {
                     port.disconnect();
                 } catch (e) {
@@ -262,14 +264,14 @@ export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMe
             // situation already - probably just through standard GC.
         }
         if (this.sender.frameId === 0) {
-            window.kee.deleteTabState(this.sender.tab.id);
+            kee.deleteTabState(this.sender.tab.id);
         }
     }
 }
 
 export function vaultMessageHandler(this: chrome.runtime.Port, msg: VaultMessage) {
     if (msg.mutation) {
-        window.kee.store.onRemoteMessage(this, msg.mutation);
+        kee.store.onRemoteMessage(this, msg.mutation);
     }
 
     let result;
@@ -278,7 +280,7 @@ export function vaultMessageHandler(this: chrome.runtime.Port, msg: VaultMessage
     }
     switch (msg.action) {
         case VaultAction.Init:
-            result = window.kee.KeePassRPC.startEventSession(
+            result = kee.KeePassRPC.startEventSession(
                 msg.sessionId,
                 msg.features,
                 msgToPage => this.postMessage(msgToPage)
@@ -288,7 +290,7 @@ export function vaultMessageHandler(this: chrome.runtime.Port, msg: VaultMessage
             }
             return;
         case VaultAction.MessageToClient:
-            result = window.kee.KeePassRPC.eventSessionMessageFromPage(msg);
+            result = kee.KeePassRPC.eventSessionMessageFromPage(msg);
             if (result) {
                 this.postMessage(result);
             }
@@ -298,14 +300,14 @@ export function vaultMessageHandler(this: chrome.runtime.Port, msg: VaultMessage
             chrome.windows.update(this.sender.tab.windowId, { focused: true });
             return;
         case VaultAction.AccountChanged:
-            window.kee.accountManager.processNewTokens(msg.tokens);
+            accountManager.processNewTokens(msg.tokens);
             return;
     }
 }
 
 export async function iframeMessageHandler(this: chrome.runtime.Port, msg: AddonMessage) {
     if (msg.mutation) {
-        window.kee.store.onRemoteMessage(this, msg.mutation);
+        kee.store.onRemoteMessage(this, msg.mutation);
     }
 
     if (KeeLog && KeeLog.debug) {
@@ -315,32 +317,32 @@ export async function iframeMessageHandler(this: chrome.runtime.Port, msg: Addon
     const tabId = this.sender.tab.id;
 
     if (msg.action == Action.ManualFill && msg.selectedEntryIndex != null) {
-        window.kee.tabStates
+        kee.tabStates
             .get(tabId)
             .framePorts.get(msg.frameId || 0)
             .postMessage(msg);
-        window.kee.tabStates
+        kee.tabStates
             .get(tabId)
             .framePorts.get(0)
             .postMessage({ action: Action.CloseAllPanels });
     }
 
     if (msg.action == Action.CloseAllPanels) {
-        window.kee.tabStates.get(tabId).framePorts.get(0).postMessage(msg);
+        kee.tabStates.get(tabId).framePorts.get(0).postMessage(msg);
     }
 
     if (msg.action == Action.GetPasswordProfiles) {
-        const passwordProfiles = await window.kee.getPasswordProfiles();
-        window.kee.store.updatePasswordProfiles(passwordProfiles);
+        const passwordProfiles = await kee.getPasswordProfiles();
+        kee.store.updatePasswordProfiles(passwordProfiles);
     }
 
     if (msg.action == Action.GeneratePassword) {
-        const generatedPassword = await window.kee.generatePassword(
+        const generatedPassword = await kee.generatePassword(
             msg.passwordProfile,
-            window.kee.tabStates.get(tabId).url
+            kee.tabStates.get(tabId).url
         );
         if (generatedPassword) {
-            window.kee.store.updateGeneratedPassword(generatedPassword);
+            kee.store.updateGeneratedPassword(generatedPassword);
             this.postMessage({
                 generatedPassword: generatedPassword
             } as AddonMessage);
@@ -352,7 +354,7 @@ export async function iframeMessageHandler(this: chrome.runtime.Port, msg: Addon
     }
 
     if (msg.loginEditor) {
-        window.kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
+        kee.launchLoginEditor(msg.loginEditor.uuid, msg.loginEditor.DBfilename);
     }
 
     if (msg.copyToClipboard) {

@@ -103,7 +103,7 @@ export class WebsocketSessionManager {
             if (this.pendingPortChange != null) {
                 clearTimeout(this.pendingPortChange);
             }
-            this.pendingPortChange = window.setTimeout(() => {
+            this.pendingPortChange = self.setTimeout(() => {
                 this.configureConnectionURIs();
                 if (
                     this.webSocket !== undefined &&
@@ -157,7 +157,7 @@ export class WebsocketSessionManager {
         // KeePassRPC's TCP port. If we tried to connect now, we risk connecting
         // back to the browser and causing a deadlock. A small delay gives the browser
         // a chance to cleanly close the old port
-        this._webSocketTimer = window.setTimeout(this.tryToconnectToWebsocket.bind(this), 100);
+        this._webSocketTimer = self.setTimeout(this.tryToconnectToWebsocket.bind(this), 100);
     }
 
     // Initiates a connection to the KPRPC server.
@@ -270,6 +270,7 @@ export class WebsocketSessionManager {
             );
             rpc.httpConnectionAttemptCallback();
         } else {
+            //TODO: replace with fetch() and see if that changes error behaviour.
             const xhr = new XMLHttpRequest();
 
             xhr.open("GET", rpc.httpChannelURI, true);

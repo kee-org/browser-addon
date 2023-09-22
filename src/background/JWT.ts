@@ -8,7 +8,7 @@ export class JWT {
             throw new Error("Invalid JWT");
         }
 
-        const claimJSON = window.kee.utils.base64urlDecode(sigParts[1]);
+        const claimJSON = kee.utils.base64urlDecode(sigParts[1]);
         let claim: Claim;
 
         try {
@@ -77,7 +77,7 @@ export class JWT {
                 hash: { name: "SHA-256" } //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
             },
             key, //from generateKey or importKey above
-            window.kee.utils.base64urltoByteArray(sigParts[2]), //ArrayBuffer of the signature
+            kee.utils.base64urltoByteArray(sigParts[2]), //ArrayBuffer of the signature
             data //ArrayBuffer of the data
         );
 

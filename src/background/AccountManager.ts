@@ -41,9 +41,22 @@ export class KeeAccount {
     }
 }
 
-export class AccountManager {
+class AccountManager {
+    private static instance: AccountManager;
     private account: KeeAccount;
     private listeners: (() => void)[];
+
+    private constructor() {
+        this.account = new KeeAccount();
+        this.listeners = [];
+    }
+
+    public static getInstance(): AccountManager {
+        if (!AccountManager.instance) {
+            AccountManager.instance = new AccountManager();
+        }
+        return AccountManager.instance;
+    }
 
     async processNewTokens(tokens: Tokens) {
         await this.account.parseJWTs(tokens);
@@ -64,10 +77,6 @@ export class AccountManager {
         return this.account.features;
     }
 
-    constructor() {
-        this.account = new KeeAccount();
-        this.listeners = [];
-    }
 
     private featuresValidSecondsAgo(seconds: number) {
         return this.account.featureExpiry > Date.now() - seconds * 1000;
@@ -94,3 +103,5 @@ export class AccountManager {
         );
     }
 }
+
+export const accountManager = AccountManager.getInstance();

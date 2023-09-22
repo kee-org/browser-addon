@@ -11,6 +11,8 @@ import { FeatureFlags } from "../common/FeatureFlags";
 import { KeeNotification } from "../common/KeeNotification";
 import { configManager } from "../common/ConfigManager";
 import BackgroundStore from "~/store/BackgroundStore";
+import { accountManager } from "./AccountManager";
+import { kee } from "./KF";
 
 /*
 kprpcClient.js provides functionality for
@@ -72,7 +74,7 @@ export class kprpcClient {
         );
         this.websocketSessionManager = new WebsocketSessionManager(
             () =>
-                window.kee.accountManager.featureEnabledMultiSessionTypes ||
+                accountManager.featureEnabledMultiSessionTypes ||
                 !this.eventSessionManager.isActive(),
             () => this.setupWebsocketSession(),
             () => this.onWebsocketSessionClosed(),
@@ -162,7 +164,7 @@ export class kprpcClient {
                     ":" +
                     ex.stack
                 );
-                window.setTimeout(() => {
+                self.setTimeout(() => {
                     this.processJSONRPCresponse(
                         {
                             id: requestId,
@@ -196,8 +198,8 @@ export class kprpcClient {
 
     KPRPCListener(signal) {
         // call this async so that json reader can get back to listening ASAP and prevent deadlocks
-        window.setTimeout(function () {
-            window.kee.KPRPCListener(signal);
+        self.setTimeout(function () {
+            kee.KPRPCListener(signal);
         }, 5);
     }
 
@@ -234,18 +236,18 @@ export class kprpcClient {
         this.secretKey = null;
 
         if (!this.eventSessionManager.isActive()) {
-            window.kee._pauseKee();
-            window.kee.inviteKeeVaultConnection();
+            kee._pauseKee();
+            kee.inviteKeeVaultConnection();
         } else {
-            window.kee._refreshKPDB();
+            kee._refreshKPDB();
         }
     }
 
     onEventSessionClosed() {
         if (!this.websocketSessionManager.isActive()) {
-            window.kee._pauseKee();
+            kee._pauseKee();
         } else {
-            window.kee._refreshKPDB();
+            kee._refreshKPDB();
         }
     }
 
@@ -569,7 +571,7 @@ export class kprpcClient {
                     this.secretKey = this.getStoredKey();
 
                     // 0.025 second delay before we try to do the Kee connection startup stuff
-                    window.setTimeout(this.onConnectStartup.bind(this), 50, "CR");
+                    self.setTimeout(this.onConnectStartup.bind(this), 50, "CR");
                 }
             });
     }
@@ -642,18 +644,18 @@ export class kprpcClient {
                 this.setStoredKey(this.srpClientInternals.I, this.getSecurityLevel(), key);
 
                 // 0.025 second delay before we try to do the Kee connection startup stuff
-                window.setTimeout(this.onConnectStartup.bind(this), 50, "SRP");
+                self.setTimeout(this.onConnectStartup.bind(this), 50, "SRP");
             });
         }
     }
 
     onConnectStartup() {
         // if any errors were shown, they are now resolved
-        window.kee.removeUserNotifications(
+        kee.removeUserNotifications(
             (notification: KeeNotification) => notification.name != "kee-connection-message"
         );
         this.store.updateLatestConnectionError("");
-        window.kee._refreshKPDB();
+        kee._refreshKPDB();
     }
 
     // No need to return anything from this function so sync or async implementation is fine
@@ -771,7 +773,7 @@ export class kprpcClient {
 
     setupEventSession(features: string[]) {
         if (
-            !window.kee.accountManager.featureEnabledMultiSessionTypes &&
+            !accountManager.featureEnabledMultiSessionTypes &&
             this.websocketSessionManager.isActive()
         ) {
             KeeLog.debug(
@@ -813,7 +815,7 @@ export class kprpcClient {
 
     setupWebsocketSession() {
         if (
-            !window.kee.accountManager.featureEnabledMultiSessionTypes &&
+            !accountManager.featureEnabledMultiSessionTypes &&
             this.eventSessionManager.isActive()
         ) {
             KeeLog.debug(
@@ -1011,7 +1013,7 @@ export class kprpcClient {
 
                             // Do the callback async because we don't want exceptions in
                             // JSONRPC handling being treated as encryption errors
-                            window.setTimeout(callbackTarget, 1, callback.bind(KPRPC), encryptedMessage);
+                            self.setTimeout(callbackTarget, 1, callback.bind(KPRPC), encryptedMessage);
                         });
                     })
                     .catch(function (e) {
@@ -1116,7 +1118,7 @@ export class kprpcClient {
 
                 // Do the callback async because we don't want exceptions in
                 // JSONRPC handling being treated as connection errors
-                window.setTimeout(callbackTarget, 1, callback.bind(KPRPC), plainText);
+                self.setTimeout(callbackTarget, 1, callback.bind(KPRPC), plainText);
             } catch (e) {
                 KeeLog.error("Failed to decrypt. Exception: " + e);
 
@@ -1146,7 +1148,7 @@ export class kprpcClient {
 }
 
 showConnectionMessage(msg: string, buttons ?: Button[]) {
-    window.kee.notifyUser(
+    kee.notifyUser(
         new KeeNotification(
             "kee-connection-message",
             buttons ? buttons : [],

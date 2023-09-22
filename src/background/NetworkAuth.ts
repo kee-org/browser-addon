@@ -3,10 +3,10 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Entry } from "../common/model/Entry";
 import punycode from "punycode/";
-import BackgroundStore from "~/store/BackgroundStore";
+import { kee } from "./KF";
 
 export class NetworkAuth {
-    constructor(private store: BackgroundStore) {}
+    constructor() {}
 
     pendingRequests = [];
 
@@ -38,14 +38,14 @@ export class NetworkAuth {
         this.pendingRequests.push(requestDetails.requestId);
         KeeLog.debug("Providing credentials for: " + requestDetails.requestId);
 
-        if (!this.store.state.connected || this.store.state.ActiveKeePassDatabaseIndex < 0) {
+        if (!kee.store.state.connected || kee.store.state.ActiveKeePassDatabaseIndex < 0) {
             return { cancel: false };
         }
 
         const url = new URL(requestDetails.url);
         url.hostname = punycode.toUnicode(url.hostname);
 
-        const result = await window.kee.findLogins(
+        const result = await kee.findLogins(
             url.href,
             requestDetails.realm,
             null,

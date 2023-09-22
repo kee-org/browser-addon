@@ -1,6 +1,7 @@
 import { Command } from "./Command";
 import { Action } from "../common/Action";
 import { KeeLog } from "../common/Logger";
+import { kee } from "./KF";
 
 
 export class KFCommands {
@@ -8,12 +9,12 @@ export class KFCommands {
 
     public init() {
         chrome.commands.onCommand.addListener(command => {
-            const store = window.kee.store;
+            const store = kee.store;
             switch (command) {
                 case Command.DetectForms:
                     if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
-                        window.kee.tabStates
-                            .get(window.kee.foregroundTabId)
+                        kee.tabStates
+                            .get(kee.foregroundTabId)
                             .framePorts.forEach(port => {
                                 port.postMessage({
                                     action: Action.DetectForms
@@ -23,29 +24,29 @@ export class KFCommands {
                     break;
                 case Command.PrimaryAction:
                     if (store.state.ActiveKeePassDatabaseIndex < 0) {
-                        window.kee.loginToPasswordManager();
+                        kee.loginToPasswordManager();
                     } else {
-                        window.kee.tabStates
-                            .get(window.kee.foregroundTabId)
+                        kee.tabStates
+                            .get(kee.foregroundTabId)
                             .framePorts.forEach(port => {
                                 port.postMessage({ action: Action.Primary });
                             }, this);
                     }
                     break;
                 case Command.GeneratePassword:
-                    window.kee.initiatePasswordGeneration();
+                    kee.initiatePasswordGeneration();
                     break;
             }
         });
 
         chrome.contextMenus.onClicked.addListener(info => {
             const id = info.menuItemId as string;
-            const store = window.kee.store;
+            const store = kee.store;
             switch (id) {
                 case Command.DetectForms:
                     if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
-                        window.kee.tabStates
-                            .get(window.kee.foregroundTabId)
+                        kee.tabStates
+                            .get(kee.foregroundTabId)
                             .framePorts.forEach(port => {
                                 port.postMessage({
                                     action: Action.DetectForms
@@ -55,20 +56,20 @@ export class KFCommands {
                     break;
                 // case Command.PrimaryAction:
                 //     if (store.ActiveKeePassDatabaseIndex < 0) {
-                //         window.kee.loginToPasswordManager();
+                //         kee.loginToPasswordManager();
                 //     } else {
-                //         window.kee.tabStates.get(window.kee.foregroundTabId).framePorts.forEach(port => {
+                //         kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
                 //                 port.postMessage({ action: Action.Primary });
                 //         }, this);
                 //     }
                 // break;
                 case Command.GeneratePassword:
-                    window.kee.initiatePasswordGeneration();
+                    kee.initiatePasswordGeneration();
                     break;
             }
             if (id.startsWith("matchedLogin-")) {
-                window.kee.tabStates
-                    .get(window.kee.foregroundTabId)
+                kee.tabStates
+                    .get(kee.foregroundTabId)
                     .framePorts.get(info.frameId)
                     .postMessage({
                         action: Action.ManualFill,
@@ -88,7 +89,7 @@ export class KFCommands {
             );
             return;
         }
-        const store = window.kee.store;
+        const store = kee.store;
 
         commandManager.contextMenuUpdateLock = true;
         try {
@@ -149,11 +150,11 @@ export class KFCommands {
             }
 
             if (
-                window.kee.foregroundTabId >= 0 &&
-                window.kee.tabStates.has(window.kee.foregroundTabId) &&
-                window.kee.tabStates.get(window.kee.foregroundTabId).frames
+                kee.foregroundTabId >= 0 &&
+                kee.tabStates.has(kee.foregroundTabId) &&
+                kee.tabStates.get(kee.foregroundTabId).frames
             ) {
-                window.kee.tabStates.get(window.kee.foregroundTabId).frames.forEach(frame => {
+                kee.tabStates.get(kee.foregroundTabId).frames.forEach(frame => {
                     for (let j = 0; j < frame.entries.length; j++) {
                         const entry = frame.entries[j];
                         try {
