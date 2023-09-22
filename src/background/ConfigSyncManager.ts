@@ -2,6 +2,7 @@ import { Config } from "../common/config";
 import { configManager } from "../common/ConfigManager";
 import { KeeLog } from "../common/Logger";
 import { deepEqual } from "../common/utils";
+import { kee } from "./KF";
 
 class ConfigSyncManager {
     private static instance: ConfigSyncManager;

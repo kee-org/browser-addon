@@ -109,7 +109,7 @@ export class KFCommands {
                             "page",
                             "password",
                             "selection"
-                        ]
+                        ] as any
                     });
                 } catch (e) {
                     // try again with Chrome-supported contexts
@@ -136,7 +136,7 @@ export class KFCommands {
                             "page",
                             "password",
                             "selection"
-                        ]
+                        ] as any
                     });
                 } catch (e) {
                     // try again with Chrome-supported contexts
@@ -170,7 +170,7 @@ export class KFCommands {
                                     "page",
                                     "password",
                                     "selection"
-                                ]
+                                ] as any
                             });
                         } catch (e) {
                             // try again with Chrome-supported contexts

@@ -79,7 +79,7 @@ function startup() {
                         piniaInstance.use(IPCPiniaPlugin);
                         vueApp.use(vuetify);
                         vueApp.use(piniaInstance);
-                        vueApp.config.globalProperties.$browser = browser;
+                        vueApp.config.globalProperties.$chrome = chrome;
                         vueApp.config.globalProperties.$i18n = chrome.i18n.getMessage;
                         store = useStore();
 

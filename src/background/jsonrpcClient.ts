@@ -13,6 +13,7 @@ import { Entry } from "../common/model/Entry";
 import { DatabaseSummary } from "../common/model/DatabaseSummary";
 import BackgroundStore from "../store/BackgroundStore";
 import { configSyncManager } from "./ConfigSyncManager";
+import { kee } from "./KF";
 
 /*
 jsonrpcClient provides a JSON-RPC client and method proxies for

@@ -1,4 +1,5 @@
 import { Claim } from "./Claim";
+import { kee } from "./KF";
 
 export class JWT {
     public static async verify(sig: string): Promise<{ audience: string; claim?: Claim }> {
