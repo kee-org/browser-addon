@@ -212,7 +212,7 @@ export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMe
         if (configManager.current.notificationCountSavePassword < 10) {
             chrome.notifications.create({
                 type: "basic",
-                iconUrl: chrome.extension.getURL("/assets/images/128.png"),
+                iconUrl: chrome.runtime.getURL("/assets/images/128.png"),
                 title: $STR("savePasswordText"),
                 message:
                     $STR("notification_save_password_tip") +

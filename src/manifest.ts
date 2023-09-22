@@ -69,7 +69,7 @@ export async function getManifest() {
             "webNavigation",
             "activeTab",
             "privacy",
-            "webRequestBlocking",
+        //    "webRequestBlocking",
             "webRequest",
             "notifications",
             "unlimitedStorage",
@@ -91,7 +91,7 @@ export async function getManifest() {
                 : "script-src 'self'; object-src 'self'"
           },
         commands: {
-            "_execute_browser_action": {
+            "_execute_action": {
                 "suggested_key": {
                     "default": "Alt+Shift+K"
                 }

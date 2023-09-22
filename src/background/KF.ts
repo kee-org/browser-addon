@@ -4,7 +4,7 @@ import { PersistentTabState } from "./PersistentTabState";
 import { jsonrpcClient } from "./jsonrpcClient";
 import { ConfigSyncManager } from "./ConfigSyncManager";
 import { NetworkAuth } from "./NetworkAuth";
-import { AnimateIcon } from "./AnimateIcon";
+//import { AnimateIcon } from "./AnimateIcon";
 import { NativeNotification } from "./NativeNotification";
 import { commandManager } from "./commands";
 import {
@@ -58,7 +58,7 @@ export class Kee {
     onPortConnected: any;
 
     networkAuth: NetworkAuth;
-    animateIcon: AnimateIcon;
+    //animateIcon: AnimateIcon;
     store: BackgroundStore;
 
     constructor() {
@@ -108,7 +108,7 @@ export class Kee {
         });
 
         this.networkAuth = new NetworkAuth(this.store);
-        this.animateIcon = new AnimateIcon();
+        //this.animateIcon = new AnimateIcon();
 
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         this.browserPopupPort = { postMessage: _msg => {} };
@@ -328,7 +328,7 @@ export class Kee {
         if (nativeNotification) {
             chrome.notifications.create({
                 type: "basic",
-                iconUrl: chrome.extension.getURL("/assets/images/128.png"),
+                iconUrl: chrome.runtime.getURL("/assets/images/128.png"),
                 title: nativeNotification.title,
                 message: nativeNotification.message
             });
@@ -336,7 +336,7 @@ export class Kee {
             if (configManager.current.notificationCountGeneric < 5) {
                 chrome.notifications.create({
                     type: "basic",
-                    iconUrl: chrome.extension.getURL("/assets/images/128.png"),
+                    iconUrl: chrome.runtime.getURL("/assets/images/128.png"),
                     title: $STR("notification_raised_title"),
                     message:
                         $STR("notification_yellow_background") +
@@ -362,7 +362,7 @@ export class Kee {
         // enable a nice smooth animation to subtly hint that they might want to
         // click on the icon. We have to make the animation in Firefox much less subtle :-(
         // https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1309347
-        this.animateIcon.start(duration, !isFirefox());
+        //this.animateIcon.start(duration, !isFirefox());
     }
 
     resetBrowserActionColor() {

@@ -59,7 +59,7 @@ export class JWT {
                 throw new Error("Unknown JWT issuer so cannot verify");
         }
 
-        const key = await window.crypto.subtle.importKey(
+        const key = await crypto.subtle.importKey(
             "jwk",
             jwk,
             {
@@ -71,7 +71,7 @@ export class JWT {
             ["verify"] //"verify" for public key import, "sign" for private key imports
         );
 
-        const isValid = await window.crypto.subtle.verify(
+        const isValid = await crypto.subtle.verify(
             {
                 name: "ECDSA",
                 hash: { name: "SHA-256" } //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"

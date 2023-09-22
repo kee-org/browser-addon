@@ -95,51 +95,54 @@ function updateForegroundTab(tabId: number) {
     }
 }
 
-// Some browsers (e.g. Firefox) automatically inject content scripts on install/update
-// but others don't (e.g. Chrome). To ensure every existing tab has exactly one
-// instance of this content script running in it, we programmatically inject the script.
-if (!isFirefox()) {
-    chrome.runtime.onInstalled.addListener(() => {
-        const showErrors = () => {
-            if (chrome.runtime.lastError) {
-                if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError.message);
-                else console.error(chrome.runtime.lastError);
-            }
-        };
-        chrome.runtime.getManifest().content_scripts?.forEach(script => {
-            const allFrames = script.all_frames;
-            const url = script.matches;
+//TODO: Find out if Chrome still requires us to do this to ensure reliable behaviour after
+// first install/update and modify script execution calls if needed
+// https://developer.chrome.com/docs/extensions/migrating/api-calls/
+// // Some browsers (e.g. Firefox) automatically inject content scripts on install/update
+// // but others don't (e.g. Chrome). To ensure every existing tab has exactly one
+// // instance of this content script running in it, we programmatically inject the script.
+// if (!isFirefox()) {
+//     chrome.runtime.onInstalled.addListener(() => {
+//         const showErrors = () => {
+//             if (chrome.runtime.lastError) {
+//                 if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError.message);
+//                 else console.error(chrome.runtime.lastError);
+//             }
+//         };
+//         chrome.runtime.getManifest().content_scripts?.forEach(script => {
+//             const allFrames = script.all_frames;
+//             const url = script.matches;
 
-            // We have to define the list of expected Vault URLs here as well as in
-            // the manifest because there is no API available to automatically handle
-            // the manifest globs and it's not worth bundling a generic parser for
-            // just this one use case.
-            const vaultURLs = [
-                "https://app-dev.kee.pm:8087/",
-                "https://app-beta.kee.pm/",
-                "https://app.kee.pm/",
-                "https://keevault.pm/"
-            ];
+//             // We have to define the list of expected Vault URLs here as well as in
+//             // the manifest because there is no API available to automatically handle
+//             // the manifest globs and it's not worth bundling a generic parser for
+//             // just this one use case.
+//             const vaultURLs = [
+//                 "https://app-dev.kee.pm:8087/",
+//                 "https://app-beta.kee.pm/",
+//                 "https://app.kee.pm/",
+//                 "https://keevault.pm/"
+//             ];
 
-            const loadContentScripts = (tab: chrome.tabs.Tab) => {
-                if (tab.url && tab.url.startsWith("chrome://")) return;
-                if (script.exclude_globs && script.exclude_globs.length > 0) {
-                    if (vaultURLs.some(excludedURL => tab.url.startsWith(excludedURL))) return;
-                }
-                if (script.include_globs && script.include_globs.length > 0) {
-                    if (!vaultURLs.some(includedURL => tab.url.startsWith(includedURL))) return;
-                }
-                (script.js || []).forEach(file => {
-                    chrome.tabs.executeScript(tab.id, { allFrames, file }).then(showErrors);
-                });
-                (script.css || []).forEach(file => {
-                    chrome.tabs.insertCSS(tab.id, { allFrames, file }).then(showErrors);
-                });
-            };
-            chrome.tabs.query({ url }).then(tabs => tabs.forEach(loadContentScripts));
-        });
-    });
-}
+//             const loadContentScripts = (tab: chrome.tabs.Tab) => {
+//                 if (tab.url && tab.url.startsWith("chrome://")) return;
+//                 if (script.exclude_globs && script.exclude_globs.length > 0) {
+//                     if (vaultURLs.some(excludedURL => tab.url.startsWith(excludedURL))) return;
+//                 }
+//                 if (script.include_globs && script.include_globs.length > 0) {
+//                     if (!vaultURLs.some(includedURL => tab.url.startsWith(includedURL))) return;
+//                 }
+//                 (script.js || []).forEach(file => {
+//                     chrome.scripting.executeScript(tab.id, { allFrames, file }).then(showErrors);
+//                 });
+//                 (script.css || []).forEach(file => {
+//                     chrome.tabs.insertCSS(tab.id, { allFrames, file }).then(showErrors);
+//                 });
+//             };
+//             chrome.tabs.query({ url }).then(tabs => tabs.forEach(loadContentScripts));
+//         });
+//     });
+// }
 
 chrome.runtime.onInstalled.addListener(async function (details) {
     if (details.reason === "install") {
