@@ -792,7 +792,7 @@
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
     "list_version_upgrade_3_11": {
-        "message": "User interface improvements;Keyboard navigation improvements, including in the Network Auth list of entries and when selecting a group to save a new entry into;Fixes the \"ignore case\" option which did not work for include IDs and Names. You may therefore find that Kee offers to fill in some forms it previously ignored;Re-enables filtering of group names when selecting where to save a new entry (this was disabled only on Firefox in the previous version of Kee)",
+        "message": "Vylepšenia používateľského rozhrania;Vylepšená navigácia pomocou klávesnice, a to aj v zozname položiek sieťovej autorizácie a pri výbere skupiny, do ktorej chcete uložiť novú položku;Opravená možnosť \"ignorovať veľkosť písmen\", ktorá nefungovala v prípade ID a názvov. Môže sa preto stať, že Kee ponúkne vyplnenie niektorých formulárov, ktoré predtým ignoroval;Opätovné zapnutie filtrovania názvov skupín pri výbere miesta, kam sa má uložiť nový záznam (v predchádzajúcej verzii Kee to bolo vypnuté len v prehliadači Firefox)",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
