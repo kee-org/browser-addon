@@ -132,37 +132,4 @@ export class NetworkAuth {
         });
     }
 
-    public startListening() {
-        if (isFirefox()) {
-            chrome.webRequest.onAuthRequired.addListener(
-                requestDetails => this.provideCredentialsAsync(requestDetails),
-                { urls: ["<all_urls>"] },
-                ["blocking"]
-            );
-        } else {
-            chrome.webRequest.onAuthRequired.addListener(
-                (requestDetails, callback) => {
-                    this.provideCredentialsAsyncBlockingCallback(requestDetails, callback);
-                },
-                { urls: ["<all_urls>"] },
-                ["asyncBlocking"]
-            );
-        }
-
-        chrome.webRequest.onCompleted.addListener(
-            requestDetails => {
-                this.completed(requestDetails);
-            },
-            { urls: ["<all_urls>"] }
-        );
-
-        chrome.webRequest.onErrorOccurred.addListener(
-            requestDetails => {
-                this.completed(requestDetails);
-            },
-            { urls: ["<all_urls>"] }
-        );
-
-        KeeLog.debug("Network authentication listeners started");
-    }
 }

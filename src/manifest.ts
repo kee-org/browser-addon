@@ -69,17 +69,19 @@ export async function getManifest() {
             "webNavigation",
             "activeTab",
             "privacy",
-        //    "webRequestBlocking",
+            "webRequestAuthProvider",
             "webRequest",
             "notifications",
             "unlimitedStorage",
-            "idle"
-        ],
+            "idle",
+            "scripting" // new requirement for MV3 to support reliable enabling of Kee Vault website and in-page assistance for tabs already open when extension is installed/updated
+        ] as any, // type error - doesn't support webRequestAuthProvider
         //TODO: Find out about equiveleant for permissions - "<all_urls>",
         host_permissions: ["*://*/*"],
         web_accessible_resources: [
             {
-                resources: ["dist/panels/*"],
+                //TODO: which lib location is correct? Why do we not use the panelColour fiel any more?
+                resources: ["dist/panels/*", "dist/lib/linkContentScriptToKeeVaultWebsite.js", "lib/linkContentScriptToKeeVaultWebsite.js"],
                 matches: ["<all_urls>"]
               }
         ],
@@ -142,13 +144,16 @@ export async function getManifest() {
         (manifest as any).action.default_area = "navbar";
     }
 
-    if (isDev) {
-        // for content script, as browsers will cache them for each reload,
-        // we use a background script to always inject the latest version
-        // see src/background/contentScriptHMR.ts
-        delete manifest.content_scripts;
-        //manifest.permissions?.push("webNavigation");
-    }
+    //TODO: test if below is possible on Firefox
+    // impossible unless https://bugs.chromium.org/p/chromium/issues/detail?id=1198822 is resolved.
+    // Until then, all changes to content scripts require a manual browser reload and content page reload.
+    // if (isDev) {
+    //     // for content script, as browsers will cache them for each reload,
+    //     // we use a background script to always inject the latest version
+    //     // see src/background/contentScriptHMR.ts
+    //     delete manifest.content_scripts;
+    //     //manifest.permissions?.push("webNavigation");
+    // }
 
     return manifest;
 }

@@ -13,9 +13,19 @@ import { NetworkAuth } from "./NetworkAuth";
 if (import.meta.hot) {
     // @ts-expect-error for background HMR
     import("/@vite/client");
+    // doesn't apepar to work in MV3
     // load latest content script
-    import("./contentScriptHMR");
-  }
+    // import("./contentScriptHMR");
+}
+
+
+let resolveInitialised: (value?: boolean | PromiseLike<boolean>) => void;
+
+// We can'ty do anything useful if we fail to intiialise so just crash and let this Promise get GCd
+const initialised: Promise<boolean> = new Promise((resolve, _) => {
+    resolveInitialised = resolve;
+});
+
 
 const userBusySeconds = 60 * 15;
 const maxUpdateDelaySeconds = 60 * 60 * 8;
@@ -23,20 +33,18 @@ const maxUpdateDelaySeconds = 60 * 60 * 8;
 // window.KeePersistentLogger = new PersistentLogger();
 
 const networkAuth = new NetworkAuth();
-//TODO: start listening for network auth requests in this top level synchronous module
 
 // Make sure user knows we're not ready yet
 chrome.action.setBadgeText({ text: "OFF" });
 chrome.action.setBadgeBackgroundColor({ color: "red" });
 chrome.action.disable();
 
-//TODO: Split creation of Kee object from connection attempts, if not already done. Probably put the init stuff somewhere else in startup lifecycle?
 // Assumes config and logging have been initialised before this is called.
 async function startup() {
     // window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
     KeeLog.attachConfig(configManager.current);
     await showReleaseNotesAfterUpdate();
-    kee.init();
+    resolveInitialised(await kee.init());
     configManager.addChangeListener(() =>
         configSyncManager.updateToRemoteConfig(configManager.current)
     );
@@ -57,22 +65,6 @@ async function showReleaseNotesAfterUpdate() {
         configManager.setASAP({ mustShowReleaseNotesAtStartup: false });
     }
 }
-
-chrome.windows.onFocusChanged.addListener(async function (windowId) {
-    if (KeeLog && KeeLog.debug) KeeLog.debug("Focus changed for id: " + windowId);
-    if (windowId !== chrome.windows.WINDOW_ID_NONE) {
-        const tabs = await chrome.tabs.query({
-            active: true,
-            windowId: windowId
-        });
-        if (tabs[0] && tabs[0].id != null) onTabActivated(tabs[0].id);
-    }
-});
-
-chrome.tabs.onActivated.addListener(event => {
-    if (KeeLog && KeeLog.debug) KeeLog.debug("Tab activated with id: " + event.tabId);
-    onTabActivated(event.tabId);
-});
 
 function onTabActivated(tabId) {
     updateForegroundTab(tabId);
@@ -101,54 +93,66 @@ function updateForegroundTab(tabId: number) {
     }
 }
 
-//TODO: Find out if Chrome still requires us to do this to ensure reliable behaviour after
-// first install/update and modify script execution calls if needed
-// https://developer.chrome.com/docs/extensions/migrating/api-calls/
-// // Some browsers (e.g. Firefox) automatically inject content scripts on install/update
-// // but others don't (e.g. Chrome). To ensure every existing tab has exactly one
-// // instance of this content script running in it, we programmatically inject the script.
-// if (!isFirefox()) {
-//     chrome.runtime.onInstalled.addListener(() => {
-//         const showErrors = () => {
-//             if (chrome.runtime.lastError) {
-//                 if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError.message);
-//                 else console.error(chrome.runtime.lastError);
-//             }
-//         };
-//         chrome.runtime.getManifest().content_scripts?.forEach(script => {
-//             const allFrames = script.all_frames;
-//             const url = script.matches;
+//TODO: Below seems likely still required. need to check if friefox has changed behaviour in mv3 mode too.
+// Some browsers (e.g. Firefox) automatically inject content scripts on install/update
+// but others don't (e.g. Chrome). To ensure every existing tab has exactly one
+// instance of this content script running in it, we programmatically inject the script.
+if (!isFirefox()) {
+    chrome.runtime.onInstalled.addListener(() => {
+        // const showErrors = () => {
+        //     if (chrome.runtime.lastError) {
+        //         if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError.message);
+        //         else console.error(chrome.runtime.lastError);
+        //     }
+        // };
+        chrome.runtime.getManifest().content_scripts?.forEach(async script => {
+            const allFrames = script.all_frames;
+            const url = script.matches;
 
-//             // We have to define the list of expected Vault URLs here as well as in
-//             // the manifest because there is no API available to automatically handle
-//             // the manifest globs and it's not worth bundling a generic parser for
-//             // just this one use case.
-//             const vaultURLs = [
-//                 "https://app-dev.kee.pm:8087/",
-//                 "https://app-beta.kee.pm/",
-//                 "https://app.kee.pm/",
-//                 "https://keevault.pm/"
-//             ];
+            // We have to define the list of expected Vault URLs here as well as in
+            // the manifest because there is no API available to automatically handle
+            // the manifest globs and it's not worth bundling a generic parser for
+            // just this one use case.
+            const vaultURLs = [
+                "https://app-dev.kee.pm:8087/",
+                "https://app-beta.kee.pm/",
+                "https://app.kee.pm/",
+                "https://keevault.pm/"
+            ];
 
-//             const loadContentScripts = (tab: chrome.tabs.Tab) => {
-//                 if (tab.url && tab.url.startsWith("chrome://")) return;
-//                 if (script.exclude_globs && script.exclude_globs.length > 0) {
-//                     if (vaultURLs.some(excludedURL => tab.url.startsWith(excludedURL))) return;
-//                 }
-//                 if (script.include_globs && script.include_globs.length > 0) {
-//                     if (!vaultURLs.some(includedURL => tab.url.startsWith(includedURL))) return;
-//                 }
-//                 (script.js || []).forEach(file => {
-//                     chrome.scripting.executeScript(tab.id, { allFrames, file }).then(showErrors);
-//                 });
-//                 (script.css || []).forEach(file => {
-//                     chrome.tabs.insertCSS(tab.id, { allFrames, file }).then(showErrors);
-//                 });
-//             };
-//             chrome.tabs.query({ url }).then(tabs => tabs.forEach(loadContentScripts));
-//         });
-//     });
-// }
+            const loadOperations = [];
+            const loadContentScripts = (tab: chrome.tabs.Tab) => {
+                if (tab.url && tab.url.startsWith("chrome://")) return;
+                if (script.exclude_globs && script.exclude_globs.length > 0) {
+                    if (vaultURLs.some(excludedURL => tab.url.startsWith(excludedURL))) return;
+                }
+                if (script.include_globs && script.include_globs.length > 0) {
+                    if (!vaultURLs.some(includedURL => tab.url.startsWith(includedURL))) return;
+                }
+                if (script?.js?.length > 0) {
+                    loadOperations.push(chrome.scripting.executeScript({
+                        target: {tabId: tab.id, allFrames },
+                        files: script.js
+                    }));
+                }
+                if (script?.css?.length > 0) {
+                    loadOperations.push(chrome.scripting.insertCSS({
+                        target: {tabId: tab.id, allFrames },
+                        files: script.css
+                    }));
+                }
+            };
+            try {
+                const tabs = await chrome.tabs.query({ url });
+                tabs.forEach(loadContentScripts);
+                await Promise.all(loadOperations);
+            } catch (e) {
+                if (KeeLog && KeeLog.error) KeeLog.error(e.message);
+                else console.error(e);
+            }
+        });
+    });
+}
 
 chrome.runtime.onInstalled.addListener(async function (details) {
     if (details.reason === "install") {
@@ -164,6 +168,22 @@ chrome.runtime.onInstalled.addListener(async function (details) {
             });
         }
     }
+});
+
+chrome.windows.onFocusChanged.addListener(async function (windowId) {
+    if (KeeLog && KeeLog.debug) KeeLog.debug("Focus changed for id: " + windowId);
+    if (windowId !== chrome.windows.WINDOW_ID_NONE) {
+        const tabs = await chrome.tabs.query({
+            active: true,
+            windowId: windowId
+        });
+        if (tabs[0] && tabs[0].id != null) onTabActivated(tabs[0].id);
+    }
+});
+
+chrome.tabs.onActivated.addListener(event => {
+    if (KeeLog && KeeLog.debug) KeeLog.debug("Tab activated with id: " + event.tabId);
+    onTabActivated(event.tabId);
 });
 
 //TODO: re-enable update idle delay feature
@@ -183,6 +203,46 @@ chrome.runtime.onInstalled.addListener(async function (details) {
 //         }, maxUpdateDelaySeconds * 1000);
 //     }
 // });
+
+
+//TODO: verify works... probably need to cache incoming requests and process them after this init function has been called. Or, maybe just deferring the initial response to the content/popup script is sufficient?
+chrome.runtime.onConnect.addListener(async port => {
+    await initialised;
+    kee.onPortConnected(port);
+});
+
+// With MV3 we must always listen to httpauth requests and decide whether to handle them based on whether we have already initalised the pinia store, got connected to KPRPC, have open DBs, etc.
+//TODO: only handle requests if initialised has resolved to true (we may crash at startup session restore otherwise)
+
+// if (isFirefox()) {
+//     chrome.webRequest.onAuthRequired.addListener(
+//         requestDetails => networkAuth.provideCredentialsAsync(requestDetails),
+//         { urls: ["<all_urls>"] },
+//         ["blocking"]
+//     );
+// } else {
+    chrome.webRequest.onAuthRequired.addListener(
+        (requestDetails, callback) => {
+            networkAuth.provideCredentialsAsyncBlockingCallback(requestDetails, callback);
+        },
+        { urls: ["<all_urls>"] },
+        ["asyncBlocking"]
+    );
+//}
+
+chrome.webRequest.onCompleted.addListener(
+    requestDetails => {
+        networkAuth.completed(requestDetails);
+    },
+    { urls: ["<all_urls>"] }
+);
+
+chrome.webRequest.onErrorOccurred.addListener(
+    requestDetails => {
+        networkAuth.completed(requestDetails);
+    },
+    { urls: ["<all_urls>"] }
+);
 
 // Load our config and start the addon once done
 configManager.load(startup);

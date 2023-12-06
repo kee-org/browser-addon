@@ -97,6 +97,8 @@ export class WebsocketSessionManager {
     }
 
     startup() {
+        return;
+        //TODO: reenable websocket KPRPC conenction
         this.pendingPortChange = null;
         chrome.runtime.onMessage.addListener(request => {
             if (request.action !== "KPRPC_Port_Change") return;
@@ -121,7 +123,7 @@ export class WebsocketSessionManager {
         // NB: overheads here include a test whether a socket is alive
         // and regular timer scheduling overheads - hopefully that's insignificant
         // but if not we can try more complicated connection strategies
-        this._reconnectTimer = window.setInterval(
+        this._reconnectTimer = setInterval(
             this.attemptConnection.bind(this),
             this.reconnectionAttemptFrequency
         );

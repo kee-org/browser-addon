@@ -30,7 +30,6 @@ import BackgroundStore from "~/store/BackgroundStore";
 import { Mutation } from "~/store/Mutation";
 import { accountManager } from "./AccountManager";
 
-
 class Kee {
     tabStates: Map<number, TabState>;
     persistentTabStates: Map<number, PersistentTabState>;
@@ -54,7 +53,7 @@ class Kee {
 
     browserPopupPort: Partial<chrome.runtime.Port>;
     vaultPort: Partial<chrome.runtime.Port>;
-    onPortConnected: any;
+    onPortConnected: (p: chrome.runtime.Port) => void;
 
     networkAuth: NetworkAuth;
     //animateIcon: AnimateIcon;
@@ -120,7 +119,7 @@ class Kee {
         this.browserPopupPort = { postMessage: _msg => { } };
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         this.vaultPort = { postMessage: _msg => { } };
-        this.onPortConnected = function (p: chrome.runtime.Port) {
+        this.onPortConnected = async function (p: chrome.runtime.Port) {
             if (KeeLog && KeeLog.debug) KeeLog.debug(p.name + " port connected");
             let name = p.name;
             let parentFrameId: number;
@@ -283,12 +282,12 @@ class Kee {
         return frameId;
     }
 
-    async init() {
-        // Create a timer for KPRPC connection establishment
-        this.regularKPRPCListenerQueueHandlerTimer = self.setInterval(
-            this.RegularKPRPCListenerQueueHandler,
-            5000
-        );
+    async init(): Promise<boolean> {
+        // // Create a timer for KPRPC connection establishment
+        // this.regularKPRPCListenerQueueHandlerTimer = self.setInterval(
+        //     this.RegularKPRPCListenerQueueHandler,
+        //     5000
+        // );
 
         this._keeBrowserStartup();
 
@@ -309,12 +308,6 @@ class Kee {
             }
         });
 
-        //TODO: Move this to top level main - probably need to cache incoming requests and process them after this init function has been called. Or, maybe just deferring the initial response to the content/popup script is sufficient?
-        chrome.runtime.onConnect.addListener(this.onPortConnected);
-
-        //TODO: Same. Need to always listen to httpauth requests and decide whether to handle them based on whether we have already initalised the pinia store, got connected to KPRPC, have open DBs, etc.
-        this.networkAuth.startListening();
-
         await chrome.privacy.services.passwordSavingEnabled.set({
             value: false
         });
@@ -325,6 +318,7 @@ class Kee {
                 chrome.runtime.lastError.message
             );
         }
+        return true;
     }
 
     notifyUser(notification: KeeNotification, nativeNotification?: NativeNotification) {
@@ -783,7 +777,7 @@ class Kee {
 
         KeeLog.debug("Signal received by KPRPCListener (" + sig + ") @" + sigTime);
 
-        let executeNow = false;
+     //   let executeNow = false;
         let refresh = false;
 
         switch (sig) {
@@ -835,51 +829,53 @@ class Kee {
 
         const now = new Date().getTime();
 
-        // If there is nothing in the queue at the moment we can process this callback straight away
-        if (!this.processingCallback && this.pendingCallback == "") {
-            KeeLog.debug("Signal executing now. @" + sigTime);
-            this.processingCallback = true;
-            executeNow = true;
-        }
-        // Otherwise we need to add the action for this callback to a queue and leave it up to the regular callback processor to execute the action
+        // // If there is nothing in the queue at the moment we can process this callback straight away
+        // if (!this.processingCallback && this.pendingCallback == "") {
+        //     KeeLog.debug("Signal executing now. @" + sigTime);
+        //     this.processingCallback = true;
+        //     executeNow = true;
+        // }
+        // // Otherwise we need to add the action for this callback to a queue and leave it up to the regular callback processor to execute the action
 
         if (refresh) {
-            if (executeNow) {
+     //       if (executeNow) {
                 this.store.updateLastKeePassRPCRefresh(now);
                 this._refreshKPDB();
-            } else {
-                this.pendingCallback = "_refreshKPDB";
-            }
+            // } else {
+            //     this.pendingCallback = "_refreshKPDB";
+            // }
         }
 
-        KeeLog.debug("Signal handled or queued. @" + sigTime);
-        if (executeNow) {
-            //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
-            try {
-                if (this.pendingCallback == "_refreshKPDB") this._refreshKPDB();
-                else KeeLog.debug("A pending signal was found and handled.");
-            } finally {
-                this.pendingCallback = "";
-                this.processingCallback = false;
-            }
+        // KeeLog.debug("Signal handled or queued. @" + sigTime);
+        // if (executeNow) {
+            // //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
+            // try {
+            //     if (this.pendingCallback == "_refreshKPDB") this._refreshKPDB();
+            //     else KeeLog.debug("A pending signal was found and handled.");
+            // } finally {
+            //     this.pendingCallback = "";
+            //     this.processingCallback = false;
+            // }
             KeeLog.debug("Signal handled. @" + sigTime);
-        }
+     //   }
     }
 
-    RegularKPRPCListenerQueueHandler() {
-        // If there is nothing in the queue at the moment or we are already processing a callback, we give up for now
-        if (this.processingCallback || this.pendingCallback == "") return;
+    //TODO: verify this simplification is fine.
+    // The only possible callback handler for signals is refreshDb so we don't need this timer, etc. any more
+    // RegularKPRPCListenerQueueHandler() {
+    //     // If there is nothing in the queue at the moment or we are already processing a callback, we give up for now
+    //     if (this.processingCallback || this.pendingCallback == "") return;
 
-        KeeLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
-        this.processingCallback = true;
-        try {
-            if (this.pendingCallback == "_refreshKPDB") this._refreshKPDB();
-        } finally {
-            this.pendingCallback = "";
-            this.processingCallback = false;
-        }
-        KeeLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
-    }
+    //     KeeLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
+    //     this.processingCallback = true;
+    //     try {
+    //         if (this.pendingCallback == "_refreshKPDB") this._refreshKPDB();
+    //     } finally {
+    //         this.pendingCallback = "";
+    //         this.processingCallback = false;
+    //     }
+    //     KeeLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
+    // }
 
     createTabStateIfMissing(tabId: number) {
         if (!this.tabStates.has(tabId)) {

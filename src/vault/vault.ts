@@ -126,36 +126,20 @@ class Page {
             );
             return;
         }
-
+// mv3 doesn't allow us create a dynamic script containing our secrets so need to find a new way.
+// set a data attribute on some sort of metadata head tag and then hardcode the text below into a file that we can allow via web accessible resources?
         const body = document.getElementsByTagName("body")[0];
         const existingScript = document.getElementById("keeVaultMagic_existsExactlyHere");
         if (existingScript) existingScript.parentElement.removeChild(existingScript);
         const script = document.createElement("script");
         script.setAttribute("id", "keeVaultMagic_existsExactlyHere");
-        script.innerText = `
-    window.KeeAddonSupportedFeatures = [
-        "KPRPC_FEATURE_BROWSER_HOSTED",
-        "KPRPC_FEATURE_VERSION_1_6",
-        "KPRPC_FEATURE_WARN_USER_WHEN_FEATURE_MISSING",
-        "BROWSER_SETTINGS_SYNC"];
-
-    function messageToKeeAddon(detail) {
-        var messageEvent = new CustomEvent("${customEventNameFromPage}", {"detail":detail});
-        document.dispatchEvent(messageEvent);
-    }
-
-    function initKeeAddonLink() {
-        var KeeAddonEnabledEvent = new CustomEvent('KeeAddonEnabled', {"detail":"${customEventNameToPage}"});
-        document.dispatchEvent(KeeAddonEnabledEvent);
-        console.log("Kee addon link activated");
-    }
-
-    if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", initKeeAddonLink); }
-    else { initKeeAddonLink() }
-    console.log("Kee addon link injected");
-        `;
+        script.dataset["kvCustomEventNameFromPage"] = customEventNameFromPage;
+        script.dataset["kvCustomEventNameToPage"] = customEventNameToPage;
+        script.src = chrome.runtime.getURL("lib/linkContentScriptToKeeVaultWebsite.js");
         body.appendChild(script);
     }
+
+//TODO: updateForegroundTab fails for some reason; CS fails to inject to about:blank
 
     public static send(msg) {
         const messageEvent = new CustomEvent(customEventNameToPage, {
