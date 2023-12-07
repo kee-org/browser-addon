@@ -139,8 +139,6 @@ class Page {
         body.appendChild(script);
     }
 
-//TODO: updateForegroundTab fails for some reason; CS fails to inject to about:blank
-
     public static send(msg) {
         const messageEvent = new CustomEvent(customEventNameToPage, {
             detail: msg

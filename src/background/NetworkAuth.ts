@@ -17,20 +17,20 @@ export class NetworkAuth {
         }
     }
 
-    public provideCredentialsAsyncBlockingCallback(
-        requestDetails: any,
-        callback: (response: chrome.webRequest.BlockingResponse) => void
-    ) {
-        // Firefox fails to register the event listener so this function
-        // only executes in other browsers
+    // public provideCredentialsAsyncBlockingCallback(
+    //     requestDetails: any,
+    //     callback: (response: chrome.webRequest.BlockingResponse) => void
+    // ) {
+    //     // Firefox fails to register the event listener so this function
+    //     // only executes in other browsers
 
-        this.provideCredentialsAsync(requestDetails)
-            .then(result => callback(result))
-            .catch(reason => {
-                KeeLog.error("AsyncBlockingCallback promise failed", reason);
-                callback({ cancel: false });
-            });
-    }
+    //     this.provideCredentialsAsync(requestDetails)
+    //         .then(result => callback(result))
+    //         .catch(reason => {
+    //             KeeLog.error("AsyncBlockingCallback promise failed", reason);
+    //             callback({ cancel: false });
+    //         });
+    // }
 
     public async provideCredentialsAsync(
         requestDetails: any

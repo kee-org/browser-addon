@@ -79,15 +79,22 @@ function updateForegroundTab(tabId: number) {
     if (kee && kee.foregroundTabId !== tabId) {
         // May not have set up kee yet
         kee.foregroundTabId = tabId;
-        if (kee.tabStates.has(tabId) && kee.tabStates.get(tabId).framePorts) {
+        const ports = kee.tabStates.get(tabId)?.framePorts;
+        if (ports) {
             // May not have set up port yet
             if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
-            kee.tabStates.get(tabId).framePorts.forEach(port => {
-                port.postMessage({
-                    isForegroundTab: true,
-                    action: Action.DetectForms,
-                    resetState: kee.store.state
-                } as AddonMessage);
+
+            ports.forEach((port, frameId) => {
+                try {
+                    port.postMessage({
+                        isForegroundTab: true,
+                        action: Action.DetectForms,
+                        resetState: kee.store.state
+                    } as AddonMessage);
+                } catch (e) {
+                    if (KeeLog && KeeLog.warn) KeeLog.warn("Failed to post a message to a foreground tab port. Will remove the port now.");
+                    ports.delete(frameId);
+                }
             });
         }
     }
@@ -122,6 +129,10 @@ if (!isFirefox()) {
 
             const loadOperations = [];
             const loadContentScripts = (tab: chrome.tabs.Tab) => {
+                // Firefox used to open every new tab with an about page so maybe it was important
+                // to not block that injection but I think that is no longer an issue so we can
+                // avoid the log noise by skipping those pages now.
+                if (tab.url && tab.url.startsWith("about:")) return;
                 if (tab.url && tab.url.startsWith("chrome://")) return;
                 if (script.exclude_globs && script.exclude_globs.length > 0) {
                     if (vaultURLs.some(excludedURL => tab.url.startsWith(excludedURL))) return;
@@ -131,13 +142,13 @@ if (!isFirefox()) {
                 }
                 if (script?.js?.length > 0) {
                     loadOperations.push(chrome.scripting.executeScript({
-                        target: {tabId: tab.id, allFrames },
+                        target: { tabId: tab.id, allFrames },
                         files: script.js
                     }));
                 }
                 if (script?.css?.length > 0) {
                     loadOperations.push(chrome.scripting.insertCSS({
-                        target: {tabId: tab.id, allFrames },
+                        target: { tabId: tab.id, allFrames },
                         files: script.css
                     }));
                 }
@@ -212,22 +223,32 @@ chrome.runtime.onConnect.addListener(async port => {
 });
 
 // With MV3 we must always listen to httpauth requests and decide whether to handle them based on whether we have already initalised the pinia store, got connected to KPRPC, have open DBs, etc.
-//TODO: only handle requests if initialised has resolved to true (we may crash at startup session restore otherwise)
 
+//TODO: Find out if Firefox MV3 still requires the older blocking option
 // if (isFirefox()) {
-//     chrome.webRequest.onAuthRequired.addListener(
-//         requestDetails => networkAuth.provideCredentialsAsync(requestDetails),
-//         { urls: ["<all_urls>"] },
-//         ["blocking"]
-//     );
+chrome.webRequest.onAuthRequired.addListener(
+    async requestDetails => {
+        //      try {
+        //TODO: Timeout 20 seconds for initialisation?
+        // We may crash at startup / session restore if we're not initialised yet
+        await initialised;
+        return networkAuth.provideCredentialsAsync(requestDetails);
+        // } catch {
+        //     KeeLog.error("AsyncBlockingCallback promise failed", reason);
+        //     callback({ cancel: false });
+        // }
+    },
+    { urls: ["<all_urls>"] },
+    [isFirefox() ? "blocking" : "asyncBlocking"]
+);
 // } else {
-    chrome.webRequest.onAuthRequired.addListener(
-        (requestDetails, callback) => {
-            networkAuth.provideCredentialsAsyncBlockingCallback(requestDetails, callback);
-        },
-        { urls: ["<all_urls>"] },
-        ["asyncBlocking"]
-    );
+// chrome.webRequest.onAuthRequired.addListener(
+//     (requestDetails, callback) => {
+//         networkAuth.provideCredentialsAsyncBlockingCallback(requestDetails, callback);
+//     },
+//     { urls: ["<all_urls>"] },
+//     ["asyncBlocking"]
+// );
 //}
 
 chrome.webRequest.onCompleted.addListener(

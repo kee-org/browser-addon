@@ -1,4 +1,5 @@
 import { AddonMessage } from "./AddonMessage";
+import { KeeLog } from "./Logger";
 import { VaultMessage } from "./VaultMessage";
 
 class ContentPortManager {
@@ -13,7 +14,11 @@ class ContentPortManager {
     // };
 
     public postMessage(msg: AddonMessage | VaultMessage) {
-        this.port.postMessage(msg);
+        try {
+            this.port.postMessage(msg);
+        } catch (e) {
+            if (KeeLog && KeeLog.warn) KeeLog.warn("Failed to post a message. If the addon has just auto-updated this is expected.");
+        }
     }
 
     public startup(name: string) {

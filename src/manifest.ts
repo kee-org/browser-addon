@@ -80,8 +80,9 @@ export async function getManifest() {
         host_permissions: ["*://*/*"],
         web_accessible_resources: [
             {
-                //TODO: which lib location is correct? Why do we not use the panelColour fiel any more?
-                resources: ["dist/panels/*", "dist/lib/linkContentScriptToKeeVaultWebsite.js", "lib/linkContentScriptToKeeVaultWebsite.js"],
+                //TODO: Why do we not use the panelColour file any more?
+                //TODO: See if we can limit the KV script injection using matches to prevent other addons or websites injecting it to other pages... not sure why that would be a problem but worth preventing if we can.
+                resources: ["dist/panels/*", "lib/linkContentScriptToKeeVaultWebsite.js"],
                 matches: ["<all_urls>"]
               }
         ],

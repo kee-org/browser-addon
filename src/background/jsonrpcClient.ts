@@ -32,6 +32,10 @@ export class jsonrpcClient {
         return this.kprpcClient.startEventSession(sessionId, features, messageToWebPage);
     }
 
+    closeEventSession() {
+        this.kprpcClient.closeEventSession();
+    }
+
     eventSessionMessageFromPage(data: VaultMessage) {
         return this.kprpcClient.eventSessionMessageFromPage(data);
     }

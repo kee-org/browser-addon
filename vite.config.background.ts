@@ -13,9 +13,10 @@ export default defineConfig({
     "process.env.NODE_ENV": JSON.stringify(isDev ? "development" : "production")
   },
   build: {
-    watch: isDev
-      ? {}
-      : undefined,
+    //TODO: trying no watching incase that is why we get fucked up sourcemaps at the end of the background file
+    // watch: isDev
+    //   ? {}
+    //   : undefined,
     outDir: r("extension/dist/background"),
     cssCodeSplit: false,
     emptyOutDir: false,

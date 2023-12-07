@@ -70,32 +70,38 @@ class Kee {
 
     private constructor() {
         this.store = new BackgroundStore((mutation: Mutation, excludedPort: chrome.runtime.Port) => {
-            const allPorts: Partial<chrome.runtime.Port>[] = [];
-            allPorts.push(this.browserPopupPort);
-            allPorts.push(this.vaultPort);
 
-            const ts = this.tabStates.get(this.foregroundTabId);
-            if (ts) {
-                ts.framePorts.forEach(port => {
-                    allPorts.push(port);
-                });
-                ts.ourIframePorts.forEach(port => {
-                    allPorts.push(port);
-                });
+            function tryPostMessage(port: Partial<chrome.runtime.Port>, mutationObj: any): boolean {
+                try {
+                    port.postMessage({ mutation: mutationObj } as AddonMessage);
+                    return true;
+                } catch (e) {
+                    KeeLog.warn("Dead port found", e);
+                    // Sometimes dead ports are left lying around by the browser (especially
+                    // during upgrades, etc.). We can do nothing about this except try to
+                    // tidy up our reference to it and must not let it cause a failure to post to any valid ports.
+                    return false;
+                }
             }
+            //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
+            const json = JSON.stringify(mutation);
+            KeeLog.debug("New background mutation for distribution");
+            const mutationObj = JSON.parse(json);
 
-            for (const port of allPorts) {
-                if (port !== excludedPort) {
-                    try {
-                        //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
-                        const json = JSON.stringify(mutation);
-                        KeeLog.debug("New background mutation for distribution");
-                        port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
-                    } catch (e) {
-                        KeeLog.warn("Dead port found", e);
-                        // Sometimes dead ports are left lying around by the browser (especially
-                        // during upgrades, etc.). We can do nothing about this but must not let
-                        // it cause this function to fail to execute to the end.
+            //TODO: Maybe try to tidy up these ports too? Should already be dealt with elsewhere and they are a bit more complex because some things expect them to always exist as at least a stub.
+            if (this.browserPopupPort !== excludedPort) tryPostMessage(this.browserPopupPort, mutationObj);
+            if (this.vaultPort !== excludedPort) tryPostMessage(this.vaultPort, mutationObj);
+
+            const foregroundTabState = this.tabStates.get(this.foregroundTabId);
+            if (foregroundTabState) {
+                for (const [id, port] of foregroundTabState.framePorts) {
+                    if (port !== excludedPort && !tryPostMessage(port, mutationObj)) {
+                        foregroundTabState.framePorts.delete(id);
+                    }
+                }
+                for (const [id, port] of foregroundTabState.ourIframePorts) {
+                    if (port !== excludedPort && !tryPostMessage(port, mutationObj)) {
+                        foregroundTabState.ourIframePorts.delete(id);
                     }
                 }
             }
@@ -202,6 +208,13 @@ class Kee {
                         isForegroundTab: tabId === this.foregroundTabId
                     } as AddonMessage;
 
+                    //TODO: Also need p.onDisconnect.addListener(() => { here?
+                    // p.onDisconnect.addListener(port => {
+                    //     const states = this.tabStates.get(tabId);
+                    //     states.frames.delete(frameId);
+                    //     states.framePorts.delete(frameId);
+
+                    // });
                     this.createTabStateIfMissing(tabId);
 
                     if (frameId === 0) {
@@ -226,11 +239,23 @@ class Kee {
                 }
                 case "vault": {
                     p.onMessage.addListener(vaultMessageHandler.bind(p));
+                    //TODO: below is too complex.? Maybe can close over the tabid/frameid or something?
                     /* Potentially could/should call messageCloseSession() when the port is disconnected but
                      earlier experience suggests disconnection does not occur before a new port is connected in Firefox due to a
                      bug (works fine in Chrome) so we would risk closing the freshly opened session instead.
                     p.onDisconnect.addListener(this.messageCloseSession();)
                     */
+                    //TODO: Test again in Firefox to see if behaviour is now reliable enough. If not, enable the listener only for Chromium.
+                    // Or maybe can pass the port metadata in case we can workaround the bug using some of that data?
+                    // p.onDisconnect.addListener(port => {
+                    //     // Only take action if the port we received this on is the same as the one we are currently tracking as active. This helps us to tidy up after the user closes the Kee Vault tab or navigates away from the site
+                    //     //but ensures we don't close newly opened connections when an old port is closed (such as during page refreshes, extension updates, etc.)
+                    //     if (port == this.vaultPort) {
+                    //     // eslint-disable-next-line @typescript-eslint/no-empty-function
+                    //     this.vaultPort = { postMessage: _msg => { } };
+                    //     this.KeePassRPC.closeEventSession();
+                    //     }
+                    // });
 
                     const connectMessage = {
                         initialState: this.store.state,
@@ -245,6 +270,11 @@ class Kee {
                 }
                 case "iframe": {
                     p.onMessage.addListener(iframeMessageHandler.bind(p));
+                    p.onDisconnect.addListener(() => {
+                        this.tabStates
+                            .get(p.sender.tab.id)
+                            ?.ourIframePorts?.delete(p.sender.frameId);
+                    });
 
                     const connectMessage = {
                         initialState: this.store.state,
@@ -777,7 +807,7 @@ class Kee {
 
         KeeLog.debug("Signal received by KPRPCListener (" + sig + ") @" + sigTime);
 
-     //   let executeNow = false;
+        //   let executeNow = false;
         let refresh = false;
 
         switch (sig) {
@@ -838,9 +868,9 @@ class Kee {
         // // Otherwise we need to add the action for this callback to a queue and leave it up to the regular callback processor to execute the action
 
         if (refresh) {
-     //       if (executeNow) {
-                this.store.updateLastKeePassRPCRefresh(now);
-                this._refreshKPDB();
+            //       if (executeNow) {
+            this.store.updateLastKeePassRPCRefresh(now);
+            this._refreshKPDB();
             // } else {
             //     this.pendingCallback = "_refreshKPDB";
             // }
@@ -848,16 +878,16 @@ class Kee {
 
         // KeeLog.debug("Signal handled or queued. @" + sigTime);
         // if (executeNow) {
-            // //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
-            // try {
-            //     if (this.pendingCallback == "_refreshKPDB") this._refreshKPDB();
-            //     else KeeLog.debug("A pending signal was found and handled.");
-            // } finally {
-            //     this.pendingCallback = "";
-            //     this.processingCallback = false;
-            // }
-            KeeLog.debug("Signal handled. @" + sigTime);
-     //   }
+        // //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
+        // try {
+        //     if (this.pendingCallback == "_refreshKPDB") this._refreshKPDB();
+        //     else KeeLog.debug("A pending signal was found and handled.");
+        // } finally {
+        //     this.pendingCallback = "";
+        //     this.processingCallback = false;
+        // }
+        KeeLog.debug("Signal handled. @" + sigTime);
+        //   }
     }
 
     //TODO: verify this simplification is fine.

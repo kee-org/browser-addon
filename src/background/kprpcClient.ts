@@ -87,9 +87,15 @@ export class kprpcClient {
     startWebsocketSessionManager() {
         this.websocketSessionManager.startup();
     }
+
     startEventSession(sessionId: string, features: string[], messageToWebPage) {
         return this.eventSessionManager.startSession(sessionId, features, messageToWebPage);
     }
+
+    closeEventSession() {
+        this.eventSessionManager.closeSession();
+    }
+
     eventSessionMessageFromPage(data: VaultMessage) {
         return this.eventSessionManager.messageReciever(data);
     }
