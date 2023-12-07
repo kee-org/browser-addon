@@ -6,42 +6,19 @@ import punycode from "punycode/";
 import { kee } from "./KF";
 
 export class NetworkAuth {
-    constructor() {}
-
-    pendingRequests = [];
-
-    public completed(requestDetails) {
-        const index = this.pendingRequests.indexOf(requestDetails.requestId);
-        if (index > -1) {
-            this.pendingRequests.splice(index, 1);
-        }
-    }
-
-    // public provideCredentialsAsyncBlockingCallback(
-    //     requestDetails: any,
-    //     callback: (response: chrome.webRequest.BlockingResponse) => void
-    // ) {
-    //     // Firefox fails to register the event listener so this function
-    //     // only executes in other browsers
-
-    //     this.provideCredentialsAsync(requestDetails)
-    //         .then(result => callback(result))
-    //         .catch(reason => {
-    //             KeeLog.error("AsyncBlockingCallback promise failed", reason);
-    //             callback({ cancel: false });
-    //         });
-    // }
+    constructor() { }
 
     public async provideCredentialsAsync(
         requestDetails: any
     ): Promise<chrome.webRequest.BlockingResponse> {
-        this.pendingRequests.push(requestDetails.requestId);
-        KeeLog.debug("Providing credentials for: " + requestDetails.requestId);
+        //this.pendingRequests.push(requestDetails.requestId);
+        KeeLog.debug("Considering handling request ID: " + requestDetails.requestId);
 
         if (!kee.store.state.connected || kee.store.state.ActiveKeePassDatabaseIndex < 0) {
             return { cancel: false };
         }
 
+        KeeLog.info("Finding credentials for request ID: " + requestDetails.requestId);
         const url = new URL(requestDetails.url);
         url.hostname = punycode.toUnicode(url.hostname);
 
@@ -87,22 +64,19 @@ export class NetworkAuth {
 
         matchedEntries.sort((_e1, e2) => (e2.httpRealm === requestDetails.realm ? 1 : 0));
 
-        return new Promise<chrome.webRequest.BlockingResponse>(resolve => {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise<chrome.webRequest.BlockingResponse>(async (resolve, reject) => {
             function handleMessage(request, sender: chrome.runtime.MessageSender) {
                 switch (request.action) {
                     case "NetworkAuth_ok": {
                         const entry = matchedEntries[request.selectedEntryIndex];
+                        KeeLog.debug("Filling request ID: " + requestDetails.requestId);
                         resolve({
                             authCredentials: {
                                 username: Entry.getUsernameField(entry).value,
                                 password: Entry.getPasswordField(entry).value
                             }
                         });
-                        chrome.runtime.onMessage.removeListener(handleMessage);
-                        break;
-                    }
-                    case "NetworkAuth_cancel": {
-                        resolve({ cancel: false });
                         chrome.runtime.onMessage.removeListener(handleMessage);
                         break;
                     }
@@ -128,7 +102,20 @@ export class NetworkAuth {
                 width: 600,
                 height: 300
             } as chrome.windows.CreateData;
-            chrome.windows.create(createData);
+            try {
+                const wind = await chrome.windows.create(createData);
+                // eslint-disable-next-line no-inner-declarations
+                function declineHandling(closingWindowId: number) {
+                    if (closingWindowId !== wind.id) return;
+                    KeeLog.debug("Cancelling request ID: " + requestDetails.requestId);
+                    resolve({ cancel: false });
+                    chrome.runtime.onMessage.removeListener(handleMessage);
+                    chrome.windows.onRemoved.removeListener(declineHandling);
+                }
+                chrome.windows.onRemoved.addListener(declineHandling);
+            } catch (e) {
+                reject(e);
+            }
         });
     }
 

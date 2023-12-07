@@ -158,8 +158,10 @@ if (!isFirefox()) {
                 tabs.forEach(loadContentScripts);
                 await Promise.all(loadOperations);
             } catch (e) {
-                if (KeeLog && KeeLog.error) KeeLog.error(e.message);
-                else console.error(e);
+                if (!(e.message as string).endsWith(" is showing error page")) {
+                    if (KeeLog && KeeLog.error) KeeLog.error(e.message);
+                    else console.error(e);
+                }
             }
         });
     });
@@ -222,17 +224,21 @@ chrome.runtime.onConnect.addListener(async port => {
     kee.onPortConnected(port);
 });
 
-// With MV3 we must always listen to httpauth requests and decide whether to handle them based on whether we have already initalised the pinia store, got connected to KPRPC, have open DBs, etc.
+// With MV3 we must always listen to httpauth requests and decide whether to handle them
+// based on whether we have already initalised the pinia store, got connected to KPRPC, have open DBs, etc.
 
 //TODO: Find out if Firefox MV3 still requires the older blocking option
 // if (isFirefox()) {
 chrome.webRequest.onAuthRequired.addListener(
-    async requestDetails => {
+    async (requestDetails, callback) => {
+        if (KeeLog?.debug) KeeLog.debug("onAuthRequired request started");
         //      try {
-        //TODO: Timeout 20 seconds for initialisation?
+
         // We may crash at startup / session restore if we're not initialised yet
-        await initialised;
-        return networkAuth.provideCredentialsAsync(requestDetails);
+        await Promise.race([initialised, new Promise(resolve => self.setTimeout(resolve, 20000))]);
+        if (KeeLog?.debug) KeeLog.debug("onAuthRequired request ongoing");
+        const result = await networkAuth.provideCredentialsAsync(requestDetails);
+        callback(result);
         // } catch {
         //     KeeLog.error("AsyncBlockingCallback promise failed", reason);
         //     callback({ cancel: false });
@@ -250,20 +256,6 @@ chrome.webRequest.onAuthRequired.addListener(
 //     ["asyncBlocking"]
 // );
 //}
-
-chrome.webRequest.onCompleted.addListener(
-    requestDetails => {
-        networkAuth.completed(requestDetails);
-    },
-    { urls: ["<all_urls>"] }
-);
-
-chrome.webRequest.onErrorOccurred.addListener(
-    requestDetails => {
-        networkAuth.completed(requestDetails);
-    },
-    { urls: ["<all_urls>"] }
-);
 
 // Load our config and start the addon once done
 configManager.load(startup);

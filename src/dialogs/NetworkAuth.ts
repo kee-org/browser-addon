@@ -14,7 +14,7 @@ class NetworkAuth {
 
     async supplyNetworkAuth(entryIndex: number) {
         const tab = await chrome.tabs.getCurrent();
-        chrome.runtime.sendMessage({
+        await chrome.runtime.sendMessage({
             action: "NetworkAuth_ok",
             selectedEntryIndex: entryIndex
         });
@@ -123,9 +123,6 @@ class NetworkAuth {
 let networkAuth: NetworkAuth;
 
 function setupNetworkAuthDialog() {
-    window.addEventListener("beforeunload", () =>
-        chrome.runtime.sendMessage({ action: "NetworkAuth_cancel" })
-    );
     KeeLog.attachConfig(configManager.current);
     networkAuth = new NetworkAuth();
     chrome.runtime.onMessage.addListener(message => {
