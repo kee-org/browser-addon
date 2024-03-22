@@ -13,10 +13,10 @@ export default defineConfig({
     "process.env.NODE_ENV": JSON.stringify(isDev ? "development" : "production")
   },
   build: {
-    //TODO: trying no watching incase that is why we get fucked up sourcemaps at the end of the background file
-    // watch: isDev
-    //   ? {}
-    //   : undefined,
+    //TODO: retest file watching in Firefox to check vite 5 fixed sourcemaps there as well as chrome
+    watch: isDev
+      ? {}
+      : undefined,
     outDir: r("extension/dist/background"),
     cssCodeSplit: false,
     emptyOutDir: false,
