@@ -16,7 +16,7 @@
         "typeRoots" : ["src/typedefs", "node_modules/@types", "./node_modules"],
         "moduleResolution": "node",
         "noImplicitThis": true,
-        "verbatimModuleSyntax": true, //TODO: test that this works and remove isoaltedModules if it does
+        // "verbatimModuleSyntax": true, //TODO: test that this works and remove isoaltedModules if it does
         "isolatedModules": true,
         "types": [
             "vite/client",
