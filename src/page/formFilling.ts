@@ -4,7 +4,7 @@ import { FormUtils } from "./formsUtils";
 import { FormSaving } from "./formSaving";
 import { KeeFieldIcon } from "./keeFieldIcon";
 import { MatchResult } from "./MatchResult";
-import { FindMatchesBehaviour } from "./findMatchesBehaviour";
+import type { FindMatchesBehaviour } from "./findMatchesBehaviour";
 import { KeeLogger, KeeLog } from "../common/Logger";
 import { Config } from "../common/config";
 import { configManager } from "../common/ConfigManager";

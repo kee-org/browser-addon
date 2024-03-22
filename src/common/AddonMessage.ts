@@ -2,8 +2,8 @@ import { Action } from "./Action";
 import { FrameState } from "./FrameState";
 import { KeeNotification } from "./KeeNotification";
 import { PasswordProfile } from "./model/PasswordProfile";
-import { SubmittedData } from "./SubmittedData";
-import { KeeState } from "../store/KeeState";
+import type { SubmittedData } from "./SubmittedData";
+import type { KeeState } from "../store/KeeState";
 import { Entry } from "./model/Entry";
 import { Mutation } from "../store/Mutation";
 

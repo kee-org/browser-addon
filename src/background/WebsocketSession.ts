@@ -1,4 +1,4 @@
-import { ResultWrapper } from "./kprpcClient";
+import type { ResultWrapper } from "./kprpcClient";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 

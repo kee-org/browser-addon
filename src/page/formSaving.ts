@@ -3,7 +3,7 @@ import { MatchResult } from "./MatchResult";
 import { FilledField } from "./FilledField";
 import { KeeLogger } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
-import { AddonMessage } from "../common/AddonMessage";
+import type { AddonMessage } from "../common/AddonMessage";
 import { MatchedField } from "./MatchedField";
 import { Field } from "../common/model/Field";
 import punycode from "punycode/";

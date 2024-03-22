@@ -1,6 +1,6 @@
 import { kprpcClient } from "./kprpcClient";
 import { EventSessionManager } from "./EventSession";
-import { VaultMessage } from "../common/VaultMessage";
+import type { VaultMessage } from "../common/VaultMessage";
 import { SessionType } from "../common/SessionType";
 import { PasswordProfile } from "../common/model/PasswordProfile";
 import { KeeLog } from "../common/Logger";

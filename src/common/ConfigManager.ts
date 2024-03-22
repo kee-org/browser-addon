@@ -2,10 +2,10 @@ import {
     Config,
     SiteConfig,
     SiteConfigLookup,
-    SiteConfigMethod,
+    type SiteConfigMethod,
     SiteConfigNode,
-    SiteConfigNodeType,
-    SiteConfigTarget
+    type SiteConfigNodeType,
+    type SiteConfigTarget
 } from "./config";
 import { ConfigMigrations } from "./ConfigMigrations";
 import { defaultSiteConfig } from "./DefaultSiteConfig";

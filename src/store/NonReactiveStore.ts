@@ -1,5 +1,5 @@
 import * as types from "./mutation-types";
-import { defaults, KeeState } from "./KeeState";
+import { defaults, type KeeState } from "./KeeState";
 import { SaveState } from "../common/SaveState";
 import { Entry } from "../common/model/Entry";
 import { SaveEntryResult } from "../common/SaveEntryResult";
@@ -7,7 +7,7 @@ import { Field } from "../common/model/Field";
 import { Database } from "../common/model/Database";
 import { KeeNotification } from "../common/KeeNotification";
 import { PasswordProfile } from "../common/model/PasswordProfile";
-import { SubmittedData } from "../common/SubmittedData";
+import type { SubmittedData } from "../common/SubmittedData";
 import { EntrySummary } from "../common/model/EntrySummary";
 import { Mutation } from "./Mutation";
 

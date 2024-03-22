@@ -1,4 +1,4 @@
-import { SubmittedData } from "./SubmittedData";
+import type { SubmittedData } from "./SubmittedData";
 import { Entry } from "./model/Entry";
 
 export class SaveState {

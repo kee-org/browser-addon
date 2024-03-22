@@ -1,8 +1,8 @@
 import { FrameState } from "./FrameState";
 import { VaultAction } from "./VaultAction";
-import { Tokens } from "./Tokens";
+import type { Tokens } from "./Tokens";
 import { VaultProtocol } from "./VaultProtocol";
-import { KeeState } from "../store/KeeState";
+import type { KeeState } from "../store/KeeState";
 import { Mutation } from "../store/Mutation";
 
 export interface VaultMessage {

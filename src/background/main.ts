@@ -4,7 +4,7 @@ import { commandManager } from "./commands";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Action } from "../common/Action";
-import { AddonMessage } from "../common/AddonMessage";
+import type { AddonMessage } from "../common/AddonMessage";
 import { configSyncManager } from "./ConfigSyncManager";
 import { NetworkAuth } from "./NetworkAuth";
 // import { PersistentLogger } from "../common/PersistentLogger";

@@ -1,7 +1,7 @@
-import { ResultWrapper } from "./kprpcClient";
+import type { ResultWrapper } from "./kprpcClient";
 import { KeeLog } from "../common/Logger";
 import { VaultProtocol } from "../common/VaultProtocol";
-import { VaultMessage } from "../common/VaultMessage";
+import type { VaultMessage } from "../common/VaultMessage";
 import { configSyncManager } from "./ConfigSyncManager";
 
 /*

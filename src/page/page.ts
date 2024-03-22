@@ -5,7 +5,7 @@ import { FormSaving } from "./formSaving";
 import { PasswordGenerator } from "./PasswordGenerator";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
-import { AddonMessage } from "../common/AddonMessage";
+import type { AddonMessage } from "../common/AddonMessage";
 import { Action } from "../common/Action";
 import { Port } from "../common/port";
 import NonReactiveStore from "../store/NonReactiveStore";

@@ -1,9 +1,9 @@
-import { AddonMessage } from "../common/AddonMessage";
+import type { AddonMessage } from "../common/AddonMessage";
 import { KeeLog } from "../common/Logger";
 import { KeeNotification } from "../common/KeeNotification";
 import { Action } from "../common/Action";
 import { configManager } from "../common/ConfigManager";
-import { VaultMessage } from "../common/VaultMessage";
+import type { VaultMessage } from "../common/VaultMessage";
 import { VaultAction } from "../common/VaultAction";
 import { Entry } from "../common/model/Entry";
 import { copyStringToClipboard } from "../common/copyStringToClipboard";

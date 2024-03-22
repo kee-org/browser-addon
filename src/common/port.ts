@@ -1,6 +1,6 @@
-import { AddonMessage } from "./AddonMessage";
+import type { AddonMessage } from "./AddonMessage";
 import { KeeLog } from "./Logger";
-import { VaultMessage } from "./VaultMessage";
+import type { VaultMessage } from "./VaultMessage";
 
 class ContentPortManager {
     private port: chrome.runtime.Port;

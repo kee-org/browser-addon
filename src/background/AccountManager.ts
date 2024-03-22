@@ -1,5 +1,5 @@
 import { JWT } from "./JWT";
-import { Tokens } from "../common/Tokens";
+import type { Tokens } from "../common/Tokens";
 import { KeeLog } from "../common/Logger";
 
 export class KeeAccount {

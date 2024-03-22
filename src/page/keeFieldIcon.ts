@@ -1,6 +1,6 @@
 import { FormUtils } from "./formsUtils";
 import { Action } from "../common/Action";
-import { AddonMessage } from "../common/AddonMessage";
+import { type AddonMessage } from "../common/AddonMessage";
 import { MatchedField } from "./MatchedField";
 import { Entry } from "../common/model/Entry";
 
