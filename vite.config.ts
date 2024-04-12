@@ -107,7 +107,7 @@ export default defineConfig(({ command }) => ({
         // Firefox can resolve relative sourcemapurls within extensions
         // so we're stuck with inline until then.
         //sourcemap: isDev ? "inline" : isBeta ? true : false,
-        sourcemap: (isDev || isBeta) ? "inline" : false,
+        sourcemap: true, // (isDev || isBeta) ? "inline" : false,
         rollupOptions: {
             //treeshake: false,
             input: {

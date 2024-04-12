@@ -97,7 +97,7 @@ export class WebsocketSessionManager {
     }
 
     startup() {
-        return;
+        //return;
         //TODO: reenable websocket KPRPC conenction
         this.pendingPortChange = null;
         chrome.runtime.onMessage.addListener(request => {
@@ -238,7 +238,7 @@ export class WebsocketSessionManager {
         this.onClose();
     }
 
-    attemptConnection() {
+    async attemptConnection() {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const rpc = this;
 
@@ -272,33 +272,41 @@ export class WebsocketSessionManager {
             );
             rpc.httpConnectionAttemptCallback();
         } else {
-            //TODO: replace with fetch() and see if that changes error behaviour.
-            const xhr = new XMLHttpRequest();
-
-            xhr.open("GET", rpc.httpChannelURI, true);
-            xhr.timeout = 750;
-            xhr.onerror = function () {
-                // an error indicates that KeePass is running (or that it is at least worth attempting a precious websocket connection)
-                KeeLog.debug(
-                    "HTTP connection did not timeout. We will now attempt a web socket connection."
-                );
+            //TODO: test below fetch approach:
+            try {
+                await fetch(rpc.httpChannelURI);
+                KeeLog.debug("HTTP request succeeded, attempting web socket connection");
                 rpc.httpConnectionAttemptCallback();
-            };
-            xhr.ontimeout = function () {
-                // a timeout indicates that KeePass is not running
-                KeeLog.debug("HTTP connection timed out. Will not attempt web socket connection.");
-            };
-            xhr.onabort = function () {
-                KeeLog.warn("HTTP connection aborted. Will not attempt web socket connection.");
-            };
+            } catch (error) {
+                KeeLog.debug(`HTTP request failed: ${error.message} (${error.status} ${error.statusText}), not attempting web socket connection`);
+            }
 
-            // Try to connect
-            // There may be more than one concurrent attempted connection.
-            // If more than one attempted connection returns a timeout,
-            // we will see a batch of "alive" or "locked" states for subsequent callbacks
-            // That should be fine but we could implement a more complex request ID
-            // tracking system in future if it becomes a problem
-            xhr.send();
+            // const xhr = new XMLHttpRequest();
+
+            // xhr.open("GET", rpc.httpChannelURI, true);
+            // xhr.timeout = 750;
+            // xhr.onerror = function () {
+            //     // an error indicates that KeePass is running (or that it is at least worth attempting a precious websocket connection)
+            //     KeeLog.debug(
+            //         "HTTP connection did not timeout. We will now attempt a web socket connection."
+            //     );
+            //     rpc.httpConnectionAttemptCallback();
+            // };
+            // xhr.ontimeout = function () {
+            //     // a timeout indicates that KeePass is not running
+            //     KeeLog.debug("HTTP connection timed out. Will not attempt web socket connection.");
+            // };
+            // xhr.onabort = function () {
+            //     KeeLog.warn("HTTP connection aborted. Will not attempt web socket connection.");
+            // };
+
+            // // Try to connect
+            // // There may be more than one concurrent attempted connection.
+            // // If more than one attempted connection returns a timeout,
+            // // we will see a batch of "alive" or "locked" states for subsequent callbacks
+            // // That should be fine but we could implement a more complex request ID
+            // // tracking system in future if it becomes a problem
+            // xhr.send();
         }
     }
 
@@ -308,9 +316,9 @@ export class WebsocketSessionManager {
         } catch (ex) {
             KeeLog.error(
                 "Failed to send a websocket message. Exception details: " +
-                    ex +
-                    ", stack: " +
-                    ex.stack
+                ex +
+                ", stack: " +
+                ex.stack
             );
         }
     }

@@ -1,5 +1,6 @@
 import { KeeLog } from "./Logger";
 
+//TODO: navigator.clipboard and document are both missing in MV3 background environment so can't copy to clipboard at the moment. Does work from popup panel though since that doesn't have to go via background scripts... or maybe doesn't even use this function - need to investigate difference.
 export async function copyStringToClipboard(value: string) {
     try {
         await navigator.clipboard.writeText(value);

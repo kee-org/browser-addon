@@ -7,7 +7,7 @@ type Manifest = chrome.runtime.Manifest;
 
 export async function getManifest() {
     const pkg = (await fs.readJSON(r("package.json"))) as typeof PkgType;
-//chrome.runtime.connect(port);
+    //chrome.runtime.connect(port);
     // update this file to update this manifest.json
     // can also be conditional based on your need
     const manifest: Manifest = {
@@ -17,10 +17,17 @@ export async function getManifest() {
         description: pkg.description,
         default_locale: "en",
         version_name: pkg.version,
-        author: "Kee Vault Ltd",
+
+        // necessary to omit scripts in 2024 to avoid warning noise in Chrome
+        // background: {
+        //     service_worker: "./dist/background/index.js",
+        //     scripts: ["dist/background/index.js"],
+        //     type: "module"
+        //   } as any, // type error - doesn't support scripts
         background: {
-            service_worker: "./dist/background/index.js"
-          },
+            service_worker: "./dist/background/index.js",
+            type: "module"
+        },
         content_scripts: [{
             all_frames: true,
             matches: ["<all_urls>"],
@@ -71,28 +78,41 @@ export async function getManifest() {
             "privacy",
             "webRequestAuthProvider",
             "webRequest",
+            //"webRequestBlocking", // Required for Firefox HTTP Auth?
             "notifications",
             "unlimitedStorage",
             "idle",
             "scripting" // new requirement for MV3 to support reliable enabling of Kee Vault website and in-page assistance for tabs already open when extension is installed/updated
         ] as any, // type error - doesn't support webRequestAuthProvider
-        //TODO: Find out about equiveleant for permissions - "<all_urls>",
-        host_permissions: ["*://*/*"],
+
+        // As of 2024 host permission management is still chaotic across Firefox and Chrome but if
+        // they can ever come up with the promised solution for optional per-site management, we
+        // could look into requesting "optional_host_permissions": ["<all_urls>"] and
+        // host_permissions: ["*://*.kee.pm/*", "*://*.keevault.pm/*"] to give end users more
+        // options for risk management.
+        host_permissions: ["<all_urls>"],
+
+        // http and https only(no file) - otherwise should be identical to <all_urls>
+        //host_permissions: ["*://*/*"],
+
         web_accessible_resources: [
             {
-                //TODO: Why do we not use the panelColour file any more?
-                //TODO: See if we can limit the KV script injection using matches to prevent other addons or websites injecting it to other pages... not sure why that would be a problem but worth preventing if we can.
-                resources: ["dist/panels/*", "lib/linkContentScriptToKeeVaultWebsite.js"],
+                resources: ["lib/linkContentScriptToKeeVaultWebsite.js"],
+                matches: ["*://*.kee.pm/*", "*://*.keevault.pm/*"]
+            },
+            {
+                resources: ["dist/panels/*"],
                 matches: ["<all_urls>"]
-              }
+            }
         ],
         content_security_policy: {
             extension_pages: isDev
-                // this is required on dev for Vite script to load
-                //TODO: Also support https://localhost:8099; for Vue devtools connection
-                ? `script-src 'self' http://localhost:${port}; object-src 'self'`
-                : "script-src 'self'; object-src 'self'"
-          },
+                // http://localhost:${port} is required on dev for Vite script to load
+                // http://localhost:8099 for Vue devtools connection
+                // https://bugzilla.mozilla.org/show_bug.cgi?id=1864284 prevents this from working in Firefox
+                ? `script-src 'self' http://localhost:${port} http://localhost:8099`
+                : "script-src 'self'" // default FF 106 & Chrome 111
+        },
         commands: {
             "_execute_action": {
                 "suggested_key": {
@@ -118,30 +138,30 @@ export async function getManifest() {
                 "description": "__MSG_Menu_Button_fillCurrentDocument_label__"
             }
         },
-        applications: {
+        "browser_specific_settings": {
             "gecko": {
                 "id": "keefox@chris.tomlinson",
                 "update_url": "https://raw.githubusercontent.com/kee-org/browser-addon-updates/master/beta/update.json",
-                "strict_min_version": "116.0"
+                "strict_min_version": "122.0"
             }
         },
-        minimum_chrome_version: "116"
+        minimum_chrome_version: "121"
     };
 
     if (!isBeta) {
-        delete manifest.applications.gecko.update_url;
+        delete manifest.browser_specific_settings.gecko.update_url;
     } else {
         manifest.version_name += " beta";
     }
 
     if (isChrome) {
-        delete manifest.applications;
+        delete manifest.browser_specific_settings; // still necessary to remove this in 2024 to avoid warning noise
     } else {
         delete manifest.version_name;
         (manifest as any).background = {
             scripts: ["dist/background/index.js"],
             type: "module"
-          };
+        };
         (manifest as any).action.default_area = "navbar";
     }
 

@@ -52,10 +52,17 @@ async function startup() {
 }
 
 async function showReleaseNotesAfterUpdate() {
-    //TODO: Retest and try to use onInstalled or similar if now possible.
     // chrome.runtime.onInstalled is not reliably called after an update. E.g.
     // in Firefox after a browser restart. Hence we must track the recent update
     // using our async config store rather than rely on the runtime event being fired.
+    // Also a now-fixed Chrome issue - https://issues.chromium.org/issues/41116832
+    // Maybe original Firefox bug upon restart has been fixed by now but in any case
+    // there are other ongoing issues that require us to track this information
+    // ourselves including:
+    // https://github.com/w3c/webextensions/issues/353
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1700797
+    // Also seems Chrome fails if it is also recovering from a crashed browser
+    // as part of the initial install operation (may only be possible in development)
     if (configManager.current.mustShowReleaseNotesAtStartup) {
         const tab = await chrome.tabs.create({
             url: "/dist/release-notes/update-notes.html",
@@ -245,7 +252,7 @@ chrome.webRequest.onAuthRequired.addListener(
         // }
     },
     { urls: ["<all_urls>"] },
-    [isFirefox() ? "blocking" : "asyncBlocking"]
+    ["asyncBlocking"] //[isFirefox() ? "blocking" : "asyncBlocking"]
 );
 // } else {
 // chrome.webRequest.onAuthRequired.addListener(

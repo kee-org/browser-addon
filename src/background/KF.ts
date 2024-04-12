@@ -56,7 +56,6 @@ class Kee {
     onPortConnected: (p: chrome.runtime.Port) => void;
 
     networkAuth: NetworkAuth;
-    //animateIcon: AnimateIcon;
     store: BackgroundStore;
 
     private static instance: Kee;

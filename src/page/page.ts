@@ -267,7 +267,8 @@ if (document.body) {
     window.addEventListener("pagehide", () => {
         inputsObserver.disconnect();
         if (Port.raw) Port.postMessage({ action: Action.PageHide });
-        formFilling.removeKeeIconFromAllFields();
+        //TODO: work out why this can be null. Was never connected for some reason? E.g. background script bug or injected into a page type we can't support?
+        formFilling?.removeKeeIconFromAllFields();
         Port.shutdown();
         connected = false;
         frameId = undefined;

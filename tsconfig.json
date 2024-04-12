@@ -14,10 +14,11 @@
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
         "typeRoots" : ["src/typedefs", "node_modules/@types", "./node_modules"],
-        "moduleResolution": "node",
+        "moduleResolution": "bundler", // nodenext
         "noImplicitThis": true,
         // "verbatimModuleSyntax": true, //TODO: test that this works and remove isoaltedModules if it does
         "isolatedModules": true,
+        //"allowImportingTsExtensions": true,
         "types": [
             "vite/client",
             "unplugin-icons/types/vue",
