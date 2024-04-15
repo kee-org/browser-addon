@@ -2,7 +2,7 @@ import { Icon } from "./Icon";
 import { Database } from "./Database";
 import { utils } from "../utils";
 import { Field } from "./Field";
-import { EntryDto, FormFieldTypeDTO } from "./KPRPCDTOs";
+import { EntryAutomationBehaviour, EntryDto, EntryDto2, FieldTypeEnum, FormFieldTypeDTO, Icon as IconDto } from "./KPRPCDTOs";
 import { DatabaseSummary } from "./DatabaseSummary";
 import { GroupSummary } from "./GroupSummary";
 
@@ -126,6 +126,99 @@ export class Entry {
         return entry;
     }
 
+    public static fromKPRPCEntryDTO2(entryDto: EntryDto2, db: DatabaseSummary) {
+        const sortedFields: Field[] = [];
+        let maximumPage = 1;
+
+        const usernameIndex = entryDto.fields.findIndex(
+            f => f.valuePath === "UserName"
+        );
+        const passwordIndex = entryDto.fields.findIndex(
+            f => f.valuePath === "Password"
+        );
+
+        const unsortedFields = entryDto.fields.map(f => {
+            if (f.page > maximumPage) maximumPage = f.page;
+
+            return Field.fromKPRPCFieldDTO2(f);
+        });
+
+        if (usernameIndex > -1) {
+            sortedFields.push(unsortedFields[usernameIndex]);
+        }
+        if (passwordIndex > -1) {
+            sortedFields.push(unsortedFields[passwordIndex]);
+        }
+        unsortedFields.forEach((f, i) => {
+            if (i !== usernameIndex && i !== passwordIndex) {
+                sortedFields.push(f);
+            }
+        });
+
+        let alwaysAutoFill;
+        let neverAutoFill;
+        let alwaysAutoSubmit;
+        let neverAutoSubmit;
+
+        switch (entryDto.behaviour ?? EntryAutomationBehaviour.Default) {
+            case EntryAutomationBehaviour.AlwaysAutoFill:
+                alwaysAutoFill = true;
+                neverAutoFill = false;
+                alwaysAutoSubmit = false;
+                neverAutoSubmit = false;
+                break;
+            case EntryAutomationBehaviour.NeverAutoSubmit:
+                alwaysAutoFill = false;
+                neverAutoFill = false;
+                alwaysAutoSubmit = false;
+                neverAutoSubmit = true;
+                break;
+            case EntryAutomationBehaviour.AlwaysAutoFillAlwaysAutoSubmit:
+                alwaysAutoFill = true;
+                neverAutoFill = false;
+                alwaysAutoSubmit = true;
+                neverAutoSubmit = false;
+                break;
+            case EntryAutomationBehaviour.NeverAutoFillNeverAutoSubmit:
+                alwaysAutoFill = false;
+                neverAutoFill = true;
+                alwaysAutoSubmit = false;
+                neverAutoSubmit = true;
+                break;
+            case EntryAutomationBehaviour.AlwaysAutoFillNeverAutoSubmit:
+                alwaysAutoFill = true;
+                neverAutoFill = false;
+                alwaysAutoSubmit = false;
+                neverAutoSubmit = true;
+                break;
+            case EntryAutomationBehaviour.Default:
+                alwaysAutoFill = false;
+                neverAutoFill = false;
+                alwaysAutoSubmit = false;
+                neverAutoSubmit = false;
+                break;
+        }
+
+        const entry = new Entry({
+            URLs: entryDto.urls,
+            neverAutoFill: neverAutoFill,
+            alwaysAutoFill: alwaysAutoFill,
+            neverAutoSubmit: neverAutoSubmit,
+            alwaysAutoSubmit: alwaysAutoSubmit,
+            icon: { version: 1, iconImageData: entryDto.icon.base64 },
+            parentGroup: GroupSummary.fromKPRPCLightGroupDTO(entryDto.parent),
+            database: db,
+            matchAccuracy: entryDto.matchAccuracy,
+            httpRealm: entryDto.realm,
+            uuid: entryDto.uniqueID,
+            title: entryDto.title,
+            fields: sortedFields
+        });
+
+
+        return entry;
+    }
+
     public static toKPRPCEntryDTO(entry: Entry) {
         const entryDto = new EntryDto();
         entryDto.alwaysAutoFill = entry.alwaysAutoFill;
@@ -137,6 +230,30 @@ export class Entry {
         entryDto.neverAutoSubmit = entry.neverAutoSubmit;
         entryDto.title = entry.title;
         entryDto.uRLs = entry.URLs;
+        return entryDto;
+    }
+
+    public static toKPRPCEntryDTO2(entry: Entry) {
+        const entryDto = new EntryDto2();
+
+        if (entry.neverAutoFill)
+            entryDto.behaviour = EntryAutomationBehaviour.NeverAutoFillNeverAutoSubmit;
+        else if (entry.alwaysAutoSubmit)
+            entryDto.behaviour = EntryAutomationBehaviour.AlwaysAutoFillAlwaysAutoSubmit;
+        else if (entry.alwaysAutoFill && entry.neverAutoSubmit)
+            entryDto.behaviour = EntryAutomationBehaviour.AlwaysAutoFillNeverAutoSubmit;
+        else if (entry.neverAutoSubmit)
+            entryDto.behaviour = EntryAutomationBehaviour.NeverAutoSubmit;
+        else if (entry.alwaysAutoFill)
+            entryDto.behaviour = EntryAutomationBehaviour.AlwaysAutoFill;
+
+        entryDto.fields = entry.fields.map((f, i) => Field.toKPRPCFieldDTO2(f, i === 0, i === 1));
+        entryDto.realm = entry.httpRealm;
+        entryDto.icon = {base64: entry.icon.iconImageData};
+        entryDto.title = entry.title;
+        entryDto.urls = entry.URLs;
+        entryDto.uniqueID = entry.uuid;
+        entryDto.authenticationMethods = ["password"];
         return entryDto;
     }
 }

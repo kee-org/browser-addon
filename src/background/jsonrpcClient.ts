@@ -7,7 +7,7 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Config } from "../common/config";
 import { WebsocketSessionManager } from "./WebsocketSession";
-import { DatabaseDto, EntryDto } from "../common/model/KPRPCDTOs";
+import { DatabaseDto, DatabaseDto2, EntryDto, EntryDto2 } from "../common/model/KPRPCDTOs";
 import { Database } from "../common/model/Database";
 import { Entry } from "../common/model/Entry";
 import { DatabaseSummary } from "../common/model/DatabaseSummary";
@@ -137,29 +137,36 @@ export class jsonrpcClient {
     }
 
     async addLogin(entry: Entry, parentUUID: string, dbFileName: string) {
-        const jslogin = Entry.toKPRPCEntryDTO(entry);
+        const sessionManager = this.sessionManagerForFilename(dbFileName);
+        const jslogin = sessionManager.isDtoV2Mode() ? Entry.toKPRPCEntryDTO2(entry) : Entry.toKPRPCEntryDTO(entry);
         const sessionResponses = await this.kprpcClient.request(
-            [this.sessionManagerForFilename(dbFileName)],
-            "AddLogin",
+            [sessionManager],
+            sessionManager.isDtoV2Mode() ? "AddEntry" : "AddLogin",
             [jslogin, parentUUID, dbFileName]
         );
         const result = sessionResponses?.[0].resultWrapper?.result;
         if (result) {
-            const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO(result.db);
-            return Entry.fromKPRPCEntryDTO(result, db);
+            if (sessionManager.isDtoV2Mode()) {
+                const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO2(result.db);
+                return Entry.fromKPRPCEntryDTO2(result, db);
+            } else {
+                const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO(result.db);
+                return Entry.fromKPRPCEntryDTO(result, db);
+            }
         }
         return null;
     }
 
     async updateLogin(entry: Entry, oldLoginUUID: string, dbFileName: string) {
-        const jslogin = Entry.toKPRPCEntryDTO(entry);
         const sessionManager = this.sessionManagerForFilename(dbFileName);
+        const jslogin = sessionManager.isDtoV2Mode() ? Entry.toKPRPCEntryDTO2(entry) : Entry.toKPRPCEntryDTO(entry);
+
         const urlMergeMode = sessionManager
             .features()
             .some(f => f === "KPRPC_FEATURE_ENTRY_URL_REPLACEMENT")
             ? 5
             : 2;
-        const sessionResponses = await this.kprpcClient.request([sessionManager], "UpdateLogin", [
+        const sessionResponses = await this.kprpcClient.request([sessionManager], sessionManager.isDtoV2Mode() ? "UpdateEntry" : "UpdateLogin", [
             jslogin,
             oldLoginUUID,
             urlMergeMode,
@@ -167,8 +174,13 @@ export class jsonrpcClient {
         ]);
         const result = sessionResponses?.[0].resultWrapper?.result;
         if (result) {
-            const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO(result.db);
-            return Entry.fromKPRPCEntryDTO(result, db);
+            if (sessionManager.isDtoV2Mode()) {
+                const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO2(result.db);
+                return Entry.fromKPRPCEntryDTO2(result, db);
+            } else {
+                const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO(result.db);
+                return Entry.fromKPRPCEntryDTO(result, db);
+            }
         }
         return null;
     }
@@ -232,7 +244,9 @@ export class jsonrpcClient {
             }
         }
 
-        const sessionResponses = await this.kprpcClient.request(sessionManagers, "FindLogins", [
+        const sessionManagersDtoV1 = sessionManagers.filter(sm => !sm.isDtoV2Mode());
+        const sessionManagersDtoV2 = sessionManagers.filter(sm => sm.isDtoV2Mode());
+        const sessionResponsesDtoV1 = sessionManagersDtoV1.length > 0 ? await this.kprpcClient.request(sessionManagersDtoV1, "FindLogins", [
             urls,
             null,
             httpRealm,
@@ -242,9 +256,17 @@ export class jsonrpcClient {
             dbFileName,
             freeText,
             username
-        ]);
+        ]) : [];
+        const sessionResponsesDtoV2 = sessionManagersDtoV2.length > 0 ? await this.kprpcClient.request(sessionManagersDtoV2, "FindEntries", [
+            urls,
+            false,
+            uuid,
+            dbFileName,
+            freeText,
+            username
+        ]) : [];
         const results: Entry[] = [];
-        for (const sessionResponse of sessionResponses) {
+        for (const sessionResponse of sessionResponsesDtoV1) {
             if (sessionResponse.resultWrapper?.result?.[0]) {
                 const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO(
                     sessionResponse.resultWrapper.result[0].db
@@ -256,36 +278,61 @@ export class jsonrpcClient {
                 );
             }
         }
+        for (const sessionResponse of sessionResponsesDtoV2) {
+            if (sessionResponse.resultWrapper?.result?.[0]) {
+                const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO2(
+                    sessionResponse.resultWrapper.result[0].db
+                );
+                results.push(
+                    ...sessionResponse.resultWrapper.result.map((res: EntryDto2) =>
+                        Entry.fromKPRPCEntryDTO2(res, db)
+                    )
+                );
+            }
+        }
         return results;
     }
 
     async getAllDatabases() {
         const activeSessions = this.kprpcClient.getManagersForActiveSessions();
 
-        const sessionResponses = await this.kprpcClient.request(
-            activeSessions,
+        const sessionManagersDtoV1 = activeSessions.filter(sm => !sm.isDtoV2Mode());
+        const sessionManagersDtoV2 = activeSessions.filter(sm => sm.isDtoV2Mode());
+        const sessionResponsesDtoV1 = sessionManagersDtoV1.length > 0 ? await this.kprpcClient.request(
+            sessionManagersDtoV1,
             "GetAllDatabases",
             null
-        );
+        ) : [];
+        const sessionResponsesDtoV2 = sessionManagersDtoV2.length > 0 ? await this.kprpcClient.request(
+            sessionManagersDtoV2,
+            "AllDatabases",
+            null
+        ) : [];
         const dbs: Database[] = [];
-        sessionResponses.sort(s => (s.sessionType === SessionType.Event ? -1 : 1));
-        for (const sessionResponse of sessionResponses) {
+        const sessionResponses = sessionResponsesDtoV1.map(sr => ({sr: sr, v: 1})).concat(sessionResponsesDtoV2.map(sr => ({sr: sr, v: 2})));
+        sessionResponses.sort(s => (s.sr.sessionType === SessionType.Event ? -1 : 1));
+        for (const sessionResponseWrapper of sessionResponses) {
+            const sessionResponse = sessionResponseWrapper.sr;
             if (sessionResponse.resultWrapper.result !== null) {
                 const recievedDBs =
                     sessionResponse.sessionType === SessionType.Event
                         ? sessionResponse.resultWrapper.result.dbs
                         : sessionResponse.resultWrapper.result;
-                for (const db of recievedDBs as Array<DatabaseDto>) {
+                for (const db of recievedDBs as Array<DatabaseDto | DatabaseDto2>) {
                     if (!dbs.find(d => d.fileName === db.fileName)) {
                         dbs.push(
-                            Database.fromKPRPCDatabaseDTO(
-                                db,
+                            sessionResponseWrapper.v == 2 ? Database.fromKPRPCDatabaseDTO2(
+                                db as DatabaseDto2,
+                                sessionResponse.sessionType,
+                                sessionResponse.features
+                            ) : Database.fromKPRPCDatabaseDTO(
+                                db as DatabaseDto,
                                 sessionResponse.sessionType,
                                 sessionResponse.features
                             )
                         );
                     } else {
-                        KeeLog.debug("Database with duplicate file name found. Ignoring.");
+                        KeeLog.info("Database with duplicate file name found. Ignoring.");
                     }
                 }
                 if (sessionResponse.sessionType === SessionType.Event) {

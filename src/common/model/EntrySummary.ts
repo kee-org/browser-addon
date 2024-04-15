@@ -1,7 +1,7 @@
 import { Entry } from "./Entry";
 import { Icon } from "./Icon";
 import { utils } from "../utils";
-import { EntrySummaryDto } from "./KPRPCDTOs";
+import { EntrySummaryDto, LightEntryDto2 } from "./KPRPCDTOs";
 
 export class EntrySummary {
     icon: Icon;
@@ -61,6 +61,24 @@ export class EntrySummary {
             uRLs: entrySummaryDto.uRLs,
             url: entrySummaryDto?.uRLs[0],
             uuid: entrySummaryDto.uniqueID,
+            dbFileName
+        });
+    }
+
+    public static fromKPRPCLightEntryDto2(
+        lightEntryDto2: LightEntryDto2,
+        path: string,
+        dbFileName: string
+    ) {
+        return new EntrySummary({
+            icon: { version: 1, iconImageData: lightEntryDto2.icon.base64 },
+            usernameValue: lightEntryDto2.usernameValue,
+            usernameName: lightEntryDto2.usernameName,
+            path,
+            title: lightEntryDto2.title,
+            uRLs: lightEntryDto2.urls,
+            url: lightEntryDto2?.urls[0],
+            uuid: lightEntryDto2.uniqueID,
             dbFileName
         });
     }

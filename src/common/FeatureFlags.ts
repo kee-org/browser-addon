@@ -10,7 +10,13 @@ export class FeatureFlags {
         "KPRPC_FEATURE_BROWSER_HOSTED",
 
         // Sync settings across multiple browsers and devices
-        "BROWSER_SETTINGS_SYNC"
+        "BROWSER_SETTINGS_SYNC",
+
+        // We understand the KPRPC v2 DTO format
+        "KPRPC_FEATURE_DTO_V2"//,
+
+        // We can request a full list of custom icons and handle references only within each individual entry
+        //"KPRPC_FEATURE_ICON_REFERENCES"
 
         // in the rare event that we want to check for the absense of a feature
         // we would add a feature flag along the lines of "KPRPC_FEATURE_REMOVED_INCOMPATIBLE_THING_X"

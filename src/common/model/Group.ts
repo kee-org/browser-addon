@@ -1,7 +1,7 @@
 import { EntrySummary } from "./EntrySummary";
 import { Icon } from "./Icon";
 import { utils } from "../utils";
-import { GroupDto } from "./KPRPCDTOs";
+import { GroupDto, GroupDto2 } from "./KPRPCDTOs";
 
 export class Group {
     readonly title: string;
@@ -32,6 +32,21 @@ export class Group {
             ),
             groups: groupDto.childGroups.map(childGroup =>
                 this.fromKPRPCGroupDTO(childGroup, dbFileName)
+            )
+        });
+    }
+
+    public static fromKPRPCGroupDTO2(groupDto: GroupDto2, dbFileName: string) {
+        return new Group({
+            title: groupDto.title,
+            uuid: groupDto.uniqueID,
+            icon: { version: 1, iconImageData: groupDto.icon.base64 },
+            path: groupDto.path,
+            entrySummaries: groupDto.childLightEntries.map(childLightEntry =>
+                EntrySummary.fromKPRPCLightEntryDto2(childLightEntry, groupDto.path, dbFileName)
+            ),
+            groups: groupDto.childGroups.map(childGroup =>
+                this.fromKPRPCGroupDTO2(childGroup, dbFileName)
             )
         });
     }

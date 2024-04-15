@@ -55,6 +55,10 @@ export class WebsocketSessionManager {
         this._features = features;
     }
 
+    public isDtoV2Mode() {
+        return this.features().some(f => f === "KPRPC_FEATURE_DTO_V2");
+    }
+
     public registerCallback(
         requestId: number,
         callback: (resultWrapper: Partial<ResultWrapper>) => void
