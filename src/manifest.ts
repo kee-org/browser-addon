@@ -76,9 +76,9 @@ export async function getManifest() {
             "webNavigation",
             "activeTab",
             "privacy",
-            "webRequestAuthProvider",
+            "webRequestAuthProvider", // Supported in Firefox 126+ (https://bugzilla.mozilla.org/show_bug.cgi?id=1820569)
             "webRequest",
-            //"webRequestBlocking", // Required for Firefox HTTP Auth?
+            //"webRequestBlocking", // Required for Firefox HTTP Auth before 126
             "notifications",
             "unlimitedStorage",
             "idle",
@@ -142,7 +142,7 @@ export async function getManifest() {
             "gecko": {
                 "id": "keefox@chris.tomlinson",
                 "update_url": "https://raw.githubusercontent.com/kee-org/browser-addon-updates/master/beta/update.json",
-                "strict_min_version": "122.0"
+                "strict_min_version": "126.0"
             }
         },
         minimum_chrome_version: "121"
