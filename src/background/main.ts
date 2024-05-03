@@ -28,7 +28,7 @@ const initialised: Promise<boolean> = new Promise((resolve, _) => {
 
 
 const userBusySeconds = 60 * 15;
-const maxUpdateDelaySeconds = 60 * 60 * 8;
+const maxUpdateDelayMinutes = 60 * 8;
 
 // window.KeePersistentLogger = new PersistentLogger();
 
@@ -206,24 +206,31 @@ chrome.tabs.onActivated.addListener(event => {
     onTabActivated(event.tabId);
 });
 
-//TODO: re-enable update idle delay feature
-// chrome.runtime.onUpdateAvailable.addListener(async () => {
-//     await configManager.setASAP({ mustShowReleaseNotesAtStartup: true });
-//     if ((await chrome.idle.queryState(userBusySeconds)) === "idle") {
-//         chrome.runtime.reload();
-//     } else {
-//         chrome.idle.setDetectionInterval(userBusySeconds);
-//         chrome.idle.onStateChanged.addListener(status => {
-//             if (status !== "active") {
-//                 chrome.runtime.reload();
-//             }
-//         });
-//         self.setTimeout(() => {
-//             chrome.runtime.reload();
-//         }, maxUpdateDelaySeconds * 1000);
-//     }
-// });
+chrome.runtime.onUpdateAvailable.addListener(async () => {
+    await configManager.setASAP({ mustShowReleaseNotesAtStartup: true });
+    if ((await chrome.idle.queryState(userBusySeconds)) === "idle") {
+        chrome.runtime.reload();
+    } else {
+        // restart at least by maxUpdateDelayMinutes. Shorter durations are
+        // likely, triggered by the idle state changing to not "active".
+        await chrome.alarms.create("updateAvailableIdleMaximum", { delayInMinutes: maxUpdateDelayMinutes });
+    }
+});
 
+chrome.alarms.onAlarm.addListener(() => {
+    // Only reload if we have not already by inferring if release notes have been shown yet
+    if (configManager.current.mustShowReleaseNotesAtStartup) {
+        chrome.runtime.reload();
+    }
+});
+
+
+chrome.idle.setDetectionInterval(userBusySeconds);
+chrome.idle.onStateChanged.addListener(status => {
+    if (status !== "active" && configManager.current.mustShowReleaseNotesAtStartup) {
+        chrome.runtime.reload();
+    }
+});
 
 //TODO: verify works... probably need to cache incoming requests and process them after this init function has been called. Or, maybe just deferring the initial response to the content/popup script is sufficient?
 chrome.runtime.onConnect.addListener(async port => {
