@@ -342,7 +342,8 @@ window.addEventListener("pagehide", () => {
 let pageShowFired = false;
 let configReady = false;
 let missingPageShowTimer: number;
-configManager.load(() => {
+(async () => {
+    await configManager.load();
     configReady = true;
     if (pageShowFired) {
         startup();
@@ -353,4 +354,4 @@ configManager.load(() => {
         // is already established.
         missingPageShowTimer = window.setTimeout(startup, 1500);
     }
-});
+})();

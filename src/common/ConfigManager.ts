@@ -138,40 +138,38 @@ export class ConfigManager {
         await chrome.storage.local.set(configValues);
     }
 
-    public load(onLoaded) {
+    public async load() {
         // We completely replace current config with what we load because we
         // don't know that applying onto the defaults will result in a safe
         // migration from any old version that we load. It would probably be
         // fine but might require version comparisons... in which case we might
         // as well just increment the version number and run a migration once
         // rather than incur increased ongoing load costs.
-        chrome.storage.local.get().then(config => {
-            const pageCount = config["keeConfigPageCount"];
+        const config = await chrome.storage.local.get();
+        const pageCount = config["keeConfigPageCount"];
 
-            if (pageCount) {
+        if (pageCount) {
+            let configString = "";
+            for (let i = 0; i < pageCount; i++) {
+                const nextPage = config["keeConfigPage" + i];
+                if (nextPage) configString += nextPage;
+            }
+            if (configString) this.current = JSON.parse(configString);
+        } else {
+            const oldPageCount = config["keefoxConfigPageCount"];
+
+            if (oldPageCount) {
                 let configString = "";
-                for (let i = 0; i < pageCount; i++) {
-                    const nextPage = config["keeConfigPage" + i];
+                for (let i = 0; i < oldPageCount; i++) {
+                    const nextPage = config["keefoxConfigPage" + i];
                     if (nextPage) configString += nextPage;
                 }
                 if (configString) this.current = JSON.parse(configString);
-            } else {
-                const oldPageCount = config["keefoxConfigPageCount"];
-
-                if (oldPageCount) {
-                    let configString = "";
-                    for (let i = 0; i < oldPageCount; i++) {
-                        const nextPage = config["keefoxConfigPage" + i];
-                        if (nextPage) configString += nextPage;
-                    }
-                    if (configString) this.current = JSON.parse(configString);
-                    //TODO:4: Delete the old keefox prefixed data to save space
-                }
+                //TODO:4: Delete the old keefox prefixed data to save space
             }
-            this.fixInvalidConfigData();
-            this.migrateToLatestVersion();
-            onLoaded();
-        });
+        }
+        this.fixInvalidConfigData();
+        this.migrateToLatestVersion();
     }
 
     // This is typically invalid due to the previous execution of alpha and beta code

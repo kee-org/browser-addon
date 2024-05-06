@@ -96,7 +96,8 @@ class SrpDialog {
 
 let srp: SrpDialog;
 
-function setupPage() {
+async function setupPage() {
+    await configManager.load();
     KeeLog.attachConfig(configManager.current);
     srp = new SrpDialog();
     srp.setupPage();
@@ -104,9 +105,11 @@ function setupPage() {
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => configManager.load(setupPage));
+    document.addEventListener("DOMContentLoaded", async () => await setupPage());
 } else {
-    configManager.load(setupPage);
+    (async () => {
+        await setupPage();
+    })();
 }
 
 i18nSetup();

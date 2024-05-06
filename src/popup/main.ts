@@ -17,8 +17,9 @@ const piniaInstance = createPinia();
 let vueApp: VueApp<Element>;
 let store: KeeStore;
 
-function startup() {
-    KeeLog.debug("popup started");
+async function start() {
+    await configManager.load();
+    KeeLog.debug("popup starting");
     KeeLog.attachConfig(configManager.current);
     Port.startup("browserPopup");
 
@@ -118,6 +119,6 @@ function startup() {
     KeeLog.info("popup ready");
 }
 
-// Load our config and start the page script once done
-//TODO:4: Change config loading API to support Promises for MV3
-configManager.load(startup);
+(async () => {
+    await start();
+})();

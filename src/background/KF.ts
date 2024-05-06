@@ -43,8 +43,6 @@ class Kee {
     // Our link to the JSON-RPC objects required for communication with KeePass
     KeePassRPC: jsonrpcClient;
 
-    //TODO: Make many other vars a singleton so we can just import it to other places that depend on it
-
     _installerTabLoaded: boolean;
 
     processingCallback: boolean;
@@ -82,12 +80,12 @@ class Kee {
                     return false;
                 }
             }
-            //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
+            //TODO:f: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
             const json = JSON.stringify(mutation);
             KeeLog.debug("New background mutation for distribution");
             const mutationObj = JSON.parse(json);
 
-            //TODO: Maybe try to tidy up these ports too? Should already be dealt with elsewhere and they are a bit more complex because some things expect them to always exist as at least a stub.
+            //TODO:f: Maybe try to tidy up these ports too? Should already be dealt with elsewhere and they are a bit more complex because some things expect them to always exist as at least a stub.
             if (this.browserPopupPort !== excludedPort) tryPostMessage(this.browserPopupPort, mutationObj);
             if (this.vaultPort !== excludedPort) tryPostMessage(this.vaultPort, mutationObj);
 
@@ -485,6 +483,7 @@ class Kee {
         } else {
             chrome.action.setBadgeText({ text: "OFF" });
             chrome.action.setBadgeBackgroundColor({ color: "orange" });
+            chrome.action.setTitle({title: "Kee - no databases sources open"}) //TODO: etc.
         }
 
         if (configManager.current.rememberMRUDB) {

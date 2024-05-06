@@ -69,6 +69,7 @@ export async function getManifest() {
             open_in_tab: true
         },
         permissions: [
+            "alarms",
             "tabs",
             "contextMenus",
             "storage",
@@ -145,7 +146,7 @@ export async function getManifest() {
                 "strict_min_version": "126.0"
             }
         },
-        minimum_chrome_version: "121"
+        minimum_chrome_version: "123"
     };
 
     if (!isBeta) {
@@ -165,7 +166,7 @@ export async function getManifest() {
         (manifest as any).action.default_area = "navbar";
     }
 
-    //TODO: test if below is possible on Firefox
+    //TODO:f: test if below is possible on Firefox
     // impossible unless https://bugs.chromium.org/p/chromium/issues/detail?id=1198822 is resolved.
     // Until then, all changes to content scripts require a manual browser reload and content page reload.
     // if (isDev) {

@@ -23,6 +23,7 @@ export class WebsocketSessionManager {
     // http://tools.ietf.org/html/rfc6455#section-7.2.3
     // See KeeFox issue #189 for connection algorithm overview:
     // https://github.com/luckyrat/KeeFox/issues/189#issuecomment-23635771
+    //TODO: This no longer works in MV3 since we have to use fetch which doesn't provide any way to differntiate between port unavailable and forcibly disconnected by the KPRPC server. Will therefore be unable to attempt conenctions more than every minute or so. Maybe can implement some sort of response (header or body) in KPRPC server but it would need to be backwards compatible with old MV2 approach of existing clients.
     private httpChannelURI: string;
     private _reconnectTimer;
     public connectionProhibitedUntil: Date;
@@ -97,8 +98,6 @@ export class WebsocketSessionManager {
     }
 
     startup() {
-        //return;
-        //TODO: reenable websocket KPRPC conenction
         this.pendingPortChange = null;
         chrome.runtime.onMessage.addListener(request => {
             if (request.action !== "KPRPC_Port_Change") return;
@@ -272,7 +271,7 @@ export class WebsocketSessionManager {
             );
             rpc.httpConnectionAttemptCallback();
         } else {
-            //TODO: test below fetch approach:
+            //TODO: fix the new fetch approach - see note at top
             try {
                 await fetch(rpc.httpChannelURI);
                 KeeLog.debug("HTTP request succeeded, attempting web socket connection");

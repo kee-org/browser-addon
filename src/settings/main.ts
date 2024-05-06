@@ -19,7 +19,8 @@ let siteModeAll = true;
 let specificSite: SiteSearchResult;
 let searchResults: SiteSearchResult[];
 
-function setupPage() {
+async function setupPage() {
+    await configManager.load();
     KeeLog.attachConfig(configManager.current);
     loadInitialConfig();
     [].forEach.call(
@@ -1176,9 +1177,11 @@ function stringFromLogLevel(level) {
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => configManager.load(setupPage));
+    document.addEventListener("DOMContentLoaded", async () => await setupPage());
 } else {
-    configManager.load(setupPage);
+    (async () => {
+        await setupPage();
+    })();
 }
 
 i18nSetup();

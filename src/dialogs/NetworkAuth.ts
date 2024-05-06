@@ -122,7 +122,8 @@ class NetworkAuth {
 
 let networkAuth: NetworkAuth;
 
-function setupNetworkAuthDialog() {
+async function setupNetworkAuthDialog() {
+    await configManager.load();
     KeeLog.attachConfig(configManager.current);
     networkAuth = new NetworkAuth();
     chrome.runtime.onMessage.addListener(message => {
@@ -135,9 +136,11 @@ function setupNetworkAuthDialog() {
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => configManager.load(setupNetworkAuthDialog));
+    document.addEventListener("DOMContentLoaded", async () => await setupNetworkAuthDialog());
 } else {
-    configManager.load(setupNetworkAuthDialog);
+    (async () => {
+        await setupNetworkAuthDialog();
+    })();
 }
 
 i18nSetup();

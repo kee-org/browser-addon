@@ -21,12 +21,12 @@ if (keeDuplicationCount) {
     if (KeeLog && KeeLog.error) {
         KeeLog.error(
             "Duplicate Kee content script instance detected! Found this many other instances: " +
-                keeDuplicationCount
+            keeDuplicationCount
         );
     } else {
         console.error(
             "Duplicate Kee content script instance detected! Found this many other instances: " +
-                keeDuplicationCount
+            keeDuplicationCount
         );
     }
 } else {
@@ -147,7 +147,7 @@ if (document.body) {
         } catch (ex) {
             KeeLog.warn(
                 "Failed to connect to messaging port. We'll try again later. Exception message: " +
-                    ex.message
+                ex.message
             );
         }
 
@@ -162,7 +162,7 @@ if (document.body) {
                 } catch (ex) {
                     KeeLog.warn(
                         "Failed to connect to messaging port. We'll try again later. Exception message: " +
-                            ex.message
+                        ex.message
                     );
                 }
             } else {
@@ -177,8 +177,8 @@ if (document.body) {
         if (Port.raw) {
             KeeLog.warn(
                 "port already set to '" +
-                    Port.raw.name +
-                    "'. Skipping startup because it should already be underway but is taking a long time."
+                Port.raw.name +
+                "'. Skipping startup because it should already be underway but is taking a long time."
             );
             return;
         }
@@ -267,7 +267,7 @@ if (document.body) {
     window.addEventListener("pagehide", () => {
         inputsObserver.disconnect();
         if (Port.raw) Port.postMessage({ action: Action.PageHide });
-        //TODO: work out why this can be null. Was never connected for some reason? E.g. background script bug or injected into a page type we can't support?
+        //TODO:f: work out why this can be null. Was never connected for some reason? E.g. background script bug or injected into a page type we can't support?
         formFilling?.removeKeeIconFromAllFields();
         Port.shutdown();
         connected = false;
@@ -278,8 +278,9 @@ if (document.body) {
         passwordGenerator = undefined;
     });
 
-    // Load our config
-    configManager.load(() => {
+
+    (async () => {
+        await configManager.load();
         configReady = true;
         if (pageShowFired) {
             startup();
@@ -290,5 +291,6 @@ if (document.body) {
             // is already established.
             missingPageShowTimer = window.setTimeout(startup, 1500);
         }
-    });
+    })();
+
 }

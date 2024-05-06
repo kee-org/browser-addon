@@ -22,7 +22,8 @@ function closePanel() {
 
 let store: NonReactiveStore;
 
-function startup() {
+async function start() {
+    await configManager.load();
     KeeLog.debug("iframe page starting");
     KeeLog.attachConfig(configManager.current);
     Port.startup("iframe_" + parentFrameId);
@@ -138,7 +139,9 @@ document.location.search
 
 const parentFrameId = parseInt(params["parentFrameId"]);
 
-// Load our config and start the panel once done
-configManager.load(startup);
+
+(async () => {
+    await start();
+})();
 
 i18nSetup();

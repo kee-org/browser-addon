@@ -21,11 +21,14 @@ if (import.meta.hot) {
 
 let resolveInitialised: (value?: boolean | PromiseLike<boolean>) => void;
 
-// We can'ty do anything useful if we fail to intiialise so just crash and let this Promise get GCd
+// We can't do anything useful if we fail to initialise so just crash and let this Promise get GCd
 const initialised: Promise<boolean> = new Promise((resolve, _) => {
     resolveInitialised = resolve;
 });
 
+let hasInitialised = false;
+
+let initialising = false;
 
 const userBusySeconds = 60 * 15;
 const maxUpdateDelayMinutes = 60 * 8;
@@ -38,17 +41,30 @@ const networkAuth = new NetworkAuth();
 chrome.action.setBadgeText({ text: "OFF" });
 chrome.action.setBadgeBackgroundColor({ color: "red" });
 chrome.action.disable();
+console.error("main disabled");
 
-// Assumes config and logging have been initialised before this is called.
-async function startup() {
-    // window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
-    KeeLog.attachConfig(configManager.current);
-    await showReleaseNotesAfterUpdate();
-    resolveInitialised(await kee.init());
-    configManager.addChangeListener(() =>
-        configSyncManager.updateToRemoteConfig(configManager.current)
-    );
-    chrome.action.enable();
+async function ensureStarted() {
+    if (initialising || hasInitialised) {
+        return;
+    }
+    try {
+        initialising = true;
+        await configManager.load();
+        console.error("startup");
+        // window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
+        KeeLog.attachConfig(configManager.current);
+        await showReleaseNotesAfterUpdate();
+        resolveInitialised(await kee.init());
+        hasInitialised = true;
+        configManager.addChangeListener(() =>
+            configSyncManager.updateToRemoteConfig(configManager.current)
+        );
+        chrome.action.enable();
+        console.error("main enabled");
+    }
+    finally {
+        initialising = false;
+    }
 }
 
 async function showReleaseNotesAfterUpdate() {
@@ -217,11 +233,20 @@ chrome.runtime.onUpdateAvailable.addListener(async () => {
     }
 });
 
-chrome.alarms.onAlarm.addListener(() => {
-    // Only reload if we have not already by inferring if release notes have been shown yet
-    if (configManager.current.mustShowReleaseNotesAtStartup) {
-        chrome.runtime.reload();
+chrome.alarms.onAlarm.addListener((alarm) => {
+    switch (alarm.name) {
+        case "updateAvailableIdleMaximum":
+            // Only reload if we have not already by inferring if release notes have been shown yet
+            if (configManager.current.mustShowReleaseNotesAtStartup) {
+                chrome.runtime.reload();
+            }
+            break;
+
+        case "ensureActive":
+            ensureStarted();
+            break;
     }
+
 });
 
 
@@ -232,14 +257,24 @@ chrome.idle.onStateChanged.addListener(status => {
     }
 });
 
-//TODO: verify works... probably need to cache incoming requests and process them after this init function has been called. Or, maybe just deferring the initial response to the content/popup script is sufficient?
+// We need to regularly poll an external application to enable our primary functionality, as well as needing to consider every page load and some page requests from all websites, tabs and windows. Restarting the service worker thus comes at a much higher cost to the user than just keeping it running at all times. This timer thus allows us to keep things working at the lowest cost to users.
+const keepAlive = () => setInterval(chrome.runtime.getPlatformInfo, 22500);
+chrome.runtime.onStartup.addListener(keepAlive);
+keepAlive();
+
+// This alarm lets us restart our regular polling (for KeePassRPC presence) and avoid unnecessary user delays during page loads, etc. by ensuring that we are reactivated shortly after any unexpected crashes, operating system standby/resume events, etc.
+chrome.alarms.create("ensureActive", { periodInMinutes: 0.5 });
+
 chrome.runtime.onConnect.addListener(async port => {
+    console.error("await init port");
+    // We can defer the initial response to the port until we have finished initialising. It shouldn't take long but there is a theoretical risk of a rapidly (presumably automatically) created and destroyed frame having gone away before we run the connection startup process. Don't think that will cause any serious problems but may lead to some noisy warnings so maybe one day we can add some extra defence here.
     await initialised;
+    console.error("init port completed");
     kee.onPortConnected(port);
 });
 
 // With MV3 we must always listen to httpauth requests and decide whether to handle them
-// based on whether we have already initalised the pinia store, got connected to KPRPC, have open DBs, etc.
+// based on whether we have already initialised the pinia store, got connected to KPRPC, have open DBs, etc.
 
 //TODO: Find out if Firefox MV3 still requires the older blocking option
 // if (isFirefox()) {
@@ -271,5 +306,8 @@ chrome.webRequest.onAuthRequired.addListener(
 // );
 //}
 
-// Load our config and start the addon once done
-configManager.load(startup);
+(async () => {
+    await ensureStarted();
+})();
+
+console.error("main end");
