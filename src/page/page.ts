@@ -51,9 +51,19 @@ let inputsObserver: MutationObserver;
 // We have no interest in this document if it has no body Node
 if (document.body) {
 
-    inputsObserver = new MutationObserver(mutations => {
+    inputsObserver = new MutationObserver((mutations, observer) => {
         // If we have already scheduled a rescan recently, no further action required
         if (formFilling.formFinderTimer !== null) return;
+
+        // If we have become disconnected from the main extension (e.g. after an
+        // upgrade to a new version) we can force a disconnect to reduce error
+        // log noise and potentially mitigate performance impacts of the ongoing
+        // observation.
+        if (!chrome.runtime?.id) {
+            KeeLog.debug("we are dead so disconnecting the observer");
+            observer.disconnect();
+            return;
+        }
 
         // Only proceed if we have a DB to search
         if (!store?.state.connected || store?.state.ActiveKeePassDatabaseIndex < 0) return;

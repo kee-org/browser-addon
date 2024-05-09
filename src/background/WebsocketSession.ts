@@ -116,7 +116,7 @@ export class WebsocketSessionManager {
         this.configureConnectionURIs();
 
         // start regular attempts to reconnect to KeePassRPC
-        // NB: overheads here include a test whether a socket is alive
+        // NB: overheads here include a HTTP GET request
         // and regular timer scheduling overheads - hopefully that's insignificant
         // but if not we can try more complicated connection strategies
         this._reconnectTimer = setInterval(

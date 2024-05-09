@@ -2,7 +2,6 @@ import { isFirefox } from "webext-detect-page";
 import { PersistentTabState } from "./PersistentTabState";
 import { jsonrpcClient } from "./jsonrpcClient";
 import { NetworkAuth } from "./NetworkAuth";
-//import { AnimateIcon } from "./AnimateIcon";
 import { NativeNotification } from "./NativeNotification";
 import { commandManager } from "./commands";
 import {
@@ -37,8 +36,6 @@ class Kee {
     utils: Utils;
     search: SearcherAll;
     foregroundTabId: number;
-
-    regularKPRPCListenerQueueHandlerTimer: number;
     currentSearchTermTimer: number;
 
     // Our link to the JSON-RPC objects required for communication with KeePass
@@ -116,8 +113,6 @@ class Kee {
             version: 1,
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
-
-        //this.animateIcon = new AnimateIcon();
 
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         this.browserPopupPort = { postMessage: _msg => { } };
@@ -206,12 +201,14 @@ class Kee {
                         isForegroundTab: tabId === this.foregroundTabId
                     } as AddonMessage;
 
-                    //TODO: Also need p.onDisconnect.addListener(() => { here?
-                    // p.onDisconnect.addListener(port => {
+                    //TODO:f: This may be a potential performance improvement but, at least
+                    // in Firefox, it isn't guaranteed that a reloading page has its port
+                    // disconnected before the new one is connected. Since we may have the
+                    // same tab and frame ids, we could end up breaking the new port instead.
+                    // p.onDisconnect.addListener(() => {
                     //     const states = this.tabStates.get(tabId);
                     //     states.frames.delete(frameId);
                     //     states.framePorts.delete(frameId);
-
                     // });
                     this.createTabStateIfMissing(tabId);
 
@@ -311,12 +308,6 @@ class Kee {
     }
 
     async init(): Promise<boolean> {
-        // // Create a timer for KPRPC connection establishment
-        // this.regularKPRPCListenerQueueHandlerTimer = self.setInterval(
-        //     this.RegularKPRPCListenerQueueHandler,
-        //     5000
-        // );
-
         this._keeBrowserStartup();
 
         // This listener is called when a new account is logged in to within Kee Vault. It
@@ -426,12 +417,6 @@ class Kee {
     shutdown() {
         // These log messages never appear. Does this function even get executed?
         KeeLog.debug("Kee module shutting down...");
-        // if (this.KeePassRPC != undefined && this.KeePassRPC != null)
-        //     this.KeePassRPC..session.shutdown();
-        // if (this.regularKPRPCListenerQueueHandlerTimer != undefined && this.regularKPRPCListenerQueueHandlerTimer != null)
-        //     clearInterval(this.regularKPRPCListenerQueueHandlerTimer);
-        // this.KeePassRPC = null;
-
         KeeLog.debug("Kee module shut down.");
     }
 
@@ -821,7 +806,6 @@ class Kee {
 
         KeeLog.debug("Signal received by KPRPCListener (" + sig + ") @" + sigTime);
 
-        //   let executeNow = false;
         let refresh = false;
 
         switch (sig) {
@@ -872,54 +856,13 @@ class Kee {
         if (!refresh) return;
 
         const now = new Date().getTime();
-
-        // // If there is nothing in the queue at the moment we can process this callback straight away
-        // if (!this.processingCallback && this.pendingCallback == "") {
-        //     KeeLog.debug("Signal executing now. @" + sigTime);
-        //     this.processingCallback = true;
-        //     executeNow = true;
-        // }
-        // // Otherwise we need to add the action for this callback to a queue and leave it up to the regular callback processor to execute the action
-
         if (refresh) {
-            //       if (executeNow) {
             this.store.updateLastKeePassRPCRefresh(now);
             this._refreshKPDB();
-            // } else {
-            //     this.pendingCallback = "_refreshKPDB";
-            // }
         }
 
-        // KeeLog.debug("Signal handled or queued. @" + sigTime);
-        // if (executeNow) {
-        // //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
-        // try {
-        //     if (this.pendingCallback == "_refreshKPDB") this._refreshKPDB();
-        //     else KeeLog.debug("A pending signal was found and handled.");
-        // } finally {
-        //     this.pendingCallback = "";
-        //     this.processingCallback = false;
-        // }
         KeeLog.debug("Signal handled. @" + sigTime);
-        //   }
     }
-
-    //TODO: verify this simplification is fine.
-    // The only possible callback handler for signals is refreshDb so we don't need this timer, etc. any more
-    // RegularKPRPCListenerQueueHandler() {
-    //     // If there is nothing in the queue at the moment or we are already processing a callback, we give up for now
-    //     if (this.processingCallback || this.pendingCallback == "") return;
-
-    //     KeeLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
-    //     this.processingCallback = true;
-    //     try {
-    //         if (this.pendingCallback == "_refreshKPDB") this._refreshKPDB();
-    //     } finally {
-    //         this.pendingCallback = "";
-    //         this.processingCallback = false;
-    //     }
-    //     KeeLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
-    // }
 
     createTabStateIfMissing(tabId: number) {
         if (!this.tabStates.has(tabId)) {

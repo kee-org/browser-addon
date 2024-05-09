@@ -9,6 +9,7 @@ export async function copyStringToClipboard(value: string) {
     if (isChrome && isExtensionContext) {
         try {
             await mv3ClipboardWorkaround(value);
+            return;
         } catch (e) {
             KeeLog.error("Failed to write to clipboard using MV3 offscreen workaround");
         }
