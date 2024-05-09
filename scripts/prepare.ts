@@ -21,7 +21,8 @@ function rewriteLinks(data: string, search: string, replace: string) {
 async function stubIndexHtml() {
     const views = [
         "settings",
-        "popup"
+        "popup",
+        "install-notes"
     ];
 
     for (const view of views) {
@@ -48,7 +49,7 @@ async function stubIndexHtml() {
         log("PRE", `stub panels${panel}`);
     }
 
-    for (const ia of ["install", "update"]) {
+    for (const ia of ["update"]) {
         await fs.ensureDir(r(`extension/dist/release-notes/${ia}`));
         let data = await fs.readFile(r(`src/release-notes/${ia}-notes.html`), "utf-8");
         data = rewriteLinks(data, `"./${ia}.ts"`, `"http://localhost:${port}/release-notes/${ia}.ts"`);

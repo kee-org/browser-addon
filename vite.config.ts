@@ -117,7 +117,7 @@ export default defineConfig(({ command }) => ({
                 networkAuth: r("src/dialogs/NetworkAuth.html"),
                 vuePanels: r("src/panels/panels.html"),
                 legacyPanels: r("src/panels/panelsLegacy.html"),
-                installNotes: r("src/release-notes/install-notes.html"),
+                installNotes: r("src/install-notes/index.html"),
                 updateNotes: r("src/release-notes/update-notes.html")
             }
             // This needs an absolute URL so is unlikely to be much
