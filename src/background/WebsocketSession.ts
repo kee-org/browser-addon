@@ -21,9 +21,6 @@ export class WebsocketSessionManager {
     // the KPRPC server because it's quick and not subject to the rate limiting
     // of webSocket connections as per Firefox bug #711793 and RFC 7.2.3:
     // http://tools.ietf.org/html/rfc6455#section-7.2.3
-    // See KeeFox issue #189 for connection algorithm overview:
-    // https://github.com/luckyrat/KeeFox/issues/189#issuecomment-23635771
-    //TODO: This no longer works in MV3 since we have to use fetch which doesn't provide any way to differntiate between port unavailable and forcibly disconnected by the KPRPC server. Will therefore be unable to attempt conenctions more than every minute or so. Maybe can implement some sort of response (header or body) in KPRPC server but it would need to be backwards compatible with old MV2 approach of existing clients.
     private httpChannelURI: string;
     private _reconnectTimer;
     public connectionProhibitedUntil: Date;
@@ -141,7 +138,7 @@ export class WebsocketSessionManager {
             this.webSocketPort = defaultWebSocketPort;
         }
         this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
-        this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
+        this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort + "/pingAvailabilityTest";
     }
 
     tryToconnectToWebsocket() {
@@ -271,41 +268,17 @@ export class WebsocketSessionManager {
             );
             rpc.httpConnectionAttemptCallback();
         } else {
-            //TODO: fix the new fetch approach - see note at top
             try {
-                await fetch(rpc.httpChannelURI);
-                KeeLog.debug("HTTP request succeeded, attempting web socket connection");
-                rpc.httpConnectionAttemptCallback();
+                const httpResponse = await fetch(rpc.httpChannelURI);
+                if (httpResponse.status == 404) {
+                    KeeLog.debug("HTTP request succeeded, attempting web socket connection");
+                    rpc.httpConnectionAttemptCallback();
+                } else {
+                    KeeLog.warn("HTTP request got unexpected response code. Another service is listening on KPRPC port?");
+                }
             } catch (error) {
                 KeeLog.debug(`HTTP request failed: ${error.message} (${error.status} ${error.statusText}), not attempting web socket connection`);
             }
-
-            // const xhr = new XMLHttpRequest();
-
-            // xhr.open("GET", rpc.httpChannelURI, true);
-            // xhr.timeout = 750;
-            // xhr.onerror = function () {
-            //     // an error indicates that KeePass is running (or that it is at least worth attempting a precious websocket connection)
-            //     KeeLog.debug(
-            //         "HTTP connection did not timeout. We will now attempt a web socket connection."
-            //     );
-            //     rpc.httpConnectionAttemptCallback();
-            // };
-            // xhr.ontimeout = function () {
-            //     // a timeout indicates that KeePass is not running
-            //     KeeLog.debug("HTTP connection timed out. Will not attempt web socket connection.");
-            // };
-            // xhr.onabort = function () {
-            //     KeeLog.warn("HTTP connection aborted. Will not attempt web socket connection.");
-            // };
-
-            // // Try to connect
-            // // There may be more than one concurrent attempted connection.
-            // // If more than one attempted connection returns a timeout,
-            // // we will see a batch of "alive" or "locked" states for subsequent callbacks
-            // // That should be fine but we could implement a more complex request ID
-            // // tracking system in future if it becomes a problem
-            // xhr.send();
         }
     }
 

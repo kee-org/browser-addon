@@ -70,6 +70,7 @@ export async function getManifest() {
         },
         permissions: [
             "alarms",
+            "offscreen", // required in Chromium until bug 40252021/40738001 is fixed. TODO: Find out if needed/prohibited in Firefox
             "tabs",
             "contextMenus",
             "storage",

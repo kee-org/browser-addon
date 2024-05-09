@@ -167,6 +167,11 @@ export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMe
             isForegroundTab: this.sender.tab.id === kee.foregroundTabId,
             findMatchesResult: result
         } as AddonMessage);
+
+        //TODO: content scripts are responsible for recording the results from the searches they initiated into the shared data store (and updating the set of results when the active tab is changed). Maybe in future we can find a way to handle that in the background worker so we can immediately ask the browser action icon to update using the results. Potential workaround if required is to force a "number of matched results" parameter in the call to this update function but yuk.
+        //configureBrowserActionIcon();
+        //TODO: would be nice to show number of matching results on browser action icon but either need another async call from the page (yuk) or to store the matched logins in the main store rather than passing them on the message object.
+        //TODO: putting in main store will probably help with other new features too.
     }
     if (msg.removeNotification) {
         kee.removeUserNotifications((n: KeeNotification) => n.id != msg.removeNotification);
@@ -179,6 +184,7 @@ export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMe
         }
     }
     if (msg.entries) {
+        //TODO: When/how is this msg sent? it might be somewhere we can trigger the browser action button update to display the number of matched items.
         kee.tabStates.get(this.sender.tab.id).frames.get(this.sender.frameId).entries =
             msg.entries;
     }
@@ -226,9 +232,7 @@ export async function pageMessageHandler(this: chrome.runtime.Port, msg: AddonMe
                     configManager.current.notificationCountSavePassword + 1
             });
         }
-        if (configManager.current.animateWhenOfferingSave) {
-            kee.animateBrowserActionIcon();
-        }
+        kee.configureBrowserActionIcon();
     }
     if (msg.action === Action.ShowMatchedLoginsPanel) {
         kee.tabStates.get(this.sender.tab.id).framePorts.get(0).postMessage({

@@ -179,10 +179,10 @@ export class MatchedLoginsPanel {
             //"chrome://kee/skin/copy.png",
             button.addEventListener(
                 "click",
-                event => {
+                async event => {
                     event.stopPropagation();
                     event.preventDefault();
-                    copyStringToClipboard(usernameField.value);
+                    await copyStringToClipboard(usernameField.value);
                     this.myPort.postMessage({
                         action: Action.CloseAllPanels
                     } as AddonMessage);
@@ -201,10 +201,10 @@ export class MatchedLoginsPanel {
             //"chrome://kee/skin/copy.png",
             button.addEventListener(
                 "click",
-                event => {
+                async event => {
                     event.stopPropagation();
                     event.preventDefault();
-                    copyStringToClipboard(passwordField.value);
+                    await copyStringToClipboard(passwordField.value);
                     this.myPort.postMessage({
                         action: Action.CloseAllPanels
                     } as AddonMessage);
@@ -227,10 +227,10 @@ export class MatchedLoginsPanel {
                         //"chrome://kee/skin/copy.png",
                         button.addEventListener(
                             "click",
-                            event => {
+                            async event => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                copyStringToClipboard(o.value);
+                                await copyStringToClipboard(o.value);
                                 this.myPort.postMessage({
                                     action: Action.CloseAllPanels
                                 } as AddonMessage);
@@ -255,10 +255,10 @@ export class MatchedLoginsPanel {
                         //"chrome://kee/skin/copy.png",
                         button.addEventListener(
                             "click",
-                            event => {
+                            async event => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                copyStringToClipboard(p.value);
+                                await copyStringToClipboard(p.value);
                                 this.myPort.postMessage({
                                     action: Action.CloseAllPanels
                                 } as AddonMessage);

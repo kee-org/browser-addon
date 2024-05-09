@@ -29,6 +29,7 @@ import { SaveEntryResult } from "../common/SaveEntryResult";
 import BackgroundStore from "~/store/BackgroundStore";
 import { Mutation } from "~/store/Mutation";
 import { accountManager } from "./AccountManager";
+import { KeeBrowserActionIconConfiguration } from "../common/KeeBrowserActionIconConfiguration";
 
 class Kee {
     tabStates: Map<number, TabState>;
@@ -190,7 +191,7 @@ class Kee {
                     }
                     this.browserPopupPort = p;
 
-                    this.resetBrowserActionColor();
+                    this.resetBrowserActionColor(); //TODO: still want to do this all the time? even when showing match number on the label/title? Also reset the title so rename the method?
                     break;
                 }
                 case "page": {
@@ -351,9 +352,7 @@ class Kee {
     notifyUser(notification: KeeNotification, nativeNotification?: NativeNotification) {
         this.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
         this.store.addNotification(notification);
-        chrome.action.setIcon({
-            path: "/assets/images/highlight-48.png"
-        });
+        this.configureBrowserActionIcon();
         if (nativeNotification) {
             chrome.notifications.create({
                 type: "basic",
@@ -383,15 +382,41 @@ class Kee {
         this.store.updateNotifications(this.store.state.notifications.filter(unlessTrue));
     }
 
-    animateBrowserActionIcon(duration = 1200) {
-        // Firefox claims that a janky icon animation is less intrusive for users
-        // than a smoothly animated one and therefore will not develop the smooth
-        // animation support available in other browsers. Our user testing confirms
-        // this is not the case so where we are able to (i.e. not Firefox) we
-        // enable a nice smooth animation to subtly hint that they might want to
-        // click on the icon. We have to make the animation in Firefox much less subtle :-(
-        // https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1309347
-        //this.animateIcon.start(duration, !isFirefox());
+    configureBrowserActionIcon() {
+        const actionConfig = new KeeBrowserActionIconConfiguration();
+
+        actionConfig.saveAvailable = false;
+        if (this.persistentTabStates.get(this.foregroundTabId)) {
+            this.persistentTabStates
+                .get(this.foregroundTabId)
+                .items.forEach(item => {
+                    if (item.itemType === "submittedData") {
+                        actionConfig.saveAvailable = true;
+                    }
+                });
+        }
+
+        actionConfig.matchedEntries = 0;
+        //TODO: Support number of matched entries on the icon if we can find a way to ensure the data in the store or tabState is up to date and relevant for the current tab when this function runs.
+        // if (this.tabStates.has(this.foregroundTabId)) {
+        //     const frames = this.tabStates.get(this.foregroundTabId).frames;
+        //     const matchedFrameID = this.frameIdWithMatchedLogins(frames);
+        //     if (matchedFrameID >= 0) {
+        //         actionConfig.matchedEntries = frames.get(matchedFrameID).entries.length;
+        //     }
+        // }
+
+        actionConfig.connectionAvailable = this.store.state.connected;
+        actionConfig.dbAvailable = this.store.state.KeePassDatabases.length > 0;
+        actionConfig.notificationAvailable = this.store.state.notifications.length > 0;
+
+        const iconPath = actionConfig.notificationAvailable || actionConfig.saveAvailable ? "/assets/images/highlight-48.png" : "/assets/images/48.png";
+        const text = (!actionConfig.connectionAvailable || !actionConfig.dbAvailable) ? "OFF" : (actionConfig.matchedEntries > 0 ? actionConfig.matchedEntries.toString() : "");
+        const color = !actionConfig.connectionAvailable ? "red" : !actionConfig.dbAvailable ? "orange" : "blue";
+        chrome.action.setIcon({ path: iconPath });
+        chrome.action.setBadgeText({ text: text });
+        chrome.action.setBadgeBackgroundColor({ color: color });
+        chrome.action.setTitle({title: "Kee - no databases sources open"}) //TODO: etc.
     }
 
     resetBrowserActionColor() {
@@ -435,9 +460,7 @@ class Kee {
                 "Uncaught exception posting message in _pauseKee: " + e.message + " : " + e.stack
             );
         }
-
-        chrome.action.setBadgeText({ text: "OFF" });
-        chrome.action.setBadgeBackgroundColor({ color: "red" });
+        this.configureBrowserActionIcon();
 
         commandManager.setupContextMenuItems();
 
@@ -477,14 +500,7 @@ class Kee {
 
         KeeLog.info("Number of databases open: " + newDatabases.length);
 
-        if (newDatabases.length > 0) {
-            chrome.action.setBadgeText({ text: "" });
-            chrome.action.setBadgeBackgroundColor({ color: "blue" });
-        } else {
-            chrome.action.setBadgeText({ text: "OFF" });
-            chrome.action.setBadgeBackgroundColor({ color: "orange" });
-            chrome.action.setTitle({title: "Kee - no databases sources open"}) //TODO: etc.
-        }
+        this.configureBrowserActionIcon();
 
         if (configManager.current.rememberMRUDB) {
             const MRUFN = this.getDatabaseFileName();
