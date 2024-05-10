@@ -70,7 +70,6 @@ export async function getManifest() {
         },
         permissions: [
             "alarms",
-            "offscreen", // required in Chromium until bug 40252021/40738001 is fixed. TODO: Find out if needed/prohibited in Firefox
             "tabs",
             "contextMenus",
             "storage",
@@ -78,9 +77,9 @@ export async function getManifest() {
             "webNavigation",
             "activeTab",
             "privacy",
-            "webRequestAuthProvider", // Supported in Firefox 126+ (https://bugzilla.mozilla.org/show_bug.cgi?id=1820569)
+            //"webRequestAuthProvider", // Supported in Firefox 126+ (https://bugzilla.mozilla.org/show_bug.cgi?id=1820569)
             "webRequest",
-            //"webRequestBlocking", // Required for Firefox HTTP Auth before 126
+            "webRequestBlocking", // Required for Firefox HTTP Auth before 126
             "notifications",
             "unlimitedStorage",
             "idle",
@@ -144,7 +143,7 @@ export async function getManifest() {
             "gecko": {
                 "id": "keefox@chris.tomlinson",
                 "update_url": "https://raw.githubusercontent.com/kee-org/browser-addon-updates/master/beta/update.json",
-                "strict_min_version": "126.0"
+                "strict_min_version": "125.0" //TODO: change to 126
             }
         },
         minimum_chrome_version: "123"
@@ -157,7 +156,11 @@ export async function getManifest() {
     }
 
     if (isChrome) {
-        delete manifest.browser_specific_settings; // still necessary to remove this in 2024 to avoid warning noise
+        // still necessary to remove this in 2024 to avoid warning noise
+        delete manifest.browser_specific_settings;
+
+        // required in Chromium until bug 40252021/40738001 is fixed. Prohibited in Firefox
+        manifest.permissions?.push("offscreen");
     } else {
         delete manifest.version_name;
         (manifest as any).background = {

@@ -95,6 +95,8 @@ export class KFCommands {
         try {
             await chrome.contextMenus.removeAll();
 
+            //TODO: type: "separator"
+
             if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
                 try {
                     chrome.contextMenus.create({

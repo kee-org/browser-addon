@@ -8,6 +8,10 @@
 
             <p style="font-weight: bold;">{{ $i18n("introduction_to_kee") }}</p>
 
+            <p>It can only work when given access to each web page that you load. We've been doing this for decades and are fully open source so you can trust us with this permission but we welcome additional verification and scrutiny - if you are interested, .... is a good place to start.</p>
+
+            <p>Since it's used on most sites, we also recommend keeping the browser icon on your toolbar for ease of access. TODO: Browser-specific screenshot and instructions (maybe don't bother for Firefox since we already request it goes there at install time)</p>
+
             <p>{{ $i18n("kee_works_with_a_password_manager") }}</p>
 
             <p>{{ $i18n("recommend_start_with_kee_vault") }}</p>

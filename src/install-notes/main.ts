@@ -18,7 +18,7 @@ async function start() {
     KeeLog.debug("install notes page starting");
     KeeLog.attachConfig(configManager.current);
 
-    const darkTheme = params["theme"] === "dark";
+    //const darkTheme = params["theme"] === "dark";
 
     try {
         const piniaInstance = createPinia();
@@ -30,7 +30,7 @@ async function start() {
             components,
             directives,
             theme: {
-                defaultTheme: darkTheme ? "dark" : "light",
+                defaultTheme: configManager.activeTheme,
                 themes: {
                     dark: {
                         dark: true,
@@ -75,15 +75,15 @@ async function start() {
     KeeLog.info("install notes page ready");
 }
 
-const params: { [key: string]: string } = {};
+// const params: { [key: string]: string } = {};
 
-document.location.search
-    .substr(1)
-    .split("&")
-    .forEach(pair => {
-        const [key, value] = pair.split("=");
-        params[key] = value;
-    });
+// document.location.search
+//     .substr(1)
+//     .split("&")
+//     .forEach(pair => {
+//         const [key, value] = pair.split("=");
+//         params[key] = value;
+//     });
 
 (async () => {
     await start();

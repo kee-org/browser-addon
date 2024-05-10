@@ -192,17 +192,18 @@ if (!isFirefox()) {
 
 chrome.runtime.onInstalled.addListener(async function (details) {
     if (details.reason === "install") {
-        const vaultTabs = await chrome.tabs.query({
-            url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]
-        });
-        if (vaultTabs && vaultTabs[0]) {
-            chrome.tabs.update(vaultTabs[0].id, { active: true });
-            chrome.windows.update(vaultTabs[0].windowId, { focused: true });
-        } else {
+        //TODO: Move this logic to the install wizard so all users can enable permissions straight away rather than be fired straight back to an open Kee Vault tab before it happens... but only if we now determine that the permissions are missing (to allow for the smoother experience in non-Firefox browsers)
+        // const vaultTabs = await chrome.tabs.query({
+        //     url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]
+        // });
+        // if (vaultTabs && vaultTabs[0]) {
+        //     chrome.tabs.update(vaultTabs[0].id, { active: true });
+        //     chrome.windows.update(vaultTabs[0].windowId, { focused: true });
+        // } else {
             chrome.tabs.create({
-                url: "/dist/release-notes/install-notes.html"
+                url: "/dist/install-notes/index.html"
             });
-        }
+        // }
     }
 });
 
