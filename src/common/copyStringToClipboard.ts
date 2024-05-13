@@ -40,13 +40,13 @@ export async function copyStringToClipboard(value: string) {
 
 async function mv3ClipboardWorkaround(value: string) {
     await chrome.offscreen.createDocument({
-        url: chrome.runtime.getURL('lib/copyToClipboard.html'),
+        url: chrome.runtime.getURL("lib/copyToClipboard.html"),
         reasons: [chrome.offscreen.Reason.CLIPBOARD],
-        justification: 'Required by Chromium to copy text.',
+        justification: "Required by Chromium to copy text."
     });
     chrome.runtime.sendMessage({
-        type: 'copy-data-to-clipboard',
-        target: 'offscreen-doc',
+        type: "copy-data-to-clipboard",
+        target: "offscreen-doc",
         data: value
     });
 }

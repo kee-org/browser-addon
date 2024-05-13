@@ -109,7 +109,7 @@ module.exports = {
             }
         ],
         "no-redeclare": "error",
-        "no-return-await": "error",
+        "no-return-await": "off",
         "no-sequences": "off",
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": "error",

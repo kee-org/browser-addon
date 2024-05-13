@@ -32,7 +32,7 @@ export default defineConfig({
     lib: {
       entry: r("src/background/main.ts"),
       name: packageJson.name,
-      formats: ['es']
+      formats: ["es"]
     },
     rollupOptions: {
       output: {
