@@ -7,13 +7,12 @@ import { Action } from "../common/Action";
 import type { AddonMessage } from "../common/AddonMessage";
 import { configSyncManager } from "./ConfigSyncManager";
 import { NetworkAuth } from "./NetworkAuth";
-// import { PersistentLogger } from "../common/PersistentLogger";
 
 // only on dev mode
 if (import.meta.hot) {
     // @ts-expect-error for background HMR
     import("/@vite/client");
-    // doesn't apepar to work in MV3
+    // doesn't appear to work in MV3
     // load latest content script
     // import("./contentScriptHMR");
 }
@@ -27,7 +26,6 @@ const initialised: Promise<boolean> = new Promise((resolve, _) => {
 });
 
 let hasInitialised = false;
-
 let initialising = false;
 
 const userBusySeconds = 60 * 15;
@@ -41,7 +39,8 @@ const networkAuth = new NetworkAuth();
 chrome.action.setBadgeText({ text: "OFF" });
 chrome.action.setBadgeBackgroundColor({ color: "red" });
 chrome.action.disable();
-console.error("main disabled");
+//TODO: Remove all 'console.error("LIFECYCLE: '
+console.error("LIFECYCLE: main disabled action");
 
 async function ensureStarted() {
     if (initialising || hasInitialised) {
@@ -50,7 +49,8 @@ async function ensureStarted() {
     try {
         initialising = true;
         await configManager.load();
-        console.error("startup");
+        console.error("LIFECYCLE: startup");
+        // Useful for interactive debugging:
         // window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
         KeeLog.attachConfig(configManager.current);
         await showReleaseNotesAfterUpdate();
@@ -60,7 +60,7 @@ async function ensureStarted() {
             configSyncManager.updateToRemoteConfig(configManager.current)
         );
         chrome.action.enable();
-        console.error("main enabled");
+        console.error("LIFECYCLE: main enabled action");
     }
     finally {
         initialising = false;
@@ -107,7 +107,7 @@ function updateForegroundTab(tabId: number) {
             // May not have set up port yet
             if (KeeLog && KeeLog.debug) KeeLog.debug("kee activated on tab: " + tabId);
 
-            ports.forEach((port, frameId) => {
+            ports.forEach((port, frameIndex) => {
                 try {
                     port.postMessage({
                         isForegroundTab: true,
@@ -116,7 +116,7 @@ function updateForegroundTab(tabId: number) {
                     } as AddonMessage);
                 } catch (e) {
                     if (KeeLog && KeeLog.warn) KeeLog.warn("Failed to post a message to a foreground tab port. Will remove the port now.");
-                    ports.delete(frameId);
+                    ports.delete(frameIndex);
                 }
             });
         }
@@ -129,12 +129,6 @@ function updateForegroundTab(tabId: number) {
 // instance of this content script running in it, we programmatically inject the script.
 if (!isFirefox()) {
     chrome.runtime.onInstalled.addListener(() => {
-        // const showErrors = () => {
-        //     if (chrome.runtime.lastError) {
-        //         if (KeeLog && KeeLog.error) KeeLog.error(chrome.runtime.lastError.message);
-        //         else console.error(chrome.runtime.lastError);
-        //     }
-        // };
         chrome.runtime.getManifest().content_scripts?.forEach(async script => {
             const allFrames = script.all_frames;
             const url = script.matches;
@@ -248,9 +242,7 @@ chrome.alarms.onAlarm.addListener(alarm => {
             ensureStarted();
             break;
     }
-
 });
-
 
 chrome.idle.setDetectionInterval(userBusySeconds);
 chrome.idle.onStateChanged.addListener(status => {
@@ -274,14 +266,14 @@ keepAlive();
 chrome.alarms.create("ensureActive", { periodInMinutes: 0.5 });
 
 chrome.runtime.onConnect.addListener(async port => {
-    console.error("await init port");
+    console.error("LIFECYCLE: await init port");
     // We can defer the initial response to the port until we have finished initialising.
     // It shouldn't take long but there is a theoretical risk of a rapidly (presumably
     // automatically) created and destroyed frame having gone away before we run the
     // connection startup process. Don't think that will cause any serious problems but
     // may lead to some noisy warnings so maybe one day we can add some extra defence here.
     await initialised;
-    console.error("init port completed");
+    console.error("LIFECYCLE: init port completed");
     kee.onPortConnected(port);
 });
 
@@ -304,4 +296,4 @@ chrome.webRequest.onAuthRequired.addListener(
     await ensureStarted();
 })();
 
-console.error("main end");
+console.error("LIFECYCLE: main end");

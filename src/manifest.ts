@@ -7,7 +7,6 @@ type Manifest = chrome.runtime.Manifest;
 
 export async function getManifest() {
     const pkg = (await fs.readJSON(r("package.json"))) as typeof PkgType;
-    //chrome.runtime.connect(port);
     // update this file to update this manifest.json
     // can also be conditional based on your need
     const manifest: Manifest = {

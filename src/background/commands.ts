@@ -54,15 +54,6 @@ export class KFCommands {
                             }, this);
                     }
                     break;
-                // case Command.PrimaryAction:
-                //     if (store.ActiveKeePassDatabaseIndex < 0) {
-                //         kee.loginToPasswordManager();
-                //     } else {
-                //         kee.tabStates.get(kee.foregroundTabId).framePorts.forEach(port => {
-                //                 port.postMessage({ action: Action.Primary });
-                //         }, this);
-                //     }
-                // break;
                 case Command.GeneratePassword:
                     kee.initiatePasswordGeneration();
                     break;

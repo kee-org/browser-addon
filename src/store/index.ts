@@ -99,7 +99,7 @@ const useStore = defineStore("kee", {
     // by default, all actions distribute their activity to other parts of the webextension.
     // The notable time we want to avoid this is when we have received a notification of
     // some activity in another part of the addon that we need to apply here.
-    //TODO: Find some way to remove duplicate code in a typesafe manner for NonReactiveStore equivalents
+    //TODO:f: Find some way to remove duplicate code in a typesafe manner for NonReactiveStore equivalents
     actions: {
         onRemoteMessage(sourcePort: chrome.runtime.Port, mutation: Mutation) {
             if (mutation.type === types.addNotification) {

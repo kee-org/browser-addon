@@ -126,8 +126,6 @@ class Page {
             );
             return;
         }
-// mv3 doesn't allow us create a dynamic script containing our secrets so need to find a new way.
-// set a data attribute on some sort of metadata head tag and then hardcode the text below into a file that we can allow via web accessible resources?
         const body = document.getElementsByTagName("body")[0];
         const existingScript = document.getElementById("keeVaultMagic_existsExactlyHere");
         if (existingScript) existingScript.parentElement.removeChild(existingScript);

@@ -11,7 +11,6 @@ export class NetworkAuth {
     public async provideCredentialsAsync(
         requestDetails: any
     ): Promise<chrome.webRequest.BlockingResponse> {
-        //this.pendingRequests.push(requestDetails.requestId);
         KeeLog.debug("Considering handling request ID: " + requestDetails.requestId);
 
         if (!kee.store.state.connected || kee.store.state.ActiveKeePassDatabaseIndex < 0) {

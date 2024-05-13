@@ -35,9 +35,6 @@ export const sharedConfig: UserConfig = {
                 "vue",
                 {
                     "~/common/DollarPolyfills": ["$$", "$", "$STR", "$STRF"]
-                // },
-                // {
-                //     "webextension-polyfill": [["*", "browser"]]
                 }
             ],
             dts: r("src/auto-imports.d.ts")
@@ -95,21 +92,12 @@ export default defineConfig(({ command }) => ({
     //     minifyWhitespace: true,
     // },
     build: {
-        watch: isDev
-        ? {}
-        : undefined,
+        watch: isDev ? {} : undefined,
         outDir: r("extension/dist"),
         emptyOutDir: false,
-        // Ideally we'd package the sourcemaps alongside rather than
-        // base64 encoding them for the beta releases since this
-        // reduces overall extension package size and should decrease
-        // load time a bit too. Sadly, it still doesn't look like
-        // Firefox can resolve relative sourcemapurls within extensions
-        // so we're stuck with inline until then.
-        //sourcemap: isDev ? "inline" : isBeta ? true : false,
-        sourcemap: true, // (isDev || isBeta) ? "inline" : false,
+        //TODO: consider excluding from prod package - (isDev || isBeta) ? true : false,
+        sourcemap: true,
         rollupOptions: {
-            //treeshake: false,
             input: {
                 settings: r("src/settings/index.html"),
                 popup: r("src/popup/index.html"),

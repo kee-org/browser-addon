@@ -86,7 +86,7 @@ async function start() {
             store.$patch(m.initialState);
 
             vueApp.mount("#main");
-            //TODO: Sometimes popup size is wrong initially. Possibly only when in dev
+            //TODO:f: Sometimes popup size is wrong initially. Possibly only when in dev
             // mode and it's much slower to load everything? In any case, might be
             // affected by timing of when we mount the main app to the popup DOM
             // Each time I've seen it, it's an extra 16px right and bottom.

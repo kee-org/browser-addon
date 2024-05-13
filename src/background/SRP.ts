@@ -8,25 +8,25 @@ Inspiration and some code comes from
 http://code.google.com/p/srp-js/ used under a BSD license.
 */
 
-function modPow (base: bigint, exponent: bigint, modulus: bigint) {
-	let result = 1n;
+function modPow(base: bigint, exponent: bigint, modulus: bigint) {
+    let result = 1n;
 
-	if (modulus === 0n && exponent > 0n) {
-		throw new Error("Divide by zero");
-	}
+    if (modulus === 0n && exponent > 0n) {
+        throw new Error("Divide by zero");
+    }
 
-	while (exponent > 0n) {
-		if (exponent & 1n) {
-			result = (result * base) % modulus;
-		}
+    while (exponent > 0n) {
+        if (exponent & 1n) {
+            result = (result * base) % modulus;
+        }
 
-		exponent = exponent >> 1n;
-		if (exponent > 0n) {
-			base = (base * base) % modulus;
-		}
-	}
+        exponent = exponent >> 1n;
+        if (exponent > 0n) {
+            base = (base * base) % modulus;
+        }
+    }
 
-	return BigInt(result);
+    return BigInt(result);
 };
 
 export class SRPc {

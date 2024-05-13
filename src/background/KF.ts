@@ -186,7 +186,10 @@ class Kee {
                     }
                     this.browserPopupPort = p;
 
-                    this.resetBrowserActionColor(); //TODO: still want to do this all the time? even when showing match number on the label/title? Also reset the title so rename the method?
+                    //TODO:f: Do we still want to do this all the time? Even when showing
+                    // the number of matches on the label/title? Also will want to reset
+                    // the title and label so rename the method?
+                    this.resetBrowserActionColor();
                     break;
                 }
                 case "page": {
@@ -388,7 +391,8 @@ class Kee {
         }
 
         actionConfig.matchedEntries = 0;
-        //TODO: Support number of matched entries on the icon if we can find a way to ensure the data in the store or tabState is up to date and relevant for the current tab when this function runs.
+        //TODO:f: Support number of matched entries on the icon if we can find a way to ensure the data in the store or
+        // tabState is up to date and relevant for the current tab when this function runs.
         // if (this.tabStates.has(this.foregroundTabId)) {
         //     const frames = this.tabStates.get(this.foregroundTabId).frames;
         //     const matchedFrameID = this.frameIdWithMatchedLogins(frames);
@@ -413,12 +417,6 @@ class Kee {
 
     resetBrowserActionColor() {
         chrome.action.setIcon({ path: "/assets/images/48.png" });
-    }
-
-    shutdown() {
-        // These log messages never appear. Does this function even get executed?
-        KeeLog.debug("Kee module shutting down...");
-        KeeLog.debug("Kee module shut down.");
     }
 
     _keeBrowserStartup() {

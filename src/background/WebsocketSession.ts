@@ -271,6 +271,14 @@ export class WebsocketSessionManager {
             try {
                 const httpResponse = await fetch(rpc.httpChannelURI);
                 if (httpResponse.status == 404) {
+                    // Since KeePassRPC.plgx 2.0 we return a 404 iff a request targets the
+                    // special ping path - /pingAvailabilityTest - earlier versions of Kee
+                    // will experience no behaviour change but if someone fails to upgrade
+                    // KeePassRPC they may experience slower connection startup, if they
+                    // are not already afflicted by the increasingly common changes to
+                    // networking stacks in operating systems and browser network layers
+                    // which have gradually invalidated our earlier connection establishment protocol.
+
                     KeeLog.debug("HTTP request succeeded, attempting web socket connection");
                     rpc.httpConnectionAttemptCallback();
                 } else {
