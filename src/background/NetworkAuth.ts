@@ -78,6 +78,7 @@ export class NetworkAuth {
                             }
                         });
                         chrome.runtime.onMessage.removeListener(handleMessage);
+                        chrome.windows.onRemoved.removeListener(declineHandling);
                         break;
                     }
                     case "NetworkAuth_load": {
@@ -96,6 +97,15 @@ export class NetworkAuth {
 
             chrome.runtime.onMessage.addListener(handleMessage);
 
+            let wind;
+
+            function declineHandling(closingWindowId: number) {
+                if (closingWindowId !== wind?.id) return;
+                KeeLog.debug("Cancelling request ID: " + requestDetails.requestId);
+                resolve({ cancel: false });
+                chrome.runtime.onMessage.removeListener(handleMessage);
+                chrome.windows.onRemoved.removeListener(declineHandling);
+            }
             const createData = {
                 type: "popup",
                 url: "/dist/dialogs/NetworkAuth.html",
@@ -103,15 +113,7 @@ export class NetworkAuth {
                 height: 300
             } as chrome.windows.CreateData;
             try {
-                const wind = await chrome.windows.create(createData);
-                // eslint-disable-next-line no-inner-declarations
-                function declineHandling(closingWindowId: number) {
-                    if (closingWindowId !== wind.id) return;
-                    KeeLog.debug("Cancelling request ID: " + requestDetails.requestId);
-                    resolve({ cancel: false });
-                    chrome.runtime.onMessage.removeListener(handleMessage);
-                    chrome.windows.onRemoved.removeListener(declineHandling);
-                }
+                wind = await chrome.windows.create(createData);
                 chrome.windows.onRemoved.addListener(declineHandling);
             } catch (e) {
                 reject(e);

@@ -276,36 +276,18 @@ chrome.runtime.onConnect.addListener(async port => {
 
 // With MV3 we must always listen to httpauth requests and decide whether to handle them
 // based on whether we have already initialised the pinia store, got connected to KPRPC, have open DBs, etc.
-
-//TODO: Find out if Firefox MV3 still requires the older blocking option
-// if (isFirefox()) {
 chrome.webRequest.onAuthRequired.addListener(
-    async (requestDetails, callback) => {
+    async (requestDetails): Promise<chrome.webRequest.BlockingResponse> => {
         if (KeeLog?.debug) KeeLog.debug("onAuthRequired request started");
-        //      try {
-
         // We may crash at startup / session restore if we're not initialised yet
         await Promise.race([initialised, new Promise(resolve => self.setTimeout(resolve, 20000))]);
         if (KeeLog?.debug) KeeLog.debug("onAuthRequired request ongoing");
         const result = await networkAuth.provideCredentialsAsync(requestDetails);
-        callback(result);
-        // } catch {
-        //     KeeLog.error("AsyncBlockingCallback promise failed", reason);
-        //     callback({ cancel: false });
-        // }
+        return result;
     },
     { urls: ["<all_urls>"] },
-    ["asyncBlocking"] //[isFirefox() ? "blocking" : "asyncBlocking"]
+    [isFirefox() ? "blocking" : "asyncBlocking"]
 );
-// } else {
-// chrome.webRequest.onAuthRequired.addListener(
-//     (requestDetails, callback) => {
-//         networkAuth.provideCredentialsAsyncBlockingCallback(requestDetails, callback);
-//     },
-//     { urls: ["<all_urls>"] },
-//     ["asyncBlocking"]
-// );
-//}
 
 (async () => {
     await ensureStarted();

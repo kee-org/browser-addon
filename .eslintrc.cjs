@@ -1,4 +1,4 @@
-const INLINE_ELEMENTS = require('./node_modules/eslint-plugin-vue/lib/utils/inline-non-void-elements.json');
+const INLINE_ELEMENTS = require('eslint-plugin-vue/lib/utils/inline-non-void-elements.json');
 const htmlElementContentNewlineIgnores = ["v-btn", "pre", "textarea", "v-icon", ...INLINE_ELEMENTS];
 
 module.exports = {

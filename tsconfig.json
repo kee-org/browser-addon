@@ -16,7 +16,7 @@
         "typeRoots" : ["src/typedefs", "node_modules/@types", "./node_modules"],
         "moduleResolution": "bundler", // nodenext
         "noImplicitThis": true,
-        // "verbatimModuleSyntax": true, //TODO: test that this works and remove isoaltedModules if it does
+        // "verbatimModuleSyntax": true, //TODO:f: test if this works and remove isolatedModules if it does
         "isolatedModules": true,
         //"allowImportingTsExtensions": true,
         "types": [

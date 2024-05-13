@@ -1,5 +1,3 @@
-<!-- eslint-disable vuetify/no-deprecated-props -->
-<!-- above due to eslint bug incorrectly highlighting border="top" as a problem -->
 <template>
     <v-app class="">
         <v-app-bar v-model="showSearchPanel" class="py-1" density="compact" style="max-width: 400px">

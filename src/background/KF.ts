@@ -404,10 +404,11 @@ class Kee {
         const iconPath = actionConfig.notificationAvailable || actionConfig.saveAvailable ? "/assets/images/highlight-48.png" : "/assets/images/48.png";
         const text = (!actionConfig.connectionAvailable || !actionConfig.dbAvailable) ? "OFF" : (actionConfig.matchedEntries > 0 ? actionConfig.matchedEntries.toString() : "");
         const color = !actionConfig.connectionAvailable ? "red" : !actionConfig.dbAvailable ? "orange" : "blue";
+        const title = "Kee";
         chrome.action.setIcon({ path: iconPath });
         chrome.action.setBadgeText({ text: text });
         chrome.action.setBadgeBackgroundColor({ color: color });
-        chrome.action.setTitle({title: "Kee - no databases sources open"}) //TODO: etc.
+        chrome.action.setTitle({title: title});
     }
 
     resetBrowserActionColor() {

@@ -4,3 +4,4 @@ node_modules
 public
 src/lib
 *.js
+.eslintrc.cjs
