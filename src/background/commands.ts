@@ -86,7 +86,54 @@ export class KFCommands {
         try {
             await chrome.contextMenus.removeAll();
 
-            //TODO: type: "separator"
+            if (
+                kee.foregroundTabId >= 0 &&
+                kee.tabStates.has(kee.foregroundTabId) &&
+                kee.tabStates.get(kee.foregroundTabId).frames
+            ) {
+                kee.tabStates.get(kee.foregroundTabId).frames.forEach(frame => {
+                    for (let j = 0; j < frame.entries.length; j++) {
+                        const entry = frame.entries[j];
+                        try {
+                            chrome.contextMenus.create({
+                                id: "matchedLogin-" + j,
+                                title: entry.title,
+                                documentUrlPatterns: ["http://*/*", "https://*/*"],
+                                contexts: [
+                                    "editable",
+                                    "frame",
+                                    "image",
+                                    "link",
+                                    "page",
+                                    "password",
+                                    "selection"
+                                ] as any
+                            });
+                        } catch (e) {
+                            // try again with Chrome-supported contexts
+                            chrome.contextMenus.create({
+                                id: "matchedLogin-" + j,
+                                title: entry.title,
+                                documentUrlPatterns: ["http://*/*", "https://*/*"],
+                                contexts: [
+                                    "editable",
+                                    "frame",
+                                    "image",
+                                    "link",
+                                    "page",
+                                    "selection"
+                                ]
+                            });
+                        }
+                    }
+                });
+            }
+
+            chrome.contextMenus.create({
+                type: "separator",
+                id: Command.DetectForms,
+                documentUrlPatterns: ["http://*/*", "https://*/*"]
+            });
 
             if (store.state.connected && store.state.ActiveKeePassDatabaseIndex >= 0) {
                 try {
@@ -142,48 +189,6 @@ export class KFCommands {
                 }
             }
 
-            if (
-                kee.foregroundTabId >= 0 &&
-                kee.tabStates.has(kee.foregroundTabId) &&
-                kee.tabStates.get(kee.foregroundTabId).frames
-            ) {
-                kee.tabStates.get(kee.foregroundTabId).frames.forEach(frame => {
-                    for (let j = 0; j < frame.entries.length; j++) {
-                        const entry = frame.entries[j];
-                        try {
-                            chrome.contextMenus.create({
-                                id: "matchedLogin-" + j,
-                                title: entry.title,
-                                documentUrlPatterns: ["http://*/*", "https://*/*"],
-                                contexts: [
-                                    "editable",
-                                    "frame",
-                                    "image",
-                                    "link",
-                                    "page",
-                                    "password",
-                                    "selection"
-                                ] as any
-                            });
-                        } catch (e) {
-                            // try again with Chrome-supported contexts
-                            chrome.contextMenus.create({
-                                id: "matchedLogin-" + j,
-                                title: entry.title,
-                                documentUrlPatterns: ["http://*/*", "https://*/*"],
-                                contexts: [
-                                    "editable",
-                                    "frame",
-                                    "image",
-                                    "link",
-                                    "page",
-                                    "selection"
-                                ]
-                            });
-                        }
-                    }
-                });
-            }
         } finally {
             commandManager.contextMenuUpdateLock = false;
         }

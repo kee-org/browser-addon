@@ -16,7 +16,6 @@ export default defineConfig({
     // FF devtools never updates sources or deployed files after extension is reloaded
     // - MUST MANUALLY RESTART DEVTOOLS EVERY TIME!
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1437937 may be a problem but unsure
-    //TODO: Need to test whether beta packaging still works with the relative maps or if need to try reverting to data-uri for that
     watch: isDev
       ? {}
       : undefined,
