@@ -276,7 +276,9 @@ export class jsonrpcClient {
                         ? sessionResponse.resultWrapper.result.dbs
                         : sessionResponse.resultWrapper.result;
                 for (const db of recievedDBs as Array<DatabaseDto>) {
-                    if (!dbs.find(d => d.fileName === db.fileName)) {
+                    if (!db) {
+                        KeeLog.warn("Missing db for sessiontype: " + sessionResponse.sessionType);
+                    } else if (!dbs.find(d => d.fileName === db.fileName)) {
                         dbs.push(
                             Database.fromKPRPCDatabaseDTO(
                                 db,
@@ -285,7 +287,7 @@ export class jsonrpcClient {
                             )
                         );
                     } else {
-                        KeeLog.debug("Database with duplicate file name found. Ignoring.");
+                        KeeLog.warn("Database with duplicate file name found. Ignoring.");
                     }
                 }
                 if (sessionResponse.sessionType === SessionType.Event) {
