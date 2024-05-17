@@ -131,7 +131,7 @@ export class KFCommands {
 
             chrome.contextMenus.create({
                 type: "separator",
-                id: Command.DetectForms,
+                id: "separator1",
                 documentUrlPatterns: ["http://*/*", "https://*/*"]
             });
 
