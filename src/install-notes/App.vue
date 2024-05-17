@@ -2,26 +2,25 @@
     <v-app>
         <div id="i18n_root">
             <h1 style="font-size: 42px;"><img src="/assets/images/64.png"
-                    style="margin-bottom: 4px; margin-right: 10px; display: inline;" />{{ $i18n("welcome_to_kee") }} {{
-                        extensionVersion }}
+                    style="margin-bottom: 4px; margin-right: 10px; display: inline;" />{{ $i18n("welcome_to_kee") }}
             </h1>
 
             <p style="font-weight: bold;">{{ $i18n("introduction_to_kee") }}</p>
 
-            <p v-if="showPermissionsInfo">Your browser requires an additional step before Kee can work. If you want
-                additional reassurance before continuing, make sure you read about <a href="https://kee.pm/open-source/">why
-                    being Open Source matters</a> and you can find details about all the <a
-                    href="https://kee.pm/extension-permissions/">permissions</a> we require on our website.</p>
+            <p v-if="showPermissionsInfo">{{ $i18n("all_sites_permissions_required_start") }} <a
+                    href="https://kee.pm/open-source/" target="_blank">{{ $i18n("all_sites_permissions_required_why_open_source_link_text")
+                    }}</a> {{ $i18n("all_sites_permissions_required_middle") }} <a
+                    href="https://kee.pm/extension-permissions/" target="_blank">{{
+                        $i18n("all_sites_permissions_required_permissions_link_text") }}</a> {{
+        $i18n("all_sites_permissions_required_end") }}</p>
 
-                    <v-btn v-if="showPermissionsInfo" color="primary" style="margin-top: 24px;" size="x-large"
-                @click="requestPermissions">Continue</v-btn>
+            <v-btn v-if="showPermissionsInfo" color="primary" style="margin-top: 24px;" size="x-large"
+                @click="requestPermissions">{{ $i18n("continue") }}</v-btn>
 
-            <p v-if="showToolbarInfo">Since Kee is used on most sites, we recommend keeping the browser icon on your
-                toolbar for ease of
-                access.
-            </p>
+            <p v-if="showToolbarInfo">{{ $i18n("recommend_action_button_should_be_pinned") }}</p>
 
-            <img v-if="showToolbarInfo" style="margin-top: 24px;" src="/assets/images/pinChromeScreenshot.png" />
+            <img v-if="showToolbarInfo" style="margin-top: 24px;" width="309"
+                src="/assets/images/pinChromeScreenshot.png" />
 
             <div v-if="showDatabaseSourceOptions">
                 <p>{{ $i18n("kee_works_with_a_password_manager") }}</p>
@@ -73,7 +72,6 @@
         $i18n("point_user_to_keepass_install_instructions_end")
     }}</p>
             </div>
-
         </div>
     </v-app>
 </template>
@@ -109,13 +107,16 @@ async function switchToKeeVaultTab() {
     return false;
 }
 
-async function initialiseDatabaseSourcePossibilities() {
+async function initialiseDatabaseSourcePossibilities(permissionsInfoWasShown: boolean = false) {
     if (await switchToKeeVaultTab()) {
+        // Kee Vault users that already have the app open in another tab and
+        // have the required permissions will never see the toolbar pinning hint
+        // but we think that it is not critical.
         close();
     } else {
         showDatabaseSourceOptions.value = true;
         showPermissionsInfo.value = false;
-        showToolbarInfo.value = false;
+        if (permissionsInfoWasShown) showToolbarInfo.value = false;
     }
 }
 
@@ -126,7 +127,7 @@ async function asyncSetup() {
     } else {
         chrome.permissions.onAdded.addListener(async permissions => {
             if (permissions.origins.includes("<all_urls>")) {
-                await initialiseDatabaseSourcePossibilities();
+                await initialiseDatabaseSourcePossibilities(true);
             }
         });
         showPermissionsInfo.value = true;
@@ -141,7 +142,7 @@ const manifest = chrome.runtime.getManifest();
 const showPermissionsInfo = ref(false);
 const showDatabaseSourceOptions = ref(false);
 const extensionVersion = ref(manifest.version);
-const showToolbarInfo = ref(true); //ref(!isFirefox);
+const showToolbarInfo = ref(!isFirefox());
 asyncSetup.call(this);
 </script>
 
@@ -192,5 +193,4 @@ div#i18n_root th:first-child {
     border-left: none;
     text-align: right;
     width: 40%;
-}
-</style>
+}</style>

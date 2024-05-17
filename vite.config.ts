@@ -95,7 +95,8 @@ export default defineConfig(({ command }) => ({
         watch: isDev ? {} : undefined,
         outDir: r("extension/dist"),
         emptyOutDir: false,
-        //TODO: consider excluding from prod package - (isDev || isBeta) ? true : false,
+        //TODO:f: consider excluding from prod package once dust from MV3 migration has settled:
+        // sourcemap: (isDev || isBeta) ? true : false,
         sourcemap: true,
         rollupOptions: {
             input: {

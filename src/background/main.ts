@@ -39,8 +39,11 @@ const networkAuth = new NetworkAuth();
 chrome.action.setBadgeText({ text: "OFF" });
 chrome.action.setBadgeBackgroundColor({ color: "red" });
 chrome.action.disable();
-//TODO: Remove all 'console.error("LIFECYCLE: '
-console.error("LIFECYCLE: main disabled action");
+
+//TODO: Remove all 'console.debug("LIFECYCLE: ' messages once dust has settled from MV3 migration
+// Since we're not sure of the status of our own logging infrastructure at
+// these lifecycle points, we have to just output using the console.
+console.debug("LIFECYCLE: main disabled action");
 
 async function ensureStarted() {
     if (initialising || hasInitialised) {
@@ -49,7 +52,7 @@ async function ensureStarted() {
     try {
         initialising = true;
         await configManager.load();
-        console.error("LIFECYCLE: startup");
+        console.debug("LIFECYCLE: startup");
         // Useful for interactive debugging:
         // window.KeePersistentLogger.init(configManager.current.logLevel >= 4);
         KeeLog.attachConfig(configManager.current);
@@ -60,7 +63,7 @@ async function ensureStarted() {
             configSyncManager.updateToRemoteConfig(configManager.current)
         );
         chrome.action.enable();
-        console.error("LIFECYCLE: main enabled action");
+        console.debug("LIFECYCLE: main enabled action");
     }
     finally {
         initialising = false;
@@ -186,19 +189,9 @@ if (!isFirefox()) {
 
 chrome.runtime.onInstalled.addListener(async function (details) {
     if (details.reason === "install") {
-        //TODO: Move this logic to the install wizard so all users can enable permissions straight away rather than be fired straight
-        // back to an open Kee Vault tab before it happens... but only if we now determine that the permissions are missing (to allow for the smoother experience in non-Firefox browsers)
-        // const vaultTabs = await chrome.tabs.query({
-        //     url: ["https://keevault.pm/*", "https://app-beta.kee.pm/*", "https://app-dev.kee.pm/*"]
-        // });
-        // if (vaultTabs && vaultTabs[0]) {
-        //     chrome.tabs.update(vaultTabs[0].id, { active: true });
-        //     chrome.windows.update(vaultTabs[0].windowId, { focused: true });
-        // } else {
-            chrome.tabs.create({
-                url: "/dist/install-notes/index.html"
-            });
-        // }
+        chrome.tabs.create({
+            url: "/dist/install-notes/index.html"
+        });
     }
 });
 
@@ -266,14 +259,14 @@ keepAlive();
 chrome.alarms.create("ensureActive", { periodInMinutes: 0.5 });
 
 chrome.runtime.onConnect.addListener(async port => {
-    console.error("LIFECYCLE: await init port");
+    console.debug("LIFECYCLE: await init port");
     // We can defer the initial response to the port until we have finished initialising.
     // It shouldn't take long but there is a theoretical risk of a rapidly (presumably
     // automatically) created and destroyed frame having gone away before we run the
     // connection startup process. Don't think that will cause any serious problems but
     // may lead to some noisy warnings so maybe one day we can add some extra defence here.
     await initialised;
-    console.error("LIFECYCLE: init port completed");
+    console.debug("LIFECYCLE: init port completed");
     kee.onPortConnected(port);
 });
 
@@ -296,4 +289,4 @@ chrome.webRequest.onAuthRequired.addListener(
     await ensureStarted();
 })();
 
-console.error("LIFECYCLE: main end");
+console.debug("LIFECYCLE: main end");
