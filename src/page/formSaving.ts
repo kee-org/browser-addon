@@ -18,7 +18,7 @@ export class FormSaving {
     private Logger: KeeLogger;
     private formUtils: FormUtils;
     private SubmitHandlerAttachments: SubmitHandlerAttachment[] = [];
-    private matchResult: MatchResult; //TODO:4: May be overkill to have all this data available for saving
+    private matchResult: MatchResult; //TODO:5: May be overkill to have all this data available for saving
 
     constructor(private myPort: chrome.runtime.Port, logger: KeeLogger, formUtils: FormUtils) {
         this.Logger = logger;
@@ -53,7 +53,7 @@ export class FormSaving {
     // This won't always be called before all event handlers on the web page so on
     // some sites we will store invalid data (in cases where the login scripts
     // mangle the contents of the fields before submitting them).
-    //TODO:4: Possibly could slightly reduce incidence of this problem by listening
+    //TODO:5: Possibly could slightly reduce incidence of this problem by listening
     // to every click on the document body or tracking all input events but performance?
     private submitHandler(_e: Event, form: HTMLFormElement) {
         this.Logger.debug("submitHandler called");
@@ -107,7 +107,7 @@ export class FormSaving {
 
                 for (let i = 0; i < passwords.length; i++) passwordFields.push(passwords[i]);
 
-                //TODO:4: try to distinguish between multi-password login/signup and typo. maybe: if username exists and matches existing password it is a typo, else multi-password
+                //TODO:5: try to distinguish between multi-password login/signup and typo. maybe: if username exists and matches existing password it is a typo, else multi-password
                 //return;
             } // it's probably a password change form, but may be a sign-up form
             else {
@@ -123,7 +123,7 @@ export class FormSaving {
                 // if there are only two passwords we already know that they match
                 if (passwords.length == 2) {
                     passwordFields.push(passwords[0]);
-                    //TODO:4: it is also reasonably likely that this indicates a
+                    //TODO:5: it is also reasonably likely that this indicates a
                     // sign-up form rather than a password change form. decide
                     // which here and flag which one it is. for now, we just assume
                     // it's a sign-up form becuase that is more useful for the user in many cases

@@ -26,5 +26,5 @@ export class Locator {
         this.autocompleteValues = locator.autocompleteValues;
     }
 
-    //TODO:4: Things like MaxLength that can be used to both help identify the field and generate new values/passwords
+    //TODO:5: Things like MaxLength that can be used to both help identify the field and generate new values/passwords
 }

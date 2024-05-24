@@ -165,7 +165,7 @@ export class ConfigManager {
                     if (nextPage) configString += nextPage;
                 }
                 if (configString) this.current = JSON.parse(configString);
-                //TODO:4: Delete the old keefox prefixed data to save space
+                //TODO:5: Delete the old keefox prefixed data to save space
             }
         }
         this.fixInvalidConfigData();

@@ -14,7 +14,7 @@ export class EntrySummary {
     uuid: string;
     dbFileName: string;
     relevanceScore: number;
-    fullDetails?: Entry; //TODO:4: remove circular reference by maintaining independent Entry lookup by uuid?
+    fullDetails?: Entry; //TODO:5: remove circular reference by maintaining independent Entry lookup by uuid?
     isPreferredMatch?: boolean;
 
     constructor(e: Partial<EntrySummary>) {

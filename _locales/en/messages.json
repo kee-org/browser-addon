@@ -823,7 +823,7 @@
       "message": "Always save new entries here",
       "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
   },
-  "list_version_upgrade_3_12": {
+  "list_version_upgrade_4_0": {
     "message": "Support for the latest web browsers (MV3);Faster connection to KeePass on some systems (requires KeePassRPC.plgx v2+);Lots of bug fixes and probably some new bugs introduced",
     "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
   },

@@ -5,7 +5,7 @@ defaultSiteConfig.pageRegex = new SiteConfigLookup();
 
 defaultSiteConfig.pageRegex["^.*$"] = {
     config: {
-        /* TODO:4: ? In future we can give finer control of form rescanning behaviour from here
+        /* TODO:5: ? In future we can give finer control of form rescanning behaviour from here
             rescanDOMevents:
             [{
 

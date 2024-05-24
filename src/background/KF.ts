@@ -465,7 +465,7 @@ class Kee {
     }
 
     updateKeePassDatabases(newDatabases: Database[]) {
-        //TODO:4: To improve performance we might need to determine if anything
+        //TODO:5: To improve performance we might need to determine if anything
         // has actually changed before doing the dispatches and poking the
         // current tab frames to find entries
         let newDatabaseActiveIndex = -1;
@@ -508,7 +508,7 @@ class Kee {
 
     private refreshFormStatus(action: Action) {
         this.tabStates.forEach((ts, tabId) => {
-            //TODO:4: This should be equivalent but much faster than testing in the inner
+            //TODO:5: This should be equivalent but much faster than testing in the inner
             // loop. Unless tabId does not equal port.sender.tab.id?
             //if (tabId !== this.foregroundTabId) return;
 

@@ -16,7 +16,7 @@ function updateFrameState(newState: FrameState) {
 }
 
 function closePanel() {
-    //TODO:4: Might want more fine-grained closing in future
+    //TODO:5: Might want more fine-grained closing in future
     Port.postMessage({ action: Action.CloseAllPanels });
 }
 

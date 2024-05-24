@@ -169,7 +169,7 @@ export class FormFilling {
     private calculateFieldMatchScore(
         matchedField: MatchedField,
         dataField: Field,
-        _currentPage, //TODO:4: remove param
+        _currentPage, //TODO:5: remove param
         config: FieldMatchScoreConfig,
         isVisible?: boolean
     ) {
@@ -359,7 +359,7 @@ export class FormFilling {
             domElement.value = value;
         }
 
-        //TODO:4: Investigate and document why we're not using data attributes to store this string in the DOM
+        //TODO:5: Investigate and document why we're not using data attributes to store this string in the DOM
         (domElement as any).keeInitialDetectedValue = value;
 
         domElement.dispatchEvent(
@@ -437,7 +437,7 @@ export class FormFilling {
     }
 
     private initMatchResult(behaviour: FindMatchesBehaviour) {
-        //TODO:4: #6 create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
+        //TODO:5: #6 create new object might cause issues with multi-page or submit behaviour? if not, this would be neater:
         // matchResult = new MatchResult();
         this.matchResult.UUID = "";
         this.matchResult.entries = [];
@@ -683,7 +683,7 @@ export class FormFilling {
                 offsetParent: true, // This tricks element visibility checks into treating this as visible to the user
                 addEventListener: function () {
                     return;
-                }, //TODO:4: hook up to the submit function to simulate real form submission
+                }, //TODO:5: hook up to the submit function to simulate real form submission
                 removeEventListener: function () {
                     return;
                 }
@@ -728,7 +728,7 @@ export class FormFilling {
             // form and entry combination. We could be more efficient for the common case of 1 form
             // by avoiding the clone then but keeping the same behaviour gives us a higher chance
             // of noticing bugs.
-            matchResult.entries[i] = JSON.parse(crString); //TODO:4: faster clone? https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
+            matchResult.entries[i] = JSON.parse(crString); //TODO:5: faster clone? https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm ?
 
             // Nothing to do if we have no matching entries available.
             if (matchResult.entries[i].length == 0) continue;
@@ -1013,7 +1013,7 @@ export class FormFilling {
             }
 
             if (matchingLogin != null) {
-                //TODO:4: #6 multi-page
+                //TODO:5: #6 multi-page
                 // // record / update the info attached to this tab regarding
                 // // the number of pages of forms we want to fill in
                 // // NB: we do this even if we know this is a single form
@@ -1034,7 +1034,7 @@ export class FormFilling {
                 // }
 
                 // // If the user manually requested this to be filled in or the current page is unknown
-                // if (!automated)//TODO:4: #6 multi-page || tabState.currentPage <= 0)
+                // if (!automated)//TODO:5: #6 multi-page || tabState.currentPage <= 0)
                 // {
                 //     let maximumPageCount = 1;
                 //     for (let i = 0; i < matchingLogin.passwords.length; i++)
@@ -1049,7 +1049,7 @@ export class FormFilling {
                 //         if (otherField.formFieldPage > maximumPageCount)
                 //             maximumPageCount = otherField.formFieldPage;
                 //     }
-                //     //TODO:4: #6: multi-page
+                //     //TODO:5: #6: multi-page
                 //     // // always assume page 1 (very rare cases will go wrong - see github KeeFox #411 for relevant enhancement request)
                 //     // // Possible regression since v1.4: We used to ignore currentPage entirely for the first
                 //     // // page of a submission, now we might try to give preference to page 1 fields (though total
@@ -1142,7 +1142,7 @@ export class FormFilling {
 
         // If this form fill is the non-final page of a multi-page login process we record the
         // UUID and dbFilename. We also enable auto-submit in some circumstances
-        //TODO:4: #6: multi-page
+        //TODO:5: #6: multi-page
         // if (matchResult.UUID != undefined && matchResult.UUID != null && matchResult.UUID != "")
         // {
         //     if (tabState.currentPage > 0 && tabState.currentPage < tabState.maximumPage)
@@ -1415,7 +1415,7 @@ export class FormFilling {
             candidate.score += distanceFactor * distanceScore;
         });
 
-        //TODO:4: more accurate searching of submit buttons, etc. to avoid password resets if possible
+        //TODO:5: more accurate searching of submit buttons, etc. to avoid password resets if possible
         // maybe special cases for common HTML output patterns (e.g. javascript-only ASP.NET forms)
 
         let maxScore = submitElements[0].score;
@@ -1435,7 +1435,7 @@ export class FormFilling {
         semanticWhitelistCache,
         semanticBlacklistCache
     ) {
-        //TODO:4: other languages
+        //TODO:5: other languages
         const goodWords = [
             "submit",
             "login",
@@ -1580,7 +1580,7 @@ export class FormFilling {
             form.submit();
         }
 
-        //TODO:4: maybe something like this might be useful? Dunno why a click()
+        //TODO:5: maybe something like this might be useful? Dunno why a click()
         // above wouldn't be sufficient but maybe some custom event raising might be handy...
         /*
         function simulateClick() {

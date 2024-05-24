@@ -46,7 +46,7 @@ export class Entry {
 
     // How relevant this entry is to the current form in
     // the browser - transient (not stored in KeePass)
-    //TODO:4 put all match data into a new object?
+    //TODO:5 put all match data into a new object?
     relevanceScore: number;
     lowFieldMatchRatio: any;
     formIndex: number;

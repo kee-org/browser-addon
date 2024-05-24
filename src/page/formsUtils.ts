@@ -188,8 +188,8 @@ export class FormUtils {
         // Work out which DOM form element is most likely to be the username field.
         // This information is only used to display the username to the user so an inaccurate
         // choice won't impact the form detection or filling behaviour.
-        //TODO:4: Extend this to inspect more than just the name of the field. E.g. max length?
-        //TODO:4: For form filling (not submitting) we might want to select based upon found data in KeePass?
+        //TODO:5: Extend this to inspect more than just the name of the field. E.g. max length?
+        //TODO:5: For form filling (not submitting) we might want to select based upon found data in KeePass?
         if (firstPossibleUsernameIndex != -1) usernameIndex = firstPossibleUsernameIndex;
         else if (firstPasswordIndex > 0) usernameIndex = firstPasswordIndex - 1;
         this.Logger.debug("usernameIndex: " + usernameIndex);

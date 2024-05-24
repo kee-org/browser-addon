@@ -87,7 +87,7 @@ async function start() {
                         store.$patch(m.initialState);
                         vueApp.mount("#main");
 
-                        //TODO:4: Could be done earlier to speed up initial rendering?
+                        //TODO:5: Could be done earlier to speed up initial rendering?
                         Port.postMessage({
                             action: Action.GetPasswordProfiles
                         });
