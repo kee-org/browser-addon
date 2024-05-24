@@ -15,10 +15,10 @@ document.getElementById("keeVaultCTA").addEventListener("click", () => {
 const root = document.documentElement;
 
 if (import.meta.env.VITE_KEE_CHANNEL) {
-    console.error("beta 1");
+    console.log("beta 1");
     root.style.setProperty("--display-none-when-beta", "none");
   } else {
-    console.error("prod");
+    console.log("prod");
     root.style.setProperty("--display-none-when-not-beta", "none");
   }
 i18nSetup();

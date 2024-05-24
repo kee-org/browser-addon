@@ -1,5 +1,7 @@
 import { resolve } from "path";
 import { bgCyan, black } from "kolorist";
+import * as url from "url";
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 export const port = parseInt(process.env.PORT || "") || 3303;
 export const r = (...args: string[]) => resolve(__dirname, "..", ...args);

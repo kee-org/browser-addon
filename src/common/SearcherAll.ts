@@ -1,5 +1,5 @@
 import { KeeLog } from "./Logger";
-import { KeeState } from "../store/KeeState";
+import type { KeeState } from "../store/KeeState";
 import { SearchConfig } from "./model/SearchConfig";
 import { EntrySummary } from "./model/EntrySummary";
 import { resolveConfig, tokenise, calculateMatchScore } from "./SearchUtils";

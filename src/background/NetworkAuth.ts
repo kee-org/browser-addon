@@ -3,53 +3,25 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { Entry } from "../common/model/Entry";
 import punycode from "punycode/";
-import BackgroundStore from "~/store/BackgroundStore";
-
-// Pretend browser (WebExtensions) is chrome (we include a
-// polyfill from Mozilla but it doesn't work for onAuthRequired)
-declare const chrome;
+import { kee } from "./KF";
 
 export class NetworkAuth {
-    constructor(private store: BackgroundStore) {}
-
-    pendingRequests = [];
-
-    public completed(requestDetails) {
-        const index = this.pendingRequests.indexOf(requestDetails.requestId);
-        if (index > -1) {
-            this.pendingRequests.splice(index, 1);
-        }
-    }
-
-    public provideCredentialsAsyncBlockingCallback(
-        requestDetails: any,
-        callback: (response: browser.webRequest.BlockingResponse) => void
-    ) {
-        // Firefox fails to register the event listener so this function
-        // only executes in other browsers
-
-        this.provideCredentialsAsync(requestDetails)
-            .then(result => callback(result))
-            .catch(reason => {
-                KeeLog.error("AsyncBlockingCallback promise failed", reason);
-                callback({ cancel: false });
-            });
-    }
+    constructor() { }
 
     public async provideCredentialsAsync(
         requestDetails: any
-    ): Promise<browser.webRequest.BlockingResponse> {
-        this.pendingRequests.push(requestDetails.requestId);
-        KeeLog.debug("Providing credentials for: " + requestDetails.requestId);
+    ): Promise<chrome.webRequest.BlockingResponse> {
+        KeeLog.debug("Considering handling request ID: " + requestDetails.requestId);
 
-        if (!this.store.state.connected || this.store.state.ActiveKeePassDatabaseIndex < 0) {
+        if (!kee.store.state.connected || kee.store.state.ActiveKeePassDatabaseIndex < 0) {
             return { cancel: false };
         }
 
+        KeeLog.info("Finding credentials for request ID: " + requestDetails.requestId);
         const url = new URL(requestDetails.url);
         url.hostname = punycode.toUnicode(url.hostname);
 
-        const result = await window.kee.findLogins(
+        const result = await kee.findLogins(
             url.href,
             requestDetails.realm,
             null,
@@ -91,28 +63,26 @@ export class NetworkAuth {
 
         matchedEntries.sort((_e1, e2) => (e2.httpRealm === requestDetails.realm ? 1 : 0));
 
-        return new Promise<browser.webRequest.BlockingResponse>(resolve => {
-            function handleMessage(request, sender: browser.runtime.MessageSender) {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise<chrome.webRequest.BlockingResponse>(async (resolve, reject) => {
+            function handleMessage(request, sender: chrome.runtime.MessageSender) {
                 switch (request.action) {
                     case "NetworkAuth_ok": {
                         const entry = matchedEntries[request.selectedEntryIndex];
+                        KeeLog.debug("Filling request ID: " + requestDetails.requestId);
                         resolve({
                             authCredentials: {
                                 username: Entry.getUsernameField(entry).value,
                                 password: Entry.getPasswordField(entry).value
                             }
                         });
-                        browser.runtime.onMessage.removeListener(handleMessage);
-                        break;
-                    }
-                    case "NetworkAuth_cancel": {
-                        resolve({ cancel: false });
-                        browser.runtime.onMessage.removeListener(handleMessage);
+                        chrome.runtime.onMessage.removeListener(handleMessage);
+                        chrome.windows.onRemoved.removeListener(declineHandling);
                         break;
                     }
                     case "NetworkAuth_load": {
                         // Can't use sendResponse() because Mozilla chose to not implement it, contrary to the MDN docs
-                        browser.tabs.sendMessage(sender.tab.id, {
+                        chrome.tabs.sendMessage(sender.tab.id, {
                             action: "NetworkAuth_matchedEntries",
                             entries: matchedEntries,
                             realm: requestDetails.realm,
@@ -124,49 +94,30 @@ export class NetworkAuth {
                 }
             }
 
-            browser.runtime.onMessage.addListener(handleMessage);
+            chrome.runtime.onMessage.addListener(handleMessage);
 
+            let wind;
+
+            function declineHandling(closingWindowId: number) {
+                if (closingWindowId !== wind?.id) return;
+                KeeLog.debug("Cancelling request ID: " + requestDetails.requestId);
+                resolve({ cancel: false });
+                chrome.runtime.onMessage.removeListener(handleMessage);
+                chrome.windows.onRemoved.removeListener(declineHandling);
+            }
             const createData = {
-                type: "popup" as browser.windows.CreateType,
+                type: "popup",
                 url: "/dist/dialogs/NetworkAuth.html",
                 width: 600,
                 height: 300
-            };
-            browser.windows.create(createData);
+            } as chrome.windows.CreateData;
+            try {
+                wind = await chrome.windows.create(createData);
+                chrome.windows.onRemoved.addListener(declineHandling);
+            } catch (e) {
+                reject(e);
+            }
         });
     }
 
-    public startListening() {
-        if (isFirefox()) {
-            browser.webRequest.onAuthRequired.addListener(
-                requestDetails => this.provideCredentialsAsync(requestDetails),
-                { urls: ["<all_urls>"] },
-                ["blocking"]
-            );
-        } else {
-            chrome.webRequest.onAuthRequired.addListener(
-                (requestDetails, callback) => {
-                    this.provideCredentialsAsyncBlockingCallback(requestDetails, callback);
-                },
-                { urls: ["<all_urls>"] },
-                ["asyncBlocking"]
-            );
-        }
-
-        browser.webRequest.onCompleted.addListener(
-            requestDetails => {
-                this.completed(requestDetails);
-            },
-            { urls: ["<all_urls>"] }
-        );
-
-        browser.webRequest.onErrorOccurred.addListener(
-            requestDetails => {
-                this.completed(requestDetails);
-            },
-            { urls: ["<all_urls>"] }
-        );
-
-        KeeLog.debug("Network authentication listeners started");
-    }
 }

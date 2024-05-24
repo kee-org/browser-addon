@@ -1,6 +1,6 @@
 import { kprpcClient } from "./kprpcClient";
 import { EventSessionManager } from "./EventSession";
-import { VaultMessage } from "../common/VaultMessage";
+import type { VaultMessage } from "../common/VaultMessage";
 import { SessionType } from "../common/SessionType";
 import { PasswordProfile } from "../common/model/PasswordProfile";
 import { KeeLog } from "../common/Logger";
@@ -12,6 +12,8 @@ import { Database } from "../common/model/Database";
 import { Entry } from "../common/model/Entry";
 import { DatabaseSummary } from "../common/model/DatabaseSummary";
 import BackgroundStore from "../store/BackgroundStore";
+import { configSyncManager } from "./ConfigSyncManager";
+import { kee } from "./KF";
 
 /*
 jsonrpcClient provides a JSON-RPC client and method proxies for
@@ -28,6 +30,10 @@ export class jsonrpcClient {
 
     startEventSession(sessionId: string, features: string[], messageToWebPage) {
         return this.kprpcClient.startEventSession(sessionId, features, messageToWebPage);
+    }
+
+    closeEventSession() {
+        this.kprpcClient.closeEventSession();
     }
 
     eventSessionMessageFromPage(data: VaultMessage) {
@@ -270,7 +276,9 @@ export class jsonrpcClient {
                         ? sessionResponse.resultWrapper.result.dbs
                         : sessionResponse.resultWrapper.result;
                 for (const db of recievedDBs as Array<DatabaseDto>) {
-                    if (!dbs.find(d => d.fileName === db.fileName)) {
+                    if (!db) {
+                        KeeLog.warn("Missing db for sessiontype: " + sessionResponse.sessionType);
+                    } else if (!dbs.find(d => d.fileName === db.fileName)) {
                         dbs.push(
                             Database.fromKPRPCDatabaseDTO(
                                 db,
@@ -279,17 +287,17 @@ export class jsonrpcClient {
                             )
                         );
                     } else {
-                        KeeLog.debug("Database with duplicate file name found. Ignoring.");
+                        KeeLog.warn("Database with duplicate file name found. Ignoring.");
                     }
                 }
                 if (sessionResponse.sessionType === SessionType.Event) {
-                    window.kee.configSyncManager.updateFromRemoteConfig(
+                    configSyncManager.updateFromRemoteConfig(
                         sessionResponse.resultWrapper.result.config
                     );
                 }
             }
         }
-        window.kee.updateKeePassDatabases(dbs);
+        kee.updateKeePassDatabases(dbs);
     }
 
     updateAddonSettings(settings: Partial<Config>, version: number) {

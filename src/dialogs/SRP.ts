@@ -38,7 +38,7 @@ class SrpDialog {
         );
 
         window.addEventListener("beforeunload", () =>
-            browser.runtime.sendMessage({ action: "SRP_ok", password: "" })
+            chrome.runtime.sendMessage({ action: "SRP_ok", password: "" })
         );
     }
 
@@ -85,18 +85,19 @@ class SrpDialog {
     }
 
     async continueSRP(password: string) {
-        const tab = await browser.tabs.getCurrent();
-        browser.runtime.sendMessage({
+        const tab = await chrome.tabs.getCurrent();
+        chrome.runtime.sendMessage({
             action: "SRP_ok",
             password: password
         });
-        await browser.tabs.remove(tab.id);
+        await chrome.tabs.remove(tab.id);
     }
 }
 
 let srp: SrpDialog;
 
-function setupPage() {
+async function setupPage() {
+    await configManager.load();
     KeeLog.attachConfig(configManager.current);
     srp = new SrpDialog();
     srp.setupPage();
@@ -104,9 +105,11 @@ function setupPage() {
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => configManager.load(setupPage));
+    document.addEventListener("DOMContentLoaded", async () => await setupPage());
 } else {
-    configManager.load(setupPage);
+    (async () => {
+        await setupPage();
+    })();
 }
 
 i18nSetup();

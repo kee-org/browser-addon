@@ -5,7 +5,7 @@ import { FormSaving } from "./formSaving";
 import { PasswordGenerator } from "./PasswordGenerator";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
-import { AddonMessage } from "../common/AddonMessage";
+import type { AddonMessage } from "../common/AddonMessage";
 import { Action } from "../common/Action";
 import { Port } from "../common/port";
 import NonReactiveStore from "../store/NonReactiveStore";
@@ -21,12 +21,12 @@ if (keeDuplicationCount) {
     if (KeeLog && KeeLog.error) {
         KeeLog.error(
             "Duplicate Kee content script instance detected! Found this many other instances: " +
-                keeDuplicationCount
+            keeDuplicationCount
         );
     } else {
         console.error(
             "Duplicate Kee content script instance detected! Found this many other instances: " +
-                keeDuplicationCount
+            keeDuplicationCount
         );
     }
 } else {
@@ -51,9 +51,19 @@ let inputsObserver: MutationObserver;
 // We have no interest in this document if it has no body Node
 if (document.body) {
 
-    inputsObserver = new MutationObserver(mutations => {
+    inputsObserver = new MutationObserver((mutations, observer) => {
         // If we have already scheduled a rescan recently, no further action required
         if (formFilling.formFinderTimer !== null) return;
+
+        // If we have become disconnected from the main extension (e.g. after an
+        // upgrade to a new version) we can force a disconnect to reduce error
+        // log noise and potentially mitigate performance impacts of the ongoing
+        // observation.
+        if (!chrome.runtime?.id) {
+            KeeLog.debug("we are dead so disconnecting the observer");
+            observer.disconnect();
+            return;
+        }
 
         // Only proceed if we have a DB to search
         if (!store?.state.connected || store?.state.ActiveKeePassDatabaseIndex < 0) return;
@@ -96,7 +106,7 @@ if (document.body) {
                 "state",
                 JSON.stringify({
                     connected: store?.state?.connected || false,
-                    version: browser.runtime.getManifest().version,
+                    version: chrome.runtime.getManifest().version,
                     dbLoaded: store?.state?.KeePassDatabases?.length > 0,
                     sessionNames: store?.state?.KeePassDatabases?.map?.(db =>
                         db.sessionType.toString()
@@ -147,7 +157,7 @@ if (document.body) {
         } catch (ex) {
             KeeLog.warn(
                 "Failed to connect to messaging port. We'll try again later. Exception message: " +
-                    ex.message
+                ex.message
             );
         }
 
@@ -162,7 +172,7 @@ if (document.body) {
                 } catch (ex) {
                     KeeLog.warn(
                         "Failed to connect to messaging port. We'll try again later. Exception message: " +
-                            ex.message
+                        ex.message
                     );
                 }
             } else {
@@ -177,8 +187,8 @@ if (document.body) {
         if (Port.raw) {
             KeeLog.warn(
                 "port already set to '" +
-                    Port.raw.name +
-                    "'. Skipping startup because it should already be underway but is taking a long time."
+                Port.raw.name +
+                "'. Skipping startup because it should already be underway but is taking a long time."
             );
             return;
         }
@@ -267,7 +277,8 @@ if (document.body) {
     window.addEventListener("pagehide", () => {
         inputsObserver.disconnect();
         if (Port.raw) Port.postMessage({ action: Action.PageHide });
-        formFilling.removeKeeIconFromAllFields();
+        //TODO:f: work out why this can be null. Was never connected for some reason? E.g. background script bug or injected into a page type we can't support?
+        formFilling?.removeKeeIconFromAllFields();
         Port.shutdown();
         connected = false;
         frameId = undefined;
@@ -277,8 +288,9 @@ if (document.body) {
         passwordGenerator = undefined;
     });
 
-    // Load our config
-    configManager.load(() => {
+
+    (async () => {
+        await configManager.load();
         configReady = true;
         if (pageShowFired) {
             startup();
@@ -289,5 +301,6 @@ if (document.body) {
             // is already established.
             missingPageShowTimer = window.setTimeout(startup, 1500);
         }
-    });
+    })();
+
 }

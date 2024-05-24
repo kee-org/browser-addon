@@ -8,7 +8,6 @@
 // });
 import { beforeEach, describe, expect, it, vi } from "vitest";
 //globalThis.jest = vi;
-//import "jest-webextension-mock";
 
 import { SiteConfig } from "../common/config";
 

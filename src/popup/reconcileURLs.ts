@@ -3,7 +3,7 @@ import { KeeURL } from "../common/KeeURL";
 
 export async function reconcileURLs(oldUrls: string[], submittedUrl?: string) {
     const currentTab = !submittedUrl
-        ? (await browser.tabs.query({ active: true, currentWindow: true }))[0]
+        ? (await chrome.tabs.query({ active: true, currentWindow: true }))[0]
         : null;
 
     // primary url to compare against entry being edited

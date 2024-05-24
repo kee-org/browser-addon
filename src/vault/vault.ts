@@ -3,9 +3,9 @@ import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 import { utils } from "../common/utils";
 import { VaultAction } from "../common/VaultAction";
-import { VaultMessage } from "../common/VaultMessage";
+import type { VaultMessage } from "../common/VaultMessage";
 import { VaultProtocol } from "../common/VaultProtocol";
-import { AddonMessage } from "../common/AddonMessage";
+import type { AddonMessage } from "../common/AddonMessage";
 import { Port } from "../common/port";
 import NonReactiveStore from "../store/NonReactiveStore";
 import { Mutation } from "../store/Mutation";
@@ -126,34 +126,14 @@ class Page {
             );
             return;
         }
-
         const body = document.getElementsByTagName("body")[0];
         const existingScript = document.getElementById("keeVaultMagic_existsExactlyHere");
         if (existingScript) existingScript.parentElement.removeChild(existingScript);
         const script = document.createElement("script");
         script.setAttribute("id", "keeVaultMagic_existsExactlyHere");
-        script.innerText = `
-    window.KeeAddonSupportedFeatures = [
-        "KPRPC_FEATURE_BROWSER_HOSTED",
-        "KPRPC_FEATURE_VERSION_1_6",
-        "KPRPC_FEATURE_WARN_USER_WHEN_FEATURE_MISSING",
-        "BROWSER_SETTINGS_SYNC"];
-
-    function messageToKeeAddon(detail) {
-        var messageEvent = new CustomEvent("${customEventNameFromPage}", {"detail":detail});
-        document.dispatchEvent(messageEvent);
-    }
-
-    function initKeeAddonLink() {
-        var KeeAddonEnabledEvent = new CustomEvent('KeeAddonEnabled', {"detail":"${customEventNameToPage}"});
-        document.dispatchEvent(KeeAddonEnabledEvent);
-        console.log("Kee addon link activated");
-    }
-
-    if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", initKeeAddonLink); }
-    else { initKeeAddonLink() }
-    console.log("Kee addon link injected");
-        `;
+        script.dataset["kvCustomEventNameFromPage"] = customEventNameFromPage;
+        script.dataset["kvCustomEventNameToPage"] = customEventNameToPage;
+        script.src = chrome.runtime.getURL("lib/linkContentScriptToKeeVaultWebsite.js");
         body.appendChild(script);
     }
 
@@ -360,7 +340,8 @@ window.addEventListener("pagehide", () => {
 let pageShowFired = false;
 let configReady = false;
 let missingPageShowTimer: number;
-configManager.load(() => {
+(async () => {
+    await configManager.load();
     configReady = true;
     if (pageShowFired) {
         startup();
@@ -371,4 +352,4 @@ configManager.load(() => {
         // is already established.
         missingPageShowTimer = window.setTimeout(startup, 1500);
     }
-});
+})();

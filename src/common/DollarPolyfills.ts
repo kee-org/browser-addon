@@ -7,10 +7,10 @@ export function $$(selector: any, el?: Document) {
     return el.querySelectorAll(selector);
 }
 export function $STR(str: string) {
-    const msg = browser.i18n.getMessage(str);
+    const msg = chrome.i18n.getMessage(str);
     return msg || str;
 }
 export function $STRF(str: string, subs: any) {
-    const msg = browser.i18n.getMessage(str, subs);
+    const msg = chrome.i18n.getMessage(str, subs);
     return msg || str;
 }

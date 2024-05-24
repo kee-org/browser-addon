@@ -5,7 +5,7 @@
         "removeComments": false,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "target": "ES2016",
+        "target": "ES2020",
         "lib": ["DOM", "ESNext", "DOM.Iterable"],
         "esModuleInterop": true,
         "incremental": false,
@@ -14,12 +14,14 @@
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
         "typeRoots" : ["src/typedefs", "node_modules/@types", "./node_modules"],
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "noImplicitThis": true,
+        // "verbatimModuleSyntax": true, //TODO:f: test if this works and remove isolatedModules if it does
         "isolatedModules": true,
         "types": [
             "vite/client",
-            "unplugin-icons/types/vue"
+            "unplugin-icons/types/vue",
+            "chrome"
         ],
         "module": "ESNext",
         "paths": {

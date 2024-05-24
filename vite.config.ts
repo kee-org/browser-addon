@@ -35,9 +35,6 @@ export const sharedConfig: UserConfig = {
                 "vue",
                 {
                     "~/common/DollarPolyfills": ["$$", "$", "$STR", "$STRF"]
-                },
-                {
-                    "webextension-polyfill": [["*", "browser"]]
                 }
             ],
             dts: r("src/auto-imports.d.ts")
@@ -51,7 +48,7 @@ export const sharedConfig: UserConfig = {
             resolvers: [
                 // auto import icons
                 IconsResolver({
-                    componentPrefix: ""
+                    prefix: ""
                 })
             ]
         }),
@@ -74,7 +71,7 @@ export const sharedConfig: UserConfig = {
     ],
     // Only used in development (esbuild)
     optimizeDeps: {
-        include: ["vue", "@vueuse/core", "webextension-polyfill"],
+        include: ["vue", "@vueuse/core"],
         exclude: ["vue-demi"]
     }
 };
@@ -95,28 +92,21 @@ export default defineConfig(({ command }) => ({
     //     minifyWhitespace: true,
     // },
     build: {
-
+        watch: isDev ? {} : undefined,
         outDir: r("extension/dist"),
         emptyOutDir: false,
-        // Ideally we'd package the sourcemaps alongside rather than
-        // base64 encoding them for the beta releases since this
-        // reduces overall extension package size and should decrease
-        // load time a bit too. Sadly, it still doesn't look like
-        // Firefox can resolve relative sourcemapurls within extensions
-        // so we're stuck with inline until then.
-        //sourcemap: isDev ? "inline" : isBeta ? true : false,
-        sourcemap: (isDev || isBeta) ? "inline" : false,
+        //TODO:f: consider excluding from prod package once dust from MV3 migration has settled:
+        // sourcemap: (isDev || isBeta) ? true : false,
+        sourcemap: true,
         rollupOptions: {
-            //treeshake: false,
             input: {
-                background: r("src/background/index.html"),
                 settings: r("src/settings/index.html"),
                 popup: r("src/popup/index.html"),
                 srp: r("src/dialogs/SRP.html"),
                 networkAuth: r("src/dialogs/NetworkAuth.html"),
                 vuePanels: r("src/panels/panels.html"),
                 legacyPanels: r("src/panels/panelsLegacy.html"),
-                installNotes: r("src/release-notes/install-notes.html"),
+                installNotes: r("src/install-notes/index.html"),
                 updateNotes: r("src/release-notes/update-notes.html")
             }
             // This needs an absolute URL so is unlikely to be much

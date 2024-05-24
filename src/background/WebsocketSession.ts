@@ -1,4 +1,4 @@
-import { ResultWrapper } from "./kprpcClient";
+import type { ResultWrapper } from "./kprpcClient";
 import { KeeLog } from "../common/Logger";
 import { configManager } from "../common/ConfigManager";
 
@@ -21,8 +21,6 @@ export class WebsocketSessionManager {
     // the KPRPC server because it's quick and not subject to the rate limiting
     // of webSocket connections as per Firefox bug #711793 and RFC 7.2.3:
     // http://tools.ietf.org/html/rfc6455#section-7.2.3
-    // See KeeFox issue #189 for connection algorithm overview:
-    // https://github.com/luckyrat/KeeFox/issues/189#issuecomment-23635771
     private httpChannelURI: string;
     private _reconnectTimer;
     public connectionProhibitedUntil: Date;
@@ -98,12 +96,12 @@ export class WebsocketSessionManager {
 
     startup() {
         this.pendingPortChange = null;
-        browser.runtime.onMessage.addListener(request => {
+        chrome.runtime.onMessage.addListener(request => {
             if (request.action !== "KPRPC_Port_Change") return;
             if (this.pendingPortChange != null) {
                 clearTimeout(this.pendingPortChange);
             }
-            this.pendingPortChange = window.setTimeout(() => {
+            this.pendingPortChange = self.setTimeout(() => {
                 this.configureConnectionURIs();
                 if (
                     this.webSocket !== undefined &&
@@ -118,10 +116,10 @@ export class WebsocketSessionManager {
         this.configureConnectionURIs();
 
         // start regular attempts to reconnect to KeePassRPC
-        // NB: overheads here include a test whether a socket is alive
+        // NB: overheads here include a HTTP GET request
         // and regular timer scheduling overheads - hopefully that's insignificant
         // but if not we can try more complicated connection strategies
-        this._reconnectTimer = window.setInterval(
+        this._reconnectTimer = setInterval(
             this.attemptConnection.bind(this),
             this.reconnectionAttemptFrequency
         );
@@ -140,7 +138,7 @@ export class WebsocketSessionManager {
             this.webSocketPort = defaultWebSocketPort;
         }
         this.webSocketURI = "ws://" + this.webSocketHost + ":" + this.webSocketPort;
-        this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort;
+        this.httpChannelURI = "http://" + this.webSocketHost + ":" + this.webSocketPort + "/pingAvailabilityTest";
     }
 
     tryToconnectToWebsocket() {
@@ -157,7 +155,7 @@ export class WebsocketSessionManager {
         // KeePassRPC's TCP port. If we tried to connect now, we risk connecting
         // back to the browser and causing a deadlock. A small delay gives the browser
         // a chance to cleanly close the old port
-        this._webSocketTimer = window.setTimeout(this.tryToconnectToWebsocket.bind(this), 100);
+        this._webSocketTimer = self.setTimeout(this.tryToconnectToWebsocket.bind(this), 100);
     }
 
     // Initiates a connection to the KPRPC server.
@@ -236,7 +234,7 @@ export class WebsocketSessionManager {
         this.onClose();
     }
 
-    attemptConnection() {
+    async attemptConnection() {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const rpc = this;
 
@@ -270,32 +268,25 @@ export class WebsocketSessionManager {
             );
             rpc.httpConnectionAttemptCallback();
         } else {
-            const xhr = new XMLHttpRequest();
+            try {
+                const httpResponse = await fetch(rpc.httpChannelURI);
+                if (httpResponse.status == 404) {
+                    // Since KeePassRPC.plgx 2.0 we return a 404 iff a request targets the
+                    // special ping path - /pingAvailabilityTest - earlier versions of Kee
+                    // will experience no behaviour change but if someone fails to upgrade
+                    // KeePassRPC they may experience slower connection startup, if they
+                    // are not already afflicted by the increasingly common changes to
+                    // networking stacks in operating systems and browser network layers
+                    // which have gradually invalidated our earlier connection establishment protocol.
 
-            xhr.open("GET", rpc.httpChannelURI, true);
-            xhr.timeout = 750;
-            xhr.onerror = function () {
-                // an error indicates that KeePass is running (or that it is at least worth attempting a precious websocket connection)
-                KeeLog.debug(
-                    "HTTP connection did not timeout. We will now attempt a web socket connection."
-                );
-                rpc.httpConnectionAttemptCallback();
-            };
-            xhr.ontimeout = function () {
-                // a timeout indicates that KeePass is not running
-                KeeLog.debug("HTTP connection timed out. Will not attempt web socket connection.");
-            };
-            xhr.onabort = function () {
-                KeeLog.warn("HTTP connection aborted. Will not attempt web socket connection.");
-            };
-
-            // Try to connect
-            // There may be more than one concurrent attempted connection.
-            // If more than one attempted connection returns a timeout,
-            // we will see a batch of "alive" or "locked" states for subsequent callbacks
-            // That should be fine but we could implement a more complex request ID
-            // tracking system in future if it becomes a problem
-            xhr.send();
+                    KeeLog.debug("HTTP request succeeded, attempting web socket connection");
+                    rpc.httpConnectionAttemptCallback();
+                } else {
+                    KeeLog.warn("HTTP request got unexpected response code. Another service is listening on KPRPC port?");
+                }
+            } catch (error) {
+                KeeLog.debug(`HTTP request failed: ${error.message} (${error.status} ${error.statusText}), not attempting web socket connection`);
+            }
         }
     }
 
@@ -305,9 +296,9 @@ export class WebsocketSessionManager {
         } catch (ex) {
             KeeLog.error(
                 "Failed to send a websocket message. Exception details: " +
-                    ex +
-                    ", stack: " +
-                    ex.stack
+                ex +
+                ", stack: " +
+                ex.stack
             );
         }
     }

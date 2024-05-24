@@ -1,5 +1,5 @@
 import * as types from "./mutation-types";
-import { defaults, KeeState } from "./KeeState";
+import { defaults, type KeeState } from "./KeeState";
 import { SaveState } from "../common/SaveState";
 import { Entry } from "../common/model/Entry";
 import { SaveEntryResult } from "../common/SaveEntryResult";
@@ -7,7 +7,7 @@ import { Field } from "../common/model/Field";
 import { Database } from "../common/model/Database";
 import { KeeNotification } from "../common/KeeNotification";
 import { PasswordProfile } from "../common/model/PasswordProfile";
-import { SubmittedData } from "../common/SubmittedData";
+import type { SubmittedData } from "../common/SubmittedData";
 import { EntrySummary } from "../common/model/EntrySummary";
 import { Mutation } from "./Mutation";
 
@@ -19,7 +19,7 @@ function undefAbort(payload) {
     }
 }
 
-declare type BackgroundDistributor = (mutation: Mutation, excludedPort?: browser.runtime.Port) => void;
+declare type BackgroundDistributor = (mutation: Mutation, excludedPort?: chrome.runtime.Port) => void;
 
 export default class NonReactiveStore {
 
@@ -33,7 +33,7 @@ export default class NonReactiveStore {
 
     }
 
-    public onRemoteMessage(sourcePort: browser.runtime.Port, mutation: Mutation) {
+    public onRemoteMessage(sourcePort: chrome.runtime.Port, mutation: Mutation) {
         if (mutation.type === types.addNotification) {
             this.addNotification(mutation.payload, false);
         } else if (mutation.type === types.removeFieldFromActiveEntry) {

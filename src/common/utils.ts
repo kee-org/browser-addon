@@ -48,11 +48,9 @@ export class Utils {
 
     BigIntFromRandom(byteCount) {
         const bytes = new Uint8Array(byteCount);
-        window.crypto.getRandomValues(bytes);
+        crypto.getRandomValues(bytes);
         const hex = Array.from(bytes).map(this.toHexString).join("");
-        return BigInteger.parse(hex, 16);
-        //TODO:4: switch to native bigint
-        //        return BigInt(`0x${hex}`);
+        return BigInt(`0x${hex}`);
     }
 
     // input can be either UTF8 formatted string or a byte array
@@ -203,7 +201,7 @@ export class Utils {
         }
 
         const dvals = new Uint32Array(4);
-        window.crypto.getRandomValues(dvals);
+        crypto.getRandomValues(dvals);
         const d0 = dvals[0];
         const d1 = dvals[1];
         const d2 = dvals[2];

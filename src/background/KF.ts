@@ -1,10 +1,7 @@
 import { isFirefox } from "webext-detect-page";
-import { AccountManager } from "./AccountManager";
 import { PersistentTabState } from "./PersistentTabState";
 import { jsonrpcClient } from "./jsonrpcClient";
-import { ConfigSyncManager } from "./ConfigSyncManager";
 import { NetworkAuth } from "./NetworkAuth";
-import { AnimateIcon } from "./AnimateIcon";
 import { NativeNotification } from "./NativeNotification";
 import { commandManager } from "./commands";
 import {
@@ -18,9 +15,9 @@ import { Utils, utils } from "../common/utils";
 import { SearcherAll } from "../common/SearcherAll";
 import { configManager } from "../common/ConfigManager";
 import { KeeLog } from "../common/Logger";
-import { AddonMessage } from "../common/AddonMessage";
+import type { AddonMessage } from "../common/AddonMessage";
 import { FrameState } from "../common/FrameState";
-import { VaultMessage } from "../common/VaultMessage";
+import type { VaultMessage } from "../common/VaultMessage";
 import { KeeNotification } from "../common/KeeNotification";
 import { VaultProtocol } from "../common/VaultProtocol";
 import { SessionType } from "../common/SessionType";
@@ -30,22 +27,19 @@ import { Entry } from "../common/model/Entry";
 import { SaveEntryResult } from "../common/SaveEntryResult";
 import BackgroundStore from "~/store/BackgroundStore";
 import { Mutation } from "~/store/Mutation";
+import { accountManager } from "./AccountManager";
+import { KeeBrowserActionIconConfiguration } from "../common/KeeBrowserActionIconConfiguration";
 
-
-export class Kee {
-    accountManager: AccountManager;
+class Kee {
     tabStates: Map<number, TabState>;
     persistentTabStates: Map<number, PersistentTabState>;
     utils: Utils;
     search: SearcherAll;
     foregroundTabId: number;
-
-    regularKPRPCListenerQueueHandlerTimer: number;
     currentSearchTermTimer: number;
 
     // Our link to the JSON-RPC objects required for communication with KeePass
     KeePassRPC: jsonrpcClient;
-    configSyncManager = new ConfigSyncManager();
 
     _installerTabLoaded: boolean;
 
@@ -53,47 +47,60 @@ export class Kee {
     pendingCallback: string;
     urlToOpenOnStartup: string;
 
-    browserPopupPort: Partial<browser.runtime.Port>;
-    vaultPort: Partial<browser.runtime.Port>;
-    onPortConnected: any;
+    browserPopupPort: Partial<chrome.runtime.Port>;
+    vaultPort: Partial<chrome.runtime.Port>;
+    onPortConnected: (p: chrome.runtime.Port) => void;
 
     networkAuth: NetworkAuth;
-    animateIcon: AnimateIcon;
     store: BackgroundStore;
 
-    constructor() {
-        this.store = new BackgroundStore((mutation: Mutation, excludedPort: browser.runtime.Port) => {
-            const allPorts: Partial<browser.runtime.Port>[] = [];
-            allPorts.push(this.browserPopupPort);
-            allPorts.push(this.vaultPort);
+    private static instance: Kee;
 
-            const ts = window.kee.tabStates.get(window.kee.foregroundTabId);
-            if (ts) {
-                ts.framePorts.forEach(port => {
-                    allPorts.push(port);
-                });
-                ts.ourIframePorts.forEach(port => {
-                    allPorts.push(port);
-                });
+    public static getInstance(): Kee {
+        if (!Kee.instance) {
+            Kee.instance = new Kee();
+        }
+        return Kee.instance;
+    }
+
+    private constructor() {
+        this.store = new BackgroundStore((mutation: Mutation, excludedPort: chrome.runtime.Port) => {
+
+            function tryPostMessage(port: Partial<chrome.runtime.Port>, mutationObj: any): boolean {
+                try {
+                    port.postMessage({ mutation: mutationObj } as AddonMessage);
+                    return true;
+                } catch (e) {
+                    KeeLog.warn("Dead port found", e);
+                    // Sometimes dead ports are left lying around by the browser (especially
+                    // during upgrades, etc.). We can do nothing about this except try to
+                    // tidy up our reference to it and must not let it cause a failure to post to any valid ports.
+                    return false;
+                }
             }
+            //TODO:f: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
+            const json = JSON.stringify(mutation);
+            KeeLog.debug("New background mutation for distribution");
+            const mutationObj = JSON.parse(json);
 
-            for (const port of allPorts) {
-                if (port !== excludedPort) {
-                    try {
-                        //TODO: Find a way to more efficiently distribute Pinia Patch objects / Vue3 Proxy objects without this additional JSON mapping / manipulation
-                        const json = JSON.stringify(mutation);
-                        KeeLog.debug("New background mutation for distribution");
-                        port.postMessage({ mutation: JSON.parse(json) } as AddonMessage);
-                    } catch (e) {
-                        KeeLog.warn("Dead port found", e);
-                        // Sometimes dead ports are left lying around by the browser (especially
-                        // during upgrades, etc.). We can do nothing about this but must not let
-                        // it cause this function to fail to execute to the end.
+            //TODO:f: Maybe try to tidy up these ports too? Should already be dealt with elsewhere and they are a bit more complex because some things expect them to always exist as at least a stub.
+            if (this.browserPopupPort !== excludedPort) tryPostMessage(this.browserPopupPort, mutationObj);
+            if (this.vaultPort !== excludedPort) tryPostMessage(this.vaultPort, mutationObj);
+
+            const foregroundTabState = this.tabStates.get(this.foregroundTabId);
+            if (foregroundTabState) {
+                for (const [id, port] of foregroundTabState.framePorts) {
+                    if (port !== excludedPort && !tryPostMessage(port, mutationObj)) {
+                        foregroundTabState.framePorts.delete(id);
+                    }
+                }
+                for (const [id, port] of foregroundTabState.ourIframePorts) {
+                    if (port !== excludedPort && !tryPostMessage(port, mutationObj)) {
+                        foregroundTabState.ourIframePorts.delete(id);
                     }
                 }
             }
         });
-        this.accountManager = new AccountManager();
 
         this.tabStates = new Map<number, TabState>();
         this.persistentTabStates = new Map<number, PersistentTabState>();
@@ -107,14 +114,11 @@ export class Kee {
             searchAllDatabases: configManager.current.searchAllOpenDBs
         });
 
-        this.networkAuth = new NetworkAuth(this.store);
-        this.animateIcon = new AnimateIcon();
-
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        this.browserPopupPort = { postMessage: _msg => {} };
+        this.browserPopupPort = { postMessage: _msg => { } };
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        this.vaultPort = { postMessage: _msg => {} };
-        this.onPortConnected = function (p: browser.runtime.Port) {
+        this.vaultPort = { postMessage: _msg => { } };
+        this.onPortConnected = async function (p: chrome.runtime.Port) {
             if (KeeLog && KeeLog.debug) KeeLog.debug(p.name + " port connected");
             let name = p.name;
             let parentFrameId: number;
@@ -124,25 +128,25 @@ export class Kee {
             }
             switch (name) {
                 case "browserPopup": {
-                    clearTimeout(window.kee.currentSearchTermTimer);
+                    clearTimeout(this.currentSearchTermTimer);
                     p.onMessage.addListener(browserPopupMessageHandler.bind(p));
                     p.onDisconnect.addListener(() => {
-                        window.kee.browserPopupPort = {
+                        this.browserPopupPort = {
                             // eslint-disable-next-line @typescript-eslint/no-empty-function
-                            postMessage: _msg => {}
+                            postMessage: _msg => { }
                         };
-                        window.kee.currentSearchTermTimer = window.setTimeout(() => {
-                            window.kee?.store?.updateCurrentSearchTerm(null);
-                            window.kee?.store?.updateSearchResults(null);
+                        this.currentSearchTermTimer = self.setTimeout(() => {
+                            this?.store?.updateCurrentSearchTerm(null);
+                            this?.store?.updateSearchResults(null);
                         }, configManager.current.currentSearchTermTimeout * 1000);
                     });
 
                     let submittedData: any = null;
                     let loginsFound = false;
 
-                    if (window.kee.persistentTabStates.get(window.kee.foregroundTabId)) {
-                        window.kee.persistentTabStates
-                            .get(window.kee.foregroundTabId)
+                    if (this.persistentTabStates.get(this.foregroundTabId)) {
+                        this.persistentTabStates
+                            .get(this.foregroundTabId)
                             .items.forEach(item => {
                                 if (item.itemType === "submittedData") {
                                     submittedData = item.submittedData;
@@ -151,22 +155,22 @@ export class Kee {
                     }
 
                     const matchedLogins: any = {};
-                    if (window.kee.tabStates.has(window.kee.foregroundTabId)) {
-                        const frames = window.kee.tabStates.get(window.kee.foregroundTabId).frames;
-                        const matchedFrameID = window.kee.frameIdWithMatchedLogins(frames);
+                    if (this.tabStates.has(this.foregroundTabId)) {
+                        const frames = this.tabStates.get(this.foregroundTabId).frames;
+                        const matchedFrameID = this.frameIdWithMatchedLogins(frames);
                         if (matchedFrameID >= 0) {
                             loginsFound = true;
                             matchedLogins.entries = frames.get(matchedFrameID).entries;
                             matchedLogins.frameId = matchedFrameID;
-                            matchedLogins.tabId = window.kee.foregroundTabId;
+                            matchedLogins.tabId = this.foregroundTabId;
                         }
                     }
 
-                    window.kee.store.updateSubmittedData(submittedData);
-                    window.kee.store.updateLoginsFound(loginsFound);
+                    this.store.updateSubmittedData(submittedData);
+                    this.store.updateLoginsFound(loginsFound);
 
                     const connectMessage = {
-                        initialState: window.kee.store.state
+                        initialState: this.store.state
                     } as AddonMessage;
 
                     if (matchedLogins.entries) {
@@ -180,9 +184,12 @@ export class Kee {
                     } catch (e) {
                         KeeLog.error("postMessage error", e);
                     }
-                    window.kee.browserPopupPort = p;
+                    this.browserPopupPort = p;
 
-                    window.kee.resetBrowserActionColor();
+                    //TODO:f: Do we still want to do this all the time? Even when showing
+                    // the number of matches on the label/title? Also will want to reset
+                    // the title and label so rename the method?
+                    this.resetBrowserActionColor();
                     break;
                 }
                 case "page": {
@@ -191,21 +198,30 @@ export class Kee {
                     const tabId = p.sender.tab.id;
                     const frameId = p.sender.frameId;
                     const connectMessage = {
-                        initialState: window.kee.store.state,
+                        initialState: this.store.state,
                         frameId,
                         tabId,
-                        isForegroundTab: tabId === window.kee.foregroundTabId
+                        isForegroundTab: tabId === this.foregroundTabId
                     } as AddonMessage;
 
-                    window.kee.createTabStateIfMissing(tabId);
+                    //TODO:f: This may be a potential performance improvement but, at least
+                    // in Firefox, it isn't guaranteed that a reloading page has its port
+                    // disconnected before the new one is connected. Since we may have the
+                    // same tab and frame ids, we could end up breaking the new port instead.
+                    // p.onDisconnect.addListener(() => {
+                    //     const states = this.tabStates.get(tabId);
+                    //     states.frames.delete(frameId);
+                    //     states.framePorts.delete(frameId);
+                    // });
+                    this.createTabStateIfMissing(tabId);
 
                     if (frameId === 0) {
-                        window.kee.tabStates.get(tabId).url = p.sender.tab.url;
+                        this.tabStates.get(tabId).url = p.sender.tab.url;
 
-                        if (window.kee.persistentTabStates.get(tabId)?.items?.length > 0) {
-                            window.kee.persistentTabStates.get(
+                        if (this.persistentTabStates.get(tabId)?.items?.length > 0) {
+                            this.persistentTabStates.get(
                                 tabId
-                            ).items = window.kee.persistentTabStates
+                            ).items = this.persistentTabStates
                                 .get(tabId)
                                 .items.filter(
                                     item =>
@@ -214,45 +230,62 @@ export class Kee {
                                 );
                         }
                     }
-                    window.kee.tabStates.get(tabId).frames.set(frameId, new FrameState());
-                    window.kee.tabStates.get(tabId).framePorts.set(frameId, p);
+                    this.tabStates.get(tabId).frames.set(frameId, new FrameState());
+                    this.tabStates.get(tabId).framePorts.set(frameId, p);
                     p.postMessage(connectMessage);
                     break;
                 }
                 case "vault": {
                     p.onMessage.addListener(vaultMessageHandler.bind(p));
+                    //TODO: below is too complex.? Maybe can close over the tabid/frameid or something?
                     /* Potentially could/should call messageCloseSession() when the port is disconnected but
                      earlier experience suggests disconnection does not occur before a new port is connected in Firefox due to a
                      bug (works fine in Chrome) so we would risk closing the freshly opened session instead.
                     p.onDisconnect.addListener(this.messageCloseSession();)
                     */
+                    //TODO: Test again in Firefox to see if behaviour is now reliable enough. If not, enable the listener only for Chromium.
+                    // Or maybe can pass the port metadata in case we can workaround the bug using some of that data?
+                    // p.onDisconnect.addListener(port => {
+                    //     // Only take action if the port we received this on is the same as the one we are currently tracking as active. This helps us to tidy up after the user closes the Kee Vault tab or navigates away from the site
+                    //     //but ensures we don't close newly opened connections when an old port is closed (such as during page refreshes, extension updates, etc.)
+                    //     if (port == this.vaultPort) {
+                    //     // eslint-disable-next-line @typescript-eslint/no-empty-function
+                    //     this.vaultPort = { postMessage: _msg => { } };
+                    //     this.KeePassRPC.closeEventSession();
+                    //     }
+                    // });
 
                     const connectMessage = {
-                        initialState: window.kee.store.state,
+                        initialState: this.store.state,
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
-                        isForegroundTab: p.sender.tab.id === window.kee.foregroundTabId
+                        isForegroundTab: p.sender.tab.id === this.foregroundTabId
                     } as VaultMessage;
 
-                    window.kee.vaultPort = p;
+                    this.vaultPort = p;
                     p.postMessage(connectMessage);
                     break;
                 }
                 case "iframe": {
                     p.onMessage.addListener(iframeMessageHandler.bind(p));
+                    p.onDisconnect.addListener(() => {
+                        this.tabStates
+                            .get(p.sender.tab.id)
+                            ?.ourIframePorts?.delete(p.sender.frameId);
+                    });
 
                     const connectMessage = {
-                        initialState: window.kee.store.state,
-                        frameState: window.kee.tabStates
+                        initialState: this.store.state,
+                        frameState: this.tabStates
                             .get(p.sender.tab.id)
                             .frames.get(parentFrameId),
                         frameId: p.sender.frameId,
                         tabId: p.sender.tab.id,
-                        isForegroundTab: p.sender.tab.id === window.kee.foregroundTabId
+                        isForegroundTab: p.sender.tab.id === this.foregroundTabId
                     } as AddonMessage;
 
-                    if (window.kee.persistentTabStates.get(p.sender.tab.id)) {
-                        window.kee.persistentTabStates.get(p.sender.tab.id).items.forEach(item => {
+                    if (this.persistentTabStates.get(p.sender.tab.id)) {
+                        this.persistentTabStates.get(p.sender.tab.id).items.forEach(item => {
                             if (item.itemType === "submittedData") {
                                 connectMessage.submittedData = item.submittedData;
                             }
@@ -260,7 +293,7 @@ export class Kee {
                     }
 
                     p.postMessage(connectMessage);
-                    window.kee.tabStates
+                    this.tabStates
                         .get(p.sender.tab.id)
                         .ourIframePorts.set(p.sender.frameId, p);
                     break;
@@ -277,18 +310,12 @@ export class Kee {
         return frameId;
     }
 
-    async init() {
-        // Create a timer for KPRPC connection establishment
-        this.regularKPRPCListenerQueueHandlerTimer = window.setInterval(
-            this.RegularKPRPCListenerQueueHandler,
-            5000
-        );
-
+    async init(): Promise<boolean> {
         this._keeBrowserStartup();
 
         // This listener is called when a new account is logged in to within Kee Vault. It
         // does not require an active KPRPC event session for delivery
-        this.accountManager.addListener(() => {
+        accountManager.addListener(() => {
             // If there is a vault port available but no active session, we poke the content script to
             // reinitialise the connection if it now looks likely that it will succeed (as a result of
             // a new account being logged in to which has the required multi-session feature).
@@ -296,47 +323,42 @@ export class Kee {
             // regularly anyway.
             // We also don't worry about kicking people off from active sessions if their license expires.
             if (
-                this.accountManager.featureEnabledMultiSessionTypes &&
+                accountManager.featureEnabledMultiSessionTypes &&
                 !this.KeePassRPC.eventSessionManagerIsActive
             ) {
                 this.inviteKeeVaultConnection();
             }
         });
 
-        browser.runtime.onConnect.addListener(this.onPortConnected);
-
-        this.networkAuth.startListening();
-
-        await browser.privacy.services.passwordSavingEnabled.set({
+        await chrome.privacy.services.passwordSavingEnabled.set({
             value: false
         });
 
-        if (browser.runtime.lastError != null) {
+        if (chrome.runtime.lastError != null) {
             KeeLog.warn(
                 "KeeFox was unable to disable built-in password manager saving - confusion may ensue! " +
-                    browser.runtime.lastError.message
+                chrome.runtime.lastError.message
             );
         }
+        return true;
     }
 
     notifyUser(notification: KeeNotification, nativeNotification?: NativeNotification) {
-        window.kee.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
-        window.kee.store.addNotification(notification);
-        browser.browserAction.setIcon({
-            path: "/assets/images/highlight-48.png"
-        });
+        this.removeUserNotifications((n: KeeNotification) => n.name != notification.name);
+        this.store.addNotification(notification);
+        this.configureBrowserActionIcon();
         if (nativeNotification) {
-            browser.notifications.create({
+            chrome.notifications.create({
                 type: "basic",
-                iconUrl: browser.extension.getURL("/assets/images/128.png"),
+                iconUrl: chrome.runtime.getURL("/assets/images/128.png"),
                 title: nativeNotification.title,
                 message: nativeNotification.message
             });
         } else {
             if (configManager.current.notificationCountGeneric < 5) {
-                browser.notifications.create({
+                chrome.notifications.create({
                     type: "basic",
-                    iconUrl: browser.extension.getURL("/assets/images/128.png"),
+                    iconUrl: chrome.runtime.getURL("/assets/images/128.png"),
                     title: $STR("notification_raised_title"),
                     message:
                         $STR("notification_yellow_background") +
@@ -354,31 +376,47 @@ export class Kee {
         this.store.updateNotifications(this.store.state.notifications.filter(unlessTrue));
     }
 
-    animateBrowserActionIcon(duration = 1200) {
-        // Firefox claims that a janky icon animation is less intrusive for users
-        // than a smoothly animated one and therefore will not develop the smooth
-        // animation support available in other browsers. Our user testing confirms
-        // this is not the case so where we are able to (i.e. not Firefox) we
-        // enable a nice smooth animation to subtly hint that they might want to
-        // click on the icon. We have to make the animation in Firefox much less subtle :-(
-        // https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1309347
-        this.animateIcon.start(duration, !isFirefox());
+    configureBrowserActionIcon() {
+        const actionConfig = new KeeBrowserActionIconConfiguration();
+
+        actionConfig.saveAvailable = false;
+        if (this.persistentTabStates.get(this.foregroundTabId)) {
+            this.persistentTabStates
+                .get(this.foregroundTabId)
+                .items.forEach(item => {
+                    if (item.itemType === "submittedData") {
+                        actionConfig.saveAvailable = true;
+                    }
+                });
+        }
+
+        actionConfig.matchedEntries = 0;
+        //TODO:f: Support number of matched entries on the icon if we can find a way to ensure the data in the store or
+        // tabState is up to date and relevant for the current tab when this function runs.
+        // if (this.tabStates.has(this.foregroundTabId)) {
+        //     const frames = this.tabStates.get(this.foregroundTabId).frames;
+        //     const matchedFrameID = this.frameIdWithMatchedLogins(frames);
+        //     if (matchedFrameID >= 0) {
+        //         actionConfig.matchedEntries = frames.get(matchedFrameID).entries.length;
+        //     }
+        // }
+
+        actionConfig.connectionAvailable = this.store.state.connected;
+        actionConfig.dbAvailable = this.store.state.KeePassDatabases.length > 0;
+        actionConfig.notificationAvailable = this.store.state.notifications.length > 0;
+
+        const iconPath = actionConfig.notificationAvailable || actionConfig.saveAvailable ? "/assets/images/highlight-48.png" : "/assets/images/48.png";
+        const text = (!actionConfig.connectionAvailable || !actionConfig.dbAvailable) ? "OFF" : (actionConfig.matchedEntries > 0 ? actionConfig.matchedEntries.toString() : "");
+        const color = !actionConfig.connectionAvailable ? "red" : !actionConfig.dbAvailable ? "orange" : "blue";
+        const title = "Kee";
+        chrome.action.setIcon({ path: iconPath });
+        chrome.action.setBadgeText({ text: text });
+        chrome.action.setBadgeBackgroundColor({ color: color });
+        chrome.action.setTitle({title: title});
     }
 
     resetBrowserActionColor() {
-        browser.browserAction.setIcon({ path: "/assets/images/48.png" });
-    }
-
-    shutdown() {
-        // These log messages never appear. Does this function even get executed?
-        KeeLog.debug("Kee module shutting down...");
-        // if (this.KeePassRPC != undefined && this.KeePassRPC != null)
-        //     this.KeePassRPC..session.shutdown();
-        // if (this.regularKPRPCListenerQueueHandlerTimer != undefined && this.regularKPRPCListenerQueueHandlerTimer != null)
-        //     clearInterval(this.regularKPRPCListenerQueueHandlerTimer);
-        // this.KeePassRPC = null;
-
-        KeeLog.debug("Kee module shut down.");
+        chrome.action.setIcon({ path: "/assets/images/48.png" });
     }
 
     _keeBrowserStartup() {
@@ -406,9 +444,7 @@ export class Kee {
                 "Uncaught exception posting message in _pauseKee: " + e.message + " : " + e.stack
             );
         }
-
-        browser.browserAction.setBadgeText({ text: "OFF" });
-        browser.browserAction.setBadgeBackgroundColor({ color: "red" });
+        this.configureBrowserActionIcon();
 
         commandManager.setupContextMenuItems();
 
@@ -448,13 +484,7 @@ export class Kee {
 
         KeeLog.info("Number of databases open: " + newDatabases.length);
 
-        if (newDatabases.length > 0) {
-            browser.browserAction.setBadgeText({ text: "" });
-            browser.browserAction.setBadgeBackgroundColor({ color: "blue" });
-        } else {
-            browser.browserAction.setBadgeText({ text: "OFF" });
-            browser.browserAction.setBadgeBackgroundColor({ color: "orange" });
-        }
+        this.configureBrowserActionIcon();
 
         if (configManager.current.rememberMRUDB) {
             const MRUFN = this.getDatabaseFileName();
@@ -467,9 +497,9 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Uncaught exception posting message in updateKeePassDatabases: " +
-                    e.message +
-                    " : " +
-                    e.stack
+                e.message +
+                " : " +
+                e.stack
             );
         }
 
@@ -477,7 +507,7 @@ export class Kee {
     }
 
     private refreshFormStatus(action: Action) {
-        window.kee.tabStates.forEach((ts, tabId) => {
+        this.tabStates.forEach((ts, tabId) => {
             //TODO:4: This should be equivalent but much faster than testing in the inner
             // loop. Unless tabId does not equal port.sender.tab.id?
             //if (tabId !== this.foregroundTabId) return;
@@ -491,13 +521,13 @@ export class Kee {
                     if (KeeLog && KeeLog.info) {
                         KeeLog.info(
                             "failed to request form field reset/update on tab " +
-                                tabId +
-                                ". Assuming port is broken (possible browser bug) and deleting the port. " +
-                                "Kee may no longer work in the affected tab, if indeed the tab even " +
-                                "exists any more. The exception that caused this is: " +
-                                e.message +
-                                " : " +
-                                e.stack
+                            tabId +
+                            ". Assuming port is broken (possible browser bug) and deleting the port. " +
+                            "Kee may no longer work in the affected tab, if indeed the tab even " +
+                            "exists any more. The exception that caused this is: " +
+                            e.message +
+                            " : " +
+                            e.stack
                         );
                     }
                     map.delete(key);
@@ -560,7 +590,7 @@ export class Kee {
             this.getKeePassFileNameToOpen()
         );
         if (sessionType !== SessionType.Websocket) {
-            const vaultTabs = await browser.tabs.query({
+            const vaultTabs = await chrome.tabs.query({
                 url: [
                     "https://keevault.pm/*",
                     "https://app-beta.kee.pm/*",
@@ -568,10 +598,10 @@ export class Kee {
                 ]
             });
             if (vaultTabs && vaultTabs[0]) {
-                browser.tabs.update(vaultTabs[0].id, { active: true });
-                browser.windows.update(vaultTabs[0].windowId, { focused: true });
+                chrome.tabs.update(vaultTabs[0].id, { active: true });
+                chrome.windows.update(vaultTabs[0].windowId, { focused: true });
             } else {
-                browser.tabs.create({
+                chrome.tabs.create({
                     url: "https://keevault.pm/",
                     active: true
                 });
@@ -630,7 +660,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -642,7 +672,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -661,7 +691,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -680,7 +710,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -692,7 +722,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -711,7 +741,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -723,7 +753,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -735,7 +765,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -747,7 +777,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -759,7 +789,7 @@ export class Kee {
         } catch (e) {
             KeeLog.error(
                 "Unexpected exception while connecting to KeePassRPC. Please inform the Kee team that they should be handling this exception: " +
-                    e
+                e
             );
             throw e;
         }
@@ -775,7 +805,6 @@ export class Kee {
 
         KeeLog.debug("Signal received by KPRPCListener (" + sig + ") @" + sigTime);
 
-        let executeNow = false;
         let refresh = false;
 
         switch (sig) {
@@ -826,66 +855,27 @@ export class Kee {
         if (!refresh) return;
 
         const now = new Date().getTime();
-
-        // If there is nothing in the queue at the moment we can process this callback straight away
-        if (!window.kee.processingCallback && window.kee.pendingCallback == "") {
-            KeeLog.debug("Signal executing now. @" + sigTime);
-            window.kee.processingCallback = true;
-            executeNow = true;
-        }
-        // Otherwise we need to add the action for this callback to a queue and leave it up to the regular callback processor to execute the action
-
         if (refresh) {
-            if (executeNow) {
-                window.kee.store.updateLastKeePassRPCRefresh(now);
-                window.kee._refreshKPDB();
-            } else {
-                window.kee.pendingCallback = "_refreshKPDB";
-            }
+            this.store.updateLastKeePassRPCRefresh(now);
+            this._refreshKPDB();
         }
 
-        KeeLog.debug("Signal handled or queued. @" + sigTime);
-        if (executeNow) {
-            //trigger any pending callback handler immediately rather than waiting for the timed handler to pick it up
-            try {
-                if (window.kee.pendingCallback == "_refreshKPDB") window.kee._refreshKPDB();
-                else KeeLog.debug("A pending signal was found and handled.");
-            } finally {
-                window.kee.pendingCallback = "";
-                window.kee.processingCallback = false;
-            }
-            KeeLog.debug("Signal handled. @" + sigTime);
-        }
-    }
-
-    RegularKPRPCListenerQueueHandler() {
-        // If there is nothing in the queue at the moment or we are already processing a callback, we give up for now
-        if (window.kee.processingCallback || window.kee.pendingCallback == "") return;
-
-        KeeLog.debug("RegularKPRPCListenerQueueHandler will execute the pending item now");
-        window.kee.processingCallback = true;
-        try {
-            if (window.kee.pendingCallback == "_refreshKPDB") window.kee._refreshKPDB();
-        } finally {
-            window.kee.pendingCallback = "";
-            window.kee.processingCallback = false;
-        }
-        KeeLog.debug("RegularKPRPCListenerQueueHandler has finished executing the item");
+        KeeLog.debug("Signal handled. @" + sigTime);
     }
 
     createTabStateIfMissing(tabId: number) {
-        if (!window.kee.tabStates.has(tabId)) {
-            window.kee.tabStates.set(tabId, new TabState());
+        if (!this.tabStates.has(tabId)) {
+            this.tabStates.set(tabId, new TabState());
         }
     }
 
     deleteTabState(tabId: number) {
-        window.kee.tabStates.delete(tabId);
+        this.tabStates.delete(tabId);
     }
 
     initiatePasswordGeneration() {
-        if (window.kee.store.state.connected) {
-            const tabState = window.kee.tabStates.get(window.kee.foregroundTabId);
+        if (this.store.state.connected) {
+            const tabState = this.tabStates.get(this.foregroundTabId);
             if (tabState) {
                 const framePort = tabState.framePorts.get(0);
                 if (framePort) {
@@ -894,15 +884,17 @@ export class Kee {
                 }
             }
             // Focussed on a Kee Vault tab or other tab we are not allowed to inject content scripts into
-            if (window.kee.vaultPort) {
-                window.kee.vaultPort.postMessage({
+            if (this.vaultPort) {
+                this.vaultPort.postMessage({
                     protocol: VaultProtocol.ShowGenerator
                 } as VaultMessage);
-                browser.tabs.update(window.kee.vaultPort.sender.tab.id, {
+                chrome.tabs.update(this.vaultPort.sender.tab.id, {
                     active: true
                 });
-                browser.windows.update(window.kee.vaultPort.sender.tab.windowId, { focused: true });
+                chrome.windows.update(this.vaultPort.sender.tab.windowId, { focused: true });
             }
         }
     }
 }
+
+export const kee = Kee.getInstance();

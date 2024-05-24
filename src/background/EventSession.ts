@@ -1,7 +1,8 @@
-import { ResultWrapper } from "./kprpcClient";
+import type { ResultWrapper } from "./kprpcClient";
 import { KeeLog } from "../common/Logger";
 import { VaultProtocol } from "../common/VaultProtocol";
-import { VaultMessage } from "../common/VaultMessage";
+import type { VaultMessage } from "../common/VaultMessage";
+import { configSyncManager } from "./ConfigSyncManager";
 
 /*
 EventSession.js manages the low-level transport connection between this
@@ -11,7 +12,15 @@ It can marshall independent event messages to/from a content script that connect
 to a server instance in a tab.
 
 Every 5 seconds we expect a ping from any active server running in this browser.
-After 6 missed pings, we'll assume the session is dead.
+After 18 missed pings, we'll assume the session is dead.
+
+We need to wait for a lot of missed pings due to Chromium "efficiencies"
+introduced in recent years.
+
+We hope that the impact of this extra delay won't be too noticeable if the
+disconnection is reliably reported to our port now. Firefox in particular
+used to suffer from bugs in this area so if we still see problems in 2024,
+we may need to introduce browser-specific timeout configuration.
 
 The session keeps running until the tab is closed even if no databases are open
 so the current Kee concepts of closed app vs closed db still apply.
@@ -24,7 +33,7 @@ export class EventSession {
 
 export class EventSessionManager {
     private eventActivityTimer: number; // we only support one session
-    private eventActivityTimeout = 30000;
+    private eventActivityTimeout = 90000;
     private latestSession: EventSession;
     private callbacks: Record<string, (resultWrapper: Partial<ResultWrapper>) => void>;
     private _features: string[] = [];
@@ -93,7 +102,7 @@ export class EventSessionManager {
             this._features = features;
 
             clearTimeout(this.eventActivityTimer);
-            this.eventActivityTimer = window.setTimeout(() => {
+            this.eventActivityTimer = self.setTimeout(() => {
                 this.closeSession();
             }, this.eventActivityTimeout);
 
@@ -155,7 +164,7 @@ export class EventSessionManager {
         }
 
         clearTimeout(this.eventActivityTimer);
-        this.eventActivityTimer = window.setTimeout(() => {
+        this.eventActivityTimer = self.setTimeout(() => {
             this.closeSession();
         }, this.eventActivityTimeout);
 
@@ -192,7 +201,7 @@ export class EventSessionManager {
         this.latestSession = null;
         this._features = [];
         this.callbacks = {};
-        window.kee.configSyncManager.reset();
+        configSyncManager.reset();
         this.onClose();
     }
 }

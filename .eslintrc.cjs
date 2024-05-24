@@ -1,4 +1,4 @@
-const INLINE_ELEMENTS = require('./node_modules/eslint-plugin-vue/lib/utils/inline-non-void-elements.json');
+const INLINE_ELEMENTS = require('eslint-plugin-vue/lib/utils/inline-non-void-elements.json');
 const htmlElementContentNewlineIgnores = ["v-btn", "pre", "textarea", "v-icon", ...INLINE_ELEMENTS];
 
 module.exports = {
@@ -12,12 +12,11 @@ module.exports = {
     ],
     "env": {
         "browser": true,
-        "es6": true
+        "webextensions": true
     },
     "globals": {
         "browser": "readonly",
-        "chrome": "readonly",
-        "BigInteger": "readonly"
+        "chrome": "readonly"
     },
     "parser": "vue-eslint-parser",
     "parserOptions": {
@@ -110,7 +109,7 @@ module.exports = {
             }
         ],
         "no-redeclare": "error",
-        "no-return-await": "error",
+        "no-return-await": "off",
         "no-sequences": "off",
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": "error",

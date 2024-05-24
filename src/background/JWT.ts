@@ -1,4 +1,5 @@
 import { Claim } from "./Claim";
+import { kee } from "./KF";
 
 export class JWT {
     public static async verify(sig: string): Promise<{ audience: string; claim?: Claim }> {
@@ -8,7 +9,7 @@ export class JWT {
             throw new Error("Invalid JWT");
         }
 
-        const claimJSON = window.kee.utils.base64urlDecode(sigParts[1]);
+        const claimJSON = kee.utils.base64urlDecode(sigParts[1]);
         let claim: Claim;
 
         try {
@@ -59,7 +60,7 @@ export class JWT {
                 throw new Error("Unknown JWT issuer so cannot verify");
         }
 
-        const key = await window.crypto.subtle.importKey(
+        const key = await crypto.subtle.importKey(
             "jwk",
             jwk,
             {
@@ -71,13 +72,13 @@ export class JWT {
             ["verify"] //"verify" for public key import, "sign" for private key imports
         );
 
-        const isValid = await window.crypto.subtle.verify(
+        const isValid = await crypto.subtle.verify(
             {
                 name: "ECDSA",
                 hash: { name: "SHA-256" } //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
             },
             key, //from generateKey or importKey above
-            window.kee.utils.base64urltoByteArray(sigParts[2]), //ArrayBuffer of the signature
+            kee.utils.base64urltoByteArray(sigParts[2]), //ArrayBuffer of the signature
             data //ArrayBuffer of the data
         );
 

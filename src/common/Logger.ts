@@ -97,7 +97,7 @@ export class KeeLogger {
         //     // Will only be true in the background process
         //     window.KeePersistentLogger.emit(logEntry);
         // } else {
-        //     browser.runtime.sendMessage(logEntry);
+        //     chrome.runtime.sendMessage(logEntry);
         // }
     }
 

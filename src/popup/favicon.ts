@@ -24,7 +24,7 @@ export function fetchFavicon(url): Promise<string> {
 
 export async function getFaviconUrl() {
     for (let i = 0; i < 45; i++) {
-        const tab = (await browser.tabs.query({ active: true, currentWindow: true }))[0];
+        const tab = (await chrome.tabs.query({ active: true, currentWindow: true }))[0];
         if (tab) {
             return tab.favIconUrl;
         }

@@ -224,7 +224,7 @@ export default {
                 this.manualFill();
             } else {
                 // Overwriting the Kee Vault tab causes much confusion so prevent that from happening
-                const currentTab = await browser.tabs.query({
+                const currentTab = await chrome.tabs.query({
                     currentWindow: true,
                     active: true,
                     url: [
@@ -241,11 +241,11 @@ export default {
             }
         },
         loadInSameTab() {
-            browser.tabs.update({ url: this.entrySummary.url });
+            chrome.tabs.update({ url: this.entrySummary.url });
             window.close();
         },
         loadInNewTab() {
-            browser.tabs.create({ url: this.entrySummary.url });
+            chrome.tabs.create({ url: this.entrySummary.url });
             window.close();
         },
         manualFill() {

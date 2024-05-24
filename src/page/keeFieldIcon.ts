@@ -1,12 +1,12 @@
 import { FormUtils } from "./formsUtils";
 import { Action } from "../common/Action";
-import { AddonMessage } from "../common/AddonMessage";
+import { type AddonMessage } from "../common/AddonMessage";
 import { MatchedField } from "./MatchedField";
 import { Entry } from "../common/model/Entry";
 
 export class KeeFieldIcon {
     constructor(
-        private myPort: browser.runtime.Port,
+        private myPort: chrome.runtime.Port,
         private parentFrameId: number,
         private formUtils: FormUtils,
         private createMatchedLoginsPanelNearNode: (e: HTMLElement) => void

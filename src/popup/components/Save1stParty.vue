@@ -1,4 +1,3 @@
-<!-- eslint-disable vuetify/no-deprecated-props -->
 <template>
     <div>
         <v-slide-y-transition>

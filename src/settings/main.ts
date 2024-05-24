@@ -19,7 +19,8 @@ let siteModeAll = true;
 let specificSite: SiteSearchResult;
 let searchResults: SiteSearchResult[];
 
-function setupPage() {
+async function setupPage() {
+    await configManager.load();
     KeeLog.attachConfig(configManager.current);
     loadInitialConfig();
     [].forEach.call(
@@ -1124,7 +1125,7 @@ function saveKPRPCPort(e) {
     configManager.current.KeePassRPCWebSocketPort = parseInt(
         (document.getElementById("pref_keePassRPCPort_label") as HTMLInputElement).value
     );
-    configManager.save().then(() => browser.runtime.sendMessage({ action: "KPRPC_Port_Change" }));
+    configManager.save().then(() => chrome.runtime.sendMessage({ action: "KPRPC_Port_Change" }));
 }
 
 function saveKPRPCDBToOpen(e) {
@@ -1176,9 +1177,11 @@ function stringFromLogLevel(level) {
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => configManager.load(setupPage));
+    document.addEventListener("DOMContentLoaded", async () => await setupPage());
 } else {
-    configManager.load(setupPage);
+    (async () => {
+        await setupPage();
+    })();
 }
 
 i18nSetup();

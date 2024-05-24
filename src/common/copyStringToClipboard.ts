@@ -1,7 +1,23 @@
 import { KeeLog } from "./Logger";
+import { isChrome, isExtensionContext } from "webext-detect-page";
+
+// https://issues.chromium.org/issues/40738001
+// https://developer.chrome.com/docs/extensions/reference/api/offscreen
+// https://issues.chromium.org/issues/40252021
 
 export async function copyStringToClipboard(value: string) {
+    if (isChrome && isExtensionContext) {
+        try {
+            await mv3ClipboardWorkaround(value);
+            return;
+        } catch (e) {
+            KeeLog.error("Failed to write to clipboard using MV3 offscreen workaround");
+        }
+    }
     try {
+        // Actually I think isExtensionContext is true for the popup and that this operation
+        // will work within that context because the user has focus but hopefully the MV3
+        // workaround works fine in that situation too.
         await navigator.clipboard.writeText(value);
     } catch (e) {
         try {
@@ -20,4 +36,17 @@ export async function copyStringToClipboard(value: string) {
             KeeLog.error("Failed to write to clipboard using modern API and fallback hack");
         }
     }
+}
+
+async function mv3ClipboardWorkaround(value: string) {
+    await chrome.offscreen.createDocument({
+        url: chrome.runtime.getURL("lib/copyToClipboard.html"),
+        reasons: [chrome.offscreen.Reason.CLIPBOARD],
+        justification: "Required by Chromium to copy text."
+    });
+    chrome.runtime.sendMessage({
+        type: "copy-data-to-clipboard",
+        target: "offscreen-doc",
+        data: value
+    });
 }

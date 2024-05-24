@@ -1,4 +1,4 @@
-import { SubmittedData } from "../common/SubmittedData";
+import type { SubmittedData } from "../common/SubmittedData";
 
 export class PersistentDataItem {
     itemType: "submittedData";

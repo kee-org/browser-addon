@@ -1,4 +1,4 @@
-import { Button } from "./Button";
+import type { Button } from "./Button";
 
 // These notifications are displayed within the Kee browser action popup.
 // They may persist for significant lengths of time.
