@@ -533,15 +533,43 @@
     },
     "welcome_to_kee": {
         "message": "Willkommen bei Kee",
-        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+        "description": "Header for release notes page. May have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "introduction_to_kee": {
         "message": "Kee füllt automatisch Anmeldeformulare aus, um Zeit zu sparen und Sie vor Sicherheitsrisiken zu schützen.",
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
+    "all_sites_permissions_required_start": {
+        "message": "Ihr Browser erfordert einen zusätzlichen Schritt, bevor Kee funktionieren kann. Wenn Sie zusätzliche Sicherheit wünschen, bevor Sie fortfahren, lesen Sie unbedingt darüber",
+        "description": "First part of a paragraph that contains 2 links. The first, directly follows this text (a space character is inserted either side of the link) is a link to information about why open source is important for a password manager."
+    },
+    "all_sites_permissions_required_why_open_source_link_text": {
+        "message": "Warum es wichtig ist, Open Source zu sein",
+        "description": "Text for a link to information about why open source is important for a password manager. A space character will be inserted either side of the link."
+    },
+    "all_sites_permissions_required_middle": {
+        "message": "und Sie können alle Details finden zu",
+        "description": "Middle part of the paragraph - surrounded by the two links."
+    },
+    "all_sites_permissions_required_permissions_link_text": {
+        "message": "Berechtigungen",
+        "description": "Text for a link to information about the extension permissions we require and why. A space character will be inserted either side of the link."
+    },
+    "all_sites_permissions_required_end": {
+        "message": "die wir auf unserer Website benötigen.",
+        "description": "Final part of the paragraph, directly preceded by the link to our website page about extension permissions."
+    },
+    "continue": {
+        "message": "fortfahren",
+        "description": "Call to action to proceed with the next step in a process. E.g. asking the browser UI to prompt the user with a new question."
+    },
+    "recommend_action_button_should_be_pinned": {
+        "message": "Da Kee auf den meisten Websites verwendet wird, empfehlen wir, die Kee-Schaltfläche an Ihre Symbolleiste anzuheften:",
+        "description": "Recommends that the user might want to pin the extension to the main toolbar. A screenshot demonstrating this will be displayed directly below (English in the screenshot so not ideal but it's the icons that matter most)."
+    },
     "kee_works_with_a_password_manager": {
         "message": "Die Zugangsdaten, die Kee für Sie eingibt, werden sicher in einem Passwortmanager hinter einem einzigen \"Hauptpasswort\" gespeichert.",
-        "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
+        "description": "Explains that Kee stores passwords in a password manager that users access through a single password."
     },
     "recommend_start_with_kee_vault": {
         "message": "Wir empfehlen Ihnen, unseren Passwort-Manager Kee Vault auszuprobieren. Es kostet nach einer kostenlosen Testversion nur etwa 20£ pro Jahr, synchronisiert und sichert Ihre Passwörter nahtlos auf allen Ihren Geräten und ist Open Source, genau wie Kee.",
@@ -589,7 +617,7 @@
     },
     "difficulty": {
         "message": "Schwierigkeit",
-        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+        "description": "How hard or easy it is to complete a task"
     },
     "difficulty_kee_vault": {
         "message": "Einfach",
@@ -601,7 +629,7 @@
     },
     "keepass_sync_config_explanation": {
         "message": "Für KeePass kann eine Teillösung für den Zugriff auf mehrere Geräte manuell mit Drittanbieterdiensten konfiguriert werden, von denen einige kostenpflichtig sind. Jedes Gerät muss vorab vorbereitet und konfiguriert werden.",
-        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+        "description": ""
     },
     "point_user_to_keepass_install_instructions_start": {
         "message": "Eine Anleitung zur Installation und Konfiguration von KeePass und dem benötigten KeePassRPC-Plug-in finden Sie in unserem",
@@ -791,8 +819,8 @@
         "message": "Neue Einträge immer hier speichern",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_11": {
-        "message": "Verbesserungen der Benutzeroberfläche;Verbesserungen der Tastaturnavigation, einschließlich in der Netzwerkauthentifizierungsliste der Einträge und bei der Auswahl einer Gruppe, in der ein neuer Eintrag gespeichert werden soll;Behebt die Option „Groß-/Kleinschreibung ignorieren“, die bei Include-IDs und Namen nicht funktionierte. Sie werden daher möglicherweise feststellen, dass Kee das Ausfüllen einiger Formulare anbietet, die zuvor ignoriert wurden. Aktiviert die Filterung von Gruppennamen erneut, wenn ausgewählt wird, wo ein neuer Eintrag gespeichert werden soll (dies war in der vorherigen Version von Kee nur in Firefox deaktiviert).\n ",
+    "list_version_upgrade_4_0": {
+        "message": "Unterstützung für die neuesten Webbrowser (MV3);Schnellere Verbindung zu KeePass auf einigen Systemen (erfordert KeePassRPC.plgx v2+);Viele Fehlerbehebungen und wahrscheinlich einige neue Fehler eingeführt",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {

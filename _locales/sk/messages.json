@@ -533,15 +533,43 @@
     },
     "welcome_to_kee": {
         "message": "Vitajte v Kee",
-        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+        "description": "Header for release notes page. May have a version suffix added to it. E.g. Welcome to Kee 2.0"
     },
     "introduction_to_kee": {
         "message": "Kee automaticky vyplní prihlasovacie formuláre, čím vám ušetrí čas a ochráni vás pred bezpečnostnými rizikami.",
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
+    "all_sites_permissions_required_start": {
+        "message": "Váš prehliadač vyžaduje ďalší krok, aby mohol Kee fungovať. Ak chcete pred pokračovaním získať dodatočné uistenie, určite si prečítajte",
+        "description": "First part of a paragraph that contains 2 links. The first, directly follows this text (a space character is inserted either side of the link) is a link to information about why open source is important for a password manager."
+    },
+    "all_sites_permissions_required_why_open_source_link_text": {
+        "message": "prečo je dôležité mať otvorený zdrojový kód",
+        "description": "Text for a link to information about why open source is important for a password manager. A space character will be inserted either side of the link."
+    },
+    "all_sites_permissions_required_middle": {
+        "message": "a môžete nájsť podrobnosti o všetkých",
+        "description": "Middle part of the paragraph - surrounded by the two links."
+    },
+    "all_sites_permissions_required_permissions_link_text": {
+        "message": "povoleniach",
+        "description": "Text for a link to information about the extension permissions we require and why. A space character will be inserted either side of the link."
+    },
+    "all_sites_permissions_required_end": {
+        "message": "ktoré požadujeme na našej webovej stránke.",
+        "description": "Final part of the paragraph, directly preceded by the link to our website page about extension permissions."
+    },
+    "continue": {
+        "message": "pokračovať",
+        "description": "Call to action to proceed with the next step in a process. E.g. asking the browser UI to prompt the user with a new question."
+    },
+    "recommend_action_button_should_be_pinned": {
+        "message": "Keďže Kee sa používa na väčšine lokalít, odporúčame pripnúť tlačidlo Kee na panel nástrojov:",
+        "description": "Recommends that the user might want to pin the extension to the main toolbar. A screenshot demonstrating this will be displayed directly below (English in the screenshot so not ideal but it's the icons that matter most)."
+    },
     "kee_works_with_a_password_manager": {
         "message": "Prihlasovacie údaje, ktoré za vás Kee zadá, sú bezpečne uložené v správcovi hesiel za jediným \"hlavným heslom\".",
-        "description": "Explains that Kee stores passwords in a password manager that user's access through a single password."
+        "description": "Explains that Kee stores passwords in a password manager that users access through a single password."
     },
     "recommend_start_with_kee_vault": {
         "message": "Odporúčame vyskúšať nášho správcu hesiel Kee Vault. Po bezplatnej skúšobnej verzii stojí len približne 20 libier ročne, bezproblémovo synchronizuje a zálohuje vaše heslá vo všetkých vašich zariadeniach a je rovnako ako Kee s otvoreným zdrojovým kódom.",
@@ -589,7 +617,7 @@
     },
     "difficulty": {
         "message": "Obtiažnosť",
-        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+        "description": "How hard or easy it is to complete a task"
     },
     "difficulty_kee_vault": {
         "message": "Ľahká",
@@ -601,7 +629,7 @@
     },
     "keepass_sync_config_explanation": {
         "message": "Pre KeePass, čiastočné riešenie pre prístup viacerých zariadení je možné manuálne konfigurovať pomocou služieb tretích strán, z ktorých niektoré účtujú poplatok. Každé zariadenie musí byť pripravené a nakonfigurované vopred.",
-        "description": "Header for release notes page. Will have a version suffix added to it. E.g. Welcome to Kee 2.0"
+        "description": ""
     },
     "point_user_to_keepass_install_instructions_start": {
         "message": "Návod na inštaláciu a konfiguráciu KeePass a požadovaný plugin KeePassRPC.plgx nájdete na našich stránkach",
@@ -791,8 +819,8 @@
         "message": "Vždy ukladať nové záznamy sem",
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
-    "list_version_upgrade_3_11": {
-        "message": "Vylepšenia používateľského rozhrania;Vylepšená navigácia pomocou klávesnice, a to aj v zozname položiek sieťovej autorizácie a pri výbere skupiny, do ktorej chcete uložiť novú položku;Opravená možnosť \"ignorovať veľkosť písmen\", ktorá nefungovala v prípade ID a názvov. Môže sa preto stať, že Kee ponúkne vyplnenie niektorých formulárov, ktoré predtým ignoroval;Opätovné zapnutie filtrovania názvov skupín pri výbere miesta, kam sa má uložiť nový záznam (v predchádzajúcej verzii Kee to bolo vypnuté len v prehliadači Firefox)",
+    "list_version_upgrade_4_0": {
+        "message": "Podpora najnovších webových prehliadačov (MV3);Rýchlejšie pripojenie ku KeePass na niektorých systémoch (vyžaduje KeePassRPC.plgx v2+);Množstvo opravených chýb a pravdepodobne pribudli aj nejaké nové chyby",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
