@@ -70,17 +70,19 @@ Our builds are created by GitHub Actions using the following configuration:
 * `.tx` Used by Transifex localisation scripts to help manage multiple language translation.
 * `dist` Output folder for build packages (e.g. an XPI file for installation in Firefox). Created automatically by development scripts or manually if you're only building for packaging/release.
 * `extension` Output folder for compiled files when developing or building for packaging/release.
-* `lib` Javascript files that are directly included in the resulting extension, undergoing no further adjustment or compilation.
+* `lib` Files that are directly included in the resulting extension, undergoing no further adjustment or compilation.
 * `scripts` The scripts within help prepare the `extension` file structure for hot module reloading during development, as well as ensuring that various categories of files end up in the right place, with appropriate references updated.
 * `src` 
    * `manifest.ts` Outputs a manifest.json file appropriate to the current build / development environment.
-   * `background` Extension's main background process script.
-   * `common` Modules that are used across multiple extension scopes (e.g. background script, popup script, content script, etc.) 
+   * `assets` Static assets. These may be manipulated by the build process into a different format or excluded entirely from the final output but typically will just be included as is, into the extension/assets folder.
+   * `background` Extension's main background script / Service Worker.
+   * `common` Modules that are used across multiple extension scopes (e.g. background, popup, content script, etc.) 
    * `dialogs` Standalone dialogs within the extension context (e.g. for the Network Authentication window).
+   * `install-notes` A Vue app that is shown after an extension installation has occurred.
    * `page` The content page script that gets injected to every web page that is not Kee Vault.
    * `panels` Small pages that are rendered as in-page panels, within an iframe, within any web page.
    * `popup` The main browser popup that clicking on the browser toolbar button will display.
-   * `release-notes` Pages that are shown after an extension update or installation has occurred.
+   * `release-notes` Pages that are shown after an extension update has occurred.
    * `settings` Page to allow user to adjust many extension settings.
    * `store` The Pinia Store definitions that are used for both Vue/Vuetify UI state storage and for automated data transfer across multiple extension execution scopes (popup, settings page, background, in-page panels, etc.)
    * `vault` The content page script that gets injected to the Kee Vault website.
