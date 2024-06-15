@@ -272,18 +272,55 @@ chrome.runtime.onConnect.addListener(async port => {
 
 // With MV3 we must always listen to httpauth requests and decide whether to handle them
 // based on whether we have already initialised the pinia store, got connected to KPRPC, have open DBs, etc.
-chrome.webRequest.onAuthRequired.addListener(
-    async (requestDetails): Promise<chrome.webRequest.BlockingResponse> => {
-        if (KeeLog?.debug) KeeLog.debug("onAuthRequired request started");
-        // We may crash at startup / session restore if we're not initialised yet
-        await Promise.race([initialised, new Promise(resolve => self.setTimeout(resolve, 20000))]);
-        if (KeeLog?.debug) KeeLog.debug("onAuthRequired request ongoing");
-        const result = await networkAuth.provideCredentialsAsync(requestDetails);
-        return result;
-    },
-    { urls: ["<all_urls>"] },
-    [isFirefox() ? "blocking" : "asyncBlocking"]
-);
+if (isFirefox()) {
+    chrome.webRequest.onAuthRequired.addListener(
+        async (requestDetails): Promise<chrome.webRequest.BlockingResponse> => {
+            if (KeeLog?.debug) KeeLog.debug("onAuthRequired request started");
+            // We may crash at startup / session restore if we're not initialised yet
+            await Promise.race([initialised, new Promise(resolve => self.setTimeout(resolve, 20000))]);
+            if (KeeLog?.debug) KeeLog.debug("onAuthRequired request ongoing");
+            const result = await networkAuth.provideCredentialsAsync(requestDetails);
+            return result;
+        },
+        { urls: ["<all_urls>"] },
+        ["blocking"]
+    );
+} else {
+    chrome.webRequest.onAuthRequired.addListener(
+        (requestDetails, callback) => {
+            if (KeeLog?.debug) KeeLog.debug("onAuthRequired request started");
+            Promise.race([
+                initialised,
+                new Promise(resolve => self.setTimeout(resolve, 20000))
+            ])
+            .then(() => {
+                if (KeeLog?.debug) KeeLog.debug("onAuthRequired request ongoing");
+                networkAuth.provideCredentialsAsyncBlockingCallback(requestDetails, callback);
+            });
+        },
+        { urls: ["<all_urls>"] },
+        ["asyncBlocking"]
+    );
+}
+
+// This can be used instead once Chrome either supports Promises in "blocking" mode
+// or, more likely, a new flag, which then Firefox would have to support too but we
+// could still just use a conditional in the mean time to keep compatibility with a
+// wider range of Firefox versions.
+// https://github.com/w3c/webextensions/issues/490
+// https://issues.chromium.org/issues/41483002
+// chrome.webRequest.onAuthRequired.addListener(
+//     async (requestDetails): Promise<chrome.webRequest.BlockingResponse> => {
+//         if (KeeLog?.debug) KeeLog.debug("onAuthRequired request started");
+//         // We may crash at startup / session restore if we're not initialised yet
+//         await Promise.race([initialised, new Promise(resolve => self.setTimeout(resolve, 20000))]);
+//         if (KeeLog?.debug) KeeLog.debug("onAuthRequired request ongoing");
+//         const result = await networkAuth.provideCredentialsAsync(requestDetails);
+//         return result;
+//     },
+//     { urls: ["<all_urls>"] },
+//     [isFirefox() ? "blocking" : "asyncBlockingPromise"]
+// );
 
 (async () => {
     await ensureStarted();

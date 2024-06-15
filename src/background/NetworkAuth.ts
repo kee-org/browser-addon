@@ -8,6 +8,18 @@ import { kee } from "./KF";
 export class NetworkAuth {
     constructor() { }
 
+    public provideCredentialsAsyncBlockingCallback(
+        requestDetails: any,
+        callback: (response: chrome.webRequest.BlockingResponse) => void
+    ) {
+        this.provideCredentialsAsync(requestDetails)
+            .then(result => callback(result))
+            .catch(reason => {
+                KeeLog.error("AsyncBlockingCallback promise failed", reason);
+                callback({ cancel: false });
+            });
+    }
+
     public async provideCredentialsAsync(
         requestDetails: any
     ): Promise<chrome.webRequest.BlockingResponse> {
