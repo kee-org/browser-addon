@@ -540,31 +540,31 @@
         "description": "Top-level description of what Kee does. Focuses on the most obvious/desirable features that are specific to Kee, rather than generic to the concept of a password manager."
     },
     "all_sites_permissions_required_start": {
-        "message": "Your browser requires an additional step before Kee can work. If you want additional reassurance before continuing, make sure you read about",
+        "message": "Seu navegador requer uma etapa adicional antes que o Kee possa funcionar. Se você quiser garantias adicionais antes de continuar, leia sobre",
         "description": "First part of a paragraph that contains 2 links. The first, directly follows this text (a space character is inserted either side of the link) is a link to information about why open source is important for a password manager."
     },
     "all_sites_permissions_required_why_open_source_link_text": {
-        "message": "why being Open Source matters",
+        "message": "porque ser Open Source é importante",
         "description": "Text for a link to information about why open source is important for a password manager. A space character will be inserted either side of the link."
     },
     "all_sites_permissions_required_middle": {
-        "message": "and you can find details about all the",
+        "message": "e você pode encontrar detalhes sobre todas as",
         "description": "Middle part of the paragraph - surrounded by the two links."
     },
     "all_sites_permissions_required_permissions_link_text": {
-        "message": "permissions",
+        "message": "permissões",
         "description": "Text for a link to information about the extension permissions we require and why. A space character will be inserted either side of the link."
     },
     "all_sites_permissions_required_end": {
-        "message": "we require on our website.",
+        "message": "que nós exigimos em nosso site.",
         "description": "Final part of the paragraph, directly preceded by the link to our website page about extension permissions."
     },
     "continue": {
-        "message": "continue",
+        "message": "continuar",
         "description": "Call to action to proceed with the next step in a process. E.g. asking the browser UI to prompt the user with a new question."
     },
     "recommend_action_button_should_be_pinned": {
-        "message": "Since Kee is used on most sites, we recommend pinning the Kee button to your toolbar:",
+        "message": "Como o Kee é usado na maioria dos sites, recomendamos fixar o botão Kee na sua barra de ferramentas:",
         "description": "Recommends that the user might want to pin the extension to the main toolbar. A screenshot demonstrating this will be displayed directly below (English in the screenshot so not ideal but it's the icons that matter most)."
     },
     "kee_works_with_a_password_manager": {
@@ -820,7 +820,7 @@
         "description": "Description of checkbox that when enabled will change a setting such that the user is not prompted where to save future entries they create."
     },
     "list_version_upgrade_4_0": {
-        "message": "Support for the latest web browsers (MV3);Faster connection to KeePass on some systems (requires KeePassRPC.plgx v2+);Lots of bug fixes and probably some new bugs introduced",
+        "message": "Suporte para os navegadores mais recentes (MV3); Conexão mais rápida ao KeePass em alguns sistemas (requer KeePassRPC.plgx v2+); Muitas correções de bugs e provavelmente alguns novos bugs introduzidos",
         "description": "Changes for the version number in the string key name. Multiple items MUST be separated by a semicolon (;). Do not use a semi-colon except as a list-item (new line) separator."
     },
     "release_details_for_keepass_available_on_forum": {
