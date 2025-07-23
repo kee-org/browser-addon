@@ -1,5 +1,5 @@
 import { SessionType } from "./SessionType";
-import { DatabaseDto } from "./KPRPCDTOs";
+import { DatabaseDto, DatabaseDto2 } from "./KPRPCDTOs";
 import { Icon } from "./Icon";
 import { Group } from "./Group";
 
@@ -32,6 +32,22 @@ export class Database {
             fileName: dto.fileName,
             icon: { version: 1, iconImageData: dto.iconImageData },
             root: Group.fromKPRPCGroupDTO(dto.root, dto.fileName),
+            active: dto.active,
+            sessionType,
+            sessionFeatures
+        });
+    }
+
+    public static fromKPRPCDatabaseDTO2(
+        dto: DatabaseDto2,
+        sessionType: SessionType,
+        sessionFeatures: string[]
+    ) {
+        return new Database({
+            name: dto.name,
+            fileName: dto.fileName,
+            icon: { version: 1, iconImageData: dto.iconImageData },
+            root: Group.fromKPRPCGroupDTO2(dto.root, dto.fileName),
             active: dto.active,
             sessionType,
             sessionFeatures

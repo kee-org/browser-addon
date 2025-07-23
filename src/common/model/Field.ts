@@ -1,6 +1,6 @@
 import { utils } from "../utils";
 import { Locator } from "./Locator";
-import { FieldDto, FormFieldTypeDTO } from "./KPRPCDTOs";
+import { FieldDto, FieldDto2, FieldMatcherConfig, FieldMatcherType, FieldTypeEnum, FormFieldTypeDTO } from "./KPRPCDTOs";
 
 export type FieldType = "password" | "text" | "existing" | "boolean" | "otp" | "some-chars";
 
@@ -19,6 +19,9 @@ export class Field {
     // For OTP, need to work out whether we will have to transfer the secrets and recalculate in the browser or just treat as standard value
     readonly value: string;
 
+    // The KDBX field name - "." when value is stored within the KPRPC configuration
+    //readonly valuePath: string;
+
     // type of data this field represents. There's no 100% way to match this to the type of HTML form element but it's often logical.
     // E.g. password goes into password fields unless user explicitly re-configures that; existing would typically match something
     // like a radio button or select option already present on the HTML form; boolean would match a checkbox.
@@ -33,6 +36,7 @@ export class Field {
     constructor(field: Partial<Field>) {
         this.name = field.name || "";
         this.value = field.value || "";
+   //     this.valuePath = field.valuePath || ".";
         this.resetValue = field.resetValue || "";
         this.uuid = field.uuid || utils.newGUID();
         this.type = field.type || "text";
@@ -97,6 +101,23 @@ export class Field {
         }
     }
 
+    static typeEnumFromDOMtype(domType: string): FieldTypeEnum {
+        // We can't know every type that may exist in future so assume:
+        // 1. unknown types must be text
+        // 2. we won't be asked to handle types for irrelevant elements such as buttons
+        switch (domType) {
+            case "password":
+                return FieldTypeEnum.Password;
+            case "radio":
+                return FieldTypeEnum.Existing;
+            case "checkbox":
+                return FieldTypeEnum.Toggle;
+            case "select-one":
+                return FieldTypeEnum.Existing;
+            default:
+                return FieldTypeEnum.Text;
+        }
+    }
     // By convention the first non-password item will be the username and the password will be either 1st or 2nd in the list
     static combineDomFieldLists(usernameIndex: number, otherFields: Field[], passwords: Field[]) {
         const fields: Field[] = [];
@@ -180,6 +201,28 @@ export class Field {
         });
     }
 
+    static fromKPRPCFieldDTO2(f: FieldDto2) {
+        //TODO: Could defer this until rendering the name? Might have to?
+        let displayName = f.name;
+        if (f.type == FieldTypeEnum.Password && f.valuePath == "Password") {
+            displayName ??= "Password";
+        }
+        else if (f.type == FieldTypeEnum.Text && f.valuePath == "UserName") {
+            displayName ??= "Username";
+        }
+        const fmc = f.matcherConfigs[0] ?? FieldMatcherConfig.defaultForType(f.type);
+        return new Field({
+            name: displayName || f.uuid,
+            uuid: f.uuid,
+            value: f.resolvedValue,
+            resetValue: f.resolvedValue,
+            type: fieldTypeEnumToFieldType(f.type),
+            locators: [
+                Locator.fromFieldMatcherConfig(fmc)
+            ]
+        });
+    }
+
     static toKPRPCFieldDTO(f: Field, isUsername: boolean) {
         let fft: FormFieldTypeDTO;
 
@@ -209,6 +252,50 @@ export class Field {
             value: f.value,
             page: -1
         } as FieldDto;
+    }
+
+    static toKPRPCFieldDTO2(f: Field, isUsername: boolean, isPassword: boolean) {
+        let fft: FormFieldTypeDTO;
+
+        switch (f.locators[0].type) {
+            case "password":
+                fft = FormFieldTypeDTO.password;
+                break;
+            case "radio":
+                fft = FormFieldTypeDTO.radio;
+                break;
+            case "checkbox":
+                fft = FormFieldTypeDTO.checkbox;
+                break;
+            case "select-one":
+                fft = FormFieldTypeDTO.select;
+                break;
+            default:
+                fft = isUsername ? FormFieldTypeDTO.username : FormFieldTypeDTO.text;
+                break;
+        }
+
+        let valuePath = ".";
+        let defaultMatcherType;
+        if (isUsername) {
+            valuePath = "UserName";
+            defaultMatcherType = FieldMatcherType.UsernameDefaultHeuristic;
+        } else if (isPassword) {
+            valuePath = "Password";
+            defaultMatcherType = FieldMatcherType.PasswordDefaultHeuristic;
+        }
+
+        let mc = FieldMatcherConfig.fromLocator(f.locators[0], defaultMatcherType);
+
+        return {
+            name: f.name,
+            type: fieldTypeToFieldTypeEnum(f.type),
+            value: f.value,
+            uuid: f.uuid,
+            matcherConfigs: [mc],
+            valuePath: valuePath,
+            page: -1
+        } as FieldDto2;
     }
 }
 
@@ -254,3 +341,34 @@ function collectAutocompleteValues(element: HTMLInputElement | HTMLSelectElement
         });
     return values.length ? values : undefined;
 }
+function fieldTypeEnumToFieldType(type: FieldTypeEnum): FieldType {
+    switch (type) {
+        case FieldTypeEnum.Existing: return "existing";
+        case FieldTypeEnum.Otp: return "otp";
+        case FieldTypeEnum.Password: return "password";
+        case FieldTypeEnum.SomeChars: return "some-chars";
+        case FieldTypeEnum.Text: return "text";
+        case FieldTypeEnum.Toggle: return "boolean";
+    }
+}
+function fieldTypeToFieldTypeEnum(type: FieldType): FieldTypeEnum {
+    switch (type) {
+        case "boolean": return FieldTypeEnum.Toggle;
+        case "existing": return FieldTypeEnum.Existing;
+        case "otp": return FieldTypeEnum.Otp;
+        case "password": return FieldTypeEnum.Password;
+        case "some-chars": return FieldTypeEnum.SomeChars;
+        case "text": return FieldTypeEnum.Text;
+    }
+}
+export function fieldTypeEnumToDOMTypeEstimate(type: FieldTypeEnum): string {
+    // We should only need to do this as a defence against bugs elsewhere or perhaps if
+    // someone uses an out of date version of some KPRPC software during the switch to V2 config
+    switch (type) {
+        case FieldTypeEnum.Existing: return "radio";
+        case FieldTypeEnum.Password: return "password";
+        case FieldTypeEnum.Toggle: return "checkbox";
+        default: return "text";
+    }
+}
+

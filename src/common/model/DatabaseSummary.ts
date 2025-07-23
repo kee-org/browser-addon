@@ -1,4 +1,4 @@
-import { DatabaseSummaryDto } from "./KPRPCDTOs";
+import { DatabaseSummaryDto, DatabaseSummaryDto2 } from "./KPRPCDTOs";
 import { Icon } from "./Icon";
 import { GroupSummary } from "./GroupSummary";
 import { Database } from "./Database";
@@ -24,6 +24,16 @@ export class DatabaseSummary {
             fileName: dto.fileName,
             icon: { version: 1, iconImageData: dto.iconImageData },
             root: GroupSummary.fromKPRPCGroupSummaryDTO(dto.root),
+            active: dto.active
+        });
+    }
+
+    public static fromKPRPCDatabaseSummaryDTO2(dto: DatabaseSummaryDto2) {
+        return new DatabaseSummary({
+            name: dto.name,
+            fileName: dto.fileName,
+            icon: { version: 1, iconImageData: dto.icon.base64 },
+            root: GroupSummary.fromKPRPCLightGroupDTO(dto.root),
             active: dto.active
         });
     }

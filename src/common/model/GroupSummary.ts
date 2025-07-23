@@ -1,6 +1,6 @@
 import { Icon } from "./Icon";
 import { utils } from "../utils";
-import { GroupSummaryDto } from "./KPRPCDTOs";
+import { GroupSummaryDto, LightGroupDto2 } from "./KPRPCDTOs";
 import { Group } from "./Group";
 
 export class GroupSummary {
@@ -22,6 +22,15 @@ export class GroupSummary {
             uuid: groupSummaryDto.uniqueID,
             icon: { version: 1, iconImageData: groupSummaryDto.iconImageData },
             path: groupSummaryDto.path
+        });
+    }
+
+    public static fromKPRPCLightGroupDTO(lightGroup: LightGroupDto2) {
+        return new GroupSummary({
+            title: lightGroup.title,
+            uuid: lightGroup.uniqueID,
+            icon: { version: 1, iconImageData: lightGroup.icon.base64 },
+            path: lightGroup.path
         });
     }
 
