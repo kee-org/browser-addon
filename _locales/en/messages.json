@@ -232,8 +232,8 @@
     "description": ""
   },
   "pref_excludeExpiredEntries_label": {
-    "message": "Exclude expired entries from search results",
-    "description": "When enabled, entries that have expired (Expires=true and ExpiryTime is in the past) will be hidden from all search and match results."
+    "message": "Exclude expired entries",
+    "description": "When enabled, matching entries that have expired (Expires=true and ExpiryTime is in the past) will be hidden from the result list."
   },
   "pref_when_kee_chooses_standard_form_desc": {
     "message": "When Kee chooses a matching login for a standard form, Kee should",
