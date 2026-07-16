@@ -96,4 +96,5 @@ export class Config {
     hideConfirmationAfterSave: boolean;
     mustShowReleaseNotesAtStartup: boolean;
     autoFillFieldsWithExistingValue: boolean;
+    excludeExpiredEntries: boolean;
 }

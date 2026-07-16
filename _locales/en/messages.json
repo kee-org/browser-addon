@@ -231,6 +231,10 @@
     "message": "Search all open Kee Vaults and KeePass databases",
     "description": ""
   },
+  "pref_excludeExpiredEntries_label": {
+    "message": "Exclude expired entries from search results",
+    "description": "When enabled, entries that have expired (Expires=true and ExpiryTime is in the past) will be hidden from all search and match results."
+  },
   "pref_when_kee_chooses_standard_form_desc": {
     "message": "When Kee chooses a matching login for a standard form, Kee should",
     "description": "Context/label for user when changing setting relating to auto-fill/submit behaviour. A list of potential actions will be displayed immediately after this string and the user can select their preferred behaviour from that list."

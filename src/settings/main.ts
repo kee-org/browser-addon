@@ -35,6 +35,11 @@ function loadInitialConfig() {
     (document.getElementById("pref_searchAllOpenDBs_label") as HTMLInputElement).checked =
         configManager.current.searchAllOpenDBs ? configManager.current.searchAllOpenDBs : null;
 
+    (document.getElementById("pref_excludeExpiredEntries_label") as HTMLInputElement).checked =
+        configManager.current.excludeExpiredEntries
+            ? configManager.current.excludeExpiredEntries
+            : null;
+
     (
         document.getElementById("pref_autoFillFormsWithMultipleMatches_label") as HTMLInputElement
     ).checked = configManager.current.autoFillFormsWithMultipleMatches
@@ -106,6 +111,9 @@ function setupInputListeners() {
     document
         .getElementById("pref_searchAllOpenDBs_label")
         .addEventListener("change", saveSearchAllOpenDBs);
+    document
+        .getElementById("pref_excludeExpiredEntries_label")
+        .addEventListener("change", saveExcludeExpiredEntries);
     document
         .getElementById("pref_autoFillFormsWithMultipleMatches_label")
         .addEventListener("change", saveAutoFillFormsWithMultipleMatches);
@@ -944,6 +952,15 @@ function saveSearchAllOpenDBs(e) {
     configManager.setASAP({
         searchAllOpenDBs: (
             document.getElementById("pref_searchAllOpenDBs_label") as HTMLInputElement
+        ).checked
+    });
+}
+
+function saveExcludeExpiredEntries(e) {
+    e.preventDefault();
+    configManager.setASAP({
+        excludeExpiredEntries: (
+            document.getElementById("pref_excludeExpiredEntries_label") as HTMLInputElement
         ).checked
     });
 }

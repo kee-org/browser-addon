@@ -85,6 +85,8 @@ export class EntryDto {
     uniqueID: string;
     title: string;
     formFieldList: FieldDto[];
+    expires: boolean;
+    expiryTime: string;
 }
 
 export class EntrySummaryDto {

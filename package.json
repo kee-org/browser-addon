@@ -93,5 +93,13 @@
     "lint:xpi": "web-ext lint --source-dir ./extension",
     "sign:xpi:beta": "cross-env WEB_EXT_ARTIFACTS_DIR=./dist/signed web-ext sign --source-dir ./extension --channel=unlisted",
     "tsc": "vue-tsc --noEmit"
+  },
+  "allowScripts": {
+    "core-js@3.29.0": true,
+    "dtrace-provider@0.8.8": true,
+    "esbuild@0.28.1": true,
+    "esbuild@0.21.5": true,
+    "spawn-sync@1.0.15": true,
+    "vue-demi@0.14.7": true
   }
 }
