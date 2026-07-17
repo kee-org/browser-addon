@@ -1,8 +1,8 @@
 {
   "name": "kee-browser-addon",
-  "displayName": "Kee - Password Manager",
+  "displayName": "Kee - Password Manager (Drealise mod)",
   "description": "Kee adds private, secure and easy password management features which save time and keep your private data more secure.",
-  "version": "4.1.1",
+  "version": "4.1.4",
   "type": "module",
   "devDependencies": {
     "@ffflorian/jszip-cli": "^3.6.3",
@@ -92,6 +92,7 @@
     "lint:fix": "eslint --fix .",
     "lint:xpi": "web-ext lint --source-dir ./extension",
     "sign:xpi:beta": "cross-env WEB_EXT_ARTIFACTS_DIR=./dist/signed web-ext sign --source-dir ./extension --channel=unlisted",
+    "build:dre": "rimraf extension extension_chrome_PROD extension_firefox_PROD dist && npm run build-chrome:prod && ren extension extension_chrome_PROD && npm run build:prod && npm run pack:prod && ren extension extension_firefox_PROD && ren dist\\extension.xpi extension_firefox_PROD.xpi",
     "tsc": "vue-tsc --noEmit"
   }
 }
