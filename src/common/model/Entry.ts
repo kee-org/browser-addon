@@ -44,6 +44,9 @@ export class Entry {
 
     readonly database: DatabaseSummary;
 
+    readonly expires: boolean;
+    readonly expiryTime: string;
+
     // How relevant this entry is to the current form in
     // the browser - transient (not stored in KeePass)
     //TODO:5 put all match data into a new object?
@@ -67,6 +70,8 @@ export class Entry {
         this.matchAccuracy = e.matchAccuracy || 0;
         this.icon = e.icon || { version: 1, iconImageData: "" };
         this.database = e.database || new Database({});
+        this.expires = e.expires || false;
+        this.expiryTime = e.expiryTime || "";
         this.relevanceScore = e.relevanceScore;
         this.lowFieldMatchRatio = e.lowFieldMatchRatio;
         this.formIndex = e.formIndex;
@@ -120,7 +125,9 @@ export class Entry {
             httpRealm: entryDto.hTTPRealm,
             uuid: entryDto.uniqueID,
             title: entryDto.title,
-            fields: sortedFields
+            fields: sortedFields,
+            expires: entryDto.expires,
+            expiryTime: entryDto.expiryTime
         });
 
         return entry;

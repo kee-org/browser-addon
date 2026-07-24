@@ -78,6 +78,7 @@ defaultConfig.theme = null;
 defaultConfig.hideConfirmationAfterSave = false;
 defaultConfig.mustShowReleaseNotesAtStartup = false;
 defaultConfig.autoFillFieldsWithExistingValue = false;
+defaultConfig.excludeExpiredEntries = false;
 
 export class ConfigManager {
     public current: Config;

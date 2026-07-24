@@ -244,6 +244,7 @@ export class jsonrpcClient {
             username
         ]);
         const results: Entry[] = [];
+        const now = new Date();
         for (const sessionResponse of sessionResponses) {
             if (sessionResponse.resultWrapper?.result?.[0]) {
                 const db = DatabaseSummary.fromKPRPCDatabaseSummaryDTO(
@@ -255,6 +256,13 @@ export class jsonrpcClient {
                     )
                 );
             }
+        }
+        if (configManager.current.excludeExpiredEntries) {
+            return results.filter(entry => {
+                if (!entry.expires || !entry.expiryTime) return true;
+                const expiry = new Date(entry.expiryTime);
+                return isNaN(expiry.getTime()) || expiry >= now;
+            });
         }
         return results;
     }
